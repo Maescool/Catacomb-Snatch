@@ -10,7 +10,7 @@ public class TurnSynchronizer {
     public static long synchedSeed;
 
     public static final int TURN_QUEUE_LENGTH = 3;
-    public static final int TICKS_PER_TURN = 1;
+    public static final int TICKS_PER_TURN = 5;
 
     private int currentTurnLength = TICKS_PER_TURN;
 
