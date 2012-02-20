@@ -2,6 +2,23 @@ This is the source code of the Humble bundle release from Mojang.
 
 They did not license it, so my guess is we are free to have this source code here and work on it.
 
+TODO's (in my view):
+-Before starting the game, get a menu with what difficulty and level choicer.
+-add levels
+-add options menu for audio options etc..
+
+todolist from http://www.minecraftforum.net/topic/1042382-the-unofficial-catacomb-snatch-patch/
+Options Screen
+Save/Load Feature
+Enemies Spawn Outside Of Level Sometimes
+Add AI-player In Single Player.
+Add Scarab
+Add Sphynx-Mummy.
+Add Map Loader.
+Pause Menu For Single And Mulitplayer
+Possibly (AND THIS IS A VERY BIG 'POSSIBLY') Co-Op.
+Make It So Turrets Don't Fire At ALL Entities
+Make It Able To Change The Resolution Through "MojamComponent.java"
 
 
 Here is the original README
