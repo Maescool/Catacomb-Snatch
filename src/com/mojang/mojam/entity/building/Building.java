@@ -2,6 +2,7 @@ package com.mojang.mojam.entity.building;
 
 import com.mojang.mojam.entity.*;
 import com.mojang.mojam.entity.mob.Mob;
+import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.*;
@@ -26,6 +27,9 @@ public class Building extends Mob implements IUsable {
     public void render(Screen screen) {
         super.render(screen);
         renderMarker(screen);
+        if (upgradeLevel != 0) {
+        	Font.draw(screen, "" + upgradeLevel, (int) (pos.x + 10), (int) (pos.y));
+        }
     }
 
     protected void renderMarker(Screen screen) {
@@ -75,6 +79,7 @@ public class Building extends Mob implements IUsable {
     // Upgrade
     //
     protected void upgradeComplete(int upgradeLevel) {
+    	
     }
 
     private int upgradeLevel = 0;

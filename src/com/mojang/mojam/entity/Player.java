@@ -8,6 +8,7 @@ import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.loot.*;
 import com.mojang.mojam.entity.mob.*;
 import com.mojang.mojam.entity.particle.Sparkle;
+import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.level.tile.*;
 import com.mojang.mojam.math.Vec2;
@@ -282,6 +283,8 @@ public class Player extends Mob implements LootCollector {
                     selected = null;
                 } else if (selected instanceof IUsable && keys.use.wasPressed()) {
                     ((IUsable) selected).use(this);
+                } else if (selected instanceof IUsable && keys.upgrade.wasPressed()){
+                	((IUsable) selected).upgrade(this);
                 }
             }
 
