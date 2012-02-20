@@ -51,6 +51,8 @@ public class Turret extends Building {
                 continue;
             if (!((Mob) e).isNotFriendOf(this))
                 continue;
+            if ((e instanceof TreasurePile))
+                continue;
             final double dist = e.pos.distSqr(pos);
             if (dist < radiusSqr && dist < closestDist) {
                 closestDist = dist;
