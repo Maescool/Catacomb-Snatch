@@ -16,11 +16,16 @@ public class LevelSelect extends GuiMenu {
 	private final int yStringPosition = 50;
 	private Button startGameButton;
 	
-	public LevelSelect() {
+	public LevelSelect(boolean bHosting) {
 		super();
 		TitleMenu.level = levels.get(0).levelFile;
-		startGameButton = addButton(new Button(TitleMenu.START_GAME_ID, 0, 100, 180));
-		addButton(new Button(TitleMenu.CANCEL_JOIN_ID, 4, 250, 180));
+		
+		if(bHosting){
+			startGameButton = addButton(new Button(TitleMenu.HOST_GAME_ID, 0, 125, 300));
+		} else {
+			startGameButton = addButton(new Button(TitleMenu.START_GAME_ID, 0, 125, 300));
+		}
+		addButton(new Button(TitleMenu.CANCEL_JOIN_ID, 4, 275, 300));
 	}
 
 	@Override

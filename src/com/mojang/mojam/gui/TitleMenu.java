@@ -16,6 +16,7 @@ public class TitleMenu extends GuiMenu {
     public static final int PERFORM_JOIN_ID = 1005;
     public static final int RESTART_GAME_ID = 1006;
     public static final int SELECT_LEVEL_ID = 1007;
+    public static final int SELECT_HOST_LEVEL_ID = 1008;
 
     public static String level = "";
     
@@ -30,7 +31,7 @@ public class TitleMenu extends GuiMenu {
         this.gameWidth = gameWidth;
 
         addButton(new Button(SELECT_LEVEL_ID, 0, (gameWidth - 128) / 2, 200));
-        addButton(new Button(HOST_GAME_ID, 2, (gameWidth - 128) / 2, 240));
+        addButton(new Button(SELECT_HOST_LEVEL_ID, 2, (gameWidth - 128) / 2, 240));
         addButton(new Button(JOIN_GAME_ID, 3, (gameWidth - 128) / 2, 280));
         addButton(new Button(EXIT_GAME_ID, 1, (gameWidth - 128) / 2, 320));
     }
