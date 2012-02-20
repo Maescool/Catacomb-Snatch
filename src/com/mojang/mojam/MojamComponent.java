@@ -129,9 +129,9 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
     }
 
-    private synchronized void createLevel() {
+    private synchronized void createLevel(String levelFile) {
         try {
-            level = Level.fromFile("/levels/level1.bmp");
+            level = Level.fromFile(levelFile);
         } catch (Exception ex) {
             throw new RuntimeException("Unable to load level", ex);
         }
@@ -357,7 +357,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
             synchronizer = new TurnSynchronizer(MojamComponent.this, packetLink, localId, 2);
 
             clearMenus();
-            createLevel();
+            createLevel("/levels/level1.bmp");
 
             synchronizer.setStarted(true);
             packetLink.sendPacket(new StartGamePacket(TurnSynchronizer.synchedSeed));
@@ -392,7 +392,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
         if (packet instanceof StartGamePacket) {
             if (!isServer) {
                 synchronizer.onStartGamePacket((StartGamePacket) packet);
-                createLevel();
+                createLevel("/levels/level1.bmp");
             }
         } else if (packet instanceof TurnPacket) {
             synchronizer.onTurnPacket((TurnPacket) packet);
@@ -414,7 +414,9 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
             synchronizer = new TurnSynchronizer(this, null, 0, 1);
             synchronizer.setStarted(true);
 
-            createLevel();
+            createLevel(TitleMenu.level);
+        } else if (button.getId() == TitleMenu.SELECT_LEVEL_ID) {
+        	addMenu(new LevelSelect());
         } else if (button.getId() == TitleMenu.HOST_GAME_ID) {
             addMenu(new HostingWaitMenu());
             isMultiplayer = true;
