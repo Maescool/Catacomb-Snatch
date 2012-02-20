@@ -129,9 +129,9 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
     }
 
-    private synchronized void createLevel() {
+    private synchronized void createLevel(String levelFile) {
         try {
-            level = Level.fromFile("/levels/level1.bmp");
+            level = Level.fromFile(levelFile);
         } catch (Exception ex) {
             throw new RuntimeException("Unable to load level", ex);
         }
@@ -357,10 +357,10 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
             synchronizer = new TurnSynchronizer(MojamComponent.this, packetLink, localId, 2);
 
             clearMenus();
-            createLevel();
+            createLevel(TitleMenu.level);
 
             synchronizer.setStarted(true);
-            packetLink.sendPacket(new StartGamePacket(TurnSynchronizer.synchedSeed));
+            packetLink.sendPacket(new StartGamePacket(TurnSynchronizer.synchedSeed, TitleMenu.level));
             packetLink.setPacketListener(MojamComponent.this);
 
         }
@@ -391,8 +391,9 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
     public void handle(Packet packet) {
         if (packet instanceof StartGamePacket) {
             if (!isServer) {
-                synchronizer.onStartGamePacket((StartGamePacket) packet);
-                createLevel();
+            	StartGamePacket sgPacker = (StartGamePacket) packet;
+                synchronizer.onStartGamePacket(sgPacker);
+                createLevel(sgPacker.getLevelFile());
             }
         } else if (packet instanceof TurnPacket) {
             synchronizer.onTurnPacket((TurnPacket) packet);
@@ -414,7 +415,11 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
             synchronizer = new TurnSynchronizer(this, null, 0, 1);
             synchronizer.setStarted(true);
 
-            createLevel();
+            createLevel(TitleMenu.level);
+        } else if (button.getId() == TitleMenu.SELECT_LEVEL_ID) {
+        	addMenu(new LevelSelect(false));
+        } else if (button.getId() == TitleMenu.SELECT_HOST_LEVEL_ID) {
+        	addMenu(new LevelSelect(true));
         } else if (button.getId() == TitleMenu.HOST_GAME_ID) {
             addMenu(new HostingWaitMenu());
             isMultiplayer = true;
