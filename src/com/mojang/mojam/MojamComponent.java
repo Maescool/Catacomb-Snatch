@@ -146,13 +146,13 @@ public class MojamComponent extends Canvas implements Runnable,
 
 		level.init();
 
-		players[0] = new Player(synchedKeys[0], level.width * Tile.WIDTH / 2
+		players[0] = new Player(synchedKeys[0], mouseButtons, level.width * Tile.WIDTH / 2
 				- 16, (level.height - 5 - 1) * Tile.HEIGHT - 16, Team.Team1);
 		players[0].setFacing(4);
 		level.addEntity(players[0]);
 		level.addEntity(new Base(34 * Tile.WIDTH, 7 * Tile.WIDTH, Team.Team1));
 		if (isMultiplayer) {
-			players[1] = new Player(synchedKeys[1], level.width * Tile.WIDTH
+			players[1] = new Player(synchedKeys[1], mouseButtons, level.width * Tile.WIDTH
 					/ 2 - 16, 7 * Tile.HEIGHT - 16, Team.Team2);
 			// players[1] = new Player(synchedKeys[1], 10, 10);
 			level.addEntity(players[1]);
