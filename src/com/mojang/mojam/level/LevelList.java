@@ -17,6 +17,8 @@ public class LevelList {
 		levels.add(new LevelInformation("level2", "/levels/level2.bmp"));
 		levels.add(new LevelInformation("Testmap", "/levels/Testmap.bmp"));
 		levels.add(new LevelInformation("TheMaze", "/levels/TheMaze.bmp"));
+		levels.add(new LevelInformation("Circular_Shapes", "/levels/Circular Shapes.bmp"));
+		levels.add(new LevelInformation("BlackHole", "/levels/BlackHole.bmp"));
 	}
 
 	public static ArrayList<LevelInformation> getLevels() {
