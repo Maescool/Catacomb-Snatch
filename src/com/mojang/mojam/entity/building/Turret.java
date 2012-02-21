@@ -86,7 +86,7 @@ public class Turret extends Building {
 	public void render(Screen screen) {
 		super.render(screen);
 		if (health != 0) {
-			Font.drawCentered(screen, health + " / " + maxHealth,
+			Font.drawCentered(screen, health + "/" + maxHealth,
 					(int) (pos.x), (int) (pos.y + 12));
 		}
 	}
