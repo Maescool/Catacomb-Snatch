@@ -54,32 +54,6 @@ public class Rifle implements IWeapon {
 	}
 
 	@Override
-	public void secondaryFire(double xDir, double yDir) {
-		isBursting = true;
-		if(curBurstDelay-- <= 0) {
-			if (curBurstCount++ < burstCount) {				
-				double dir = getBulletDirection(accuracy / 5);
-				xDir = Math.cos(dir);
-				yDir = Math.sin(dir);			
-					
-					
-				Entity bullet = new Bullet(owner, xDir*1.2, yDir*1.2);
-				owner.level.addEntity(bullet);
-				applyImpuls(xDir, yDir, 1.5);
-				owner.muzzleTicks = 3;
-				owner.muzzleX = bullet.pos.x + 7 * xDir - 8;
-				owner.muzzleY = bullet.pos.y + 5 * yDir - 8 + 1;
-				curBurstDelay = shootDelay;
-				MojamComponent.soundPlayer.playSound("/sound/Shot 1.wav",
-						(float) owner.getPosition().x, (float) owner.getPosition().y);
-			} else {
-				curBurstDelay = burstCooldown;
-				curBurstCount = 0;
-			}
-		}
-	}
-
-	@Override
 	public void weapontick() {
 		if(!wasShooting) {
 			curShootDelay = 0;

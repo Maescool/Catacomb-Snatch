@@ -184,9 +184,7 @@ public class Player extends Mob implements LootCollector {
 		weapon.weapontick();
 		if (carrying == null && keys.fire.isDown || carrying == null && mouseButtons.isDown(mouseFireButton)) {
 			primaryFire(xa, ya);
-		} else  if (carrying == null && mouseButtons.isDown(3)) {
-			secondaryFire(xa, ya);
-		}else{
+		} else{
 			if (wasShooting) {
 				suckRadius = 60;
 			}
@@ -297,14 +295,6 @@ public class Player extends Mob implements LootCollector {
 			takeDelay--;
 		}
 		weapon.primaryFire(xa, ya);
-	}
-	
-	private void secondaryFire(double xa, double ya) {
-		wasShooting = true;
-		if (takeDelay > 0) {
-			takeDelay--;
-		}
-		weapon.secondaryFire(xa, ya);
 	}
 
 	public void payCost(int cost) {
