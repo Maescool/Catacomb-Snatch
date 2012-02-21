@@ -27,6 +27,7 @@ public class DifficultySelect extends GuiMenu
 			screen.clear(0);
 			drawDifficulty(screen);
 			super.render(screen);
+			Font.draw(screen, "Choose a difficulty", 10, 10);
 		}
 
 		private void drawDifficulty(Screen screen) {
