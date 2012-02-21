@@ -32,6 +32,15 @@ Your output artifact is in build/libs/Catacomb-Snatch-1.0.0.jar
 You can run it the same way you would run catacomb snatch otherwise (java -jar build/libs/Catacomb-Snatch-1.0.0.jar)
 Or use gradle run to build it and run it.
 
+### How to make a native Mac build
+
+In eclipse go to
+File>Export>Other>Mac OS X application bundle 
+choose the main class and fill in the appropriate information and then click finish to compile your build.
+
+You also have the option to use an icon for the application (must be an icns file) which is provided below
+Mac Icon download: http://catacomb-snatch.googlecode.com/files/cs_icon.icns
+
 Catacomb Snatch
 ===============
 
