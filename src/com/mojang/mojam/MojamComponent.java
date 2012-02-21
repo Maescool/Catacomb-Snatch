@@ -6,9 +6,7 @@ import java.awt.image.*;
 import java.io.IOException;
 import java.net.*;
 import java.util.*;
-
 import javax.swing.*;
-
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.building.Base;
 import com.mojang.mojam.entity.mob.Team;
@@ -26,7 +24,11 @@ import com.mojang.mojam.sound.SoundPlayer;
 public class MojamComponent extends Canvas implements Runnable,
 		MouseMotionListener, CommandListener, PacketListener, MouseListener,
 		ButtonListener, KeyListener {
-
+/*
+/	GAME_WIDTH and GAME_HEIGHT can be changed to hardcode a new screen resolution
+/	For example to play the game in 1080p change GAME_WIDTH to 1920 and GAME_HEIGHT to 1080 and the SCALE to 1
+/	SCALE multiplies the resolution by whatever the number in SCALE is set too but also scales gameplay accordingly.
+*/
 	private static final long serialVersionUID = 1L;
 	public static final int GAME_WIDTH = 512;
 	public static final int GAME_HEIGHT = GAME_WIDTH * 3 / 4;
