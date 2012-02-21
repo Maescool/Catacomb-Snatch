@@ -11,11 +11,15 @@ public class Facing {
 	}
 
 	public static Vec2 getVector(int dir, double length) {
-		switch(dir) {
-		case NORTH: return new Vec2(0, -length);
-		case SOUTH: return new Vec2(0, +length);
-		case WEST : return new Vec2(-length, 0);
-		case EAST : return new Vec2(+length, 0);
+		switch (dir) {
+		case NORTH:
+			return new Vec2(0, -length);
+		case SOUTH:
+			return new Vec2(0, +length);
+		case WEST:
+			return new Vec2(-length, 0);
+		case EAST:
+			return new Vec2(+length, 0);
 		}
 		return null;
 	}

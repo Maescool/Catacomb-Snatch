@@ -11,7 +11,7 @@ public class InputHandler implements KeyListener {
 	private Map<Integer, Key> mappings = new HashMap<Integer, Key>();
 
 	public InputHandler(Keys keys) {
-		//controls
+		// controls
 		mappings.put(KeyEvent.VK_UP, keys.up);
 		mappings.put(KeyEvent.VK_DOWN, keys.down);
 		mappings.put(KeyEvent.VK_LEFT, keys.left);
@@ -27,7 +27,7 @@ public class InputHandler implements KeyListener {
 		mappings.put(KeyEvent.VK_A, keys.left);
 		mappings.put(KeyEvent.VK_D, keys.right);
 
-		//actions
+		// actions
 		mappings.put(KeyEvent.VK_SPACE, keys.fire);
 		mappings.put(KeyEvent.VK_ALT, keys.fire);
 		mappings.put(KeyEvent.VK_CONTROL, keys.fire);
