@@ -24,7 +24,7 @@ public class LevelSelect extends GuiMenu {
 			startGameButton = addButton(new Button(TitleMenu.HOST_GAME_ID, 0,
 					125, 300));
 		} else {
-			startGameButton = addButton(new Button(TitleMenu.START_GAME_ID, 0,
+			startGameButton = addButton(new Button(TitleMenu.SELECT_DIFFICULTY_ID, 0,
 					125, 300));
 		}
 		addButton(new Button(TitleMenu.CANCEL_JOIN_ID, 4, 275, 300));

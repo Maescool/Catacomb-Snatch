@@ -16,8 +16,10 @@ public class TitleMenu extends GuiMenu {
 	public static final int RESTART_GAME_ID = 1006;
 	public static final int SELECT_LEVEL_ID = 1007;
 	public static final int SELECT_HOST_LEVEL_ID = 1008;
+	public static final int SELECT_DIFFICULTY_ID = 1009;
 
 	public static String level = "";
+	public static int Difficulty = 0;
 
 	// public static lol... ;)
 	public static String ip = "";

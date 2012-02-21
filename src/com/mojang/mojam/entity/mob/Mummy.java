@@ -1,6 +1,7 @@
 package com.mojang.mojam.entity.mob;
 
 import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.*;
 
@@ -12,7 +13,7 @@ public class Mummy extends Mob {
 	public Mummy(double x, double y) {
 		super(x, y, Team.Neutral);
 		setPos(x, y);
-		setStartHealth(7);
+		setStartHealth(7 + 2 * TitleMenu.Difficulty);
 		dir = TurnSynchronizer.synchedRandom.nextDouble() * Math.PI * 2;
 		minimapColor = 0xffff0000;
 		yOffs = 10;
