@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -21,6 +22,7 @@ import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
+import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.tile.*;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.math.Vec2;
@@ -40,6 +42,8 @@ public class Level {
 	private Bitmap minimap;
 	private boolean seen[];
 	final int[] neighbourOffsets;
+
+	public int maxMonsters;
 
 	public int player1Score = 0;
 	public int player2Score = 0;
@@ -143,6 +147,8 @@ public class Level {
 
 	public void init() {
 		Random random = TurnSynchronizer.synchedRandom;
+
+		maxMonsters = 2000 + 500 * TitleMenu.Difficulty;
 
 		for (int i = 0; i < 11; i++) {
 			double x = (random.nextInt(width - 16) + 8) * Tile.WIDTH
@@ -692,5 +698,16 @@ public class Level {
 		if (player != null) {
 			setTile(x, y, tile);
 		}
+	}
+	
+	// counts how many of a certain entitiy class are in play
+	public <T> int countEntities(Class<T> entityType) {
+		int count = 0;
+		for (Iterator<Entity> it = entities.iterator(); it.hasNext();) {
+			if (entityType.isInstance(it.next())) {
+				count++;
+			}
+		}
+		return count;
 	}
 }

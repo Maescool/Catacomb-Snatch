@@ -49,9 +49,8 @@ public class SpawnerEntity extends Building {
 		if (type == 2)
 			te = new Mummy(x, y);
 
-		if (level.getEntities(te.getBB().grow(8), te.getClass()).size() == 0) {
+		if (level.countEntities(Mob.class) < level.maxMonsters && level.getEntities(te.getBB().grow(8), te.getClass()).size() == 0)
 			level.addEntity(te);
-		}
 	}
 
 	public void die() {

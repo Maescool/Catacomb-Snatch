@@ -5,9 +5,15 @@ import com.mojang.mojam.screen.*;
 public class Font {
 	public static String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ   "
 			+ "0123456789-.!?/%$\\=*+,;:()&#\"'";
+	private static final int pxFontHeight = 8;
+	private static final int pxFontWidth = 8;
 
 	public static int getStringWidth(String s) {
-		return s.length() * 8;
+		return s.length() * pxFontWidth;
+	}
+	
+	public static int getStringHeight() {
+		return pxFontHeight;
 	}
 
 	private Font() {
