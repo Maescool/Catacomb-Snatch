@@ -20,6 +20,16 @@ Possibly (AND THIS IS A VERY BIG 'POSSIBLY') Co-Op.
 Make It So Turrets Don't Fire At ALL Entities
 Make It Able To Change The Resolution Through "MojamComponent.java"
 
+How to build
+------------
+
+ * Get Gradle (www.gradle.org) Currently using 1.0-minlestone-8
+ * gradle build
+
+Your output artifact is in build/libs/Catacomb-Snatch-1.0.0.jar
+
+You can run it the same way you would run catacomb snatch otherwise (java -jar build/libs/Catacomb-Snatch-1.0.0.jar)
+Or use gradle run to build it and run it.
 
 Here is the original README
 ---------------------

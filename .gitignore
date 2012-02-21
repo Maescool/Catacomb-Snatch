@@ -1,1 +1,3 @@
 bin/
+.gradle
+build
