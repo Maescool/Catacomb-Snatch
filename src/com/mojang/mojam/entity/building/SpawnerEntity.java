@@ -6,6 +6,7 @@ import com.mojang.mojam.screen.*;
 
 public class SpawnerEntity extends Building {
 	public static final int SPAWN_INTERVAL = 60 * 4;
+	public static final int MAX_MONSTERS = 1000;
 
 	public int spawnTime = 0;
 
@@ -49,9 +50,8 @@ public class SpawnerEntity extends Building {
 		if (type == 2)
 			te = new Mummy(x, y);
 
-		if (level.getEntities(te.getBB().grow(8), te.getClass()).size() == 0) {
+		if (level.entities.size() < MAX_MONSTERS && level.getEntities(te.getBB().grow(8), te.getClass()).size() == 0)
 			level.addEntity(te);
-		}
 	}
 
 	public void die() {
