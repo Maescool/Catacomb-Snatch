@@ -4,74 +4,75 @@ import java.awt.event.KeyEvent;
 
 import com.mojang.mojam.screen.*;
 
-
 public class TitleMenu extends GuiMenu {
 
-    public static final int START_GAME_ID = 1000;
-    public static final int HOST_GAME_ID = 1002;
-    public static final int JOIN_GAME_ID = 1003;
-    public static final int EXIT_GAME_ID = 1001;
+	public static final int START_GAME_ID = 1000;
+	public static final int HOST_GAME_ID = 1002;
+	public static final int JOIN_GAME_ID = 1003;
+	public static final int EXIT_GAME_ID = 1001;
 
-    public static final int CANCEL_JOIN_ID = 1004;
-    public static final int PERFORM_JOIN_ID = 1005;
-    public static final int RESTART_GAME_ID = 1006;
-    public static final int SELECT_LEVEL_ID = 1007;
-    public static final int SELECT_HOST_LEVEL_ID = 1008;
+	public static final int CANCEL_JOIN_ID = 1004;
+	public static final int PERFORM_JOIN_ID = 1005;
+	public static final int RESTART_GAME_ID = 1006;
+	public static final int SELECT_LEVEL_ID = 1007;
+	public static final int SELECT_HOST_LEVEL_ID = 1008;
 
-    public static String level = "";
-    
-    // public static lol... ;)
-    public static String ip = "";
+	public static String level = "";
 
-    private int selectedItem = 0;
-    private final int gameWidth;
+	// public static lol... ;)
+	public static String ip = "";
 
-    public TitleMenu(int gameWidth, int gameHeight) {
-        super();
-        this.gameWidth = gameWidth;
+	private int selectedItem = 0;
+	private final int gameWidth;
 
-        addButton(new Button(SELECT_LEVEL_ID, 0, (gameWidth - 128) / 2, 200));
-        addButton(new Button(SELECT_HOST_LEVEL_ID, 2, (gameWidth - 128) / 2, 240));
-        addButton(new Button(JOIN_GAME_ID, 3, (gameWidth - 128) / 2, 280));
-        addButton(new Button(EXIT_GAME_ID, 1, (gameWidth - 128) / 2, 320));
-    }
+	public TitleMenu(int gameWidth, int gameHeight) {
+		super();
+		this.gameWidth = gameWidth;
 
-    public void render(Screen screen) {
+		addButton(new Button(SELECT_LEVEL_ID, 0, (gameWidth - 128) / 2, 200));
+		addButton(new Button(SELECT_HOST_LEVEL_ID, 2, (gameWidth - 128) / 2,
+				240));
+		addButton(new Button(JOIN_GAME_ID, 3, (gameWidth - 128) / 2, 280));
+		addButton(new Button(EXIT_GAME_ID, 1, (gameWidth - 128) / 2, 320));
+	}
 
-        screen.clear(0);
-//        screen.blit(Art.titles[1], 0, 10);
-        screen.blit(Art.titleScreen, 0, 0);
+	public void render(Screen screen) {
 
-        super.render(screen);
+		screen.clear(0);
+		// screen.blit(Art.titles[1], 0, 10);
+		screen.blit(Art.titleScreen, 0, 0);
 
-        screen.blit(Art.lordLard[0][6], (gameWidth - 128) / 2 - 40, 190 + selectedItem * 40);
-    }
+		super.render(screen);
 
-    @Override
-    public void buttonPressed(Button button) {
-    }
+		screen.blit(Art.lordLard[0][6], (gameWidth - 128) / 2 - 40,
+				190 + selectedItem * 40);
+	}
 
-    public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_UP) {
-            selectedItem--;
-            if (selectedItem < 0) {
-                selectedItem = 3;
-            }
-        } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-            selectedItem++;
-            if (selectedItem > 3) {
-                selectedItem = 0;
-            }
-        } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            e.consume();
-            buttons.get(selectedItem).postClick();
-        }
-    }
+	@Override
+	public void buttonPressed(Button button) {
+	}
 
-    public void keyReleased(KeyEvent arg0) {
-    }
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_UP) {
+			selectedItem--;
+			if (selectedItem < 0) {
+				selectedItem = 3;
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+			selectedItem++;
+			if (selectedItem > 3) {
+				selectedItem = 0;
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			e.consume();
+			buttons.get(selectedItem).postClick();
+		}
+	}
 
-    public void keyTyped(KeyEvent arg0) {
-    }
+	public void keyReleased(KeyEvent arg0) {
+	}
+
+	public void keyTyped(KeyEvent arg0) {
+	}
 
 }
