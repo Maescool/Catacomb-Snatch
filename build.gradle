@@ -1,8 +1,8 @@
 apply plugin: 'java'
 apply plugin: 'idea'
 
-project.group = "org.shlrm.mojam"
-project.version = "1.0.0-BEEPDOG"
+project.group = "com.mojang.mojam"
+project.version = "1.0.0"
 
 sourceSets {
   main {
