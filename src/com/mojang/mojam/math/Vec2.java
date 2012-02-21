@@ -63,6 +63,12 @@ public class Vec2 {
         y += p.y;
         validate();
     }
+    
+	public void addSelf(double x, double y) {
+        x += x;
+        y += y;
+        validate();
+	}
 
     public void copy(Vec2 pos) {
         this.x = pos.x;
@@ -97,6 +103,12 @@ public class Vec2 {
     public Vec2 scale(double s) {
         return new Vec2(x * s, y * s);
     }
+    
+    public void scaleSelf(double s) {
+        x *= s;
+        y *= s;
+        validate();
+    }
 
     public Vec2 mul(Vec2 v) {
         return new Vec2(x * v.x, y * v.y);
@@ -107,4 +119,5 @@ public class Vec2 {
             System.out.println("Gahhh: " + toString());
         }
     }
+
 }
