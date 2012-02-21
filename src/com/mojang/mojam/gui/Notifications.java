@@ -38,7 +38,7 @@ public class Notifications {
     }
 
     public void render(Screen screen) {
-        Iterator it = notes.iterator();
+        Iterator<Note> it = notes.iterator();
         int i = 0;
         while (it.hasNext()) {
             i += 1;

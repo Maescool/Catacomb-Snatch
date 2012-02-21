@@ -1,6 +1,5 @@
 package com.mojang.mojam.entity.building;
 
-import com.mojang.mojam.entity.animation.SmokeAnimation;
 import com.mojang.mojam.entity.mob.*;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.*;

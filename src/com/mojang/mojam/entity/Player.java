@@ -8,7 +8,6 @@ import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.loot.*;
 import com.mojang.mojam.entity.mob.*;
 import com.mojang.mojam.entity.particle.Sparkle;
-import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.level.tile.*;
 import com.mojang.mojam.math.Vec2;
@@ -231,24 +230,14 @@ public class Player extends Mob implements LootCollector {
             }
         }
 
-
-
         if (carrying != null) {
             carrying.setPos(pos.x, pos.y - 20);
             carrying.tick();
 
             if (keys.use.wasPressed()) {
                 Vec2 buildPos = pos.clone();
-                Tile tile = level.getTile(buildPos);
-//                if (tile != null && tile.isBuildable()) {
                 boolean allowed = true;
-/*
- * for (Entity e : level.getEntities(x - Building.MIN_BUILDING_DISTANCE, y -
- * Building.MIN_BUILDING_DISTANCE, x + Building.MIN_BUILDING_DISTANCE, y +
- * Building.MIN_BUILDING_DISTANCE, Building.class)) { if
- * (e.pos.distSqr(buildPos) < Building.MIN_BUILDING_DISTANCE) { allowed = false;
- * break; } }
- */
+
                 if (allowed && (!(carrying instanceof IUsable) || (carrying instanceof IUsable && ((IUsable) carrying).isAllowedToCancel()))) {
                     carrying.removed = false;
                     carrying.xSlide = aimVector.x * 5;
@@ -258,7 +247,6 @@ public class Player extends Mob implements LootCollector {
                     level.addEntity(carrying);
                     carrying = null;
                 }
-//                }
             }
         } else {
             Entity closest = null;
