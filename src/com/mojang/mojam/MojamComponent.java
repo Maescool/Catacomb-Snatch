@@ -19,6 +19,7 @@ import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.network.*;
 import com.mojang.mojam.network.packet.*;
+import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 import com.mojang.mojam.sound.SoundPlayer;
 
@@ -38,8 +39,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
     private Stack<GuiMenu> menuStack = new Stack<GuiMenu>();
 
     private boolean mouseMoved = false;
-    private boolean mouseHidden = false;
-    private int mouseHideTime = 0;
     public MouseButtons mouseButtons = new MouseButtons();
     public Keys keys = new Keys();
     public Keys[] synchedKeys = {
@@ -127,6 +126,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
         setFocusTraversalKeysEnabled(false);
         requestFocus();
 
+        // hide cursor, since we're drawing our own one
+        setCursor(emptyCursor);
     }
 
     private synchronized void createLevel(String levelFile) {
@@ -286,6 +287,10 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
         g.clipRect(0, 0, GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE);
 
         if (!menuStack.isEmpty() || level != null) {
+        	
+        	// render mouse
+        	renderMouse( screen, mouseButtons );
+        	
             g.drawImage(screen.image, 0, 0, GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE, null);
         }
 
@@ -296,6 +301,24 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 //        g.drawString(msg, 10, 10);
 
     }
+    
+	private void renderMouse( Screen screen, MouseButtons mouseButtons ) {
+	    	
+		int crosshairSize = 15;
+		int crosshairSizeHalf = crosshairSize / 2;
+		
+		Bitmap marker = new Bitmap(crosshairSize, crosshairSize);
+		    	
+		// horizontal line
+		for ( int i = 0; i < crosshairSize; i++ ) {
+			if ( i >= crosshairSizeHalf - 1 && i <= crosshairSizeHalf + 1 ) continue;
+			
+			marker.pixels[crosshairSizeHalf + i * crosshairSize] = 0xffffffff;
+			marker.pixels[i + crosshairSizeHalf * crosshairSize] = 0xffffffff;
+		}
+		
+		screen.blit( marker, mouseButtons.getX() / SCALE - crosshairSizeHalf - 2, mouseButtons.getY() / SCALE - crosshairSizeHalf - 2 );
+	}
 
     private void tick() {
         if (level != null) {
@@ -327,6 +350,15 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
                 for (Keys skeys : synchedKeys) {
                     skeys.tick();
                 }
+                
+                // if mouse has moved, update player orientation before level tick
+                if ( mouseMoved ) {
+                	mouseMoved = false;
+                	
+                	// update player mouse, in world pixels relative to player
+                    player.setMousePos( ( ( mouseButtons.getX() / SCALE ) - ( screen.w / 2 ) ), ( ( ( mouseButtons.getY() / SCALE ) + 24 ) - ( screen.h / 2 ) ) );
+                }
+                
                 level.tick();
             }
         }
@@ -334,21 +366,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
         if (!menuStack.isEmpty()) {
             menuStack.peek().tick(mouseButtons);
         }
-        if (mouseMoved) {
-            mouseMoved = false;
-            mouseHideTime = 0;
-            if (mouseHidden) {
-                mouseHidden = false;
-                setCursor(null);
-            }
-        }
-        if (mouseHideTime < 60) {
-            mouseHideTime++;
-            if (mouseHideTime == 60) {
-                setCursor(emptyCursor);
-                mouseHidden = true;
-            }
-        }
+
         mouseButtons.tick();
 
         if (createServerState == 1) {
