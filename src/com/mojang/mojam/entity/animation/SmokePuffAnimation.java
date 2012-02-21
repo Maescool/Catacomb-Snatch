@@ -10,7 +10,7 @@ public class SmokePuffAnimation extends Animation {
 	int width;
 	int numFrames;
 	double xa, ya;
-	
+
 	public SmokePuffAnimation(Mob mob, Bitmap[][] bitmap, int duration) {
 		super(mob.pos.x, mob.pos.y, duration);
 		xa = mob.xd * 0.5f;
@@ -21,16 +21,17 @@ public class SmokePuffAnimation extends Animation {
 		width = bitmap.length;
 		numFrames = width * bitmap[0].length;
 	}
-	
+
 	public void tick() {
 		super.tick();
 		move(xa, ya);
 		xa *= 0.9f;
 		ya *= 0.9f;
 	}
-	
-    public void render(Screen screen) {
-        int frame = Mth.clamp(numFrames - life * numFrames / duration - 1, 0, numFrames);
-        screen.blit(bitmap[frame % width][frame / width], pos.x, pos.y);
-    }
+
+	public void render(Screen screen) {
+		int frame = Mth.clamp(numFrames - life * numFrames / duration - 1, 0,
+				numFrames);
+		screen.blit(bitmap[frame % width][frame / width], pos.x, pos.y);
+	}
 }
