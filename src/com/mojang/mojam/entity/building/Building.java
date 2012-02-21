@@ -1,5 +1,6 @@
 package com.mojang.mojam.entity.building;
 
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.*;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.gui.Font;
@@ -28,7 +29,7 @@ public class Building extends Mob implements IUsable {
         super.render(screen);
         renderMarker(screen);
         if (upgradeLevel != 0) {
-        	Font.draw(screen, "" + upgradeLevel, (int) (pos.x + 10), (int) (pos.y));
+        	Font.drawCentered(screen, "" + upgradeLevel, (int) (pos.x + 10), (int) (pos.y));
         }
     }
 
@@ -92,6 +93,8 @@ public class Building extends Mob implements IUsable {
         final int cost = upgradeCosts[upgradeLevel];
         if (cost > p.getScore()) return false;
 
+        MojamComponent.soundPlayer.playSound( "/sound/Upgrade.wav", (float) pos.x, (float) pos.y, true);
+        
         ++upgradeLevel;
         p.useMoney(cost);
         upgradeComplete(upgradeLevel);

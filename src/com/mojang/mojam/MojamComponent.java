@@ -39,6 +39,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
     private Stack<GuiMenu> menuStack = new Stack<GuiMenu>();
 
     private boolean mouseMoved = false;
+    private boolean mouseHidden = false;
+    private int mouseHideTime = 0;
     public MouseButtons mouseButtons = new MouseButtons();
     public Keys keys = new Keys();
     public Keys[] synchedKeys = {
@@ -303,7 +305,9 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
     }
     
 	private void renderMouse( Screen screen, MouseButtons mouseButtons ) {
-	    	
+	    
+		if ( mouseHidden ) return;
+		
 		int crosshairSize = 15;
 		int crosshairSizeHalf = crosshairSize / 2;
 		
@@ -332,10 +336,36 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
                 level = null;
                 return;
             }
+            if ( keys.escape.wasPressed() ) {
+            	clearMenus();
+                addMenu(new TitleMenu(GAME_WIDTH, GAME_HEIGHT));
+                level = null;
+                return;
+            }
         }
         if (packetLink != null) {
             packetLink.tick();
         }
+        
+        mouseButtons.setPosition(getMousePosition());
+        if (!menuStack.isEmpty()) {
+            menuStack.peek().tick(mouseButtons);
+        }
+        if (mouseMoved) {
+            mouseMoved = false;
+            mouseHideTime = 0;
+            if (mouseHidden) {
+            	mouseHidden = false;
+            }
+        }
+        if (mouseHideTime < 60) {
+            mouseHideTime++;
+            if (mouseHideTime == 60) {
+                mouseHidden = true;
+            }
+        }
+        mouseButtons.tick();
+        
         if (level != null) {
             if (synchronizer.preTurn()) {
                 synchronizer.postTurn();
@@ -351,23 +381,19 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
                     skeys.tick();
                 }
                 
-                // if mouse has moved, update player orientation before level tick
-                if ( mouseMoved ) {
-                	mouseMoved = false;
+                // if mouse is in use, update player orientation before level tick
+                if ( !mouseHidden ) {
                 	
                 	// update player mouse, in world pixels relative to player
-                    player.setMousePos( ( ( mouseButtons.getX() / SCALE ) - ( screen.w / 2 ) ), ( ( ( mouseButtons.getY() / SCALE ) + 24 ) - ( screen.h / 2 ) ) );
+                    player.setAimByMouse( ( ( mouseButtons.getX() / SCALE ) - ( screen.w / 2 ) ), ( ( ( mouseButtons.getY() / SCALE ) + 24 ) - ( screen.h / 2 ) ) );
+                } else {
+                	player.setAimByKeyboard();
                 }
                 
                 level.tick();
             }
         }
-        mouseButtons.setPosition(getMousePosition());
-        if (!menuStack.isEmpty()) {
-            menuStack.peek().tick(mouseButtons);
-        }
-
-        mouseButtons.tick();
+        
 
         if (createServerState == 1) {
             createServerState = 2;

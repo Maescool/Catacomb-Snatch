@@ -24,6 +24,7 @@ public class Player extends Mob implements LootCollector {
 
     public Keys keys;
     public Vec2 aimVector;
+    private boolean mouseAiming;
     public int shootDelay = 0;
     public double xd, yd;
     public int takeDelay = 0;
@@ -109,6 +110,12 @@ public class Player extends Mob implements LootCollector {
         }
         if (keys.right.isDown) {
             xa++;
+        }
+        
+        if ( !mouseAiming &&!keys.fire.isDown && xa * xa + ya * ya != 0) {
+        	aimVector.set( xa, ya );
+        	aimVector.normalizeSelf();
+    		updateFacing();
         }
 
         if (xa != 0 || ya != 0) {
@@ -244,8 +251,8 @@ public class Player extends Mob implements LootCollector {
  */
                 if (allowed && (!(carrying instanceof IUsable) || (carrying instanceof IUsable && ((IUsable) carrying).isAllowedToCancel()))) {
                     carrying.removed = false;
-                    carrying.xSlide = aimVector.x * 3;
-                    carrying.ySlide = aimVector.y * 3;
+                    carrying.xSlide = aimVector.x * 5;
+                    carrying.ySlide = aimVector.y * 5;
                     carrying.freezeTime = 10;
                     carrying.setPos(buildPos.x, buildPos.y);
                     level.addEntity(carrying);
@@ -462,10 +469,15 @@ public class Player extends Mob implements LootCollector {
     /**
      * used to update player orientation, values relative to player.
      */
-	public void setMousePos( int x, int y ) {
+	public void setAimByMouse( int x, int y ) {
+		mouseAiming = true;
 		aimVector.set(x, y);
 		aimVector.normalizeSelf();
 		updateFacing();
+	}
+	
+	public void setAimByKeyboard() {
+		mouseAiming = false;
 	}
 	
 	/**

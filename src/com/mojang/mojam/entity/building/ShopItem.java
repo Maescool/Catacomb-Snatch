@@ -32,8 +32,8 @@ public class ShopItem extends Building {
     @Override
     public void render(Screen screen) {
         super.render(screen);
-        Bitmap image = getSprite();
-        Font.draw(screen, "" + COST[type], (int) (pos.x - image.w / 2) + 3, (int) (pos.y + 7));
+//        Bitmap image = getSprite();
+        Font.drawCentered(screen, "" + COST[type], (int) (pos.x), (int) (pos.y + 10));
     }
 
     public void init() {
