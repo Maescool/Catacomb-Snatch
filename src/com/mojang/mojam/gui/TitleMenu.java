@@ -2,7 +2,8 @@ package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
 
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Screen;
 
 public class TitleMenu extends GuiMenu {
 
@@ -31,11 +32,11 @@ public class TitleMenu extends GuiMenu {
 		super();
 		this.gameWidth = gameWidth;
 
-		addButton(new Button(SELECT_LEVEL_ID, 0, (gameWidth - 128) / 2, 200));
-		addButton(new Button(SELECT_HOST_LEVEL_ID, 2, (gameWidth - 128) / 2,
+		addButton(new Button(SELECT_LEVEL_ID, "start", true, (gameWidth - 128) / 2, 200));
+		addButton(new Button(SELECT_HOST_LEVEL_ID, "host", true, (gameWidth - 128) / 2,
 				240));
-		addButton(new Button(JOIN_GAME_ID, 3, (gameWidth - 128) / 2, 280));
-		addButton(new Button(EXIT_GAME_ID, 1, (gameWidth - 128) / 2, 320));
+		addButton(new Button(JOIN_GAME_ID, "join", true, (gameWidth - 128) / 2, 280));
+		addButton(new Button(EXIT_GAME_ID, "exit", true, (gameWidth - 128) / 2, 320));
 	}
 
 	public void render(Screen screen) {

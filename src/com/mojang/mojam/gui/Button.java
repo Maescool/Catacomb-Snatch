@@ -1,9 +1,11 @@
 package com.mojang.mojam.gui;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.mojang.mojam.MouseButtons;
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Screen;
 
 public class Button extends GuiComponent {
 
@@ -22,6 +24,8 @@ public class Button extends GuiComponent {
 	private String label;
 	private int ix;
 	private int iy;
+	private int tx;
+	private int ty;
 	private boolean performClick = false;
 
 	public Button(int id, int buttonImageIndex, int x, int y) {		
@@ -36,13 +40,30 @@ public class Button extends GuiComponent {
 	}
 	
 	public Button(int id, String label, int x, int y) {
+		this(id, label, false, x, y);
+	}
+	
+	public Button(int id, String label, boolean isImageButton, int x, int y) {
 		this.id = id;
 		this.x = x;
 		this.y = y;
-		this.w = Font.getStringWidth(label);
-		this.h = Font.getStringHeight();
+		
+		if (isImageButton) {
+			this.w = 128;
+			this.h = 24;	
+		}
+		else {
+			this.w = Font.getStringWidth(label);
+			this.h = Font.getStringHeight();
+		}		
+		
+		this.ix = 1;
+		this.iy = 3;
+		this.tx = (128 - Font.getStringWidth(label)) / 2;
+		this.ty = (24 - Font.getStringHeight()) / 2;
+		
 		this.label = label;
-		isImageButton = false;
+		this.isImageButton = isImageButton;
 	}
 
 	@Override
@@ -80,13 +101,13 @@ public class Button extends GuiComponent {
 		if (isPressed) {
 			if(isImageButton)
 				screen.blit(Art.buttons[ix][iy * 2 + 1], x, y);
-			else
-				Font.draw(screen, label, x, y);
+			if (label != null)
+				Font.drawPressed(screen, label, x+tx, y+ty);
 		} else {
 			if(isImageButton)
 				screen.blit(Art.buttons[ix][iy * 2 + 0], x, y);
-			else
-				Font.draw(screen, label, x, y);			
+			if (label != null)
+				Font.draw(screen, label, x+tx, y+ty);			
 		}
 	}
 

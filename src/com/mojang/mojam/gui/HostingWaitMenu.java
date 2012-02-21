@@ -1,7 +1,7 @@
 package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
-import java.net.*;
+import java.net.InetAddress;
 
 import com.mojang.mojam.screen.Screen;
 
@@ -10,7 +10,7 @@ public class HostingWaitMenu extends GuiMenu {
 	public HostingWaitMenu() {
 		super();
 
-		addButton(new Button(TitleMenu.CANCEL_JOIN_ID, 4, 250, 180));
+		addButton(new Button(TitleMenu.CANCEL_JOIN_ID, "cancel", true, 250, 180));
 	}
 
 	@Override

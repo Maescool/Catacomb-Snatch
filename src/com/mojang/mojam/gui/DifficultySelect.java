@@ -18,8 +18,8 @@ public class DifficultySelect extends GuiMenu
 
 		public DifficultySelect() {
 			super();
-			startGameButton = addButton(new Button(TitleMenu.START_GAME_ID, 0, 125, 300));
-			addButton(new Button(TitleMenu.CANCEL_JOIN_ID, 4, 275, 300));
+			startGameButton = addButton(new Button(TitleMenu.SELECT_LEVEL_ID, "start", true, 125, 300));
+			addButton(new Button(TitleMenu.CANCEL_JOIN_ID, "cancel", true, 275, 300));
 		}
 
 		@Override
