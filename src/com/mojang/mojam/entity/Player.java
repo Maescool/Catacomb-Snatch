@@ -22,6 +22,8 @@ public class Player extends Mob implements LootCollector {
 	public static final int REGEN_INTERVAL = 60 * 3;
 
 	public Keys keys;
+	public MouseButtons mouseButtons;
+	public int mouseFireButton = 1;
 	public Vec2 aimVector;
 	private boolean mouseAiming;
 	public int shootDelay = 0;
@@ -51,9 +53,10 @@ public class Player extends Mob implements LootCollector {
 
 	private int regenDelay = 0;
 
-	public Player(Keys keys, int x, int y, int team) {
+	public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team) {
 		super(x, y, team);
 		this.keys = keys;
+		this.mouseButtons = mouseButtons;
 
 		startX = x;
 		startY = y;
@@ -64,7 +67,7 @@ public class Player extends Mob implements LootCollector {
 
 	}
 
-	public void tick() {
+	public void tick() {		
 		time++;
 		minimapIcon = time / 3 % 4;
 		if (minimapIcon == 3) {
@@ -115,7 +118,7 @@ public class Player extends Mob implements LootCollector {
 			xa++;
 		}
 
-		if (!mouseAiming && !keys.fire.isDown && xa * xa + ya * ya != 0) {
+		if (!mouseAiming && !keys.fire.isDown && !mouseButtons.isDown(mouseFireButton) && xa * xa + ya * ya != 0) {
 			aimVector.set(xa, ya);
 			aimVector.normalizeSelf();
 			updateFacing();
@@ -176,7 +179,7 @@ public class Player extends Mob implements LootCollector {
 		yBump *= 0.8;
 		muzzleImage = (muzzleImage + 1) & 3;
 
-		if (carrying == null && keys.fire.isDown) {
+		if (carrying == null && keys.fire.isDown || carrying == null && mouseButtons.isDown(mouseFireButton)) {
 			wasShooting = true;
 			if (takeDelay > 0) {
 				takeDelay--;
