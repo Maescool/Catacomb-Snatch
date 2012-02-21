@@ -225,7 +225,7 @@ public class Player extends Mob implements LootCollector {
 							this);
 					payCost(COST_RAIL);
 				} else if (score < COST_RAIL) {
-					Notifications.getInstance().add("You need "+COST_DROID+" to build a rail");
+					Notifications.getInstance().add("You need "+COST_RAIL+" to build a rail");
 				}
 			} else if (level.getTile(x, y) instanceof RailTile) {
 				if ((y < 8 && team == Team.Team2)
@@ -245,7 +245,7 @@ public class Player extends Mob implements LootCollector {
 							payCost(COST_REMOVE_RAIL);
 						}
 					} else if (score < COST_REMOVE_RAIL) {
-						Notifications.getInstance().add("You need "+COST_DROID+" to remove a rail");
+						Notifications.getInstance().add("You need "+COST_REMOVE_RAIL+" to remove a rail");
 					}
 					MojamComponent.soundPlayer.playSound(
 							"/sound/Track Place.wav", (float) pos.x,
