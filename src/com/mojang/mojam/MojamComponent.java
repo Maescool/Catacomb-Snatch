@@ -1,31 +1,63 @@
 package com.mojang.mojam;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
+import java.awt.BorderLayout;
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.*;
-import java.util.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
+import java.util.Random;
+import java.util.Stack;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.building.Base;
 import com.mojang.mojam.entity.mob.Team;
-import com.mojang.mojam.gui.*;
 import com.mojang.mojam.gui.Button;
+import com.mojang.mojam.gui.ButtonListener;
+import com.mojang.mojam.gui.DifficultySelect;
 import com.mojang.mojam.gui.Font;
+import com.mojang.mojam.gui.GuiMenu;
+import com.mojang.mojam.gui.HostingWaitMenu;
+import com.mojang.mojam.gui.HowToPlay;
+import com.mojang.mojam.gui.JoinGameMenu;
+import com.mojang.mojam.gui.LevelSelect;
+import com.mojang.mojam.gui.TitleMenu;
+import com.mojang.mojam.gui.WinMenu;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.tile.Tile;
-import com.mojang.mojam.network.*;
-import com.mojang.mojam.network.packet.*;
+import com.mojang.mojam.network.ClientSidePacketLink;
+import com.mojang.mojam.network.CommandListener;
+import com.mojang.mojam.network.NetworkCommand;
+import com.mojang.mojam.network.NetworkPacketLink;
+import com.mojang.mojam.network.Packet;
+import com.mojang.mojam.network.PacketLink;
+import com.mojang.mojam.network.PacketListener;
+import com.mojang.mojam.network.TurnSynchronizer;
+import com.mojang.mojam.network.packet.ChangeKeyCommand;
+import com.mojang.mojam.network.packet.StartGamePacket;
+import com.mojang.mojam.network.packet.TurnPacket;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 import com.mojang.mojam.sound.SoundPlayer;
 
-public class MojamComponent extends Canvas implements Runnable,
-		MouseMotionListener, CommandListener, PacketListener, MouseListener,
-		ButtonListener, KeyListener {
+public class MojamComponent extends Canvas implements Runnable, MouseMotionListener,
+		CommandListener, PacketListener, MouseListener, ButtonListener, KeyListener {
 
 	private static final long serialVersionUID = 1L;
 	public static final int GAME_WIDTH = 512;
@@ -60,12 +92,9 @@ public class MojamComponent extends Canvas implements Runnable,
 	private int createServerState = 0;
 
 	public MojamComponent() {
-		this.setPreferredSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT
-				* SCALE));
-		this.setMinimumSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT
-				* SCALE));
-		this.setMaximumSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT
-				* SCALE));
+		this.setPreferredSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
+		this.setMinimumSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
+		this.setMaximumSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
 		this.addKeyListener(new InputHandler(keys));
 		this.addMouseMotionListener(this);
 		this.addMouseListener(this);
@@ -83,11 +112,9 @@ public class MojamComponent extends Canvas implements Runnable,
 		mouseMoved = true;
 	}
 
-	public void mouseClicked(MouseEvent e) {
-	}
+	public void mouseClicked(MouseEvent e) {}
 
-	public void mouseEntered(MouseEvent e) {
-	}
+	public void mouseEntered(MouseEvent e) {}
 
 	public void mouseExited(MouseEvent e) {
 		mouseButtons.releaseAll();
@@ -101,11 +128,9 @@ public class MojamComponent extends Canvas implements Runnable,
 		mouseButtons.setNextState(e.getButton(), false);
 	}
 
-	public void paint(Graphics g) {
-	}
+	public void paint(Graphics g) {}
 
-	public void update(Graphics g) {
-	}
+	public void update(Graphics g) {}
 
 	public void start() {
 		running = true;
@@ -125,8 +150,8 @@ public class MojamComponent extends Canvas implements Runnable,
 
 		try {
 			emptyCursor = Toolkit.getDefaultToolkit().createCustomCursor(
-					new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB),
-					new Point(0, 0), "empty");
+					new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB), new Point(0, 0),
+					"empty");
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 		}
@@ -146,18 +171,17 @@ public class MojamComponent extends Canvas implements Runnable,
 
 		level.init();
 
-		players[0] = new Player(synchedKeys[0], mouseButtons, level.width * Tile.WIDTH / 2
-				- 16, (level.height - 5 - 1) * Tile.HEIGHT - 16, Team.Team1);
+		players[0] = new Player(synchedKeys[0], mouseButtons, level.width * Tile.WIDTH / 2 - 16,
+				(level.height - 5 - 1) * Tile.HEIGHT - 16, Team.Team1);
 		players[0].setFacing(4);
 		level.addEntity(players[0]);
 		level.addEntity(new Base(34 * Tile.WIDTH, 7 * Tile.WIDTH, Team.Team1));
 		if (isMultiplayer) {
-			players[1] = new Player(synchedKeys[1], mouseButtons, level.width * Tile.WIDTH
-					/ 2 - 16, 7 * Tile.HEIGHT - 16, Team.Team2);
+			players[1] = new Player(synchedKeys[1], mouseButtons,
+					level.width * Tile.WIDTH / 2 - 16, 7 * Tile.HEIGHT - 16, Team.Team2);
 			// players[1] = new Player(synchedKeys[1], 10, 10);
 			level.addEntity(players[1]);
-			level.addEntity(new Base(32 * Tile.WIDTH - 20,
-					32 * Tile.WIDTH - 20, Team.Team2));
+			level.addEntity(new Base(32 * Tile.WIDTH - 20, 32 * Tile.WIDTH - 20, Team.Team2));
 		}
 		player = players[localId];
 		player.setCanSee(true);
@@ -272,8 +296,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		if (level != null) {
 			int xScroll = (int) (player.pos.x - screen.w / 2);
 			int yScroll = (int) (player.pos.y - (screen.h - 24) / 2);
-			soundPlayer.setListenerPosition((float) player.pos.x,
-					(float) player.pos.y);
+			soundPlayer.setListenerPosition((float) player.pos.x, (float) player.pos.y);
 			level.render(screen, xScroll, yScroll);
 		}
 		if (!menuStack.isEmpty()) {
@@ -295,8 +318,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		g.setColor(Color.BLACK);
 
 		g.fillRect(0, 0, getWidth(), getHeight());
-		g.translate((getWidth() - GAME_WIDTH * SCALE) / 2,
-				(getHeight() - GAME_HEIGHT * SCALE) / 2);
+		g.translate((getWidth() - GAME_WIDTH * SCALE) / 2, (getHeight() - GAME_HEIGHT * SCALE) / 2);
 		g.clipRect(0, 0, GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE);
 
 		if (!menuStack.isEmpty() || level != null) {
@@ -304,8 +326,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			// render mouse
 			renderMouse(screen, mouseButtons);
 
-			g.drawImage(screen.image, 0, 0, GAME_WIDTH * SCALE, GAME_HEIGHT
-					* SCALE, null);
+			g.drawImage(screen.image, 0, 0, GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE, null);
 		}
 
 		// String msg = "FPS: " + fps;
@@ -335,8 +356,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			marker.pixels[i + crosshairSizeHalf * crosshairSize] = 0xffffffff;
 		}
 
-		screen.blit(marker,
-				mouseButtons.getX() / SCALE - crosshairSizeHalf - 2,
+		screen.blit(marker, mouseButtons.getX() / SCALE - crosshairSizeHalf - 2,
 				mouseButtons.getY() / SCALE - crosshairSizeHalf - 2);
 	}
 
@@ -389,8 +409,7 @@ public class MojamComponent extends Canvas implements Runnable,
 					Keys.Key key = keys.getAll().get(index);
 					boolean nextState = key.nextState;
 					if (key.isDown != nextState) {
-						synchronizer.addCommand(new ChangeKeyCommand(index,
-								nextState));
+						synchronizer.addCommand(new ChangeKeyCommand(index, nextState));
 					}
 				}
 				keys.tick();
@@ -403,8 +422,7 @@ public class MojamComponent extends Canvas implements Runnable,
 				if (!mouseHidden) {
 
 					// update player mouse, in world pixels relative to player
-					player.setAimByMouse(
-							((mouseButtons.getX() / SCALE) - (screen.w / 2)),
+					player.setAimByMouse(((mouseButtons.getX() / SCALE) - (screen.w / 2)),
 							(((mouseButtons.getY() / SCALE) + 24) - (screen.h / 2)));
 				} else {
 					player.setAimByKeyboard();
@@ -417,15 +435,14 @@ public class MojamComponent extends Canvas implements Runnable,
 		if (createServerState == 1) {
 			createServerState = 2;
 
-			synchronizer = new TurnSynchronizer(MojamComponent.this,
-					packetLink, localId, 2);
+			synchronizer = new TurnSynchronizer(MojamComponent.this, packetLink, localId, 2);
 
 			clearMenus();
 			createLevel(TitleMenu.level);
 
 			synchronizer.setStarted(true);
-			packetLink.sendPacket(new StartGamePacket(
-					TurnSynchronizer.synchedSeed, TitleMenu.level));
+			packetLink
+					.sendPacket(new StartGamePacket(TurnSynchronizer.synchedSeed, TitleMenu.level));
 			packetLink.setPacketListener(MojamComponent.this);
 
 		}
@@ -449,8 +466,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 		if (packet instanceof ChangeKeyCommand) {
 			ChangeKeyCommand ckc = (ChangeKeyCommand) packet;
-			synchedKeys[playerId].getAll().get(ckc.getKey()).nextState = ckc
-					.getNextState();
+			synchedKeys[playerId].getAll().get(ckc.getKey()).nextState = ckc.getNextState();
 		}
 	}
 
@@ -524,8 +540,7 @@ public class MojamComponent extends Canvas implements Runnable,
 							if (fail) {
 								try {
 									serverSocket.close();
-								} catch (IOException e) {
-								}
+								} catch (IOException e) {}
 							}
 						};
 					};
@@ -550,8 +565,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			try {
 				localId = 1;
 				packetLink = new ClientSidePacketLink(TitleMenu.ip, 3000);
-				synchronizer = new TurnSynchronizer(this, packetLink, localId,
-						2);
+				synchronizer = new TurnSynchronizer(this, packetLink, localId, 2);
 				packetLink.setPacketListener(this);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -562,6 +576,10 @@ public class MojamComponent extends Canvas implements Runnable,
 			addMenu(new DifficultySelect());
 		} else if (button.getId() == TitleMenu.EXIT_GAME_ID) {
 			System.exit(0);
+		} else if (button.getId() == TitleMenu.HOW_TO_PLAY) {
+			addMenu(new HowToPlay(GAME_WIDTH, GAME_HEIGHT));
+		} else if (button.getId() == TitleMenu.HOW_TO_PLAY_BACK) {
+			popMenu();
 		}
 	}
 

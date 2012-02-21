@@ -1,9 +1,11 @@
 package com.mojang.mojam.gui;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.mojang.mojam.MouseButtons;
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Screen;
 
 public class Button extends GuiComponent {
 
@@ -11,10 +13,10 @@ public class Button extends GuiComponent {
 
 	private boolean isPressed;
 
-	private int x;
-	private int y;
-	private final int w;
-	private final int h;
+	protected int x;
+	protected int y;
+	protected final int w;
+	protected final int h;
 
 	private final int id;
 

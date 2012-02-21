@@ -18,13 +18,13 @@ public class Art {
 	public static Bitmap[][] darkness = cut("/dark.png", 32, 32);
 	public static Bitmap[][] bullets = cut("/bullets.png", 16, 16);
 	public static Bitmap[][] lordLard = cut("/lord_lard_sheet.png", 32, 32);
-	public static Bitmap[][] herrSpeck = cut("/herr_von_speck_sheet.png", 32,
-			32);
+	public static Bitmap[][] herrSpeck = cut("/herr_von_speck_sheet.png", 32, 32);
 	public static Bitmap[] titles = cut("/titles.png", 128);
 	public static Bitmap[][] buttons = cut("/buttons.png", 128, 24);
 	public static Bitmap[][] font = cut("/gamfont.png", 8, 8);
 	public static Bitmap[][] mapIcons = cut("/mapicons.png", 5, 5);
 	public static Bitmap titleScreen = load("/TITLESCREEN.png");
+	public static Bitmap howToPlayScreen = load("/how_to_play.png");
 	public static Bitmap gameOverScreen = load("/game_over.png");
 	public static Bitmap panel = load("/panel.png");
 	public static Bitmap shadow = load("/shadow.png");
@@ -34,52 +34,38 @@ public class Art {
 	public static Bitmap[][] bat = cut("/mob/enemy_bat_32.png", 32, 32);
 	public static Bitmap batShadow = load("/mob/shadow.png");
 	public static Bitmap[][] turret = cut("/turret.png", 32, 32);
-    public static Bitmap[][] turret2 = cut("/turret2.png", 32, 32);
-    public static Bitmap[][] turret3 = cut("/turret3.png", 32, 32);
-    public static Bitmap[][] mobSpawner = cut("/spawner.png", 32, 40);
+	public static Bitmap[][] turret2 = cut("/turret2.png", 32, 32);
+	public static Bitmap[][] turret3 = cut("/turret3.png", 32, 32);
+	public static Bitmap[][] mobSpawner = cut("/spawner.png", 32, 40);
 	public static Bitmap[][] rails = cut("/rails.png", 32, 38);
 	public static Bitmap[][] bullet = cut("/bullet.png", 16, 16);
 	public static Bitmap[][] muzzle = cut("/muzzle.png", 16, 16);
 	public static Bitmap[][] harvester = cut("/building/bot_vacuum.png", 32, 56);
 	public static Bitmap[][] startLordLard = cut("/start_lordlard.png", 32, 32);
-	public static Bitmap[][] startHerrSpeck = cut("/start_herrspeck.png", 32,
-			32);
+	public static Bitmap[][] startHerrSpeck = cut("/start_herrspeck.png", 32, 32);
 
-	public static Bitmap[][] pickupCoinBronzeSmall = cut(
-			"/pickup/pickup_coin_bronze_small_8.png", 8, 8);
-	public static Bitmap[][] pickupCoinBronze = cut(
-			"/pickup/pickup_coin_bronze_16.png", 16, 16);
-	public static Bitmap[][] pickupCoinSilverSmall = cut(
-			"/pickup/pickup_coin_silver_small_8.png", 8, 8);
-	public static Bitmap[][] pickupCoinSilver = cut(
-			"/pickup/pickup_coin_silver_16.png", 16, 16);
-	public static Bitmap[][] pickupCoinGoldSmall = cut(
-			"/pickup/pickup_coin_gold_small_8.png", 8, 8);
-	public static Bitmap[][] pickupCoinGold = cut(
-			"/pickup/pickup_coin_gold_16.png", 16, 16);
-	public static Bitmap[][] pickupGemEmerald = cut(
-			"/pickup/pickup_gem_emerald_12.png", 16, 16);
-	public static Bitmap[][] pickupGemRuby = cut(
-			"/pickup/pickup_gem_ruby_12.png", 16, 16);
-	public static Bitmap[][] pickupGemDiamond = cut(
-			"/pickup/pickup_gem_diamond_24.png", 24, 24);
-	public static Bitmap[][] shineSmall = cut(
-			"/pickup/effect_shine_small_13.png", 13, 13);
-	public static Bitmap[][] shineBig = cut("/pickup/effect_shine_big_13.png",
-			13, 13);
+	public static Bitmap[][] pickupCoinBronzeSmall = cut("/pickup/pickup_coin_bronze_small_8.png",
+			8, 8);
+	public static Bitmap[][] pickupCoinBronze = cut("/pickup/pickup_coin_bronze_16.png", 16, 16);
+	public static Bitmap[][] pickupCoinSilverSmall = cut("/pickup/pickup_coin_silver_small_8.png",
+			8, 8);
+	public static Bitmap[][] pickupCoinSilver = cut("/pickup/pickup_coin_silver_16.png", 16, 16);
+	public static Bitmap[][] pickupCoinGoldSmall = cut("/pickup/pickup_coin_gold_small_8.png", 8, 8);
+	public static Bitmap[][] pickupCoinGold = cut("/pickup/pickup_coin_gold_16.png", 16, 16);
+	public static Bitmap[][] pickupGemEmerald = cut("/pickup/pickup_gem_emerald_12.png", 16, 16);
+	public static Bitmap[][] pickupGemRuby = cut("/pickup/pickup_gem_ruby_12.png", 16, 16);
+	public static Bitmap[][] pickupGemDiamond = cut("/pickup/pickup_gem_diamond_24.png", 24, 24);
+	public static Bitmap[][] shineSmall = cut("/pickup/effect_shine_small_13.png", 13, 13);
+	public static Bitmap[][] shineBig = cut("/pickup/effect_shine_big_13.png", 13, 13);
 
 	public static Bitmap bomb = load("/bomb.png");
 
-	public static Bitmap[][] fxEnemyDie = cut("/effects/fx_enemydie_64.png",
-			64, 64);
-	public static Bitmap[][] fxSteam24 = cut("/effects/fx_steam1_24.png", 24,
-			24);
-	public static Bitmap[][] fxSteam12 = cut("/effects/fx_steam2_12.png", 12,
-			12);
-	public static Bitmap[][] fxBombSplosion = cut(
-			"/effects/fx_bombsplosion_big_32.png", 32, 32);
-	public static Bitmap[][] fxBombSplosionSmall = cut(
-			"/effects/fx_bombsplosion_small_32.png", 32, 32);
+	public static Bitmap[][] fxEnemyDie = cut("/effects/fx_enemydie_64.png", 64, 64);
+	public static Bitmap[][] fxSteam24 = cut("/effects/fx_steam1_24.png", 24, 24);
+	public static Bitmap[][] fxSteam12 = cut("/effects/fx_steam2_12.png", 12, 12);
+	public static Bitmap[][] fxBombSplosion = cut("/effects/fx_bombsplosion_big_32.png", 32, 32);
+	public static Bitmap[][] fxBombSplosionSmall = cut("/effects/fx_bombsplosion_small_32.png", 32,
+			32);
 	public static Bitmap[][] fxDust12 = cut("/effects/fx_dust2_12.png", 12, 12);
 	public static Bitmap[][] fxDust24 = cut("/effects/fx_dust1_24.png", 24, 24);
 
@@ -89,8 +75,7 @@ public class Art {
 
 	private static Bitmap[][] cut(String string, int w, int h, int bx, int by) {
 		try {
-			BufferedImage bi = ImageIO.read(MojamComponent.class
-					.getResource(string));
+			BufferedImage bi = ImageIO.read(MojamComponent.class.getResource(string));
 
 			int xTiles = (bi.getWidth() - bx) / w;
 			int yTiles = (bi.getHeight() - by) / h;
@@ -100,8 +85,7 @@ public class Art {
 			for (int x = 0; x < xTiles; x++) {
 				for (int y = 0; y < yTiles; y++) {
 					result[x][y] = new Bitmap(w, h);
-					bi.getRGB(bx + x * w, by + y * h, w, h,
-							result[x][y].pixels, 0, w);
+					bi.getRGB(bx + x * w, by + y * h, w, h, result[x][y].pixels, 0, w);
 				}
 			}
 
@@ -142,8 +126,7 @@ public class Art {
 
 	private static Bitmap load(String string) {
 		try {
-			BufferedImage bi = ImageIO.read(MojamComponent.class
-					.getResource(string));
+			BufferedImage bi = ImageIO.read(MojamComponent.class.getResource(string));
 
 			int w = bi.getWidth();
 			int h = bi.getHeight();
@@ -161,8 +144,7 @@ public class Art {
 
 	private static Bitmap[] cut(String string, int h) {
 		try {
-			BufferedImage bi = ImageIO.read(MojamComponent.class
-					.getResource(string));
+			BufferedImage bi = ImageIO.read(MojamComponent.class.getResource(string));
 
 			int yTiles = bi.getHeight() / h;
 			int w = bi.getWidth();
