@@ -34,7 +34,9 @@ public class Art {
 	public static Bitmap[][] bat = cut("/mob/enemy_bat_32.png", 32, 32);
 	public static Bitmap batShadow = load("/mob/shadow.png");
 	public static Bitmap[][] turret = cut("/turret.png", 32, 32);
-	public static Bitmap[][] mobSpawner = cut("/spawner.png", 32, 40);
+    public static Bitmap[][] turret2 = cut("/turret2.png", 32, 32);
+    public static Bitmap[][] turret3 = cut("/turret3.png", 32, 32);
+    public static Bitmap[][] mobSpawner = cut("/spawner.png", 32, 40);
 	public static Bitmap[][] rails = cut("/rails.png", 32, 38);
 	public static Bitmap[][] bullet = cut("/bullet.png", 16, 16);
 	public static Bitmap[][] muzzle = cut("/muzzle.png", 16, 16);
