@@ -145,10 +145,10 @@ public class Harvester extends Building implements LootCollector {
         } else {
             screen.blit(image, pos.x - image.w / 2, pos.y - image.h + 8);
         }
-        Font.draw(screen, money + "/" + capacity, (int) (pos.x - 25),
+        Font.draw(screen, Integer.toString(money), (int) (pos.x - Font.getStringWidth(Integer.toString(money)) / 2),
                 (int) (pos.y - 30));
-        Font.draw(screen, health + "/" + maxHealth, (int) (pos.x - 27),
-                (int) (pos.y + 10));
+        Font.draw(screen, health + "/" + maxHealth, (int) (pos.x - 20),
+                (int) (pos.y + 6));
     }
 
     public void take(Loot loot) {
