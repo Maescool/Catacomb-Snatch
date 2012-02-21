@@ -2,7 +2,8 @@ package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
 
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Screen;
 
 public class TitleMenu extends GuiMenu {
 
@@ -17,6 +18,8 @@ public class TitleMenu extends GuiMenu {
 	public static final int SELECT_LEVEL_ID = 1007;
 	public static final int SELECT_HOST_LEVEL_ID = 1008;
 	public static final int SELECT_DIFFICULTY_ID = 1009;
+	public static final int HOW_TO_PLAY = 1010;
+	public static final int HOW_TO_PLAY_BACK = 1011;
 
 	public static String level = "";
 	public static int Difficulty = 0;
@@ -26,16 +29,19 @@ public class TitleMenu extends GuiMenu {
 
 	private int selectedItem = 0;
 	private final int gameWidth;
+	private final int gameHeight;
 
 	public TitleMenu(int gameWidth, int gameHeight) {
 		super();
 		this.gameWidth = gameWidth;
+		this.gameHeight = gameHeight;
 
 		addButton(new Button(SELECT_LEVEL_ID, 0, (gameWidth - 128) / 2, 200));
-		addButton(new Button(SELECT_HOST_LEVEL_ID, 2, (gameWidth - 128) / 2,
-				240));
+		addButton(new Button(SELECT_HOST_LEVEL_ID, 2, (gameWidth - 128) / 2, 240));
 		addButton(new Button(JOIN_GAME_ID, 3, (gameWidth - 128) / 2, 280));
 		addButton(new Button(EXIT_GAME_ID, 1, (gameWidth - 128) / 2, 320));
+		addButton(new TextButton(HOW_TO_PLAY, "how to play", gameWidth - 128 - 5,
+				gameHeight - 24 - 5));
 	}
 
 	public void render(Screen screen) {
@@ -46,23 +52,25 @@ public class TitleMenu extends GuiMenu {
 
 		super.render(screen);
 
-		screen.blit(Art.lordLard[0][6], (gameWidth - 128) / 2 - 40,
-				190 + selectedItem * 40);
+		if (selectedItem == 4) {
+			screen.blit(Art.lordLard[0][6], gameWidth - 128 - 5 - 40, gameHeight - 40);
+		} else {
+			screen.blit(Art.lordLard[0][6], (gameWidth - 128) / 2 - 40, 190 + selectedItem * 40);
+		}
 	}
 
 	@Override
-	public void buttonPressed(Button button) {
-	}
+	public void buttonPressed(Button button) {}
 
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			selectedItem--;
 			if (selectedItem < 0) {
-				selectedItem = 3;
+				selectedItem = 4;
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 			selectedItem++;
-			if (selectedItem > 3) {
+			if (selectedItem > 4) {
 				selectedItem = 0;
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -71,10 +79,8 @@ public class TitleMenu extends GuiMenu {
 		}
 	}
 
-	public void keyReleased(KeyEvent arg0) {
-	}
+	public void keyReleased(KeyEvent arg0) {}
 
-	public void keyTyped(KeyEvent arg0) {
-	}
+	public void keyTyped(KeyEvent arg0) {}
 
 }
