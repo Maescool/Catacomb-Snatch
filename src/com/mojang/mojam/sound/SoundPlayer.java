@@ -1,7 +1,6 @@
 package com.mojang.mojam.sound;
 
 import com.mojang.mojam.network.TurnSynchronizer;
-import java.net.URL;
 import java.util.*;
 
 import paulscode.sound.*;
@@ -96,7 +95,7 @@ public class SoundPlayer {
                 }
 
                 // Source already playing, create new source for same sound
-// effect.
+                // effect.
                 return playSound(sourceName, x, y, false, index + 1);
             }
             soundSystem.stop(indexedSourceName);
