@@ -2,18 +2,24 @@ package com.mojang.mojam.entity;
 
 import java.util.Random;
 
-import com.mojang.mojam.*;
+import com.mojang.mojam.Keys;
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.animation.SmokePuffAnimation;
 import com.mojang.mojam.entity.building.Building;
-import com.mojang.mojam.entity.loot.*;
-import com.mojang.mojam.entity.mob.*;
+import com.mojang.mojam.entity.loot.Loot;
+import com.mojang.mojam.entity.loot.LootCollector;
+import com.mojang.mojam.entity.mob.Mob;
+import com.mojang.mojam.entity.mob.RailDroid;
+import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.entity.particle.Sparkle;
-import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
-import com.mojang.mojam.level.tile.*;
+import com.mojang.mojam.level.tile.RailTile;
+import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.network.TurnSynchronizer;
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.Screen;
 
 public class Player extends Mob implements LootCollector {
 
@@ -21,7 +27,12 @@ public class Player extends Mob implements LootCollector {
     public static final int COST_DROID = 50;
     public static final int COST_REMOVE_RAIL = 15;
     public static final int REGEN_INTERVAL = 60 * 3;
+    public static final int TRAP_LIMIT = 6;
 
+    public enum GUN {
+        PEASHOOTER, SHOTGUN,TRAP;
+    }
+    
     public Keys keys;
     public Vec2 aimVector;
     private boolean mouseAiming;
@@ -47,10 +58,12 @@ public class Player extends Mob implements LootCollector {
     private double muzzleX = 0;
     private double muzzleY = 0;
     private int muzzleImage = 0;
-
+    private GUN selectedGun = GUN.PEASHOOTER;
+    
     private int nextWalkSmokeTick = 0;
 
     private int regenDelay = 0;
+	public int trapsLeft = TRAP_LIMIT;
 
     public Player(Keys keys, int x, int y, int team) {
         super(x, y, team);
@@ -111,6 +124,8 @@ public class Player extends Mob implements LootCollector {
         if (keys.right.isDown) {
             xa++;
         }
+
+        selectGun();
         
         if ( !mouseAiming &&!keys.fire.isDown && xa * xa + ya * ya != 0) {
         	aimVector.set( xa, ya );
@@ -176,19 +191,7 @@ public class Player extends Mob implements LootCollector {
                 takeDelay--;
             }
             if (shootDelay-- <= 0) {
-                double dir = Math.atan2(aimVector.y, aimVector.x) + (TurnSynchronizer.synchedRandom.nextFloat() - TurnSynchronizer.synchedRandom.nextFloat()) * 0.1;
-
-                xa = Math.cos(dir);
-                ya = Math.sin(dir);
-                xd -= xa;
-                yd -= ya;
-                Entity bullet = new Bullet(this, xa, ya);
-                level.addEntity(bullet);
-                muzzleTicks = 3;
-                muzzleX = bullet.pos.x + 7 * xa - 8;
-                muzzleY = bullet.pos.y + 5 * ya - 8 + 1;
-                shootDelay = 5;
-                MojamComponent.soundPlayer.playSound("/sound/Shot 1.wav", (float) pos.x, (float) pos.y);
+                shootGun();
             }
         } else {
             if (wasShooting) {
@@ -199,7 +202,11 @@ public class Player extends Mob implements LootCollector {
                 suckRadius--;
             }
             takeDelay = 15;
-            shootDelay = 0;
+            
+            if (shootDelay > 0) {
+                shootDelay--;
+            } 
+            
         }
 
         int x = (int) pos.x / Tile.WIDTH;
@@ -295,6 +302,101 @@ public class Player extends Mob implements LootCollector {
             level.reveal(x, y, 5);
         }
     }
+
+	private void shootGun() {
+		
+		switch (selectedGun) {
+		case SHOTGUN:
+			fireShotgun();
+			break;
+		case TRAP:
+			fireTrap();
+			break;
+		default:
+			firePeaShooter();
+		}		
+	}
+
+	private void selectGun() {
+		if (keys.selectpeaShooter.isDown) {
+			this.selectedGun = GUN.PEASHOOTER;
+		} else if (keys.selectShotgun.isDown) {
+			this.selectedGun = GUN.SHOTGUN;
+		} else if (keys.selectTrapgun.isDown) {
+			this.selectedGun = GUN.TRAP;
+		}
+	}
+
+	private void firePeaShooter() {
+		double xa;
+		double ya;
+		double dir = Math.atan2(aimVector.y, aimVector.x) + (TurnSynchronizer.synchedRandom.nextFloat() - TurnSynchronizer.synchedRandom.nextFloat()) * 0.1;
+
+		xa = Math.cos(dir);
+		ya = Math.sin(dir);
+		xd -= xa;
+		yd -= ya;
+		Entity bullet = new Bullet(this, xa, ya);
+		level.addEntity(bullet);
+		muzzleTicks = 3;
+		muzzleX = bullet.pos.x + 7 * xa - 8;
+		muzzleY = bullet.pos.y + 5 * ya - 8 + 1;
+		shootDelay = 5;
+		MojamComponent.soundPlayer.playSound("/sound/Shot 1.wav", (float) pos.x, (float) pos.y);
+	}
+	
+	private void fireTrap() {
+		if(level.countEntities(Trap.class) == TRAP_LIMIT) {
+			Trap trapToRemove = (Trap)level.getOldestEntity(Trap.class);
+			if(trapToRemove!=null)
+				trapToRemove.remove();
+		}
+		
+		double xa;
+		double ya;
+		double dir = Math.atan2(aimVector.y, aimVector.x);
+
+		xa = Math.cos(dir);
+		ya = Math.sin(dir);
+		xd -= xa;
+		yd -= ya;
+		Entity bullet = new Trap(this, xa, ya);
+		level.addEntity(bullet);
+		muzzleTicks = 3;
+		muzzleX = bullet.pos.x + 7 * xa - 8;
+		muzzleY = bullet.pos.y + 5 * ya - 8 + 1;
+		shootDelay = 25;
+		MojamComponent.soundPlayer.playSound("/sound/Shot 1.wav", (float) pos.x, (float) pos.y);
+	}
+	
+	
+	private void fireShotgun() {
+		double xa;
+		double ya;
+
+		double[] dirs = new double[9];
+		
+		double spread = 0.1;
+		for (int i = 0; i < dirs.length; i++) {
+			dirs[i] = Math.atan2(aimVector.y, aimVector.x) + (TurnSynchronizer.synchedRandom.nextFloat() - TurnSynchronizer.synchedRandom.nextFloat()) * spread;
+			spread += 0.1;
+			
+			Entity bullet = new BulletRed(this, Math.cos(dirs[i]), Math.sin(dirs[i]));
+			level.addEntity(bullet) ;
+		}
+		
+		xa = Math.cos(dirs[0]);
+		ya = Math.sin(dirs[0]);
+		xd -= xa;
+		yd -= ya;
+		
+		
+		muzzleTicks = 3;
+		muzzleX = this.pos.x + 7 * xa - 8;
+		muzzleY = this.pos.y + 5 * ya - 8 + 1;
+		shootDelay = 25 ;
+		MojamComponent.soundPlayer.playSound("/sound/Shot 2.wav", (float) pos.x, (float) pos.y);
+	}
 
     public void payCost(int cost) {
         score -= cost;

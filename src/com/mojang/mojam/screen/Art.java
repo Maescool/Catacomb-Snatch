@@ -37,6 +37,9 @@ public class Art {
     public static Bitmap[][] rails = cut("/rails.png", 32, 38);
     public static Bitmap[][] bullet = cut("/bullet.png", 16, 16);
     public static Bitmap[][] muzzle = cut("/muzzle.png", 16, 16);
+    public static Bitmap[][] bulletred = cut("/bullet-red.png", 16, 16);
+    public static Bitmap[][] bulletgreen = cut("/bullet-green.png", 16, 16);
+    
     public static Bitmap[][] harvester = cut("/building/bot_vacuum.png", 32, 56);
     public static Bitmap[][] startLordLard = cut("/start_lordlard.png", 32, 32);
     public static Bitmap[][] startHerrSpeck = cut("/start_herrspeck.png", 32, 32);
@@ -54,7 +57,8 @@ public class Art {
     public static Bitmap[][] shineBig = cut("/pickup/effect_shine_big_13.png", 13, 13);
 
     public static Bitmap bomb = load("/bomb.png");
-
+    public static Bitmap trap = load("/trap.png");
+    
     public static Bitmap[][] fxEnemyDie = cut("/effects/fx_enemydie_64.png", 64, 64);
     public static Bitmap[][] fxSteam24 = cut("/effects/fx_steam1_24.png", 24, 24);
     public static Bitmap[][] fxSteam12 = cut("/effects/fx_steam2_12.png", 12, 12);

@@ -1,9 +1,12 @@
 package com.mojang.mojam.entity.building;
 
-import com.mojang.mojam.entity.animation.SmokeAnimation;
-import com.mojang.mojam.entity.mob.*;
+import com.mojang.mojam.entity.mob.Bat;
+import com.mojang.mojam.entity.mob.Mob;
+import com.mojang.mojam.entity.mob.Mummy;
+import com.mojang.mojam.entity.mob.Snake;
 import com.mojang.mojam.network.TurnSynchronizer;
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
 
 
 public class SpawnerEntity extends Building {
