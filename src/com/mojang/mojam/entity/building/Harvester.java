@@ -93,7 +93,7 @@ public class Harvester extends Building implements LootCollector {
 		return Art.harvester[frame][0];
 	}
 
-	protected void upgradeComplete(int upgradeLevel) {
+	protected void upgradeComplete() {
 		radius = upgradeRadius[upgradeLevel];
 		capacity = upgradeCapacities[upgradeLevel];
 	}
@@ -145,7 +145,11 @@ public class Harvester extends Building implements LootCollector {
 		} else {
 			screen.blit(image, pos.x - image.w / 2, pos.y - image.h + 8);
 		}
-
+		
+        if (upgradeLevel != 0) {
+            Font.drawCentered(screen, "" + upgradeLevel, (int) (pos.x + 10),
+                    (int) (pos.y));
+        }
 		Font.drawCentered(screen, money + " / " + capacity, (int) (pos.x),
 				(int) (pos.y - 30));
 		Font.drawCentered(screen, health + " / " + maxHealth, (int) (pos.x),

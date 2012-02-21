@@ -82,10 +82,17 @@ public class Turret extends Building {
 	}
 
 	public Bitmap getSprite() {
-		return Art.turret[facing][0];
+	    switch (upgradeLevel){
+	    case 1:
+	        return Art.turret2[facing][0];
+	    case 2:
+	        return Art.turret3[facing][0];
+	    default:
+	        return Art.turret[facing][0];
+	    }
 	}
 
-	protected void upgradeComplete(int upgradeLevel) {
+	protected void upgradeComplete() {
 		delay = upgradeDelay[upgradeLevel];
 		radius = upgradeRadius[upgradeLevel];
 		radiusSqr = radius * radius;
