@@ -166,7 +166,7 @@ private void addHealthBar(Screen screen){
         bar.clear(0xff00ff00);
         bar.fill(start, 0, bar_width - start, bar_height, 0xffff0000);
         
-        screen.blit(bar, pos.x - (bar_width/2), pos.y + 10);
+        screen.blit(bar, pos.x - (bar_width/2), pos.y + 8);
     }
 	
 	public void take(Loot loot) {
