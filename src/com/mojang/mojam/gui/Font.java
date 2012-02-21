@@ -1,6 +1,8 @@
 package com.mojang.mojam.gui;
 
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.Screen;
 
 public class Font {
 	public static String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ   "
@@ -20,13 +22,21 @@ public class Font {
 	}
 
 	public static void draw(Screen screen, String msg, int x, int y) {
+		draw(screen, msg, x, y, Art.font);
+	}
+	
+	public static void drawPressed(Screen screen, String msg, int x, int y) {
+		draw(screen, msg, x, y, Art.fontPressed);
+	}
+	
+	protected static void draw(Screen screen, String msg, int x, int y, Bitmap[][] font) {
 		msg = msg.toUpperCase();
 		int length = msg.length();
 		for (int i = 0; i < length; i++) {
 			int c = letters.indexOf(msg.charAt(i));
 			if (c < 0)
 				continue;
-			screen.blit(Art.font[c % 29][c / 29], x, y);
+			screen.blit(font[c % 29][c / 29], x, y);
 			x += 8;
 		}
 	}

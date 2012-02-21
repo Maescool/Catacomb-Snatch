@@ -27,13 +27,13 @@ public class LevelSelect extends GuiMenu {
 		setupLevelButtons();
 		
 		if (bHosting) {
-			startGameButton = addButton(new Button(TitleMenu.HOST_GAME_ID, 0,
+			startGameButton = addButton(new Button(TitleMenu.HOST_GAME_ID, "start", true,
 					125, 300));
 		} else {
-			startGameButton = addButton(new Button(TitleMenu.SELECT_DIFFICULTY_ID, 0,
+			startGameButton = addButton(new Button(TitleMenu.SELECT_DIFFICULTY_ID, "start", true,
 					125, 300));
 		}
-		addButton(new Button(TitleMenu.CANCEL_JOIN_ID, 4, 275, 300));
+		addButton(new Button(TitleMenu.CANCEL_JOIN_ID, "cancel", true, 275, 300));
 		
 		addButtonListener(this);
 	}

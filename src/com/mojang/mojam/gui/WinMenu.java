@@ -2,7 +2,8 @@ package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
 
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Screen;
 
 public class WinMenu extends GuiMenu {
 	private int selectedItem = 0;
@@ -14,7 +15,7 @@ public class WinMenu extends GuiMenu {
 		this.winningPlayer = winningPlayer;
 		this.gameWidth = gameWidth;
 
-		addButton(new Button(TitleMenu.RESTART_GAME_ID, 1,
+		addButton(new Button(TitleMenu.RESTART_GAME_ID, "restart", true,
 				(gameWidth - 128) / 2, 200));
 	}
 
