@@ -52,7 +52,8 @@ public class LevelSelect extends GuiMenu {
 	@Override
 	public void render(Screen screen) {
 		screen.clear(0);
-		super.render(screen);		
+		super.render(screen);
+		Font.draw(screen, "Choose a level", 10, 10);
 	}
 
 	@Override
