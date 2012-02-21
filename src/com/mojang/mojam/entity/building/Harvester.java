@@ -30,7 +30,7 @@ public class Harvester extends Building implements LootCollector {
 
 	public Harvester(double x, double y, int team) {
 		super(x, y, team);
-		setStartHealth(20);
+		setStartHealth(10);
 		freezeTime = 10;
 		makeUpgradeableWithCosts(new int[] { 500, 1000, 5000 });
 	}
@@ -94,6 +94,8 @@ public class Harvester extends Building implements LootCollector {
 	}
 
 	protected void upgradeComplete() {
+	    health += 10;
+	    maxHealth += 10;
 		radius = upgradeRadius[upgradeLevel];
 		capacity = upgradeCapacities[upgradeLevel];
 	}
