@@ -42,6 +42,11 @@ public class Keys {
     public Key upgrade = new Key();
 	public Key escape = new Key();
 
+	//guns
+	public Key selectpeaShooter = new Key();
+    public Key selectShotgun = new Key();
+    public Key selectTrapgun = new Key();
+    
     public void tick() {
         for (Key key : all)
             key.tick();

@@ -9,7 +9,9 @@ public class Bullet extends Entity {
     public Mob owner;
     boolean hit = false;
     public int life;
-    private int facing;
+    protected int facing;
+	public int damage = 1;
+    
 
     public Bullet(Mob e, double xa, double ya) {
         this.owner = e;

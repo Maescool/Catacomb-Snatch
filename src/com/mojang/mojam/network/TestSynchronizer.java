@@ -1,7 +1,7 @@
 package com.mojang.mojam.network;
 
-import java.net.*;
-import java.util.Random;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 import com.mojang.mojam.network.packet.TurnPacket;
 
@@ -58,7 +58,7 @@ public class TestSynchronizer {
         @Override
         public void run() {
 
-            Random random = new Random();
+          //  Random random = new Random();
 
             while (true) {
                 packetLink.tick();

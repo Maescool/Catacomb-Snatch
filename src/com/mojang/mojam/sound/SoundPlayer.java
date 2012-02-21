@@ -1,12 +1,17 @@
 package com.mojang.mojam.sound;
 
-import com.mojang.mojam.network.TurnSynchronizer;
-import java.net.URL;
-import java.util.*;
+import java.util.Set;
+import java.util.TreeSet;
 
-import paulscode.sound.*;
-import paulscode.sound.codecs.*;
+import paulscode.sound.Library;
+import paulscode.sound.SoundSystem;
+import paulscode.sound.SoundSystemConfig;
+import paulscode.sound.SoundSystemException;
+import paulscode.sound.codecs.CodecJOrbis;
+import paulscode.sound.codecs.CodecWav;
 import paulscode.sound.libraries.LibraryJavaSound;
+
+import com.mojang.mojam.network.TurnSynchronizer;
 
 public class SoundPlayer {
 

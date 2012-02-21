@@ -153,7 +153,7 @@ public abstract class Mob extends Entity {
         if (freezeTime <= 0) {
             hurtTime = 40;
             freezeTime = 5;
-            health--;
+            health -= bullet.damage; 
             if (bullet != null) {
                 xBump = bullet.xa / 5.0;
                 yBump = bullet.ya / 5.0;

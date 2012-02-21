@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -593,4 +594,31 @@ public class Level {
             setTile(x, y, tile);
         }
     }
+    
+    //counts how many of a certain entitiy class are in play
+    public <T> int countEntities(Class<T> entityType) {
+        int count = 0;
+        if (entities != null) {
+            for (Iterator<Entity> it = entities.iterator(); it.hasNext();) {
+                if (entityType.isInstance(it.next())) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    
+    //gets the oldest of a specific entity
+    public <T> Entity getOldestEntity(Class<T> entityType) {
+        if (entities != null) {
+            for (Iterator<Entity> it = entities.iterator(); it.hasNext();) {
+            	Entity entity = it.next();
+                if (entityType.isInstance(entity)) {
+                	  return entity;
+                }
+            }
+        }
+      return null;
+    }
+    
 }

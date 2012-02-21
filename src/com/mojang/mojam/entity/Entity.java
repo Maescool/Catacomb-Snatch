@@ -20,7 +20,9 @@ public abstract class Entity implements BBOwner {
 
     public boolean isBlocking = true;
     public boolean physicsSlide = true;
-
+    public boolean isFlying = false;
+    public boolean isGroundOnly = false;
+    
     public int xto;
     public int yto;
     public double xd, yd;

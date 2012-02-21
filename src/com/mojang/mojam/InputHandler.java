@@ -40,6 +40,12 @@ public class InputHandler implements KeyListener {
 		mappings.put(KeyEvent.VK_E, keys.use);
 		mappings.put(KeyEvent.VK_F, keys.upgrade);
 		mappings.put(KeyEvent.VK_ESCAPE, keys.escape);
+		
+		//gun selection
+		mappings.put(KeyEvent.VK_1,keys.selectpeaShooter);
+		mappings.put(KeyEvent.VK_2,keys.selectShotgun);
+		mappings.put(KeyEvent.VK_3,keys.selectTrapgun);
+				
 	}
 
 	public void keyPressed(KeyEvent ke) {
