@@ -246,7 +246,7 @@ public class Player extends Mob implements LootCollector {
 
             if (keys.use.wasPressed()) {
                 Vec2 buildPos = pos.clone();
-                Tile tile = level.getTile(buildPos);
+//                Tile tile = level.getTile(buildPos);
 //                if (tile != null && tile.isBuildable()) {
                 boolean allowed = true;
 /*

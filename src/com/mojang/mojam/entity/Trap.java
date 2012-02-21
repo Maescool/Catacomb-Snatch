@@ -3,7 +3,6 @@ package com.mojang.mojam.entity;
 import com.mojang.mojam.entity.animation.EnemyDieAnimation;
 import com.mojang.mojam.entity.mob.Bat;
 import com.mojang.mojam.entity.mob.Mob;
-import com.mojang.mojam.entity.mob.RailDroid;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
