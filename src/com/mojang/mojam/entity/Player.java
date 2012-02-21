@@ -24,6 +24,7 @@ public class Player extends Mob implements LootCollector {
 	public Keys keys;
 	public MouseButtons mouseButtons;
 	public int mouseFireButton = 1;
+	public int mouseBuildButton = 3;
 	public Vec2 aimVector;
 	private boolean mouseAiming;
 	public int shootDelay = 0;
@@ -52,6 +53,9 @@ public class Player extends Mob implements LootCollector {
 	private int nextWalkSmokeTick = 0;
 
 	private int regenDelay = 0;
+	
+	private enum Build {NONE, BUILDING_RAILS, REMOVING_RAILS};
+	private Build currentlyBuilding = Build.NONE;
 
 	public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team) {
 		super(x, y, team);
@@ -216,16 +220,19 @@ public class Player extends Mob implements LootCollector {
 
 		int x = (int) pos.x / Tile.WIDTH;
 		int y = (int) pos.y / Tile.HEIGHT;
-
-		if (keys.build.isDown && !keys.build.wasDown) {
-			if (level.getTile(x, y).isBuildable()) {
-				if (score >= COST_RAIL && time - lastRailTick >= RailDelayTicks) {
+		
+		boolean mouseBuild = mouseButtons != null && mouseButtons.isDown(mouseBuildButton);
+		
+		if ((keys.build.isDown && !keys.build.wasDown) || mouseBuild) {
+			if (currentlyBuilding != Build.REMOVING_RAILS && level.getTile(x, y).isBuildable()) {
+				if (score >= COST_RAIL && (mouseBuild || time - lastRailTick >= RailDelayTicks)) {
 					lastRailTick = time;
 					level.placeTile(x, y, new RailTile(level.getTile(x, y)),
 							this);
 					payCost(COST_RAIL);
+					currentlyBuilding = Build.BUILDING_RAILS;
 				}
-			} else if (level.getTile(x, y) instanceof RailTile) {
+			} else if (currentlyBuilding != Build.BUILDING_RAILS && level.getTile(x, y) instanceof RailTile) {
 				if ((y < 8 && team == Team.Team2)
 						|| (y > level.height - 9 && team == Team.Team1)) {
 					if (score >= COST_DROID) {
@@ -235,17 +242,20 @@ public class Player extends Mob implements LootCollector {
 				} else {
 
 					if (score >= COST_REMOVE_RAIL
-							&& time - lastRailTick >= RailDelayTicks) {
+							&& (mouseBuild || time - lastRailTick >= RailDelayTicks)) {
 						lastRailTick = time;
 						if (((RailTile) level.getTile(x, y)).remove()) {
 							payCost(COST_REMOVE_RAIL);
 						}
+						currentlyBuilding = Build.REMOVING_RAILS;
 					}
 					MojamComponent.soundPlayer.playSound(
 							"/sound/Track Place.wav", (float) pos.x,
 							(float) pos.y);
 				}
 			}
+		} else if(mouseButtons != null) {
+			currentlyBuilding = Build.NONE;
 		}
 
 		if (carrying != null) {
