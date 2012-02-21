@@ -76,7 +76,7 @@ public class Turret extends Building {
     public void render(Screen screen) {
         super.render(screen);
         if (health != 0) {
-            Font.draw(screen, health + " / " + maxHealth, (int) (pos.x - 30),
+            Font.draw(screen, health + "/" + maxHealth, (int) (pos.x - 30),
                     (int) (pos.y + 12));
         }
     }
