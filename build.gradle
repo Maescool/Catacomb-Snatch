@@ -1,0 +1,42 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+project.group = "com.mojang.mojam"
+project.version = "1.0.0"
+
+sourceSets {
+  main {
+    java {
+      srcDir 'src'
+    }
+    resources {
+      srcDir 'res'
+    }
+  }
+}
+
+dependencies {
+  compile fileTree( dir: 'lib', include: '*.jar')
+}
+
+//fat jar~!
+//Could be easier to use the jarjar ant task, it's probably faster
+jar {
+  from {
+    configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+  }
+  manifest {
+    attributes "Main-Class" : "com.mojang.mojam.MojamComponent"
+  }
+}
+
+task run() {
+  dependsOn "build"
+  doLast {
+    println "Executing Catacomb Snatch!"
+    javaexec {
+      main = '-jar'
+      args = [ jar.archivePath ]
+    }
+  }
+}
