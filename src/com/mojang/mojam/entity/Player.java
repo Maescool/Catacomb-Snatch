@@ -23,7 +23,8 @@ public class Player extends Mob implements LootCollector {
     public static final int REGEN_INTERVAL = 60 * 3;
 
     public Keys keys;
-    public double xAim, yAim = 1;
+    public Vec2 aimVector;
+    private boolean mouseAiming;
     public int shootDelay = 0;
     public double xd, yd;
     public int takeDelay = 0;
@@ -54,10 +55,12 @@ public class Player extends Mob implements LootCollector {
     public Player(Keys keys, int x, int y, int team) {
         super(x, y, team);
         this.keys = keys;
-
+        
         startX = x;
         startY = y;
 
+        aimVector = new Vec2( 0, 1 );
+        
         score = 0;
 
     }
@@ -108,13 +111,11 @@ public class Player extends Mob implements LootCollector {
         if (keys.right.isDown) {
             xa++;
         }
-
-        if (!keys.fire.isDown && xa * xa + ya * ya != 0) {
-            xAim *= 0.7;
-            yAim *= 0.7;
-            xAim += xa;
-            yAim += ya;
-            facing = (int) ((Math.atan2(-xAim, yAim) * 8 / (Math.PI * 2) + 8.5)) & 7;
+        
+        if ( !mouseAiming &&!keys.fire.isDown && xa * xa + ya * ya != 0) {
+        	aimVector.set( xa, ya );
+        	aimVector.normalizeSelf();
+    		updateFacing();
         }
 
         if (xa != 0 || ya != 0) {
@@ -175,7 +176,7 @@ public class Player extends Mob implements LootCollector {
                 takeDelay--;
             }
             if (shootDelay-- <= 0) {
-                double dir = Math.atan2(yAim, xAim) + (TurnSynchronizer.synchedRandom.nextFloat() - TurnSynchronizer.synchedRandom.nextFloat()) * 0.1;
+                double dir = Math.atan2(aimVector.y, aimVector.x) + (TurnSynchronizer.synchedRandom.nextFloat() - TurnSynchronizer.synchedRandom.nextFloat()) * 0.1;
 
                 xa = Math.cos(dir);
                 ya = Math.sin(dir);
@@ -250,8 +251,8 @@ public class Player extends Mob implements LootCollector {
  */
                 if (allowed && (!(carrying instanceof IUsable) || (carrying instanceof IUsable && ((IUsable) carrying).isAllowedToCancel()))) {
                     carrying.removed = false;
-                    carrying.xSlide = xAim * 3;
-                    carrying.ySlide = yAim * 3;
+                    carrying.xSlide = aimVector.x * 5;
+                    carrying.ySlide = aimVector.y * 5;
                     carrying.freezeTime = 10;
                     carrying.setPos(buildPos.x, buildPos.y);
                     level.addEntity(carrying);
@@ -464,4 +465,25 @@ public class Player extends Mob implements LootCollector {
     public String getDeatchSound() {
         return "/sound/Death.wav";
     }
+
+    /**
+     * used to update player orientation, values relative to player.
+     */
+	public void setAimByMouse( int x, int y ) {
+		mouseAiming = true;
+		aimVector.set(x, y);
+		aimVector.normalizeSelf();
+		updateFacing();
+	}
+	
+	public void setAimByKeyboard() {
+		mouseAiming = false;
+	}
+	
+	/**
+	 * Update facing for rendering
+	 */
+	public void updateFacing() {
+		facing = (int) ((Math.atan2(-aimVector.x, aimVector.y) * 8 / (Math.PI * 2) + 8.5)) & 7;
+	}
 }

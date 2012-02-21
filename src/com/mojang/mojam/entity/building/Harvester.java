@@ -15,7 +15,7 @@ import java.util.Random;
 
 public class Harvester extends Building implements LootCollector {
 
-    private int capacity = 5000;
+    private int capacity = 1500;
     private int money = 0;
     private int time = 0;
     private int harvestingTicks = 20;
@@ -145,9 +145,10 @@ public class Harvester extends Building implements LootCollector {
         } else {
             screen.blit(image, pos.x - image.w / 2, pos.y - image.h + 8);
         }
-        Font.draw(screen, money + " / " + capacity, (int) (pos.x - 25),
+        
+        Font.drawCentered(screen, money + " / " + capacity, (int) (pos.x),
                 (int) (pos.y - 30));
-        Font.draw(screen, health + " / " + maxHealth, (int) (pos.x - 27),
+        Font.drawCentered(screen, health + " / " + maxHealth, (int) (pos.x),
                 (int) (pos.y + 10));
     }
 
