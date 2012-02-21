@@ -11,19 +11,20 @@ public class Button extends GuiComponent {
 
 	private boolean isPressed;
 
-	private final int x;
-	private final int y;
+	private int x;
+	private int y;
 	private final int w;
 	private final int h;
 
 	private final int id;
 
+	private boolean isImageButton;
+	private String label;
 	private int ix;
-
 	private int iy;
 	private boolean performClick = false;
 
-	public Button(int id, int buttonImageIndex, int x, int y) {
+	public Button(int id, int buttonImageIndex, int x, int y) {		
 		this.id = id;
 		this.x = x;
 		this.y = y;
@@ -31,6 +32,17 @@ public class Button extends GuiComponent {
 		this.h = 24;
 		this.ix = buttonImageIndex % 2;
 		this.iy = buttonImageIndex / 2;
+		isImageButton = true;
+	}
+	
+	public Button(int id, String label, int x, int y) {
+		this.id = id;
+		this.x = x;
+		this.y = y;
+		this.w = Font.getStringWidth(label);
+		this.h = Font.getStringHeight();
+		this.label = label;
+		isImageButton = false;
 	}
 
 	@Override
@@ -66,9 +78,15 @@ public class Button extends GuiComponent {
 	public void render(Screen screen) {
 
 		if (isPressed) {
-			screen.blit(Art.buttons[ix][iy * 2 + 1], x, y);
+			if(isImageButton)
+				screen.blit(Art.buttons[ix][iy * 2 + 1], x, y);
+			else
+				Font.draw(screen, label, x, y);
 		} else {
-			screen.blit(Art.buttons[ix][iy * 2 + 0], x, y);
+			if(isImageButton)
+				screen.blit(Art.buttons[ix][iy * 2 + 0], x, y);
+			else
+				Font.draw(screen, label, x, y);			
 		}
 	}
 
@@ -85,5 +103,13 @@ public class Button extends GuiComponent {
 
 	public int getId() {
 		return id;
+	}
+	
+	public void setXPosition(int x) {
+		this.x = x;
+	}
+	
+	public void setYPosition(int y) {
+		this.y = y;
 	}
 }
