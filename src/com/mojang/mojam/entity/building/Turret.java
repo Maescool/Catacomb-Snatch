@@ -70,6 +70,16 @@ public class Turret extends Building {
 		Bullet bullet = new Bullet(this, xd * invDist, yd * invDist);
 		bullet.pos.y -= 10;
 		level.addEntity(bullet);
+		
+		if (upgradeLevel > 0){
+		    Bullet second_bullet = new Bullet(this, xd * invDist, yd * invDist);
+            level.addEntity(second_bullet);
+            if (facing == 0 || facing == 4){
+                bullet.pos.x -= 5;
+                second_bullet.pos.x += 5;
+            }
+		}
+		
 		delayTicks = delay;
 	}
 
