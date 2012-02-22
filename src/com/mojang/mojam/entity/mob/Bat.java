@@ -3,7 +3,6 @@ package com.mojang.mojam.entity.mob;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.network.TurnSynchronizer;
-import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.screen.*;
 
 public class Bat extends Mob {
@@ -31,14 +30,10 @@ public class Bat extends Mob {
 		xd += Math.cos(dir) * 1;
 		yd += Math.sin(dir) * 1;
 		
-		try{
-			Tile nextTile = level.getTile((int)(pos.x/Tile.WIDTH+Math.signum(xd)), 
-										(int)(pos.y/Tile.HEIGHT+Math.signum(yd)));
-			if (!nextTile.canPass(this)){
-				xd = -xd;
-				yd = -yd;
-			}
-		} catch (Exception exc) {}
+		if (shouldBounceOffWall(xd, yd)){
+			xd = -xd;
+			yd = -yd;
+		}
 		
 		if (!move(xd, yd)) {
 			dir += (TurnSynchronizer.synchedRandom.nextDouble() - TurnSynchronizer.synchedRandom
