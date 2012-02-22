@@ -469,13 +469,6 @@ public class MojamComponent extends Canvas implements Runnable,
 						level = null;
 						return;
 					}
-					if (keys.escape.wasPressed()) {
-						clearMenus();
-						addMenu(new TitleMenu(GAME_WIDTH, GAME_HEIGHT));
-						soundPlayer.startTitleMusic();
-						level = null;
-						return;
-					}
 				}
 			}
 
