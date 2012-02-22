@@ -4,6 +4,7 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.*;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.*;
+import com.mojang.mojam.level.HoleTile;
 
 public class Loot extends Entity {
 	public double xa, ya, za;
@@ -58,6 +59,10 @@ public class Loot extends Entity {
 	}
 
 	public void tick() {
+		if(level.getTile(pos) instanceof HoleTile)
+		{
+			remove();
+		}
 		animTime++;
 		if (takeTime > 0) {
 			takeTime--;
