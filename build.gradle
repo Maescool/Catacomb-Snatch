@@ -1,8 +1,9 @@
 apply plugin: 'java'
 apply plugin: 'idea'
 
+archivesBaseName = "Catacomb-Snatch"
 project.group = "com.mojang.mojam"
-project.version = "1.0.0"
+project.version = "1.0.0-SNAPSHOT"
 
 sourceSets {
   main {
