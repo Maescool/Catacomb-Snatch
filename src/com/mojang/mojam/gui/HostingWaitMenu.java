@@ -1,6 +1,7 @@
 package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
+import java.net.*;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.screen.Screen;
@@ -10,7 +11,7 @@ public class HostingWaitMenu extends GuiMenu {
 	public HostingWaitMenu() {
 		super();
 
-		addButton(new Button(TitleMenu.CANCEL_JOIN_ID, 4, 250, 180));
+		addButton(new Button(TitleMenu.CANCEL_JOIN_ID, "Cancel", 250, 180));
 	}
 
 	@Override
@@ -18,17 +19,33 @@ public class HostingWaitMenu extends GuiMenu {
 
 		screen.clear(0);
 		Font.draw(screen, MojamComponent.texts.waitingForClient(), 100, 100);
-
+		try {
+			InetAddress thisIp = InetAddress.getLocalHost();
+			Font.draw(screen, "Your IP:" + thisIp.getHostAddress(), 100, 120);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		super.render(screen);
 	}
 
+	@Override
+	public void buttonPressed(ClickableComponent button) {
+		// nothing.
+	}
+
+	@Override
 	public void keyPressed(KeyEvent arg0) {
+		// nothing
 	}
 
+	@Override
 	public void keyReleased(KeyEvent arg0) {
+		// nothing
 	}
 
+	@Override
 	public void keyTyped(KeyEvent arg0) {
+		// nothing
 	}
 
 }

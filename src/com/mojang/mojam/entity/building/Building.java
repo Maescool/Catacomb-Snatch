@@ -26,10 +26,6 @@ public class Building extends Mob implements IUsable {
 	public void render(Screen screen) {
 		super.render(screen);
 		renderMarker(screen);
-		if (upgradeLevel != 0) {
-			Font.drawCentered(screen, "" + upgradeLevel, (int) (pos.x + 10),
-					(int) (pos.y));
-		}
 	}
 
 	protected void renderMarker(Screen screen) {
@@ -81,11 +77,11 @@ public class Building extends Mob implements IUsable {
 	//
 	// Upgrade
 	//
-	protected void upgradeComplete(int upgradeLevel) {
+	protected void upgradeComplete() {
 
 	}
 
-	private int upgradeLevel = 0;
+	protected int upgradeLevel = 0;
 	private int maxUpgradeLevel = 0;
 	private int[] upgradeCosts = null;
 
@@ -102,7 +98,7 @@ public class Building extends Mob implements IUsable {
 
 		++upgradeLevel;
 		p.useMoney(cost);
-		upgradeComplete(upgradeLevel);
+		upgradeComplete();
 		return true;
 	}
 
@@ -113,7 +109,7 @@ public class Building extends Mob implements IUsable {
 
 		upgradeCosts = costs;
 		maxUpgradeLevel = costs.length - 1;
-		upgradeComplete(0);
+		upgradeComplete();
 	}
 
 	public void use(Entity user) {

@@ -8,6 +8,8 @@ import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.loot.*;
 import com.mojang.mojam.entity.mob.*;
 import com.mojang.mojam.entity.particle.Sparkle;
+import com.mojang.mojam.entity.weapon.IWeapon;
+import com.mojang.mojam.entity.weapon.Rifle;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.level.tile.*;
 import com.mojang.mojam.math.Vec2;
@@ -22,9 +24,11 @@ public class Player extends Mob implements LootCollector {
 	public static final int REGEN_INTERVAL = 60 * 3;
 
 	public Keys keys;
+	public MouseButtons mouseButtons;
+	public int mouseFireButton = 1;
 	public Vec2 aimVector;
+	public IWeapon weapon;
 	private boolean mouseAiming;
-	public int shootDelay = 0;
 	public double xd, yd;
 	public int takeDelay = 0;
 	public int flashTime = 0;
@@ -42,18 +46,19 @@ public class Player extends Mob implements LootCollector {
 	private boolean isSeeing;
 	private int startX;
 	private int startY;
-	private int muzzleTicks = 0;
-	private double muzzleX = 0;
-	private double muzzleY = 0;
+	public int muzzleTicks = 0;
+	public double muzzleX = 0;
+	public double muzzleY = 0;
 	private int muzzleImage = 0;
 
 	private int nextWalkSmokeTick = 0;
 
 	private int regenDelay = 0;
 
-	public Player(Keys keys, int x, int y, int team) {
+	public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team) {
 		super(x, y, team);
 		this.keys = keys;
+		this.mouseButtons = mouseButtons;
 
 		startX = x;
 		startY = y;
@@ -61,10 +66,10 @@ public class Player extends Mob implements LootCollector {
 		aimVector = new Vec2(0, 1);
 
 		score = 0;
-
+		weapon = new Rifle(this);
 	}
 
-	public void tick() {
+	public void tick() {		
 		time++;
 		minimapIcon = time / 3 % 4;
 		if (minimapIcon == 3) {
@@ -115,7 +120,7 @@ public class Player extends Mob implements LootCollector {
 			xa++;
 		}
 
-		if (!mouseAiming && !keys.fire.isDown && xa * xa + ya * ya != 0) {
+		if (!mouseAiming && !keys.fire.isDown && !mouseButtons.isDown(mouseFireButton) && xa * xa + ya * ya != 0) {
 			aimVector.set(xa, ya);
 			aimVector.normalizeSelf();
 			updateFacing();
@@ -175,31 +180,11 @@ public class Player extends Mob implements LootCollector {
 		xBump *= 0.8;
 		yBump *= 0.8;
 		muzzleImage = (muzzleImage + 1) & 3;
-
-		if (carrying == null && keys.fire.isDown) {
-			wasShooting = true;
-			if (takeDelay > 0) {
-				takeDelay--;
-			}
-			if (shootDelay-- <= 0) {
-				double dir = Math.atan2(aimVector.y, aimVector.x)
-						+ (TurnSynchronizer.synchedRandom.nextFloat() - TurnSynchronizer.synchedRandom
-								.nextFloat()) * 0.1;
-
-				xa = Math.cos(dir);
-				ya = Math.sin(dir);
-				xd -= xa;
-				yd -= ya;
-				Entity bullet = new Bullet(this, xa, ya);
-				level.addEntity(bullet);
-				muzzleTicks = 3;
-				muzzleX = bullet.pos.x + 7 * xa - 8;
-				muzzleY = bullet.pos.y + 5 * ya - 8 + 1;
-				shootDelay = 5;
-				MojamComponent.soundPlayer.playSound("/sound/Shot 1.wav",
-						(float) pos.x, (float) pos.y);
-			}
-		} else {
+		
+		weapon.weapontick();
+		if (carrying == null && keys.fire.isDown || carrying == null && mouseButtons.isDown(mouseFireButton)) {
+			primaryFire(xa, ya);
+		} else{
 			if (wasShooting) {
 				suckRadius = 60;
 			}
@@ -208,8 +193,8 @@ public class Player extends Mob implements LootCollector {
 				suckRadius--;
 			}
 			takeDelay = 15;
-			shootDelay = 0;
 		}
+		
 
 		int x = (int) pos.x / Tile.WIDTH;
 		int y = (int) pos.y / Tile.HEIGHT;
@@ -221,6 +206,8 @@ public class Player extends Mob implements LootCollector {
 					level.placeTile(x, y, new RailTile(level.getTile(x, y)),
 							this);
 					payCost(COST_RAIL);
+				} else if (score < COST_RAIL) {
+					Notifications.getInstance().add("You need "+COST_RAIL+" to build a rail");
 				}
 			} else if (level.getTile(x, y) instanceof RailTile) {
 				if ((y < 8 && team == Team.Team2)
@@ -228,6 +215,8 @@ public class Player extends Mob implements LootCollector {
 					if (score >= COST_DROID) {
 						level.addEntity(new RailDroid(pos.x, pos.y, team));
 						payCost(COST_DROID);
+					} else {
+						Notifications.getInstance().add("You need "+COST_DROID+" for a rail droid");
 					}
 				} else {
 
@@ -237,6 +226,8 @@ public class Player extends Mob implements LootCollector {
 						if (((RailTile) level.getTile(x, y)).remove()) {
 							payCost(COST_REMOVE_RAIL);
 						}
+					} else if (score < COST_REMOVE_RAIL) {
+						Notifications.getInstance().add("You need "+COST_REMOVE_RAIL+" to remove a rail");
 					}
 					MojamComponent.soundPlayer.playSound(
 							"/sound/Track Place.wav", (float) pos.x,
@@ -302,6 +293,14 @@ public class Player extends Mob implements LootCollector {
 		if (isSeeing) {
 			level.reveal(x, y, 5);
 		}
+	}
+	
+	private void primaryFire(double xa, double ya) {
+		wasShooting = true;
+		if (takeDelay > 0) {
+			takeDelay--;
+		}
+		weapon.primaryFire(xa, ya);
 	}
 
 	public void payCost(int cost) {
@@ -505,5 +504,9 @@ public class Player extends Mob implements LootCollector {
 	public void updateFacing() {
 		facing = (int) ((Math.atan2(-aimVector.x, aimVector.y) * 8
 				/ (Math.PI * 2) + 8.5)) & 7;
+	}
+	
+	public Vec2 getPosition() {
+		return pos;
 	}
 }

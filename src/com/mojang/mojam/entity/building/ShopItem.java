@@ -4,6 +4,7 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.*;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.Font;
+import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.screen.*;
 
 public class ShopItem extends Building {
@@ -73,6 +74,8 @@ public class ShopItem extends Building {
 				}
 				level.addEntity(item);
 				player.pickup(item);
+			} else if ( player.getScore() < COST[type] ){
+				Notifications.getInstance().add("You dont have enough money");
 			}
 		}
 	}

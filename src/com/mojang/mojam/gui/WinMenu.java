@@ -15,10 +15,10 @@ public class WinMenu extends GuiMenu {
 		this.winningPlayer = winningPlayer;
 		this.gameWidth = gameWidth;
 
-		addButton(new Button(TitleMenu.RESTART_GAME_ID, 1,
-				(gameWidth - 128) / 2, 200));
+		addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, "Ok", (gameWidth - 128) / 2, 200));
 	}
 
+	@Override
 	public void render(Screen screen) {
 		screen.clear(0);
 		screen.blit(Art.gameOverScreen, 0, 0);
@@ -33,27 +33,28 @@ public class WinMenu extends GuiMenu {
 		super.render(screen);
 
 		if (winningPlayer == 1)
-			screen.blit(Art.lordLard[0][6], (gameWidth - 128) / 2 - 40,
-					190 + selectedItem * 40);
+			screen.blit(Art.lordLard[0][6], (gameWidth - 128) / 2 - 40, 190 + selectedItem * 40);
 		if (winningPlayer == 2)
-			screen.blit(Art.herrSpeck[0][6], (gameWidth - 128) / 2 - 40,
-					190 + selectedItem * 40);
+			screen.blit(Art.herrSpeck[0][6], (gameWidth - 128) / 2 - 40, 190 + selectedItem * 40);
 	}
 
 	@Override
-	public void buttonPressed(Button button) {
-	}
-
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			buttons.get(selectedItem).postClick();
 		}
 	}
 
+	@Override
 	public void keyReleased(KeyEvent arg0) {
 	}
 
+	@Override
 	public void keyTyped(KeyEvent arg0) {
+	}
+
+	@Override
+	public void buttonPressed(ClickableComponent button) {
 	}
 
 }

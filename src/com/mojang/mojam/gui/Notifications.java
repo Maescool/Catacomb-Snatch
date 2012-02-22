@@ -42,11 +42,8 @@ public class Notifications {
 		int i = 0;
 		while (it.hasNext()) {
 			i += 1;
-			Note note = (Note) it.next();
-			Font.draw(screen, note.message, (MojamComponent.GAME_WIDTH / 2)
-					- (Font.getStringWidth(note.message) / 2),
-					MojamComponent.GAME_HEIGHT / 5
-							+ (i * 8 * MojamComponent.SCALE));
+			Note note = it.next();
+			Font.draw(screen, note.message, (MojamComponent.GAME_WIDTH / 2) - (Font.getStringWidth(note.message) / 2), MojamComponent.GAME_HEIGHT / 5 + (i * 8 * MojamComponent.SCALE));
 		}
 	}
 

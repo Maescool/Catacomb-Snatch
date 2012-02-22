@@ -21,10 +21,12 @@ public class Art {
 	public static Bitmap[][] herrSpeck = cut("/herr_von_speck_sheet.png", 32,
 			32);
 	public static Bitmap[] titles = cut("/titles.png", 128);
-	public static Bitmap[][] buttons = cut("/buttons.png", 128, 24);
+	public static Bitmap[][] button = cut("/button.png", 128, 24);
 	public static Bitmap[][] font = cut("/gamfont.png", 8, 8);
 	public static Bitmap[][] mapIcons = cut("/mapicons.png", 5, 5);
 	public static Bitmap titleScreen = load("/TITLESCREEN.png");
+	public static Bitmap howToPlayScreen = load("/how_to_play.png");
+	public static Bitmap emptyBackground = load("/empty_background.png");
 	public static Bitmap gameOverScreen = load("/game_over.png");
 	public static Bitmap panel = load("/panel.png");
 	public static Bitmap shadow = load("/shadow.png");
@@ -34,7 +36,9 @@ public class Art {
 	public static Bitmap[][] bat = cut("/mob/enemy_bat_32.png", 32, 32);
 	public static Bitmap batShadow = load("/mob/shadow.png");
 	public static Bitmap[][] turret = cut("/turret.png", 32, 32);
-	public static Bitmap[][] mobSpawner = cut("/spawner.png", 32, 40);
+    public static Bitmap[][] turret2 = cut("/turret2.png", 32, 32);
+    public static Bitmap[][] turret3 = cut("/turret3.png", 32, 32);
+    public static Bitmap[][] mobSpawner = cut("/spawner.png", 32, 40);
 	public static Bitmap[][] rails = cut("/rails.png", 32, 38);
 	public static Bitmap[][] bullet = cut("/bullet.png", 16, 16);
 	public static Bitmap[][] muzzle = cut("/muzzle.png", 16, 16);
