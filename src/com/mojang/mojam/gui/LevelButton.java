@@ -1,8 +1,12 @@
 package com.mojang.mojam.gui;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
+
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
@@ -14,7 +18,6 @@ public class LevelButton extends ClickableComponent {
 
 	private int id;
 	private Bitmap minimap;
-	private String nicename;
 	private LevelInformation levelInfo;
 
 	public static final int WIDTH = 140;
@@ -28,12 +31,11 @@ public class LevelButton extends ClickableComponent {
 	 * @throws IOException
 	 *             map file not found?
 	 */
-	public LevelButton(int id, String nicename, LevelInformation levelInfo, int x, int y) {
+	public LevelButton(int id, LevelInformation levelInfo, int x, int y) {
 		super(x, y, WIDTH, HEIGHT);
 
 		this.id = id;
 		this.levelInfo = levelInfo;
-		this.nicename = nicename;
 
 		buildMinimap();
 	}
@@ -101,10 +103,10 @@ public class LevelButton extends ClickableComponent {
 			screen.blit(minimap, getX() + (getWidth() - minimap.w) / 2, getY() + 4);
 
 			// map name
-			Font.drawCentered(screen, nicename, getX() + getWidth() / 2, getY() + 4 + minimap.h + 8);
+			Font.drawCentered(screen, levelInfo.levelName, getX() + getWidth() / 2, getY() + 4 + minimap.h + 8);
 		} else {
 			Font.setFont("red");
-			Font.drawCentered(screen, nicename, getX() + getWidth() / 2, getY() + 4 + 32);
+			Font.drawCentered(screen, levelInfo.levelName, getX() + getWidth() / 2, getY() + 4 + 32);
 			Font.setFont("");
 		}
 	}
