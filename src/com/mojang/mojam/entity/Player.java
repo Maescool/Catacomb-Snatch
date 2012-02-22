@@ -471,6 +471,8 @@ public class Player extends Mob implements LootCollector {
 				double dist = source.pos.dist(pos);
 				xBump = (pos.x - source.pos.x) / dist * 10;
 				yBump = (pos.y - source.pos.y) / dist * 10;
+				
+				MojamComponent.soundPlayer.playSound("/sound/hit2.wav", (float) pos.x, (float) pos.y, true);
 			}
 		}
 	}
