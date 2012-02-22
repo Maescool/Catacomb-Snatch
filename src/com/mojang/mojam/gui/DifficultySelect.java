@@ -11,14 +11,14 @@ import com.mojang.mojam.screen.Screen;
 
 public class DifficultySelect extends GuiMenu {
 	
-	private ArrayList<DifficultyInformation> Difficulties = DifficultyList.getDifficulties();
+	static ArrayList<DifficultyInformation> Difficulties = DifficultyList.getDifficulties();
 	
 	private DifficultyButton[] DifficultyButtons;
 	private final int xButtons = 3;
 	private final int xSpacing = DifficultyButton.WIDTH + 8;
 	private final int ySpacing = DifficultyButton.HEIGHT + 8;
-	private final int xStart = (MojamComponent.GAME_WIDTH - (xSpacing * xButtons) + 8) / 2;
-	private final int yStart = 50;
+	private final int xStart = (MojamComponent.GAME_WIDTH - (xSpacing * xButtons)) / 2;
+	private final int yStart = 75;
 	
 	private DifficultyButton activeButton;
 	private Button startGameButton;
@@ -32,7 +32,7 @@ public class DifficultySelect extends GuiMenu {
 		
 		TitleMenu.Difficulty = Difficulties.get(0).DifficultyNumber;
 		
-		startGameButton = new Button(TitleMenu.START_GAME_ID,  "Start Game", MojamComponent.GAME_WIDTH - 256 - 30, MojamComponent.GAME_HEIGHT - 24 - 25);
+		startGameButton = new Button(TitleMenu.START_GAME_ID,  "Start Game", (MojamComponent.GAME_WIDTH - 256 - 30), MojamComponent.GAME_HEIGHT - 24 - 25);
 		cancelButton = new Button(TitleMenu.CANCEL_JOIN_ID, "Cancel", MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25);
 		
 		addButton(startGameButton);
@@ -50,12 +50,11 @@ public class DifficultySelect extends GuiMenu {
 				activeButton = DifficultyButtons[i];
 				activeButton.setActive(true);
 			}
-
+		
 			if (x == (xButtons - 1))
 				y++;
 		}
-	}
-	
+		}
 
 	@Override
 	public void render(Screen screen) {
@@ -88,17 +87,23 @@ public class DifficultySelect extends GuiMenu {
 		int activeButtonId = activeButton.getId();
 		int nextActiveButtonId = -2;
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			nextActiveButtonId = (activeButtonId % 3 == 0)
-					? bestExistingDifficultyId(activeButtonId + 2, activeButtonId + 1)
+			nextActiveButtonId = (activeButtonId % xButtons == 0)
+					? bestExistingDifficultyId(activeButtonId + xButtons - 1, activeButtonId + xButtons - 2)
 				    : activeButtonId - 1;
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			if (activeButtonId == Difficulties.size() - 1) {
-				nextActiveButtonId = activeButtonId - (activeButtonId % 3);
+				nextActiveButtonId = activeButtonId - (activeButtonId % xButtons);
 			}
 			else {
-				nextActiveButtonId = (activeButtonId % 3 == 2) ? activeButtonId - 2 : activeButtonId + 1;
+				nextActiveButtonId = (activeButtonId % xButtons == xButtons - 1) ? activeButtonId - xButtons - 1 : activeButtonId + xButtons - 2;
 			}
+		}else if (e.getKeyCode() == KeyEvent.VK_UP) {
+			nextActiveButtonId = bestExistingDifficultyId(activeButtonId - xButtons, activeButtonId + 2 * xButtons, activeButtonId + xButtons);
+		}
+		else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+			nextActiveButtonId = bestExistingDifficultyId(activeButtonId + xButtons, activeButtonId + xButtons - 1, activeButtonId + xButtons - 2,
+					activeButtonId - 2 * xButtons, activeButtonId - xButtons);
 		}
 		
 		// Update active button
@@ -115,7 +120,6 @@ public class DifficultySelect extends GuiMenu {
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			cancelButton.postClick();
 		}
-		
 	}
 	
 	public int bestExistingDifficultyId(int... options) {
