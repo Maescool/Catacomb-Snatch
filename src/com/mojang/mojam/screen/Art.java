@@ -41,9 +41,9 @@ public class Art {
 	public static Bitmap bomb = load("/art/building/bomb.png");
         
 	public static Bitmap[][] defaultFont = cut("/art/fonts/default.png", 8, 8);
-	public static Bitmap[][] fontBlue = cut("/art/fonts/font_blue.png", 8, 8);
-	public static Bitmap[][] fontGrey = cut("/art/fonts/font_grey.png", 8, 8);
-	public static Bitmap[][] fontRed = cut("/art/fonts/font_red.png", 8, 8);
+	public static Bitmap[][] font_blue = cut("/art/fonts/font_blue.png", 8, 8);
+	public static Bitmap[][] font_gray = cut("/art/fonts/font_gray.png", 8, 8);
+	public static Bitmap[][] font_red = cut("/art/fonts/font_red.png", 8, 8);
 	public static Bitmap[][] font = cut("/art/fonts/gamfont.png", 8, 8);
 
         public static Bitmap[][] raildroid = cut("/art/mob/raildroid.png", 32, 32);

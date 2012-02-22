@@ -16,10 +16,10 @@ public class Font {
 	static {
 		fonts.put("", new Font(Art.font));
                 fonts.put("", new Font(Art.defaultFont));
-                fonts.put("", new Font(Art.fontBlue));
-                fonts.put("", new Font(Art.fontGrey));
-                fonts.put("", new Font(Art.fontRed));
-	}
+                fonts.put("", new Font(Art.font_blue));
+                fonts.put("", new Font(Art.font_gray));
+                fonts.put("", new Font(Art.font_red)); 
+        }
 	
 	public static void addFont(String s){
 		s = s.toLowerCase();
