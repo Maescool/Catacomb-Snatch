@@ -43,7 +43,9 @@ public class SpawnerEntity extends Building {
 				* 5;
 		x=Math.max(Math.min(x, level.width*Tile.WIDTH), 0);//spawn only inside the level!
 		y=Math.max(Math.min(y, level.height*Tile.HEIGHT), 0);
-		
+		int xin=(int)x/ Tile.WIDTH;
+		int yin=(int)y/ Tile.HEIGHT;
+		Tile spawntile = level.getTile(xin, yin);
 		Mob te = null;
 		if (type == 0)
 			te = new Bat(x, y);
@@ -51,8 +53,7 @@ public class SpawnerEntity extends Building {
 			te = new Snake(x, y);
 		if (type == 2)
 			te = new Mummy(x, y);
-
-		if (level.countEntities(Mob.class) < level.maxMonsters && level.getEntities(te.getBB().grow(8), te.getClass()).size() == 0)
+		if (level.countEntities(Mob.class) < level.maxMonsters && level.getEntities(te.getBB().grow(8), te.getClass()).size() == 0 && spawntile.canPass(te))
 			level.addEntity(te);
 	}
 
