@@ -139,8 +139,6 @@ public class Building extends Mob implements IUsable {
 		}
 	}
   
-	public void collect(Entity user) { }
-  
 	public boolean isHighlightable() {
 		return true;
 	}

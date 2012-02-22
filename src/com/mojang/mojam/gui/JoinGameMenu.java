@@ -9,12 +9,13 @@ import com.mojang.mojam.screen.Art;
 public class JoinGameMenu extends GuiMenu {
 
 	private Button joinButton;
+	private Button cancelButton;
 
 	public JoinGameMenu() {
 		super();
 
 		joinButton = (Button) addButton(new Button(TitleMenu.PERFORM_JOIN_ID, "Join", 100, 180));
-		addButton(new Button(TitleMenu.CANCEL_JOIN_ID, "Cancel", 250, 180));
+		cancelButton = (Button) addButton(new Button(TitleMenu.CANCEL_JOIN_ID, "Cancel", 250, 180));
 	}
 
 	@Override
@@ -30,8 +31,12 @@ public class JoinGameMenu extends GuiMenu {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		// Start on Enter, Cancel on Escape
 		if (e.getKeyChar() == KeyEvent.VK_ENTER && TitleMenu.ip.length() > 0) {
 			joinButton.postClick();
+		}
+		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			cancelButton.postClick();
 		}
 	}
 

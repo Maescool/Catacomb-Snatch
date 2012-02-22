@@ -40,10 +40,12 @@ public class InputHandler implements KeyListener {
 		mappings.put(KeyEvent.VK_E, keys.use);
 		mappings.put(KeyEvent.VK_F, keys.upgrade);
 		mappings.put(KeyEvent.VK_ESCAPE, keys.pause);
-		mappings.put(KeyEvent.VK_Q, keys.collect);
-
+		mappings.put(KeyEvent.VK_F2, keys.screenShot);
+		
 		mappings.put(KeyEvent.VK_Y, keys.sprint);
 		mappings.put(KeyEvent.VK_NUMPAD0, keys.sprint);
+		
+		mappings.put(KeyEvent.VK_F11, keys.fullscreen);
 	}
 
 	public void keyPressed(KeyEvent ke) {

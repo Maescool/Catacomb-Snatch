@@ -9,13 +9,68 @@ import com.mojang.mojam.screen.Screen;
 public class HowToPlay extends GuiMenu {
 
 	public HowToPlay() {
-		addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, "back", MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25));
+		addButton(new Button(TitleMenu.BACK_ID, "back", MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25));
 	}
 
 	public void render(Screen screen) {
-		screen.blit(Art.howToPlayScreen, 0, 0);
+		screen.blit(Art.background, 0, 0);
+		printHelpText(screen);
 		super.render(screen);
 	}
+
+	private void printHelpText(Screen screen) {
+		int goalX = 350;
+		int imgTab = 70;
+		int tab1 = 100;
+		int tab2 = 210;
+		int goalTopMargin = 20;
+		int vspace = 50;
+		int line = 110;
+
+		Font.drawCentered(screen, "Goal:", goalX, goalTopMargin);
+		Font.drawCentered(screen, MojamComponent.texts.getStatic("help1"), goalX, goalTopMargin+10);
+		Font.drawCentered(screen, MojamComponent.texts.getStatic("help2"), goalX, goalTopMargin+20);
+		Font.drawCentered(screen, MojamComponent.texts.getStatic("help3"), goalX, goalTopMargin+30);
+		Font.drawCentered(screen, MojamComponent.texts.getStatic("help4"), goalX, goalTopMargin+40);
+		
+		screen.blit(Art.turret[7][0], imgTab-66, line);
+		screen.blit(Art.turret2[7][0], imgTab-33, line);
+		screen.blit(Art.turret3[7][0], imgTab, line);
+		Font.draw(screen, MojamComponent.texts.getStatic("turret"), tab1, line);
+		screen.blit(Art.pickupCoinGold[0][0], tab1, line+10);
+		Font.draw(screen, "150", tab1+20, line+15);
+		Font.draw(screen, MojamComponent.texts.getStatic("turret1"), tab2, line);
+
+		
+		line += vspace;
+		screen.blit(Art.harvester[7][0], imgTab-66, line-10);
+		screen.blit(Art.harvester2[7][0], imgTab-33, line-10);
+		screen.blit(Art.harvester3[7][0], imgTab, line-10);
+		Font.draw(screen, MojamComponent.texts.getStatic("collector"), tab1, line);
+		screen.blit(Art.pickupCoinGold[0][0], tab1, line+10);
+		Font.draw(screen, "300", tab1+20, line+15);
+		Font.draw(screen, MojamComponent.texts.getStatic("collector1"), tab2, line);
+		Font.draw(screen, MojamComponent.texts.getStatic("collector2"), tab2, line+10);
+
+		line += vspace+10;
+		screen.blit(Art.bomb, imgTab, line);
+		Font.draw(screen, MojamComponent.texts.getStatic("bomb"), tab1, line);
+		screen.blit(Art.pickupCoinGold[0][0], tab1, line+10);
+		Font.draw(screen, "500", tab1+20, line+15);
+		Font.draw(screen, MojamComponent.texts.getStatic("bomb1"), tab2, line);
+		Font.draw(screen, MojamComponent.texts.getStatic("bomb2"), tab2, line+10);
+
+		line += vspace;
+		screen.blit(Art.rails[1][0], imgTab, line);
+		Font.draw(screen, MojamComponent.texts.getStatic("rails"), tab1, line);
+		screen.blit(Art.pickupCoinGold[0][0], tab1, line+10);
+		Font.draw(screen, "10 (+)", tab1+20, line+15);
+		Font.draw(screen, "15 (-)", tab1+20, line+25);
+		Font.draw(screen, MojamComponent.texts.getStatic("rails1"), tab2, line);
+		
+		
+
+		}
 
 	@Override
 	public void keyTyped(KeyEvent e) {

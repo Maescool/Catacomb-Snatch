@@ -34,6 +34,7 @@ public class Player extends Mob implements LootCollector {
 	public Keys keys;
 	public MouseButtons mouseButtons;
 	public int mouseFireButton = 1;
+	public int mouseUseButton = 3;
 	public Vec2 aimVector;
 	public IWeapon weapon;
 	private boolean mouseAiming;
@@ -124,8 +125,10 @@ public class Player extends Mob implements LootCollector {
 		if (regenDelay > 0) {
 			regenDelay--;
 			if (regenDelay == 0) {
-				if (health < maxHealth)
+				if (health + 1 < maxHealth)
 					health++;
+				else if (health < maxHealth)
+					health = maxHealth;
 				regenDelay = REGEN_INTERVAL;
 			}
 		}
@@ -298,9 +301,10 @@ public class Player extends Mob implements LootCollector {
 			carrying.setPos(pos.x, pos.y - 20);
 			carrying.tick();
 
-			if (keys.use.wasPressed()) {
+			if (keys.use.wasPressed() || mouseButtons.isDown(mouseUseButton)) {
 				Vec2 buildPos = pos.clone();
 				boolean allowed = true;
+				mouseButtons.setNextState(mouseUseButton, false);
 
 				if (allowed && (!(carrying instanceof IUsable) || (carrying instanceof IUsable && ((IUsable) carrying).isAllowedToCancel()))) {
 					carrying.removed = false;
@@ -330,16 +334,17 @@ public class Player extends Mob implements LootCollector {
 				((IUsable) selected).setHighlighted(true);
 			}
 
+			
+			
 			if (selected != null) {
 				if (selected.pos.distSqr(getInteractPosition()) > INTERACT_DISTANCE) {
 					((IUsable) selected).setHighlighted(false);
 					selected = null;
-				} else if (selected instanceof IUsable && keys.use.wasPressed()) {
+				} else if (selected instanceof IUsable && (keys.use.wasPressed() || mouseButtons.isDown(mouseUseButton))) {
 					((IUsable) selected).use(this);
+					mouseButtons.setNextState(mouseUseButton, false);
 				} else if (selected instanceof IUsable && keys.upgrade.wasPressed()) {
 					((IUsable) selected).upgrade(this);
-				} else if (selected instanceof IUsable && keys.collect.wasPressed()){
-					((IUsable) selected).collect(this);
 				}
 			}
 

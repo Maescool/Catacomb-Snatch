@@ -29,7 +29,7 @@ public class WallTile extends Tile {
 	}
 
 	public void render(Screen screen) {
-		screen.blit(Art.wallTiles[img % 3][0], x * Tile.WIDTH, y * Tile.HEIGHT
+		screen.blit(Art.wallTiles[img % 4][0], x * Tile.WIDTH, y * Tile.HEIGHT
 				- (WALLHEIGHT - Tile.HEIGHT));
 	}
 

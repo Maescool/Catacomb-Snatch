@@ -1,5 +1,6 @@
 package com.mojang.mojam;
 
+import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -8,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.Point;
+import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -21,10 +23,13 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Stack;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -44,6 +49,7 @@ import com.mojang.mojam.gui.JoinGameMenu;
 import com.mojang.mojam.gui.LevelSelect;
 import com.mojang.mojam.gui.PauseMenu;
 import com.mojang.mojam.gui.TitleMenu;
+import com.mojang.mojam.level.DifficultyList;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.LevelList;
@@ -105,8 +111,10 @@ public class MojamComponent extends Canvas implements Runnable,
 	private boolean isServer;
 	private int localId;
 	private Thread hostThread;
+	private static boolean fullscreen = false;
 	public static SoundPlayer soundPlayer;
 	private long nextMusicInterval = 0;
+	private byte sShotCounter = 0;
 
 	private int createServerState = 0;
 	private static File mojamDir = null;
@@ -462,7 +470,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		if (level != null) {
 			if (synchronizer.preTurn()) {
 				synchronizer.postTurn();
-				
+
 				if (!paused) {
 					for (int index = 0; index < keys.getAll().size(); index++) {
 						Keys.Key key = keys.getAll().get(index);
@@ -472,28 +480,33 @@ public class MojamComponent extends Canvas implements Runnable,
 									nextState));
 						}
 					}
-					
+
 					keys.tick();
 					for (Keys skeys : synchedKeys) {
 						skeys.tick();
 					}
-	
+
 					if (keys.pause.wasPressed()) {
 						keys.release();
 						synchronizer.addCommand(new PauseCommand(true));
 					}
+					
+					if (keys.fullscreen.wasPressed()) {
+						setFullscreen(!fullscreen);
+					}
 						
 					// if mouse is in use, update player orientation before level tick
 					if (!mouseHidden) {
-	
-						// update player mouse, in world pixels relative to player
+
+						// update player mouse, in world pixels relative to
+						// player
 						player.setAimByMouse(
 								((mouseButtons.getX() / SCALE) - (screen.w / 2)),
 								(((mouseButtons.getY() / SCALE) + 24) - (screen.h / 2)));
 					} else {
 						player.setAimByKeyboard();
 					}
-	
+
 					level.tick();
 				}
 
@@ -501,6 +514,10 @@ public class MojamComponent extends Canvas implements Runnable,
 				if (System.currentTimeMillis() / 1000 > nextMusicInterval) {
 					nextMusicInterval = (System.currentTimeMillis() / 1000) + 4 * 60;
 					soundPlayer.startBackgroundMusic();
+				}
+
+				if (keys.screenShot.isDown) {
+					takeScreenShot();
 				}
 			}
 		}
@@ -517,11 +534,10 @@ public class MojamComponent extends Canvas implements Runnable,
 			synchronizer.setStarted(true);
 			if (TitleMenu.level.vanilla) {
 				packetLink.sendPacket(new StartGamePacket(
-						TurnSynchronizer.synchedSeed, TitleMenu.level
-								.getUniversalPath()));
+						TurnSynchronizer.synchedSeed, TitleMenu.level.getUniversalPath(),DifficultyList.getDifficultyID(TitleMenu.difficulty)));
 			} else {
 				packetLink.sendPacket(new StartGamePacketCustom(
-						TurnSynchronizer.synchedSeed, level));
+						TurnSynchronizer.synchedSeed, level, DifficultyList.getDifficultyID(TitleMenu.difficulty)));
 			}
 			packetLink.setPacketListener(MojamComponent.this);
 
@@ -555,7 +571,11 @@ public class MojamComponent extends Canvas implements Runnable,
 		// display window
 		guiFrame.setLocationRelativeTo(null);
 		guiFrame.setVisible(true);
-
+		fullscreen = fs;
+	}
+	
+	public static boolean isFulscreen() {
+		return fullscreen;
 	}
 
 	@Override
@@ -584,6 +604,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			if (!isServer) {
 				StartGamePacket sgPacker = (StartGamePacket) packet;
 				synchronizer.onStartGamePacket(sgPacker.getGameSeed());
+				TitleMenu.difficulty = DifficultyList.getDifficulties().get(sgPacker.getDifficulty());
 				createLevel(sgPacker.getLevelFile());
 			}
 		} else if (packet instanceof TurnPacket) {
@@ -592,6 +613,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			if (!isServer) {
 				StartGamePacketCustom sgPacker = (StartGamePacketCustom) packet;
 				synchronizer.onStartGamePacket(sgPacker.getGameSeed());
+				TitleMenu.difficulty = DifficultyList.getDifficulties().get(sgPacker.getDifficulty());
 				level = sgPacker.getLevel();
 				paused = false;
 				initLevel();
@@ -702,8 +724,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			try {
 				localId = 1;
 				packetLink = new ClientSidePacketLink(TitleMenu.ip, 3000);
-				synchronizer = new TurnSynchronizer(this, packetLink, localId,
-						2);
+				synchronizer = new TurnSynchronizer(this, packetLink, localId,2);
 				packetLink.setPacketListener(this);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -713,12 +734,16 @@ public class MojamComponent extends Canvas implements Runnable,
 		} else if (id == TitleMenu.HOW_TO_PLAY) {
 			addMenu(new HowToPlay());
 		} else if (id == TitleMenu.SELECT_DIFFICULTY_ID) {
-			addMenu(new DifficultySelect());
+			addMenu(new DifficultySelect(false));
+		} else if (id == TitleMenu.SELECT_DIFFICULTY_HOSTING_ID) {
+			addMenu(new DifficultySelect(true));
 		} else if (id == TitleMenu.EXIT_GAME_ID) {
 			System.exit(0);
 		} else if (id == TitleMenu.RETURN_ID) {
 			synchronizer.addCommand(new PauseCommand(false));
 			keys.tick();
+		} else if (id == TitleMenu.BACK_ID) {
+			popMenu();
 		}
 	}
 
@@ -829,6 +854,26 @@ public class MojamComponent extends Canvas implements Runnable,
 					.append(file).toString());
 		} else {
 			return file;
+		}
+	}
+
+	public void takeScreenShot() {
+		BufferedImage screencapture;
+
+		try {
+			screencapture = new Robot().createScreenCapture(guiFrame
+					.getBounds());
+
+			File file = new File("screenShot" + sShotCounter++ + ".jpg");
+			while(file.exists()) {
+			    file = new File("screenShot" + sShotCounter++ + ".jpg");
+			}
+			
+			ImageIO.write(screencapture, "jpg", file);
+		} catch (AWTException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }
