@@ -22,7 +22,13 @@ public class Player extends Mob implements LootCollector {
 	public static final int COST_DROID = 50;
 	public static final int COST_REMOVE_RAIL = 15;
 	public static final int REGEN_INTERVAL = 60 * 3;
-
+	public int plevel;
+	public int pnextlevel;
+	public double pexp;
+	public double psprint;
+	public boolean isSprint = false;
+	public int timeSprint = 0;
+	public int maxTimeSprint;
 	public Keys keys;
 	public MouseButtons mouseButtons;
 	public int mouseFireButton = 1;
@@ -59,17 +65,48 @@ public class Player extends Mob implements LootCollector {
 		super(x, y, team);
 		this.keys = keys;
 		this.mouseButtons = mouseButtons;
+		
+	    startX = x;
+	    startY = y;
 
 		startX = x;
 		startY = y;
-
+		plevel = 1;
+	    pexp = 0;
+	    
+	    maxHealth=5;
+	    health=5;
+	    psprint=1.5;
+	    maxTimeSprint = 100;
+	    
 		aimVector = new Vec2(0, 1);
 
 		score = 0;
 		weapon = new Rifle(this);
 	}
-
-	public void tick() {		
+	private void calculLevel() {
+		if(pexp>=nextLevel()){
+			levelUp();
+		}
+	}
+	private double nextLevel(){
+		double next = (plevel*7)*(plevel*7);
+		pnextlevel=(int) next;
+		return next;
+	}
+	public double getNextLevel(){
+		double next = nextLevel()-pexp;
+		return next;
+	}
+	private void levelUp(){
+		this.maxHealth++;
+		this.regenDelay=2;
+		plevel++;
+		psprint+=0.1;
+		maxTimeSprint+=20;
+	}
+	public void tick() {
+		calculLevel();
 		time++;
 		minimapIcon = time / 3 % 4;
 		if (minimapIcon == 3) {
@@ -161,7 +198,22 @@ public class Player extends Mob implements LootCollector {
 
 			double dd = Math.sqrt(xa * xa + ya * ya);
 			double speed = getSpeed() / dd;
-
+			if(this.keys.sprint.isDown) {
+			    isSprint=true;
+			    if(timeSprint<maxTimeSprint){
+			    	if(carrying==null){
+			    		speed=getSpeed() / dd*psprint;
+			    	}else{
+			    		speed=getSpeed() / dd*(psprint-0.5);
+			    	}
+				timeSprint++;
+			    }
+		    }else{
+		    	if(timeSprint>=0){
+		    		timeSprint--;
+		    	}
+			    isSprint=false;
+		    }
 			xa *= speed;
 			ya *= speed;
 
