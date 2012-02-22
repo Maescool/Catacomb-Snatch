@@ -1,6 +1,7 @@
 package com.mojang.mojam.level;
 
 import java.awt.image.BufferedImage;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,9 +22,12 @@ import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.building.TreasurePile;
 import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.entity.mob.Team;
+import com.mojang.mojam.entity.shop.ShopBomb;
+import com.mojang.mojam.entity.shop.ShopGrenadeLauncher;
+import com.mojang.mojam.entity.shop.ShopHarvester;
+import com.mojang.mojam.entity.shop.ShopTurret;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
-import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.tile.DestroyableWallTile;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.SandTile;
@@ -160,7 +164,7 @@ public class Level {
 	public void init() {
 		Random random = TurnSynchronizer.synchedRandom;
 
-		maxMonsters = 2000 + 500 * TitleMenu.Difficulty;
+		maxMonsters = 1500 + (int)DifficultyInformation.calculateStrength(500);
 
 		for (int i = 0; i < 11; i++) {
 			double x = (random.nextInt(width - 16) + 8) * Tile.WIDTH
@@ -174,19 +178,23 @@ public class Level {
 			}
 		}
 
-		addEntity(new ShopItem(32 * (width / 2 - 1.5), 4.5 * 32,
-				ShopItem.SHOP_TURRET, Team.Team2));
-		addEntity(new ShopItem(32 * (width / 2 - .5), 4.5 * 32,
-				ShopItem.SHOP_HARVESTER, Team.Team2));
-		addEntity(new ShopItem(32 * (width / 2 + .5), 4.5 * 32,
-				ShopItem.SHOP_BOMB, Team.Team2));
+		addEntity(new ShopTurret(32 * (width / 2 - 2), 4.5 * 32,
+				Team.Team2));
+		addEntity(new ShopHarvester(32 * (width / 2 - 1), 4.5 * 32,
+				Team.Team2));
+		addEntity(new ShopBomb(32 * (width / 2), 4.5 * 32,
+				Team.Team2));
+		addEntity(new ShopGrenadeLauncher(32 * (width / 2 + 1), 4.5 * 32,
+				Team.Team2));
 
-		addEntity(new ShopItem(32 * (width / 2 - 1.5), (height - 4.5) * 32,
-				ShopItem.SHOP_TURRET, Team.Team1));
-		addEntity(new ShopItem(32 * (width / 2 - .5), (height - 4.5) * 32,
-				ShopItem.SHOP_HARVESTER, Team.Team1));
-		addEntity(new ShopItem(32 * (width / 2 + .5), (height - 4.5) * 32,
-				ShopItem.SHOP_BOMB, Team.Team1));
+		addEntity(new ShopTurret(32 * (width / 2 - 2), (height - 4.5) * 32,
+				Team.Team1));
+		addEntity(new ShopHarvester(32 * (width / 2 - 1), (height - 4.5) * 32,
+				Team.Team1));
+		addEntity(new ShopBomb(32 * (width / 2), (height - 4.5) * 32,
+				Team.Team1));
+		addEntity(new ShopGrenadeLauncher(32 * (width / 2 + 1), (height - 4.5) * 32,
+				Team.Team1));
 
 		// test turret
 		// addEntity(new Turret(1024, 390, Team.Team1));

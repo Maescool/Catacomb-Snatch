@@ -9,8 +9,8 @@ import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
 public class DifficultySelect extends GuiMenu {
-	private ArrayList<DifficultyInformation> Difficulties = DifficultyList.getDifficulties();
-	private int selectedIndex = 0;
+	private ArrayList<DifficultyInformation> difficulties = DifficultyList.getDifficulties();
+	private int selectedIndex = 1;
 	private final int spacing = 15;
 	private final int xStringPosition = 50;
 	private final int yStringPosition = 50;
@@ -33,12 +33,12 @@ public class DifficultySelect extends GuiMenu {
 	}
 
 	private void drawDifficulty(Screen screen) {
-		for (int i = 0; i < Difficulties.size(); i++) {
+		for (int i = 0; i < difficulties.size(); i++) {
 			int xpos = xStringPosition;
 			if (selectedIndex == i)
 				xpos += spacing;
 			int ypos = yStringPosition + spacing * i;
-			Font.draw(screen, Difficulties.get(i).DifficultyName, xpos, ypos);
+			Font.draw(screen, difficulties.get(i).difficultyName, xpos, ypos);
 		}
 	}
 
@@ -47,11 +47,11 @@ public class DifficultySelect extends GuiMenu {
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			selectedIndex--;
 			if (selectedIndex < 0) {
-				selectedIndex = Difficulties.size() - 1;
+				selectedIndex = difficulties.size() - 1;
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 			selectedIndex++;
-			if (selectedIndex >= Difficulties.size()) {
+			if (selectedIndex >= difficulties.size()) {
 				selectedIndex = 0;
 			}
 		} else if (e.getKeyChar() == KeyEvent.VK_ENTER) {
@@ -59,7 +59,7 @@ public class DifficultySelect extends GuiMenu {
 		} else if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
 			cancelButton.postClick();
 		}
-		TitleMenu.Difficulty = Difficulties.get(selectedIndex).DifficultyNumber;
+		TitleMenu.difficulty = difficulties.get(selectedIndex);
 	}
 
 	@Override

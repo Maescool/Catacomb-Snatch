@@ -71,6 +71,8 @@ public class Art {
 			13, 13);
 
 	public static Bitmap bomb = load("/bomb.png");
+	
+	public static Bitmap grenadeLauncher = load("/grenadelauncher.png");
 
 	public static Bitmap[][] fxEnemyDie = cut("/effects/fx_enemydie_64.png",
 			64, 64);
