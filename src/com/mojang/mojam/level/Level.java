@@ -1,6 +1,7 @@
 package com.mojang.mojam.level;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +24,13 @@ import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.gui.TitleMenu;
-import com.mojang.mojam.level.tile.*;
+import com.mojang.mojam.level.tile.DestroyableWallTile;
+import com.mojang.mojam.level.tile.FloorTile;
+import com.mojang.mojam.level.tile.SandTile;
+import com.mojang.mojam.level.tile.Tile;
+import com.mojang.mojam.level.tile.UnbreakableRailTile;
+import com.mojang.mojam.level.tile.UnpassableSandTile;
+import com.mojang.mojam.level.tile.WallTile;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.network.TurnSynchronizer;
@@ -80,9 +87,14 @@ public class Level {
 		 */
 	}
 
-	public static Level fromFile(String path) throws IOException {
-		BufferedImage bufferedImage = ImageIO.read(MojamComponent.class
-				.getResource(path));
+	public static Level fromFile(LevelInformation li) throws IOException {
+		BufferedImage bufferedImage;
+		//System.out.println("Loading level from file: "+li.getPath());
+		if(li.vanilla){
+			bufferedImage = ImageIO.read(MojamComponent.class.getResource(li.getPath()));
+		} else {
+			bufferedImage = ImageIO.read(new File(li.getPath()));
+		}
 		int w = bufferedImage.getWidth() + 16;
 		int h = bufferedImage.getHeight() + 16;
 
