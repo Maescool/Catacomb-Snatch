@@ -89,6 +89,7 @@ public class Level {
 
 	public static Level fromFile(LevelInformation li) throws IOException {
 		BufferedImage bufferedImage;
+		//System.out.println("Loading level from file: "+li.getPath());
 		if(li.vanilla){
 			bufferedImage = ImageIO.read(MojamComponent.class.getResource(li.getPath()));
 		} else {

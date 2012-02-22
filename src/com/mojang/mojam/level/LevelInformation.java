@@ -8,6 +8,9 @@ public class LevelInformation {
 	public static HashMap<String, LevelInformation> fileToInfo = new HashMap<String, LevelInformation>();
 	private static int localIDcounter = 0;
 	
+	public static final boolean mac = isMacOS();
+	public static final String seperator = mac ? "/" : "\\";
+	
 	public int localID;
 	public String levelName;
 	private String levelFile;
@@ -27,7 +30,7 @@ public class LevelInformation {
 	
 	public String getPath(){
 		if(vanilla) return levelFile;
-		return MojamComponent.getMojamDir()+"\\"+levelFile;
+		return MojamComponent.getMojamDir()+seperator+levelFile;
 	}
 	public String getUniversalPath(){
 		return levelFile;
@@ -51,6 +54,7 @@ public class LevelInformation {
 	}
 	
 	public static boolean isPathVanilla(String s){
+		if(mac) return !s.startsWith("/Users/");
 		return s.startsWith("/");
 	}
 	
@@ -58,5 +62,10 @@ public class LevelInformation {
 		System.out.println("Path -> info: "+s);
 		if(isPathVanilla(s)) return fileToInfo.get(s);
 		return fileToInfo.get(sanitizePath(s));
+	}
+	
+	public static boolean isMacOS() {
+	    String osName = System.getProperty("os.name");
+	    return osName.startsWith("Mac");
 	}
 }
