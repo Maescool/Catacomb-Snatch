@@ -3,7 +3,6 @@ package com.mojang.mojam.entity.building;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.*;
 import com.mojang.mojam.entity.mob.Mob;
-import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.*;

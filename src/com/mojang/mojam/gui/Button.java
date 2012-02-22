@@ -8,7 +8,6 @@ public class Button extends ClickableComponent {
 	private final int id;
 
 	private String label;
-	private boolean performClick = false;
 
 	public Button(int id, String label, int x, int y) {
 		super(x, y, 128, 24);
