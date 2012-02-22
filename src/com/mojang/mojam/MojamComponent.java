@@ -1,5 +1,6 @@
 package com.mojang.mojam;
 
+import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -8,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.Point;
+import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -21,10 +23,13 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Stack;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -109,6 +114,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	private static boolean fullscreen = false;
 	public static SoundPlayer soundPlayer;
 	private long nextMusicInterval = 0;
+	private byte sShotCounter = 0;
 
 	private int createServerState = 0;
 	private static File mojamDir = null;
@@ -464,7 +470,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		if (level != null) {
 			if (synchronizer.preTurn()) {
 				synchronizer.postTurn();
-				
+
 				if (!paused) {
 					for (int index = 0; index < keys.getAll().size(); index++) {
 						Keys.Key key = keys.getAll().get(index);
@@ -474,12 +480,12 @@ public class MojamComponent extends Canvas implements Runnable,
 									nextState));
 						}
 					}
-					
+
 					keys.tick();
 					for (Keys skeys : synchedKeys) {
 						skeys.tick();
 					}
-	
+
 					if (keys.pause.wasPressed()) {
 						keys.release();
 						synchronizer.addCommand(new PauseCommand(true));
@@ -491,15 +497,16 @@ public class MojamComponent extends Canvas implements Runnable,
 						
 					// if mouse is in use, update player orientation before level tick
 					if (!mouseHidden) {
-	
-						// update player mouse, in world pixels relative to player
+
+						// update player mouse, in world pixels relative to
+						// player
 						player.setAimByMouse(
 								((mouseButtons.getX() / SCALE) - (screen.w / 2)),
 								(((mouseButtons.getY() / SCALE) + 24) - (screen.h / 2)));
 					} else {
 						player.setAimByKeyboard();
 					}
-	
+
 					level.tick();
 				}
 
@@ -507,6 +514,10 @@ public class MojamComponent extends Canvas implements Runnable,
 				if (System.currentTimeMillis() / 1000 > nextMusicInterval) {
 					nextMusicInterval = (System.currentTimeMillis() / 1000) + 4 * 60;
 					soundPlayer.startBackgroundMusic();
+				}
+
+				if (keys.screenShot.isDown) {
+					takeScreenShot();
 				}
 			}
 		}
@@ -843,6 +854,26 @@ public class MojamComponent extends Canvas implements Runnable,
 					.append(file).toString());
 		} else {
 			return file;
+		}
+	}
+
+	public void takeScreenShot() {
+		BufferedImage screencapture;
+
+		try {
+			screencapture = new Robot().createScreenCapture(guiFrame
+					.getBounds());
+
+			File file = new File("screenShot" + sShotCounter++ + ".jpg");
+			while(file.exists()) {
+			    file = new File("screenShot" + sShotCounter++ + ".jpg");
+			}
+			
+			ImageIO.write(screencapture, "jpg", file);
+		} catch (AWTException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }
