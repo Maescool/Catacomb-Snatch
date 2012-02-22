@@ -14,11 +14,11 @@ public class Font {
 	private static String currentFont = "";
 
 	static {
-		fonts.put("", new Font(Art.font));
-                fonts.put("", new Font(Art.defaultFont));
+                fonts.put("", new Font(Art.font_default));
                 fonts.put("", new Font(Art.font_blue));
                 fonts.put("", new Font(Art.font_gray));
                 fonts.put("", new Font(Art.font_red)); 
+		fonts.put("", new Font(Art.font_gold));
         }
 	
 	public static void addFont(String s){

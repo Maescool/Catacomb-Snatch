@@ -40,11 +40,11 @@ public class Art {
 	public static Bitmap[][] turret3 = cut("/art/building/turret3.png", 32, 32);
 	public static Bitmap bomb = load("/art/building/bomb.png");
         
-	public static Bitmap[][] defaultFont = cut("/art/fonts/default.png", 8, 8);
+	public static Bitmap[][] font_default = cut("/art/fonts/font_default.png", 8, 8);
 	public static Bitmap[][] font_blue = cut("/art/fonts/font_blue.png", 8, 8);
 	public static Bitmap[][] font_gray = cut("/art/fonts/font_gray.png", 8, 8);
 	public static Bitmap[][] font_red = cut("/art/fonts/font_red.png", 8, 8);
-	public static Bitmap[][] font = cut("/art/fonts/gamfont.png", 8, 8);
+	public static Bitmap[][] font_gold = cut("/art/fonts/font_gold.png", 8, 8);
 
         public static Bitmap[][] raildroid = cut("/art/mob/raildroid.png", 32, 32);
 	public static Bitmap[][] mummy = cut("/art/mob/enemy_mummy_anim_48.png", 48, 48);
