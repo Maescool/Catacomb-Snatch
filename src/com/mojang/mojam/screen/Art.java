@@ -26,6 +26,7 @@ public class Art {
 	public static Bitmap[][] mapIcons = cut("/mapicons.png", 5, 5);
 	public static Bitmap titleScreen = load("/TITLESCREEN.png");
 	public static Bitmap howToPlayScreen = load("/how_to_play.png");
+	public static Bitmap background = load("/BACKGROUND.png");
 	public static Bitmap emptyBackground = load("/empty_background.png");
 	public static Bitmap gameOverScreen = load("/game_over.png");
 	public static Bitmap pauseScreen = load("/pause_screen.png");
