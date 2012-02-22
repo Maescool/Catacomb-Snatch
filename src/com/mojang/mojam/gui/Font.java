@@ -15,9 +15,10 @@ public class Font {
 
 	static {
 		fonts.put("", new Font(Art.font));
-		addFont("/font_blue.png");
-		addFont("/font_red.png");
-		addFont("/font_gray.png");
+                fonts.put("", new Font(Art.defaultFont));
+                fonts.put("", new Font(Art.fontBlue));
+                fonts.put("", new Font(Art.fontGrey));
+                fonts.put("", new Font(Art.fontRed));
 	}
 	
 	public static void addFont(String s){
