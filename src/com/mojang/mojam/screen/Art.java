@@ -20,7 +20,6 @@ public class Art {
 	public static Bitmap[][] lordLard = cut("/lord_lard_sheet.png", 32, 32);
 	public static Bitmap[][] herrSpeck = cut("/herr_von_speck_sheet.png", 32,
 			32);
-	public static Bitmap[] titles = cut("/titles.png", 128);
 	public static Bitmap[][] button = cut("/button.png", 128, 24);
 	public static Bitmap[][] font = cut("/gamfont.png", 8, 8);
 	public static Bitmap[][] mapIcons = cut("/mapicons.png", 5, 5);
@@ -47,6 +46,8 @@ public class Art {
 	public static Bitmap[][] harvester = cut("/building/bot_vacuum.png", 32, 56);
 	public static Bitmap[][] harvester2 = cut("/building/bot_vacuum2.png", 32, 56);
 	public static Bitmap[][] harvester3 = cut("/building/bot_vacuum3.png", 32, 56);
+	public static Bitmap[][] moneyBar = cut("/bar_blue.png", 32, 4);
+	public static Bitmap[][] healthBar = cut("/bar_green.png", 32, 4);
     public static Bitmap[][] startLordLard = cut("/start_lordlard.png", 32, 32);
 	public static Bitmap[][] startHerrSpeck = cut("/start_herrspeck.png", 32,
 			32);
