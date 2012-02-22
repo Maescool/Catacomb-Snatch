@@ -11,13 +11,13 @@ public class LevelList {
 
 	public static void createLevelList() {
 		levels = new ArrayList<LevelInformation>();
-		levels.add(new LevelInformation("Mojam", "/levels/level1.bmp"));
-		levels.add(new LevelInformation("AsymeTrical","/levels/AsymeTrical.bmp"));
-		levels.add(new LevelInformation("CataBOMB", "/levels/CataBOMB.bmp"));
-		levels.add(new LevelInformation("Horizontal8","/levels/Horizontal8.bmp"));
-		levels.add(new LevelInformation("TheMaze", "/levels/TheMaze.bmp"));
-		levels.add(new LevelInformation("Circular_Shapes", "/levels/Circular Shapes.bmp"));
-		levels.add(new LevelInformation("BlackHole", "/levels/BlackHole.bmp"));
+		levels.add(new LevelInformation("Mojam", "/levels/level1.bmp",true));
+		levels.add(new LevelInformation("AsymeTrical","/levels/AsymeTrical.bmp",true));
+		levels.add(new LevelInformation("CataBOMB", "/levels/CataBOMB.bmp",true));
+		levels.add(new LevelInformation("Horizontal8","/levels/Horizontal8.bmp",true));
+		levels.add(new LevelInformation("TheMaze", "/levels/TheMaze.bmp",true));
+		levels.add(new LevelInformation("Circular_Shapes", "/levels/Circular Shapes.bmp",true));
+		levels.add(new LevelInformation("BlackHole", "/levels/BlackHole.bmp",true));
 		
 		File levels = getBaseDir();
 		if(!levels.exists()) levels.mkdirs();
@@ -45,7 +45,7 @@ public class LevelList {
 	            ext=fileName.substring(mid+1);
 	            System.out.println("  Found level: "+fname+" . "+ext);
 	            if(ext.toLowerCase().equals("bmp")){
-	        		levels.add(new LevelInformation("+ "+fname, child.getPath()));
+	        		levels.add(new LevelInformation("+ "+fname, child.getPath(),false));
 	            }
 	        }
 	    }

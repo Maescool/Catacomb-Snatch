@@ -26,6 +26,7 @@ public abstract class Packet {
 		map(12, StartGamePacketCustom.class);
 
 		map(100, ChangeKeyCommand.class);
+		map(101, PauseCommand.class);
 	}
 
 	public final int getId() {

@@ -134,9 +134,6 @@ public class Turret extends Building {
 
 	public void render(Screen screen) {
 		super.render(screen);
-
-		if (health < maxHealth)
-			addHealthBar(screen, health, maxHealth);
 	}
 
 	public Bitmap getSprite() {

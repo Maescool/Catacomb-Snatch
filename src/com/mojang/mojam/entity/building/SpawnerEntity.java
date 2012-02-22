@@ -20,7 +20,7 @@ public class SpawnerEntity extends Building {
 		freezeTime = 10;
 		spawnTime = TurnSynchronizer.synchedRandom.nextInt(SPAWN_INTERVAL);
 		minimapIcon = 4;
-
+		healthBarOffset = 15;
 		deathPoints = type * 5 + 5;
 	}
 

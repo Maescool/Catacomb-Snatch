@@ -17,6 +17,7 @@ public class Bomb extends Building {
 		setStartHealth(5);
 		yOffs = 2;
 		setSize(7, 7);
+		doShowHealthBar = false;
 	}
 
 	public void die() {
