@@ -1,11 +1,11 @@
 package com.mojang.mojam.gui;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Random;
 
 import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.level.Level;
+import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
@@ -15,7 +15,7 @@ public class LevelButton extends ClickableComponent {
 	private int id;
 	private Bitmap minimap;
 	private String nicename;
-	private String mapfile;
+	private LevelInformation levelInfo;
 
 	public static final int WIDTH = 140;
 	public static final int HEIGHT = 84;
@@ -28,11 +28,11 @@ public class LevelButton extends ClickableComponent {
 	 * @throws IOException
 	 *             map file not found?
 	 */
-	public LevelButton(int id, String nicename, String mapfile, int x, int y) {
+	public LevelButton(int id, String nicename, LevelInformation levelInfo, int x, int y) {
 		super(x, y, WIDTH, HEIGHT);
 
 		this.id = id;
-		this.mapfile = mapfile;
+		this.levelInfo = levelInfo;
 		this.nicename = nicename;
 
 		buildMinimap();
@@ -52,7 +52,7 @@ public class LevelButton extends ClickableComponent {
 		// load level
 		Level l;
 		try {
-			l = Level.fromFile(mapfile);
+			l = Level.fromFile(levelInfo);
 		} catch (IOException e) {
 			return false;
 		}

@@ -1,12 +1,47 @@
 package com.mojang.mojam.gui;
 
-import com.mojang.mojam.screen.*;
+import java.util.HashMap;
+
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.Screen;
 
 public class Font {
 	public static String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ   " + "0123456789-.!?/%$\\=*+,;:()&#\"'";
 	private static final int pxFontHeight = 8;
 	private static final int pxFontWidth = 8;
+	public static HashMap<String, Font> fonts = new HashMap<String, Font>();
+	private static String currentFont = "";
 
+	static {
+		fonts.put("", new Font(Art.font));
+		addFont("/font_blue.png");
+		addFont("/font_red.png");
+		addFont("/font_gray.png");
+	}
+	
+	public static void addFont(String s){
+		s = s.toLowerCase();
+		String s1 = s.substring(s.indexOf("font_")+5);
+		int mid= s1.lastIndexOf(".");
+		String fontName = s1.substring(0, mid); 
+		fonts.put(fontName, new Font(Art.cut(s, 8, 8)));
+		System.out.println("ADDED FONT:"+fontName);
+	}
+	
+	public static void setFont(String s){
+		currentFont = s;
+	}
+	
+	public static Font getFont(){
+		Font returnFont = fonts.get(currentFont);
+		if(returnFont == null){
+			System.out.println("BAD FONT: "+currentFont);
+			return fonts.get("");
+		}
+		return returnFont;
+	}
+	
 	public static int getStringWidth(String s) {
 		return s.length() * pxFontWidth;
 	}
@@ -15,10 +50,16 @@ public class Font {
 		return pxFontHeight;
 	}
 
-	private Font() {
+	public Bitmap[][] bitmapData;
+	private Font(Bitmap[][] bitmapData) {
+		this.bitmapData = bitmapData;
 	}
 
 	public static void draw(Screen screen, String msg, int x, int y) {
+		drawMulti(screen, msg, x, y, 99999);
+	}
+	public static void drawMulti(Screen screen, String msg, int x, int y, int width) {
+		int startX = x;
 		msg = msg.toUpperCase();
 		int length = msg.length();
 		for (int i = 0; i < length; i++) {
@@ -27,6 +68,10 @@ public class Font {
 				continue;
 			screen.blit(Art.font[c % 29][c / 29], x, y);
 			x += 8;
+			if(x > width){
+				x = startX;
+				y += 10;
+			}
 		}
 	}
 

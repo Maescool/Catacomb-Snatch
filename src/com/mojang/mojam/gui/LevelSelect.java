@@ -24,11 +24,13 @@ public class LevelSelect extends GuiMenu {
 	private LevelButton activeButton;
 	private Button startGameButton;
 	private Button cancelButton;
-
+	public boolean bHosting;
+	
 	public LevelSelect(boolean bHosting) {
 
 		super();
-
+		this.bHosting = bHosting;
+		
 		// get all levels
 		levels = LevelList.getLevels();
 
@@ -37,7 +39,7 @@ public class LevelSelect extends GuiMenu {
 		setupLevelButtons();
 
 		// -
-		TitleMenu.level = levels.get(0).levelFile;
+		TitleMenu.level = levels.get(0);
 
 		// start + cancel button
 		if (bHosting) {
@@ -46,6 +48,7 @@ public class LevelSelect extends GuiMenu {
 			startGameButton = new Button(TitleMenu.SELECT_DIFFICULTY_ID, "Start", MojamComponent.GAME_WIDTH - 256 - 30, MojamComponent.GAME_HEIGHT - 24 - 25);
 		}
 		cancelButton = new Button(TitleMenu.CANCEL_JOIN_ID, "Cancel", MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25);
+		addButton(new Button(TitleMenu.UPDATE_LEVELS, "Update Levels", MojamComponent.GAME_WIDTH - 386 - 40, MojamComponent.GAME_HEIGHT - 24 - 25));
 
 		addButton(startGameButton);
 		addButton(cancelButton);
@@ -57,7 +60,7 @@ public class LevelSelect extends GuiMenu {
 		for (int i = 0; i < levels.size(); i++) {
 			int x = i % xButtons;
 
-			levelButtons[i] = (LevelButton) addButton(new LevelButton(i, levels.get(i).levelName, levels.get(i).levelFile, xStart + x * xSpacing, yStart + ySpacing * y));
+			levelButtons[i] = (LevelButton) addButton(new LevelButton(i, levels.get(i).levelName, levels.get(i), xStart + x * xSpacing, yStart + ySpacing * y));
 			if (i == 0) {
 				activeButton = levelButtons[i];
 				activeButton.setActive(true);
@@ -81,7 +84,7 @@ public class LevelSelect extends GuiMenu {
 		if (button instanceof LevelButton) {
 
 			LevelButton lb = (LevelButton) button;
-			TitleMenu.level = levels.get(lb.getId()).levelFile;
+			TitleMenu.level = levels.get(lb.getId());
 
 			if (activeButton != null && activeButton != lb) {
 				activeButton.setActive(false);

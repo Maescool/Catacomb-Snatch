@@ -85,7 +85,7 @@ public class Art {
 	public static Bitmap[][] fxDust12 = cut("/effects/fx_dust2_12.png", 12, 12);
 	public static Bitmap[][] fxDust24 = cut("/effects/fx_dust1_24.png", 24, 24);
 
-	private static Bitmap[][] cut(String string, int w, int h) {
+	public static Bitmap[][] cut(String string, int w, int h) {
 		return cut(string, w, h, 0, 0);
 	}
 

@@ -1,24 +1,67 @@
 package com.mojang.mojam;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
+import java.awt.BorderLayout;
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.GraphicsDevice;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
-import java.net.*;
-import java.util.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
+import java.util.Locale;
+import java.util.Random;
+import java.util.Stack;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.building.Base;
 import com.mojang.mojam.entity.mob.Team;
-import com.mojang.mojam.gui.*;
 import com.mojang.mojam.gui.Button;
+import com.mojang.mojam.gui.ButtonListener;
+import com.mojang.mojam.gui.ClickableComponent;
+import com.mojang.mojam.gui.DifficultySelect;
 import com.mojang.mojam.gui.Font;
+import com.mojang.mojam.gui.GuiError;
+import com.mojang.mojam.gui.GuiMenu;
+import com.mojang.mojam.gui.HostingWaitMenu;
+import com.mojang.mojam.gui.HowToPlay;
+import com.mojang.mojam.gui.JoinGameMenu;
+import com.mojang.mojam.gui.LevelSelect;
+import com.mojang.mojam.gui.TitleMenu;
+import com.mojang.mojam.gui.WinMenu;
 import com.mojang.mojam.level.Level;
+import com.mojang.mojam.level.LevelInformation;
+import com.mojang.mojam.level.LevelList;
 import com.mojang.mojam.level.tile.Tile;
-import com.mojang.mojam.network.*;
-import com.mojang.mojam.network.packet.*;
+import com.mojang.mojam.mc.EnumOS2;
+import com.mojang.mojam.mc.EnumOSMappingHelper;
+import com.mojang.mojam.network.ClientSidePacketLink;
+import com.mojang.mojam.network.CommandListener;
+import com.mojang.mojam.network.NetworkCommand;
+import com.mojang.mojam.network.NetworkPacketLink;
+import com.mojang.mojam.network.Packet;
+import com.mojang.mojam.network.PacketLink;
+import com.mojang.mojam.network.PacketListener;
+import com.mojang.mojam.network.TurnSynchronizer;
+import com.mojang.mojam.network.packet.ChangeKeyCommand;
+import com.mojang.mojam.network.packet.StartGamePacket;
+import com.mojang.mojam.network.packet.StartGamePacketCustom;
+import com.mojang.mojam.network.packet.TurnPacket;
 import com.mojang.mojam.resources.Texts;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
@@ -26,6 +69,7 @@ import com.mojang.mojam.sound.SoundPlayer;
 
 public class MojamComponent extends Canvas implements Runnable, MouseMotionListener, CommandListener, PacketListener, MouseListener, ButtonListener, KeyListener {
 
+	public static MojamComponent instance;
 	public static Locale locale;
 	public static Texts texts;
 	private static final long serialVersionUID = 1L;
@@ -61,6 +105,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private long nextMusicInterval = 0;
 
 	private int createServerState = 0;
+	private static File mojamDir = null;
 
 	public MojamComponent() {
 		locale = new Locale("en");
@@ -77,6 +122,9 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		TitleMenu menu = new TitleMenu(GAME_WIDTH, GAME_HEIGHT);
 		addMenu(menu);
 		addKeyListener(this);
+		
+		instance = this;
+		LevelList.createLevelList();
 	}
 
 	public void mouseDragged(MouseEvent arg0) {
@@ -139,13 +187,34 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		setCursor(emptyCursor);
 	}
 
-	private synchronized void createLevel(String levelFile) {
-		try {
-			level = Level.fromFile(levelFile);
-		} catch (Exception ex) {
-			throw new RuntimeException("Unable to load level", ex);
+	public void showError(String s){
+		handleAction(TitleMenu.RETURN_TO_TITLESCREEN);
+		addMenu(new GuiError(s));
+	}
+	
+	private synchronized void createLevel(String levelPath) {
+		LevelInformation li = LevelInformation.getInfoForPath(levelPath); 
+		if(li != null) {
+			createLevel(li);
+			return;
+		} else if(!isMultiplayer){
+			showError("Missing map.");
 		}
-
+		showError("Missing map - Multiplayer");
+	}
+	private synchronized void createLevel(LevelInformation li) {
+		try {
+			level = Level.fromFile(li);
+		} catch (Exception ex) {
+			//throw new RuntimeException("Unable to load level", ex);
+			ex.printStackTrace();
+			showError("Unable to load map.");
+			return;
+		}
+		initLevel();
+	}
+	private synchronized void initLevel(){
+		if(level == null) return;
 		level.init();
 
 		players[0] = new Player(synchedKeys[0], mouseButtons, level.width * Tile.WIDTH / 2 - 16, (level.height - 5 - 1) * Tile.HEIGHT - 16, Team.Team1);
@@ -427,7 +496,12 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			createLevel(TitleMenu.level);
 
 			synchronizer.setStarted(true);
-			packetLink.sendPacket(new StartGamePacket(TurnSynchronizer.synchedSeed, TitleMenu.level));
+			if(TitleMenu.level.vanilla){
+				packetLink.sendPacket(new StartGamePacket(TurnSynchronizer.synchedSeed,
+						TitleMenu.level.getUniversalPath()));
+			} else {
+				packetLink.sendPacket(new StartGamePacketCustom(TurnSynchronizer.synchedSeed, level));
+			}
 			packetLink.setPacketListener(MojamComponent.this);
 
 		}
@@ -475,11 +549,18 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		if (packet instanceof StartGamePacket) {
 			if (!isServer) {
 				StartGamePacket sgPacker = (StartGamePacket) packet;
-				synchronizer.onStartGamePacket(sgPacker);
+				synchronizer.onStartGamePacket(sgPacker.getGameSeed());
 				createLevel(sgPacker.getLevelFile());
 			}
 		} else if (packet instanceof TurnPacket) {
 			synchronizer.onTurnPacket((TurnPacket) packet);
+		} else if (packet instanceof StartGamePacketCustom) {
+			if(!isServer){
+				StartGamePacketCustom sgPacker = (StartGamePacketCustom) packet;
+				synchronizer.onStartGamePacket(sgPacker.getGameSeed());
+				level = sgPacker.getLevel();
+				initLevel();
+			}
 		}
 	}
 
@@ -487,109 +568,119 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 		if (component instanceof Button) {
 			final Button button = (Button) component;
-
-			if (button.getId() == TitleMenu.RETURN_TO_TITLESCREEN) {
-				clearMenus();
-				TitleMenu menu = new TitleMenu(GAME_WIDTH, GAME_HEIGHT);
-				addMenu(menu);
-
-			} else if (button.getId() == TitleMenu.START_GAME_ID) {
-				clearMenus();
-				isMultiplayer = false;
-
-				localId = 0;
-				synchronizer = new TurnSynchronizer(this, null, 0, 1);
-				synchronizer.setStarted(true);
-
-				createLevel(TitleMenu.level);
-				soundPlayer.stopBackgroundMusic();
-			} else if (button.getId() == TitleMenu.SELECT_LEVEL_ID) {
-				addMenu(new LevelSelect(false));
-			} else if (button.getId() == TitleMenu.SELECT_HOST_LEVEL_ID) {
-				addMenu(new LevelSelect(true));
-			} else if (button.getId() == TitleMenu.HOST_GAME_ID) {
-				addMenu(new HostingWaitMenu());
-				isMultiplayer = true;
-				isServer = true;
-				try {
-					if (isServer) {
-						localId = 0;
-						serverSocket = new ServerSocket(3000);
-						serverSocket.setSoTimeout(1000);
-
-						hostThread = new Thread() {
-
-							public void run() {
-								boolean fail = true;
-								try {
-									while (!isInterrupted()) {
-										Socket socket = null;
-										try {
-											socket = serverSocket.accept();
-										} catch (SocketTimeoutException e) {
-
-										}
-										if (socket == null) {
-											System.out.println("asdf");
-											continue;
-										}
-										fail = false;
-
-										packetLink = new NetworkPacketLink(socket);
-
-										createServerState = 1;
-										break;
-									}
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-								if (fail) {
-									try {
-										serverSocket.close();
-									} catch (IOException e) {
-									}
-								}
-							};
-						};
-						hostThread.start();
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			} else if (button.getId() == TitleMenu.JOIN_GAME_ID) {
-				addMenu(new JoinGameMenu());
-			} else if (button.getId() == TitleMenu.CANCEL_JOIN_ID) {
-				popMenu();
-				if (hostThread != null) {
-					hostThread.interrupt();
-					hostThread = null;
-				}
-			} else if (button.getId() == TitleMenu.PERFORM_JOIN_ID) {
-				menuStack.clear();
-				isMultiplayer = true;
-				isServer = false;
-
-				try {
-					localId = 1;
-					packetLink = new ClientSidePacketLink(TitleMenu.ip, 3000);
-					synchronizer = new TurnSynchronizer(this, packetLink, localId, 2);
-					packetLink.setPacketListener(this);
-				} catch (Exception e) {
-					e.printStackTrace();
-					// System.exit(1);
-					addMenu(new TitleMenu(GAME_WIDTH, GAME_HEIGHT));
-				}
-			} else if (button.getId() == TitleMenu.HOW_TO_PLAY) {
-				addMenu(new HowToPlay());
-			} else if (button.getId() == TitleMenu.SELECT_DIFFICULTY_ID) {
-				addMenu(new DifficultySelect());
-			} else if (button.getId() == TitleMenu.EXIT_GAME_ID) {
-				System.exit(0);
-			}
-
+			handleAction(button.getId());
 		}
 	}
 
+	public void handleAction(int id){
+		if (id == TitleMenu.RETURN_TO_TITLESCREEN) {
+			clearMenus();
+			TitleMenu menu = new TitleMenu(GAME_WIDTH, GAME_HEIGHT);
+			addMenu(menu);
+
+		} else if (id == TitleMenu.START_GAME_ID) {
+			clearMenus();
+			isMultiplayer = false;
+
+			localId = 0;
+			synchronizer = new TurnSynchronizer(this, null, 0, 1);
+			synchronizer.setStarted(true);
+
+			createLevel(TitleMenu.level);
+			soundPlayer.stopBackgroundMusic();
+		} else if (id == TitleMenu.SELECT_LEVEL_ID) {
+			addMenu(new LevelSelect(false));
+		} else if (id == TitleMenu.SELECT_HOST_LEVEL_ID) {
+			addMenu(new LevelSelect(true));
+		} else if(id == TitleMenu.UPDATE_LEVELS){
+			LevelList.resetLevels();
+			GuiMenu menu = menuStack.pop();
+			if(menu instanceof LevelSelect){
+				addMenu(new LevelSelect(((LevelSelect) menu).bHosting));
+			} else {
+				addMenu(new LevelSelect(false));
+			}
+		} else if (id == TitleMenu.HOST_GAME_ID) {
+			addMenu(new HostingWaitMenu());
+			isMultiplayer = true;
+			isServer = true;
+			try {
+				if (isServer) {
+					localId = 0;
+					serverSocket = new ServerSocket(3000);
+					serverSocket.setSoTimeout(1000);
+
+					hostThread = new Thread() {
+
+						public void run() {
+							boolean fail = true;
+							try {
+								while (!isInterrupted()) {
+									Socket socket = null;
+									try {
+										socket = serverSocket.accept();
+									} catch (SocketTimeoutException e) {
+
+									}
+									if (socket == null) {
+										System.out.println("asdf");
+										continue;
+									}
+									fail = false;
+
+									packetLink = new NetworkPacketLink(socket);
+
+									createServerState = 1;
+									break;
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+							if (fail) {
+								try {
+									serverSocket.close();
+								} catch (IOException e) {
+								}
+							}
+						};
+					};
+					hostThread.start();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else if (id == TitleMenu.JOIN_GAME_ID) {
+			addMenu(new JoinGameMenu());
+		} else if (id == TitleMenu.CANCEL_JOIN_ID) {
+			popMenu();
+			if (hostThread != null) {
+				hostThread.interrupt();
+				hostThread = null;
+			}
+		} else if (id == TitleMenu.PERFORM_JOIN_ID) {
+			menuStack.clear();
+			isMultiplayer = true;
+			isServer = false;
+
+			try {
+				localId = 1;
+				packetLink = new ClientSidePacketLink(TitleMenu.ip, 3000);
+				synchronizer = new TurnSynchronizer(this, packetLink, localId, 2);
+				packetLink.setPacketListener(this);
+			} catch (Exception e) {
+				e.printStackTrace();
+				// System.exit(1);
+				addMenu(new TitleMenu(GAME_WIDTH, GAME_HEIGHT));
+			}
+		} else if (id == TitleMenu.HOW_TO_PLAY) {
+			addMenu(new HowToPlay());
+		} else if (id == TitleMenu.SELECT_DIFFICULTY_ID) {
+			addMenu(new DifficultySelect());
+		} else if (id == TitleMenu.EXIT_GAME_ID) {
+			System.exit(0);
+		}
+	}
+	
 	private void clearMenus() {
 		while (!menuStack.isEmpty()) {
 			menuStack.pop();
@@ -625,4 +716,83 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		}
 	}
 
+	public static File getMojamDir()
+    {
+        if(mojamDir == null)
+        {
+        	mojamDir = getAppDir("mojam");
+        }
+        return mojamDir;
+    }
+
+	private static EnumOS2 getOs()
+    {
+        String s = System.getProperty("os.name").toLowerCase();
+        if(s.contains("win"))
+        {
+            return EnumOS2.windows;
+        }
+        if(s.contains("mac"))
+        {
+            return EnumOS2.macos;
+        }
+        if(s.contains("solaris"))
+        {
+            return EnumOS2.solaris;
+        }
+        if(s.contains("sunos"))
+        {
+            return EnumOS2.solaris;
+        }
+        if(s.contains("linux"))
+        {
+            return EnumOS2.linux;
+        }
+        if(s.contains("unix"))
+        {
+            return EnumOS2.linux;
+        } else
+        {
+            return EnumOS2.unknown;
+        }
+    }
+	
+    public static File getAppDir(String s)
+    {
+        String s1 = System.getProperty("user.home", ".");
+        File file;
+        switch(EnumOSMappingHelper.enumOSMappingArray[getOs().ordinal()])
+        {
+        case 1: // '\001'
+        case 2: // '\002'
+            file = new File(s1, (new StringBuilder()).append('.').append(s).append('/').toString());
+            break;
+
+        case 3: // '\003'
+            String s2 = System.getenv("APPDATA");
+            if(s2 != null)
+            {
+                file = new File(s2, (new StringBuilder()).append(".").append(s).append('/').toString());
+            } else
+            {
+                file = new File(s1, (new StringBuilder()).append('.').append(s).append('/').toString());
+            }
+            break;
+
+        case 4: // '\004'
+            file = new File(s1, (new StringBuilder()).append("Library/Application Support/").append(s).toString());
+            break;
+
+        default:
+            file = new File(s1, (new StringBuilder()).append(s).append('/').toString());
+            break;
+        }
+        if(!file.exists() && !file.mkdirs())
+        {
+            throw new RuntimeException((new StringBuilder()).append("The working directory could not be created: ").append(file).toString());
+        } else
+        {
+            return file;
+        }
+    }
 }
