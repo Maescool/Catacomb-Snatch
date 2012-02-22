@@ -11,9 +11,8 @@ public class JoinGameMenu extends GuiMenu {
 	public JoinGameMenu() {
 		super();
 
-		joinButton = addButton(new Button(TitleMenu.PERFORM_JOIN_ID, 3, 100,
-				180));
-		addButton(new Button(TitleMenu.CANCEL_JOIN_ID, 4, 250, 180));
+		joinButton = (Button) addButton(new Button(TitleMenu.PERFORM_JOIN_ID, "Join", 100, 180));
+		addButton(new Button(TitleMenu.CANCEL_JOIN_ID, "Cancel", 250, 180));
 	}
 
 	@Override
@@ -26,23 +25,30 @@ public class JoinGameMenu extends GuiMenu {
 		super.render(screen);
 	}
 
+	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyChar() == KeyEvent.VK_ENTER && TitleMenu.ip.length() > 0) {
 			joinButton.postClick();
 		}
 	}
 
+	@Override
 	public void keyReleased(KeyEvent arg0) {
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e) {
 
-		if (e.getKeyChar() == KeyEvent.VK_BACK_SPACE
-				&& TitleMenu.ip.length() > 0) {
+		if (e.getKeyChar() == KeyEvent.VK_BACK_SPACE && TitleMenu.ip.length() > 0) {
 			TitleMenu.ip = TitleMenu.ip.substring(0, TitleMenu.ip.length() - 1);
 		} else if (Font.letters.indexOf(Character.toUpperCase(e.getKeyChar())) >= 0) {
 			TitleMenu.ip += e.getKeyChar();
 		}
+	}
+
+	@Override
+	public void buttonPressed(ClickableComponent button) {
+		// nothing
 	}
 
 }

@@ -6,12 +6,11 @@ import java.util.*;
 import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.screen.Screen;
 
-public abstract class GuiMenu extends GuiComponent implements ButtonListener,
-		KeyListener {
+public abstract class GuiMenu extends GuiComponent implements ButtonListener, KeyListener {
 
-	protected List<Button> buttons = new ArrayList<Button>();
+	protected List<ClickableComponent> buttons = new ArrayList<ClickableComponent>();
 
-	protected Button addButton(Button button) {
+	protected ClickableComponent addButton(ClickableComponent button) {
 		buttons.add(button);
 		button.addListener(this);
 		return button;
@@ -21,7 +20,7 @@ public abstract class GuiMenu extends GuiComponent implements ButtonListener,
 	public void render(Screen screen) {
 		super.render(screen);
 
-		for (Button button : buttons) {
+		for (ClickableComponent button : buttons) {
 			button.render(screen);
 		}
 	}
@@ -30,18 +29,15 @@ public abstract class GuiMenu extends GuiComponent implements ButtonListener,
 	public void tick(MouseButtons mouseButtons) {
 		super.tick(mouseButtons);
 
-		for (Button button : buttons) {
+		for (ClickableComponent button : buttons) {
 			button.tick(mouseButtons);
 		}
 	}
 
 	public void addButtonListener(ButtonListener listener) {
-		for (Button button : buttons) {
+		for (ClickableComponent button : buttons) {
 			button.addListener(listener);
 		}
-	}
-
-	public void buttonPressed(Button button) {
 	}
 
 }

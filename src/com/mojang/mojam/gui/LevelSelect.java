@@ -3,6 +3,7 @@ package com.mojang.mojam.gui;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.LevelList;
 import com.mojang.mojam.screen.Screen;
@@ -10,45 +11,58 @@ import com.mojang.mojam.screen.Screen;
 public class LevelSelect extends GuiMenu {
 
 	private ArrayList<LevelInformation> levels;
-	private Button[] levelButtons;
-	private int selectedIndex = 0;
-	private int previousIndex = 0;
-	private final int spacing = 15;
-	private final int xStringPosition = 50;
-	private final int yStringPosition = 50;
-	
+
+	private LevelButton[] levelButtons;
+	private final int xButtons = (MojamComponent.GAME_WIDTH / LevelButton.WIDTH);
+	private final int yButtons = 3; // unused yet, need to add pages later.
+	private final int xSpacing = LevelButton.WIDTH + 8;
+	private final int ySpacing = LevelButton.HEIGHT + 8;
+	private final int xStart = (MojamComponent.GAME_WIDTH - (xSpacing * xButtons) + 8) / 2;
+	private final int yStart = 50;
+
+	private LevelButton activeButton;
 	private Button startGameButton;
 
 	public LevelSelect(boolean bHosting) {
+
 		super();
+
+		// get all levels
 		levels = LevelList.getLevels();
-		levelButtons = new Button[levels.size()];
-		TitleMenu.level = levels.get(0).levelFile;
+
+		// create buttons
+		levelButtons = new LevelButton[levels.size()];
 		setupLevelButtons();
-		
+
+		// -
+		TitleMenu.level = levels.get(0).levelFile;
+
+		// start + cancel button
 		if (bHosting) {
-			startGameButton = addButton(new Button(TitleMenu.HOST_GAME_ID, 0,
-					125, 300));
+			addButton(new Button(TitleMenu.HOST_GAME_ID, "Host", 125, 350));
 		} else {
-			startGameButton = addButton(new Button(TitleMenu.SELECT_DIFFICULTY_ID, 0,
-					125, 300));
+			addButton(new Button(TitleMenu.SELECT_DIFFICULTY_ID, "Start", 125, 350));
 		}
-		addButton(new Button(TitleMenu.CANCEL_JOIN_ID, 4, 275, 300));
-		
+		addButton(new Button(TitleMenu.CANCEL_JOIN_ID, "Cancel", 275, 350));
 		addButtonListener(this);
 	}
-	
+
 	private void setupLevelButtons() {
+		int y = 0;
 		for (int i = 0; i < levels.size(); i++) {
-			if(i == 0)
-				levelButtons[i] = addButton(new Button(i, levels.get(i).levelName,
-					xStringPosition + spacing, yStringPosition + spacing * i));
-			else
-				levelButtons[i] = addButton(new Button(i, levels.get(i).levelName,
-						xStringPosition, yStringPosition + spacing * i));
+			int x = i % xButtons;
+
+			levelButtons[i] = (LevelButton) addButton(new LevelButton(i, levels.get(i).levelName, levels.get(i).levelFile, xStart + x * xSpacing, yStart + ySpacing * y));
+			if (i == 0) {
+				activeButton = levelButtons[i];
+				activeButton.setActive(true);
+			}
+
+			if (x == (xButtons - 1))
+				y++;
 		}
 	}
-	
+
 	@Override
 	public void render(Screen screen) {
 		screen.clear(0);
@@ -57,53 +71,30 @@ public class LevelSelect extends GuiMenu {
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {
-		previousIndex = selectedIndex;
-		if (e.getKeyCode() == KeyEvent.VK_UP) {
-			selectedIndex--;
-			if (selectedIndex < 0) {
-				selectedIndex = levels.size() - 1;
+	public void buttonPressed(ClickableComponent button) {
+
+		if (button instanceof LevelButton) {
+
+			LevelButton lb = (LevelButton) button;
+			TitleMenu.level = levels.get(lb.getId()).levelFile;
+
+			if (activeButton != null && activeButton != lb) {
+				activeButton.setActive(false);
 			}
-			
-			updateSelectedButtons();
-		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-			selectedIndex++;
-			if (selectedIndex >= levels.size()) {
-				selectedIndex = 0;
-			}
-			
-			updateSelectedButtons();
-		} else if (e.getKeyChar() == KeyEvent.VK_ENTER) {
-			startGameButton.postClick();
+
+			activeButton = lb;
 		}
-		TitleMenu.level = levels.get(selectedIndex).levelFile;
 	}
-	
+
 	@Override
-	public void buttonPressed(Button button) {
-		if(button.getId() >= 0 && button.getId() < levels.size()) {
-			previousIndex = selectedIndex;
-			TitleMenu.level = levels.get(button.getId()).levelFile;
-			selectedIndex = button.getId();
-			
-			updateSelectedButtons();
-		}
-	}
-	
-	private void updateSelectedButtons() {
-		levelButtons[previousIndex].setXPosition(xStringPosition);
-		levelButtons[selectedIndex].setXPosition(xStringPosition + spacing);
+	public void keyPressed(KeyEvent e) {
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 }
