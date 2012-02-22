@@ -107,6 +107,8 @@ public class Player extends Mob implements LootCollector {
 		plevel++;
 		psprint += 0.1;
 		maxTimeSprint += 20;
+
+		MojamComponent.soundPlayer.playSound("/sound/levelUp.wav", (float) pos.x, (float) pos.y, true);
 	}
 
 	public void tick() {
