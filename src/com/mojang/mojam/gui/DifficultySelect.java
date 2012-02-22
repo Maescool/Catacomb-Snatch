@@ -14,11 +14,12 @@ public class DifficultySelect extends GuiMenu {
 	private final int xStringPosition = 50;
 	private final int yStringPosition = 50;
 	private Button startGameButton;
+	private Button cancelButton;
 
 	public DifficultySelect() {
 		super();
 		startGameButton = (Button) addButton(new Button(TitleMenu.START_GAME_ID, "Start Game", 125, 350));
-		addButton(new Button(TitleMenu.CANCEL_JOIN_ID, "Cancel", 275, 350));
+		cancelButton = (Button) addButton(new Button(TitleMenu.CANCEL_JOIN_ID, "Cancel", 275, 350));
 	}
 
 	@Override
@@ -53,6 +54,8 @@ public class DifficultySelect extends GuiMenu {
 			}
 		} else if (e.getKeyChar() == KeyEvent.VK_ENTER) {
 			startGameButton.postClick();
+		} else if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
+			cancelButton.postClick();
 		}
 		TitleMenu.Difficulty = Difficulties.get(selectedIndex).DifficultyNumber;
 	}
