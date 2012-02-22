@@ -25,6 +25,7 @@ public class Player extends Mob implements LootCollector {
 	public int plevel;
 	public int pnextlevel;
 	public double pexp;
+	public double psprint;
 	public Keys keys;
 	public MouseButtons mouseButtons;
 	public int mouseFireButton = 1;
@@ -72,6 +73,7 @@ public class Player extends Mob implements LootCollector {
 	    
 	    maxHealth=5;
 	    health=5;
+	    psprint=1.5;
 	    
 		aimVector = new Vec2(0, 1);
 
@@ -189,8 +191,12 @@ public class Player extends Mob implements LootCollector {
 						35 + random.nextInt(10)));
 
 			double dd = Math.sqrt(xa * xa + ya * ya);
-			double speed = getSpeed() / dd;
-
+			double speed;
+			if(this.keys.sprint.isDown) {
+				speed=getSpeed() / dd*psprint;
+		    }else{
+		    	speed = getSpeed() / dd;
+		    }
 			xa *= speed;
 			ya *= speed;
 
