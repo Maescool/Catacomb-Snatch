@@ -106,6 +106,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	private boolean isServer;
 	private int localId;
 	private Thread hostThread;
+	private static boolean fullscreen = false;
 	public static SoundPlayer soundPlayer;
 	private long nextMusicInterval = 0;
 
@@ -483,6 +484,10 @@ public class MojamComponent extends Canvas implements Runnable,
 						keys.release();
 						synchronizer.addCommand(new PauseCommand(true));
 					}
+					
+					if (keys.fullscreen.wasPressed()) {
+						setFullscreen(!fullscreen);
+					}
 						
 					// if mouse is in use, update player orientation before level tick
 					if (!mouseHidden) {
@@ -555,7 +560,11 @@ public class MojamComponent extends Canvas implements Runnable,
 		// display window
 		guiFrame.setLocationRelativeTo(null);
 		guiFrame.setVisible(true);
-
+		fullscreen = fs;
+	}
+	
+	public static boolean isFulscreen() {
+		return fullscreen;
 	}
 
 	@Override
