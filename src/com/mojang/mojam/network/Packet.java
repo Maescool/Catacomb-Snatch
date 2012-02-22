@@ -1,9 +1,17 @@
 package com.mojang.mojam.network;
 
-import java.io.*;
-import java.util.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
+import java.io.IOException;
+import java.net.SocketException;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.mojang.mojam.network.packet.*;
+import com.mojang.mojam.network.packet.ChangeKeyCommand;
+import com.mojang.mojam.network.packet.StartGamePacket;
+import com.mojang.mojam.network.packet.StartGamePacketCustom;
+import com.mojang.mojam.network.packet.TurnPacket;
 
 public abstract class Packet {
 
@@ -62,7 +70,10 @@ public abstract class Packet {
 
 		} catch (EOFException e) {
 			// reached end of stream
-			System.out.println("Reached end of stream");
+			System.out.println("Socket Exception: Reached end of stream");
+			return null;
+		} catch (SocketException e) {
+			//System.out.println("Socket Exception: " + e.getMessage());
 			return null;
 		}
 

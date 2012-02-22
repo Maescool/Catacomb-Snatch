@@ -37,7 +37,7 @@ public class TileID {
 		Tile tile = new FloorTile();
 		try
         {
-            Class class1 = (Class)shortToTileMap.get(i);
+            Class class1 = shortToTileMap.get(i);
             if(class1 == UnbreakableRailTile.class){
             	tile = (Tile)class1.getConstructor(new Class[] {
             			Tile.class }).newInstance(new Object[] {

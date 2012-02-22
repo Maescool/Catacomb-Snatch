@@ -117,7 +117,7 @@ public class Vec2 {
 	public void validate() {
 		if (Double.isInfinite(x) || Double.isInfinite(y) || Double.isNaN(x)
 				|| Double.isNaN(y)) {
-			System.out.println("Gahhh: " + toString());
+			System.out.println("Validate: " + toString());
 		}
 	}
 

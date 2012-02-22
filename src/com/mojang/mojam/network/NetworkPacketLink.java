@@ -24,13 +24,14 @@ public class NetworkPacketLink implements PacketLink {
 	private Thread readThread;
 
 	private boolean isRunning = true;
-	private boolean isQuitting = false;
-	private boolean isDisconnected = false;
+	public boolean isDisconnected = false;
 
 	private PacketListener packetListener;
 
 	public NetworkPacketLink(Socket socket) throws IOException {
 		this.socket = socket;
+
+		isDisconnected = false;
 
 		inputStream = new DataInputStream(socket.getInputStream());
 		outputStream = new DataOutputStream(new BufferedOutputStream(
@@ -39,7 +40,7 @@ public class NetworkPacketLink implements PacketLink {
 		readThread = new Thread("Read thread") {
 			public void run() {
 				try {
-					while (isRunning && !isQuitting) {
+					while (isRunning && !isDisconnected) {
 						while (readTick())
 							;
 
@@ -56,7 +57,7 @@ public class NetworkPacketLink implements PacketLink {
 		writeThread = new Thread("Write thread") {
 			public void run() {
 				try {
-					while (isRunning) {
+					while (isRunning && !isDisconnected) {
 						while (writeTick())
 							;
 
@@ -82,7 +83,11 @@ public class NetworkPacketLink implements PacketLink {
 		writeThread.start();
 	}
 
-	public void tick() {
+	public boolean tick() {
+		if (isDisconnected) {
+			return false;
+		}
+		
 		int max = 1000;
 		while (!incoming.isEmpty() && max-- >= 0) {
 			Packet packet = incoming.remove(0);
@@ -90,10 +95,12 @@ public class NetworkPacketLink implements PacketLink {
 				packet.handle(packetListener);
 			}
 		}
+
+		return true;
 	}
 
 	public void sendPacket(Packet packet) {
-		if (isQuitting) {
+		if (isDisconnected) {
 			return;
 		}
 		synchronized (writeLock) {
@@ -107,10 +114,11 @@ public class NetworkPacketLink implements PacketLink {
 			Packet packet = Packet.readPacket(inputStream);
 
 			if (packet != null) {
-				if (!isQuitting) {
-					incoming.add(packet);
-				}
+				incoming.add(packet);
 				didSomething = true;
+			} else {
+				isDisconnected = true;
+				return false;
 			}
 		} catch (Exception e) {
 			if (!isDisconnected)

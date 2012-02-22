@@ -32,6 +32,9 @@ public class ShopItem extends Building {
 	public void render(Screen screen) {
 		super.render(screen);
 		// Bitmap image = getSprite();
+		
+		//System.out.println( screen.toString() );
+		
 		Font.drawCentered(screen, MojamComponent.texts.cost(COST[type]), (int) (pos.x), (int) (pos.y + 10));
 	}
 
@@ -56,7 +59,10 @@ public class ShopItem extends Building {
 
 	@Override
 	public void use(Entity user) {
-		if (user instanceof Player && ((Player) user).getTeam() == team) {
+		if (!(user instanceof Player))
+			return;
+		
+		if (((Player) user).getTeam() == team) {
 			Player player = (Player) user;
 			if (player.carrying == null && player.getScore() >= COST[type]) {
 				player.payCost(COST[type]);
@@ -77,7 +83,8 @@ public class ShopItem extends Building {
 			} else if ( player.getScore() < COST[type] ){
 				Notifications.getInstance().add("You dont have enough money");
 			}
+		} else {
+			Notifications.getInstance().add("Wrong team!");
 		}
 	}
-
 }

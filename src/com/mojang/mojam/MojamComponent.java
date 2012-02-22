@@ -437,7 +437,18 @@ public class MojamComponent extends Canvas implements Runnable,
 	private void tick() {
 
 		if (packetLink != null) {
-			packetLink.tick();
+			if (!packetLink.tick()) {
+				System.out.println("Lost connection with client/server");
+
+				packetLink = null; // TODO: This doesnt feel like right method
+
+				try {
+					serverSocket.close();
+				} catch (IOException e) {
+				}
+
+				handleAction(TitleMenu.RETURN_TO_TITLESCREEN);
+			}
 		}
 
 		mouseButtons.setPosition(getMousePosition());
@@ -645,7 +656,7 @@ public class MojamComponent extends Canvas implements Runnable,
 					serverSocket = new ServerSocket(3000);
 					serverSocket.setSoTimeout(1000);
 
-					hostThread = new Thread() {
+					hostThread = new Thread("Host Thread") {
 
 						@Override
 						public void run() {
@@ -659,14 +670,13 @@ public class MojamComponent extends Canvas implements Runnable,
 
 									}
 									if (socket == null) {
-										System.out
-												.println("Waiting for player to connect");
+										//System.out.println("Waiting for player to connect");
 										continue;
 									}
 									fail = false;
 
 									packetLink = new NetworkPacketLink(socket);
-
+									
 									createServerState = 1;
 									break;
 								}
@@ -701,14 +711,16 @@ public class MojamComponent extends Canvas implements Runnable,
 
 			try {
 				localId = 1;
+				
 				packetLink = new ClientSidePacketLink(TitleMenu.ip, 3000);
 				synchronizer = new TurnSynchronizer(this, packetLink, localId,
 						2);
 				packetLink.setPacketListener(this);
 			} catch (Exception e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 				// System.exit(1);
-				addMenu(new TitleMenu(GAME_WIDTH, GAME_HEIGHT));
+				TitleMenu.ip = "";
+				handleAction(TitleMenu.RETURN_TO_TITLESCREEN);
 			}
 		} else if (id == TitleMenu.HOW_TO_PLAY) {
 			addMenu(new HowToPlay());
