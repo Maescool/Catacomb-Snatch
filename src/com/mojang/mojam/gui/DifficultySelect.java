@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.DifficultyList;
+import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
 public class DifficultySelect extends GuiMenu {
@@ -25,9 +26,10 @@ public class DifficultySelect extends GuiMenu {
 	@Override
 	public void render(Screen screen) {
 		screen.clear(0);
+		screen.blit(Art.emptyBackground, 0, 0);
 		drawDifficulty(screen);
 		super.render(screen);
-		Font.draw(screen, "Choose a difficulty", 10, 10);
+		Font.draw(screen, "Choose a difficulty", 20, 20);
 	}
 
 	private void drawDifficulty(Screen screen) {
