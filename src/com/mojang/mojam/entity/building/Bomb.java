@@ -62,10 +62,7 @@ public class Bomb extends Building {
 	}
 
 	@Override
-	public void hurt(Entity source, int damage) {
+	public void hurt(Entity source, float damage) {
 		super.hurt(source, damage);
-		// if (health <= 0) {
-		// freezeTime = 30;
-		// }
 	}
 }

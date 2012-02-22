@@ -2,6 +2,7 @@ package com.mojang.mojam.entity.building;
 
 import com.mojang.mojam.entity.mob.*;
 import com.mojang.mojam.network.TurnSynchronizer;
+import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.screen.*;
 
@@ -31,7 +32,7 @@ public class SpawnerEntity extends Building {
 
 		if (--spawnTime <= 0) {
 			spawn();
-			spawnTime = SPAWN_INTERVAL;
+			spawnTime = DifficultyInformation.calculateSpawntime(SPAWN_INTERVAL);
 		}
 	}
 
@@ -62,7 +63,7 @@ public class SpawnerEntity extends Building {
 	private int lastIndex = 0;
 
 	public Bitmap getSprite() {
-		int newIndex = 3 - (3 * health) / maxHealth;
+		int newIndex = (int)(3 - (3 * health) / maxHealth);
 		if (newIndex != lastIndex) {
 			// if (newIndex > lastIndex) // means more hurt
 			// level.addEntity(new SmokeAnimation(pos.x - 12, pos.y - 20,
