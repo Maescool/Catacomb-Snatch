@@ -5,6 +5,7 @@ import java.net.*;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.Art;
 
 public class HostingWaitMenu extends GuiMenu {
 
