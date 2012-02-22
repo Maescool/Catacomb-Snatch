@@ -4,7 +4,6 @@ import java.util.Set;
 
 import com.mojang.mojam.entity.*;
 import com.mojang.mojam.entity.mob.*;
-import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.screen.*;
 
