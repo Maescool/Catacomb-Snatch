@@ -41,6 +41,7 @@ public class Keys {
 	public Key use = new Key();
 	public Key upgrade = new Key();
 	public Key escape = new Key();
+	public Key pause = new Key();
 	public Key sprint = new Key();
 
 	public void tick() {
