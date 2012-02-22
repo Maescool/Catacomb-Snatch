@@ -89,8 +89,9 @@ public class Turret extends Building {
 		int x2 = (int) dx2/Tile.WIDTH;
 		int y2 = (int) dy2/Tile.HEIGHT;
 		
+		Bullet bullet = new Bullet(this, pos.x, pos.y);
+		
 		int dx, dy, inx, iny, e;
-		boolean re=false;
 		Tile temp;
 		
 		dx = x2 - x1;
@@ -107,8 +108,8 @@ public class Turret extends Building {
 			dx <<= 1;
 			while (x1 != x2) {
 				temp = level.getTile(x1,y1);
-				if(!temp.canPass(this)) 
-					re=true;
+				if(!temp.canPass(bullet)) 
+					return true;
 				if(e >= 0) {
 					y1 += iny;
 					e-= dx;
@@ -121,8 +122,8 @@ public class Turret extends Building {
 			dy <<= 1;
 			while (y1 != y2) {
 				temp = level.getTile(x1,y1);
-				if(!temp.canPass(this))
-					re=true;
+				if(!temp.canPass(bullet))
+					return true;
 				if(e >= 0) {
 					x1 += inx;
 					e -= dy;
@@ -131,9 +132,9 @@ public class Turret extends Building {
 			}
 		}
 		temp = level.getTile(x1,y1);
-		if(!temp.canPass(this))
-			re=true;
-		return re;
+		if(!temp.canPass(bullet))
+			return true;
+		return false;
 	}
 
 	public void render(Screen screen) {
