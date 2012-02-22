@@ -73,7 +73,7 @@
     -->
 
     <target name="-post-jar">
-        <jar jarfile="${dist.dir}/mojam_combined.jar">
+        <jar jarfile="${dist.dir}/Catacomb_Snatch_combined.jar">
             <zipfileset src="${dist.jar}" excludes="META-INF/*" />
             <zipfileset src="${file.reference.CodecJOrbis.jar}" excludes="META-INF/*" />
             <zipfileset src="${file.reference.CodecWav.jar}"  excludes="META-INF/*" />
