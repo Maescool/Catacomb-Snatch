@@ -7,19 +7,9 @@ public class Button extends ClickableComponent {
 
 	private final int id;
 
-	// private boolean isImageButton;
 	private String label;
-	// private int ix;
-	// private int iy;
 	private boolean performClick = false;
 
-	// public Button(int id, int buttonImageIndex, int x, int y) {
-	// super( x, y, 128, 24 );
-	// this.id = id;
-	// this.ix = buttonImageIndex % 2;
-	// this.iy = buttonImageIndex / 2;
-	// isImageButton = true;
-	// }
 
 	public Button(int id, String label, int x, int y) {
 		super(x, y, 128, 24);
