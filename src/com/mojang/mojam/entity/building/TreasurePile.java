@@ -1,6 +1,7 @@
 package com.mojang.mojam.entity.building;
 
 import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 
@@ -14,6 +15,11 @@ public class TreasurePile extends Building {
 		freezeTime = 10;
 		minimapIcon = 5;
 		isImmortal = true;
+	}
+
+	@Override
+	public boolean isNotFriendOf(Mob m) {
+		return false;
 	}
 
 	public void tick() {

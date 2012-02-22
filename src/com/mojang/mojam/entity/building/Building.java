@@ -3,6 +3,7 @@ package com.mojang.mojam.entity.building;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.*;
 import com.mojang.mojam.entity.mob.Mob;
+import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.*;
@@ -30,16 +31,13 @@ public class Building extends Mob implements IUsable {
 	protected void renderMarker(Screen screen) {
 		if (highlight) {
 			BB bb = getBB();
-			bb = bb.grow((getSprite().w - (bb.x1 - bb.x0))
-					/ (3 + Math.sin(System.currentTimeMillis() * .01)));
+			bb = bb.grow((getSprite().w - (bb.x1 - bb.x0)) / (3 + Math.sin(System.currentTimeMillis() * .01)));
 			int width = (int) (bb.x1 - bb.x0);
 			int height = (int) (bb.y1 - bb.y0);
 			Bitmap marker = new Bitmap(width, height);
 			for (int y = 0; y < height; y++) {
 				for (int x = 0; x < width; x++) {
-					if ((x < 2 || x > width - 3 || y < 2 || y > height - 3)
-							&& (x < 5 || x > width - 6)
-							&& (y < 5 || y > height - 6)) {
+					if ((x < 2 || x > width - 3 || y < 2 || y > height - 3) && (x < 5 || x > width - 6) && (y < 5 || y > height - 6)) {
 						int i = x + y * width;
 						marker.pixels[i] = 0xffffffff;
 					}
@@ -48,19 +46,19 @@ public class Building extends Mob implements IUsable {
 			screen.blit(marker, bb.x0, bb.y0 - 4);
 		}
 	}
-	
-	protected void addHealthBar(Screen screen, int health, int maxhealth){
-        
-        int bar_width = 30;
-        int bar_height = 2;
-        int start = health * bar_width / maxhealth;
-        Bitmap bar = new Bitmap (bar_width, bar_height);
-        
-        bar.clear(0xff00ff00);
-        bar.fill(start, 0, bar_width - start, bar_height, 0xffff0000);
-        
-        screen.blit(bar, pos.x - (bar_width/2), pos.y + 8);
-    }
+
+	protected void addHealthBar(Screen screen, int health, int maxhealth) {
+
+		int bar_width = 30;
+		int bar_height = 2;
+		int start = health * bar_width / maxhealth;
+		Bitmap bar = new Bitmap(bar_width, bar_height);
+
+		bar.clear(0xff00ff00);
+		bar.fill(start, 0, bar_width - start, bar_height, 0xffff0000);
+
+		screen.blit(bar, pos.x - (bar_width / 2), pos.y + 8);
+	}
 
 	public void tick() {
 		super.tick();
@@ -98,19 +96,23 @@ public class Building extends Mob implements IUsable {
 	private int[] upgradeCosts = null;
 
 	public boolean upgrade(Player p) {
-		if (upgradeLevel >= maxUpgradeLevel)
+		if (upgradeLevel >= maxUpgradeLevel) {
+			Notifications.getInstance().add("Fully upgraded already");
 			return false;
+		}
 
 		final int cost = upgradeCosts[upgradeLevel];
-		if (cost > p.getScore())
+		if (cost > p.getScore()) {
+			Notifications.getInstance().add("You dont have enough money");
 			return false;
+		}
 
-		MojamComponent.soundPlayer.playSound("/sound/Upgrade.wav",
-				(float) pos.x, (float) pos.y, true);
+		MojamComponent.soundPlayer.playSound("/sound/Upgrade.wav", (float) pos.x, (float) pos.y, true);
 
 		++upgradeLevel;
 		p.useMoney(cost);
 		upgradeComplete();
+		Notifications.getInstance().add("Upgraded to level " + upgradeLevel);
 		return true;
 	}
 
