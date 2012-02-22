@@ -32,6 +32,7 @@ public class LevelSelect extends GuiMenu {
 		this.bHosting = bHosting;
 		
 		// get all levels
+		LevelList.resetLevels();
 		levels = LevelList.getLevels();
 
 		// create buttons

@@ -593,7 +593,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		} else if (id == TitleMenu.SELECT_HOST_LEVEL_ID) {
 			addMenu(new LevelSelect(true));
 		} else if(id == TitleMenu.UPDATE_LEVELS){
-			LevelList.resetLevels();
 			GuiMenu menu = menuStack.pop();
 			if(menu instanceof LevelSelect){
 				addMenu(new LevelSelect(((LevelSelect) menu).bHosting));

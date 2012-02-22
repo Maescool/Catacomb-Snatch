@@ -66,7 +66,7 @@ public class Font {
 			int c = letters.indexOf(msg.charAt(i));
 			if (c < 0)
 				continue;
-			screen.blit(Art.font[c % 29][c / 29], x, y);
+			screen.blit(getFont().bitmapData[c % 29][c / 29], x, y);
 			x += 8;
 			if(x > width){
 				x = startX;
