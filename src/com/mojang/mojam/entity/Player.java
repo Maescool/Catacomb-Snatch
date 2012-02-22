@@ -143,7 +143,10 @@ public class Player extends Mob implements LootCollector {
 			muzzleTicks--;
 		}
 		if (keys.up.isDown || keys.down.isDown || keys.left.isDown || keys.right.isDown) {
-			if ((carrying == null && steps % 10 == 0) || (steps % 20 == 0)) {
+			int stepCount = 25;
+			if (carrying == null) stepCount = 15;
+			if (isSprint) stepCount *= 0.6;
+			if (steps % stepCount == 0) {
 				MojamComponent.soundPlayer.playSound("/sound/Step " + (TurnSynchronizer.synchedRandom.nextInt(2) + 1) + ".wav", (float) pos.x, (float) pos.y, true);
 			}
 			steps++;
@@ -202,14 +205,16 @@ public class Player extends Mob implements LootCollector {
 			double speed = getSpeed() / dd;
 
 			if (this.keys.sprint.isDown) {
-				isSprint = true;
 				if (timeSprint < maxTimeSprint) {
+					isSprint = true;
 					if (carrying == null) {
 						speed = getSpeed() / dd * psprint;
 					} else {
 						speed = getSpeed() / dd * (psprint - 0.5);
 					}
 					timeSprint++;
+				} else {
+					isSprint = false;
 				}
 			} else {
 				if (timeSprint >= 0) {
