@@ -23,6 +23,10 @@ public class HowToPlay extends GuiMenu {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			e.consume();
+			buttons.get(0).postClick();
+		}
 	}
 
 	@Override
