@@ -11,9 +11,11 @@ import com.mojang.mojam.screen.*;
 public class Building extends Mob implements IUsable {
 	public static final int SPAWN_INTERVAL = 60;
 	public static final int MIN_BUILDING_DISTANCE = 1700; // Sqr
-
+	public static final int HEALING_INTERVAL = 15;
+	
 	public int spawnTime = 0;
 	public boolean highlight = false;
+	private int healingTime = HEALING_INTERVAL;
 
 	public Building(double x, double y, int team) {
 		super(x, y, team);
@@ -65,11 +67,29 @@ public class Building extends Mob implements IUsable {
 		if (freezeTime > 0) {
 			return;
 		}
-		if (hurtTime <= 0)
-			health = maxHealth;
+		if (hurtTime <= 0) {
+			if (health < maxHealth) {
+				if (--healingTime <= 0) {
+					++health;
+					healingTime = HEALING_INTERVAL;
+				}
+			}
+		}
 
 		xd = 0.0;
 		yd = 0.0;
+	}
+
+	@Override
+	public void hurt(Bullet bullet) {
+		super.hurt(bullet);
+		healingTime = HEALING_INTERVAL;
+	}
+
+	@Override
+	public void hurt(Entity source, int damage) {
+		super.hurt(source, damage);
+		healingTime = HEALING_INTERVAL;
 	}
 
 	public Bitmap getSprite() {
