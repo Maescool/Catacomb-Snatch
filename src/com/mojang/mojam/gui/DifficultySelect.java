@@ -25,7 +25,7 @@ public class DifficultySelect extends GuiMenu {
 	private Button startGameButton;
 	private Button cancelButton;
 
-	public DifficultySelect() {
+	public DifficultySelect(boolean hosting) {
 		super();
 		
 		DifficultyButtons = new DifficultyButton[difficulties.size()];
@@ -33,7 +33,7 @@ public class DifficultySelect extends GuiMenu {
 		
 		TitleMenu.difficulty = difficulties.get(0);
 		
-		startGameButton = new Button(TitleMenu.START_GAME_ID,  "Start Game", (MojamComponent.GAME_WIDTH - 256 - 30), MojamComponent.GAME_HEIGHT - 24 - 25);
+		startGameButton = new Button(hosting ? TitleMenu.HOST_GAME_ID : TitleMenu.START_GAME_ID,  "Start Game", (MojamComponent.GAME_WIDTH - 256 - 30), MojamComponent.GAME_HEIGHT - 24 - 25);
 		cancelButton = new Button(TitleMenu.CANCEL_JOIN_ID, "Cancel", MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25);
 		
 		addButton(startGameButton);

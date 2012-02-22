@@ -20,4 +20,14 @@ public class DifficultyList {
 		}
 		return Difficulties;
 	}
+	
+	public static int getDifficultyID(DifficultyInformation di) {
+		if ( Difficulties == null )
+			createDifficultyList();
+		for (int i = 0; i < Difficulties.size();i++)
+			if (Difficulties.get(i) == di)
+				return i;
+		return 1; // default to normal
+	}
+	
 }
