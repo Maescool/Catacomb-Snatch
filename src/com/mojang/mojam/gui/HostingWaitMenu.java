@@ -11,13 +11,14 @@ public class HostingWaitMenu extends GuiMenu {
 	public HostingWaitMenu() {
 		super();
 
-		addButton(new Button(TitleMenu.CANCEL_JOIN_ID, "Cancel", 250, 180));
+		addButton(new Button(TitleMenu.CANCEL_JOIN_ID, "Cancel", 364, 335));
 	}
 
 	@Override
 	public void render(Screen screen) {
 
 		screen.clear(0);
+		screen.blit(Art.emptyBackground, 0, 0);
 		Font.draw(screen, MojamComponent.texts.waitingForClient(), 100, 100);
 		try {
 			InetAddress thisIp = InetAddress.getLocalHost();
