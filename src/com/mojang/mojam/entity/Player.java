@@ -98,6 +98,7 @@ public class Player extends Mob implements LootCollector {
 		this.maxHealth++;
 		this.regenDelay=2;
 		plevel++;
+		psprint+=0.1;
 	}
 	public void tick() {
 		calculLevel();
