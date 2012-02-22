@@ -1,5 +1,6 @@
 package com.mojang.mojam.entity.building;
 
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.*;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.Font;
@@ -30,8 +31,7 @@ public class ShopItem extends Building {
 	public void render(Screen screen) {
 		super.render(screen);
 		// Bitmap image = getSprite();
-		Font.drawCentered(screen, "" + COST[type], (int) (pos.x),
-				(int) (pos.y + 10));
+		Font.drawCentered(screen, MojamComponent.texts.cost(COST[type]), (int) (pos.x), (int) (pos.y + 10));
 	}
 
 	public void init() {

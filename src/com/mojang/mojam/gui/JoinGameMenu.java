@@ -2,6 +2,7 @@ package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
 
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.screen.Screen;
 
 public class JoinGameMenu extends GuiMenu {
@@ -20,7 +21,7 @@ public class JoinGameMenu extends GuiMenu {
 	public void render(Screen screen) {
 
 		screen.clear(0);
-		Font.draw(screen, "Enter IP of Host:", 100, 100);
+		Font.draw(screen, MojamComponent.texts.enterIP(), 100, 100);
 		Font.draw(screen, TitleMenu.ip + "-", 100, 120);
 
 		super.render(screen);

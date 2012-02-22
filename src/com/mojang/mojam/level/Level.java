@@ -591,10 +591,8 @@ public class Level {
 		screen.blit(Art.panel, 0, screen.h - 80);
 		screen.blit(minimap, 429, screen.h - 80 + 5);
 
-		Font.draw(screen, "Lord Lard: " + player1Score * 100 / TARGET_SCORE
-				+ "%", 140, screen.h - 20);
-		Font.draw(screen, "Herr Von Speck: " + player2Score * 100
-				/ TARGET_SCORE + "%", 56, screen.h - 36);
+		Font.draw(screen, MojamComponent.texts.score(Team.Team1, player1Score * 100 / TARGET_SCORE), 140, screen.h - 20);
+		Font.draw(screen, MojamComponent.texts.score(Team.Team2, player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
 
 		Notifications.getInstance().render(screen);
 	}

@@ -462,9 +462,7 @@ public class Player extends Mob implements LootCollector {
 			regenDelay = REGEN_INTERVAL;
 
 			if (health <= 0) {
-				Notifications.getInstance().add(
-						(team == Team.Team1 ? "Lord Lard" : "Herr Von Speck")
-								+ " has died!");
+				Notifications.getInstance().add(MojamComponent.texts.hasDied(team)); 
 				carrying = null;
 				dropAllMoney();
 				pos.set(startX, startY);

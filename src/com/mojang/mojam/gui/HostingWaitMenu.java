@@ -2,6 +2,7 @@ package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
 
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.screen.Screen;
 
 public class HostingWaitMenu extends GuiMenu {
@@ -16,7 +17,7 @@ public class HostingWaitMenu extends GuiMenu {
 	public void render(Screen screen) {
 
 		screen.clear(0);
-		Font.draw(screen, "Waiting for client to join...", 100, 100);
+		Font.draw(screen, MojamComponent.texts.waitingForClient(), 100, 100);
 
 		super.render(screen);
 	}

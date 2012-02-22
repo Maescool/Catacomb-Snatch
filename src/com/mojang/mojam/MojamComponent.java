@@ -19,6 +19,7 @@ import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.network.*;
 import com.mojang.mojam.network.packet.*;
+import com.mojang.mojam.resources.Texts;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 import com.mojang.mojam.sound.SoundPlayer;
@@ -27,6 +28,8 @@ public class MojamComponent extends Canvas implements Runnable,
 		MouseMotionListener, CommandListener, PacketListener, MouseListener,
 		ButtonListener, KeyListener {
 
+	public static Locale locale;
+	public static Texts texts;
 	private static final long serialVersionUID = 1L;
 	public static final int GAME_WIDTH = 512;
 	public static final int GAME_HEIGHT = GAME_WIDTH * 3 / 4;
@@ -60,6 +63,9 @@ public class MojamComponent extends Canvas implements Runnable,
 	private int createServerState = 0;
 
 	public MojamComponent() {
+		locale = new Locale("en");
+		texts = new Texts(locale);
+		
 		this.setPreferredSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT
 				* SCALE));
 		this.setMinimumSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT
@@ -280,7 +286,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			menuStack.peek().render(screen);
 		}
 
-		Font.draw(screen, "FPS: " + fps, 10, 10);
+		Font.draw(screen, texts.FPS(fps), 10, 10);
 		// for (int p = 0; p < players.length; p++) {
 		// if (players[p] != null) {
 		// String msg = "P" + (p + 1) + ": " + players[p].getScore();
@@ -288,8 +294,8 @@ public class MojamComponent extends Canvas implements Runnable,
 		// }
 		// }
 		if (player != null && menuStack.size() == 0) {
-			Font.draw(screen, player.health + " / 10", 340, screen.h - 19);
-			Font.draw(screen, "" + player.score, 340, screen.h - 33);
+			Font.draw(screen, texts.health(player.health, 10), 340, screen.h - 19);
+			Font.draw(screen, texts.money(player.score), 340, screen.h - 33);
 		}
 
 		g.setColor(Color.BLACK);

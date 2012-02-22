@@ -2,6 +2,7 @@ package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
 
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.screen.*;
 
 public class WinMenu extends GuiMenu {
@@ -24,9 +25,9 @@ public class WinMenu extends GuiMenu {
 
 		String msg = "";
 		if (winningPlayer == 1)
-			msg = "LORD LARD WINS WOOHOO";
+			msg = MojamComponent.texts.player1Win();
 		if (winningPlayer == 2)
-			msg = "HERR VON SPECK WINS YAY";
+			msg = MojamComponent.texts.player2Win();
 		Font.draw(screen, msg, 180, 160);
 
 		super.render(screen);
