@@ -186,35 +186,20 @@ public abstract class Mob extends Entity {
 
 	public abstract Bitmap getSprite();
 
-	@Override
-	public void hurt(Bullet bullet) {
-		if (isImmortal)
-			return;
-
-		if (freezeTime <= 0) {
-
-			if (!(this instanceof SpawnerEntity)) {
-				if (bullet.owner instanceof Player) {
-					Player pl = (Player) bullet.owner;
-					pl.pexp++;
-				}
-			}
-
-			hurtTime = 40;
-			freezeTime = 5;
-			health--;
-			if (bullet != null) {
-				xBump = bullet.xa / 5.0;
-				yBump = bullet.ya / 5.0;
-			}
-		}
-	}
-
 	public void hurt(Entity source, float damage) {
 		if (isImmortal)
 			return;
 
 		if (freezeTime <= 0) {
+			
+			if (source instanceof Bullet && !(this instanceof SpawnerEntity)) {
+				Bullet bullet = (Bullet) source;
+				if (bullet.owner instanceof Player) {
+					Player pl = (Player) bullet.owner;
+					pl.pexp++;
+				}
+			}
+			
 			hurtTime = 40;
 			freezeTime = 5;
 			health -= damage;
