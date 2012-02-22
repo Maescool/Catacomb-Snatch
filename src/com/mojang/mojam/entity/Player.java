@@ -90,7 +90,7 @@ public class Player extends Mob implements LootCollector {
 		}
 	}
 	private double nextLevel(){
-		double next = (plevel*1)*(plevel*1);
+		double next = (plevel*7)*(plevel*7);
 		pnextlevel=(int) next;
 		return next;
 	}
