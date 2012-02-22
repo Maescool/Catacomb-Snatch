@@ -30,7 +30,7 @@ public class Harvester extends Building implements LootCollector {
 
 	public Harvester(double x, double y, int team) {
 		super(x, y, team);
-		setStartHealth(20);
+		setStartHealth(10);
 		freezeTime = 10;
 		makeUpgradeableWithCosts(new int[] { 500, 1000, 5000 });
 	}
@@ -94,6 +94,8 @@ public class Harvester extends Building implements LootCollector {
 	}
 
 	protected void upgradeComplete() {
+	    health += 10;
+	    maxHealth += 10;
 		radius = upgradeRadius[upgradeLevel];
 		capacity = upgradeCapacities[upgradeLevel];
 	}
@@ -152,10 +154,23 @@ public class Harvester extends Building implements LootCollector {
         }
 		Font.drawCentered(screen, money + "/" + capacity, (int) (pos.x),
 				(int) (pos.y - 30));
-		Font.drawCentered(screen, health + "/" + maxHealth, (int) (pos.x),
-				(int) (pos.y + 10));
+	
+		addHealthBar (screen);
 	}
 
+private void addHealthBar(Screen screen){
+        
+        int bar_width = 30;
+        int bar_height = 2;
+        int start = health * bar_width / maxHealth;
+        Bitmap bar = new Bitmap (bar_width, bar_height);
+        
+        bar.clear(0xff00ff00);
+        bar.fill(start, 0, bar_width - start, bar_height, 0xffff0000);
+        
+        screen.blit(bar, pos.x - (bar_width/2), pos.y + 8);
+    }
+	
 	public void take(Loot loot) {
 		loot.remove();
 		money += loot.getScoreValue();
