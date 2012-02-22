@@ -191,6 +191,7 @@ public abstract class Mob extends Entity {
 				if (bullet.owner instanceof Player) {
 					Player pl = (Player) bullet.owner;
 					pl.pexp++;
+					pl.overcharge++;
 				}
 			}
 			

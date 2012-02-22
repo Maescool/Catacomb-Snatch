@@ -22,7 +22,7 @@ public class Player extends Mob implements LootCollector {
 	public static final int COST_DROID = 50;
 	public static final int COST_REMOVE_RAIL = 15;
 	public static final int REGEN_INTERVAL = 60 * 3;
-
+	
 	public int plevel;
 	public int pnextlevel;
 	public double pexp;
@@ -59,6 +59,8 @@ public class Player extends Mob implements LootCollector {
 	public double muzzleX = 0;
 	public double muzzleY = 0;
 	private int muzzleImage = 0;
+	
+	public int overcharge = 0;
 
 	private int nextWalkSmokeTick = 0;
 
@@ -248,6 +250,32 @@ public class Player extends Mob implements LootCollector {
 		yBump *= 0.8;
 		muzzleImage = (muzzleImage + 1) & 3;
 
+		if (carrying == null && keys.overcharge.wasReleased() && overcharge > 15) {
+            xd -= xa;
+            yd -= ya;
+            Entity bullet = new Bullet(this, 0.1 * overcharge / 10, 0.0001, 7);
+            Entity bullet1 = new Bullet(this, -0.1 * overcharge / 10, 0.0001, 7);
+            Entity bullet2 = new Bullet(this, 0.0001, 0.1 * overcharge / 10, 7);
+            Entity bullet3 = new Bullet(this, 0.0001, -0.1 * overcharge / 10, 7);
+            Entity bullet4 = new Bullet(this, 0.1 * overcharge / 10, 0.1 * overcharge / 10, 7);
+            Entity bullet5 = new Bullet(this, -0.1 * overcharge / 10, 0.1 * overcharge / 10, 7);
+            Entity bullet6 = new Bullet(this, -0.1 * overcharge / 10, -0.1 * overcharge / 10, 7);
+            Entity bullet7 = new Bullet(this, 0.1 * overcharge / 10, -0.1 * overcharge / 10, 7);
+            level.addEntity(bullet);
+            level.addEntity(bullet1);
+            level.addEntity(bullet2);
+            level.addEntity(bullet3);
+            level.addEntity(bullet4);
+            level.addEntity(bullet5);
+            level.addEntity(bullet6);
+            level.addEntity(bullet7);
+            muzzleTicks = 3;
+            muzzleX = bullet.pos.x + 7 * xa - 8;
+            muzzleY = bullet.pos.y + 5 * ya - 8 + 1;
+            MojamComponent.soundPlayer.playSound("/sound/Shot 1.wav", (float) pos.x, (float) pos.y);
+            overcharge = 0;
+        }
+		
 		weapon.weapontick();
 		if (carrying == null && keys.fire.isDown || carrying == null && mouseButtons.isDown(mouseFireButton)) {
 			primaryFire(xa, ya);
