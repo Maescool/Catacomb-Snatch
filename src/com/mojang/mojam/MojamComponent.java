@@ -29,6 +29,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public static final int GAME_WIDTH = 512;
 	public static final int GAME_HEIGHT = GAME_WIDTH * 3 / 4;
 	public static final int SCALE = 2;
+	private static JFrame guiFrame;
 	private boolean running = true;
 	private Cursor emptyCursor;
 	private double framerate = 60;
@@ -423,16 +424,32 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 	public static void main(String[] args) {
 		MojamComponent mc = new MojamComponent();
-		JFrame frame = new JFrame();
+		guiFrame = new JFrame();
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(mc);
-		frame.setContentPane(panel);
-		frame.pack();
-		frame.setResizable(false);
-		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
+		guiFrame.setContentPane(panel);
+		guiFrame.pack();
+		guiFrame.setResizable(false);
+		guiFrame.setLocationRelativeTo(null);
+		guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		guiFrame.setVisible(true);
+		Options.loadProperties();
+		setFullscreen(Boolean.parseBoolean(Options.get("fullscreen")));
 		mc.start();
+	}
+	
+	public static void setFullscreen(boolean fs) {
+		GraphicsDevice device = guiFrame.getGraphicsConfiguration().getDevice();
+		// hide window
+		guiFrame.setVisible(false);
+		guiFrame.dispose();
+		// change options
+		guiFrame.setUndecorated(fs);
+		device.setFullScreenWindow( fs ? guiFrame : null);
+		// display window
+		guiFrame.setLocationRelativeTo(null);
+		guiFrame.setVisible(true);
+
 	}
 
 	public void handle(int playerId, NetworkCommand packet) {
