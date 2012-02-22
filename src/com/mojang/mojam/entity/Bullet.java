@@ -4,7 +4,7 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.mob.*;
 import com.mojang.mojam.screen.*;
 
-public class Bullet extends Entity {
+public abstract class Bullet extends Entity {
 	public double xa, ya;
 	public Mob owner;
 	boolean hit = false;
@@ -12,7 +12,7 @@ public class Bullet extends Entity {
 	private int facing;
 	private float damage;
 
-	public Bullet(Mob e, double xa, double ya, float damage) {
+	public Bullet(Mob e, double xa, double ya, int life, float damage) {
 		this.owner = e;
         this.damage = damage;
 		pos.set(e.pos.x + xa * 4, e.pos.y + ya * 4);
@@ -20,7 +20,7 @@ public class Bullet extends Entity {
 		this.ya = ya * 6;
 		this.setSize(4, 4);
 		physicsSlide = false;
-		life = 40;
+		this.life = life;
 		double angle = (Math.atan2(ya, xa) + Math.PI * 1.625);
 		facing = (8 + (int) (angle / Math.PI * 4)) & 7;
 	}

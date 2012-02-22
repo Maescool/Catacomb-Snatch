@@ -171,7 +171,7 @@ public abstract class Mob extends Entity {
 	public void hurt(Bullet bullet) {
 		if (isImmortal)
 			return;
-
+		System.out.println("HURT: " + this);
 		if (freezeTime <= 0) {
 
 			if (!(this instanceof SpawnerEntity)) {

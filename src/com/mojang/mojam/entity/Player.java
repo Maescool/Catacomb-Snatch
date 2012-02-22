@@ -8,6 +8,7 @@ import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.loot.*;
 import com.mojang.mojam.entity.mob.*;
 import com.mojang.mojam.entity.particle.Sparkle;
+import com.mojang.mojam.entity.weapon.GrenadeLauncher;
 import com.mojang.mojam.entity.weapon.IWeapon;
 import com.mojang.mojam.entity.weapon.Rifle;
 import com.mojang.mojam.gui.Notifications;
@@ -506,6 +507,7 @@ public class Player extends Mob implements LootCollector {
 				dropAllMoney();
 				pos.set(startX, startY);
 				health = maxHealth;
+				weapon = new Rifle(this);
 			} else {
 
 				double dist = source.pos.dist(pos);

@@ -1,37 +1,30 @@
 package com.mojang.mojam.entity.weapon;
 
 import com.mojang.mojam.MojamComponent;
+
 import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.GrenadeBullet;
 import com.mojang.mojam.entity.Player;
-import com.mojang.mojam.entity.RifleBullet;
 import com.mojang.mojam.network.TurnSynchronizer;
 
-public class Rifle implements IWeapon {
+public class GrenadeLauncher implements IWeapon {
 
 	private Player owner;
 	
-	private static final float BULLET_DAMAGE = .5f;
+	private static final float BULLET_DAMAGE = 15f;
 	
-	private int upgradeIndex = 1;
-	private double accuracy = 0.15;
-	private int shootDelay = 5;
-	private int burstCount = 3;
-	private int burstCooldown = 25;
+	private double accuracy = 0.25;
+	private int shootDelay = 40;
 	
 	private boolean wasShooting;
 	private int curShootDelay = 0;	
 	
-	private boolean isBursting;
-	private int curBurstCount;
-	private int curBurstDelay;	
-	
-	public Rifle(Player owner) {
+	public GrenadeLauncher(Player owner) {
 		setOwner(owner);
 	}
 	
 	@Override
 	public void upgradeWeapon() {
-		upgradeIndex++;
 	}
 
 	@Override
@@ -41,9 +34,9 @@ public class Rifle implements IWeapon {
 			double dir = getBulletDirection(accuracy);
 			xDir = Math.cos(dir);
 			yDir = Math.sin(dir);			
-			applyImpuls(xDir, yDir, 1);
+			applyImpuls(xDir, yDir, 3);
 			
-			Entity bullet = new RifleBullet(owner, xDir, yDir, BULLET_DAMAGE);
+			Entity bullet = new GrenadeBullet(owner, xDir, yDir, BULLET_DAMAGE);
 			owner.level.addEntity(bullet);
 			
 			owner.muzzleTicks = 3;
@@ -61,11 +54,6 @@ public class Rifle implements IWeapon {
 			curShootDelay = 0;
 		}
 		wasShooting = false;
-		
-		if(!isBursting) {
-			curBurstDelay--;
-		}
-		isBursting = false;
 	}
 	
 	private double getBulletDirection(double accuracy) {
@@ -85,5 +73,4 @@ public class Rifle implements IWeapon {
 	public void setOwner(Player player) {
 		this.owner = player;
 	}
-
 }

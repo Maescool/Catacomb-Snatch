@@ -64,12 +64,12 @@ public class Turret extends Building {
 		double xd = closest.pos.x - pos.x;
 		double angle = (Math.atan2(yd, xd) + Math.PI * 1.625);
 		facing = (8 + (int) (angle / Math.PI * 4)) & 7;
-		Bullet bullet = new Bullet(this, xd * invDist, yd * invDist, BULLET_DAMAGE * ((upgradeLevel + 1) / 2.f));
+		Bullet bullet = new RifleBullet(this, xd * invDist, yd * invDist, BULLET_DAMAGE * ((upgradeLevel + 1) / 2.f));
 		bullet.pos.y -= 10;
 		level.addEntity(bullet);
 
 		if (upgradeLevel > 0) {
-			Bullet second_bullet = new Bullet(this, xd * invDist, yd * invDist, BULLET_DAMAGE * ((upgradeLevel + 1) / 2.f));
+			Bullet second_bullet = new RifleBullet(this, xd * invDist, yd * invDist, BULLET_DAMAGE * ((upgradeLevel + 1) / 2.f));
 			level.addEntity(second_bullet);
 			if (facing == 0 || facing == 4) {
 				bullet.pos.x -= 5;
@@ -86,7 +86,7 @@ public class Turret extends Building {
 		int x2 = (int) dx2 / Tile.WIDTH;
 		int y2 = (int) dy2 / Tile.HEIGHT;
 
-		Bullet bullet = new Bullet(this, pos.x, pos.y, BULLET_DAMAGE * ((upgradeLevel + 1) / 2.f));
+		Bullet bullet = new RifleBullet(this, pos.x, pos.y, BULLET_DAMAGE * ((upgradeLevel + 1) / 2.f));
 
 		int dx, dy, inx, iny, e;
 		Tile temp;

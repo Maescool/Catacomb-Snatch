@@ -87,7 +87,7 @@ public class Building extends Mob implements IUsable {
 	}
 
 	@Override
-	public void hurt(Entity source, int damage) {
+	public void hurt(Entity source, float damage) {
 		super.hurt(source, damage);
 		healingTime = HEALING_INTERVAL;
 	}
@@ -132,7 +132,7 @@ public class Building extends Mob implements IUsable {
 		++upgradeLevel;
 		p.useMoney(cost);
 		upgradeComplete();
-		Notifications.getInstance().add("Upgraded to level " + upgradeLevel);
+		Notifications.getInstance().add("Upgraded to level " + (upgradeLevel + 1));
 		return true;
 	}
 
