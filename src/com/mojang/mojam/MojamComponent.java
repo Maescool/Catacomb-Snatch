@@ -54,6 +54,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private int localId;
 	private Thread hostThread;
 	public static SoundPlayer soundPlayer;
+	private long nextMusicInterval = 0;
 
 	private int createServerState = 0;
 
@@ -116,7 +117,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 	private void init() {
 		soundPlayer = new SoundPlayer();
-		soundPlayer.startBackgroundMusic();
+		soundPlayer.startTitleMusic();
 
 		try {
 			emptyCursor = Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "empty");
@@ -329,17 +330,20 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		if (level != null) {
 			if (level.player1Score >= Level.TARGET_SCORE) {
 				addMenu(new WinMenu(GAME_WIDTH, GAME_HEIGHT, 1));
+				soundPlayer.startEndMusic();
 				level = null;
 				return;
 			}
 			if (level.player2Score >= Level.TARGET_SCORE) {
 				addMenu(new WinMenu(GAME_WIDTH, GAME_HEIGHT, 2));
+				soundPlayer.startEndMusic();
 				level = null;
 				return;
 			}
 			if (keys.escape.wasPressed()) {
 				clearMenus();
 				addMenu(new TitleMenu(GAME_WIDTH, GAME_HEIGHT));
+				soundPlayer.startTitleMusic();
 				level = null;
 				return;
 			}
@@ -393,6 +397,12 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 				}
 
 				level.tick();
+				
+				// every 4 minutes, start new background music :)
+				if (System.currentTimeMillis() / 1000 > nextMusicInterval) {
+					nextMusicInterval = (System.currentTimeMillis() / 1000) + 4 * 60;
+					soundPlayer.startBackgroundMusic();
+				}
 			}
 		}
 
@@ -464,6 +474,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 				synchronizer.setStarted(true);
 
 				createLevel(TitleMenu.level);
+				soundPlayer.stopBackgroundMusic();
 			} else if (button.getId() == TitleMenu.SELECT_LEVEL_ID) {
 				addMenu(new LevelSelect(false));
 			} else if (button.getId() == TitleMenu.SELECT_HOST_LEVEL_ID) {

@@ -15,7 +15,7 @@ public class SoundPlayer {
 	private boolean wavPlaybackSupport = true;
 	private boolean muted = false;
 
-	private static final String BACKGROUND_TRACK = "Background music";
+	private static final String BACKGROUND_TRACK = "background";
 	private static final int MAX_SOURCES_PER_SOUND = 5;
 
 	public SoundPlayer() {
@@ -55,14 +55,30 @@ public class SoundPlayer {
 		return false;
 	}
 
+	public void startTitleMusic() {
+		if (!isMuted() && hasOggPlaybackSupport()) {
+			if (isPlaying(BACKGROUND_TRACK))
+				stopBackgroundMusic();
+
+			String backgroundTrack = "/sound/ThemeTitle.ogg";
+			soundSystem.backgroundMusic(BACKGROUND_TRACK, SoundPlayer.class.getResource(backgroundTrack), backgroundTrack, false);
+		}
+	}
+
+	public void startEndMusic() {
+		if (!isMuted() && hasOggPlaybackSupport()) {
+			if (isPlaying(BACKGROUND_TRACK))
+				stopBackgroundMusic();
+
+			String backgroundTrack = "/sound/ThemeEnd.ogg";
+			soundSystem.backgroundMusic(BACKGROUND_TRACK, SoundPlayer.class.getResource(backgroundTrack), backgroundTrack, false);
+		}
+	}
+
 	public void startBackgroundMusic() {
-		String backgroundTrack = "/sound/Background "
-				+ (TurnSynchronizer.synchedRandom.nextInt(4) + 1) + ".ogg";
-		if (!isMuted() && hasOggPlaybackSupport()
-				&& !isPlaying(BACKGROUND_TRACK)) {
-			soundSystem.backgroundMusic(BACKGROUND_TRACK,
-					SoundPlayer.class.getResource(backgroundTrack),
-					backgroundTrack, true);
+		if (!isMuted() && hasOggPlaybackSupport() && !isPlaying(BACKGROUND_TRACK)) {
+			String backgroundTrack = "/sound/Background " + (TurnSynchronizer.synchedRandom.nextInt(4) + 1) + ".ogg";
+			soundSystem.backgroundMusic(BACKGROUND_TRACK, SoundPlayer.class.getResource(backgroundTrack), backgroundTrack, false);
 		}
 	}
 
@@ -82,21 +98,15 @@ public class SoundPlayer {
 		return playSound(sourceName, x, y, false);
 	}
 
-	public boolean playSound(String sourceName, float x, float y,
-			boolean blocking) {
+	public boolean playSound(String sourceName, float x, float y, boolean blocking) {
 		return playSound(sourceName, x, y, blocking, 0);
 	}
 
-	private boolean playSound(String sourceName, float x, float y,
-			boolean blocking, int index) {
-		if (index < MAX_SOURCES_PER_SOUND && !isMuted()
-				&& hasWavPlaybackSupport()) {
+	private boolean playSound(String sourceName, float x, float y, boolean blocking, int index) {
+		if (index < MAX_SOURCES_PER_SOUND && !isMuted() && hasWavPlaybackSupport()) {
 			String indexedSourceName = sourceName + index;
 			if (!loaded.contains(indexedSourceName)) {
-				soundSystem.newSource(false, indexedSourceName,
-						SoundPlayer.class.getResource(sourceName), sourceName,
-						false, x, y, 0, SoundSystemConfig.ATTENUATION_ROLLOFF,
-						SoundSystemConfig.getDefaultRolloff());
+				soundSystem.newSource(false, indexedSourceName, SoundPlayer.class.getResource(sourceName), sourceName, false, x, y, 0, SoundSystemConfig.ATTENUATION_ROLLOFF, SoundSystemConfig.getDefaultRolloff());
 				loaded.add(indexedSourceName);
 			} else if (isPlaying(indexedSourceName)) {
 				if (blocking) {
@@ -110,10 +120,8 @@ public class SoundPlayer {
 			soundSystem.stop(indexedSourceName);
 			soundSystem.setPriority(indexedSourceName, false);
 			soundSystem.setPosition(indexedSourceName, x, y, 0);
-			soundSystem.setAttenuation(indexedSourceName,
-					SoundSystemConfig.ATTENUATION_ROLLOFF);
-			soundSystem.setDistOrRoll(indexedSourceName,
-					SoundSystemConfig.getDefaultRolloff());
+			soundSystem.setAttenuation(indexedSourceName, SoundSystemConfig.ATTENUATION_ROLLOFF);
+			soundSystem.setDistOrRoll(indexedSourceName, SoundSystemConfig.getDefaultRolloff());
 			soundSystem.setPitch(indexedSourceName, 1.0f);
 			soundSystem.play(indexedSourceName);
 			return true;

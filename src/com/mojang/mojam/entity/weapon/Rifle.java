@@ -11,7 +11,7 @@ public class Rifle implements IWeapon {
 	private Player owner;
 	
 	private int upgradeIndex = 1;
-	private double accuracy = 0.35;
+	private double accuracy = 0.15;
 	private int shootDelay = 5;
 	private int burstCount = 3;
 	private int burstCooldown = 25;
