@@ -68,7 +68,7 @@ public class Options {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		return decodedPath.substring(0, path.lastIndexOf("/") + 1);
+		return decodedPath.substring(0, decodedPath.lastIndexOf("/") + 1);
 	}
 
 }
