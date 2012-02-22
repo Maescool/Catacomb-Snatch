@@ -28,6 +28,7 @@ public class HostingWaitMenu extends GuiMenu {
 	public void render(Screen screen) {
 
 		screen.clear(0);
+		screen.blit(Art.emptyBackground, 0, 0);
 		Font.draw(screen, MojamComponent.texts.waitingForClient(), 100, 100);
 
 		Font.draw(screen, "Your internal IP:" + myIpLAN, 100, 120);
