@@ -15,7 +15,7 @@ public class LevelSelect extends GuiMenu {
 
 	private LevelButton[] levelButtons;
 	private final int xButtons = (MojamComponent.GAME_WIDTH / LevelButton.WIDTH);
-	private final int yButtons = 3; // unused yet, need to add pages later.
+	//private final int yButtons = 3; // unused yet, need to add pages later.
 	private final int xSpacing = LevelButton.WIDTH + 8;
 	private final int ySpacing = LevelButton.HEIGHT + 8;
 	private final int xStart = (MojamComponent.GAME_WIDTH - (xSpacing * xButtons) + 8) / 2;
@@ -102,17 +102,10 @@ public class LevelSelect extends GuiMenu {
 		int activeButtonId = activeButton.getId();
 		int nextActiveButtonId = -2;
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			nextActiveButtonId = (activeButtonId % 3 == 0)
-					? bestExistingLevelId(activeButtonId + 2, activeButtonId + 1)
-				    : activeButtonId - 1;
+			nextActiveButtonId = bestExistingLevelId(activeButtonId - 1, levels.size() - 1);
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			if (activeButtonId == levels.size() - 1) {
-				nextActiveButtonId = activeButtonId - (activeButtonId % 3);
-			}
-			else {
-				nextActiveButtonId = (activeButtonId % 3 == 2) ? activeButtonId - 2 : activeButtonId + 1;
-			}
+            nextActiveButtonId = bestExistingLevelId(activeButtonId + 1, 0);
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_UP) {
 			nextActiveButtonId = bestExistingLevelId(activeButtonId - 3, activeButtonId + 6, activeButtonId + 3);

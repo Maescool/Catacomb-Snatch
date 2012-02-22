@@ -1,12 +1,8 @@
 package com.mojang.mojam.gui;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
-import javax.imageio.ImageIO;
-
-import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
