@@ -721,7 +721,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		return mojamDir;
 	}
 
-	private static EnumOS2 getOs() {
+	public static EnumOS2 getOs() {
 		String s = System.getProperty("os.name").toLowerCase();
 		if (s.contains("win")) {
 			return EnumOS2.windows;
