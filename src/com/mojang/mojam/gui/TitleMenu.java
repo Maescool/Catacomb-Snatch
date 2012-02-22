@@ -56,11 +56,11 @@ public class TitleMenu extends GuiMenu {
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			selectedItem--;
 			if (selectedItem < 0) {
-				selectedItem = 3;
+				selectedItem = 4;
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 			selectedItem++;
-			if (selectedItem > 3) {
+			if (selectedItem > 4) {
 				selectedItem = 0;
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
