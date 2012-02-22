@@ -1,4 +1,6 @@
 bin/
 .gradle
 build
+/nbproject/private/
 *~
+.DS_Store

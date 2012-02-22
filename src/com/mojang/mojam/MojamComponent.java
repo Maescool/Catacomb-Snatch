@@ -44,6 +44,7 @@ import com.mojang.mojam.gui.JoinGameMenu;
 import com.mojang.mojam.gui.LevelSelect;
 import com.mojang.mojam.gui.PauseMenu;
 import com.mojang.mojam.gui.TitleMenu;
+import com.mojang.mojam.level.DifficultyList;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.LevelList;
@@ -517,11 +518,10 @@ public class MojamComponent extends Canvas implements Runnable,
 			synchronizer.setStarted(true);
 			if (TitleMenu.level.vanilla) {
 				packetLink.sendPacket(new StartGamePacket(
-						TurnSynchronizer.synchedSeed, TitleMenu.level
-								.getUniversalPath()));
+						TurnSynchronizer.synchedSeed, TitleMenu.level.getUniversalPath(),DifficultyList.getDifficultyID(TitleMenu.difficulty)));
 			} else {
 				packetLink.sendPacket(new StartGamePacketCustom(
-						TurnSynchronizer.synchedSeed, level));
+						TurnSynchronizer.synchedSeed, level, DifficultyList.getDifficultyID(TitleMenu.difficulty)));
 			}
 			packetLink.setPacketListener(MojamComponent.this);
 
@@ -584,6 +584,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			if (!isServer) {
 				StartGamePacket sgPacker = (StartGamePacket) packet;
 				synchronizer.onStartGamePacket(sgPacker.getGameSeed());
+				TitleMenu.difficulty = DifficultyList.getDifficulties().get(sgPacker.getDifficulty());
 				createLevel(sgPacker.getLevelFile());
 			}
 		} else if (packet instanceof TurnPacket) {
@@ -592,6 +593,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			if (!isServer) {
 				StartGamePacketCustom sgPacker = (StartGamePacketCustom) packet;
 				synchronizer.onStartGamePacket(sgPacker.getGameSeed());
+				TitleMenu.difficulty = DifficultyList.getDifficulties().get(sgPacker.getDifficulty());
 				level = sgPacker.getLevel();
 				paused = false;
 				initLevel();
@@ -702,8 +704,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			try {
 				localId = 1;
 				packetLink = new ClientSidePacketLink(TitleMenu.ip, 3000);
-				synchronizer = new TurnSynchronizer(this, packetLink, localId,
-						2);
+				synchronizer = new TurnSynchronizer(this, packetLink, localId,2);
 				packetLink.setPacketListener(this);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -713,12 +714,16 @@ public class MojamComponent extends Canvas implements Runnable,
 		} else if (id == TitleMenu.HOW_TO_PLAY) {
 			addMenu(new HowToPlay());
 		} else if (id == TitleMenu.SELECT_DIFFICULTY_ID) {
-			addMenu(new DifficultySelect());
+			addMenu(new DifficultySelect(false));
+		} else if (id == TitleMenu.SELECT_DIFFICULTY_HOSTING_ID) {
+			addMenu(new DifficultySelect(true));
 		} else if (id == TitleMenu.EXIT_GAME_ID) {
 			System.exit(0);
 		} else if (id == TitleMenu.RETURN_ID) {
 			synchronizer.addCommand(new PauseCommand(false));
 			keys.tick();
+		} else if (id == TitleMenu.BACK_ID) {
+			popMenu();
 		}
 	}
 

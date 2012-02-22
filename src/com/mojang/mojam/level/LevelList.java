@@ -14,7 +14,7 @@ public class LevelList {
 		levels.add(new LevelInformation("Mojam", "/levels/level1.bmp",true));
 		levels.add(new LevelInformation("AsymeTrical","/levels/AsymeTrical.bmp",true));
 		levels.add(new LevelInformation("CataBOMB", "/levels/CataBOMB.bmp",true));
-		levels.add(new LevelInformation("Horizontal8","/levels/Horizontal8.bmp",true));
+		levels.add(new LevelInformation("Siege","/levels/Siege.bmp",true));
 		levels.add(new LevelInformation("TheMaze", "/levels/TheMaze.bmp",true));
 		levels.add(new LevelInformation("Circular_Shapes", "/levels/Circular Shapes.bmp",true));
 		levels.add(new LevelInformation("BlackHole", "/levels/BlackHole.bmp",true));

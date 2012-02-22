@@ -2,6 +2,7 @@ package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
 
+import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
@@ -22,12 +23,15 @@ public class TitleMenu extends GuiMenu {
 	public static final int HOW_TO_PLAY = 1010;
 	public static final int UPDATE_LEVELS = 1011;
 	public static final int RETURN_ID = 1012;
+	public static final int SELECT_DIFFICULTY_HOSTING_ID = 1013;
+	public static final int BACK_ID = 1014;
 
 	public static LevelInformation level = null;
-	public static int Difficulty = 0;
+	public static DifficultyInformation difficulty = null;
 
 	// public static lol... ;)
 	public static String ip = "";
+	
 
 	private int selectedItem = 0;
 	private final int gameWidth;

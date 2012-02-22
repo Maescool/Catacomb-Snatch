@@ -15,7 +15,7 @@ public class LevelSelect extends GuiMenu {
 
 	private LevelButton[] levelButtons;
 	private final int xButtons = (MojamComponent.GAME_WIDTH / LevelButton.WIDTH);
-	private final int yButtons = 3; // unused yet, need to add pages later.
+	//private final int yButtons = 3; // unused yet, need to add pages later.
 	private final int xSpacing = LevelButton.WIDTH + 8;
 	private final int ySpacing = LevelButton.HEIGHT + 8;
 	private final int xStart = (MojamComponent.GAME_WIDTH - (xSpacing * xButtons) + 8) / 2;
@@ -43,11 +43,7 @@ public class LevelSelect extends GuiMenu {
 		TitleMenu.level = levels.get(0);
 
 		// start + cancel button
-		if (bHosting) {
-			startGameButton = new Button(TitleMenu.HOST_GAME_ID, "Host", MojamComponent.GAME_WIDTH - 256 - 30, MojamComponent.GAME_HEIGHT - 24 - 25);
-		} else {
-			startGameButton = new Button(TitleMenu.SELECT_DIFFICULTY_ID, "Start", MojamComponent.GAME_WIDTH - 256 - 30, MojamComponent.GAME_HEIGHT - 24 - 25);
-		}
+		startGameButton = new Button(bHosting ? TitleMenu.SELECT_DIFFICULTY_HOSTING_ID : TitleMenu.SELECT_DIFFICULTY_ID, "Start", MojamComponent.GAME_WIDTH - 256 - 30, MojamComponent.GAME_HEIGHT - 24 - 25);
 		cancelButton = new Button(TitleMenu.CANCEL_JOIN_ID, "Cancel", MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25);
 		addButton(new Button(TitleMenu.UPDATE_LEVELS, "Update Levels", MojamComponent.GAME_WIDTH - 386 - 40, MojamComponent.GAME_HEIGHT - 24 - 25));
 
@@ -102,17 +98,10 @@ public class LevelSelect extends GuiMenu {
 		int activeButtonId = activeButton.getId();
 		int nextActiveButtonId = -2;
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			nextActiveButtonId = (activeButtonId % 3 == 0)
-					? bestExistingLevelId(activeButtonId + 2, activeButtonId + 1)
-				    : activeButtonId - 1;
+			nextActiveButtonId = bestExistingLevelId(activeButtonId - 1, levels.size() - 1);
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			if (activeButtonId == levels.size() - 1) {
-				nextActiveButtonId = activeButtonId - (activeButtonId % 3);
-			}
-			else {
-				nextActiveButtonId = (activeButtonId % 3 == 2) ? activeButtonId - 2 : activeButtonId + 1;
-			}
+            nextActiveButtonId = bestExistingLevelId(activeButtonId + 1, 0);
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_UP) {
 			nextActiveButtonId = bestExistingLevelId(activeButtonId - 3, activeButtonId + 6, activeButtonId + 3);

@@ -160,7 +160,7 @@ public class Level {
 	public void init() {
 		Random random = TurnSynchronizer.synchedRandom;
 
-		maxMonsters = 2000 + 500 * TitleMenu.Difficulty;
+		maxMonsters = 1500 + (int)DifficultyInformation.calculateStrength(500);
 
 		for (int i = 0; i < 11; i++) {
 			double x = (random.nextInt(width - 16) + 8) * Tile.WIDTH

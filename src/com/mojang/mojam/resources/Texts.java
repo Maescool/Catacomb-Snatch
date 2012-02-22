@@ -20,6 +20,10 @@ public class Texts {
 		}
 		return "";
 	}
+	
+	public String getStatic(String property) {
+		return texts.getString(property);
+	}
 
 	public String player1Name() {
 		return texts.getString("player1Name");
@@ -50,11 +54,11 @@ public class Texts {
 	}
 
 	public String cost(int cost) {
-		return MessageFormat.format(texts.getString("cost"), cost);
+		return MessageFormat.format(texts.getString("cost"), String.valueOf(cost));
 	}
 
-	public String health(int health, int maxHealth) {
-		return MessageFormat.format(texts.getString("health"), (float)health / (float)maxHealth * 100);
+	public String health(float health, float maxHealth) {
+		return MessageFormat.format(texts.getString("health"), health / maxHealth * 100);
 	}
 
 	public String money(int money) {

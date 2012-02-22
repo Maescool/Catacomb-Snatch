@@ -23,8 +23,8 @@ public abstract class Mob extends Entity {
 	public int hurtTime = 0;
 	public int freezeTime = 0;
 	public int bounceWallTime = 0;
-	public int maxHealth = 10;
-	public int health = maxHealth;
+	public float maxHealth = 10;
+	public float health = maxHealth;
 	public boolean isImmortal = false;
 	public double xBump, yBump;
 	public Mob carrying = null;
@@ -43,7 +43,7 @@ public abstract class Mob extends Entity {
 		super.init();
 	}
 
-	public void setStartHealth(int newHealth) {
+	public void setStartHealth(float newHealth) {
 		maxHealth = health = newHealth;
 	}
 
@@ -146,7 +146,7 @@ public abstract class Mob extends Entity {
 			} else {
 				if (health < 0)
 					health = 0;
-				int col = 180 - health * 180 / maxHealth;
+				int col = (int) (180 - health * 180 / maxHealth);
 				if (hurtTime < 10)
 					col = col * hurtTime / 10;
 				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h / 2 - yOffs, (col << 24) + 255 * 65536);
@@ -167,7 +167,7 @@ public abstract class Mob extends Entity {
         
         int bar_width = 30;
         int bar_height = 2;
-        int start = health * bar_width / maxHealth;
+        int start = (int) (health * bar_width / maxHealth);
         Bitmap bar = new Bitmap(bar_width, bar_height);
 
         bar.clear(0xff00ff00);
@@ -186,35 +186,20 @@ public abstract class Mob extends Entity {
 
 	public abstract Bitmap getSprite();
 
-	@Override
-	public void hurt(Bullet bullet) {
+	public void hurt(Entity source, float damage) {
 		if (isImmortal)
 			return;
 
 		if (freezeTime <= 0) {
-
-			if (!(this instanceof SpawnerEntity)) {
+			
+			if (source instanceof Bullet && !(this instanceof SpawnerEntity)) {
+				Bullet bullet = (Bullet) source;
 				if (bullet.owner instanceof Player) {
 					Player pl = (Player) bullet.owner;
 					pl.pexp++;
 				}
 			}
-
-			hurtTime = 40;
-			freezeTime = 5;
-			health--;
-			if (bullet != null) {
-				xBump = bullet.xa / 5.0;
-				yBump = bullet.ya / 5.0;
-			}
-		}
-	}
-
-	public void hurt(Entity source, int damage) {
-		if (isImmortal)
-			return;
-
-		if (freezeTime <= 0) {
+			
 			hurtTime = 40;
 			freezeTime = 5;
 			health -= damage;
@@ -223,8 +208,8 @@ public abstract class Mob extends Entity {
 			}
 
 			double dist = source.pos.dist(pos);
-			xBump = (pos.x - source.pos.x) / dist * 10;
-			yBump = (pos.y - source.pos.y) / dist * 10;
+			xBump = (pos.x - source.pos.x) / dist * 2;
+			yBump = (pos.y - source.pos.y) / dist * 2;
 		}
 	}
 

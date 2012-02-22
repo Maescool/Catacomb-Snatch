@@ -11,7 +11,8 @@ import com.mojang.mojam.screen.Screen;
 
 public class DifficultySelect extends GuiMenu {
 	
-	static ArrayList<DifficultyInformation> Difficulties = DifficultyList.getDifficulties();
+	private ArrayList<DifficultyInformation> difficulties = DifficultyList.getDifficulties();
+	private int selectedIndex = 1;
 	
 	private DifficultyButton[] DifficultyButtons;
 	private final int xButtons = 3;
@@ -24,15 +25,15 @@ public class DifficultySelect extends GuiMenu {
 	private Button startGameButton;
 	private Button cancelButton;
 
-	public DifficultySelect() {
+	public DifficultySelect(boolean hosting) {
 		super();
 		
-		DifficultyButtons = new DifficultyButton[Difficulties.size()];
+		DifficultyButtons = new DifficultyButton[difficulties.size()];
 		setupDifficultyButtons();
 		
-		TitleMenu.Difficulty = Difficulties.get(0).DifficultyNumber;
+		TitleMenu.difficulty = difficulties.get(0);
 		
-		startGameButton = new Button(TitleMenu.START_GAME_ID,  "Start Game", (MojamComponent.GAME_WIDTH - 256 - 30), MojamComponent.GAME_HEIGHT - 24 - 25);
+		startGameButton = new Button(hosting ? TitleMenu.HOST_GAME_ID : TitleMenu.START_GAME_ID,  "Start Game", (MojamComponent.GAME_WIDTH - 256 - 30), MojamComponent.GAME_HEIGHT - 24 - 25);
 		cancelButton = new Button(TitleMenu.CANCEL_JOIN_ID, "Cancel", MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25);
 		
 		addButton(startGameButton);
@@ -42,10 +43,10 @@ public class DifficultySelect extends GuiMenu {
 	
 	private void setupDifficultyButtons() {
 		int y = 0;
-		for (int i = 0; i < Difficulties.size(); i++) {
+		for (int i = 0; i < difficulties.size(); i++) {
 			int x = i % xButtons;
 
-			DifficultyButtons[i] = (DifficultyButton) addButton(new DifficultyButton(i, Difficulties.get(i).DifficultyName, xStart + x * xSpacing, yStart + ySpacing * y));
+			DifficultyButtons[i] = (DifficultyButton) addButton(new DifficultyButton(i, difficulties.get(i).difficultyName, xStart + x * xSpacing, yStart + ySpacing * y));
 			if (i == 0) {
 				activeButton = DifficultyButtons[i];
 				activeButton.setActive(true);
@@ -69,7 +70,7 @@ public class DifficultySelect extends GuiMenu {
 		if (button instanceof DifficultyButton) {
 
 			DifficultyButton DB = (DifficultyButton) button;
-			TitleMenu.Difficulty = Difficulties.get(DB.getId()).DifficultyNumber;
+			TitleMenu.difficulty = difficulties.get(DB.getId());
 
 			if (activeButton != null && activeButton != DB) {
 				activeButton.setActive(false);
@@ -92,7 +93,7 @@ public class DifficultySelect extends GuiMenu {
 				    : activeButtonId - 1;
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			if (activeButtonId == Difficulties.size() - 1) {
+			if (activeButtonId == difficulties.size() - 1) {
 				nextActiveButtonId = activeButtonId - (activeButtonId % xButtons);
 			}
 			else {
@@ -124,7 +125,7 @@ public class DifficultySelect extends GuiMenu {
 	
 	public int bestExistingDifficultyId(int... options) {
 		for (int option : options) {
-			if (option >= 0 && option < Difficulties.size()) {
+			if (option >= 0 && option < difficulties.size()) {
 				return option;
 			}
 		}
