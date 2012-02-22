@@ -23,9 +23,7 @@ import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 import com.mojang.mojam.sound.SoundPlayer;
 
-public class MojamComponent extends Canvas implements Runnable,
-		MouseMotionListener, CommandListener, PacketListener, MouseListener,
-		ButtonListener, KeyListener {
+public class MojamComponent extends Canvas implements Runnable, MouseMotionListener, CommandListener, PacketListener, MouseListener, ButtonListener, KeyListener {
 
 	private static final long serialVersionUID = 1L;
 	public static final int GAME_WIDTH = 512;
@@ -60,12 +58,9 @@ public class MojamComponent extends Canvas implements Runnable,
 	private int createServerState = 0;
 
 	public MojamComponent() {
-		this.setPreferredSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT
-				* SCALE));
-		this.setMinimumSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT
-				* SCALE));
-		this.setMaximumSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT
-				* SCALE));
+		this.setPreferredSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
+		this.setMinimumSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
+		this.setMaximumSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
 		this.addKeyListener(new InputHandler(keys));
 		this.addMouseMotionListener(this);
 		this.addMouseListener(this);
@@ -124,9 +119,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		soundPlayer.startBackgroundMusic();
 
 		try {
-			emptyCursor = Toolkit.getDefaultToolkit().createCustomCursor(
-					new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB),
-					new Point(0, 0), "empty");
+			emptyCursor = Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "empty");
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 		}
@@ -146,18 +139,15 @@ public class MojamComponent extends Canvas implements Runnable,
 
 		level.init();
 
-		players[0] = new Player(synchedKeys[0], mouseButtons, level.width * Tile.WIDTH / 2
-				- 16, (level.height - 5 - 1) * Tile.HEIGHT - 16, Team.Team1);
+		players[0] = new Player(synchedKeys[0], mouseButtons, level.width * Tile.WIDTH / 2 - 16, (level.height - 5 - 1) * Tile.HEIGHT - 16, Team.Team1);
 		players[0].setFacing(4);
 		level.addEntity(players[0]);
 		level.addEntity(new Base(34 * Tile.WIDTH, 7 * Tile.WIDTH, Team.Team1));
 		if (isMultiplayer) {
-			players[1] = new Player(synchedKeys[1], mouseButtons, level.width * Tile.WIDTH
-					/ 2 - 16, 7 * Tile.HEIGHT - 16, Team.Team2);
+			players[1] = new Player(synchedKeys[1], mouseButtons, level.width * Tile.WIDTH / 2 - 16, 7 * Tile.HEIGHT - 16, Team.Team2);
 			// players[1] = new Player(synchedKeys[1], 10, 10);
 			level.addEntity(players[1]);
-			level.addEntity(new Base(32 * Tile.WIDTH - 20,
-					32 * Tile.WIDTH - 20, Team.Team2));
+			level.addEntity(new Base(32 * Tile.WIDTH - 20, 32 * Tile.WIDTH - 20, Team.Team2));
 		}
 		player = players[localId];
 		player.setCanSee(true);
@@ -272,15 +262,14 @@ public class MojamComponent extends Canvas implements Runnable,
 		if (level != null) {
 			int xScroll = (int) (player.pos.x - screen.w / 2);
 			int yScroll = (int) (player.pos.y - (screen.h - 24) / 2);
-			soundPlayer.setListenerPosition((float) player.pos.x,
-					(float) player.pos.y);
+			soundPlayer.setListenerPosition((float) player.pos.x, (float) player.pos.y);
 			level.render(screen, xScroll, yScroll);
 		}
 		if (!menuStack.isEmpty()) {
 			menuStack.peek().render(screen);
 		}
 
-		Font.draw(screen, "FPS: " + fps, 10, 10);
+		// Font.draw(screen, "FPS: " + fps, 10, 10);
 		// for (int p = 0; p < players.length; p++) {
 		// if (players[p] != null) {
 		// String msg = "P" + (p + 1) + ": " + players[p].getScore();
@@ -295,8 +284,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		g.setColor(Color.BLACK);
 
 		g.fillRect(0, 0, getWidth(), getHeight());
-		g.translate((getWidth() - GAME_WIDTH * SCALE) / 2,
-				(getHeight() - GAME_HEIGHT * SCALE) / 2);
+		g.translate((getWidth() - GAME_WIDTH * SCALE) / 2, (getHeight() - GAME_HEIGHT * SCALE) / 2);
 		g.clipRect(0, 0, GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE);
 
 		if (!menuStack.isEmpty() || level != null) {
@@ -304,8 +292,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			// render mouse
 			renderMouse(screen, mouseButtons);
 
-			g.drawImage(screen.image, 0, 0, GAME_WIDTH * SCALE, GAME_HEIGHT
-					* SCALE, null);
+			g.drawImage(screen.image, 0, 0, GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE, null);
 		}
 
 		// String msg = "FPS: " + fps;
@@ -335,9 +322,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			marker.pixels[i + crosshairSizeHalf * crosshairSize] = 0xffffffff;
 		}
 
-		screen.blit(marker,
-				mouseButtons.getX() / SCALE - crosshairSizeHalf - 2,
-				mouseButtons.getY() / SCALE - crosshairSizeHalf - 2);
+		screen.blit(marker, mouseButtons.getX() / SCALE - crosshairSizeHalf - 2, mouseButtons.getY() / SCALE - crosshairSizeHalf - 2);
 	}
 
 	private void tick() {
@@ -389,8 +374,7 @@ public class MojamComponent extends Canvas implements Runnable,
 					Keys.Key key = keys.getAll().get(index);
 					boolean nextState = key.nextState;
 					if (key.isDown != nextState) {
-						synchronizer.addCommand(new ChangeKeyCommand(index,
-								nextState));
+						synchronizer.addCommand(new ChangeKeyCommand(index, nextState));
 					}
 				}
 				keys.tick();
@@ -403,9 +387,7 @@ public class MojamComponent extends Canvas implements Runnable,
 				if (!mouseHidden) {
 
 					// update player mouse, in world pixels relative to player
-					player.setAimByMouse(
-							((mouseButtons.getX() / SCALE) - (screen.w / 2)),
-							(((mouseButtons.getY() / SCALE) + 24) - (screen.h / 2)));
+					player.setAimByMouse(((mouseButtons.getX() / SCALE) - (screen.w / 2)), (((mouseButtons.getY() / SCALE) + 24) - (screen.h / 2)));
 				} else {
 					player.setAimByKeyboard();
 				}
@@ -417,15 +399,13 @@ public class MojamComponent extends Canvas implements Runnable,
 		if (createServerState == 1) {
 			createServerState = 2;
 
-			synchronizer = new TurnSynchronizer(MojamComponent.this,
-					packetLink, localId, 2);
+			synchronizer = new TurnSynchronizer(MojamComponent.this, packetLink, localId, 2);
 
 			clearMenus();
 			createLevel(TitleMenu.level);
 
 			synchronizer.setStarted(true);
-			packetLink.sendPacket(new StartGamePacket(
-					TurnSynchronizer.synchedSeed, TitleMenu.level));
+			packetLink.sendPacket(new StartGamePacket(TurnSynchronizer.synchedSeed, TitleMenu.level));
 			packetLink.setPacketListener(MojamComponent.this);
 
 		}
@@ -449,8 +429,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 		if (packet instanceof ChangeKeyCommand) {
 			ChangeKeyCommand ckc = (ChangeKeyCommand) packet;
-			synchedKeys[playerId].getAll().get(ckc.getKey()).nextState = ckc
-					.getNextState();
+			synchedKeys[playerId].getAll().get(ckc.getKey()).nextState = ckc.getNextState();
 		}
 	}
 
@@ -466,102 +445,107 @@ public class MojamComponent extends Canvas implements Runnable,
 		}
 	}
 
-	public void buttonPressed(Button button) {
-		if (button.getId() == TitleMenu.RESTART_GAME_ID) {
-			clearMenus();
-			TitleMenu menu = new TitleMenu(GAME_WIDTH, GAME_HEIGHT);
-			addMenu(menu);
+	public void buttonPressed(ClickableComponent component) {
 
-		} else if (button.getId() == TitleMenu.START_GAME_ID) {
-			clearMenus();
-			isMultiplayer = false;
+		if (component instanceof Button) {
+			final Button button = (Button) component;
 
-			localId = 0;
-			synchronizer = new TurnSynchronizer(this, null, 0, 1);
-			synchronizer.setStarted(true);
+			if (button.getId() == TitleMenu.RESTART_GAME_ID) {
+				clearMenus();
+				TitleMenu menu = new TitleMenu(GAME_WIDTH, GAME_HEIGHT);
+				addMenu(menu);
 
-			createLevel(TitleMenu.level);
-		} else if (button.getId() == TitleMenu.SELECT_LEVEL_ID) {
-			addMenu(new LevelSelect(false));
-		} else if (button.getId() == TitleMenu.SELECT_HOST_LEVEL_ID) {
-			addMenu(new LevelSelect(true));
-		} else if (button.getId() == TitleMenu.HOST_GAME_ID) {
-			addMenu(new HostingWaitMenu());
-			isMultiplayer = true;
-			isServer = true;
-			try {
-				if (isServer) {
-					localId = 0;
-					serverSocket = new ServerSocket(3000);
-					serverSocket.setSoTimeout(1000);
+			} else if (button.getId() == TitleMenu.START_GAME_ID) {
+				clearMenus();
+				isMultiplayer = false;
 
-					hostThread = new Thread() {
+				localId = 0;
+				synchronizer = new TurnSynchronizer(this, null, 0, 1);
+				synchronizer.setStarted(true);
 
-						public void run() {
-							boolean fail = true;
-							try {
-								while (!isInterrupted()) {
-									Socket socket = null;
-									try {
-										socket = serverSocket.accept();
-									} catch (SocketTimeoutException e) {
+				createLevel(TitleMenu.level);
+			} else if (button.getId() == TitleMenu.SELECT_LEVEL_ID) {
+				addMenu(new LevelSelect(false));
+			} else if (button.getId() == TitleMenu.SELECT_HOST_LEVEL_ID) {
+				addMenu(new LevelSelect(true));
+			} else if (button.getId() == TitleMenu.HOST_GAME_ID) {
+				addMenu(new HostingWaitMenu());
+				isMultiplayer = true;
+				isServer = true;
+				try {
+					if (isServer) {
+						localId = 0;
+						serverSocket = new ServerSocket(3000);
+						serverSocket.setSoTimeout(1000);
 
-									}
-									if (socket == null) {
-										System.out.println("asdf");
-										continue;
-									}
-									fail = false;
+						hostThread = new Thread() {
 
-									packetLink = new NetworkPacketLink(socket);
-
-									createServerState = 1;
-									break;
-								}
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-							if (fail) {
+							public void run() {
+								boolean fail = true;
 								try {
-									serverSocket.close();
-								} catch (IOException e) {
-								}
-							}
-						};
-					};
-					hostThread.start();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else if (button.getId() == TitleMenu.JOIN_GAME_ID) {
-			addMenu(new JoinGameMenu());
-		} else if (button.getId() == TitleMenu.CANCEL_JOIN_ID) {
-			popMenu();
-			if (hostThread != null) {
-				hostThread.interrupt();
-				hostThread = null;
-			}
-		} else if (button.getId() == TitleMenu.PERFORM_JOIN_ID) {
-			menuStack.clear();
-			isMultiplayer = true;
-			isServer = false;
+									while (!isInterrupted()) {
+										Socket socket = null;
+										try {
+											socket = serverSocket.accept();
+										} catch (SocketTimeoutException e) {
 
-			try {
-				localId = 1;
-				packetLink = new ClientSidePacketLink(TitleMenu.ip, 3000);
-				synchronizer = new TurnSynchronizer(this, packetLink, localId,
-						2);
-				packetLink.setPacketListener(this);
-			} catch (Exception e) {
-				e.printStackTrace();
-				// System.exit(1);
-				addMenu(new TitleMenu(GAME_WIDTH, GAME_HEIGHT));
+										}
+										if (socket == null) {
+											System.out.println("asdf");
+											continue;
+										}
+										fail = false;
+
+										packetLink = new NetworkPacketLink(socket);
+
+										createServerState = 1;
+										break;
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+								if (fail) {
+									try {
+										serverSocket.close();
+									} catch (IOException e) {
+									}
+								}
+							};
+						};
+						hostThread.start();
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else if (button.getId() == TitleMenu.JOIN_GAME_ID) {
+				addMenu(new JoinGameMenu());
+			} else if (button.getId() == TitleMenu.CANCEL_JOIN_ID) {
+				popMenu();
+				if (hostThread != null) {
+					hostThread.interrupt();
+					hostThread = null;
+				}
+			} else if (button.getId() == TitleMenu.PERFORM_JOIN_ID) {
+				menuStack.clear();
+				isMultiplayer = true;
+				isServer = false;
+
+				try {
+					localId = 1;
+					packetLink = new ClientSidePacketLink(TitleMenu.ip, 3000);
+					synchronizer = new TurnSynchronizer(this, packetLink, localId, 2);
+					packetLink.setPacketListener(this);
+				} catch (Exception e) {
+					e.printStackTrace();
+					// System.exit(1);
+					addMenu(new TitleMenu(GAME_WIDTH, GAME_HEIGHT));
+				}
+			} else if (button.getId() == TitleMenu.SELECT_DIFFICULTY_ID) {
+				addMenu(new DifficultySelect());
+			} else if (button.getId() == TitleMenu.EXIT_GAME_ID) {
+				System.exit(0);
 			}
-		} else if (button.getId() == TitleMenu.SELECT_DIFFICULTY_ID) {
-			addMenu(new DifficultySelect());
-		} else if (button.getId() == TitleMenu.EXIT_GAME_ID) {
-			System.exit(0);
+
 		}
 	}
 

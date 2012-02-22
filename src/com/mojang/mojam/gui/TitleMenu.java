@@ -31,13 +31,13 @@ public class TitleMenu extends GuiMenu {
 		super();
 		this.gameWidth = gameWidth;
 
-		addButton(new Button(SELECT_LEVEL_ID, 0, (gameWidth - 128) / 2, 200));
-		addButton(new Button(SELECT_HOST_LEVEL_ID, 2, (gameWidth - 128) / 2,
-				240));
-		addButton(new Button(JOIN_GAME_ID, 3, (gameWidth - 128) / 2, 280));
-		addButton(new Button(EXIT_GAME_ID, 1, (gameWidth - 128) / 2, 320));
+		addButton(new Button(SELECT_LEVEL_ID, "Start", (gameWidth - 128) / 2, 200));
+		addButton(new Button(SELECT_HOST_LEVEL_ID, "Host", (gameWidth - 128) / 2, 240));
+		addButton(new Button(JOIN_GAME_ID, "Join", (gameWidth - 128) / 2, 280));
+		addButton(new Button(EXIT_GAME_ID, "Exit", (gameWidth - 128) / 2, 320));
 	}
 
+	@Override
 	public void render(Screen screen) {
 
 		screen.clear(0);
@@ -46,14 +46,10 @@ public class TitleMenu extends GuiMenu {
 
 		super.render(screen);
 
-		screen.blit(Art.lordLard[0][6], (gameWidth - 128) / 2 - 40,
-				190 + selectedItem * 40);
+		screen.blit(Art.lordLard[0][6], (gameWidth - 128) / 2 - 40, 190 + selectedItem * 40);
 	}
 
 	@Override
-	public void buttonPressed(Button button) {
-	}
-
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			selectedItem--;
@@ -71,10 +67,17 @@ public class TitleMenu extends GuiMenu {
 		}
 	}
 
+	@Override
 	public void keyReleased(KeyEvent arg0) {
 	}
 
+	@Override
 	public void keyTyped(KeyEvent arg0) {
+	}
+
+	@Override
+	public void buttonPressed(ClickableComponent button) {
+		// nothing
 	}
 
 }
