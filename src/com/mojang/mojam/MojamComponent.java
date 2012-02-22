@@ -8,9 +8,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GraphicsDevice;
-import java.awt.HeadlessException;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -25,6 +23,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Stack;
@@ -113,7 +113,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	private Thread hostThread;
 	public static SoundPlayer soundPlayer;
 	private long nextMusicInterval = 0;
-	private byte sShotCounter = 0;
+	//private byte sShotCounter = 0;
 
 	private int createServerState = 0;
 	private static File mojamDir = null;
@@ -854,9 +854,9 @@ public class MojamComponent extends Canvas implements Runnable,
 			screencapture = new Robot().createScreenCapture(guiFrame
 					.getBounds());
 
-			sShotCounter++;
+			//sShotCounter++;
 
-			File file = new File("screenShot" + sShotCounter + ".jpg");
+			File file = new File("screenShot" + new Timestamp(new java.util.Date().getTime()) + ".jpg");
 			ImageIO.write(screencapture, "jpg", file);
 		} catch (AWTException e) {
 			e.printStackTrace();
