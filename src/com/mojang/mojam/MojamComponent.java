@@ -530,7 +530,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 										}
 										if (socket == null) {
-											System.out.println("asdf");
+											//System.out.println("Waiting for player to connect");
 											continue;
 										}
 										fail = false;

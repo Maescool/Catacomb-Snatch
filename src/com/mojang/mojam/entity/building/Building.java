@@ -3,6 +3,7 @@ package com.mojang.mojam.entity.building;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.*;
 import com.mojang.mojam.entity.mob.Mob;
+import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.*;
@@ -85,12 +86,16 @@ public class Building extends Mob implements IUsable {
 	private int[] upgradeCosts = null;
 
 	public boolean upgrade(Player p) {
-		if (upgradeLevel >= maxUpgradeLevel)
+		if (upgradeLevel >= maxUpgradeLevel) {
+			Notifications.getInstance().add("Fully upgraded already");
 			return false;
+		}
 
 		final int cost = upgradeCosts[upgradeLevel];
-		if (cost > p.getScore())
+		if (cost > p.getScore()) {
+			Notifications.getInstance().add("You dont have enough money");
 			return false;
+		}
 
 		MojamComponent.soundPlayer.playSound("/sound/Upgrade.wav",
 				(float) pos.x, (float) pos.y, true);
@@ -98,6 +103,9 @@ public class Building extends Mob implements IUsable {
 		++upgradeLevel;
 		p.useMoney(cost);
 		upgradeComplete();
+
+		Notifications.getInstance().add("Upgraded to level " + upgradeLevel);
+
 		return true;
 	}
 
