@@ -31,7 +31,7 @@ public class PauseMenu extends GuiMenu {
 		super.render(screen);
 
 		screen.blit(Art.lordLard[0][6], (gameWidth - 128) / 2 - 40,
-				190 + selectedItem * 40);
+				190 + selectedItem * 30);
 	}
 
 	public void keyPressed(KeyEvent e) {
@@ -42,7 +42,7 @@ public class PauseMenu extends GuiMenu {
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 			selectedItem++;
-			if (selectedItem > 1) {
+			if (selectedItem > 2) {
 				selectedItem = 0;
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
