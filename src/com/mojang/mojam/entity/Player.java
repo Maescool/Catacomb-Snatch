@@ -338,6 +338,8 @@ public class Player extends Mob implements LootCollector {
 					((IUsable) selected).use(this);
 				} else if (selected instanceof IUsable && keys.upgrade.wasPressed()) {
 					((IUsable) selected).upgrade(this);
+				} else if (selected instanceof IUsable && keys.collect.wasPressed()){
+					((IUsable) selected).collect(this);
 				}
 			}
 

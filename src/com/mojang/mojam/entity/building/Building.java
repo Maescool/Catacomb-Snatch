@@ -138,7 +138,9 @@ public class Building extends Mob implements IUsable {
 			((Player) user).pickup(this);
 		}
 	}
-
+  
+	public void collect(Entity user) { }
+  
 	public boolean isHighlightable() {
 		return true;
 	}

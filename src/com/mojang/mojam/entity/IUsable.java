@@ -3,6 +3,8 @@ package com.mojang.mojam.entity;
 public interface IUsable {
 
 	public void use(Entity user);
+  
+	public void collect(Entity user);
 
 	public boolean upgrade(Player player);
 

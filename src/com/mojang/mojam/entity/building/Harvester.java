@@ -186,6 +186,14 @@ public class Harvester extends Building implements LootCollector {
 		}
 		money = 0;
 	}
+  
+	public void collect(Entity user){
+		super.collect(user);
+		isEmptying = true;
+		if (user instanceof Player) {
+			emptyingPlayer = (Player) user;
+		}
+	}
 
 	public void use(Entity user) {
 		super.use(user);
