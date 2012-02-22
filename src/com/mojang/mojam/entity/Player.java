@@ -22,7 +22,7 @@ public class Player extends Mob implements LootCollector {
 	public static final int COST_DROID = 50;
 	public static final int COST_REMOVE_RAIL = 15;
 	public static final int REGEN_INTERVAL = 60 * 3;
-	public static final int COST_OVERCHARGE = 50;
+	public static final int COST_OVERCHARGE = 100;
 
 	public int plevel;
 	public int pnextlevel;
@@ -61,6 +61,7 @@ public class Player extends Mob implements LootCollector {
 	private int muzzleImage = 0;
 	
 	public int overcharge = 0;
+	public int overchargesAvailable = 0;
 
 	private int nextWalkSmokeTick = 0;
 
@@ -180,6 +181,8 @@ public class Player extends Mob implements LootCollector {
         if (keys.overcharge.wasReleased() && score < COST_OVERCHARGE) {
         	overcharge = 0;
         }
+        
+        overchargesAvailable = score / 100;
 
 		if (!mouseAiming && !keys.fire.isDown && !mouseButtons.isDown(mouseFireButton) && xa * xa + ya * ya != 0) {
 			aimVector.set(xa, ya);

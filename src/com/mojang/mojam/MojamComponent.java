@@ -391,9 +391,11 @@ public class MojamComponent extends Canvas implements Runnable,
 					screen.h - 49);
 			Font.draw(screen, texts.playerLevel(player.plevel), 340,
 					screen.h - 60);
-			Font.draw(screen, "Overcharge: ", 25, screen.h - 64);
+			Font.draw(screen, "Overcharge: ", 5, screen.h - 64);
+			Font.draw(screen, "Amount: " + player.overchargesAvailable, 180, screen.h - 64);
 			int overcharge = player.overcharge > 80 ? 80 : player.overcharge;
-			OverchargeBar.draw(screen, overcharge, 80, 8, 115, screen.h - 64);
+			OverchargeBar.draw(screen, overcharge, 80, 8, 92, screen.h - 64);
+			OverchargeBar.setAvailable(player.score >= 100 ? true : false);
 		}
 
 		g.setColor(Color.BLACK);
