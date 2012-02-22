@@ -124,8 +124,10 @@ public class Player extends Mob implements LootCollector {
 		if (regenDelay > 0) {
 			regenDelay--;
 			if (regenDelay == 0) {
-				if (health < maxHealth)
+				if (health + 1 < maxHealth)
 					health++;
+				else if (health < maxHealth)
+					health = maxHealth;
 				regenDelay = REGEN_INTERVAL;
 			}
 		}
