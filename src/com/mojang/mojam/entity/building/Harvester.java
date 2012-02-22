@@ -126,14 +126,14 @@ public class Harvester extends Building implements LootCollector {
 			screen.blit(image, pos.x - image.w / 2, pos.y - image.h + 8);
 		}
 		renderMarker(screen);
+		if (health < maxHealth)
+            addHealthBar(screen);
 
+		// will get rid of texts this soon -> upgrade graphics + money bar
         if (upgradeLevel != 0) {
             Font.drawCentered(screen, "" + upgradeLevel, (int) (pos.x + 10), (int) (pos.y));
         }
 		Font.drawCentered(screen, money + "/" + capacity, (int) (pos.x), (int) (pos.y - 30));
-	
-		if ( health < maxHealth )
-			addHealthBar(screen, health, maxHealth);
 	}
 	
 	public void take(Loot loot) {

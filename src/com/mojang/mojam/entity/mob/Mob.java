@@ -17,6 +17,8 @@ public abstract class Mob extends Entity {
 	// private double speed = 0.82;
 	private double speed = 1.0;
 	protected int team;
+	protected boolean doShowHealthBar = true;
+    protected int healthBarOffset = 10;
 	double dir = 0;
 	public int hurtTime = 0;
 	public int freezeTime = 0;
@@ -153,9 +155,26 @@ public abstract class Mob extends Entity {
 			screen.blit(image, pos.x - image.w / 2, pos.y - image.h / 2 - yOffs);
 		}
 
+		if (doShowHealthBar && health < maxHealth) {
+            addHealthBar(screen);
+        }
+
 		// @todo maybe not have the rendering of carried item here..
 		renderCarrying(screen, 0);
 	}
+
+	protected void addHealthBar(Screen screen) {
+        
+        int bar_width = 30;
+        int bar_height = 2;
+        int start = health * bar_width / maxHealth;
+        Bitmap bar = new Bitmap(bar_width, bar_height);
+
+        bar.clear(0xff00ff00);
+        bar.fill(start, 0, bar_width - start, bar_height, 0xffff0000);
+
+        screen.blit(bar, pos.x - (bar_width / 2), pos.y + healthBarOffset);
+    }
 
 	protected void renderCarrying(Screen screen, int yOffs) {
 		if (carrying == null)
