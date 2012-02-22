@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.LevelList;
+import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
 public class LevelSelect extends GuiMenu {
@@ -39,11 +40,11 @@ public class LevelSelect extends GuiMenu {
 
 		// start + cancel button
 		if (bHosting) {
-			addButton(new Button(TitleMenu.HOST_GAME_ID, "Host", 125, 350));
+			addButton(new Button(TitleMenu.HOST_GAME_ID, "Host", MojamComponent.GAME_WIDTH - 256 - 30, MojamComponent.GAME_HEIGHT - 24 - 25));
 		} else {
-			addButton(new Button(TitleMenu.SELECT_DIFFICULTY_ID, "Start", 125, 350));
+			addButton(new Button(TitleMenu.SELECT_DIFFICULTY_ID, "Start", MojamComponent.GAME_WIDTH - 256 - 30, MojamComponent.GAME_HEIGHT - 24 - 25));
 		}
-		addButton(new Button(TitleMenu.CANCEL_JOIN_ID, "Cancel", 275, 350));
+		addButton(new Button(TitleMenu.CANCEL_JOIN_ID, "Cancel", MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25));
 		addButtonListener(this);
 	}
 
@@ -65,9 +66,9 @@ public class LevelSelect extends GuiMenu {
 
 	@Override
 	public void render(Screen screen) {
-		screen.clear(0);
+		screen.blit(Art.emptyBackground, 0, 0);
 		super.render(screen);
-		Font.draw(screen, "Choose a level", 10, 10);
+		Font.draw(screen, "Choose a level", 20, 20);
 	}
 
 	@Override
