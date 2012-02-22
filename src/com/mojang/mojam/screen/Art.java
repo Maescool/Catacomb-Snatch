@@ -43,7 +43,9 @@ public class Art {
 	public static Bitmap[][] bullet = cut("/bullet.png", 16, 16);
 	public static Bitmap[][] muzzle = cut("/muzzle.png", 16, 16);
 	public static Bitmap[][] harvester = cut("/building/bot_vacuum.png", 32, 56);
-	public static Bitmap[][] startLordLard = cut("/start_lordlard.png", 32, 32);
+	public static Bitmap[][] harvester2 = cut("/building/bot_vacuum2.png", 32, 56);
+	public static Bitmap[][] harvester3 = cut("/building/bot_vacuum3.png", 32, 56);
+    public static Bitmap[][] startLordLard = cut("/start_lordlard.png", 32, 32);
 	public static Bitmap[][] startHerrSpeck = cut("/start_herrspeck.png", 32,
 			32);
 
