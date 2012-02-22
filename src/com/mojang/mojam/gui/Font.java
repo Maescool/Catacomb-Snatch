@@ -7,7 +7,7 @@ import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
 public class Font {
-	public static String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ   " + "0123456789-.!?/%$\\=*+,;:()&#\"'";
+	public static String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ    " + "0123456789-.!?/%$\\=*+,;:()&#\"'";
 	private static final int pxFontHeight = 8;
 	private static final int pxFontWidth = 8;
 	public static HashMap<String, Font> fonts = new HashMap<String, Font>();
@@ -66,7 +66,7 @@ public class Font {
 			int c = letters.indexOf(msg.charAt(i));
 			if (c < 0)
 				continue;
-			screen.blit(getFont().bitmapData[c % 29][c / 29], x, y);
+			screen.blit(getFont().bitmapData[c % 30][c / 30], x, y);
 			x += 8;
 			if(x > width){
 				x = startX;
