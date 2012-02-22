@@ -1,7 +1,7 @@
 package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
+import java.util.List;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.level.LevelInformation;
@@ -11,7 +11,7 @@ import com.mojang.mojam.screen.Screen;
 
 public class LevelSelect extends GuiMenu {
 
-	private ArrayList<LevelInformation> levels;
+	private List<LevelInformation> levels;
 
 	private LevelButton[] levelButtons;
 	private final int xButtons = (MojamComponent.GAME_WIDTH / LevelButton.WIDTH);
@@ -23,6 +23,7 @@ public class LevelSelect extends GuiMenu {
 
 	private LevelButton activeButton;
 	private Button startGameButton;
+	private Button cancelButton;
 
 	public LevelSelect(boolean bHosting) {
 
@@ -40,11 +41,14 @@ public class LevelSelect extends GuiMenu {
 
 		// start + cancel button
 		if (bHosting) {
-			addButton(new Button(TitleMenu.HOST_GAME_ID, "Host", MojamComponent.GAME_WIDTH - 256 - 30, MojamComponent.GAME_HEIGHT - 24 - 25));
+			startGameButton = new Button(TitleMenu.HOST_GAME_ID, "Host", MojamComponent.GAME_WIDTH - 256 - 30, MojamComponent.GAME_HEIGHT - 24 - 25);
 		} else {
-			addButton(new Button(TitleMenu.SELECT_DIFFICULTY_ID, "Start", MojamComponent.GAME_WIDTH - 256 - 30, MojamComponent.GAME_HEIGHT - 24 - 25));
+			startGameButton = new Button(TitleMenu.SELECT_DIFFICULTY_ID, "Start", MojamComponent.GAME_WIDTH - 256 - 30, MojamComponent.GAME_HEIGHT - 24 - 25);
 		}
-		addButton(new Button(TitleMenu.CANCEL_JOIN_ID, "Cancel", MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25));
+		cancelButton = new Button(TitleMenu.CANCEL_JOIN_ID, "Cancel", MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25);
+
+		addButton(startGameButton);
+		addButton(cancelButton);
 		addButtonListener(this);
 	}
 
@@ -89,6 +93,55 @@ public class LevelSelect extends GuiMenu {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+
+		// Compute new id
+		int activeButtonId = activeButton.getId();
+		int nextActiveButtonId = -2;
+		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+			nextActiveButtonId = (activeButtonId % 3 == 0)
+					? bestExistingLevelId(activeButtonId + 2, activeButtonId + 1)
+				    : activeButtonId - 1;
+		}
+		else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			if (activeButtonId == levels.size() - 1) {
+				nextActiveButtonId = activeButtonId - (activeButtonId % 3);
+			}
+			else {
+				nextActiveButtonId = (activeButtonId % 3 == 2) ? activeButtonId - 2 : activeButtonId + 1;
+			}
+		}
+		else if (e.getKeyCode() == KeyEvent.VK_UP) {
+			nextActiveButtonId = bestExistingLevelId(activeButtonId - 3, activeButtonId + 6, activeButtonId + 3);
+		}
+		else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+			nextActiveButtonId = bestExistingLevelId(activeButtonId + 3, activeButtonId + 2, activeButtonId + 1,
+					activeButtonId - 6, activeButtonId - 3);
+		}
+		
+		// Update active button
+		if (nextActiveButtonId >= 0 && nextActiveButtonId < levelButtons.length) {
+			activeButton.setActive(false);
+			activeButton = levelButtons[nextActiveButtonId];
+			activeButton.setActive(true);
+		}
+
+		// Start on Enter, Cancel on Escape
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			startGameButton.postClick();
+		}
+		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			cancelButton.postClick();
+		}
+		
+	}
+	
+	public int bestExistingLevelId(int... options) {
+		for (int option : options) {
+			if (option >= 0 && option < levels.size()) {
+				return option;
+			}
+		}
+		return -2;
 	}
 
 	@Override
