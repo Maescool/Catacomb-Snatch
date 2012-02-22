@@ -23,6 +23,7 @@ public abstract class Packet {
 	static {
 		map(10, StartGamePacket.class);
 		map(11, TurnPacket.class);
+		map(12, StartGamePacketCustom.class);
 
 		map(100, ChangeKeyCommand.class);
 	}

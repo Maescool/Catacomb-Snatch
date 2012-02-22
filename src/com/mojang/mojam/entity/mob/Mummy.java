@@ -39,6 +39,12 @@ public class Mummy extends Mob {
 		walkTime++;
 
 		if (walkTime / 12 % 3 != 0) {
+			if (shouldBounceOffWall(xd, yd)){
+				facing = facing+2%4;
+				xd = -xd;
+				yd = -yd;
+			}
+			
 			stepTime++;
 			if (!move(xd, yd)
 					|| (walkTime > 10 && TurnSynchronizer.synchedRandom

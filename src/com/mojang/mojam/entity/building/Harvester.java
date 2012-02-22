@@ -95,7 +95,7 @@ public class Harvester extends Building implements LootCollector {
 
 	protected void upgradeComplete() {
 	    maxHealth += 10;
-	    health = maxHealth;
+	    health += 10;
         radius = upgradeRadius[upgradeLevel];
 		capacity = upgradeCapacities[upgradeLevel];
 	}
@@ -109,8 +109,7 @@ public class Harvester extends Building implements LootCollector {
 
 		if (hurtTime > 0) {
 			if (hurtTime > 40 - 6 && hurtTime / 2 % 2 == 0) {
-				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h
-						+ 8, 0xa0ffffff);
+				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h + 8, 0xa0ffffff);
 			} else {
 				if (health < 0) {
 					health = 0;
@@ -119,57 +118,23 @@ public class Harvester extends Building implements LootCollector {
 				if (hurtTime < 10) {
 					col = col * hurtTime / 10;
 				}
-				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h
-						+ 8, (col << 24) + 255 * 65536);
+				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h + 8, (col << 24) + 255 * 65536);
 			}
 		} else if (capacity - money < 500) {
-			screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h + 8,
-					0x77ff7200);
+			screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h + 8, 0x77ff7200);
 		} else {
 			screen.blit(image, pos.x - image.w / 2, pos.y - image.h + 8);
 		}
 		renderMarker(screen);
-		if (hurtTime > 0) {
-			if (hurtTime > 40 - 6 && hurtTime / 2 % 2 == 0) {
-				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h
-						+ 8, 0xa0ffffff);
-			} else {
-				if (health < 0) {
-					health = 0;
-				}
-				int col = 180 - health * 180 / maxHealth;
-				if (hurtTime < 10) {
-					col = col * hurtTime / 10;
-				}
-				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h
-						+ 8, (col << 24) + 255 * 65536);
-			}
-		} else {
-			screen.blit(image, pos.x - image.w / 2, pos.y - image.h + 8);
-		}
-		
-        if (upgradeLevel != 0) {
-            Font.drawCentered(screen, "" + upgradeLevel, (int) (pos.x + 10),
-                    (int) (pos.y));
-        }
-		Font.drawCentered(screen, money + "/" + capacity, (int) (pos.x),
-				(int) (pos.y - 30));
-	
-		addHealthBar (screen);
-	}
 
-private void addHealthBar(Screen screen){
-        
-        int bar_width = 30;
-        int bar_height = 2;
-        int start = health * bar_width / maxHealth;
-        Bitmap bar = new Bitmap (bar_width, bar_height);
-        
-        bar.clear(0xff00ff00);
-        bar.fill(start, 0, bar_width - start, bar_height, 0xffff0000);
-        
-        screen.blit(bar, pos.x - (bar_width/2), pos.y + 8);
-    }
+        if (upgradeLevel != 0) {
+            Font.drawCentered(screen, "" + upgradeLevel, (int) (pos.x + 10), (int) (pos.y));
+        }
+		Font.drawCentered(screen, money + "/" + capacity, (int) (pos.x), (int) (pos.y - 30));
+	
+		if ( health < maxHealth )
+			addHealthBar(screen, health, maxHealth);
+	}
 	
 	public void take(Loot loot) {
 		loot.remove();

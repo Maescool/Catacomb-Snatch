@@ -3,8 +3,10 @@ package com.mojang.mojam.entity.mob;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.*;
 import com.mojang.mojam.entity.animation.EnemyDieAnimation;
+import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.math.Vec2;
+import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.screen.*;
 
 public abstract class Mob extends Entity {
@@ -18,6 +20,7 @@ public abstract class Mob extends Entity {
 	double dir = 0;
 	public int hurtTime = 0;
 	public int freezeTime = 0;
+	public int bounceWallTime = 0;
 	public int maxHealth = 10;
 	public int health = maxHealth;
 	public boolean isImmortal = false;
@@ -68,6 +71,9 @@ public abstract class Mob extends Entity {
 		if (hurtTime > 0) {
 			hurtTime--;
 		}
+		if (bounceWallTime > 0) {
+			bounceWallTime--;
+		}
 
 		if (freezeTime > 0) {
 			slideMove(xSlide, ySlide);
@@ -107,35 +113,41 @@ public abstract class Mob extends Entity {
 			for (int i = 0; i < loots; i++) {
 				double dir = i * Math.PI * 2 / particles;
 
-				level.addEntity(new Loot(pos.x, pos.y, Math.cos(dir), Math
-						.sin(dir), getDeathPoints()));
+				level.addEntity(new Loot(pos.x, pos.y, Math.cos(dir), Math.sin(dir), getDeathPoints()));
 			}
 		}
 
 		level.addEntity(new EnemyDieAnimation(pos.x, pos.y));
 
-		MojamComponent.soundPlayer.playSound(getDeatchSound(), (float) pos.x,
-				(float) pos.y);
+		MojamComponent.soundPlayer.playSound(getDeatchSound(), (float) pos.x, (float) pos.y);
 	}
 
 	public String getDeatchSound() {
 		return "/sound/Explosion.wav";
 	}
 
+	public boolean shouldBounceOffWall(double xd, double yd) {
+		if (bounceWallTime > 0)
+			return false;
+		Tile nextTile = level.getTile((int) (pos.x / Tile.WIDTH + Math.signum(xd)), (int) (pos.y / Tile.HEIGHT + Math.signum(yd)));
+		boolean re = (nextTile != null && !nextTile.canPass(this));
+		if (re)
+			bounceWallTime = 10;
+		return re;
+	}
+
 	public void render(Screen screen) {
 		Bitmap image = getSprite();
 		if (hurtTime > 0) {
 			if (hurtTime > 40 - 6 && hurtTime / 2 % 2 == 0) {
-				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h
-						/ 2 - yOffs, 0xa0ffffff);
+				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h / 2 - yOffs, 0xa0ffffff);
 			} else {
 				if (health < 0)
 					health = 0;
 				int col = 180 - health * 180 / maxHealth;
 				if (hurtTime < 10)
 					col = col * hurtTime / 10;
-				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h
-						/ 2 - yOffs, (col << 24) + 255 * 65536);
+				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h / 2 - yOffs, (col << 24) + 255 * 65536);
 			}
 		} else {
 			screen.blit(image, pos.x - image.w / 2, pos.y - image.h / 2 - yOffs);
@@ -149,8 +161,7 @@ public abstract class Mob extends Entity {
 		if (carrying == null)
 			return;
 		Bitmap image = carrying.getSprite();
-		screen.blit(image, carrying.pos.x - image.w / 2, carrying.pos.y
-				- image.h + 8 + yOffs);// image.h
+		screen.blit(image, carrying.pos.x - image.w / 2, carrying.pos.y - image.h + 8 + yOffs);// image.h
 		// / 2 - 8);
 	}
 
@@ -162,6 +173,14 @@ public abstract class Mob extends Entity {
 			return;
 
 		if (freezeTime <= 0) {
+
+			if (!(this instanceof SpawnerEntity)) {
+				if (bullet.owner instanceof Player) {
+					Player pl = (Player) bullet.owner;
+					pl.pexp++;
+				}
+			}
+
 			hurtTime = 40;
 			freezeTime = 5;
 			health--;

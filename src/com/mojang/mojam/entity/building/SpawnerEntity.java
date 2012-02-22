@@ -2,6 +2,7 @@ package com.mojang.mojam.entity.building;
 
 import com.mojang.mojam.entity.mob.*;
 import com.mojang.mojam.network.TurnSynchronizer;
+import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.screen.*;
 
 public class SpawnerEntity extends Building {
@@ -39,8 +40,9 @@ public class SpawnerEntity extends Building {
 				* 5;
 		double y = pos.y + (TurnSynchronizer.synchedRandom.nextFloat() - 0.5)
 				* 5;
-		// Mob te = new Mummy(x, y);
-
+		x=Math.max(Math.min(x, level.width*Tile.WIDTH), 0);//spawn only inside the level!
+		y=Math.max(Math.min(y, level.height*Tile.HEIGHT), 0);
+		
 		Mob te = null;
 		if (type == 0)
 			te = new Bat(x, y);

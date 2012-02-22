@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.Art;
 
 public class JoinGameMenu extends GuiMenu {
 
@@ -20,6 +21,7 @@ public class JoinGameMenu extends GuiMenu {
 	public void render(Screen screen) {
 
 		screen.clear(0);
+		screen.blit(Art.emptyBackground, 0, 0);
 		Font.draw(screen, MojamComponent.texts.enterIP(), 100, 100);
 		Font.draw(screen, TitleMenu.ip + "-", 100, 120);
 

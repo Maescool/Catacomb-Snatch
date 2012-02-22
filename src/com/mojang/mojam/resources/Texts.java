@@ -54,8 +54,7 @@ public class Texts {
 	}
 
 	public String health(int health, int maxHealth) {
-		return MessageFormat.format(texts.getString("health"), health,
-				maxHealth);
+		return MessageFormat.format(texts.getString("health"), (float)health / (float)maxHealth * 100);
 	}
 
 	public String money(int money) {
@@ -72,6 +71,18 @@ public class Texts {
 
 	public String FPS(int fps) {
 		return MessageFormat.format(texts.getString("FPS"), fps);
+	}
+
+	public String nextLevel(int nextLevel) {
+		return MessageFormat.format(texts.getString("nextLevel"), nextLevel);
+	}
+
+	public String playerExp(int pexp) {
+		return MessageFormat.format(texts.getString("playerExp"), pexp);
+	}
+
+	public String playerLevel(int plevel) {
+		return MessageFormat.format(texts.getString("playerLevel"), plevel);
 	}
 
 }

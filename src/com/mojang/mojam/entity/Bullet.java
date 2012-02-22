@@ -13,7 +13,7 @@ public class Bullet extends Entity {
 
 	public Bullet(Mob e, double xa, double ya) {
 		this.owner = e;
-		pos.set(e.pos.x + xa * 4, e.pos.y + ya * 4 - 3);
+		pos.set(e.pos.x + xa * 4, e.pos.y + ya * 4);
 		this.xa = xa * 6;
 		this.ya = ya * 6;
 		this.setSize(4, 4);

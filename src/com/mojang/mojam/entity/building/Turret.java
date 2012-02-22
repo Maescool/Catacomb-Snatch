@@ -4,7 +4,6 @@ import java.util.Set;
 
 import com.mojang.mojam.entity.*;
 import com.mojang.mojam.entity.mob.*;
-import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.screen.*;
 
@@ -15,8 +14,7 @@ public class Turret extends Building {
 	private double radius;
 	private double radiusSqr;
 
-	private int[] upgradeRadius = new int[] { 3 * Tile.WIDTH, 5 * Tile.WIDTH,
-			7 * Tile.WIDTH };
+	private int[] upgradeRadius = new int[] { 3 * Tile.WIDTH, 5 * Tile.WIDTH, 7 * Tile.WIDTH };
 	private int[] upgradeDelay = new int[] { 24, 21, 18 };
 
 	private int facing = 0;
@@ -39,24 +37,18 @@ public class Turret extends Building {
 		if (--delayTicks > 0)
 			return;
 
-		Set<Entity> entities = level.getEntities(pos.x - radius,
-				pos.y - radius, pos.x + radius, pos.y + radius);
+		Set<Entity> entities = level.getEntities(pos.x - radius, pos.y - radius, pos.x + radius, pos.y + radius);
 
-		
 		Entity closest = null;
 		double closestDist = 99999999.0f;
 		for (Entity e : entities) {
-			if (!(e instanceof Mob))
-				continue;
-			if ((e instanceof RailDroid))
+			if (!(e instanceof Mob) || e instanceof RailDroid || e instanceof Bomb)
 				continue;
 			if (!((Mob) e).isNotFriendOf(this))
 				continue;
-			if ((e instanceof TreasurePile))
-				continue;
 			final double dist = e.pos.distSqr(pos);
 			if (dist < radiusSqr && dist < closestDist && !isTargetBehindWall(e.pos.x, e.pos.y)) {
-			    closestDist = dist;
+				closestDist = dist;
 				closest = e;
 			}
 		}
@@ -71,68 +63,97 @@ public class Turret extends Building {
 		Bullet bullet = new Bullet(this, xd * invDist, yd * invDist);
 		bullet.pos.y -= 10;
 		level.addEntity(bullet);
-		
-		if (upgradeLevel > 0){
-		    Bullet second_bullet = new Bullet(this, xd * invDist, yd * invDist);
-            level.addEntity(second_bullet);
-            if (facing == 0 || facing == 4){
-                bullet.pos.x -= 5;
-                second_bullet.pos.x += 5;
-            }
+
+		if (upgradeLevel > 0) {
+			Bullet second_bullet = new Bullet(this, xd * invDist, yd * invDist);
+			level.addEntity(second_bullet);
+			if (facing == 0 || facing == 4) {
+				bullet.pos.x -= 5;
+				second_bullet.pos.x += 5;
+			}
 		}
-		
+
 		delayTicks = delay;
 	}
-	
-	private boolean isTargetBehindWall(double targetPosX, double targetPosY){
-	    
-	    // work in progress
-	    
-	    int tileX = (int) Math.round((pos.x-298.0)/Tile.WIDTH);
-        int tileY = (int) Math.round((pos.y-298.0)/Tile.HEIGHT);
-        
-        int targetTileX = (int) Math.round((targetPosX-298.0)/Tile.WIDTH);
-        int targetTileY = (int) Math.round((targetPosY-298.0)/Tile.WIDTH);
-        
- //       System.out.println("x: " + tileX  + "     y: " + tileY);
- //       System.out.println("targetTileX: " + targetTileX  + "     targetTileY: " + targetTileY);
-        
-        return false;
+
+	private boolean isTargetBehindWall(double dx2, double dy2) {
+		int x1 = (int) pos.x / Tile.WIDTH;
+		int y1 = (int) pos.y / Tile.HEIGHT;
+		int x2 = (int) dx2 / Tile.WIDTH;
+		int y2 = (int) dy2 / Tile.HEIGHT;
+
+		Bullet bullet = new Bullet(this, pos.x, pos.y);
+
+		int dx, dy, inx, iny, e;
+		Tile temp;
+
+		dx = x2 - x1;
+		dy = y2 - y1;
+		inx = dx > 0 ? 1 : -1;
+		iny = dy > 0 ? 1 : -1;
+
+		dx = java.lang.Math.abs(dx);
+		dy = java.lang.Math.abs(dy);
+
+		if (dx >= dy) {
+			dy <<= 1;
+			e = dy - dx;
+			dx <<= 1;
+			while (x1 != x2) {
+				temp = level.getTile(x1, y1);
+				if (!temp.canPass(bullet))
+					return true;
+				if (e >= 0) {
+					y1 += iny;
+					e -= dx;
+				}
+				e += dy;
+				x1 += inx;
+			}
+		} else {
+			dx <<= 1;
+			e = dx - dy;
+			dy <<= 1;
+			while (y1 != y2) {
+				temp = level.getTile(x1, y1);
+				if (!temp.canPass(bullet))
+					return true;
+				if (e >= 0) {
+					x1 += inx;
+					e -= dy;
+				}
+				e += dx;
+				y1 += iny;
+			}
+		}
+		temp = level.getTile(x1, y1);
+		if (!temp.canPass(bullet))
+			return true;
+		return false;
 	}
 
 	public void render(Screen screen) {
 		super.render(screen);
-		addHealthBar(screen);
+
+		if (health < maxHealth)
+			addHealthBar(screen, health, maxHealth);
 	}
 
-	private void addHealthBar(Screen screen){
-	    
-	    int bar_width = 30;
-        int bar_height = 2;
-        int start = health * bar_width / maxHealth;
-        Bitmap bar = new Bitmap (bar_width, bar_height);
-        
-        bar.clear(0xff00ff00);
-        bar.fill(start, 0, bar_width - start, bar_height, 0xffff0000);
-        
-        screen.blit(bar, pos.x - (bar_width/2), pos.y + 10);
-	}
-	
 	public Bitmap getSprite() {
-	    switch (upgradeLevel){
-	    case 1:
-	        return Art.turret2[facing][0];
-	    case 2:
-	        return Art.turret3[facing][0];
-	    default:
-	        return Art.turret[facing][0];
-	    }
+		switch (upgradeLevel) {
+		case 1:
+			return Art.turret2[facing][0];
+		case 2:
+			return Art.turret3[facing][0];
+		default:
+			return Art.turret[facing][0];
+		}
 	}
 
 	protected void upgradeComplete() {
-	    maxHealth += 10;
-	    health = maxHealth;
-        delay = upgradeDelay[upgradeLevel];
+		maxHealth += 10;
+		health = maxHealth;
+		delay = upgradeDelay[upgradeLevel];
 		radius = upgradeRadius[upgradeLevel];
 		radiusSqr = radius * radius;
 	}

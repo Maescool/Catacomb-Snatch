@@ -29,6 +29,12 @@ public class Bat extends Mob {
 				.nextDouble()) * 0.2;
 		xd += Math.cos(dir) * 1;
 		yd += Math.sin(dir) * 1;
+		
+		if (shouldBounceOffWall(xd, yd)){
+			xd = -xd;
+			yd = -yd;
+		}
+		
 		if (!move(xd, yd)) {
 			dir += (TurnSynchronizer.synchedRandom.nextDouble() - TurnSynchronizer.synchedRandom
 					.nextDouble()) * 0.8;
