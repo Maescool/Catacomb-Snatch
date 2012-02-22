@@ -20,6 +20,10 @@ public class Texts {
 		}
 		return "";
 	}
+	
+	public String getStatic(String property) {
+		return texts.getString(property);
+	}
 
 	public String player1Name() {
 		return texts.getString("player1Name");

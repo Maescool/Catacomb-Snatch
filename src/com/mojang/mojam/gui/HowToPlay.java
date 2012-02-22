@@ -20,54 +20,53 @@ public class HowToPlay extends GuiMenu {
 
 	private void printHelpText(Screen screen) {
 		int goalX = 350;
-		int tab1 = 20;
 		int imgTab = 70;
-		int tab2 = 100;
-		int tab3 = 210;
+		int tab1 = 100;
+		int tab2 = 210;
 		int goalTopMargin = 20;
 		int vspace = 50;
 		int line = 110;
 
 		Font.drawCentered(screen, "Goal:", goalX, goalTopMargin);
-		Font.drawCentered(screen, "collect 50 batches of treasure", goalX, goalTopMargin+10);
-		Font.drawCentered(screen, "from treasure trove located", goalX, goalTopMargin+20);
-		Font.drawCentered(screen, "at the center of the map", goalX, goalTopMargin+30);
-		Font.drawCentered(screen, "before your opponent(s)", goalX, goalTopMargin+40);
+		Font.drawCentered(screen, MojamComponent.texts.getStatic("help1"), goalX, goalTopMargin+10);
+		Font.drawCentered(screen, MojamComponent.texts.getStatic("help2"), goalX, goalTopMargin+20);
+		Font.drawCentered(screen, MojamComponent.texts.getStatic("help3"), goalX, goalTopMargin+30);
+		Font.drawCentered(screen, MojamComponent.texts.getStatic("help4"), goalX, goalTopMargin+40);
 		
 		screen.blit(Art.turret[7][0], imgTab-66, line);
 		screen.blit(Art.turret2[7][0], imgTab-33, line);
 		screen.blit(Art.turret3[7][0], imgTab, line);
-		Font.draw(screen, "turret", tab2, line);
-		screen.blit(Art.pickupCoinGold[0][0], tab2, line+10);
-		Font.draw(screen, "150", tab2+20, line+15);
-		Font.draw(screen, "shoots enemies around it.", tab3, line);
+		Font.draw(screen, MojamComponent.texts.getStatic("turret"), tab1, line);
+		screen.blit(Art.pickupCoinGold[0][0], tab1, line+10);
+		Font.draw(screen, "150", tab1+20, line+15);
+		Font.draw(screen, MojamComponent.texts.getStatic("turret1"), tab2, line);
 
 		
 		line += vspace;
 		screen.blit(Art.harvester[7][0], imgTab-66, line-10);
 		screen.blit(Art.harvester2[7][0], imgTab-33, line-10);
 		screen.blit(Art.harvester3[7][0], imgTab, line-10);
-		Font.draw(screen, "collector", tab2, line);
-		screen.blit(Art.pickupCoinGold[0][0], tab2, line+10);
-		Font.draw(screen, "300", tab2+20, line+15);
-		Font.draw(screen, "suck up coins around it. pick it up", tab3, line);
-		Font.draw(screen, "to recieve the collected coins.", tab3, line+10);
+		Font.draw(screen, MojamComponent.texts.getStatic("collector"), tab1, line);
+		screen.blit(Art.pickupCoinGold[0][0], tab1, line+10);
+		Font.draw(screen, "300", tab1+20, line+15);
+		Font.draw(screen, MojamComponent.texts.getStatic("collector1"), tab2, line);
+		Font.draw(screen, MojamComponent.texts.getStatic("collector2"), tab2, line+10);
 
 		line += vspace+10;
 		screen.blit(Art.bomb, imgTab, line);
-		Font.draw(screen, "bomb", tab2, line);
-		screen.blit(Art.pickupCoinGold[0][0], tab2, line+10);
-		Font.draw(screen, "500", tab2+20, line+15);
-		Font.draw(screen, "used to destroy purple gemmed walls.", tab3, line);
-		Font.draw(screen, "shoot to detonate.", tab3, line+10);
+		Font.draw(screen, MojamComponent.texts.getStatic("bomb"), tab1, line);
+		screen.blit(Art.pickupCoinGold[0][0], tab1, line+10);
+		Font.draw(screen, "500", tab1+20, line+15);
+		Font.draw(screen, MojamComponent.texts.getStatic("bomb1"), tab2, line);
+		Font.draw(screen, MojamComponent.texts.getStatic("bomb2"), tab2, line+10);
 
 		line += vspace;
 		screen.blit(Art.rails[1][0], imgTab, line);
-		Font.draw(screen, "rails", tab2, line);
-		screen.blit(Art.pickupCoinGold[0][0], tab2, line+10);
-		Font.draw(screen, "10 (+)", tab2+20, line+15);
-		Font.draw(screen, "15 (-)", tab2+20, line+25);
-		Font.draw(screen, "for rail-droids to collect treasure", tab3, line);
+		Font.draw(screen, MojamComponent.texts.getStatic("rails"), tab1, line);
+		screen.blit(Art.pickupCoinGold[0][0], tab1, line+10);
+		Font.draw(screen, "10 (+)", tab1+20, line+15);
+		Font.draw(screen, "15 (-)", tab1+20, line+25);
+		Font.draw(screen, MojamComponent.texts.getStatic("rails1"), tab2, line);
 		
 		
 
