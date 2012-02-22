@@ -14,13 +14,15 @@ public class StartGamePacketCustom extends Packet {
 	public Level level;
 	public int levelWidth, levelHeight;
 	public Short[] shorts;
+	public int difficulty;
 	
 	public StartGamePacketCustom() {
 	}
 
-	public StartGamePacketCustom(long gameSeed, Level level) {
+	public StartGamePacketCustom(long gameSeed, Level level, int difficulty) {
 		this.gameSeed = gameSeed;
 		this.level = level;
+		this.difficulty = difficulty;
 	}
 
 	@Override
@@ -33,6 +35,7 @@ public class StartGamePacketCustom extends Packet {
 		for(int i = 0; i < shorts.length; i++){
 			shorts[i] = dis.readShort();
 		}
+		this.difficulty = dis.readInt();
 	}
 
 	@Override
@@ -43,6 +46,7 @@ public class StartGamePacketCustom extends Packet {
 		for(int i = 0; i < level.tiles.length; i++){
 			dos.writeShort(TileID.tileToShort(level.tiles[i]));
 		}
+		dos.writeInt(difficulty);
 	}
 
 	public long getGameSeed() {
@@ -58,6 +62,10 @@ public class StartGamePacketCustom extends Packet {
 			}
 		}
 		return level;
+	}
+
+	public int getDifficulty() {
+		return difficulty;
 	}
 
 }
