@@ -38,8 +38,8 @@ import com.mojang.mojam.gui.DifficultySelect;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.GuiError;
 import com.mojang.mojam.gui.GuiMenu;
+import com.mojang.mojam.gui.Help;
 import com.mojang.mojam.gui.HostingWaitMenu;
-import com.mojang.mojam.gui.HowToPlay;
 import com.mojang.mojam.gui.JoinGameMenu;
 import com.mojang.mojam.gui.LevelSelect;
 import com.mojang.mojam.gui.TitleMenu;
@@ -572,12 +572,14 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	}
 
 	public void handleAction(int id) {
-		if (id == TitleMenu.RETURN_TO_TITLESCREEN) {
+	
+		switch (id) {
+		case TitleMenu.RETURN_TO_TITLESCREEN:
 			clearMenus();
 			TitleMenu menu = new TitleMenu(GAME_WIDTH, GAME_HEIGHT);
 			addMenu(menu);
-
-		} else if (id == TitleMenu.START_GAME_ID) {
+			break;
+		case TitleMenu.START_GAME_ID:
 			clearMenus();
 			isMultiplayer = false;
 
@@ -587,75 +589,35 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 			createLevel(TitleMenu.level);
 			soundPlayer.stopBackgroundMusic();
-		} else if (id == TitleMenu.SELECT_LEVEL_ID) {
+			break;
+		case TitleMenu.SELECT_LEVEL_ID:
 			addMenu(new LevelSelect(false));
-		} else if (id == TitleMenu.SELECT_HOST_LEVEL_ID) {
+			break;
+		case TitleMenu.SELECT_HOST_LEVEL_ID:
 			addMenu(new LevelSelect(true));
-		} else if (id == TitleMenu.UPDATE_LEVELS) {
-			GuiMenu menu = menuStack.pop();
-			if (menu instanceof LevelSelect) {
-				addMenu(new LevelSelect(((LevelSelect) menu).bHosting));
+		case TitleMenu.UPDATE_LEVELS:
+			GuiMenu menu2 = menuStack.pop();
+			if (menu2 instanceof LevelSelect) {
+				addMenu(new LevelSelect(((LevelSelect) menu2).bHosting));
 			} else {
 				addMenu(new LevelSelect(false));
 			}
-		} else if (id == TitleMenu.HOST_GAME_ID) {
+			break;
+		case TitleMenu.HOST_GAME_ID:
 			addMenu(new HostingWaitMenu());
-			isMultiplayer = true;
-			isServer = true;
-			try {
-				if (isServer) {
-					localId = 0;
-					serverSocket = new ServerSocket(3000);
-					serverSocket.setSoTimeout(1000);
-
-					hostThread = new Thread() {
-
-						public void run() {
-							boolean fail = true;
-							try {
-								while (!isInterrupted()) {
-									Socket socket = null;
-									try {
-										socket = serverSocket.accept();
-									} catch (SocketTimeoutException e) {
-
-									}
-									if (socket == null) {
-										System.out.println("Waiting for player to connect");
-										continue;
-									}
-									fail = false;
-
-									packetLink = new NetworkPacketLink(socket);
-
-									createServerState = 1;
-									break;
-								}
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-							if (fail) {
-								try {
-									serverSocket.close();
-								} catch (IOException e) {
-								}
-							}
-						};
-					};
-					hostThread.start();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else if (id == TitleMenu.JOIN_GAME_ID) {
+			initiateMultiplayer();
+			break;
+		case TitleMenu.JOIN_GAME_ID:
 			addMenu(new JoinGameMenu());
-		} else if (id == TitleMenu.CANCEL_JOIN_ID) {
+			break;
+		case TitleMenu.CANCEL_JOIN_ID:
 			popMenu();
 			if (hostThread != null) {
 				hostThread.interrupt();
 				hostThread = null;
 			}
-		} else if (id == TitleMenu.PERFORM_JOIN_ID) {
+			break;
+		case TitleMenu.PERFORM_JOIN_ID:			
 			menuStack.clear();
 			isMultiplayer = true;
 			isServer = false;
@@ -670,12 +632,68 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 				// System.exit(1);
 				addMenu(new TitleMenu(GAME_WIDTH, GAME_HEIGHT));
 			}
-		} else if (id == TitleMenu.HOW_TO_PLAY) {
-			addMenu(new HowToPlay());
-		} else if (id == TitleMenu.SELECT_DIFFICULTY_ID) {
+			break;
+		case TitleMenu.SELECT_DIFFICULTY_ID:
 			addMenu(new DifficultySelect());
-		} else if (id == TitleMenu.EXIT_GAME_ID) {
+			break;
+		case TitleMenu.SHOW_HELP:
+			addMenu(new Help());
+			break;
+		case TitleMenu.EXIT_GAME_ID:
 			System.exit(0);
+			break;
+		default:
+			break;
+		}
+	}
+	
+	private void initiateMultiplayer() {
+		isMultiplayer = true;
+		isServer = true;
+		try {
+			if (isServer) {
+				localId = 0;
+				serverSocket = new ServerSocket(3000);
+				serverSocket.setSoTimeout(1000);
+
+				hostThread = new Thread() {
+
+					public void run() {
+						boolean fail = true;
+						try {
+							while (!isInterrupted()) {
+								Socket socket = null;
+								try {
+									socket = serverSocket.accept();
+								} catch (SocketTimeoutException e) {
+
+								}
+								if (socket == null) {
+									System.out.println("asdf");
+									continue;
+								}
+								fail = false;
+
+								packetLink = new NetworkPacketLink(socket);
+
+								createServerState = 1;
+								break;
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						if (fail) {
+							try {
+								serverSocket.close();
+							} catch (IOException e) {
+							}
+						}
+					};
+				};
+				hostThread.start();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
