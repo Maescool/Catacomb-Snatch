@@ -9,7 +9,7 @@ import com.mojang.mojam.screen.Screen;
 public class HowToPlay extends GuiMenu {
 
 	public HowToPlay() {
-		addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, "back", MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25));
+		addButton(new Button(TitleMenu.BACK_ID, "back", MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25));
 	}
 
 	public void render(Screen screen) {
