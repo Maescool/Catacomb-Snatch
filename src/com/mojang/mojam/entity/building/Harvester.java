@@ -94,9 +94,9 @@ public class Harvester extends Building implements LootCollector {
 	}
 
 	protected void upgradeComplete() {
-	    health += 10;
 	    maxHealth += 10;
-		radius = upgradeRadius[upgradeLevel];
+	    health = maxHealth;
+        radius = upgradeRadius[upgradeLevel];
 		capacity = upgradeCapacities[upgradeLevel];
 	}
 

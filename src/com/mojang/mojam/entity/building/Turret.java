@@ -130,9 +130,9 @@ public class Turret extends Building {
 	}
 
 	protected void upgradeComplete() {
-	    health += 10;
 	    maxHealth += 10;
-		delay = upgradeDelay[upgradeLevel];
+	    health = maxHealth;
+        delay = upgradeDelay[upgradeLevel];
 		radius = upgradeRadius[upgradeLevel];
 		radiusSqr = radius * radius;
 	}
