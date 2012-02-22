@@ -19,10 +19,20 @@ public class LevelInformation {
 	public String levelDescription;
 	public boolean vanilla;
 
-	public LevelInformation(String levelName_, String levelFile_) {
-		this.levelName = levelName_;
-		this.levelFile = sanitizePath(levelFile_);
-		vanilla = isPathVanilla(levelFile);
+//	public LevelInformation(String levelName_, String levelFile_) {
+//		this.levelName = levelName_;
+//		this.levelFile = sanitizePath(levelFile_);
+//		vanilla = isPathVanilla(levelFile);
+//		
+//		localID = localIDcounter++;
+//		fileToInfo.put(levelFile, this);
+//		System.out.println("Map info added: "+levelFile+"("+(vanilla?"vanilla":"external")+")");
+//	}
+	
+	public LevelInformation(String levelName, String levelFile, boolean vanilla) {
+		this.levelName = levelName;
+		this.levelFile = sanitizePath(levelFile);
+		this.vanilla = vanilla;
 		
 		localID = localIDcounter++;
 		fileToInfo.put(levelFile, this);
