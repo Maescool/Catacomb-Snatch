@@ -42,6 +42,7 @@ import com.mojang.mojam.gui.HostingWaitMenu;
 import com.mojang.mojam.gui.HowToPlay;
 import com.mojang.mojam.gui.JoinGameMenu;
 import com.mojang.mojam.gui.LevelSelect;
+import com.mojang.mojam.gui.OverchargeBar;
 import com.mojang.mojam.gui.PauseMenu;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.Level;
@@ -390,6 +391,9 @@ public class MojamComponent extends Canvas implements Runnable,
 					screen.h - 49);
 			Font.draw(screen, texts.playerLevel(player.plevel), 340,
 					screen.h - 60);
+			Font.draw(screen, "Overcharge: ", 25, screen.h - 64);
+			int overcharge = player.overcharge > 80 ? 80 : player.overcharge;
+			OverchargeBar.draw(screen, overcharge, 80, 8, 115, screen.h - 64);
 		}
 
 		g.setColor(Color.BLACK);

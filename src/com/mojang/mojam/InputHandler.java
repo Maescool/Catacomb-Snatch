@@ -43,6 +43,8 @@ public class InputHandler implements KeyListener {
 
 		mappings.put(KeyEvent.VK_Y, keys.sprint);
 		mappings.put(KeyEvent.VK_NUMPAD0, keys.sprint);
+		
+		mappings.put(KeyEvent.VK_V, keys.overcharge);
 	}
 
 	public void keyPressed(KeyEvent ke) {
