@@ -165,15 +165,9 @@ public abstract class Mob extends Entity {
 
 	protected void addHealthBar(Screen screen) {
         
-        int bar_width = 30;
-        int bar_height = 2;
-        int start = (int) (health * bar_width / maxHealth);
-        Bitmap bar = new Bitmap(bar_width, bar_height);
-
-        bar.clear(0xff00ff00);
-        bar.fill(start, 0, bar_width - start, bar_height, 0xffff0000);
-
-        screen.blit(bar, pos.x - (bar_width / 2), pos.y + healthBarOffset);
+        int start = (int) (health * 21 / maxHealth);
+        
+        screen.blit(Art.healthBar[start][0], pos.x - 16, pos.y + healthBarOffset);
     }
 
 	protected void renderCarrying(Screen screen, int yOffs) {

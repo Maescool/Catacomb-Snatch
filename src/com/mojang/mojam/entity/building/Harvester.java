@@ -33,6 +33,7 @@ public class Harvester extends Building implements LootCollector {
 		setStartHealth(10);
 		freezeTime = 10;
 		makeUpgradeableWithCosts(new int[] { 500, 1000, 5000 });
+		healthBarOffset = 13;
 	}
 
 	public void notifySucking() {
@@ -136,22 +137,13 @@ public class Harvester extends Building implements LootCollector {
 		if (health < maxHealth)
             addHealthBar(screen);
 
-		// will get rid of texts this soon -> upgrade graphics + money bar
 		addMoneyBar(screen);
-		// Font.drawCentered(screen, money + "/" + capacity, (int) (pos.x), (int) (pos.y - 30));
 	}
 	
 	private void addMoneyBar(Screen screen) {
         
-        int bar_width = 2;
-        int bar_height = 30;
-        int start = money * bar_height / capacity;
-        Bitmap bar = new Bitmap(bar_width, bar_height);
-
-        bar.clear(0xcc0000cc);
-        bar.fill(0, bar_height - start, bar_width, start, 0xffcccc00);
-
-        screen.blit(bar, pos.x + 18, pos.y - bar_height + 5);
+	    int start = (int) (money * 21 / capacity);
+        screen.blit(Art.moneyBar[start][0], pos.x - 16, pos.y + 8);
     }
 	
 	public void take(Loot loot) {
