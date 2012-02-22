@@ -5,6 +5,7 @@ import com.mojang.mojam.entity.*;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
+import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.screen.*;
 
 public class ShopItem extends Building {
@@ -18,6 +19,7 @@ public class ShopItem extends Building {
 	public static final int[] COST = { 150, 300, 500 };
 
 	private final int type;
+	private int effectiveCost;
 
 	public ShopItem(double x, double y, int type, int team) {
 		super(x, y, team);
@@ -32,10 +34,11 @@ public class ShopItem extends Building {
 	public void render(Screen screen) {
 		super.render(screen);
 		// Bitmap image = getSprite();
-		Font.drawCentered(screen, MojamComponent.texts.cost(COST[type]), (int) (pos.x), (int) (pos.y + 10));
+		Font.drawCentered(screen, MojamComponent.texts.cost(effectiveCost), (int) (pos.x), (int) (pos.y + 10));
 	}
 
 	public void init() {
+		effectiveCost = DifficultyInformation.calculateCosts(COST[type]);
 	}
 
 	public void tick() {
@@ -58,8 +61,8 @@ public class ShopItem extends Building {
 	public void use(Entity user) {
 		if (user instanceof Player && ((Player) user).getTeam() == team) {
 			Player player = (Player) user;
-			if (player.carrying == null && player.getScore() >= COST[type]) {
-				player.payCost(COST[type]);
+			if (player.carrying == null && player.getScore() >= effectiveCost) {
+				player.payCost(effectiveCost);
 				Building item = null;
 				switch (type) {
 				case SHOP_TURRET:
@@ -74,7 +77,7 @@ public class ShopItem extends Building {
 				}
 				level.addEntity(item);
 				player.pickup(item);
-			} else if ( player.getScore() < COST[type] ){
+			} else if ( player.getScore() < effectiveCost ){
 				Notifications.getInstance().add("You dont have enough money");
 			}
 		}

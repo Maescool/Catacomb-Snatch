@@ -2,16 +2,17 @@ package com.mojang.mojam.entity.mob;
 
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.gui.TitleMenu;
+import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.*;
 
-public class Bat extends Mob {
+public class Bat extends HostileMob {
 	private int tick = 0;
 
 	public Bat(double x, double y) {
 		super(x, y, Team.Neutral);
 		setPos(x, y);
-		setStartHealth(1 + TitleMenu.Difficulty);
+		setStartHealth(1);
 		dir = TurnSynchronizer.synchedRandom.nextDouble() * Math.PI * 2;
 		minimapColor = 0xffff0000;
 		yOffs = 5;
@@ -67,7 +68,7 @@ public class Bat extends Mob {
 		if (entity instanceof Mob) {
 			Mob mob = (Mob) entity;
 			if (isNotFriendOf(mob)) {
-				mob.hurt(this, 1);
+				mob.hurt(this, DifficultyInformation.calculateStrength(1));
 			}
 		}
 	}

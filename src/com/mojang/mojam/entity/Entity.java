@@ -51,13 +51,11 @@ public abstract class Entity implements BBOwner {
 	}
 
 	public BB getBB() {
-		return new BB(this, pos.x - radius.x, pos.y - radius.y, pos.x
-				+ radius.x, pos.y + radius.y);
+		return new BB(this, pos.x - radius.x, pos.y - radius.y, pos.x + radius.x, pos.y + radius.y);
 	}
 
 	public void render(Screen screen) {
-		screen.blit(Art.floorTiles[3][0], pos.x - Tile.WIDTH / 2, pos.y
-				- Tile.HEIGHT / 2 - 8);
+		screen.blit(Art.floorTiles[3][0], pos.x - Tile.WIDTH / 2, pos.y - Tile.HEIGHT / 2 - 8);
 	}
 
 	protected boolean move(double xa, double ya) {
@@ -147,8 +145,7 @@ public abstract class Entity implements BBOwner {
 	}
 
 	public final boolean blocks(Entity e) {
-		return isBlocking && e.isBlocking && shouldBlock(e)
-				&& e.shouldBlock(this);
+		return isBlocking && e.isBlocking && shouldBlock(e) && e.shouldBlock(this);
 	}
 
 	protected boolean shouldBlock(Entity e) {
@@ -159,6 +156,7 @@ public abstract class Entity implements BBOwner {
 		removed = true;
 	}
 
+	@Override
 	public void handleCollision(Entity entity, double xa, double ya) {
 		if (this.blocks(entity)) {
 			this.collide(entity, xa, ya);

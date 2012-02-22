@@ -74,7 +74,7 @@ public class Building extends Mob implements IUsable {
 	}
 
 	@Override
-	public void hurt(Entity source, int damage) {
+	public void hurt(Entity source, float damage) {
 		super.hurt(source, damage);
 		healingTime = HEALING_INTERVAL;
 	}
