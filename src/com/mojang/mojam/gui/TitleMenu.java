@@ -12,19 +12,21 @@ public class TitleMenu extends GuiMenu {
 	public static final int HOST_GAME_ID = 1002;
 	public static final int JOIN_GAME_ID = 1003;
 	public static final int EXIT_GAME_ID = 1001;
-
 	public static final int CANCEL_JOIN_ID = 1004;
 	public static final int PERFORM_JOIN_ID = 1005;
 	public static final int RETURN_TO_TITLESCREEN = 1006;
 	public static final int SELECT_LEVEL_ID = 1007;
 	public static final int SELECT_HOST_LEVEL_ID = 1008;
 	public static final int SELECT_DIFFICULTY_ID = 1009;
-	public static final int HOW_TO_PLAY = 1010;
 	public static final int UPDATE_LEVELS = 1011;
+	public static final int SHOW_HELP = 1010;
+	
+	public static int TOP_MARGIN = 180;
+	public static int BUTTON_HEIGHT = 30;
 
 	public static LevelInformation level = null;
 	public static int Difficulty = 0;
-
+	
 	// public static lol... ;)
 	public static String ip = "";
 
@@ -35,11 +37,13 @@ public class TitleMenu extends GuiMenu {
 		super();
 		this.gameWidth = gameWidth;
 
-		addButton(new Button(SELECT_LEVEL_ID, "Start", (gameWidth - 128) / 2, 200));
-		addButton(new Button(SELECT_HOST_LEVEL_ID, "Host", (gameWidth - 128) / 2, 230));
-		addButton(new Button(JOIN_GAME_ID, "Join", (gameWidth - 128) / 2, 260));
-		addButton(new Button(HOW_TO_PLAY, "How to play", (gameWidth - 128) / 2, 290));
-		addButton(new Button(EXIT_GAME_ID, "Exit", (gameWidth - 128) / 2, 320));
+		addButton(new Button(SELECT_LEVEL_ID, "Start", (gameWidth - 128) / 2, TOP_MARGIN+buttons.size()*BUTTON_HEIGHT));
+		addButton(new Button(SELECT_HOST_LEVEL_ID, "Host", (gameWidth - 128) / 2,
+				TOP_MARGIN+buttons.size()*BUTTON_HEIGHT));
+		addButton(new Button(JOIN_GAME_ID, "Join", (gameWidth - 128) / 2, TOP_MARGIN+buttons.size()*BUTTON_HEIGHT));
+		addButton(new Button(SHOW_HELP, "Help", (gameWidth - 128) / 2, TOP_MARGIN+buttons.size()*BUTTON_HEIGHT));
+		addButton(new Button(EXIT_GAME_ID, "Exit", (gameWidth - 128) / 2, TOP_MARGIN+buttons.size()*BUTTON_HEIGHT));
+
 	}
 
 	@Override
@@ -51,7 +55,8 @@ public class TitleMenu extends GuiMenu {
 
 		super.render(screen);
 
-		screen.blit(Art.lordLard[0][6], (gameWidth - 128) / 2 - 40, 190 + selectedItem * 30);
+		screen.blit(Art.lordLard[0][6], (gameWidth - 128) / 2 - 40,
+				TOP_MARGIN-10 + selectedItem * BUTTON_HEIGHT);
 	}
 
 	@Override
@@ -59,11 +64,11 @@ public class TitleMenu extends GuiMenu {
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			selectedItem--;
 			if (selectedItem < 0) {
-				selectedItem = 4;
+				selectedItem = buttons.size()-1;
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 			selectedItem++;
-			if (selectedItem > 4) {
+			if (selectedItem > buttons.size()-1) {
 				selectedItem = 0;
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
