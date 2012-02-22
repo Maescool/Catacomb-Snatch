@@ -20,6 +20,7 @@ public class JoinGameMenu extends GuiMenu {
 	public void render(Screen screen) {
 
 		screen.clear(0);
+		screen.blit(Art.emptyBackground, 0, 0);
 		Font.draw(screen, MojamComponent.texts.enterIP(), 100, 100);
 		Font.draw(screen, TitleMenu.ip + "-", 100, 120);
 
