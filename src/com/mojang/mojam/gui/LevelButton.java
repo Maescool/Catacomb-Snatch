@@ -77,15 +77,17 @@ public class LevelButton extends ClickableComponent {
 		return id;
 	}
 
-	// TEMP DUMMY BACKGROUND GFX
 	private static Bitmap background[] = new Bitmap[3];
 	static {
 		background[0] = new Bitmap(WIDTH, HEIGHT);
-		Arrays.fill(background[0].pixels, 0xffA8A800);
+		background[0].fill(0, 0, WIDTH, HEIGHT, 0xff522d16);
+		background[0].fill(1, 1, WIDTH-2, HEIGHT-2, 0);
 		background[1] = new Bitmap(WIDTH, HEIGHT);
-		Arrays.fill(background[1].pixels, 0xff00A8A8);
+		background[1].fill(0, 0, WIDTH, HEIGHT, 0xff26150a);
+		background[1].fill(1, 1, WIDTH-2, HEIGHT-2, 0);
 		background[2] = new Bitmap(WIDTH, HEIGHT);
-		Arrays.fill(background[2].pixels, 0xffA800A8);
+		background[2].fill(0, 0, WIDTH, HEIGHT, 0xff26150a);
+		background[2].fill(1, 1, WIDTH-2, HEIGHT-2, 0xff3a210f);
 	}
 
 	@Override
