@@ -722,8 +722,6 @@ public class MojamComponent extends Canvas implements Runnable,
 		} else if (id == TitleMenu.RETURN_ID) {
 			synchronizer.addCommand(new PauseCommand(false));
 			keys.tick();
-		} else if (id == TitleMenu.BACK_ID) {
-			popMenu();
 		}
 	}
 

@@ -14,11 +14,12 @@ public class Font {
 	private static String currentFont = "";
 
 	static {
-		fonts.put("", new Font(Art.font));
-		addFont("/font_blue.png");
-		addFont("/font_red.png");
-		addFont("/font_gray.png");
-	}
+                fonts.put("", new Font(Art.font_default));
+                fonts.put("", new Font(Art.font_blue));
+                fonts.put("", new Font(Art.font_gray));
+                fonts.put("", new Font(Art.font_red)); 
+		fonts.put("", new Font(Art.font_gold));
+        }
 	
 	public static void addFont(String s){
 		s = s.toLowerCase();
