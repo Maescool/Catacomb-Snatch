@@ -22,7 +22,9 @@ public class Player extends Mob implements LootCollector {
 	public static final int COST_DROID = 50;
 	public static final int COST_REMOVE_RAIL = 15;
 	public static final int REGEN_INTERVAL = 60 * 3;
-
+	public int plevel;
+	public int pnextlevel;
+	public double pexp;
 	public Keys keys;
 	public MouseButtons mouseButtons;
 	public int mouseFireButton = 1;
@@ -59,17 +61,44 @@ public class Player extends Mob implements LootCollector {
 		super(x, y, team);
 		this.keys = keys;
 		this.mouseButtons = mouseButtons;
+		
+	    startX = x;
+	    startY = y;
 
 		startX = x;
 		startY = y;
-
+		plevel = 1;
+	    pexp = 0;
+	    
+	    maxHealth=5;
+	    health=5;
+	    
 		aimVector = new Vec2(0, 1);
 
 		score = 0;
 		weapon = new Rifle(this);
 	}
-
-	public void tick() {		
+	private void calculLevel() {
+		if(pexp>=nextLevel()){
+			levelUp();
+		}
+	}
+	private double nextLevel(){
+		double next = (plevel*7)*(plevel*7);
+		pnextlevel=(int) next;
+		return next;
+	}
+	public double getNextLevel(){
+		double next = nextLevel()-pexp;
+		return next;
+	}
+	private void levelUp(){
+		this.maxHealth++;
+		this.regenDelay=2;
+		plevel++;
+	}
+	public void tick() {
+		calculLevel();
 		time++;
 		minimapIcon = time / 3 % 4;
 		if (minimapIcon == 3) {

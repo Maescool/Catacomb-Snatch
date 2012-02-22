@@ -3,6 +3,7 @@ package com.mojang.mojam.entity.mob;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.*;
 import com.mojang.mojam.entity.animation.EnemyDieAnimation;
+import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.screen.*;
@@ -162,6 +163,12 @@ public abstract class Mob extends Entity {
 			return;
 
 		if (freezeTime <= 0) {
+			if(!(this instanceof SpawnerEntity)){
+            	if(bullet.owner instanceof Player){
+            		Player pl = (Player)bullet.owner;
+            		pl.pexp++;
+            	}
+            }
 			hurtTime = 40;
 			freezeTime = 5;
 			health--;
@@ -177,6 +184,7 @@ public abstract class Mob extends Entity {
 			return;
 
 		if (freezeTime <= 0) {
+			
 			hurtTime = 40;
 			freezeTime = 5;
 			health -= damage;

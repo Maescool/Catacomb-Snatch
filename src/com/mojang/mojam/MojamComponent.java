@@ -277,8 +277,11 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		// }
 		// }
 		if (player != null && menuStack.size() == 0) {
-			Font.draw(screen, player.health + " / 10", 340, screen.h - 19);
-			Font.draw(screen, "" + player.score, 340, screen.h - 33);
+            Font.draw(screen, player.health + " / "+player.maxHealth, 340, screen.h - 16);
+            Font.draw(screen, "" + player.score, 340, screen.h - 27);
+            Font.draw(screen, "" + ((int)player.getNextLevel()), 340, screen.h - 38);
+            Font.draw(screen, "" + ((int)player.pexp), 340, screen.h - 49);
+            Font.draw(screen, "" + player.plevel, 340, screen.h - 60);
 		}
 
 		g.setColor(Color.BLACK);
