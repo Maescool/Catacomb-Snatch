@@ -45,9 +45,7 @@ public class Turret extends Building {
 		Entity closest = null;
 		double closestDist = 99999999.0f;
 		for (Entity e : entities) {
-			if (!(e instanceof Mob))
-				continue;
-			if ((e instanceof RailDroid))
+			if (!(e instanceof Mob) || e instanceof RailDroid || e instanceof Bomb)
 				continue;
 			if (!((Mob) e).isNotFriendOf(this))
 				continue;
