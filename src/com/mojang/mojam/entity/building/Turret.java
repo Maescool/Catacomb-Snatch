@@ -4,11 +4,15 @@ import java.util.Set;
 
 import com.mojang.mojam.entity.*;
 import com.mojang.mojam.entity.mob.*;
+import com.mojang.mojam.gui.TitleMenu;
+import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.screen.*;
 
 public class Turret extends Building {
 
+	private static final float BULLET_DAMAGE = .75f;
+	
 	private int delayTicks = 0;
 	private int delay;
 	private double radius;
@@ -24,10 +28,10 @@ public class Turret extends Building {
 		setStartHealth(10);
 		freezeTime = 10;
 
-		makeUpgradeableWithCosts(new int[] { 500, 1000, 5000 });
 	}
 
 	public void init() {
+		makeUpgradeableWithCosts(new int[] { DifficultyInformation.calculateCosts(500), DifficultyInformation.calculateCosts(1000), DifficultyInformation.calculateCosts(5000)});
 	}
 
 	public void tick() {
@@ -60,12 +64,12 @@ public class Turret extends Building {
 		double xd = closest.pos.x - pos.x;
 		double angle = (Math.atan2(yd, xd) + Math.PI * 1.625);
 		facing = (8 + (int) (angle / Math.PI * 4)) & 7;
-		Bullet bullet = new Bullet(this, xd * invDist, yd * invDist);
+		Bullet bullet = new Bullet(this, xd * invDist, yd * invDist, BULLET_DAMAGE * ((upgradeLevel + 1) / 2.f));
 		bullet.pos.y -= 10;
 		level.addEntity(bullet);
 
 		if (upgradeLevel > 0) {
-			Bullet second_bullet = new Bullet(this, xd * invDist, yd * invDist);
+			Bullet second_bullet = new Bullet(this, xd * invDist, yd * invDist, BULLET_DAMAGE * ((upgradeLevel + 1) / 2.f));
 			level.addEntity(second_bullet);
 			if (facing == 0 || facing == 4) {
 				bullet.pos.x -= 5;
@@ -82,7 +86,7 @@ public class Turret extends Building {
 		int x2 = (int) dx2 / Tile.WIDTH;
 		int y2 = (int) dy2 / Tile.HEIGHT;
 
-		Bullet bullet = new Bullet(this, pos.x, pos.y);
+		Bullet bullet = new Bullet(this, pos.x, pos.y, BULLET_DAMAGE * ((upgradeLevel + 1) / 2.f));
 
 		int dx, dy, inx, iny, e;
 		Tile temp;

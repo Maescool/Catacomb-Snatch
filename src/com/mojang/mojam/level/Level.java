@@ -1,6 +1,7 @@
 package com.mojang.mojam.level;
 
 import java.awt.image.BufferedImage;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,7 +24,6 @@ import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
-import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.tile.DestroyableWallTile;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.SandTile;
@@ -160,7 +160,7 @@ public class Level {
 	public void init() {
 		Random random = TurnSynchronizer.synchedRandom;
 
-		maxMonsters = 2000 + 500 * TitleMenu.Difficulty;
+		maxMonsters = 1500 + (int)DifficultyInformation.calculateStrength(500);
 
 		for (int i = 0; i < 11; i++) {
 			double x = (random.nextInt(width - 16) + 8) * Tile.WIDTH

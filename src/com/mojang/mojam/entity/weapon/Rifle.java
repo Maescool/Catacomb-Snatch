@@ -10,6 +10,8 @@ public class Rifle implements IWeapon {
 
 	private Player owner;
 	
+	private static final float BULLET_DAMAGE = .5f;
+	
 	private int upgradeIndex = 1;
 	private double accuracy = 0.15;
 	private int shootDelay = 5;
@@ -41,7 +43,7 @@ public class Rifle implements IWeapon {
 			yDir = Math.sin(dir);			
 			applyImpuls(xDir, yDir, 1);
 			
-			Entity bullet = new Bullet(owner, xDir, yDir);
+			Entity bullet = new Bullet(owner, xDir, yDir, BULLET_DAMAGE);
 			owner.level.addEntity(bullet);
 			
 			owner.muzzleTicks = 3;

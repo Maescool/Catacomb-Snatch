@@ -47,11 +47,11 @@ public class Building extends Mob implements IUsable {
 		}
 	}
 
-	protected void addHealthBar(Screen screen, int health, int maxhealth) {
+	protected void addHealthBar(Screen screen, float health, float maxhealth) {
 
 		int bar_width = 30;
 		int bar_height = 2;
-		int start = health * bar_width / maxhealth;
+		int start = (int)(health * bar_width / maxhealth);
 		Bitmap bar = new Bitmap(bar_width, bar_height);
 
 		bar.clear(0xff00ff00);

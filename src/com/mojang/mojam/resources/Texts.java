@@ -50,11 +50,12 @@ public class Texts {
 	}
 
 	public String cost(int cost) {
-		return MessageFormat.format(texts.getString("cost"), cost);
+		// Convert to String to suppress the dot over 1k cost
+		return MessageFormat.format(texts.getString("cost"), String.valueOf(cost));
 	}
 
-	public String health(int health, int maxHealth) {
-		return MessageFormat.format(texts.getString("health"), (float)health / (float)maxHealth * 100);
+	public String health(float health, float maxHealth) {
+		return MessageFormat.format(texts.getString("health"), health / maxHealth * 100);
 	}
 
 	public String money(int money) {

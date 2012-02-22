@@ -8,9 +8,10 @@ public class DifficultyList {
 
 	private static void createDifficultyList() {
 		Difficulties = new ArrayList<DifficultyInformation>();
-		Difficulties.add(new DifficultyInformation("Easy", 0));
-		Difficulties.add(new DifficultyInformation("Normal", 1));
-		Difficulties.add(new DifficultyInformation("Hard", 2));
+		Difficulties.add(new DifficultyInformation("Easy", .5f, .5f, 1.5f, .5f));
+		Difficulties.add(new DifficultyInformation("Normal", 1, 1, 1, 1));
+		Difficulties.add(new DifficultyInformation("Hard", 3, 3, .5f, 1.5f));
+		Difficulties.add(new DifficultyInformation("Nightmare", 6, 5, .25f, 2.5f));
 	}
 
 	public static ArrayList<DifficultyInformation> getDifficulties() {

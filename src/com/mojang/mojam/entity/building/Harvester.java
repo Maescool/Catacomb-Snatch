@@ -114,7 +114,7 @@ public class Harvester extends Building implements LootCollector {
 				if (health < 0) {
 					health = 0;
 				}
-				int col = 180 - health * 180 / maxHealth;
+				int col = (int)(180 - health * 180 / maxHealth);
 				if (hurtTime < 10) {
 					col = col * hurtTime / 10;
 				}

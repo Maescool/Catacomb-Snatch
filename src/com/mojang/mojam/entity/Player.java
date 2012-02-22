@@ -449,7 +449,7 @@ public class Player extends Mob implements LootCollector {
 	}
 
 	@Override
-	public void hurt(Entity source, int damage) {
+	public void hurt(Entity source, float damage) {
 		if (isImmortal) {
 			return;
 		}

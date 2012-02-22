@@ -20,8 +20,8 @@ public abstract class Mob extends Entity {
 	public int hurtTime = 0;
 	public int freezeTime = 0;
 	public int bounceWallTime = 0;
-	public int maxHealth = 10;
-	public int health = maxHealth;
+	public float maxHealth = 10;
+	public float health = maxHealth;
 	public boolean isImmortal = false;
 	public double xBump, yBump;
 	public Mob carrying = null;
@@ -40,7 +40,7 @@ public abstract class Mob extends Entity {
 		super.init();
 	}
 
-	public void setStartHealth(int newHealth) {
+	public void setStartHealth(float newHealth) {
 		maxHealth = health = newHealth;
 	}
 
@@ -147,7 +147,7 @@ public abstract class Mob extends Entity {
 			} else {
 				if (health < 0)
 					health = 0;
-				int col = 180 - health * 180 / maxHealth;
+				int col = 180 - (int)health * 180 / (int)maxHealth;
 				if (hurtTime < 10)
 					col = col * hurtTime / 10;
 				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h
@@ -188,7 +188,7 @@ public abstract class Mob extends Entity {
 		}
 	}
 
-	public void hurt(Entity source, int damage) {
+	public void hurt(Entity source, float damage) {
 		if (isImmortal)
 			return;
 
