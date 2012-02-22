@@ -73,4 +73,16 @@ public class Texts {
 		return MessageFormat.format(texts.getString("FPS"), fps);
 	}
 
+	public String nextLevel(int nextLevel) {
+		return MessageFormat.format(texts.getString("nextLevel"), nextLevel);
+	}
+
+	public String playerExp(int pexp) {
+		return MessageFormat.format(texts.getString("playerExp"), pexp);
+	}
+
+	public String playerLevel(int plevel) {
+		return MessageFormat.format(texts.getString("playerLevel"), plevel);
+	}
+
 }
