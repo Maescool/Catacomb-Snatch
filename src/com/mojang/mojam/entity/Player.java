@@ -22,8 +22,7 @@ public class Player extends Mob implements LootCollector {
 	public static final int COST_DROID = 50;
 	public static final int COST_REMOVE_RAIL = 15;
 	public static final int REGEN_INTERVAL = 60 * 3;
-	public static final int COST_OVERCHARGE = 100;
-
+	
 	public int plevel;
 	public int pnextlevel;
 	public double pexp;
@@ -61,7 +60,6 @@ public class Player extends Mob implements LootCollector {
 	private int muzzleImage = 0;
 	
 	public int overcharge = 0;
-	public int overchargesAvailable = 0;
 
 	private int nextWalkSmokeTick = 0;
 
@@ -170,19 +168,6 @@ public class Player extends Mob implements LootCollector {
 		if (keys.right.isDown) {
 			xa++;
 		}
-		
-		if (keys.overcharge.isDown && score >= COST_OVERCHARGE) {
-        	if (overcharge < 80) {
-        		overcharge += 3;
-        	} else {
-        		overcharge = 80;
-        	}
-        }
-        if (keys.overcharge.wasReleased() && score < COST_OVERCHARGE) {
-        	overcharge = 0;
-        }
-        
-        overchargesAvailable = score / 100;
 
 		if (!mouseAiming && !keys.fire.isDown && !mouseButtons.isDown(mouseFireButton) && xa * xa + ya * ya != 0) {
 			aimVector.set(xa, ya);
@@ -262,7 +247,7 @@ public class Player extends Mob implements LootCollector {
 		yBump *= 0.8;
 		muzzleImage = (muzzleImage + 1) & 3;
 
-		if (carrying == null && keys.overcharge.wasReleased() && score >= COST_OVERCHARGE) {
+		if (carrying == null && keys.overcharge.wasReleased() && overcharge > 15) {
             xd -= xa;
             yd -= ya;
             Entity bullet = new Bullet(this, 0.1 * overcharge / 10, 0.0001, 7);
@@ -285,7 +270,6 @@ public class Player extends Mob implements LootCollector {
             muzzleX = bullet.pos.x + 7 * xa - 8;
             muzzleY = bullet.pos.y + 5 * ya - 8 + 1;
             MojamComponent.soundPlayer.playSound("/sound/Shot 1.wav", (float) pos.x, (float) pos.y);
-            payCost(COST_OVERCHARGE);
             overcharge = 0;
         }
 		
