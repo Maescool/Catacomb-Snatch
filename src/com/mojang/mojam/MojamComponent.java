@@ -44,7 +44,6 @@ import com.mojang.mojam.gui.JoinGameMenu;
 import com.mojang.mojam.gui.LevelSelect;
 import com.mojang.mojam.gui.PauseMenu;
 import com.mojang.mojam.gui.TitleMenu;
-import com.mojang.mojam.gui.WinMenu;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.LevelList;
@@ -135,35 +134,44 @@ public class MojamComponent extends Canvas implements Runnable,
 		LevelList.createLevelList();
 	}
 
+	@Override
 	public void mouseDragged(MouseEvent arg0) {
 		mouseMoved = true;
 	}
 
+	@Override
 	public void mouseMoved(MouseEvent arg0) {
 		mouseMoved = true;
 	}
 
+	@Override
 	public void mouseClicked(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e) {
 		mouseButtons.releaseAll();
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e) {
 		mouseButtons.setNextState(e.getButton(), true);
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 		mouseButtons.setNextState(e.getButton(), false);
 	}
 
+	@Override
 	public void paint(Graphics g) {
 	}
 
+	@Override
 	public void update(Graphics g) {
 	}
 
@@ -217,12 +225,12 @@ public class MojamComponent extends Canvas implements Runnable,
 		try {
 			level = Level.fromFile(li);
 		} catch (Exception ex) {
-			// throw new RuntimeException("Unable to load level", ex);
 			ex.printStackTrace();
 			showError("Unable to load map.");
 			return;
 		}
 		initLevel();
+		paused = false;
 	}
 
 	private synchronized void initLevel() {
@@ -248,6 +256,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		player.setCanSee(true);
 	}
 
+	@Override
 	public void run() {
 		long lastTime = System.nanoTime();
 		double unprocessed = 0;
@@ -399,12 +408,6 @@ public class MojamComponent extends Canvas implements Runnable,
 					* SCALE, null);
 		}
 
-		// String msg = "FPS: " + fps;
-		// g.setColor(Color.LIGHT_GRAY);
-		// g.drawString(msg, 11, 11);
-		// g.setColor(Color.WHITE);
-		// g.drawString(msg, 10, 10);
-
 	}
 
 	private void renderMouse(Screen screen, MouseButtons mouseButtons) {
@@ -432,47 +435,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	}
 
 	private void tick() {
-		if (level != null) {
-			if (synchronizer.preTurn()) {
-				synchronizer.postTurn();
 
-				if (!paused) {
-					for (int index = 0; index < keys.getAll().size(); index++) {
-						Keys.Key key = keys.getAll().get(index);
-						boolean nextState = key.nextState;
-						if (key.isDown != nextState) {
-							synchronizer.addCommand(new ChangeKeyCommand(index,
-									nextState));
-						}
-					}
-
-					keys.tick();
-					for (Keys skeys : synchedKeys) {
-						skeys.tick();
-					}
-
-					//level.tick();
-					if (keys.pause.wasPressed()) {
-						keys.release();
-						synchronizer.addCommand(new PauseCommand(true));
-					}
-
-					if (level.player1Score >= Level.TARGET_SCORE) {
-						addMenu(new WinMenu(GAME_WIDTH, GAME_HEIGHT, 1));
-						soundPlayer.startEndMusic();
-						level = null;
-						return;
-					}
-					if (level.player2Score >= Level.TARGET_SCORE) {
-						addMenu(new WinMenu(GAME_WIDTH, GAME_HEIGHT, 2));
-						soundPlayer.startEndMusic();
-						level = null;
-						return;
-					}
-				}
-			}
-
-		}
 		if (packetLink != null) {
 			packetLink.tick();
 		}
@@ -499,32 +462,40 @@ public class MojamComponent extends Canvas implements Runnable,
 		if (level != null) {
 			if (synchronizer.preTurn()) {
 				synchronizer.postTurn();
-				for (int index = 0; index < keys.getAll().size(); index++) {
-					Keys.Key key = keys.getAll().get(index);
-					boolean nextState = key.nextState;
-					if (key.isDown != nextState) {
-						synchronizer.addCommand(new ChangeKeyCommand(index,
-								nextState));
+				
+				if (!paused) {
+					for (int index = 0; index < keys.getAll().size(); index++) {
+						Keys.Key key = keys.getAll().get(index);
+						boolean nextState = key.nextState;
+						if (key.isDown != nextState) {
+							synchronizer.addCommand(new ChangeKeyCommand(index,
+									nextState));
+						}
 					}
+					
+					keys.tick();
+					for (Keys skeys : synchedKeys) {
+						skeys.tick();
+					}
+	
+					if (keys.pause.wasPressed()) {
+						keys.release();
+						synchronizer.addCommand(new PauseCommand(true));
+					}
+						
+					// if mouse is in use, update player orientation before level tick
+					if (!mouseHidden) {
+	
+						// update player mouse, in world pixels relative to player
+						player.setAimByMouse(
+								((mouseButtons.getX() / SCALE) - (screen.w / 2)),
+								(((mouseButtons.getY() / SCALE) + 24) - (screen.h / 2)));
+					} else {
+						player.setAimByKeyboard();
+					}
+	
+					level.tick();
 				}
-				keys.tick();
-				for (Keys skeys : synchedKeys) {
-					skeys.tick();
-				}
-
-				// if mouse is in use, update player orientation before level
-				// tick
-				if (!mouseHidden) {
-
-					// update player mouse, in world pixels relative to player
-					player.setAimByMouse(
-							((mouseButtons.getX() / SCALE) - (screen.w / 2)),
-							(((mouseButtons.getY() / SCALE) + 24) - (screen.h / 2)));
-				} else {
-					player.setAimByKeyboard();
-				}
-
-				level.tick();
 
 				// every 4 minutes, start new background music :)
 				if (System.currentTimeMillis() / 1000 > nextMusicInterval) {
@@ -587,6 +558,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	}
 
+	@Override
 	public void handle(int playerId, NetworkCommand packet) {
 
 		if (packet instanceof ChangeKeyCommand) {
@@ -606,6 +578,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		}
 	}
 
+	@Override
 	public void handle(Packet packet) {
 		if (packet instanceof StartGamePacket) {
 			if (!isServer) {
@@ -620,11 +593,13 @@ public class MojamComponent extends Canvas implements Runnable,
 				StartGamePacketCustom sgPacker = (StartGamePacketCustom) packet;
 				synchronizer.onStartGamePacket(sgPacker.getGameSeed());
 				level = sgPacker.getLevel();
+				paused = false;
 				initLevel();
 			}
 		}
 	}
 
+	@Override
 	public void buttonPressed(ClickableComponent component) {
 
 		if (component instanceof Button) {
@@ -672,6 +647,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 					hostThread = new Thread() {
 
+						@Override
 						public void run() {
 							boolean fail = true;
 							try {
@@ -763,18 +739,21 @@ public class MojamComponent extends Canvas implements Runnable,
 		}
 	}
 
+	@Override
 	public void keyPressed(KeyEvent e) {
 		if (!menuStack.isEmpty()) {
 			menuStack.peek().keyPressed(e);
 		}
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 		if (!menuStack.isEmpty()) {
 			menuStack.peek().keyReleased(e);
 		}
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e) {
 		if (!menuStack.isEmpty()) {
 			menuStack.peek().keyTyped(e);
