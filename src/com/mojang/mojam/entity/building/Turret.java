@@ -84,20 +84,57 @@ public class Turret extends Building {
 		delayTicks = delay;
 	}
 	
-	private boolean isTargetBehindWall(double targetPosX, double targetPosY){
-	    
-	    // work in progress
-	    
-	    int tileX = (int) Math.round((pos.x-298.0)/Tile.WIDTH);
-        int tileY = (int) Math.round((pos.y-298.0)/Tile.HEIGHT);
-        
-        int targetTileX = (int) Math.round((targetPosX-298.0)/Tile.WIDTH);
-        int targetTileY = (int) Math.round((targetPosY-298.0)/Tile.WIDTH);
-        
- //       System.out.println("x: " + tileX  + "     y: " + tileY);
- //       System.out.println("targetTileX: " + targetTileX  + "     targetTileY: " + targetTileY);
-        
-        return false;
+	private boolean isTargetBehindWall( double dx2, double dy2){
+		int x1 = (int) pos.x/Tile.WIDTH;
+		int y1 = (int) pos.y/Tile.HEIGHT;
+		int x2 = (int) dx2/Tile.WIDTH;
+		int y2 = (int) dy2/Tile.HEIGHT;
+		
+		int dx, dy, inx, iny, e;
+		boolean re=false;
+		Tile temp;
+		
+		dx = x2 - x1;
+		dy = y2 - y1;
+		inx = dx > 0 ? 1 : -1;
+		iny = dy > 0 ? 1 : -1;
+		
+		dx = java.lang.Math.abs(dx);
+		dy = java.lang.Math.abs(dy);
+		
+		if(dx >= dy) {
+			dy <<= 1;
+			e = dy - dx;
+			dx <<= 1;
+			while (x1 != x2) {
+				temp = level.getTile(x1,y1);
+				if(!temp.canPass(this)) 
+					re=true;
+				if(e >= 0) {
+					y1 += iny;
+					e-= dx;
+				}
+				e += dy; x1 += inx;
+			}
+		} else {
+			dx <<= 1;
+			e = dx - dy;
+			dy <<= 1;
+			while (y1 != y2) {
+				temp = level.getTile(x1,y1);
+				if(!temp.canPass(this))
+					re=true;
+				if(e >= 0) {
+					x1 += inx;
+					e -= dy;
+				}
+				e += dx; y1 += iny;
+			}
+		}
+		temp = level.getTile(x1,y1);
+		if(!temp.canPass(this))
+			re=true;
+		return re;
 	}
 
 	public void render(Screen screen) {

@@ -3,6 +3,7 @@ package com.mojang.mojam.entity.mob;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.network.TurnSynchronizer;
+import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.screen.*;
 
 public class Snake extends Mob {
@@ -39,6 +40,17 @@ public class Snake extends Mob {
 		walkTime++;
 
 		if (walkTime / 12 % 4 != 0) {
+			
+			try{
+				Tile nextTile = level.getTile((int)(pos.x/Tile.WIDTH+Math.signum(xd)), 
+											(int)(pos.y/Tile.HEIGHT+Math.signum(yd)));
+				if (!nextTile.canPass(this)){
+					facing = facing+2%4;
+					xd = -xd;
+					yd = -yd;
+				}
+			} catch (Exception exc) {}
+			
 			stepTime++;
 			if (!move(xd, yd)
 					|| (walkTime > 10 && TurnSynchronizer.synchedRandom
