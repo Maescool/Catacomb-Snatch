@@ -26,6 +26,9 @@ public class Player extends Mob implements LootCollector {
 	public int pnextlevel;
 	public double pexp;
 	public double psprint;
+	public boolean isSprint = false;
+	public int timeSprint = 0;
+	public int maxTimeSprint;
 	public Keys keys;
 	public MouseButtons mouseButtons;
 	public int mouseFireButton = 1;
@@ -74,6 +77,7 @@ public class Player extends Mob implements LootCollector {
 	    maxHealth=5;
 	    health=5;
 	    psprint=1.5;
+	    maxTimeSprint = 100;
 	    
 		aimVector = new Vec2(0, 1);
 
@@ -86,7 +90,7 @@ public class Player extends Mob implements LootCollector {
 		}
 	}
 	private double nextLevel(){
-		double next = (plevel*7)*(plevel*7);
+		double next = (plevel*1)*(plevel*1);
 		pnextlevel=(int) next;
 		return next;
 	}
@@ -99,6 +103,7 @@ public class Player extends Mob implements LootCollector {
 		this.regenDelay=2;
 		plevel++;
 		psprint+=0.1;
+		maxTimeSprint+=20;
 	}
 	public void tick() {
 		calculLevel();
@@ -192,11 +197,22 @@ public class Player extends Mob implements LootCollector {
 						35 + random.nextInt(10)));
 
 			double dd = Math.sqrt(xa * xa + ya * ya);
-			double speed;
+			double speed = getSpeed() / dd;
 			if(this.keys.sprint.isDown) {
-				speed=getSpeed() / dd*psprint;
+			    isSprint=true;
+			    if(timeSprint<maxTimeSprint){
+			    	if(carrying==null){
+			    		speed=getSpeed() / dd*psprint;
+			    	}else{
+			    		speed=getSpeed() / dd*(psprint-0.5);
+			    	}
+				timeSprint++;
+			    }
 		    }else{
-		    	speed = getSpeed() / dd;
+		    	if(timeSprint>=0){
+		    		timeSprint--;
+		    	}
+			    isSprint=false;
 		    }
 			xa *= speed;
 			ya *= speed;
