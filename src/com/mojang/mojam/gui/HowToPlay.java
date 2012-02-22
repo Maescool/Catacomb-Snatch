@@ -27,7 +27,7 @@ public class HowToPlay extends GuiMenu {
 		int vspace = 50;
 		int line = 110;
 
-		Font.drawCentered(screen, "Goal:", goalX, goalTopMargin);
+		Font.drawCentered(screen, MojamComponent.texts.getStatic("goal") + ":", goalX, goalTopMargin);
 		Font.drawCentered(screen, MojamComponent.texts.getStatic("help1"), goalX, goalTopMargin+10);
 		Font.drawCentered(screen, MojamComponent.texts.getStatic("help2"), goalX, goalTopMargin+20);
 		Font.drawCentered(screen, MojamComponent.texts.getStatic("help3"), goalX, goalTopMargin+30);
