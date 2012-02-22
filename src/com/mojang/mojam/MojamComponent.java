@@ -122,7 +122,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		TitleMenu menu = new TitleMenu(GAME_WIDTH, GAME_HEIGHT);
 		addMenu(menu);
 		addKeyListener(this);
-		
+
 		instance = this;
 		LevelList.createLevelList();
 	}
@@ -187,34 +187,37 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		setCursor(emptyCursor);
 	}
 
-	public void showError(String s){
+	public void showError(String s) {
 		handleAction(TitleMenu.RETURN_TO_TITLESCREEN);
 		addMenu(new GuiError(s));
 	}
-	
+
 	private synchronized void createLevel(String levelPath) {
-		LevelInformation li = LevelInformation.getInfoForPath(levelPath); 
-		if(li != null) {
+		LevelInformation li = LevelInformation.getInfoForPath(levelPath);
+		if (li != null) {
 			createLevel(li);
 			return;
-		} else if(!isMultiplayer){
+		} else if (!isMultiplayer) {
 			showError("Missing map.");
 		}
 		showError("Missing map - Multiplayer");
 	}
+
 	private synchronized void createLevel(LevelInformation li) {
 		try {
 			level = Level.fromFile(li);
 		} catch (Exception ex) {
-			//throw new RuntimeException("Unable to load level", ex);
+			// throw new RuntimeException("Unable to load level", ex);
 			ex.printStackTrace();
 			showError("Unable to load map.");
 			return;
 		}
 		initLevel();
 	}
-	private synchronized void initLevel(){
-		if(level == null) return;
+
+	private synchronized void initLevel() {
+		if (level == null)
+			return;
 		level.init();
 
 		players[0] = new Player(synchedKeys[0], mouseButtons, level.width * Tile.WIDTH / 2 - 16, (level.height - 5 - 1) * Tile.HEIGHT - 16, Team.Team1);
@@ -348,19 +351,16 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		}
 
 		boolean drawFPS = Options.get("drawFPS") != null && Options.get("drawFPS").equals("true");
-		if ( drawFPS ) {
+		if (drawFPS) {
 			Font.draw(screen, texts.FPS(fps), 10, 10);
 		}
-		
-		// for (int p = 0; p < players.length; p++) {
-		// if (players[p] != null) {
-		// String msg = "P" + (p + 1) + ": " + players[p].getScore();
-		// Font.draw(screen, msg, 320, screen.h - 24 + p * 8);
-		// }
-		// }
+
 		if (player != null && menuStack.size() == 0) {
-			Font.draw(screen, texts.health(player.health, 10), 340, screen.h - 19);
-			Font.draw(screen, texts.money(player.score), 340, screen.h - 33);
+			Font.draw(screen, texts.health(player.health, 10), 340, screen.h - 16);
+			Font.draw(screen, texts.money(player.score), 340, screen.h - 27);
+			Font.draw(screen, texts.nextLevel((int) player.getNextLevel()), 340, screen.h - 38);
+			Font.draw(screen, texts.playerExp((int) player.pexp), 340, screen.h - 49);
+			Font.draw(screen, texts.playerLevel(player.plevel), 340, screen.h - 60);
 		}
 
 		g.setColor(Color.BLACK);
@@ -478,7 +478,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 				}
 
 				level.tick();
-				
+
 				// every 4 minutes, start new background music :)
 				if (System.currentTimeMillis() / 1000 > nextMusicInterval) {
 					nextMusicInterval = (System.currentTimeMillis() / 1000) + 4 * 60;
@@ -496,9 +496,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			createLevel(TitleMenu.level);
 
 			synchronizer.setStarted(true);
-			if(TitleMenu.level.vanilla){
-				packetLink.sendPacket(new StartGamePacket(TurnSynchronizer.synchedSeed,
-						TitleMenu.level.getUniversalPath()));
+			if (TitleMenu.level.vanilla) {
+				packetLink.sendPacket(new StartGamePacket(TurnSynchronizer.synchedSeed, TitleMenu.level.getUniversalPath()));
 			} else {
 				packetLink.sendPacket(new StartGamePacketCustom(TurnSynchronizer.synchedSeed, level));
 			}
@@ -522,7 +521,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		setFullscreen(Boolean.parseBoolean(Options.get("fullscreen")));
 		mc.start();
 	}
-	
+
 	public static void setFullscreen(boolean fs) {
 		GraphicsDevice device = guiFrame.getGraphicsConfiguration().getDevice();
 		// hide window
@@ -530,7 +529,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		guiFrame.dispose();
 		// change options
 		guiFrame.setUndecorated(fs);
-		device.setFullScreenWindow( fs ? guiFrame : null);
+		device.setFullScreenWindow(fs ? guiFrame : null);
 		// display window
 		guiFrame.setLocationRelativeTo(null);
 		guiFrame.setVisible(true);
@@ -555,7 +554,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		} else if (packet instanceof TurnPacket) {
 			synchronizer.onTurnPacket((TurnPacket) packet);
 		} else if (packet instanceof StartGamePacketCustom) {
-			if(!isServer){
+			if (!isServer) {
 				StartGamePacketCustom sgPacker = (StartGamePacketCustom) packet;
 				synchronizer.onStartGamePacket(sgPacker.getGameSeed());
 				level = sgPacker.getLevel();
@@ -572,7 +571,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		}
 	}
 
-	public void handleAction(int id){
+	public void handleAction(int id) {
 		if (id == TitleMenu.RETURN_TO_TITLESCREEN) {
 			clearMenus();
 			TitleMenu menu = new TitleMenu(GAME_WIDTH, GAME_HEIGHT);
@@ -592,9 +591,9 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			addMenu(new LevelSelect(false));
 		} else if (id == TitleMenu.SELECT_HOST_LEVEL_ID) {
 			addMenu(new LevelSelect(true));
-		} else if(id == TitleMenu.UPDATE_LEVELS){
+		} else if (id == TitleMenu.UPDATE_LEVELS) {
 			GuiMenu menu = menuStack.pop();
-			if(menu instanceof LevelSelect){
+			if (menu instanceof LevelSelect) {
 				addMenu(new LevelSelect(((LevelSelect) menu).bHosting));
 			} else {
 				addMenu(new LevelSelect(false));
@@ -679,7 +678,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			System.exit(0);
 		}
 	}
-	
+
 	private void clearMenus() {
 		while (!menuStack.isEmpty()) {
 			menuStack.pop();
@@ -715,83 +714,67 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		}
 	}
 
-	public static File getMojamDir()
-    {
-        if(mojamDir == null)
-        {
-        	mojamDir = getAppDir("mojam");
-        }
-        return mojamDir;
-    }
-	
-	private static EnumOS2 getOs()
-    {
-        String s = System.getProperty("os.name").toLowerCase();
-        if(s.contains("win"))
-        {
-            return EnumOS2.windows;
-        }
-        if(s.contains("mac"))
-        {
-            return EnumOS2.macos;
-        }
-        if(s.contains("solaris"))
-        {
-            return EnumOS2.solaris;
-        }
-        if(s.contains("sunos"))
-        {
-            return EnumOS2.solaris;
-        }
-        if(s.contains("linux"))
-        {
-            return EnumOS2.linux;
-        }
-        if(s.contains("unix"))
-        {
-            return EnumOS2.linux;
-        } else
-        {
-            return EnumOS2.unknown;
-        }
-    }
-	
-    public static File getAppDir(String s)
-    {
-        String s1 = System.getProperty("user.home", ".");
-        File file;
-        switch(EnumOSMappingHelper.enumOSMappingArray[getOs().ordinal()])
-        {
-        case 1: // '\001'
-        case 2: // '\002'
-            file = new File(s1, (new StringBuilder()).append('.').append(s).append('/').toString());
-            break;
+	public static File getMojamDir() {
+		if (mojamDir == null) {
+			mojamDir = getAppDir("mojam");
+		}
+		return mojamDir;
+	}
 
-        case 3: // '\003'
-            String s2 = System.getenv("APPDATA");
-            if(s2 != null)
-            {
-                file = new File(s2, (new StringBuilder()).append(".").append(s).append('/').toString());
-            } else
-            {
-                file = new File(s1, (new StringBuilder()).append('.').append(s).append('/').toString());
-            }
-            break;
+	private static EnumOS2 getOs() {
+		String s = System.getProperty("os.name").toLowerCase();
+		if (s.contains("win")) {
+			return EnumOS2.windows;
+		}
+		if (s.contains("mac")) {
+			return EnumOS2.macos;
+		}
+		if (s.contains("solaris")) {
+			return EnumOS2.solaris;
+		}
+		if (s.contains("sunos")) {
+			return EnumOS2.solaris;
+		}
+		if (s.contains("linux")) {
+			return EnumOS2.linux;
+		}
+		if (s.contains("unix")) {
+			return EnumOS2.linux;
+		} else {
+			return EnumOS2.unknown;
+		}
+	}
 
-        case 4: // '\004'
-            file = new File(s1, (new StringBuilder()).append("Library/Application Support/").append(s).toString());
-            break;
+	public static File getAppDir(String s) {
+		String s1 = System.getProperty("user.home", ".");
+		File file;
+		switch (EnumOSMappingHelper.enumOSMappingArray[getOs().ordinal()]) {
+		case 1: // '\001'
+		case 2: // '\002'
+			file = new File(s1, (new StringBuilder()).append('.').append(s).append('/').toString());
+			break;
 
-        default:
-            file = new File(s1, (new StringBuilder()).append(s).append('/').toString());
-            break;
-        }
-        if(!file.exists() && !file.mkdirs())
-        {
-            throw new RuntimeException((new StringBuilder()).append("The working directory could not be created: ").append(file).toString());
-        } else
-        {
-            return file;
-        }
-    }
+		case 3: // '\003'
+			String s2 = System.getenv("APPDATA");
+			if (s2 != null) {
+				file = new File(s2, (new StringBuilder()).append(".").append(s).append('/').toString());
+			} else {
+				file = new File(s1, (new StringBuilder()).append('.').append(s).append('/').toString());
+			}
+			break;
+
+		case 4: // '\004'
+			file = new File(s1, (new StringBuilder()).append("Library/Application Support/").append(s).toString());
+			break;
+
+		default:
+			file = new File(s1, (new StringBuilder()).append(s).append('/').toString());
+			break;
+		}
+		if (!file.exists() && !file.mkdirs()) {
+			throw new RuntimeException((new StringBuilder()).append("The working directory could not be created: ").append(file).toString());
+		} else {
+			return file;
+		}
+	}
 }
