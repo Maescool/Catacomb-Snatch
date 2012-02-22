@@ -21,7 +21,7 @@ public class Art {
 	public static Bitmap[][] herrSpeck = cut("/herr_von_speck_sheet.png", 32,
 			32);
 	public static Bitmap[] titles = cut("/titles.png", 128);
-	public static Bitmap[][] buttons = cut("/buttons.png", 128, 24);
+	public static Bitmap[][] button = cut("/button.png", 128, 24);
 	public static Bitmap[][] font = cut("/gamfont.png", 8, 8);
 	public static Bitmap[][] mapIcons = cut("/mapicons.png", 5, 5);
 	public static Bitmap titleScreen = load("/TITLESCREEN.png");
