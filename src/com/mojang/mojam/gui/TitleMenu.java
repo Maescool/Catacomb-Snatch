@@ -2,6 +2,7 @@ package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
 
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.screen.Art;
@@ -74,6 +75,8 @@ public class TitleMenu extends GuiMenu {
 		} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			e.consume();
 			buttons.get(selectedItem).postClick();
+		} else if (e.getKeyCode() == KeyEvent.VK_F11) {
+			MojamComponent.setFullscreen(!MojamComponent.isFulscreen());
 		}
 	}
 
@@ -82,7 +85,8 @@ public class TitleMenu extends GuiMenu {
 	}
 
 	@Override
-	public void keyTyped(KeyEvent arg0) {
+	public void keyTyped(KeyEvent ke) {
+		
 	}
 
 	@Override
