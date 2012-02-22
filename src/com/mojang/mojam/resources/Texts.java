@@ -16,7 +16,7 @@ public class Texts {
 		case 1:
 			return player1Name();
 		case 2:
-			return player1Name();
+			return player2Name();
 		}
 		return "";
 	}
@@ -72,6 +72,18 @@ public class Texts {
 
 	public String FPS(int fps) {
 		return MessageFormat.format(texts.getString("FPS"), fps);
+	}
+
+	public String nextLevel(int nextLevel) {
+		return MessageFormat.format(texts.getString("nextLevel"), nextLevel);
+	}
+
+	public String playerExp(int pexp) {
+		return MessageFormat.format(texts.getString("playerExp"), pexp);
+	}
+
+	public String playerLevel(int plevel) {
+		return MessageFormat.format(texts.getString("playerLevel"), plevel);
 	}
 
 }
