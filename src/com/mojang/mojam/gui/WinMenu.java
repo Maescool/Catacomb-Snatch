@@ -14,7 +14,7 @@ public class WinMenu extends GuiMenu {
 		this.winningPlayer = winningPlayer;
 		this.gameWidth = gameWidth;
 
-		addButton(new Button(TitleMenu.RESTART_GAME_ID, "Ok", (gameWidth - 128) / 2, 200));
+		addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, "Ok", (gameWidth - 128) / 2, 200));
 	}
 
 	@Override
