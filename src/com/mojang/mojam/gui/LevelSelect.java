@@ -61,7 +61,7 @@ public class LevelSelect extends GuiMenu {
 		for (int i = 0; i < levels.size(); i++) {
 			int x = i % xButtons;
 
-			levelButtons[i] = (LevelButton) addButton(new LevelButton(i, levels.get(i).levelName, levels.get(i), xStart + x * xSpacing, yStart + ySpacing * y));
+			levelButtons[i] = (LevelButton) addButton(new LevelButton(i, levels.get(i), xStart + x * xSpacing, yStart + ySpacing * y));
 			if (i == 0) {
 				activeButton = levelButtons[i];
 				activeButton.setActive(true);
