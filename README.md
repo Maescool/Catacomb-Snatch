@@ -1,7 +1,6 @@
 ![Catacomb Snatch](http://i.imgur.com/uSFJF.png)
 
-This is the source code of the Humble bundle release from Mojang.
+## Links
 
-They did not license it, so my guess is we are free to have this source code here and work on it.
-
-# [Check out wiki for more information](https://github.com/Maescool/Catacomb-Snatch/wiki)
+* [Minecraft Forum thread](http://www.minecraftforum.net/topic/1046349-the-catacomb-snatch-project-github)
+* [Player & developer wiki](https://github.com/Maescool/Catacomb-Snatch/wiki)
