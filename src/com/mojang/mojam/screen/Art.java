@@ -31,6 +31,7 @@ public class Art {
 	public static Bitmap pauseScreen = load("/art/screen/pause_screen.png");
 	public static Bitmap[][] button = cut("/art/screen/button.png", 128, 24);
 	public static Bitmap panel = load("/art/screen/panel.png");
+        public static Bitmap background = load("/art/screen/BACKGROUND.png");
         
 	public static Bitmap[][] harvester = cut("/art/building/bot_vacuum.png", 32, 56);
 	public static Bitmap[][] harvester2 = cut("/art/building/bot_vacuum2.png", 32, 56);
