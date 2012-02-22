@@ -13,10 +13,11 @@ public class TitleMenu extends GuiMenu {
 
 	public static final int CANCEL_JOIN_ID = 1004;
 	public static final int PERFORM_JOIN_ID = 1005;
-	public static final int RESTART_GAME_ID = 1006;
+	public static final int RETURN_TO_TITLESCREEN = 1006;
 	public static final int SELECT_LEVEL_ID = 1007;
 	public static final int SELECT_HOST_LEVEL_ID = 1008;
 	public static final int SELECT_DIFFICULTY_ID = 1009;
+	public static final int HOW_TO_PLAY = 1010;
 
 	public static String level = "";
 	public static int Difficulty = 0;
@@ -32,8 +33,9 @@ public class TitleMenu extends GuiMenu {
 		this.gameWidth = gameWidth;
 
 		addButton(new Button(SELECT_LEVEL_ID, "Start", (gameWidth - 128) / 2, 200));
-		addButton(new Button(SELECT_HOST_LEVEL_ID, "Host", (gameWidth - 128) / 2, 240));
-		addButton(new Button(JOIN_GAME_ID, "Join", (gameWidth - 128) / 2, 280));
+		addButton(new Button(SELECT_HOST_LEVEL_ID, "Host", (gameWidth - 128) / 2, 230));
+		addButton(new Button(JOIN_GAME_ID, "Join", (gameWidth - 128) / 2, 260));
+		addButton(new Button(HOW_TO_PLAY, "How to play", (gameWidth - 128) / 2, 290));
 		addButton(new Button(EXIT_GAME_ID, "Exit", (gameWidth - 128) / 2, 320));
 	}
 
