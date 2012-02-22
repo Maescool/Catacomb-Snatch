@@ -55,7 +55,7 @@ public class Turret extends Building {
 			if ((e instanceof TreasurePile))
 				continue;
 			final double dist = e.pos.distSqr(pos);
-			if (dist < radiusSqr && dist < closestDist && !isTargetBehindWall(pos.x, pos.y, e.pos.x, e.pos.y)) {
+			if (dist < radiusSqr && dist < closestDist && !isTargetBehindWall(e.pos.x, e.pos.y)) {
 			    closestDist = dist;
 				closest = e;
 			}
@@ -84,10 +84,10 @@ public class Turret extends Building {
 		delayTicks = delay;
 	}
 	
-	private boolean isTargetBehindWall(double dx1, double dy1, double dx2, double dy2){
-		int x1 = (int) dx1/Tile.WIDTH;
+	private boolean isTargetBehindWall( double dx2, double dy2){
+		int x1 = (int) pos.x/Tile.WIDTH;
+		int y1 = (int) pos.y/Tile.HEIGHT;
 		int x2 = (int) dx2/Tile.WIDTH;
-		int y1 = (int) dy1/Tile.HEIGHT;
 		int y2 = (int) dy2/Tile.HEIGHT;
 		
 		int dx, dy, inx, iny, e;
