@@ -5,6 +5,7 @@ import com.mojang.mojam.entity.*;
 import com.mojang.mojam.entity.animation.EnemyDieAnimation;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.math.Vec2;
+import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.screen.*;
 
 public abstract class Mob extends Entity {
@@ -18,6 +19,7 @@ public abstract class Mob extends Entity {
 	double dir = 0;
 	public int hurtTime = 0;
 	public int freezeTime = 0;
+	public int bounceWallTime = 0;
 	public int maxHealth = 10;
 	public int health = maxHealth;
 	public boolean isImmortal = false;
@@ -67,6 +69,9 @@ public abstract class Mob extends Entity {
 	public void tick() {
 		if (hurtTime > 0) {
 			hurtTime--;
+		}
+		if (bounceWallTime > 0) {
+			bounceWallTime--;
 		}
 
 		if (freezeTime > 0) {
@@ -120,6 +125,17 @@ public abstract class Mob extends Entity {
 
 	public String getDeatchSound() {
 		return "/sound/Explosion.wav";
+	}
+	
+	public boolean shouldBounceOffWall(double xd, double yd) {
+		if (bounceWallTime>0) 
+			return false;
+		Tile nextTile = level.getTile((int)(pos.x/Tile.WIDTH+Math.signum(xd)), 
+											(int)(pos.y/Tile.HEIGHT+Math.signum(yd)));
+		boolean re = (nextTile != null && !nextTile.canPass(this));
+		if (re)
+			bounceWallTime = 10;
+		return re;
 	}
 
 	public void render(Screen screen) {
