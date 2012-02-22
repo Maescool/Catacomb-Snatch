@@ -90,7 +90,14 @@ public class Harvester extends Building implements LootCollector {
 	@Override
 	public Bitmap getSprite() {
 		int frame = isHarvesting ? (4 + ((time >> 3) % 5)) : (time >> 3) % 4;
-		return Art.harvester[frame][0];
+		switch (upgradeLevel) {
+        case 1:
+            return Art.harvester2[frame][0];
+        case 2:
+            return Art.harvester3[frame][0];
+        default:
+            return Art.harvester[frame][0];
+        }
 	}
 
 	protected void upgradeComplete() {
@@ -130,11 +137,22 @@ public class Harvester extends Building implements LootCollector {
             addHealthBar(screen);
 
 		// will get rid of texts this soon -> upgrade graphics + money bar
-        if (upgradeLevel != 0) {
-            Font.drawCentered(screen, "" + upgradeLevel, (int) (pos.x + 10), (int) (pos.y));
-        }
-		Font.drawCentered(screen, money + "/" + capacity, (int) (pos.x), (int) (pos.y - 30));
+		addMoneyBar(screen);
+		// Font.drawCentered(screen, money + "/" + capacity, (int) (pos.x), (int) (pos.y - 30));
 	}
+	
+	private void addMoneyBar(Screen screen) {
+        
+        int bar_width = 2;
+        int bar_height = 30;
+        int start = money * bar_height / capacity;
+        Bitmap bar = new Bitmap(bar_width, bar_height);
+
+        bar.clear(0xcc0000cc);
+        bar.fill(0, bar_height - start, bar_width, start, 0xffcccc00);
+
+        screen.blit(bar, pos.x + 18, pos.y - bar_height + 5);
+    }
 	
 	public void take(Loot loot) {
 		loot.remove();
