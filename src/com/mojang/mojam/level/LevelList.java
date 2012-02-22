@@ -18,7 +18,7 @@ public class LevelList {
 		levels.add(new LevelInformation("TheMaze", "/levels/TheMaze.bmp",true));
 		levels.add(new LevelInformation("Circular_Shapes", "/levels/Circular Shapes.bmp",true));
 		levels.add(new LevelInformation("BlackHole", "/levels/BlackHole.bmp",true));
-		levels.add(new LevelInformation("Railroads", "/levels/railRoads.bmp",true));
+		levels.add(new LevelInformation("Railroads", "/levels/RailRoads.bmp",true));
 		
 		File levels = getBaseDir();
 		if(!levels.exists()) levels.mkdirs();
