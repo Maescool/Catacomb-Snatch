@@ -16,7 +16,7 @@ public class Texts {
 		case 1:
 			return player1Name();
 		case 2:
-			return player1Name();
+			return player2Name();
 		}
 		return "";
 	}
