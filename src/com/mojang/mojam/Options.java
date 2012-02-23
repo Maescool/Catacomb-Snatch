@@ -15,6 +15,7 @@ public class Options {
 	
     public static final String DRAW_FPS = "drawFps";
     public static final String FULLSCREEN = "fullscreen";
+    public static final String MUTE_MUSIC = "muteMusic";
 
     public static final String VALUE_TRUE = "true";
     public static final String VALUE_FALSE = "false";

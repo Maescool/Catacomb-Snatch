@@ -11,6 +11,7 @@ public class OptionsMenu extends GuiMenu {
 	
 	private boolean fullscreen;
 	private boolean fps;
+    private boolean muteMusic;
 	
 	int tab1 = 30;
 	int tab1i = 170;
@@ -44,11 +45,25 @@ public class OptionsMenu extends GuiMenu {
                 Options.set(Options.DRAW_FPS, fps);
 			}
 		});
+
+        ClickableComponent btnPlayMusic = addButton(new Checkbox(TitleMenu.MUTE_MUSIC, MojamComponent.texts.getStatic("options.mutemusic"), tab1, 90, muteMusic));
+        btnPlayMusic.addListener(new ButtonListener() {
+            @Override
+            public void buttonPressed(ClickableComponent button) {
+                muteMusic = !muteMusic;
+                Options.set(Options.MUTE_MUSIC, muteMusic);
+                if(muteMusic)
+                    MojamComponent.soundPlayer.stopBackgroundMusic();
+                else
+                    MojamComponent.soundPlayer.startBackgroundMusic();
+            }
+        });
 	}
 	
 	private void loadOptions() {
 		fullscreen = Options.getAsBoolean(Options.FULLSCREEN, Options.VALUE_FALSE);
 		fps = Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE);
+        muteMusic = Options.getAsBoolean(Options.MUTE_MUSIC, Options.VALUE_FALSE);
 	}
 
 	@Override
