@@ -577,7 +577,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		guiFrame.setVisible(true);
 		Options.loadProperties();
-		setFullscreen(Boolean.parseBoolean(Options.get(Options.FULLSCREEN, Options.VALUE_TRUE)));
+		setFullscreen(Boolean.parseBoolean(Options.get(Options.FULLSCREEN, Options.VALUE_FALSE)));
 		mc.start();
 	}
 
