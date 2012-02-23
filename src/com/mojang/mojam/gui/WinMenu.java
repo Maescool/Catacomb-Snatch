@@ -23,12 +23,7 @@ public class WinMenu extends GuiMenu {
 		screen.clear(0);
 		screen.blit(Art.gameOverScreen, 0, 0);
 
-		String msg = "";
-		if (winningPlayer == 1)
-			msg = MojamComponent.texts.player1Win();
-		if (winningPlayer == 2)
-			msg = MojamComponent.texts.player2Win();
-		Font.draw(screen, msg, 180, 160);
+		Font.draw(screen, MojamComponent.texts.playerWin(winningPlayer), 180, 160);
 
 		super.render(screen);
 
@@ -40,7 +35,7 @@ public class WinMenu extends GuiMenu {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+		if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
 			buttons.get(selectedItem).postClick();
 		}
 	}

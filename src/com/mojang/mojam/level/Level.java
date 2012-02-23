@@ -23,6 +23,9 @@ import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
+import com.mojang.mojam.gui.TitleMenu;
+import com.mojang.mojam.level.gamemode.ILevelTickItem;
+import com.mojang.mojam.level.gamemode.IVictoryConditions;
 import com.mojang.mojam.level.tile.DestroyableWallTile;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.SandTile;
@@ -38,7 +41,7 @@ import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
 public class Level {
-	public static final int TARGET_SCORE = 100;
+	public int TARGET_SCORE = 100;
 
 	public final int width, height;
 
@@ -49,12 +52,12 @@ public class Level {
 	private boolean seen[];
 	final int[] neighbourOffsets;
 
+	public List<ILevelTickItem> tickItems = new ArrayList<ILevelTickItem>();;
 	public int maxMonsters;
 
+	public IVictoryConditions victoryConditions;
 	public int player1Score = 0;
 	public int player2Score = 0;
-	
-	public LevelInformation levelInfo;
 
 	@SuppressWarnings("unchecked")
 	public Level(int width, int height) {
@@ -78,7 +81,7 @@ public class Level {
 			entityMap[i] = new ArrayList<Entity>();
 		}
 
-		seen = new boolean[(width + 1) * (height + 1)];
+		setSeen(new boolean[(width + 1) * (height + 1)]);
 
 		/*
 		 * for (int i = 0; i < 10; i++) { double x = random.nextInt(width) *
@@ -88,18 +91,7 @@ public class Level {
 		 */
 	}
 
-	public Level setInfo(LevelInformation li){
-		this.levelInfo = li;
-		this.levelInfo.setParent(this);
-		return this;
-	}
-	public LevelInformation getInfo(){
-		if(levelInfo == null){
-			levelInfo = new LevelInformation();
-		}
-		return levelInfo;
-	}
-	
+	/*
 	public static Level fromFile(LevelInformation li) throws IOException {
 		BufferedImage bufferedImage;
 		//System.out.println("Loading level from file: "+li.getPath());
@@ -107,9 +99,6 @@ public class Level {
 			bufferedImage = ImageIO.read(MojamComponent.class.getResource(li.getPath()));
 		} else {
 			bufferedImage = ImageIO.read(new File(li.getPath()));
-		}
-		if(bufferedImage == null){
-			throw(new IOException("Malformed image file: "+li.getPath()));
 		}
 		int w = bufferedImage.getWidth() + 16;
 		int h = bufferedImage.getHeight() + 16;
@@ -131,22 +120,31 @@ public class Level {
 		bufferedImage.getRGB(0, 0, w - 16, h - 16, rgbs, 8 + 8 * w, w);
 
 		Level l = new Level(h, w);
-		l.setInfo(li.copy());
-		
+
 		for (int y = 0; y < h; y++) {
 			for (int x = 0; x < w; x++) {
 				int col = rgbs[x + y * w] & 0xffffff;
 
-				Tile tile = TileID.colorToTile(col);
-				if(tile == null){
-					if (col == 0xffff00) {
-						TreasurePile t = new TreasurePile(x * Tile.WIDTH + 16, y
-								* Tile.HEIGHT, Team.Neutral);
-						l.addEntity(t);
-					}
-				} else {
-					l.setTile(x, y, tile);
+				Tile tile = new FloorTile();
+				if (col == 0xA8A800) {
+					tile = new SandTile();
+				} else if (col == 0x969696) {
+					tile = new UnbreakableRailTile(new FloorTile());
+				} else if (col == 0x888800) {
+					tile = new UnpassableSandTile();
+				} else if (col == 0xFF7777) {
+					tile = new DestroyableWallTile();
+				} else if (col == 0x000000) {
+					tile = new HoleTile();
+				} else if (col == 0xff0000) {
+					tile = new WallTile();
+				} else if (col == 0xffff00) {
+					TreasurePile t = new TreasurePile(x * Tile.WIDTH + 16, y
+							* Tile.HEIGHT, Team.Neutral);
+					l.addEntity(t);
 				}
+
+				l.setTile(x, y, tile);
 			}
 		}
 
@@ -156,33 +154,14 @@ public class Level {
 		for (int y = 0; y < h + 1; y++) {
 			for (int x = 0; x < w + 1; x++) {
 				if (x <= 8 || y <= 8 || x >= w - 8 || y >= h - 8) {
-					l.seen[x + y * (w + 1)] = true;
+					l.getSeen()[x + y * (w + 1)] = true;
 				}
 			}
 		}
 
 		return l;
 	}
-	
-	public BufferedImage createMapImage(){
-		int w = width - 16;
-		int h = height - 16;
-		BufferedImage output = new BufferedImage (w, h, BufferedImage.TYPE_INT_RGB);
-		for (int y = 0; y < h; y++) {
-			for (int x = 0; x < w; x++) {
-				output.setRGB(x, y, TileID.tileToColor(getTile(x+8, y+8)));
-			}
-		}
-		int xBuffer = 8 * Tile.WIDTH;
-		int yBuffer = 8 * Tile.HEIGHT;
-		for(Entity entity : entities){
-			if(entity instanceof TreasurePile){
-				output.setRGB((int) ((entity.pos.x - xBuffer) / Tile.WIDTH), (int) ((entity.pos.y - yBuffer) / Tile.HEIGHT), 0xffff00);
-			}
-		}
-		return output;
-	}
-
+	 
 	public void init() {
 		Random random = TurnSynchronizer.synchedRandom;
 
@@ -224,7 +203,8 @@ public class Level {
 		// addEntity(new Bomb(1024 - 40, 360));
 		// addEntity(new Bomb(1024 - 80, 360));
 	}
-
+	 */
+	
 	public void setTile(int x, int y, Tile tile) {
 		final int index = x + y * width;
 		tiles[index] = tile;
@@ -383,32 +363,9 @@ public class Level {
 		e.removed = true;
 	}
 
-	public void tick() {
-		Random random = TurnSynchronizer.synchedRandom;
-		for (int i = 0; i < 1; i++) {
-			double x = (random.nextInt(width - 16) + 8) * Tile.WIDTH
-					+ Tile.WIDTH / 2;
-			double y = (random.nextInt(height - 16) + 8) * Tile.HEIGHT
-					+ Tile.HEIGHT / 2 - 4;
-			final Tile tile = getTile((int) (x / Tile.WIDTH),
-					(int) (y / Tile.HEIGHT));
-			if (tile instanceof FloorTile) {
-				double r = 32 * 8;
-				if (getEntities(new BB(null, x - r, y - r, x + r, y + r),
-						Player.class).size() == 0) {
-					r = 32 * 8;
-					if (getEntities(new BB(null, x - r, y - r, x + r, y + r),
-							SpawnerEntity.class).size() == 0) {
-						r = 32 * 4;
-						if (getEntities(
-								new BB(null, x - r, y - r, x + r, y + r),
-								Turret.class).size() == 0) {
-							addEntity(new SpawnerEntity(x, y, Team.Neutral,
-									random.nextInt(3)));
-						}
-					}
-				}
-			}
+	public void tick() {		
+		for(int i = 0; i < tickItems.size(); i++) {
+			tickItems.get(i).tick(this);
 		}
 
 		for (int i = 0; i < entities.size(); i++) {
@@ -428,14 +385,15 @@ public class Level {
 				removeFromEntityMap(e);
 			}
 		}
-
+		if(victoryConditions != null)
+			victoryConditions.updateVictoryConditions(this);
 		Notifications.getInstance().tick();
 	}
 
 	private boolean hasSeen(int x, int y) {
-		return seen[x + y * (width + 1)] || seen[(x + 1) + y * (width + 1)]
-				|| seen[x + (y + 1) * (width + 1)]
-				|| seen[(x + 1) + (y + 1) * (width + 1)];
+		return getSeen()[x + y * (width + 1)] || getSeen()[(x + 1) + y * (width + 1)]
+				|| getSeen()[x + (y + 1) * (width + 1)]
+				|| getSeen()[(x + 1) + (y + 1) * (width + 1)];
 	}
 
 	public void render(Screen screen, int xScroll, int yScroll) {
@@ -532,10 +490,10 @@ public class Level {
 			for (int x = x0; x <= x1; x++) {
 				if (x < 0 || x >= width)
 					continue;
-				boolean c0 = !seen[x + y * (width + 1)];
-				boolean c1 = !seen[(x + 1) + y * (width + 1)];
-				boolean c2 = !seen[x + (y + 1) * (width + 1)];
-				boolean c3 = !seen[(x + 1) + (y + 1) * (width + 1)];
+				boolean c0 = !getSeen()[x + y * (width + 1)];
+				boolean c1 = !getSeen()[(x + 1) + y * (width + 1)];
+				boolean c2 = !getSeen()[x + (y + 1) * (width + 1)];
+				boolean c3 = !getSeen()[(x + 1) + (y + 1) * (width + 1)];
 
 				if (!(c0 || c1 || c2 || c3))
 					continue;
@@ -644,11 +602,11 @@ public class Level {
 	private boolean canSee(int x, int y) {
 		if (x < 0 || y < 1 || x >= width || y >= height)
 			return true;
-		return seen[x + (y - 1) * (width + 1)]
-				|| seen[(x + 1) + (y - 1) * (width + 1)]
-				|| seen[x + y * (width + 1)] || seen[(x + 1) + y * (width + 1)]
-				|| seen[x + (y + 1) * (width + 1)]
-				|| seen[(x + 1) + (y + 1) * (width + 1)];
+		return getSeen()[x + (y - 1) * (width + 1)]
+				|| getSeen()[(x + 1) + (y - 1) * (width + 1)]
+				|| getSeen()[x + y * (width + 1)] || getSeen()[(x + 1) + y * (width + 1)]
+				|| getSeen()[x + (y + 1) * (width + 1)]
+				|| getSeen()[(x + 1) + (y + 1) * (width + 1)];
 	}
 
 	public List<BB> getClipBBs(Entity e) {
@@ -719,10 +677,10 @@ public class Level {
 			Tile tile = getTile(xx, yy);
 			if (tile instanceof WallTile)
 				return;
-			seen[xx + yy * (width + 1)] = true;
-			seen[(xx + 1) + yy * (width + 1)] = true;
-			seen[xx + (yy + 1) * (width + 1)] = true;
-			seen[(xx + 1) + (yy + 1) * (width + 1)] = true;
+			getSeen()[xx + yy * (width + 1)] = true;
+			getSeen()[(xx + 1) + yy * (width + 1)] = true;
+			getSeen()[xx + (yy + 1) * (width + 1)] = true;
+			getSeen()[(xx + 1) + (yy + 1) * (width + 1)] = true;
 		}
 	}
 
@@ -745,5 +703,13 @@ public class Level {
 			}
 		}
 		return count;
+	}
+
+	public boolean[] getSeen() {
+		return seen;
+	}
+
+	public void setSeen(boolean seen[]) {
+		this.seen = seen;
 	}
 }
