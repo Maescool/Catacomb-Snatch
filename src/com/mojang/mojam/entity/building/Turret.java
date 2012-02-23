@@ -16,7 +16,6 @@ public class Turret extends Building {
 	private int delay;
 	private double radius;
 	private double radiusSqr;
-	private Mob carrying = Player.carrying;
 
 	private int[] upgradeRadius = new int[] { 3 * Tile.WIDTH, 5 * Tile.WIDTH, 7 * Tile.WIDTH };
 	private int[] upgradeDelay = new int[] { 24, 21, 18 };
@@ -61,7 +60,7 @@ public class Turret extends Building {
 			return;
 		
 		
-		if (Player.carrying == this)
+		if (Player.carrying == this && upgradeLevel > 0)
 			return;
 
 		double invDist = 1.0 / Math.sqrt(closestDist);
