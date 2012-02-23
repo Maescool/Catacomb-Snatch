@@ -30,6 +30,7 @@ public class Art {
 	public static Bitmap gameOverScreen = load("/art/screen/game_over.png");
 	public static Bitmap pauseScreen = load("/art/screen/pause_screen.png");
 	public static Bitmap[][] button = cut("/art/screen/button.png", 128, 24);
+    public static Bitmap[][] checkbox = cut("/art/screen/checkbox.png", 24, 24);
 	public static Bitmap panel = load("/art/screen/panel.png");
         public static Bitmap background = load("/art/screen/BACKGROUND.png");
         
