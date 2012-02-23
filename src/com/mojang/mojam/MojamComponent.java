@@ -491,6 +491,21 @@ public class MojamComponent extends Canvas implements Runnable,
 			if (synchronizer.preTurn()) {
 				synchronizer.postTurn();
 
+				
+				for (int index = 0; index < mouseButtons.currentState.length; index++) {
+					boolean nextState = mouseButtons.nextState[index];
+					if (mouseButtons.isDown(index) != nextState) {
+						synchronizer.addCommand(new ChangeMouseButtonCommand(index,nextState));
+					}
+				}
+				
+				synchronizer.addCommand(new ChangeMouseCoordinateCommand(mouseButtons.getX(), mouseButtons.getY(), mouseButtons.mouseHidden));
+									
+				mouseButtons.tick();
+				for (MouseButtons sMouseButtons : synchedMouseButtons) {
+					sMouseButtons.tick();
+				}
+				
 				if (!paused) {
 					for (int index = 0; index < keys.getAll().size(); index++) {
 						Keys.Key key = keys.getAll().get(index);
@@ -515,17 +530,7 @@ public class MojamComponent extends Canvas implements Runnable,
 					if (keys.fullscreen.wasPressed()) {
 						setFullscreen(!fullscreen);
 					}
-						
-					
-					for (int index = 0; index < mouseButtons.currentState.length; index++) {
-						boolean nextState = mouseButtons.nextState[index];
-						if (mouseButtons.isDown(index) != nextState) {
-							synchronizer.addCommand(new ChangeMouseButtonCommand(index,nextState));
-						}
-					}
-					
-					synchronizer.addCommand(new ChangeMouseCoordinateCommand(mouseButtons.getX(), mouseButtons.getY(), mouseButtons.mouseHidden));
-										
+											
 					level.tick();
 				}
 		
@@ -542,10 +547,7 @@ public class MojamComponent extends Canvas implements Runnable,
 					takeScreenShot();
 				}
 			}
-			mouseButtons.tick();
-			for (MouseButtons sMouseButtons : synchedMouseButtons) {
-				sMouseButtons.tick();
-			}
+
 		}
 
 		

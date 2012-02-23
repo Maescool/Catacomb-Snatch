@@ -57,7 +57,7 @@ public class Texts {
 	}
 
 	public String health(float health, float maxHealth) {
-		return MessageFormat.format(getStatic("health"), health / maxHealth * 100);
+		return MessageFormat.format(getStatic("health"), Math.floor(health / maxHealth * 100));
 	}
 
 	public String money(int money) {
