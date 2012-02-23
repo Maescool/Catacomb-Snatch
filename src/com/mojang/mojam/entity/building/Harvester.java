@@ -5,6 +5,7 @@ import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.animation.SmokeAnimation;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.loot.LootCollector;
+import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.network.TurnSynchronizer;
@@ -138,6 +139,12 @@ public class Harvester extends Building implements LootCollector {
             addHealthBar(screen);
 
 		addMoneyBar(screen);
+		
+		if (this.team == Team.Team2) {
+            screen.blit(Art.teamIndicator[1][0], pos.x - 4, pos.y - 25 - yOffs);
+        } else {
+        	screen.blit(Art.teamIndicator[0][0], pos.x - 4, pos.y - 25 - yOffs);
+        }
 	}
 	
 	private void addMoneyBar(Screen screen) {

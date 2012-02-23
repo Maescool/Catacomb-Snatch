@@ -67,6 +67,7 @@ public class Art {
 	public static Bitmap[][] shineSmall = cut("/art/pickup/effect_shine_small_13.png", 13, 13);
 	public static Bitmap[][] shineBig = cut("/art/pickup/effect_shine_big_13.png", 13, 13);
 
+	public static Bitmap[][] teamIndicator = cut("/art/effects/team_indicator.png", 8, 8);
 	public static Bitmap[][] bullets = cut("/art/effects/bullets.png", 16, 16);
 	public static Bitmap[][] bullet = cut("/art/effects/bullet.png", 16, 16);
 	public static Bitmap[][] muzzle = cut("/art/effects/muzzle.png", 16, 16);
