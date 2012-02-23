@@ -48,7 +48,7 @@ public class Options {
 	public static void loadProperties() {
 		BufferedInputStream stream;
 		try {
-			stream = new BufferedInputStream(new FileInputStream(getJarPath() + "options.properties"));
+			stream = new BufferedInputStream(new FileInputStream(MojamComponent.getMojamDir() + "/options.properties"));
 			properties.load(stream);
 			stream.close();
 		} catch (FileNotFoundException e) {
@@ -62,8 +62,9 @@ public class Options {
 	public static void saveProperties() {
 		BufferedOutputStream stream;
 		try {
-			File file = new File(getJarPath() + "options.properties");
+			File file = new File(MojamComponent.getMojamDir() + "/options.properties");
 			if ( !file.exists() ) {
+				System.out.println("File not there");
 				file.createNewFile();
 			}
 			stream = new BufferedOutputStream(new FileOutputStream(file));
