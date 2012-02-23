@@ -13,21 +13,20 @@ public class DifficultySelect extends GuiMenu {
 	
 	private ArrayList<DifficultyInformation> difficulties = DifficultyList.getDifficulties();
 	
-	private DifficultyButton[] DifficultyButtons;
+	private Checkbox[] DifficultyCheckboxes;
 	private final int xButtons = 3;
-	private final int xSpacing = DifficultyButton.WIDTH + 8;
-	private final int ySpacing = DifficultyButton.HEIGHT + 8;
+	private final int xSpacing = Checkbox.WIDTH + 8;
+	private final int ySpacing = Checkbox.HEIGHT + 8;
 	private final int xStart = (MojamComponent.GAME_WIDTH - (xSpacing * xButtons)) / 2;
 	private final int yStart = 75;
 	
-	private DifficultyButton activeButton;
 	private Button startGameButton;
 	private Button cancelButton;
 
 	public DifficultySelect(boolean hosting) {
 		super();
 		
-		DifficultyButtons = new DifficultyButton[difficulties.size()];
+		DifficultyCheckboxes = new Checkbox[difficulties.size()];
 		setupDifficultyButtons();
 		
 		TitleMenu.difficulty = difficulties.get(0);
@@ -42,19 +41,20 @@ public class DifficultySelect extends GuiMenu {
 	
 	private void setupDifficultyButtons() {
 		int y = 0;
-		for (int i = 0; i < difficulties.size(); i++) {
-			int x = i % xButtons;
 
-			DifficultyButtons[i] = (DifficultyButton) addButton(new DifficultyButton(i, difficulties.get(i).difficultyName, xStart + x * xSpacing, yStart + ySpacing * y));
-			if (i == 0) {
-				activeButton = DifficultyButtons[i];
-				activeButton.setActive(true);
-			}
-		
-			if (x == (xButtons - 1))
-				y++;
-		}
-		}
+        for (int i = 0; i < difficulties.size(); i++) {
+            int x = i % xButtons;
+            
+            DifficultyCheckboxes[i] = (Checkbox) addButton(new Checkbox(i, difficulties.get(i).difficultyName, xStart + x * xSpacing, yStart + ySpacing * y));
+            
+            if (i == 0) {
+                DifficultyCheckboxes[i].checked = true;
+            }
+        
+            if (x == (xButtons - 1))
+                y++;
+        }
+	}
 
 	@Override
 	public void render(Screen screen) {
@@ -65,26 +65,43 @@ public class DifficultySelect extends GuiMenu {
 
 	@Override
 	public void buttonPressed(ClickableComponent button) {
+		if (button instanceof Checkbox) {
 
-		if (button instanceof DifficultyButton) {
-
-			DifficultyButton DB = (DifficultyButton) button;
-			TitleMenu.difficulty = difficulties.get(DB.getId());
-
-			if (activeButton != null && activeButton != DB) {
-				activeButton.setActive(false);
-			}
-
-			activeButton = DB;
+		    Checkbox cb = (Checkbox) button;
+			TitleMenu.difficulty = difficulties.get(cb.getId());
+			
+			checkOnlyOne(cb);
 		}
+	}
+    
+    public Checkbox getActiveCheckbox()
+    {
+        for(Checkbox box : DifficultyCheckboxes) {
+            if(box.checked == true) {
+                return box;
+            }   
+        } 
+        return null;
+    }
+	
+	public void checkOnlyOne(Checkbox active)
+	{
+        for(Checkbox box : DifficultyCheckboxes) {
+            if(active.getId() == box.getId()) {
+                box.checked = true;
+            } else {
+                box.checked = false;
+            }
+        } 
 	}
 
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-
 		// Compute new id
-		int activeButtonId = activeButton.getId();
+		int activeButtonId = getActiveCheckbox().getId();
+		
+		
 		int nextActiveButtonId = -2;
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			nextActiveButtonId = bestExistingDifficultyId(activeButtonId - 1, difficulties.size() - 1);
@@ -97,10 +114,8 @@ public class DifficultySelect extends GuiMenu {
 		}
 		
 		// Update active button
-		if (nextActiveButtonId >= 0 && nextActiveButtonId < DifficultyButtons.length) {
-			activeButton.setActive(false);
-			activeButton = DifficultyButtons[nextActiveButtonId];
-			activeButton.setActive(true);
+		if (nextActiveButtonId >= 0 && nextActiveButtonId < DifficultyCheckboxes.length) {
+            checkOnlyOne(DifficultyCheckboxes[nextActiveButtonId]);
 		}
 
 		// Start on Enter, Cancel on Escape
