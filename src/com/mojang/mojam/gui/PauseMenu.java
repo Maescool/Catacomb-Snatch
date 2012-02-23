@@ -2,6 +2,7 @@ package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
 
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
@@ -16,10 +17,10 @@ public class PauseMenu extends GuiMenu {
 		this.gameWidth = gameWidth;
 
 		resumeButton = (Button) addButton(new Button(TitleMenu.RETURN_ID,
-				"Resume", (gameWidth - 128) / 2, 200));
-		addButton(new Button(TitleMenu.HOW_TO_PLAY, "Help menu",
+				MojamComponent.texts.getStatic("pausemenu.resume"), (gameWidth - 128) / 2, 200));
+		addButton(new Button(TitleMenu.HOW_TO_PLAY, MojamComponent.texts.getStatic("pausemenu.help"),
 				(gameWidth - 128) / 2, 230));
-		addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, "Main menu",
+		addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, MojamComponent.texts.getStatic("pausemenu.backtomain"),
 				(gameWidth - 128) / 2, 260));
 	}
 
