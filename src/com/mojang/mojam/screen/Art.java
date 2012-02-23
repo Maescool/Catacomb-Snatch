@@ -17,12 +17,13 @@ public class Art {
 	public static Bitmap[][] darkness = cut("/art/map/dark.png", 32, 32);
 	public static Bitmap[][] mapIcons = cut("/art/map/mapicons.png", 5, 5);
 	public static Bitmap shadow = load("/art/map/shadow.png");
-      	public static Bitmap[][] rails = cut("/art/map/rails.png", 32, 38);
+    public static Bitmap[][] rails = cut("/art/map/rails.png", 32, 38);
 
 	public static Bitmap[][] lordLard = cut("/art/player/lord_lard_sheet.png", 32, 32);
 	public static Bitmap[][] herrSpeck = cut("/art/player/herr_von_speck_sheet.png", 32, 32);
 	public static Bitmap[][] startLordLard = cut("/art/player/start_lordlard.png", 32, 32);
 	public static Bitmap[][] startHerrSpeck = cut("/art/player/start_herrspeck.png", 32, 32);
+	public static Bitmap[][] playerHealthBar = cut("/art/player/bar_green.png", 60, 6);
         
 	public static Bitmap titleScreen = load("/art/screen/TITLESCREEN.png");
 	public static Bitmap howToPlayScreen = load("/art/screen/how_to_play.png");
@@ -32,7 +33,7 @@ public class Art {
 	public static Bitmap[][] button = cut("/art/screen/button.png", 128, 24);
     public static Bitmap[][] checkbox = cut("/art/screen/checkbox.png", 24, 24);
 	public static Bitmap panel = load("/art/screen/panel.png");
-        public static Bitmap background = load("/art/screen/BACKGROUND.png");
+    public static Bitmap background = load("/art/screen/BACKGROUND.png");
         
 	public static Bitmap[][] harvester = cut("/art/building/bot_vacuum.png", 32, 56);
 	public static Bitmap[][] harvester2 = cut("/art/building/bot_vacuum2.png", 32, 56);
@@ -48,7 +49,7 @@ public class Art {
 	public static Bitmap[][] font_red = cut("/art/fonts/font_red.png", 8, 8);
 	public static Bitmap[][] font_gold = cut("/art/fonts/font_gold.png", 8, 8);
 
-        public static Bitmap[][] raildroid = cut("/art/mob/raildroid.png", 32, 32);
+    public static Bitmap[][] raildroid = cut("/art/mob/raildroid.png", 32, 32);
 	public static Bitmap[][] mummy = cut("/art/mob/enemy_mummy_anim_48.png", 48, 48);
 	public static Bitmap[][] snake = cut("/art/mob/enemy_snake_anim_48.png", 48, 48);
 	public static Bitmap[][] scarab = cut("/art/mob/enemy_scarab_anim_48.png", 48, 48);
