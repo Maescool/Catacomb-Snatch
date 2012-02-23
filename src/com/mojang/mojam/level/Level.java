@@ -378,7 +378,7 @@ public class Level {
 								new BB(null, x - r, y - r, x + r, y + r),
 								Turret.class).size() == 0) {
 							addEntity(new SpawnerEntity(x, y, Team.Neutral,
-									random.nextInt(3)));
+									random.nextInt(4)));
 						}
 					}
 				}
