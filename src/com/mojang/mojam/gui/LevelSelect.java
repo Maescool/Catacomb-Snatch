@@ -62,8 +62,9 @@ public class LevelSelect extends GuiMenu {
 				activeButton.setActive(true);
 			}
 
-			if (x == (xButtons - 1))
+			if (x == (xButtons - 1)) {
 				y++;
+			}
 		}
 	}
 
@@ -96,16 +97,16 @@ public class LevelSelect extends GuiMenu {
 		// Compute new id
 		int activeButtonId = activeButton.getId();
 		int nextActiveButtonId = -2;
-		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			nextActiveButtonId = bestExistingLevelId(activeButtonId - 1, levels.size() - 1);
+		if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
+			nextActiveButtonId = bestExistingLevelId(activeButtonId - 1, levelButtons.length - 1);
 		}
-		else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+		else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
             nextActiveButtonId = bestExistingLevelId(activeButtonId + 1, 0);
 		}
-		else if (e.getKeyCode() == KeyEvent.VK_UP) {
+		else if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
 			nextActiveButtonId = bestExistingLevelId(activeButtonId - 3, activeButtonId + 6, activeButtonId + 3);
 		}
-		else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+		else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
 			nextActiveButtonId = bestExistingLevelId(activeButtonId + 3, activeButtonId - 6, activeButtonId - 3);
 		}
 
@@ -117,7 +118,7 @@ public class LevelSelect extends GuiMenu {
 		}
 
 		// Start on Enter, Cancel on Escape
-		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+		if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
 			startGameButton.postClick();
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -128,7 +129,7 @@ public class LevelSelect extends GuiMenu {
 	
 	public int bestExistingLevelId(int... options) {
 		for (int option : options) {
-			if (option >= 0 && option < levels.size()) {
+			if (option >= 0 && option < levelButtons.length) {
 				return option;
 			}
 		}

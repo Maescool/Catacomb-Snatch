@@ -26,11 +26,16 @@ public class TitleMenu extends GuiMenu {
 	public static final int RETURN_ID = 1012;
 	public static final int SELECT_DIFFICULTY_HOSTING_ID = 1013;
 	public static final int BACK_ID = 1014;
+	public static final int IGNORE_ID = 1015;
+	public static final int OPTIONS_ID = 1015;
+	
+	public static final int FULLSCREEN_ID = 2000;
+	public static final int FPS_ID = 2001;
+    public static final int MUTE_MUSIC = 2002;
 
 	public static LevelInformation level = null;
 	public static DifficultyInformation difficulty = null;
 
-	// public static lol... ;)
 	public static String ip = "";
 	
 
@@ -40,12 +45,13 @@ public class TitleMenu extends GuiMenu {
 	public TitleMenu(int gameWidth, int gameHeight) {
 		super();
 		this.gameWidth = gameWidth;
-
-		addButton(new Button(SELECT_LEVEL_ID, "Start", (gameWidth - 128) / 2, 200));
-		addButton(new Button(SELECT_HOST_LEVEL_ID, "Host", (gameWidth - 128) / 2, 230));
-		addButton(new Button(JOIN_GAME_ID, "Join", (gameWidth - 128) / 2, 260));
-		addButton(new Button(HOW_TO_PLAY, "How to play", (gameWidth - 128) / 2, 290));
-		addButton(new Button(EXIT_GAME_ID, "Exit", (gameWidth - 128) / 2, 320));
+		int startY = 140;
+		addButton(new Button(SELECT_LEVEL_ID, MojamComponent.texts.getStatic("titlemenu.start"), (gameWidth - 128) / 2, (startY += 30)));
+		addButton(new Button(SELECT_HOST_LEVEL_ID, MojamComponent.texts.getStatic("titlemenu.host"), (gameWidth - 128) / 2, (startY += 30)));
+		addButton(new Button(JOIN_GAME_ID, MojamComponent.texts.getStatic("titlemenu.join"), (gameWidth - 128) / 2, (startY += 30)));
+		addButton(new Button(HOW_TO_PLAY, MojamComponent.texts.getStatic("titlemenu.help"), (gameWidth - 128) / 2, (startY += 30)));
+		addButton(new Button(OPTIONS_ID, MojamComponent.texts.getStatic("titlemenu.options"), (gameWidth - 128) / 2, (startY += 30)));
+		addButton(new Button(EXIT_GAME_ID, MojamComponent.texts.getStatic("titlemenu.exit"), (gameWidth - 128) / 2, (startY += 30)));
 	}
 
 	@Override
@@ -57,22 +63,22 @@ public class TitleMenu extends GuiMenu {
 
 		super.render(screen);
 
-		screen.blit(Art.lordLard[0][6], (gameWidth - 128) / 2 - 40, 190 + selectedItem * 30);
+		screen.blit(Art.lordLard[0][6], (gameWidth - 128) / 2 - 40, 160 + selectedItem * 30);
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_UP) {
+		if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
 			selectedItem--;
 			if (selectedItem < 0) {
-				selectedItem = 4;
+				selectedItem = buttons.size() - 1;
 			}
-		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+		} else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
 			selectedItem++;
-			if (selectedItem > 4) {
+			if (selectedItem > buttons.size() - 1) {
 				selectedItem = 0;
 			}
-		} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+		} else if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
 			e.consume();
 			buttons.get(selectedItem).postClick();
 		} else if (e.getKeyCode() == KeyEvent.VK_F11) {

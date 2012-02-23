@@ -22,7 +22,12 @@ public class Texts {
 	}
 	
 	public String getStatic(String property) {
-		return texts.getString(property);
+	    if (texts.containsKey(property)) {
+	        return texts.getString(property);
+	    }
+	    else {
+	        return "";
+	    }
 	}
 
 	public String player1Name() {

@@ -119,6 +119,20 @@ public class Player extends Mob implements LootCollector {
 
 	@Override
 	public void tick() {
+		
+		// if mouse is in use, update player orientation before level tick
+		if (!mouseButtons.mouseHidden) {
+
+			// update player mouse, in world pixels relative to
+			// player
+			setAimByMouse(
+					((mouseButtons.getX() / MojamComponent.SCALE) - (MojamComponent.screen.w / 2)),
+					(((mouseButtons.getY() / MojamComponent.SCALE) + 24) - (MojamComponent.screen.h / 2)));
+		} else {
+			setAimByKeyboard();
+		}
+
+		
 		calculLevel();
 
 		time++;
@@ -263,11 +277,11 @@ public class Player extends Mob implements LootCollector {
 			primaryFire(xa, ya);
 		} else {
 			if (wasShooting) {
-				suckRadius = 60;
+				suckRadius = 0;
 			}
 			wasShooting = false;
-			if (suckRadius > 0) {
-				suckRadius--;
+			if (suckRadius < 60) {
+				suckRadius++;
 			}
 			takeDelay = 15;
 		}
@@ -575,7 +589,7 @@ public class Player extends Mob implements LootCollector {
 	}
 
 	@Override
-	public String getDeatchSound() {
+	public String getDeathSound() {
 		return "/sound/Death.wav";
 	}
 

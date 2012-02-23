@@ -23,8 +23,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.sql.Timestamp;
-import java.util.Calendar;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Stack;
@@ -47,6 +45,7 @@ import com.mojang.mojam.gui.HostingWaitMenu;
 import com.mojang.mojam.gui.HowToPlay;
 import com.mojang.mojam.gui.JoinGameMenu;
 import com.mojang.mojam.gui.LevelSelect;
+import com.mojang.mojam.gui.OptionsMenu;
 import com.mojang.mojam.gui.PauseMenu;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.gui.WinMenu;
@@ -67,6 +66,8 @@ import com.mojang.mojam.network.PacketListener;
 import com.mojang.mojam.network.PauseCommand;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.network.packet.ChangeKeyCommand;
+import com.mojang.mojam.network.packet.ChangeMouseButtonCommand;
+import com.mojang.mojam.network.packet.ChangeMouseCoordinateCommand;
 import com.mojang.mojam.network.packet.StartGamePacket;
 import com.mojang.mojam.network.packet.StartGamePacketCustom;
 import com.mojang.mojam.network.packet.TurnPacket;
@@ -92,17 +93,17 @@ public class MojamComponent extends Canvas implements Runnable,
 	private Cursor emptyCursor;
 	private double framerate = 60;
 	private int fps;
-	private Screen screen = new Screen(GAME_WIDTH, GAME_HEIGHT);
+	public static Screen screen = new Screen(GAME_WIDTH, GAME_HEIGHT);
 	private Level level;
 
 	private Stack<GuiMenu> menuStack = new Stack<GuiMenu>();
 
 	private boolean mouseMoved = false;
-	private boolean mouseHidden = false;
 	private int mouseHideTime = 0;
 	public MouseButtons mouseButtons = new MouseButtons();
 	public Keys keys = new Keys();
 	public Keys[] synchedKeys = { new Keys(), new Keys() };
+	public MouseButtons[] synchedMouseButtons = {new MouseButtons(), new MouseButtons() };
 	public Player[] players = new Player[2];
 	public Player player;
 	public TurnSynchronizer synchronizer;
@@ -198,7 +199,9 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	private void init() {
 		soundPlayer = new SoundPlayer();
-		soundPlayer.startTitleMusic();
+		
+		if( ! Options.getAsBoolean(Options.MUTE_MUSIC, Options.VALUE_FALSE))
+		    soundPlayer.startTitleMusic();
 
 		try {
 			emptyCursor = Toolkit.getDefaultToolkit().createCustomCursor(
@@ -247,14 +250,14 @@ public class MojamComponent extends Canvas implements Runnable,
 			return;
 		level.init();
 
-		players[0] = new Player(synchedKeys[0], mouseButtons, level.width
+		players[0] = new Player(synchedKeys[0], synchedMouseButtons[0], level.width
 				* Tile.WIDTH / 2 - 16, (level.height - 5 - 1) * Tile.HEIGHT
 				- 16, Team.Team1);
 		players[0].setFacing(4);
 		level.addEntity(players[0]);
 		level.addEntity(new Base(34 * Tile.WIDTH, 7 * Tile.WIDTH, Team.Team1));
 		if (isMultiplayer) {
-			players[1] = new Player(synchedKeys[1], mouseButtons, level.width
+			players[1] = new Player(synchedKeys[1], synchedMouseButtons[1], level.width
 					* Tile.WIDTH / 2 - 16, 7 * Tile.HEIGHT - 16, Team.Team2);
 			// players[1] = new Player(synchedKeys[1], 10, 10);
 			level.addEntity(players[1]);
@@ -383,9 +386,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			menuStack.peek().render(screen);
 		}
 
-		boolean drawFPS = Options.get("drawFPS") != null
-				&& Options.get("drawFPS").equals("true");
-		if (drawFPS) {
+		if (Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE)) {
 			Font.draw(screen, texts.FPS(fps), 10, 10);
 		}
 
@@ -421,7 +422,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	private void renderMouse(Screen screen, MouseButtons mouseButtons) {
 
-		if (mouseHidden)
+		if (mouseButtons.mouseHidden)
 			return;
 
 		int crosshairSize = 15;
@@ -468,18 +469,20 @@ public class MojamComponent extends Canvas implements Runnable,
 		if (mouseMoved) {
 			mouseMoved = false;
 			mouseHideTime = 0;
-			if (mouseHidden) {
-				mouseHidden = false;
+			if (mouseButtons.mouseHidden) {
+				mouseButtons.mouseHidden = false;
 			}
 		}
 		if (mouseHideTime < 60) {
 			mouseHideTime++;
 			if (mouseHideTime == 60) {
-				mouseHidden = true;
+				mouseButtons.mouseHidden = true;
 			}
 		}
-		mouseButtons.tick();
 
+		if(level == null) {
+			mouseButtons.tick();
+		} else 
 		if (level != null) {
 			if (synchronizer.preTurn()) {
 				synchronizer.postTurn();
@@ -501,6 +504,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 					if (keys.pause.wasPressed()) {
 						keys.release();
+						mouseButtons.releaseAll();
 						synchronizer.addCommand(new PauseCommand(true));
 					}
 					
@@ -508,23 +512,24 @@ public class MojamComponent extends Canvas implements Runnable,
 						setFullscreen(!fullscreen);
 					}
 						
-					// if mouse is in use, update player orientation before level tick
-					if (!mouseHidden) {
-
-						// update player mouse, in world pixels relative to
-						// player
-						player.setAimByMouse(
-								((mouseButtons.getX() / SCALE) - (screen.w / 2)),
-								(((mouseButtons.getY() / SCALE) + 24) - (screen.h / 2)));
-					} else {
-						player.setAimByKeyboard();
+					
+					for (int index = 0; index < mouseButtons.currentState.length; index++) {
+						boolean nextState = mouseButtons.nextState[index];
+						if (mouseButtons.isDown(index) != nextState) {
+							synchronizer.addCommand(new ChangeMouseButtonCommand(index,nextState));
+						}
 					}
-
+					
+					synchronizer.addCommand(new ChangeMouseCoordinateCommand(mouseButtons.getX(), mouseButtons.getY(), mouseButtons.mouseHidden));
+										
 					level.tick();
 				}
+		
+				
+				
 
 				// every 4 minutes, start new background music :)
-				if (System.currentTimeMillis() / 1000 > nextMusicInterval) {
+				if (System.currentTimeMillis() / 1000 > nextMusicInterval && ! Options.getAsBoolean(Options.MUTE_MUSIC, Options.VALUE_FALSE)) {
 					nextMusicInterval = (System.currentTimeMillis() / 1000) + 4 * 60;
 					soundPlayer.startBackgroundMusic();
 				}
@@ -533,8 +538,13 @@ public class MojamComponent extends Canvas implements Runnable,
 					takeScreenShot();
 				}
 			}
+			mouseButtons.tick();
+			for (MouseButtons sMouseButtons : synchedMouseButtons) {
+				sMouseButtons.tick();
+			}
 		}
 
+		
 		if (createServerState == 1) {
 			createServerState = 2;
 
@@ -569,7 +579,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		guiFrame.setVisible(true);
 		Options.loadProperties();
-		setFullscreen(Boolean.parseBoolean(Options.get("fullscreen")));
+		setFullscreen(Boolean.parseBoolean(Options.get(Options.FULLSCREEN, Options.VALUE_FALSE)));
 		mc.start();
 	}
 
@@ -599,6 +609,19 @@ public class MojamComponent extends Canvas implements Runnable,
 			synchedKeys[playerId].getAll().get(ckc.getKey()).nextState = ckc
 					.getNextState();
 		}
+		
+		if (packet instanceof ChangeMouseButtonCommand) {
+			ChangeMouseButtonCommand ckc = (ChangeMouseButtonCommand) packet;
+			synchedMouseButtons[playerId].nextState[ckc.getButton()] = ckc.getNextState();
+		}
+		
+		if (packet instanceof ChangeMouseCoordinateCommand) {
+			ChangeMouseCoordinateCommand ccc = (ChangeMouseCoordinateCommand) packet;
+			synchedMouseButtons[playerId].setPosition(new Point(ccc.getX(), ccc.getY()));
+			synchedMouseButtons[playerId].mouseHidden = ccc.isMouseHidden();
+		}
+		
+		
 
 		if (packet instanceof PauseCommand) {
 			PauseCommand pc = (PauseCommand) packet;
@@ -616,7 +639,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		if (packet instanceof StartGamePacket) {
 			if (!isServer) {
 				StartGamePacket sgPacker = (StartGamePacket) packet;
-				synchronizer.onStartGamePacket(sgPacker.getGameSeed());
+				synchronizer.onStartGamePacket(sgPacker);
 				TitleMenu.difficulty = DifficultyList.getDifficulties().get(sgPacker.getDifficulty());
 				createLevel(sgPacker.getLevelFile());
 			}
@@ -625,7 +648,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		} else if (packet instanceof StartGamePacketCustom) {
 			if (!isServer) {
 				StartGamePacketCustom sgPacker = (StartGamePacketCustom) packet;
-				synchronizer.onStartGamePacket(sgPacker.getGameSeed());
+				synchronizer.onStartGamePacket((StartGamePacket)packet);
 				TitleMenu.difficulty = DifficultyList.getDifficulties().get(sgPacker.getDifficulty());
 				level = sgPacker.getLevel();
 				paused = false;
@@ -746,6 +769,8 @@ public class MojamComponent extends Canvas implements Runnable,
 			}
 		} else if (id == TitleMenu.HOW_TO_PLAY) {
 			addMenu(new HowToPlay());
+		} else if (id == TitleMenu.OPTIONS_ID) {
+			addMenu(new OptionsMenu());
 		} else if (id == TitleMenu.SELECT_DIFFICULTY_ID) {
 			addMenu(new DifficultySelect(false));
 		} else if (id == TitleMenu.SELECT_DIFFICULTY_HOSTING_ID) {
