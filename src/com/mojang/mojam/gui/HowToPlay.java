@@ -7,7 +7,7 @@ import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
 public class HowToPlay extends GuiMenu {
-
+	
 	public HowToPlay() {
 		addButton(new Button(TitleMenu.BACK_ID, "back", MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25));
 	}
@@ -68,8 +68,7 @@ public class HowToPlay extends GuiMenu {
 		Font.draw(screen, "15 (-)", tab1+20, line+25);
 		Font.draw(screen, MojamComponent.texts.getStatic("rails1"), tab2, line);
         Font.draw(screen, MojamComponent.texts.getStatic("rails2"), tab2, line+10);
-
-		}
+	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -88,6 +87,7 @@ public class HowToPlay extends GuiMenu {
 
 	@Override
 	public void buttonPressed(ClickableComponent button) {
+		
 	}
 
 }
