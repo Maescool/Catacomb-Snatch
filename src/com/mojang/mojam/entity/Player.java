@@ -37,6 +37,7 @@ public class Player extends Mob implements LootCollector {
 	public Keys keys;
 	public MouseButtons mouseButtons;
 	public int mouseFireButton = 1;
+	public int mouseUpgradeButton = 2;
 	public int mouseUseButton = 3;
 	public Vec2 aimVector;
 	public IWeapon weapon;
@@ -303,7 +304,7 @@ public class Player extends Mob implements LootCollector {
 			revive();
 		}
 
-		if (keys.build.isDown && !keys.build.wasDown) {
+		if ((keys.build.isDown && !keys.build.wasDown) || (mouseButtons.isDown(mouseUpgradeButton) && selected == null)) {
 			if (level.getTile(x, y).isBuildable()) {
 				if (score >= COST_RAIL && time - lastRailTick >= RailDelayTicks) {
 					lastRailTick = time;
@@ -333,6 +334,7 @@ public class Player extends Mob implements LootCollector {
 					MojamComponent.soundPlayer.playSound("/sound/Track Place.wav", (float) pos.x, (float) pos.y);
 				}
 			}
+			mouseButtons.setNextState(mouseUpgradeButton, false);
 		}
 
 		if (carrying != null) {
@@ -381,8 +383,9 @@ public class Player extends Mob implements LootCollector {
 				} else if (selected instanceof IUsable && (keys.use.wasPressed() || mouseButtons.isDown(mouseUseButton))) {
 					((IUsable) selected).use(this);
 					mouseButtons.setNextState(mouseUseButton, false);
-				} else if (selected instanceof IUsable && keys.upgrade.wasPressed()) {
+				} else if (selected instanceof IUsable && (keys.upgrade.wasPressed() || mouseButtons.isDown(mouseUpgradeButton))) {
 					((IUsable) selected).upgrade(this);
+					mouseButtons.setNextState(mouseUpgradeButton, false);
 				}
 			}
 
