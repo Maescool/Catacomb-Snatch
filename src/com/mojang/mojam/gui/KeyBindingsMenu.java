@@ -95,7 +95,7 @@ public class KeyBindingsMenu extends GuiMenu {
 		addButton(new KeyBindingButton(TitleMenu.KEY_UPGRADE_ID, keys.upgrade, xOffset + 3 * 128,
 				yOffset + 3 * 30));
 		back = addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"),
-				(gameWidth - 128) / 2, yOffset + 6 * 30 - 24));
+				(gameWidth - 128) / 2, yOffset + 6 * 30 - 24 + 40));
 	}
 
 	private String getMenuText(Key key) {
@@ -111,6 +111,9 @@ public class KeyBindingsMenu extends GuiMenu {
 	public void render(Screen screen) {
 		screen.blit(Art.background, 0, 0);
 		Texts txts = MojamComponent.texts;
+		String txt = txts.getStatic("options.keyBindings");
+		Font.draw(screen, txt, (MojamComponent.GAME_WIDTH - Font.getStringWidth(txt)) / 2,
+				yOffset - 40);
 		write(screen, txts.getStatic("keys.up"), 1, 0);
 		write(screen, txts.getStatic("keys.down"), 1, 1);
 		write(screen, txts.getStatic("keys.left"), 1, 2);
@@ -122,6 +125,7 @@ public class KeyBindingsMenu extends GuiMenu {
 		write(screen, txts.getStatic("keys.use"), 3, 2);
 		write(screen, txts.getStatic("keys.upgrade"), 3, 3);
 		super.render(screen);
+		screen.blit(Art.lordLard[0][6], back.getX() - 40, back.getY() - 10);
 	}
 
 	private void write(Screen screen, String txt, int column, int row) {
@@ -151,6 +155,10 @@ public class KeyBindingsMenu extends GuiMenu {
 			selected.setLabel(KeyEvent.getKeyText(e.getKeyCode()));
 			selected.setSelected(false);
 			selected = null;
+		} else {
+			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				back.postClick();
+			}
 		}
 	}
 
