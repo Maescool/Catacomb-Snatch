@@ -20,18 +20,30 @@ public class DifficultyInformation {
 	}
 
 	public static float calculateHealth(float baseHealth) {
-		return baseHealth * TitleMenu.difficulty.mobHealthModifier;
+		if(TitleMenu.difficulty != null)
+			return baseHealth * TitleMenu.difficulty.mobHealthModifier;
+		else
+			return 0;
 	}
 
 	public static float calculateStrength(int baseStrength) {
-		return baseStrength * TitleMenu.difficulty.mobStrengthModifier;
+		if(TitleMenu.difficulty != null)
+			return baseStrength * TitleMenu.difficulty.mobStrengthModifier;
+		else
+			return 0;
 	}
 
 	public static int calculateSpawntime(int baseSpawntime) {
-		return (int)(baseSpawntime * TitleMenu.difficulty.mobSpawnModifier);
+		if(TitleMenu.difficulty != null)
+			return (int)(baseSpawntime * TitleMenu.difficulty.mobSpawnModifier);
+		else
+			return 0;
 	}
 
 	public static int calculateCosts(int baseCost) {
-		return (int)(baseCost * TitleMenu.difficulty.shopCostsModifier);
+		if(TitleMenu.difficulty != null)
+			return (int)(baseCost * TitleMenu.difficulty.shopCostsModifier);
+		else
+			return 0;
 	}
 }
