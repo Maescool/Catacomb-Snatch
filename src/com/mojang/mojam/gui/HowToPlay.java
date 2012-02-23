@@ -67,8 +67,7 @@ public class HowToPlay extends GuiMenu {
 		Font.draw(screen, "10 (+)", tab1+20, line+15);
 		Font.draw(screen, "15 (-)", tab1+20, line+25);
 		Font.draw(screen, MojamComponent.texts.getStatic("rails1"), tab2, line);
-		
-		
+        Font.draw(screen, MojamComponent.texts.getStatic("rails2"), tab2, line+10);
 
 		}
 
