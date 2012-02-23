@@ -18,9 +18,15 @@ public class OptionsMenu extends GuiMenu {
 	public OptionsMenu() {
 		loadOptions();
 		
-		addButton(new Button(TitleMenu.BACK_ID, "back", MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25));
+		ClickableComponent back = addButton(new Button(TitleMenu.BACK_ID, "back", MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25));
+		back.addListener(new ButtonListener() {
+			@Override
+			public void buttonPressed(ClickableComponent button) {
+				Options.saveProperties();
+			}
+		});
 		
-		ClickableComponent btnFs = addButton(new Button(TitleMenu.FULLSCREEN_ID, "fullscreen", tab1, 30));
+		ClickableComponent btnFs = addButton(new Button(TitleMenu.FULLSCREEN_ID, MojamComponent.texts.getStatic("options.fullscreen"), tab1, 30));
 		btnFs.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
@@ -30,7 +36,7 @@ public class OptionsMenu extends GuiMenu {
 			}
 		});
 		
-		ClickableComponent btnFps = addButton(new Button(TitleMenu.FPS_ID, "show fps", tab1, 60));
+		ClickableComponent btnFps = addButton(new Button(TitleMenu.FPS_ID, MojamComponent.texts.getStatic("options.showfps"), tab1, 60));
 		btnFps.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
@@ -49,8 +55,8 @@ public class OptionsMenu extends GuiMenu {
 	public void render(Screen screen) {
 		screen.blit(Art.background, 0, 0);
 		int startY = 8;
-		Font.draw(screen, fullscreen ? "on" : "off", tab1i, (startY += 30));
-		Font.draw(screen, fps ? "on" : "off", tab1i, (startY += 30));
+		Font.draw(screen, getState(fullscreen), tab1i, (startY += 30));
+		Font.draw(screen, getState(fps), tab1i, (startY += 30));
 		
 		
 		super.render(screen);
@@ -76,6 +82,10 @@ public class OptionsMenu extends GuiMenu {
 	@Override
 	public void keyReleased(KeyEvent e) {
 
+	}
+	
+	private String getState(boolean state) {
+		return state ? MojamComponent.texts.getStatic("options.on") : MojamComponent.texts.getStatic("options.off");
 	}
 
 }
