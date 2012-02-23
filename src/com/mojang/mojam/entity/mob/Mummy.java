@@ -17,6 +17,7 @@ public class Mummy extends HostileMob {
     double speed = 0.5;
     private int tick = 0;
     public static double ATTACK_RADIUS = 128.0;
+    public boolean chasing = false;
 
     public Mummy(double x, double y) {
         super(x, y, Team.Neutral);
@@ -48,11 +49,12 @@ public class Mummy extends HostileMob {
                     closest = e;
                 }
             }
-            if (closest != null) {
-                if (!this.isTargetBehindWall(closest.pos.x, closest.pos.y, closest)) {
-                    double angle = Math.atan2((closest.pos.y - pos.y), (closest.pos.x - pos.x));
-                    facing = (int) (((Math.toDegrees(angle) + 360) / 90) - 2);
-                }
+            if (closest != null && !this.isTargetBehindWall(closest.pos.x, closest.pos.y, closest)) {
+                chasing=true;
+                double angle = Math.atan2((closest.pos.y - pos.y), (closest.pos.x - pos.x));
+                facing = (int) Math.abs(2*(angle+(3*Math.PI/4))/Math.PI) % 4; 
+            } else {
+            	chasing=false;
             }
         }
         switch (facing) {
@@ -79,7 +81,7 @@ public class Mummy extends HostileMob {
             }
 
             stepTime++;
-            if (!move(xd, yd) || (walkTime > 10 && TurnSynchronizer.synchedRandom.nextInt(200) == 0)) {
+            if ((!move(xd, yd) || (walkTime > 10 && TurnSynchronizer.synchedRandom.nextInt(200) == 0) && chasing==false)) {
                 facing = TurnSynchronizer.synchedRandom.nextInt(4);
                 walkTime = 0;
             }

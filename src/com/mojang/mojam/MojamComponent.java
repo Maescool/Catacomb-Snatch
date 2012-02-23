@@ -149,6 +149,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	public void setLocale(Locale locale) {
 		MojamComponent.locale = locale;
 		MojamComponent.texts = new Texts(locale);
+		Locale.setDefault(locale);
 	}
 
 	@Override
