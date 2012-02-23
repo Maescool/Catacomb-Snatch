@@ -199,6 +199,8 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	private void init() {
 		soundPlayer = new SoundPlayer();
+		
+		if( ! Options.getAsBoolean(Options.MUTE_MUSIC, Options.VALUE_FALSE))
 		soundPlayer.startTitleMusic();
 
 		try {
@@ -524,12 +526,10 @@ public class MojamComponent extends Canvas implements Runnable,
 										
 					level.tick();
 				}
-		
-				
 				
 
 				// every 4 minutes, start new background music :)
-				if (System.currentTimeMillis() / 1000 > nextMusicInterval) {
+				if (System.currentTimeMillis() / 1000 > nextMusicInterval && Options.getAsBoolean(Options.MUTE_MUSIC, Options.VALUE_FALSE)) {
 					nextMusicInterval = (System.currentTimeMillis() / 1000) + 4 * 60;
 					soundPlayer.startBackgroundMusic();
 				}

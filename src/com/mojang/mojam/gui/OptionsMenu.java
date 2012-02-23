@@ -11,6 +11,7 @@ public class OptionsMenu extends GuiMenu {
 	
 	private boolean fullscreen;
 	private boolean fps;
+	private boolean muteMusic;
 	
 	int tab1 = 30;
 	int tab1i = 170;
@@ -26,29 +27,44 @@ public class OptionsMenu extends GuiMenu {
 			}
 		});
 		
-		ClickableComponent btnFs = addButton(new Checkbox(TitleMenu.FULLSCREEN_ID, MojamComponent.texts.getStatic("options.fullscreen"), tab1, 30));
+		ClickableComponent btnFs = addButton(new Checkbox(TitleMenu.FULLSCREEN_ID, MojamComponent.texts.getStatic("options.fullscreen"), tab1, 30, fullscreen));
 		btnFs.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
 				fullscreen = !fullscreen;
-				Options.set("fullscreen", fullscreen ? "true" : "false");
+				Options.set(Options.FULLSCREEN, fullscreen);
 				MojamComponent.setFullscreen(fullscreen);
 			}
 		});
 		
-		ClickableComponent btnFps = addButton(new Checkbox(TitleMenu.FPS_ID, MojamComponent.texts.getStatic("options.showfps"), tab1, 60));
+		ClickableComponent btnFps = addButton(new Checkbox(TitleMenu.FPS_ID, MojamComponent.texts.getStatic("options.showfps"), tab1, 60, fps));
 		btnFps.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
 				fps = !fps;
-				Options.set("drawFPS", fps ? "true" : "false");
+				Options.set(Options.DRAW_FPS, fps);
 			}
 		});
+        
+        ClickableComponent btnPlayMusic = addButton(new Checkbox(TitleMenu.MUTE_MUSIC, MojamComponent.texts.getStatic("options.mutemusic"), tab1, 90, muteMusic));
+        btnPlayMusic.addListener(new ButtonListener() {
+            @Override
+            public void buttonPressed(ClickableComponent button) {
+                muteMusic = !muteMusic;
+                Options.set("muteMusic", muteMusic ? "true" : "false");
+                
+                if(muteMusic)
+                    MojamComponent.soundPlayer.stopBackgroundMusic();
+                else
+                    MojamComponent.soundPlayer.startBackgroundMusic();
+            }
+        });
 	}
 	
 	private void loadOptions() {
-		fullscreen = Options.get("fullscreen") != null && Boolean.parseBoolean(Options.get("fullscreen"));
-		fps = Options.get("drawFPS") != null && Boolean.parseBoolean(Options.get("drawFPS"));
+	    fullscreen = Options.getAsBoolean(Options.FULLSCREEN, Options.VALUE_FALSE);
+	    fps = Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE);
+	    muteMusic = Options.getAsBoolean(Options.MUTE_MUSIC, Options.VALUE_FALSE);
 	}
 
 	@Override
