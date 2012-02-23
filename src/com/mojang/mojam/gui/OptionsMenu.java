@@ -31,7 +31,7 @@ public class OptionsMenu extends GuiMenu {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
 				fullscreen = !fullscreen;
-				Options.set("fullscreen", fullscreen ? "true" : "false");
+				Options.set(Options.FULLSCREEN, fullscreen);
 				MojamComponent.setFullscreen(fullscreen);
 			}
 		});
@@ -41,14 +41,14 @@ public class OptionsMenu extends GuiMenu {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
 				fps = !fps;
-				Options.set("drawFPS", fps ? "true" : "false");
+                Options.set(Options.DRAW_FPS, fps);
 			}
 		});
 	}
 	
 	private void loadOptions() {
-		fullscreen = Options.get("fullscreen") != null && Boolean.parseBoolean(Options.get("fullscreen"));
-		fps = Options.get("drawFPS") != null && Boolean.parseBoolean(Options.get("drawFPS"));
+		fullscreen = Options.getAsBoolean(Options.FULLSCREEN, Options.VALUE_FALSE);
+		fps = Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE);
 	}
 
 	@Override
