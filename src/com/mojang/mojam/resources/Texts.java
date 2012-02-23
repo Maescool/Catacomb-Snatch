@@ -15,9 +15,9 @@ public class Texts {
 
 	public String playerName(int team) {
 		if(team == Team.Team1){
-			return player1Name();
+			return getStatic("player1Name");
 		} else {
-			return player2Name();
+			return getStatic("player2Name");
 		}
 	}
 	
@@ -30,20 +30,12 @@ public class Texts {
 	    }
 	}
 
-	public String player1Name() {
-		return getStatic("player1Name");
-	}
-
-	public String player2Name() {
-		return getStatic("player2Name");
-	}
-
 	public String player1Win() {
-		return MessageFormat.format(getStatic("player1Win"), player1Name().toUpperCase());
+		return MessageFormat.format(getStatic("player1Win"), getStatic("player1Name").toUpperCase());
 	}
 
 	public String player2Win() {
-		return MessageFormat.format(getStatic("player2Win"), player2Name().toUpperCase());
+		return MessageFormat.format(getStatic("player2Win"), getStatic("player2Name").toUpperCase());
 	}
 
 	public String hasDied(int team) {
@@ -64,14 +56,6 @@ public class Texts {
 
 	public String money(int money) {
 		return MessageFormat.format(getStatic("money"), money);
-	}
-
-	public String waitingForClient() {
-		return getStatic("waitingForClient");
-	}
-
-	public String enterIP() {
-		return getStatic("enterIP");
 	}
 
 	public String FPS(int fps) {
