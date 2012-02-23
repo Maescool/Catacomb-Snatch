@@ -44,6 +44,7 @@ import com.mojang.mojam.gui.GuiMenu;
 import com.mojang.mojam.gui.HostingWaitMenu;
 import com.mojang.mojam.gui.HowToPlay;
 import com.mojang.mojam.gui.JoinGameMenu;
+import com.mojang.mojam.gui.KeyBindingsMenu;
 import com.mojang.mojam.gui.LevelSelect;
 import com.mojang.mojam.gui.OptionsMenu;
 import com.mojang.mojam.gui.PauseMenu;
@@ -53,6 +54,8 @@ import com.mojang.mojam.level.DifficultyList;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.LevelList;
+import com.mojang.mojam.level.gamemode.GameMode;
+import com.mojang.mojam.level.gamemode.GameModeVanilla;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.mc.EnumOS2;
 import com.mojang.mojam.mc.EnumOSMappingHelper;
@@ -99,6 +102,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	private Stack<GuiMenu> menuStack = new Stack<GuiMenu>();
 
+	private InputHandler inputHandler;
 	private boolean mouseMoved = false;
 	private int mouseHideTime = 0;
 	public MouseButtons mouseButtons = new MouseButtons();
@@ -132,7 +136,6 @@ public class MojamComponent extends Canvas implements Runnable,
 		this.setMaximumSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT
 				* SCALE));
 
-		this.addKeyListener(new InputHandler(keys));
 		this.addMouseMotionListener(this);
 		this.addMouseListener(this);
 
@@ -203,6 +206,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	}
 
 	private void init() {
+		initInput();
 		soundPlayer = new SoundPlayer();
 		
 		if( ! Options.getAsBoolean(Options.MUTE_MUSIC, Options.VALUE_FALSE))
@@ -221,16 +225,21 @@ public class MojamComponent extends Canvas implements Runnable,
 		// hide cursor, since we're drawing our own one
 		setCursor(emptyCursor);
 	}
+	
+	private void initInput(){
+		inputHandler = new InputHandler(keys);
+		addKeyListener(inputHandler);
+	}
 
 	public void showError(String s) {
 		handleAction(TitleMenu.RETURN_TO_TITLESCREEN);
 		addMenu(new GuiError(s));
 	}
 
-	private synchronized void createLevel(String levelPath) {
+	private synchronized void createLevel(String levelPath, GameMode mode) {
 		LevelInformation li = LevelInformation.getInfoForPath(levelPath);
 		if (li != null) {
-			createLevel(li);
+			createLevel(li, mode);
 			return;
 		} else if (!isMultiplayer) {
 			showError("Missing map.");
@@ -238,9 +247,10 @@ public class MojamComponent extends Canvas implements Runnable,
 		showError("Missing map - Multiplayer");
 	}
 
-	private synchronized void createLevel(LevelInformation li) {
+	private synchronized void createLevel(LevelInformation li, GameMode mode) {
 		try {
-			level = Level.fromFile(li);
+			//level = Level.fromFile(li);
+			level = mode.generateLevel(li);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			showError("Unable to load map.");
@@ -253,7 +263,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	private synchronized void initLevel() {
 		if (level == null)
 			return;
-		level.init();
+		//level.init();
 
 		players[0] = new Player(synchedKeys[0], synchedMouseButtons[0], level.width
 				* Tile.WIDTH / 2 - 16, (level.height - 5 - 1) * Tile.HEIGHT
@@ -451,14 +461,9 @@ public class MojamComponent extends Canvas implements Runnable,
 	}
 
 	private void tick() {
-		if (level != null) {
-            if (level.player1Score >= Level.TARGET_SCORE) {
-                addMenu(new WinMenu(GAME_WIDTH, GAME_HEIGHT, 1));
-                level = null;
-                return;
-            }
-            if (level.player2Score >= Level.TARGET_SCORE) {
-                addMenu(new WinMenu(GAME_WIDTH, GAME_HEIGHT, 2));
+		if (level != null && level.victoryConditions != null) {
+			if(level.victoryConditions.isVictoryConditionAchieved()) {
+				addMenu(new WinMenu(GAME_WIDTH, GAME_HEIGHT, level.victoryConditions.playerVictorious()));
                 level = null;
                 return;
             }
@@ -560,7 +565,7 @@ public class MojamComponent extends Canvas implements Runnable,
 					packetLink, localId, 2);
 
 			clearMenus();
-			createLevel(TitleMenu.level);
+			createLevel(TitleMenu.level, TitleMenu.defaultGameMode);
 
 			synchronizer.setStarted(true);
 			if (TitleMenu.level.vanilla) {
@@ -649,7 +654,7 @@ public class MojamComponent extends Canvas implements Runnable,
 				StartGamePacket sgPacker = (StartGamePacket) packet;
 				synchronizer.onStartGamePacket(sgPacker);
 				TitleMenu.difficulty = DifficultyList.getDifficulties().get(sgPacker.getDifficulty());
-				createLevel(sgPacker.getLevelFile());
+				createLevel(sgPacker.getLevelFile(), TitleMenu.defaultGameMode);
 			}
 		} else if (packet instanceof TurnPacket) {
 			synchronizer.onTurnPacket((TurnPacket) packet);
@@ -667,7 +672,6 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	@Override
 	public void buttonPressed(ClickableComponent component) {
-
 		if (component instanceof Button) {
 			final Button button = (Button) component;
 			handleAction(button.getId());
@@ -688,7 +692,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			synchronizer = new TurnSynchronizer(this, null, 0, 1);
 			synchronizer.setStarted(true);
 
-			createLevel(TitleMenu.level);
+			createLevel(TitleMenu.level, TitleMenu.defaultGameMode);
 			soundPlayer.stopBackgroundMusic();
 		} else if (id == TitleMenu.SELECT_LEVEL_ID) {
 			addMenu(new LevelSelect(false));
@@ -783,6 +787,8 @@ public class MojamComponent extends Canvas implements Runnable,
 			addMenu(new DifficultySelect(false));
 		} else if (id == TitleMenu.SELECT_DIFFICULTY_HOSTING_ID) {
 			addMenu(new DifficultySelect(true));
+		} else if (id == TitleMenu.KEY_BINDINGS_ID) {
+			addMenu(new KeyBindingsMenu(keys, inputHandler));
 		} else if (id == TitleMenu.EXIT_GAME_ID) {
 			System.exit(0);
 		} else if (id == TitleMenu.RETURN_ID) {
