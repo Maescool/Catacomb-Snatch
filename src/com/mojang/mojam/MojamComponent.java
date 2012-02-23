@@ -49,6 +49,7 @@ import com.mojang.mojam.gui.JoinGameMenu;
 import com.mojang.mojam.gui.LevelSelect;
 import com.mojang.mojam.gui.PauseMenu;
 import com.mojang.mojam.gui.TitleMenu;
+import com.mojang.mojam.gui.WinMenu;
 import com.mojang.mojam.level.DifficultyList;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
@@ -443,7 +444,19 @@ public class MojamComponent extends Canvas implements Runnable,
 	}
 
 	private void tick() {
-
+		if (level != null) {
+            if (level.player1Score >= Level.TARGET_SCORE) {
+                addMenu(new WinMenu(GAME_WIDTH, GAME_HEIGHT, 1));
+                level = null;
+                return;
+            }
+            if (level.player2Score >= Level.TARGET_SCORE) {
+                addMenu(new WinMenu(GAME_WIDTH, GAME_HEIGHT, 2));
+                level = null;
+                return;
+            }
+        }
+		
 		if (packetLink != null) {
 			packetLink.tick();
 		}
