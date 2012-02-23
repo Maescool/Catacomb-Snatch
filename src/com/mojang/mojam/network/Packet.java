@@ -27,6 +27,7 @@ public abstract class Packet {
 
 		map(100, ChangeKeyCommand.class);
 		map(101, PauseCommand.class);
+		map(102, ChangeMouseCommand.class);
 	}
 
 	public final int getId() {
