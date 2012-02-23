@@ -66,10 +66,9 @@ public class OptionsMenu extends GuiMenu {
             public void buttonPressed(ClickableComponent button) {
             	gameScale = !gameScale;
             	Options.set(Options.GAME_SCALE, gameScale);
-				if(gameScale)
-				    MojamComponent.setScale(2);
-				else
-					MojamComponent.setScale(1);
+            	
+            	int scale = gameScale ? 2 : 1;
+				MojamComponent.setScale(scale);
             }
         });
 	}

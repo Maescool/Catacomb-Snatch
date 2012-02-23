@@ -86,7 +86,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	private static final long serialVersionUID = 1L;
 	public static final int GAME_WIDTH = 512;
 	public static final int GAME_HEIGHT = GAME_WIDTH * 3 / 4;
-	public static int SCALE = 2;
+	public static int SCALE = 1;
 	
 	private static JFrame guiFrame;
 	private boolean running = true;
@@ -127,12 +127,9 @@ public class MojamComponent extends Canvas implements Runnable,
 		locale = new Locale("en");
 		texts = new Texts(locale);
 
-		this.setPreferredSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT
-				* SCALE));
-		this.setMinimumSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT
-				* SCALE));
-		this.setMaximumSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT
-				* SCALE));
+		this.setPreferredSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
+		this.setMinimumSize(new Dimension(GAME_WIDTH * 1, GAME_HEIGHT * 1));
+		this.setMaximumSize(new Dimension(GAME_WIDTH * 2, GAME_HEIGHT * 2));
 
 		this.addKeyListener(new InputHandler(keys));
 		this.addMouseMotionListener(this);
@@ -531,9 +528,6 @@ public class MojamComponent extends Canvas implements Runnable,
 											
 					level.tick();
 				}
-		
-				
-				
 
 				// every 4 minutes, start new background music :)
 				if (System.currentTimeMillis() / 1000 > nextMusicInterval && ! Options.getAsBoolean(Options.MUTE_MUSIC, Options.VALUE_FALSE)) {
@@ -583,8 +577,8 @@ public class MojamComponent extends Canvas implements Runnable,
 		guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		Options.loadProperties();
-		setScale(Options.getAsBoolean(Options.GAME_SCALE, Options.VALUE_TRUE) ? 2 : 1);
 		setFullscreen(Boolean.parseBoolean(Options.get(Options.FULLSCREEN, Options.VALUE_FALSE)));
+		setScale(Boolean.parseBoolean(Options.get(Options.GAME_SCALE, Options.VALUE_TRUE)) ? 2 : 1);
 		mc.start();
 	}
 
@@ -615,18 +609,17 @@ public class MojamComponent extends Canvas implements Runnable,
 		guiFrame.setUndecorated(fs);
 		device.setFullScreenWindow(fs ? guiFrame : null);
 		
-		// scale settings
-		if(fs){
-			scaleNow = SCALE;
-			SCALE = 2;
-		} else {
-			setScale(scaleNow);
-		}
-		
 		// display window
 		guiFrame.setLocationRelativeTo(null);
 		guiFrame.setVisible(true);
+		
 		fullscreen = fs;
+		
+		// scale settings
+		if(fs)
+			SCALE = 2;
+		else
+			setScale(scaleNow);
 	}
 	
 	public static boolean isFulscreen() {
