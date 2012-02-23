@@ -1,7 +1,8 @@
 package com.mojang.mojam.gui;
 
 import com.mojang.mojam.MouseButtons;
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Screen;
 
 public class Button extends ClickableComponent {
 
@@ -12,6 +13,14 @@ public class Button extends ClickableComponent {
 	public Button(int id, String label, int x, int y) {
 		super(x, y, 128, 24);
 		this.id = id;
+		this.label = label;
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
 		this.label = label;
 	}
 
