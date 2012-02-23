@@ -28,16 +28,26 @@ public class TitleMenu extends GuiMenu {
 	public static final int BACK_ID = 1014;
 	public static final int IGNORE_ID = 1015;
 	public static final int OPTIONS_ID = 1015;
-	
+
 	public static final int FULLSCREEN_ID = 2000;
 	public static final int FPS_ID = 2001;
-    public static final int MUTE_MUSIC = 2002;
+	public static final int MUTE_MUSIC = 2002;
+
+	public static final int KEY_BINDINGS_ID = 3000;
+	public static final int KEY_UP_ID = 3001;
+	public static final int KEY_DOWN_ID = 3002;
+	public static final int KEY_LEFT_ID = 3003;
+	public static final int KEY_RIGHT_ID = 3004;
+	public static final int KEY_SPRINT_ID = 3005;
+	public static final int KEY_FIRE_ID = 3006;
+	public static final int KEY_USE_ID = 3007;
+	public static final int KEY_BUILD_ID = 3008;
+	public static final int KEY_UPGRADE_ID = 3009;
 
 	public static LevelInformation level = null;
 	public static DifficultyInformation difficulty = null;
 
 	public static String ip = "";
-	
 
 	private int selectedItem = 0;
 	private final int gameWidth;
@@ -46,12 +56,19 @@ public class TitleMenu extends GuiMenu {
 		super();
 		this.gameWidth = gameWidth;
 		int startY = 140;
-		addButton(new Button(SELECT_LEVEL_ID, MojamComponent.texts.getStatic("titlemenu.start"), (gameWidth - 128) / 2, (startY += 30)));
-		addButton(new Button(SELECT_HOST_LEVEL_ID, MojamComponent.texts.getStatic("titlemenu.host"), (gameWidth - 128) / 2, (startY += 30)));
-		addButton(new Button(JOIN_GAME_ID, MojamComponent.texts.getStatic("titlemenu.join"), (gameWidth - 128) / 2, (startY += 30)));
-		addButton(new Button(HOW_TO_PLAY, MojamComponent.texts.getStatic("titlemenu.help"), (gameWidth - 128) / 2, (startY += 30)));
-		addButton(new Button(OPTIONS_ID, MojamComponent.texts.getStatic("titlemenu.options"), (gameWidth - 128) / 2, (startY += 30)));
-		addButton(new Button(EXIT_GAME_ID, MojamComponent.texts.getStatic("titlemenu.exit"), (gameWidth - 128) / 2, (startY += 30)));
+		addButton(new Button(SELECT_LEVEL_ID, MojamComponent.texts.getStatic("titlemenu.start"),
+				(gameWidth - 128) / 2, (startY += 30)));
+		addButton(new Button(SELECT_HOST_LEVEL_ID,
+				MojamComponent.texts.getStatic("titlemenu.host"), (gameWidth - 128) / 2,
+				(startY += 30)));
+		addButton(new Button(JOIN_GAME_ID, MojamComponent.texts.getStatic("titlemenu.join"),
+				(gameWidth - 128) / 2, (startY += 30)));
+		addButton(new Button(HOW_TO_PLAY, MojamComponent.texts.getStatic("titlemenu.help"),
+				(gameWidth - 128) / 2, (startY += 30)));
+		addButton(new Button(OPTIONS_ID, MojamComponent.texts.getStatic("titlemenu.options"),
+				(gameWidth - 128) / 2, (startY += 30)));
+		addButton(new Button(EXIT_GAME_ID, MojamComponent.texts.getStatic("titlemenu.exit"),
+				(gameWidth - 128) / 2, (startY += 30)));
 	}
 
 	@Override
@@ -87,12 +104,11 @@ public class TitleMenu extends GuiMenu {
 	}
 
 	@Override
-	public void keyReleased(KeyEvent arg0) {
-	}
+	public void keyReleased(KeyEvent arg0) {}
 
 	@Override
 	public void keyTyped(KeyEvent ke) {
-		
+
 	}
 
 	@Override
