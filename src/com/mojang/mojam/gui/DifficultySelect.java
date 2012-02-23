@@ -12,7 +12,6 @@ import com.mojang.mojam.screen.Screen;
 public class DifficultySelect extends GuiMenu {
 	
 	private ArrayList<DifficultyInformation> difficulties = DifficultyList.getDifficulties();
-	private int selectedIndex = 1;
 	
 	private DifficultyButton[] DifficultyButtons;
 	private final int xButtons = 3;
@@ -88,23 +87,13 @@ public class DifficultySelect extends GuiMenu {
 		int activeButtonId = activeButton.getId();
 		int nextActiveButtonId = -2;
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			nextActiveButtonId = (activeButtonId % xButtons == 0)
-					? bestExistingDifficultyId(activeButtonId + xButtons - 1, activeButtonId + xButtons - 2)
-				    : activeButtonId - 1;
-		}
-		else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			if (activeButtonId == difficulties.size() - 1) {
-				nextActiveButtonId = activeButtonId - (activeButtonId % xButtons);
-			}
-			else {
-				nextActiveButtonId = (activeButtonId % xButtons == xButtons - 1) ? activeButtonId - xButtons - 1 : activeButtonId + xButtons - 2;
-			}
-		}else if (e.getKeyCode() == KeyEvent.VK_UP) {
-			nextActiveButtonId = bestExistingDifficultyId(activeButtonId - xButtons, activeButtonId + 2 * xButtons, activeButtonId + xButtons);
-		}
-		else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-			nextActiveButtonId = bestExistingDifficultyId(activeButtonId + xButtons, activeButtonId + xButtons - 1, activeButtonId + xButtons - 2,
-					activeButtonId - 2 * xButtons, activeButtonId - xButtons);
+			nextActiveButtonId = bestExistingDifficultyId(activeButtonId - 1, difficulties.size() - 1);
+		}else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			nextActiveButtonId = bestExistingDifficultyId(activeButtonId + 1, 0);
+		} else if (e.getKeyCode() == KeyEvent.VK_UP) {
+			nextActiveButtonId = bestExistingDifficultyId(activeButtonId - 3, activeButtonId + 6, activeButtonId + 3);
+		}else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+			nextActiveButtonId = bestExistingDifficultyId(activeButtonId + 3, activeButtonId - 6, activeButtonId - 3);
 		}
 		
 		// Update active button

@@ -106,10 +106,9 @@ public class LevelSelect extends GuiMenu {
 			nextActiveButtonId = bestExistingLevelId(activeButtonId - 3, activeButtonId + 6, activeButtonId + 3);
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-			nextActiveButtonId = bestExistingLevelId(activeButtonId + 3, activeButtonId + 2, activeButtonId + 1,
-					activeButtonId - 6, activeButtonId - 3);
+			nextActiveButtonId = bestExistingLevelId(activeButtonId + 3, activeButtonId - 6, activeButtonId - 3);
 		}
-		
+
 		// Update active button
 		if (nextActiveButtonId >= 0 && nextActiveButtonId < levelButtons.length) {
 			activeButton.setActive(false);
