@@ -3,6 +3,8 @@ package com.mojang.mojam.entity;
 import java.util.Random;
 
 import com.mojang.mojam.*;
+import com.mojang.mojam.entity.animation.BombExplodeAnimation;
+import com.mojang.mojam.entity.animation.EnemyDieAnimation;
 import com.mojang.mojam.entity.animation.SmokePuffAnimation;
 import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.loot.*;
@@ -11,6 +13,7 @@ import com.mojang.mojam.entity.particle.Sparkle;
 import com.mojang.mojam.entity.weapon.IWeapon;
 import com.mojang.mojam.entity.weapon.Rifle;
 import com.mojang.mojam.gui.Notifications;
+import com.mojang.mojam.level.HoleTile;
 import com.mojang.mojam.level.tile.*;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.network.TurnSynchronizer;
@@ -59,6 +62,8 @@ public class Player extends Mob implements LootCollector {
 	public double muzzleX = 0;
 	public double muzzleY = 0;
 	private int muzzleImage = 0;
+	private boolean dead = false;
+	private int deadDelay = 0;
 
 	private int nextWalkSmokeTick = 0;
 
@@ -146,6 +151,9 @@ public class Player extends Mob implements LootCollector {
 		if (muzzleTicks > 0) {
 			muzzleTicks--;
 		}
+		if (deadDelay > 0) {
+			deadDelay--;
+		}
 		if (keys.up.isDown || keys.down.isDown || keys.left.isDown || keys.right.isDown) {
 			int stepCount = 25;
 			if (carrying == null)
@@ -157,16 +165,16 @@ public class Player extends Mob implements LootCollector {
 			}
 			steps++;
 		}
-		if (keys.up.isDown) {
+		if (keys.up.isDown && !dead) {
 			ya--;
 		}
-		if (keys.down.isDown) {
+		if (keys.down.isDown && !dead) {
 			ya++;
 		}
-		if (keys.left.isDown) {
+		if (keys.left.isDown && !dead) {
 			xa--;
 		}
-		if (keys.right.isDown) {
+		if (keys.right.isDown && !dead) {
 			xa++;
 		}
 
@@ -249,7 +257,9 @@ public class Player extends Mob implements LootCollector {
 		muzzleImage = (muzzleImage + 1) & 3;
 
 		weapon.weapontick();
-		if (carrying == null && keys.fire.isDown || carrying == null && mouseButtons.isDown(mouseFireButton)) {
+		if (!dead &&
+			(carrying == null && keys.fire.isDown ||
+			 carrying == null && mouseButtons.isDown(mouseFireButton))) {
 			primaryFire(xa, ya);
 		} else {
 			if (wasShooting) {
@@ -264,6 +274,20 @@ public class Player extends Mob implements LootCollector {
 
 		int x = (int) pos.x / Tile.WIDTH;
 		int y = (int) pos.y / Tile.HEIGHT;
+		
+		if ( level.getTile(x, y) instanceof HoleTile ) {
+			if (!dead) {
+				dead = true;
+				carrying = null;
+				level.addEntity(new EnemyDieAnimation(pos.x, pos.y));
+				MojamComponent.soundPlayer.playSound("/sound/Fall.wav", (float) pos.x, (float) pos.y);
+				deadDelay = 50;
+			}
+		}
+		if (dead && deadDelay <= 0){
+			dead = false;
+			revive();
+		}
 
 		if (keys.build.isDown && !keys.build.wasDown) {
 			if (level.getTile(x, y).isBuildable()) {
@@ -400,6 +424,11 @@ public class Player extends Mob implements LootCollector {
 		if (team == Team.Team2) {
 			sheet = Art.herrSpeck;
 		}
+		
+		if (dead) {
+			// don't draw anything if we are dead (in a hole)
+			return;
+		}
 
 		int frame = (walkTime / 4 % 6 + 6) % 6;
 
@@ -520,11 +549,7 @@ public class Player extends Mob implements LootCollector {
 			regenDelay = REGEN_INTERVAL;
 
 			if (health <= 0) {
-				Notifications.getInstance().add(MojamComponent.texts.hasDied(team));
-				carrying = null;
-				dropAllMoney();
-				pos.set(startX, startY);
-				health = maxHealth;
+				revive();
 			} else {
 
 				double dist = source.pos.dist(pos);
@@ -534,6 +559,14 @@ public class Player extends Mob implements LootCollector {
 				MojamComponent.soundPlayer.playSound("/sound/hit2.wav", (float) pos.x, (float) pos.y, true);
 			}
 		}
+	}
+	
+	private void revive() {
+		Notifications.getInstance().add(MojamComponent.texts.hasDied(team));
+		carrying = null;
+		dropAllMoney();
+		pos.set(startX, startY);
+		health = maxHealth;
 	}
 
 	@Override
