@@ -10,7 +10,7 @@ public class Texts {
 	protected final ResourceBundle texts;
 
 	public Texts(Locale locale) {
-		texts = ResourceBundle.getBundle("properties/texts", locale);
+		texts = ResourceBundle.getBundle("translations/texts", locale);
 	}
 	
 	public String getStatic(String property) {
