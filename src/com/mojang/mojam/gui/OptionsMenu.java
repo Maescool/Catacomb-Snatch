@@ -12,7 +12,8 @@ public class OptionsMenu extends GuiMenu {
 	private boolean fullscreen;
 	private boolean fps;
     private boolean muteMusic;
-	
+	private boolean gameScale;
+    
 	int tab1 = 30;
 	int tab1i = 170;
 	
@@ -58,12 +59,25 @@ public class OptionsMenu extends GuiMenu {
                     MojamComponent.soundPlayer.startBackgroundMusic();
             }
         });
+        
+        ClickableComponent btnScale = addButton(new Checkbox(TitleMenu.GAME_SCALE, MojamComponent.texts.getStatic("options.scale"), tab1, 120, gameScale));
+        btnScale.addListener(new ButtonListener() {
+            @Override
+            public void buttonPressed(ClickableComponent button) {
+            	gameScale = !gameScale;
+            	Options.set(Options.GAME_SCALE, gameScale);
+            	
+            	int scale = gameScale ? 2 : 1;
+				MojamComponent.setScale(scale);
+            }
+        });
 	}
 	
 	private void loadOptions() {
 		fullscreen = Options.getAsBoolean(Options.FULLSCREEN, Options.VALUE_FALSE);
 		fps = Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE);
         muteMusic = Options.getAsBoolean(Options.MUTE_MUSIC, Options.VALUE_FALSE);
+        gameScale = Options.getAsBoolean(Options.GAME_SCALE, Options.VALUE_TRUE);
 	}
 
 	@Override
