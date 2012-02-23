@@ -1,17 +1,17 @@
 package com.mojang.mojam.entity.building;
 
+import java.util.Random;
+
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.animation.SmokeAnimation;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.loot.LootCollector;
-import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
-import java.util.Random;
 
 public class Harvester extends Building implements LootCollector {
 
