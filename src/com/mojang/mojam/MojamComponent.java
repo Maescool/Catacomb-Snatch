@@ -43,6 +43,7 @@ import com.mojang.mojam.gui.DifficultySelect;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.GuiError;
 import com.mojang.mojam.gui.GuiMenu;
+import com.mojang.mojam.gui.GuiSaveLevel;
 import com.mojang.mojam.gui.HostingWaitMenu;
 import com.mojang.mojam.gui.HowToPlay;
 import com.mojang.mojam.gui.JoinGameMenu;
@@ -93,7 +94,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	private double framerate = 60;
 	private int fps;
 	private Screen screen = new Screen(GAME_WIDTH, GAME_HEIGHT);
-	private Level level;
+	public Level level;
 
 	private Stack<GuiMenu> menuStack = new Stack<GuiMenu>();
 
@@ -628,6 +629,7 @@ public class MojamComponent extends Canvas implements Runnable,
 				synchronizer.onStartGamePacket(sgPacker.getGameSeed());
 				TitleMenu.difficulty = DifficultyList.getDifficulties().get(sgPacker.getDifficulty());
 				level = sgPacker.getLevel();
+				LevelList.createLevelList();
 				paused = false;
 				initLevel();
 			}
@@ -755,9 +757,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		} else if (id == TitleMenu.RETURN_ID) {
 			synchronizer.addCommand(new PauseCommand(false));
 			keys.tick();
-		} else if (id == TitleMenu.BACK_ID) {
-			popMenu();
-		}
+		} else if (id == TitleMenu.SAVE_LEVEL) {			addMenu(new GuiSaveLevel());		} else if (id == TitleMenu.BACK_ID) {			popMenu();		}
 	}
 
 	private void clearMenus() {

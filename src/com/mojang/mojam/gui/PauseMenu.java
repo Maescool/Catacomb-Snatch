@@ -17,12 +17,10 @@ public class PauseMenu extends GuiMenu {
 
 		resumeButton = (Button) addButton(new Button(TitleMenu.RETURN_ID,
 				"Resume", (gameWidth - 128) / 2, 200));
-		addButton(new Button(TitleMenu.HOW_TO_PLAY, "Help menu",
-				(gameWidth - 128) / 2, 230));
-		addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, "Main menu",
-				(gameWidth - 128) / 2, 260));
+		addButton(new Button(TitleMenu.HOW_TO_PLAY, "Help menu", (gameWidth - 128) / 2, 225));
+		addButton(new Button(TitleMenu.SAVE_LEVEL, "Save Level", (gameWidth - 128) / 2, 250));
+		addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, "Main menu", (gameWidth - 128) / 2, 300));
 	}
-
 	public void render(Screen screen) {
 
 		screen.clear(0);

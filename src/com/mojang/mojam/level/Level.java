@@ -23,7 +23,6 @@ import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
-import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.tile.DestroyableWallTile;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.SandTile;
@@ -54,6 +53,8 @@ public class Level {
 
 	public int player1Score = 0;
 	public int player2Score = 0;
+	
+	public LevelInformation levelInfo;
 
 	@SuppressWarnings("unchecked")
 	public Level(int width, int height) {
@@ -87,6 +88,18 @@ public class Level {
 		 */
 	}
 
+	public Level setInfo(LevelInformation li){
+		this.levelInfo = li;
+		this.levelInfo.setParent(this);
+		return this;
+	}
+	public LevelInformation getInfo(){
+		if(levelInfo == null){
+			levelInfo = new LevelInformation();
+		}
+		return levelInfo;
+	}
+	
 	public static Level fromFile(LevelInformation li) throws IOException {
 		BufferedImage bufferedImage;
 		//System.out.println("Loading level from file: "+li.getPath());
@@ -94,6 +107,9 @@ public class Level {
 			bufferedImage = ImageIO.read(MojamComponent.class.getResource(li.getPath()));
 		} else {
 			bufferedImage = ImageIO.read(new File(li.getPath()));
+		}
+		if(bufferedImage == null){
+			throw(new IOException("Malformed image file: "+li.getPath()));
 		}
 		int w = bufferedImage.getWidth() + 16;
 		int h = bufferedImage.getHeight() + 16;
@@ -115,31 +131,22 @@ public class Level {
 		bufferedImage.getRGB(0, 0, w - 16, h - 16, rgbs, 8 + 8 * w, w);
 
 		Level l = new Level(h, w);
-
+		l.setInfo(li.copy());
+		
 		for (int y = 0; y < h; y++) {
 			for (int x = 0; x < w; x++) {
 				int col = rgbs[x + y * w] & 0xffffff;
 
-				Tile tile = new FloorTile();
-				if (col == 0xA8A800) {
-					tile = new SandTile();
-				} else if (col == 0x969696) {
-					tile = new UnbreakableRailTile(new FloorTile());
-				} else if (col == 0x888800) {
-					tile = new UnpassableSandTile();
-				} else if (col == 0xFF7777) {
-					tile = new DestroyableWallTile();
-				} else if (col == 0x000000) {
-					tile = new HoleTile();
-				} else if (col == 0xff0000) {
-					tile = new WallTile();
-				} else if (col == 0xffff00) {
-					TreasurePile t = new TreasurePile(x * Tile.WIDTH + 16, y
-							* Tile.HEIGHT, Team.Neutral);
-					l.addEntity(t);
+				Tile tile = TileID.colorToTile(col);
+				if(tile == null){
+					if (col == 0xffff00) {
+						TreasurePile t = new TreasurePile(x * Tile.WIDTH + 16, y
+								* Tile.HEIGHT, Team.Neutral);
+						l.addEntity(t);
+					}
+				} else {
+					l.setTile(x, y, tile);
 				}
-
-				l.setTile(x, y, tile);
 			}
 		}
 
@@ -155,6 +162,18 @@ public class Level {
 		}
 
 		return l;
+	}
+	
+	public BufferedImage createBMP(){
+		int w = width - 16;
+		int h = height - 16;
+		BufferedImage output = new BufferedImage (w, h, BufferedImage.TYPE_INT_ARGB);
+		for (int y = 0; y < h; y++) {
+			for (int x = 0; x < w; x++) {
+				output.setRGB(x, y, TileID.tileToColor(getTile(x+8, y+8)));
+			}
+		}
+		return output;
 	}
 
 	public void init() {

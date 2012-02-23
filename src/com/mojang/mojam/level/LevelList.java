@@ -42,16 +42,18 @@ public class LevelList {
 	            String fname="";
 	            String ext="";
 	            int mid= fileName.lastIndexOf(".");
-	            fname=fileName.substring(0,mid);
-	            ext=fileName.substring(mid+1);
-	            System.out.println("  Found level: "+fname+" . "+ext);
-	            if(ext.toLowerCase().equals("bmp")){
-	        		levels.add(new LevelInformation("+ "+fname, child.getPath(),false));
+	            if(mid >= 0){
+		            fname=fileName.substring(0,mid);
+		            ext=fileName.substring(mid+1);
+		            System.out.println("  Found level: "+fname+" . "+ext);
+		            if(ext.toLowerCase().equals("bmp")){
+		        		levels.add(new LevelInformation(fname, child.getPath(),false));
+		            }
 	            }
 	        }
 	    }
 	}
-
+	
 	public static ArrayList<LevelInformation> getLevels() {
 		if (levels == null) {
 			createLevelList();
