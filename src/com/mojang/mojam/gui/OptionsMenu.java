@@ -18,7 +18,7 @@ public class OptionsMenu extends GuiMenu {
 	public OptionsMenu() {
 		loadOptions();
 		
-		ClickableComponent back = addButton(new Button(TitleMenu.BACK_ID, "back", MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25));
+		ClickableComponent back = addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"), MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25));
 		back.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
@@ -26,7 +26,7 @@ public class OptionsMenu extends GuiMenu {
 			}
 		});
 		
-		ClickableComponent btnFs = addButton(new Checkbox(TitleMenu.FULLSCREEN_ID, MojamComponent.texts.getStatic("options.fullscreen"), tab1, 30));
+		ClickableComponent btnFs = addButton(new Checkbox(TitleMenu.FULLSCREEN_ID, MojamComponent.texts.getStatic("options.fullscreen"), tab1, 30, Options.getAsBoolean(Options.FULLSCREEN, Options.VALUE_FALSE)));
 		btnFs.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
@@ -36,7 +36,7 @@ public class OptionsMenu extends GuiMenu {
 			}
 		});
 		
-		ClickableComponent btnFps = addButton(new Checkbox(TitleMenu.FPS_ID, MojamComponent.texts.getStatic("options.showfps"), tab1, 60));
+		ClickableComponent btnFps = addButton(new Checkbox(TitleMenu.FPS_ID, MojamComponent.texts.getStatic("options.showfps"), tab1, 60, Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE)));
 		btnFps.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
