@@ -142,7 +142,7 @@ public class Harvester extends Building implements LootCollector {
 	
 	private void addMoneyBar(Screen screen) {
         
-	    int start = (int) (money * 21 / capacity);
+	    int start = (int) (money * 20 / capacity);
         screen.blit(Art.moneyBar[start][0], pos.x - 16, pos.y + 8);
     }
 	
