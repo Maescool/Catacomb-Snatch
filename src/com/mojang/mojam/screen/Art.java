@@ -30,6 +30,7 @@ public class Art {
 	public static Bitmap gameOverScreen = load("/art/screen/game_over.png");
 	public static Bitmap pauseScreen = load("/art/screen/pause_screen.png");
 	public static Bitmap[][] button = cut("/art/screen/button.png", 128, 24);
+    public static Bitmap[][] checkbox = cut("/art/screen/checkbox.png", 24, 24);
 	public static Bitmap panel = load("/art/screen/panel.png");
         public static Bitmap background = load("/art/screen/BACKGROUND.png");
         
@@ -50,6 +51,7 @@ public class Art {
         public static Bitmap[][] raildroid = cut("/art/mob/raildroid.png", 32, 32);
 	public static Bitmap[][] mummy = cut("/art/mob/enemy_mummy_anim_48.png", 48, 48);
 	public static Bitmap[][] snake = cut("/art/mob/enemy_snake_anim_48.png", 48, 48);
+	public static Bitmap[][] scarab = cut("/art/mob/enemy_scarab_anim_48.png", 48, 48);
 	public static Bitmap[][] bat = cut("/art/mob/enemy_bat_32.png", 32, 32);
 	public static Bitmap batShadow = load("/art/mob/shadow.png");
 

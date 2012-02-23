@@ -17,14 +17,14 @@ public class Tile implements BBOwner {
 
 	public Level level;
 	public int x, y;
-	public int img;
+	public int img = -1; // no image set yet
 	public int minimapColor;
 
 	public void init(Level level, int x, int y) {
 		this.level = level;
 		this.x = x;
 		this.y = y;
-		img = TurnSynchronizer.synchedRandom.nextInt(4);
+		if (img == -1) img = TurnSynchronizer.synchedRandom.nextInt(4);
 		minimapColor = Art.floorTileColors[img & 7][img / 8];
 	}
 
