@@ -4,8 +4,10 @@ import java.awt.Point;
 
 public class MouseButtons {
 
-	private boolean[] currentState = new boolean[4];
-	private boolean[] nextState = new boolean[4];
+	public boolean mouseHidden = false;
+	
+	public boolean[] currentState = new boolean[4];
+	public boolean[] nextState = new boolean[4];
 
 	private int x;
 	private int y;
