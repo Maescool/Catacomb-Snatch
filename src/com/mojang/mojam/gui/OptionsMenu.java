@@ -60,7 +60,7 @@ public class OptionsMenu extends GuiMenu {
             }
         });
         
-        ClickableComponent btnScale = addButton(new Checkbox(TitleMenu.GAME_SCALE, MojamComponent.texts.getStatic("options.scale"), tab1, 120, Options.getAsBoolean(Options.GAME_SCALE, Options.VALUE_TRUE)));
+        ClickableComponent btnScale = addButton(new Checkbox(TitleMenu.GAME_SCALE, MojamComponent.texts.getStatic("options.scale"), tab1, 120, gameScale));
         btnScale.addListener(new ButtonListener() {
             @Override
             public void buttonPressed(ClickableComponent button) {

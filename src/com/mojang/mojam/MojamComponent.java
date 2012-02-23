@@ -99,7 +99,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	private Stack<GuiMenu> menuStack = new Stack<GuiMenu>();
 
-	private static boolean scaleChanged = false;
+	private static int scaleNow = 1;
 	private boolean mouseMoved = false;
 	private int mouseHideTime = 0;
 	public MouseButtons mouseButtons = new MouseButtons();
@@ -583,37 +583,47 @@ public class MojamComponent extends Canvas implements Runnable,
 		guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		Options.loadProperties();
-		int newScale = Options.getAsBoolean(Options.GAME_SCALE, Options.VALUE_TRUE) ? 2 : 1;
-		if(newScale != SCALE) scaleChanged = true;
-		SCALE = newScale;
+		setScale(Options.getAsBoolean(Options.GAME_SCALE, Options.VALUE_TRUE) ? 2 : 1);
 		setFullscreen(Boolean.parseBoolean(Options.get(Options.FULLSCREEN, Options.VALUE_FALSE)));
 		mc.start();
 	}
 
 	public static void setScale(int scale){
-		SCALE = scale;
 		if(!fullscreen){
+			SCALE = scale;
 			guiFrame.setPreferredSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
 			guiFrame.setSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
 		}
 		else {
-			SCALE = 2;
-			scaleChanged = true;
-			setFullscreen(fullscreen);
+			scaleNow = scale;
 		}
-		
 	}
+	
+	/*if(scaleChanged){
+			guiFrame.setPreferredSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
+			guiFrame.setSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
+			scaleChanged = false;
+		}*/
 	
 	public static void setFullscreen(boolean fs) {
 		GraphicsDevice device = guiFrame.getGraphicsConfiguration().getDevice();
 		// hide window
 		guiFrame.setVisible(false);
 		guiFrame.dispose();
+		
 		// change options
 		guiFrame.setUndecorated(fs);
 		device.setFullScreenWindow(fs ? guiFrame : null);
+		
+		// scale settings
+		if(fs){
+			scaleNow = SCALE;
+			SCALE = 2;
+		} else {
+			setScale(scaleNow);
+		}
+		
 		// display window
-		if(scaleChanged) guiFrame.setSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
 		guiFrame.setLocationRelativeTo(null);
 		guiFrame.setVisible(true);
 		fullscreen = fs;
