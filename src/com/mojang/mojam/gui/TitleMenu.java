@@ -62,17 +62,17 @@ public class TitleMenu extends GuiMenu {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_UP) {
+		if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
 			selectedItem--;
 			if (selectedItem < 0) {
 				selectedItem = 4;
 			}
-		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+		} else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
 			selectedItem++;
 			if (selectedItem > 4) {
 				selectedItem = 0;
 			}
-		} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+		} else if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
 			e.consume();
 			buttons.get(selectedItem).postClick();
 		} else if (e.getKeyCode() == KeyEvent.VK_F11) {
