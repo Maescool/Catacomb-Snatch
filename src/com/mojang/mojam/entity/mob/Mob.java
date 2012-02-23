@@ -186,7 +186,7 @@ public abstract class Mob extends Entity {
 
 		if (freezeTime <= 0) {
 			
-			if (source instanceof Bullet && !(this instanceof SpawnerEntity)) {
+			if (source instanceof Bullet && !(this instanceof SpawnerEntity) && !(this instanceof RailDroid)) {
 				Bullet bullet = (Bullet) source;
 				if (bullet.owner instanceof Player) {
 					Player pl = (Player) bullet.owner;
