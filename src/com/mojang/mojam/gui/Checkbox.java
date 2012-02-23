@@ -16,9 +16,15 @@ public class Checkbox extends ClickableComponent
     
     public Checkbox(int id, String label, int x, int y)
     {
+        this(id, label, x, y, false);
+    }
+    
+    public Checkbox(int id, String label, int x, int y, boolean checked)
+    {
         super(x, y, 128, 24);
         this.id = id;
         this.label = label;
+        this.checked = checked;
     }
 
     protected void clicked(MouseButtons mouseButtons)

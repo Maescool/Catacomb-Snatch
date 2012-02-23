@@ -26,7 +26,7 @@ public class OptionsMenu extends GuiMenu {
 			}
 		});
 		
-		ClickableComponent btnFs = addButton(new Button(TitleMenu.FULLSCREEN_ID, MojamComponent.texts.getStatic("options.fullscreen"), tab1, 30));
+		ClickableComponent btnFs = addButton(new Checkbox(TitleMenu.FULLSCREEN_ID, MojamComponent.texts.getStatic("options.fullscreen"), tab1, 30));
 		btnFs.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
@@ -36,7 +36,7 @@ public class OptionsMenu extends GuiMenu {
 			}
 		});
 		
-		ClickableComponent btnFps = addButton(new Button(TitleMenu.FPS_ID, MojamComponent.texts.getStatic("options.showfps"), tab1, 60));
+		ClickableComponent btnFps = addButton(new Checkbox(TitleMenu.FPS_ID, MojamComponent.texts.getStatic("options.showfps"), tab1, 60));
 		btnFps.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
@@ -54,10 +54,6 @@ public class OptionsMenu extends GuiMenu {
 	@Override
 	public void render(Screen screen) {
 		screen.blit(Art.background, 0, 0);
-		int startY = 8;
-		Font.draw(screen, getState(fullscreen), tab1i, (startY += 30));
-		Font.draw(screen, getState(fps), tab1i, (startY += 30));
-		
 		
 		super.render(screen);
 	}
@@ -82,10 +78,6 @@ public class OptionsMenu extends GuiMenu {
 	@Override
 	public void keyReleased(KeyEvent e) {
 
-	}
-	
-	private String getState(boolean state) {
-		return state ? MojamComponent.texts.getStatic("options.on") : MojamComponent.texts.getStatic("options.off");
 	}
 
 }
