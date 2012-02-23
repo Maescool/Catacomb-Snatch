@@ -7,13 +7,14 @@ import java.util.HashMap;
 import java.util.Random;
 
 import com.mojang.mojam.MojamComponent;
-import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.mc.EnumOS2;
 import com.mojang.mojam.network.TurnSynchronizer;
+import com.mojang.mojam.resources.MD5Checksum;
 import com.mojang.mojam.screen.Bitmap;
 
 public class LevelInformation {
 	public static HashMap<String, LevelInformation> fileToInfo = new HashMap<String, LevelInformation>();
+	public static HashMap<String, LevelInformation> md5ToInfo = new HashMap<String, LevelInformation>();
 	private static int localIDcounter = 0;
 	
 	public static final boolean unix = MojamComponent.getOs().equals(EnumOS2.linux)||MojamComponent.getOs().equals(EnumOS2.macos);
@@ -28,16 +29,7 @@ public class LevelInformation {
 	
 	private Bitmap minimap;
 	private Level parent;
-	
-//	public LevelInformation(String levelName_, String levelFile_) {
-//		this.levelName = levelName_;
-//		this.levelFile = sanitizePath(levelFile_);
-//		vanilla = isPathVanilla(levelFile);
-//		
-//		localID = localIDcounter++;
-//		fileToInfo.put(levelFile, this);
-//		System.out.println("Map info added: "+levelFile+"("+(vanilla?"vanilla":"external")+")");
-//	}
+	private String checksum;
 	
 	public LevelInformation(){
 		this("BLANK MAP", "", false);
@@ -50,7 +42,17 @@ public class LevelInformation {
 		
 		localID = localIDcounter++;
 		fileToInfo.put(levelFile, this);
+		
 		System.out.println("Map info added: "+levelFile+"("+(vanilla?"vanilla":"external")+")");
+		if(!vanilla){
+			try {
+				checksum = MD5Checksum.getMD5Checksum(getPath());
+				md5ToInfo.put(checksum, this);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			System.out.println("  MD5:"+checksum);
+		}
 	}
 	
 	public LevelInformation setParent(Level level){
@@ -160,9 +162,8 @@ public class LevelInformation {
 		String levelName = dis.readUTF();
 		String levelPath = dis.readUTF();
 		System.out.println("INCOMMING: "+levelPath);
-		int i = levelPath.indexOf("levels")+6;
-		levelPath = levelPath.substring(0,i)+seperator+"MP"+seperator
-			+ TitleMenu.ip+levelPath.substring(i);
+		int i = levelPath.lastIndexOf(seperator);
+		levelPath = "levels"+seperator+"MP"+seperator+levelPath.substring(i);
 		LevelInformation li = new LevelInformation(levelName, levelPath, dis.readBoolean());
 		li.setAuthor(dis.readUTF());
 		li.setDescription(dis.readUTF());

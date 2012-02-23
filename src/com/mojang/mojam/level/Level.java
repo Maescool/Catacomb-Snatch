@@ -164,13 +164,20 @@ public class Level {
 		return l;
 	}
 	
-	public BufferedImage createBMP(){
+	public BufferedImage createMapImage(){
 		int w = width - 16;
 		int h = height - 16;
-		BufferedImage output = new BufferedImage (w, h, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage output = new BufferedImage (w, h, BufferedImage.TYPE_INT_RGB);
 		for (int y = 0; y < h; y++) {
 			for (int x = 0; x < w; x++) {
 				output.setRGB(x, y, TileID.tileToColor(getTile(x+8, y+8)));
+			}
+		}
+		int xBuffer = 8 * Tile.WIDTH;
+		int yBuffer = 8 * Tile.HEIGHT;
+		for(Entity entity : entities){
+			if(entity instanceof TreasurePile){
+				output.setRGB((int) ((entity.pos.x - xBuffer) / Tile.WIDTH), (int) ((entity.pos.y - yBuffer) / Tile.HEIGHT), 0xffff00);
 			}
 		}
 		return output;

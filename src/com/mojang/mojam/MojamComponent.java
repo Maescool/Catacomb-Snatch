@@ -23,8 +23,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.sql.Timestamp;
-import java.util.Calendar;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Stack;
@@ -43,7 +41,7 @@ import com.mojang.mojam.gui.DifficultySelect;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.GuiError;
 import com.mojang.mojam.gui.GuiMenu;
-import com.mojang.mojam.gui.GuiSaveLevel;
+import com.mojang.mojam.gui.GuiPregame;
 import com.mojang.mojam.gui.HostingWaitMenu;
 import com.mojang.mojam.gui.HowToPlay;
 import com.mojang.mojam.gui.JoinGameMenu;
@@ -68,8 +66,10 @@ import com.mojang.mojam.network.PacketListener;
 import com.mojang.mojam.network.PauseCommand;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.network.packet.ChangeKeyCommand;
+import com.mojang.mojam.network.packet.ReadyNotifyPacket;
 import com.mojang.mojam.network.packet.StartGamePacket;
 import com.mojang.mojam.network.packet.StartGamePacketCustom;
+import com.mojang.mojam.network.packet.StartPregamePacket;
 import com.mojang.mojam.network.packet.TurnPacket;
 import com.mojang.mojam.resources.Texts;
 import com.mojang.mojam.screen.Bitmap;
@@ -87,6 +87,11 @@ public class MojamComponent extends Canvas implements Runnable,
 	public static final int GAME_WIDTH = 512;
 	public static final int GAME_HEIGHT = GAME_WIDTH * 3 / 4;
 	public static final int SCALE = 2;
+	public static final int SERVERSTATE_NONE = 0,
+		SERVERSTATE_SENDPREGAME = 1,
+		SERVERSTATE_PREGAME = 2,
+		SERVERSTATE_STARTGAME = 3,
+		SERVERSTATE_RUNGAME = 4;
 	private static JFrame guiFrame;
 	private boolean running = true;
 	private boolean paused;
@@ -536,25 +541,34 @@ public class MojamComponent extends Canvas implements Runnable,
 			}
 		}
 
-		if (createServerState == 1) {
-			createServerState = 2;
+		if (createServerState == SERVERSTATE_STARTGAME) {
+			createServerState = SERVERSTATE_RUNGAME;
 
-			synchronizer = new TurnSynchronizer(MojamComponent.this,
+			/*synchronizer = new TurnSynchronizer(MojamComponent.this,
 					packetLink, localId, 2);
 
 			clearMenus();
 			createLevel(TitleMenu.level);
-
+*/
 			synchronizer.setStarted(true);
 			if (TitleMenu.level.vanilla) {
 				packetLink.sendPacket(new StartGamePacket(
 						TurnSynchronizer.synchedSeed, TitleMenu.level.getUniversalPath(),DifficultyList.getDifficultyID(TitleMenu.difficulty)));
 			} else {
-				packetLink.sendPacket(new StartGamePacketCustom(
-						TurnSynchronizer.synchedSeed, level, DifficultyList.getDifficultyID(TitleMenu.difficulty)));
+				packetLink.sendPacket(new StartGamePacketCustom());
 			}
 			packetLink.setPacketListener(MojamComponent.this);
 
+		} else if(createServerState == SERVERSTATE_SENDPREGAME){
+			createServerState = SERVERSTATE_PREGAME;
+			synchronizer = new TurnSynchronizer(MojamComponent.this,
+					packetLink, localId, 2);
+
+			clearMenus();
+			createLevel(TitleMenu.level);
+			packetLink.sendPacket(new StartPregamePacket(TurnSynchronizer.synchedSeed, level, DifficultyList.getDifficultyID(TitleMenu.difficulty)));
+		} else if(createServerState == SERVERSTATE_PREGAME){
+			// wait for everyone to ready up
 		}
 	}
 
@@ -614,6 +628,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	@Override
 	public void handle(Packet packet) {
+		System.out.println("PACKET"+(isServer?" (server)":"")+":"+packet.getId());
 		if (packet instanceof StartGamePacket) {
 			if (!isServer) {
 				StartGamePacket sgPacker = (StartGamePacket) packet;
@@ -623,19 +638,35 @@ public class MojamComponent extends Canvas implements Runnable,
 			}
 		} else if (packet instanceof TurnPacket) {
 			synchronizer.onTurnPacket((TurnPacket) packet);
-		} else if (packet instanceof StartGamePacketCustom) {
+		} else if (packet instanceof StartPregamePacket) {
 			if (!isServer) {
-				StartGamePacketCustom sgPacker = (StartGamePacketCustom) packet;
-				synchronizer.onStartGamePacket(sgPacker.getGameSeed());
+				StartPregamePacket sgPacker = (StartPregamePacket) packet;
+				System.out.println("TEST1");
 				TitleMenu.difficulty = DifficultyList.getDifficulties().get(sgPacker.getDifficulty());
+				synchronizer.onStartGamePacket(sgPacker.getGameSeed());
 				level = sgPacker.getLevel();
 				LevelList.createLevelList();
-				paused = false;
+				paused = true;
 				initLevel();
+				System.out.println("TEST2");
+				addMenu(new GuiPregame(level));
+			}
+		} else if(packet instanceof StartGamePacketCustom){
+			if (!isServer) {
+				StartGamePacketCustom sgPacker = (StartGamePacketCustom) packet;
+				paused = false;
+			}
+		} else if(packet instanceof ReadyNotifyPacket){
+			if(isServer){
+				ReadyNotifyPacket sgPacker = (ReadyNotifyPacket) packet;
+				System.out.println("TEST3_"+sgPacker.isReady);
+				if(sgPacker.isReady){
+					createServerState = SERVERSTATE_STARTGAME;
+				}
 			}
 		}
 	}
-
+	
 	@Override
 	public void buttonPressed(ClickableComponent component) {
 
@@ -704,7 +735,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 									packetLink = new NetworkPacketLink(socket);
 
-									createServerState = 1;
+									createServerState = SERVERSTATE_SENDPREGAME;
 									break;
 								}
 							} catch (Exception e) {
@@ -757,7 +788,13 @@ public class MojamComponent extends Canvas implements Runnable,
 		} else if (id == TitleMenu.RETURN_ID) {
 			synchronizer.addCommand(new PauseCommand(false));
 			keys.tick();
-		} else if (id == TitleMenu.SAVE_LEVEL) {			addMenu(new GuiSaveLevel());		} else if (id == TitleMenu.BACK_ID) {			popMenu();		}
+		} else if (id == TitleMenu.BACK_ID) {
+			popMenu();
+		} else if(id == TitleMenu.SEND_READY){
+			if(!isServer){
+				packetLink.sendPacket(new ReadyNotifyPacket(true));
+			}
+		}
 	}
 
 	private void clearMenus() {

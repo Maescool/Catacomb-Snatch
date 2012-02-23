@@ -14,10 +14,10 @@ public class Font {
 	private static String currentFont = "";
 
 	static {
-		fonts.put("", new Font(Art.font_default));
-		fonts.put("", new Font(Art.font_red));
-		fonts.put("", new Font(Art.font_blue));
-		fonts.put("", new Font(Art.font_gray));
+		fonts.put("def", new Font(Art.font_default));
+		fonts.put("red", new Font(Art.font_red));
+		fonts.put("blue", new Font(Art.font_blue));
+		fonts.put("gray", new Font(Art.font_gray));
 		fonts.put("", new Font(Art.font_gold));
 	}
 	

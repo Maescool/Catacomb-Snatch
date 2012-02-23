@@ -24,6 +24,8 @@ public abstract class Packet {
 		map(10, StartGamePacket.class);
 		map(11, TurnPacket.class);
 		map(12, StartGamePacketCustom.class);
+		map(13, StartPregamePacket.class);
+		map(14, ReadyNotifyPacket.class);
 
 		map(100, ChangeKeyCommand.class);
 		map(101, PauseCommand.class);

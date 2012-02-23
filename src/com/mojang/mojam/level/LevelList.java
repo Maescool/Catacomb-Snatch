@@ -44,9 +44,9 @@ public class LevelList {
 	            int mid= fileName.lastIndexOf(".");
 	            if(mid >= 0){
 		            fname=fileName.substring(0,mid);
-		            ext=fileName.substring(mid+1);
+		            ext=fileName.substring(mid+1).toLowerCase();
 		            System.out.println("  Found level: "+fname+" . "+ext);
-		            if(ext.toLowerCase().equals("bmp")){
+		            if(ext.equals("bmp") || ext.equals("png")){
 		        		levels.add(new LevelInformation(fname, child.getPath(),false));
 		            }
 	            }
