@@ -45,7 +45,31 @@ public class MouseButtons {
 	public int getY() {
 		return y;
 	}
-
+	
+	public void setX(int x) {
+		this.x = x;
+	}
+	
+	public void setY(int y) {
+		this.y = y;
+	}
+	
+	public boolean[] getAllCurrentState() {
+		return currentState;
+	}
+	
+	public boolean[] getAllNextState() {
+		return nextState;
+	}
+	
+	public void setAllCurrentState(boolean[] state) {
+		currentState = state;
+	}
+	
+	public void setAllNextState(boolean[] state) {
+		nextState = state;
+	}
+	
 	public void setPosition(Point mousePosition) {
 		if (mousePosition != null) {
 			x = mousePosition.x;

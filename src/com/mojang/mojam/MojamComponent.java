@@ -67,6 +67,7 @@ import com.mojang.mojam.network.PacketListener;
 import com.mojang.mojam.network.PauseCommand;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.network.packet.ChangeKeyCommand;
+import com.mojang.mojam.network.packet.ChangeMouseCommand;
 import com.mojang.mojam.network.packet.StartGamePacket;
 import com.mojang.mojam.network.packet.StartGamePacketCustom;
 import com.mojang.mojam.network.packet.TurnPacket;
@@ -103,6 +104,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	public MouseButtons mouseButtons = new MouseButtons();
 	public Keys keys = new Keys();
 	public Keys[] synchedKeys = { new Keys(), new Keys() };
+	public MouseButtons[] synchedMouseButtons = { new MouseButtons(), new MouseButtons() };
 	public Player[] players = new Player[2];
 	public Player player;
 	public TurnSynchronizer synchronizer;
@@ -247,14 +249,14 @@ public class MojamComponent extends Canvas implements Runnable,
 			return;
 		level.init();
 
-		players[0] = new Player(synchedKeys[0], mouseButtons, level.width
+		players[0] = new Player(synchedKeys[0], synchedMouseButtons[0], level.width
 				* Tile.WIDTH / 2 - 16, (level.height - 5 - 1) * Tile.HEIGHT
 				- 16, Team.Team1);
 		players[0].setFacing(4);
 		level.addEntity(players[0]);
 		level.addEntity(new Base(34 * Tile.WIDTH, 7 * Tile.WIDTH, Team.Team1));
 		if (isMultiplayer) {
-			players[1] = new Player(synchedKeys[1], mouseButtons, level.width
+			players[1] = new Player(synchedKeys[1], synchedMouseButtons[1], level.width
 					* Tile.WIDTH / 2 - 16, 7 * Tile.HEIGHT - 16, Team.Team2);
 			// players[1] = new Player(synchedKeys[1], 10, 10);
 			level.addEntity(players[1]);
@@ -507,7 +509,17 @@ public class MojamComponent extends Canvas implements Runnable,
 					if (keys.fullscreen.wasPressed()) {
 						setFullscreen(!fullscreen);
 					}
-						
+					
+					synchronizer.addCommand(
+					new ChangeMouseCommand(
+						((mouseButtons.getX() / SCALE) - (screen.w / 2)),
+						(((mouseButtons.getY() / SCALE) + 24) - (screen.h / 2)),
+						mouseButtons.getAllCurrentState(),
+						mouseButtons.getAllNextState()
+						)
+					);
+					mouseButtons.tick();
+					
 					// if mouse is in use, update player orientation before level tick
 					if (!mouseHidden) {
 
@@ -598,6 +610,15 @@ public class MojamComponent extends Canvas implements Runnable,
 			ChangeKeyCommand ckc = (ChangeKeyCommand) packet;
 			synchedKeys[playerId].getAll().get(ckc.getKey()).nextState = ckc
 					.getNextState();
+		}
+		
+		if (packet instanceof ChangeMouseCommand) {
+			ChangeMouseCommand cmc = (ChangeMouseCommand) packet;
+			synchedMouseButtons[playerId].setAllNextState(cmc.getAllNextState());
+			synchedMouseButtons[playerId].setAllCurrentState(cmc.getAllCurrentState());
+			synchedMouseButtons[playerId].setX(cmc.getX());
+			synchedMouseButtons[playerId].setY(cmc.getY());
+			players[playerId].setAimByMouse(cmc.getX(), cmc.getY());
 		}
 
 		if (packet instanceof PauseCommand) {
