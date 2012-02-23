@@ -19,28 +19,26 @@ public class RandomSpawner implements ILevelTickItem {
 		Random random = TurnSynchronizer.synchedRandom;
 		int width = level.width;
 		int height = level.height;
-		
-		for (int i = 0; i < 1; i++) {
-			double x = (random.nextInt(width - 16) + 8) * Tile.WIDTH
-					+ Tile.WIDTH / 2;
-			double y = (random.nextInt(height - 16) + 8) * Tile.HEIGHT
-					+ Tile.HEIGHT / 2 - 4;
-			final Tile tile = level.getTile((int) (x / Tile.WIDTH),
-					(int) (y / Tile.HEIGHT));
-			if (tile instanceof FloorTile) {
-				double r = 32 * 8;
+
+		double x = (random.nextInt(width - 16) + 8) * Tile.WIDTH
+				+ Tile.WIDTH / 2;
+		double y = (random.nextInt(height - 16) + 8) * Tile.HEIGHT
+				+ Tile.HEIGHT / 2 - 4;
+		final Tile tile = level.getTile((int) (x / Tile.WIDTH),
+				(int) (y / Tile.HEIGHT));
+		if (tile instanceof FloorTile) {
+			double r = 32 * 8;
+			if (level.getEntities(new BB(null, x - r, y - r, x + r, y + r),
+					Player.class).size() == 0) {
+				r = 32 * 8;
 				if (level.getEntities(new BB(null, x - r, y - r, x + r, y + r),
-						Player.class).size() == 0) {
-					r = 32 * 8;
-					if (level.getEntities(new BB(null, x - r, y - r, x + r, y + r),
-							SpawnerEntity.class).size() == 0) {
-						r = 32 * 4;
-						if (level.getEntities(
-								new BB(null, x - r, y - r, x + r, y + r),
-								Turret.class).size() == 0) {
-							level.addEntity(new SpawnerEntity(x, y, Team.Neutral,
-									random.nextInt(3)));
-						}
+						SpawnerEntity.class).size() == 0) {
+					r = 32 * 4;
+					if (level.getEntities(
+							new BB(null, x - r, y - r, x + r, y + r),
+							Turret.class).size() == 0) {
+						level.addEntity(new SpawnerEntity(x, y, Team.Neutral,
+								random.nextInt(3)));
 					}
 				}
 			}
