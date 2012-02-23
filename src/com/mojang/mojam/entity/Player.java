@@ -85,7 +85,7 @@ public class Player extends Mob implements LootCollector {
 
 		aimVector = new Vec2(0, 1);
 
-		score = 10000;
+		score = 0;
 		weapon = new Rifle(this);
 	}
 
