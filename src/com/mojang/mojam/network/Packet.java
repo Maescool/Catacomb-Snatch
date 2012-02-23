@@ -28,7 +28,7 @@ public abstract class Packet {
 		map(14, ReadyNotifyPacket.class);
 
 		map(100, ChangeKeyCommand.class);
-		map(101, PauseCommand.class);
+		map(101, PauseCommand.class);		
 	}
 
 	public final int getId() {

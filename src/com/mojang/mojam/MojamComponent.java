@@ -115,7 +115,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	private PacketLink packetLink;
 	private ServerSocket serverSocket;
 	private boolean isMultiplayer;
-	private boolean isServer;
+	public boolean isServer;
 	private int localId;
 	private Thread hostThread;
 	private static boolean fullscreen = false;
@@ -557,7 +557,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			} else {
 				packetLink.sendPacket(new StartGamePacketCustom());
 			}
-			packetLink.setPacketListener(MojamComponent.this);
+			popMenu();
 
 		} else if(createServerState == SERVERSTATE_SENDPREGAME){
 			createServerState = SERVERSTATE_PREGAME;
@@ -566,12 +566,25 @@ public class MojamComponent extends Canvas implements Runnable,
 
 			clearMenus();
 			createLevel(TitleMenu.level);
+			
+			packetLink.setPacketListener(MojamComponent.this);
 			packetLink.sendPacket(new StartPregamePacket(TurnSynchronizer.synchedSeed, level, DifficultyList.getDifficultyID(TitleMenu.difficulty)));
+			addMenu(new GuiPregame(level));
 		} else if(createServerState == SERVERSTATE_PREGAME){
 			// wait for everyone to ready up
+			if(areAllReady()){
+				createServerState = SERVERSTATE_STARTGAME;
+			}
 		}
 	}
 
+	public boolean areAllReady(){
+		for(int i = 0; i < players.length; i++){
+			if(!players[i].isReady) return false;
+		}
+		return true;
+	}
+	
 	public static void main(String[] args) {
 		MojamComponent mc = new MojamComponent();
 		guiFrame = new JFrame();
@@ -608,7 +621,6 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	@Override
 	public void handle(int playerId, NetworkCommand packet) {
-
 		if (packet instanceof ChangeKeyCommand) {
 			ChangeKeyCommand ckc = (ChangeKeyCommand) packet;
 			synchedKeys[playerId].getAll().get(ckc.getKey()).nextState = ckc
@@ -628,7 +640,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	@Override
 	public void handle(Packet packet) {
-		System.out.println("PACKET"+(isServer?" (server)":"")+":"+packet.getId());
+		//System.out.println("PACKET"+(isServer?" (server)":"")+":"+packet.getId());
 		if (packet instanceof StartGamePacket) {
 			if (!isServer) {
 				StartGamePacket sgPacker = (StartGamePacket) packet;
@@ -641,28 +653,27 @@ public class MojamComponent extends Canvas implements Runnable,
 		} else if (packet instanceof StartPregamePacket) {
 			if (!isServer) {
 				StartPregamePacket sgPacker = (StartPregamePacket) packet;
-				System.out.println("TEST1");
 				TitleMenu.difficulty = DifficultyList.getDifficulties().get(sgPacker.getDifficulty());
 				synchronizer.onStartGamePacket(sgPacker.getGameSeed());
 				level = sgPacker.getLevel();
 				LevelList.createLevelList();
 				paused = true;
 				initLevel();
-				System.out.println("TEST2");
 				addMenu(new GuiPregame(level));
 			}
 		} else if(packet instanceof StartGamePacketCustom){
 			if (!isServer) {
 				StartGamePacketCustom sgPacker = (StartGamePacketCustom) packet;
+				popMenu();
 				paused = false;
 			}
 		} else if(packet instanceof ReadyNotifyPacket){
+			ReadyNotifyPacket sgPacker = (ReadyNotifyPacket) packet;
+			for (int i = 0; i < sgPacker.ready.length; i++) {
+				players[i].isReady = sgPacker.ready[i];
+			}
 			if(isServer){
-				ReadyNotifyPacket sgPacker = (ReadyNotifyPacket) packet;
-				System.out.println("TEST3_"+sgPacker.isReady);
-				if(sgPacker.isReady){
-					createServerState = SERVERSTATE_STARTGAME;
-				}
+				packetLink.sendPacket(new ReadyNotifyPacket());
 			}
 		}
 	}
@@ -791,12 +802,14 @@ public class MojamComponent extends Canvas implements Runnable,
 		} else if (id == TitleMenu.BACK_ID) {
 			popMenu();
 		} else if(id == TitleMenu.SEND_READY){
+			boolean flag = !player.isReady;
+			player.isReady = flag;
 			if(!isServer){
-				packetLink.sendPacket(new ReadyNotifyPacket(true));
+				packetLink.sendPacket(new ReadyNotifyPacket());
 			}
 		}
 	}
-
+	
 	private void clearMenus() {
 		while (!menuStack.isEmpty()) {
 			menuStack.pop();

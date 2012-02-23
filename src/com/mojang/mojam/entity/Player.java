@@ -23,6 +23,8 @@ public class Player extends Mob implements LootCollector {
 	public static final int COST_REMOVE_RAIL = 15;
 	public static final int REGEN_INTERVAL = 60 * 3;
 
+	public boolean isReady;
+	
 	public int plevel;
 	public int pnextlevel;
 	public double pexp;
