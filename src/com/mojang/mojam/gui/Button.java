@@ -1,7 +1,8 @@
 package com.mojang.mojam.gui;
 
 import com.mojang.mojam.MouseButtons;
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Screen;
 
 public class Button extends ClickableComponent {
 
@@ -15,6 +16,14 @@ public class Button extends ClickableComponent {
 		this.label = label;
 	}
 
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
 	@Override
 	protected void clicked(MouseButtons mouseButtons) {
 		// do nothing, handled by button listeners
@@ -22,7 +31,6 @@ public class Button extends ClickableComponent {
 
 	@Override
 	public void render(Screen screen) {
-
 		if (isPressed()) {
 			screen.blit(Art.button[0][1], getX(), getY());
 		} else {
