@@ -165,16 +165,16 @@ public class Player extends Mob implements LootCollector {
 			}
 			steps++;
 		}
-		if (keys.up.isDown) {
+		if (keys.up.isDown && !dead) {
 			ya--;
 		}
-		if (keys.down.isDown) {
+		if (keys.down.isDown && !dead) {
 			ya++;
 		}
-		if (keys.left.isDown) {
+		if (keys.left.isDown && !dead) {
 			xa--;
 		}
-		if (keys.right.isDown) {
+		if (keys.right.isDown && !dead) {
 			xa++;
 		}
 
@@ -257,7 +257,9 @@ public class Player extends Mob implements LootCollector {
 		muzzleImage = (muzzleImage + 1) & 3;
 
 		weapon.weapontick();
-		if (carrying == null && keys.fire.isDown || carrying == null && mouseButtons.isDown(mouseFireButton)) {
+		if (!dead &&
+			(carrying == null && keys.fire.isDown ||
+			 carrying == null && mouseButtons.isDown(mouseFireButton))) {
 			primaryFire(xa, ya);
 		} else {
 			if (wasShooting) {
@@ -276,6 +278,7 @@ public class Player extends Mob implements LootCollector {
 		if ( level.getTile(x, y) instanceof HoleTile ) {
 			if (!dead) {
 				dead = true;
+				carrying = null;
 				level.addEntity(new EnemyDieAnimation(pos.x, pos.y));
 				MojamComponent.soundPlayer.playSound("/sound/Fall.wav", (float) pos.x, (float) pos.y);
 				deadDelay = 50;
