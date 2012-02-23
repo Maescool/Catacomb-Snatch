@@ -589,7 +589,7 @@ public class Player extends Mob implements LootCollector {
 	}
 
 	@Override
-	public String getDeatchSound() {
+	public String getDeathSound() {
 		return "/sound/Death.wav";
 	}
 
