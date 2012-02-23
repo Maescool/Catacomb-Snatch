@@ -86,13 +86,13 @@ public class DifficultySelect extends GuiMenu {
 		// Compute new id
 		int activeButtonId = activeButton.getId();
 		int nextActiveButtonId = -2;
-		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+		if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
 			nextActiveButtonId = bestExistingDifficultyId(activeButtonId - 1, difficulties.size() - 1);
-		}else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+		}else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
 			nextActiveButtonId = bestExistingDifficultyId(activeButtonId + 1, 0);
-		} else if (e.getKeyCode() == KeyEvent.VK_UP) {
+		} else if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
 			nextActiveButtonId = bestExistingDifficultyId(activeButtonId - 3, activeButtonId + 6, activeButtonId + 3);
-		}else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+		}else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
 			nextActiveButtonId = bestExistingDifficultyId(activeButtonId + 3, activeButtonId - 6, activeButtonId - 3);
 		}
 		
@@ -104,7 +104,7 @@ public class DifficultySelect extends GuiMenu {
 		}
 
 		// Start on Enter, Cancel on Escape
-		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+		if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
 			startGameButton.postClick();
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
