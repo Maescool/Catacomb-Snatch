@@ -142,6 +142,11 @@ public class Turret extends Building {
 
 	public void render(Screen screen) {
 		super.render(screen);
+		if (this.team == Team.Team2) {
+            screen.blit(Art.teamIndicator[1][0], pos.x - 4, pos.y - 25 - yOffs);
+        } else {
+        	screen.blit(Art.teamIndicator[0][0], pos.x - 4, pos.y - 25 - yOffs);
+        }
 	}
 
 	public Bitmap getSprite() {
