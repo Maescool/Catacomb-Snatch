@@ -201,14 +201,14 @@ public class RailDroid extends Mob {
 	@Override
 	public Bitmap getSprite() {
 		if (lDir == 1)
-			return Art.slave[1][1];
+			return Art.raildroid[1][1];
 		if (lDir == 2)
-			return Art.slave[0][1];
+			return Art.raildroid[0][1];
 		if (lDir == 3)
-			return Art.slave[1][0];
+			return Art.raildroid[1][0];
 		if (lDir == 4)
-			return Art.slave[0][0];
-		return Art.slave[0][0];
+			return Art.raildroid[0][0];
+		return Art.raildroid[0][0];
 	}
 
 	public void handleCollision(Entity entity, double xa, double ya) {
