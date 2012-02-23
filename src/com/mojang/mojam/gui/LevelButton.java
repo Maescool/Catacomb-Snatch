@@ -1,11 +1,17 @@
 package com.mojang.mojam.gui;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
+
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
+import com.mojang.mojam.level.gamemode.GameMode;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
@@ -46,18 +52,18 @@ public class LevelButton extends ClickableComponent {
 		// back it up and use a local new one instead, just to make sure
 		Random backupRandom = TurnSynchronizer.synchedRandom;
 		TurnSynchronizer.synchedRandom = new Random();
-
+		
 		// load level
 		Level l;
 		try {
-			l = Level.fromFile(levelInfo);
+			l = new GameMode().generateLevel(levelInfo);
 		} catch (IOException e) {
 			return false;
 		}
 
 		int w = l.width;
 		int h = l.height;
-
+		
 		minimap = new Bitmap(w, h);
 
 		for (int y = 0; y < h; y++) {
