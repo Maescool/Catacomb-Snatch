@@ -24,6 +24,7 @@ public class LevelSelect extends GuiMenu {
 	private LevelButton activeButton;
 	private Button startGameButton;
 	private Button cancelButton;
+	private Button updateButton;
 	public boolean bHosting;
 	
 	public LevelSelect(boolean bHosting) {
@@ -43,12 +44,10 @@ public class LevelSelect extends GuiMenu {
 		TitleMenu.level = levels.get(0);
 
 		// start + cancel button
-		startGameButton = new Button(bHosting ? TitleMenu.SELECT_DIFFICULTY_HOSTING_ID : TitleMenu.SELECT_DIFFICULTY_ID, "Start", MojamComponent.GAME_WIDTH - 256 - 30, MojamComponent.GAME_HEIGHT - 24 - 25);
-		cancelButton = new Button(TitleMenu.CANCEL_JOIN_ID, "Cancel", MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25);
-		addButton(new Button(TitleMenu.UPDATE_LEVELS, "Update Levels", MojamComponent.GAME_WIDTH - 386 - 40, MojamComponent.GAME_HEIGHT - 24 - 25));
+		startGameButton = (Button) addButton(new Button(bHosting ? TitleMenu.SELECT_DIFFICULTY_HOSTING_ID : TitleMenu.SELECT_DIFFICULTY_ID, "Start", MojamComponent.GAME_WIDTH - 256 - 30, MojamComponent.GAME_HEIGHT - 24 - 25));
+		cancelButton = (Button) addButton(new Button(TitleMenu.CANCEL_JOIN_ID, "Cancel", MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25));
+		updateButton = (Button) addButton(new Button(TitleMenu.UPDATE_LEVELS, "Update Levels", MojamComponent.GAME_WIDTH - 386 - 40, MojamComponent.GAME_HEIGHT - 24 - 25));
 
-		addButton(startGameButton);
-		addButton(cancelButton);
 		addButtonListener(this);
 	}
 

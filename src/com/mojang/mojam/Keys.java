@@ -41,7 +41,9 @@ public class Keys {
 	public Key use = new Key();
 	public Key upgrade = new Key();
 	public Key pause = new Key();
+	public Key fullscreen = new Key();
 	public Key sprint = new Key();
+	public Key screenShot = new Key();
 
 	public void tick() {
 		for (Key key : all)
