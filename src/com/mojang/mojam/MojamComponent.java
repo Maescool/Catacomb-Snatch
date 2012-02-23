@@ -384,9 +384,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			menuStack.peek().render(screen);
 		}
 
-		boolean drawFPS = Options.get("drawFPS") != null
-				&& Options.get("drawFPS").equals("true");
-		if (drawFPS) {
+		if (Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE)) {
 			Font.draw(screen, texts.FPS(fps), 10, 10);
 		}
 
@@ -579,7 +577,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		guiFrame.setVisible(true);
 		Options.loadProperties();
-		setFullscreen(Boolean.parseBoolean(Options.get("fullscreen")));
+		setFullscreen(Boolean.parseBoolean(Options.get(Options.FULLSCREEN, Options.VALUE_TRUE)));
 		mc.start();
 	}
 
