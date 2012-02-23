@@ -19,7 +19,7 @@ public class ChangeMouseCommand extends NetworkCommand {
 
   public ChangeMouseCommand(int x, int y, boolean[] currentState, boolean[] nextState) {
     this.x = x;
-    this.y = x;
+    this.y = y;
     this.currentState = currentState;
     this.nextState = nextState;
   }
