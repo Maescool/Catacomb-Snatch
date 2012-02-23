@@ -5,6 +5,9 @@ import java.awt.event.KeyEvent;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.LevelInformation;
+import com.mojang.mojam.level.gamemode.GameMode;
+import com.mojang.mojam.level.gamemode.GameModeGoldRush;
+import com.mojang.mojam.level.gamemode.GameModeVanilla;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
@@ -28,6 +31,7 @@ public class TitleMenu extends GuiMenu {
 	public static final int BACK_ID = 1014;
 
 	public static LevelInformation level = null;
+	public static GameMode defaultGameMode= new GameModeVanilla();
 	public static DifficultyInformation difficulty = null;
 
 	// public static lol... ;)
