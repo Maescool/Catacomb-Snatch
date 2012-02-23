@@ -32,6 +32,7 @@ public class TitleMenu extends GuiMenu {
 	public static final int FULLSCREEN_ID = 2000;
 	public static final int FPS_ID = 2001;
     public static final int MUTE_MUSIC = 2002;
+    public static final int GAME_SCALE = 2003;
 
 	public static LevelInformation level = null;
 	public static DifficultyInformation difficulty = null;

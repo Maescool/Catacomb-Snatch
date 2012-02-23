@@ -86,7 +86,8 @@ public class MojamComponent extends Canvas implements Runnable,
 	private static final long serialVersionUID = 1L;
 	public static final int GAME_WIDTH = 512;
 	public static final int GAME_HEIGHT = GAME_WIDTH * 3 / 4;
-	public static final int SCALE = 2;
+	public static int SCALE = 2;
+	
 	private static JFrame guiFrame;
 	private boolean running = true;
 	private boolean paused;
@@ -98,6 +99,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	private Stack<GuiMenu> menuStack = new Stack<GuiMenu>();
 
+	private static boolean scaleChanged = false;
 	private boolean mouseMoved = false;
 	private int mouseHideTime = 0;
 	public MouseButtons mouseButtons = new MouseButtons();
@@ -580,9 +582,17 @@ public class MojamComponent extends Canvas implements Runnable,
 		guiFrame.setVisible(true);
 		Options.loadProperties();
 		setFullscreen(Boolean.parseBoolean(Options.get(Options.FULLSCREEN, Options.VALUE_FALSE)));
+		setScale(Options.getAsBoolean(Options.GAME_SCALE, Options.VALUE_TRUE) ? 2 : 1);
 		mc.start();
 	}
 
+	public static void setScale(int scale){
+		SCALE = scale;
+		if(!fullscreen) guiFrame.setSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
+		else scaleChanged = true;
+		setFullscreen(fullscreen);
+	}
+	
 	public static void setFullscreen(boolean fs) {
 		GraphicsDevice device = guiFrame.getGraphicsConfiguration().getDevice();
 		// hide window
@@ -592,6 +602,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		guiFrame.setUndecorated(fs);
 		device.setFullScreenWindow(fs ? guiFrame : null);
 		// display window
+		if(scaleChanged || !fs) guiFrame.setSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
 		guiFrame.setLocationRelativeTo(null);
 		guiFrame.setVisible(true);
 		fullscreen = fs;
