@@ -277,6 +277,7 @@ public class Player extends Mob implements LootCollector {
 			if (!dead) {
 				dead = true;
 				level.addEntity(new EnemyDieAnimation(pos.x, pos.y));
+				MojamComponent.soundPlayer.playSound("/sound/Fall.wav", (float) pos.x, (float) pos.y);
 				deadDelay = 50;
 			}
 		}
@@ -422,6 +423,7 @@ public class Player extends Mob implements LootCollector {
 		}
 		
 		if (dead) {
+			// don't draw anything if we are dead (in a hole)
 			return;
 		}
 
