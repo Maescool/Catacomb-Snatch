@@ -386,8 +386,8 @@ public class MojamComponent extends Canvas implements Runnable,
 			menuStack.peek().render(screen);
 		}
 
-		boolean drawFPS = Options.get("drawFPS") != null
-				&& Options.get("drawFPS").equals("true");
+		boolean drawFPS = Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE);
+		
 		if (drawFPS) {
 			Font.draw(screen, texts.FPS(fps), 10, 10);
 		}
