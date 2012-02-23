@@ -21,7 +21,7 @@ public class GuiSaveLevel extends GuiMenu {
 	private Bitmap minimap;
 	
 	public GuiSaveLevel(){
-		addButton(new Button(TitleMenu.POP_MENU, "Cancel", 24, 330));
+		addButton(new Button(TitleMenu.BACK_ID, "Cancel", 24, 330));
 		saveButton = new Button(-1, "Save Local", 152, 330);
 		
 		addButton(saveButton);
@@ -55,7 +55,7 @@ public class GuiSaveLevel extends GuiMenu {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		MojamComponent.instance.handleAction(TitleMenu.POP_MENU);
+		MojamComponent.instance.handleAction(TitleMenu.BACK_ID);
 	}
 	
 	public void render(Screen screen) {
@@ -88,7 +88,7 @@ public class GuiSaveLevel extends GuiMenu {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			MojamComponent.instance.handleAction(TitleMenu.POP_MENU);
+			MojamComponent.instance.handleAction(TitleMenu.BACK_ID);
 		}
 	}
 

@@ -25,7 +25,9 @@ public class TitleMenu extends GuiMenu {
 	public static final int UPDATE_LEVELS = 1011;
 	public static final int RETURN_ID = 1012;
 	public static final int SELECT_DIFFICULTY_HOSTING_ID = 1013;
-	public static final int BACK_ID = 1014;	public static final int SAVE_LEVEL = 1015;
+	public static final int BACK_ID = 1014;
+	public static final int SAVE_LEVEL = 1015;
+	
 	public static LevelInformation level = null;
 	public static DifficultyInformation difficulty = null;
 
