@@ -124,8 +124,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	private static File mojamDir = null;
 
 	public MojamComponent() {
-		locale = new Locale("en");
-		texts = new Texts(locale);
+		setLocale(new Locale("en"));
 
 		this.setPreferredSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
 		this.setMinimumSize(new Dimension(GAME_WIDTH * 1, GAME_HEIGHT * 1));
@@ -141,6 +140,11 @@ public class MojamComponent extends Canvas implements Runnable,
 
 		instance = this;
 		LevelList.createLevelList();
+	}
+	
+	public void setLocale(Locale locale) {
+		MojamComponent.locale = locale;
+		MojamComponent.texts = new Texts(locale);
 	}
 
 	@Override
