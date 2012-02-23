@@ -4,6 +4,8 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import com.mojang.mojam.entity.mob.Team;
+
 public class Texts {
 	protected final ResourceBundle texts;
 
@@ -12,86 +14,80 @@ public class Texts {
 	}
 
 	public String playerName(int team) {
-		switch (team) {
-		case 1:
+		if(team == Team.Team1){
 			return player1Name();
-		case 2:
+		} else {
 			return player2Name();
 		}
-		return "";
 	}
 	
 	public String getStatic(String property) {
 	    if (texts.containsKey(property)) {
 	        return texts.getString(property);
-	    }
-	    else {
-	        return "";
+	    } else {
+	    	System.err.println("Missing text property {"+property+"}");
+	        return "{"+property+"}";
 	    }
 	}
 
 	public String player1Name() {
-		return texts.getString("player1Name");
+		return getStatic("player1Name");
 	}
 
 	public String player2Name() {
-		return texts.getString("player2Name");
+		return getStatic("player2Name");
 	}
 
 	public String player1Win() {
-		return MessageFormat.format(texts.getString("player1Win"),
-				player1Name().toUpperCase());
+		return MessageFormat.format(getStatic("player1Win"), player1Name().toUpperCase());
 	}
 
 	public String player2Win() {
-		return MessageFormat.format(texts.getString("player2Win"),
-				player2Name().toUpperCase());
+		return MessageFormat.format(getStatic("player2Win"), player2Name().toUpperCase());
 	}
 
 	public String hasDied(int team) {
-		return MessageFormat.format(texts.getString("hasDied"),
-				playerName(team));
+		return MessageFormat.format(getStatic("hasDied"), playerName(team));
 	}
 
 	public String score(int team, int score) {
-		return MessageFormat.format(texts.getString("score"), playerName(team),
-				score);
+		return MessageFormat.format(getStatic("score"), playerName(team), score);
 	}
 
 	public String cost(int cost) {
-		return MessageFormat.format(texts.getString("cost"), String.valueOf(cost));
+		return MessageFormat.format(getStatic("cost"), String.valueOf(cost));
 	}
 
 	public String health(float health, float maxHealth) {
-		return MessageFormat.format(texts.getString("health"), health / maxHealth * 100);
+		return MessageFormat.format(getStatic("health"), health / maxHealth * 100);
 	}
 
 	public String money(int money) {
-		return MessageFormat.format(texts.getString("money"), money);
+		return MessageFormat.format(getStatic("money"), money);
 	}
 
 	public String waitingForClient() {
-		return texts.getString("waitingForClient");
+		return getStatic("waitingForClient");
 	}
 
 	public String enterIP() {
-		return texts.getString("enterIP");
+		return getStatic("enterIP");
 	}
 
 	public String FPS(int fps) {
-		return MessageFormat.format(texts.getString("FPS"), fps);
+		return MessageFormat.format(getStatic("FPS"), fps);
 	}
 
 	public String nextLevel(int nextLevel) {
-		return MessageFormat.format(texts.getString("nextLevel"), nextLevel);
+		return MessageFormat.format(getStatic("nextLevel"), nextLevel);
 	}
 
 	public String playerExp(int pexp) {
-		return MessageFormat.format(texts.getString("playerExp"), pexp);
+		return MessageFormat.format(getStatic("playerExp"), pexp);
 	}
 
 	public String playerLevel(int plevel) {
-		return MessageFormat.format(texts.getString("playerLevel"), plevel);
+		return MessageFormat.format(getStatic("playerLevel"), plevel);
 	}
 
 }
