@@ -914,9 +914,9 @@ public class MojamComponent extends Canvas implements Runnable,
 			screencapture = new Robot().createScreenCapture(guiFrame
 					.getBounds());
 
-			File file = new File("screenShot" + sShotCounter++ + ".png");
+			File file = new File(getMojamDir()+"/"+"screenShot" + sShotCounter++ + ".png");
 			while(file.exists()) {
-			    file = new File("screenShot" + sShotCounter++ + ".png");
+			    file = new File(getMojamDir()+"/"+"screenShot" + sShotCounter++ + ".png");
 			}
 			
 			ImageIO.write(screencapture, "png", file);
