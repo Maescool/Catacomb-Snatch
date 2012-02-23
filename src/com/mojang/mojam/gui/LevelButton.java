@@ -33,43 +33,10 @@ public class LevelButton extends ClickableComponent {
 		this.id = id;
 		this.levelInfo = levelInfo;
 
-		buildMinimap();
+		minimap = levelInfo.getButtonMinimap();
 	}
 
-	/**
-	 * Builds the minimap, loads resource specified by this.mapfile
-	 * 
-	 * @return build successful
-	 */
-	private boolean buildMinimap() {
-
-		// back it up and use a local new one instead, just to make sure
-		Random backupRandom = TurnSynchronizer.synchedRandom;
-		TurnSynchronizer.synchedRandom = new Random();
-
-		// load level
-		Level l;
-		try {
-			l = Level.fromFile(levelInfo);
-		} catch (IOException e) {
-			return false;
-		}
-
-		int w = l.width;
-		int h = l.height;
-
-		minimap = new Bitmap(w, h);
-
-		for (int y = 0; y < h; y++) {
-			for (int x = 0; x < w; x++) {
-				minimap.pixels[x + y * w] = l.getTile(x, y).minimapColor;
-			}
-		}
-
-		TurnSynchronizer.synchedRandom = backupRandom;
-
-		return true;
-	}
+	
 
 	public int getId() {
 		return id;
@@ -99,10 +66,10 @@ public class LevelButton extends ClickableComponent {
 			screen.blit(minimap, getX() + (getWidth() - minimap.w) / 2, getY() + 4);
 
 			// map name
-			Font.drawCentered(screen, levelInfo.levelName, getX() + getWidth() / 2, getY() + 4 + minimap.h + 8);
+			Font.drawCentered(screen, levelInfo.getName(), getX() + getWidth() / 2, getY() + 4 + minimap.h + 8);
 		} else {
 			Font.setFont("red");
-			Font.drawCentered(screen, levelInfo.levelName, getX() + getWidth() / 2, getY() + 4 + 32);
+			Font.drawCentered(screen, levelInfo.getName(), getX() + getWidth() / 2, getY() + 4 + 32);
 			Font.setFont("");
 		}
 	}
