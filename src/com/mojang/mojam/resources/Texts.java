@@ -12,14 +12,6 @@ public class Texts {
 	public Texts(Locale locale) {
 		texts = ResourceBundle.getBundle("properties/texts", locale);
 	}
-
-	public String playerName(int team) {
-		if(team == Team.Team1){
-			return getStatic("player1Name");
-		} else {
-			return getStatic("player2Name");
-		}
-	}
 	
 	public String getStatic(String property) {
 	    if (texts.containsKey(property)) {
@@ -36,6 +28,20 @@ public class Texts {
 
 	public String player2Win() {
 		return MessageFormat.format(getStatic("player2Win"), getStatic("player2Name").toUpperCase());
+	}
+	
+	public String playerName(int team) {
+		if(team == Team.Team1) {
+			return getStatic("player1Name");
+		}
+		return getStatic("player2Name");
+	}
+	
+	public String playerWin(int team) {
+		if(team == Team.Team1) {
+			return player1Win();
+		}
+		return player2Win();
 	}
 
 	public String hasDied(int team) {
