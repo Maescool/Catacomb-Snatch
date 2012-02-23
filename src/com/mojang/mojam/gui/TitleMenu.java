@@ -41,11 +41,11 @@ public class TitleMenu extends GuiMenu {
 		super();
 		this.gameWidth = gameWidth;
 
-		addButton(new Button(SELECT_LEVEL_ID, "Start", (gameWidth - 128) / 2, 200));
-		addButton(new Button(SELECT_HOST_LEVEL_ID, "Host", (gameWidth - 128) / 2, 230));
-		addButton(new Button(JOIN_GAME_ID, "Join", (gameWidth - 128) / 2, 260));
-		addButton(new Button(HOW_TO_PLAY, "How to play", (gameWidth - 128) / 2, 290));
-		addButton(new Button(EXIT_GAME_ID, "Exit", (gameWidth - 128) / 2, 320));
+		addButton(new Button(SELECT_LEVEL_ID, MojamComponent.texts.getStatic("titlemenu.start"), (gameWidth - 128) / 2, 200));
+		addButton(new Button(SELECT_HOST_LEVEL_ID, MojamComponent.texts.getStatic("titlemenu.host"), (gameWidth - 128) / 2, 230));
+		addButton(new Button(JOIN_GAME_ID, MojamComponent.texts.getStatic("titlemenu.join"), (gameWidth - 128) / 2, 260));
+		addButton(new Button(HOW_TO_PLAY, MojamComponent.texts.getStatic("titlemenu.help"), (gameWidth - 128) / 2, 290));
+		addButton(new Button(EXIT_GAME_ID, MojamComponent.texts.getStatic("titlemenu.exit"), (gameWidth - 128) / 2, 320));
 	}
 
 	@Override
