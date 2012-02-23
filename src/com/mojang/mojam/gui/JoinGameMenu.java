@@ -32,7 +32,7 @@ public class JoinGameMenu extends GuiMenu {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// Start on Enter, Cancel on Escape
-		if (e.getKeyChar() == KeyEvent.VK_ENTER && TitleMenu.ip.length() > 0) {
+		if ((e.getKeyChar() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) && TitleMenu.ip.length() > 0) {
 			joinButton.postClick();
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
