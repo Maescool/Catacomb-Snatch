@@ -1,41 +1,24 @@
 package com.mojang.mojam.level;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
-
-import javax.imageio.ImageIO;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
-import com.mojang.mojam.entity.building.ShopItem;
-import com.mojang.mojam.entity.building.SpawnerEntity;
-import com.mojang.mojam.entity.building.TreasurePile;
-import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
-import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.gamemode.ILevelTickItem;
 import com.mojang.mojam.level.gamemode.IVictoryConditions;
-import com.mojang.mojam.level.tile.DestroyableWallTile;
 import com.mojang.mojam.level.tile.FloorTile;
-import com.mojang.mojam.level.tile.SandTile;
 import com.mojang.mojam.level.tile.Tile;
-import com.mojang.mojam.level.tile.UnbreakableRailTile;
-import com.mojang.mojam.level.tile.UnpassableSandTile;
 import com.mojang.mojam.level.tile.WallTile;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.math.Vec2;
-import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
@@ -91,120 +74,7 @@ public class Level {
 		 */
 	}
 
-	/*
-	public static Level fromFile(LevelInformation li) throws IOException {
-		BufferedImage bufferedImage;
-		//System.out.println("Loading level from file: "+li.getPath());
-		if(li.vanilla){
-			bufferedImage = ImageIO.read(MojamComponent.class.getResource(li.getPath()));
-		} else {
-			bufferedImage = ImageIO.read(new File(li.getPath()));
-		}
-		int w = bufferedImage.getWidth() + 16;
-		int h = bufferedImage.getHeight() + 16;
 
-		int[] rgbs = new int[w * h];
-		Arrays.fill(rgbs, 0xffA8A800);
-
-		for (int y = 0 + 4; y < h - 4; y++) {
-			for (int x = 31 - 3; x < 32 + 3; x++) {
-				rgbs[x + y * w] = 0xff888800;
-			}
-		}
-		for (int y = 0 + 5; y < h - 5; y++) {
-			for (int x = 31 - 1; x < 32 + 1; x++) {
-				rgbs[x + y * w] = 0xffA8A800;
-			}
-		}
-
-		bufferedImage.getRGB(0, 0, w - 16, h - 16, rgbs, 8 + 8 * w, w);
-
-		Level l = new Level(h, w);
-
-		for (int y = 0; y < h; y++) {
-			for (int x = 0; x < w; x++) {
-				int col = rgbs[x + y * w] & 0xffffff;
-
-				Tile tile = new FloorTile();
-				if (col == 0xA8A800) {
-					tile = new SandTile();
-				} else if (col == 0x969696) {
-					tile = new UnbreakableRailTile(new FloorTile());
-				} else if (col == 0x888800) {
-					tile = new UnpassableSandTile();
-				} else if (col == 0xFF7777) {
-					tile = new DestroyableWallTile();
-				} else if (col == 0x000000) {
-					tile = new HoleTile();
-				} else if (col == 0xff0000) {
-					tile = new WallTile();
-				} else if (col == 0xffff00) {
-					TreasurePile t = new TreasurePile(x * Tile.WIDTH + 16, y
-							* Tile.HEIGHT, Team.Neutral);
-					l.addEntity(t);
-				}
-
-				l.setTile(x, y, tile);
-			}
-		}
-
-		l.setTile(31, 7, new UnbreakableRailTile(new SandTile()));
-		l.setTile(31, 63 - 7, new UnbreakableRailTile(new SandTile()));
-
-		for (int y = 0; y < h + 1; y++) {
-			for (int x = 0; x < w + 1; x++) {
-				if (x <= 8 || y <= 8 || x >= w - 8 || y >= h - 8) {
-					l.getSeen()[x + y * (w + 1)] = true;
-				}
-			}
-		}
-
-		return l;
-	}
-	 
-	public void init() {
-		Random random = TurnSynchronizer.synchedRandom;
-
-		maxMonsters = 1500 + (int)DifficultyInformation.calculateStrength(500);
-
-		for (int i = 0; i < 11; i++) {
-			double x = (random.nextInt(width - 16) + 8) * Tile.WIDTH
-					+ Tile.WIDTH / 2;
-			double y = (random.nextInt(height - 16) + 8) * Tile.HEIGHT
-					+ Tile.HEIGHT / 2 - 4;
-			final Tile tile = getTile((int) (x / Tile.WIDTH),
-					(int) (y / Tile.HEIGHT));
-			if (tile instanceof FloorTile) {
-				addEntity(new SpawnerEntity(x, y, Team.Neutral, 0));
-			}
-		}
-
-		addEntity(new ShopItem(32 * (width / 2 - 1.5), 4.5 * 32,
-				ShopItem.SHOP_TURRET, Team.Team2));
-		addEntity(new ShopItem(32 * (width / 2 - .5), 4.5 * 32,
-				ShopItem.SHOP_HARVESTER, Team.Team2));
-		addEntity(new ShopItem(32 * (width / 2 + .5), 4.5 * 32,
-				ShopItem.SHOP_BOMB, Team.Team2));
-
-		addEntity(new ShopItem(32 * (width / 2 - 1.5), (height - 4.5) * 32,
-				ShopItem.SHOP_TURRET, Team.Team1));
-		addEntity(new ShopItem(32 * (width / 2 - .5), (height - 4.5) * 32,
-				ShopItem.SHOP_HARVESTER, Team.Team1));
-		addEntity(new ShopItem(32 * (width / 2 + .5), (height - 4.5) * 32,
-				ShopItem.SHOP_BOMB, Team.Team1));
-
-		// test turret
-		// addEntity(new Turret(1024, 390, Team.Team1));
-		// and harvester
-		// addEntity(new Harvester(1064, 350, Team.Team1));
-
-		// addEntity(new Bomb(1024, 360));
-		// addEntity(new Bomb(1064, 360));
-		// addEntity(new Bomb(1024 - 40, 360));
-		// addEntity(new Bomb(1024 - 80, 360));
-	}
-	 */
-	
 	public void setTile(int x, int y, Tile tile) {
 		final int index = x + y * width;
 		tiles[index] = tile;
