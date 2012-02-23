@@ -58,6 +58,10 @@ public class Turret extends Building {
 		}
 		if (closest == null)
 			return;
+		
+		
+		if (Player.carrying == this && upgradeLevel > 0)
+			return;
 
 		double invDist = 1.0 / Math.sqrt(closestDist);
 		double yd = closest.pos.y - pos.y;
