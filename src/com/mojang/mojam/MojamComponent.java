@@ -45,6 +45,7 @@ import com.mojang.mojam.gui.HostingWaitMenu;
 import com.mojang.mojam.gui.HowToPlay;
 import com.mojang.mojam.gui.JoinGameMenu;
 import com.mojang.mojam.gui.LevelSelect;
+import com.mojang.mojam.gui.OptionsMenu;
 import com.mojang.mojam.gui.PauseMenu;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.gui.WinMenu;
@@ -768,6 +769,8 @@ public class MojamComponent extends Canvas implements Runnable,
 			}
 		} else if (id == TitleMenu.HOW_TO_PLAY) {
 			addMenu(new HowToPlay());
+		} else if (id == TitleMenu.OPTIONS_ID) {
+			addMenu(new OptionsMenu());
 		} else if (id == TitleMenu.SELECT_DIFFICULTY_ID) {
 			addMenu(new DifficultySelect(false));
 		} else if (id == TitleMenu.SELECT_DIFFICULTY_HOSTING_ID) {
