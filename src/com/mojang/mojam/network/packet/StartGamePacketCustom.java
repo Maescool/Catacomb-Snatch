@@ -6,9 +6,8 @@ import java.io.IOException;
 
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.TileID;
-import com.mojang.mojam.network.Packet;
 
-public class StartGamePacketCustom extends Packet {
+public class StartGamePacketCustom extends StartGamePacket {
 
 	private long gameSeed;
 	public Level level;

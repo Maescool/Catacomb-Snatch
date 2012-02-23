@@ -119,6 +119,20 @@ public class Player extends Mob implements LootCollector {
 
 	@Override
 	public void tick() {
+		
+		// if mouse is in use, update player orientation before level tick
+		if (!mouseButtons.mouseHidden) {
+
+			// update player mouse, in world pixels relative to
+			// player
+			setAimByMouse(
+					((mouseButtons.getX() / MojamComponent.SCALE) - (MojamComponent.screen.w / 2)),
+					(((mouseButtons.getY() / MojamComponent.SCALE) + 24) - (MojamComponent.screen.h / 2)));
+		} else {
+			setAimByKeyboard();
+		}
+
+		
 		calculLevel();
 
 		time++;
