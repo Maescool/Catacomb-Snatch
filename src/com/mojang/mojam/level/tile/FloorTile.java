@@ -7,7 +7,6 @@ import com.mojang.mojam.screen.Screen;
 
 public class FloorTile extends Tile {
 
-	private int orgImg;
 	// Binary West|North|East
 	static final int[] shadowImages = new int[] { -1, // 000
 			3, // 001
@@ -22,7 +21,6 @@ public class FloorTile extends Tile {
 	public void init(Level level, int x, int y) {
 		super.init(level, x, y);
 		neighbourChanged(null);
-		orgImg = img;
 	}
 
 	public void render(Screen screen) {
@@ -42,7 +40,6 @@ public class FloorTile extends Tile {
 		if (e != null && e.castShadow())
 			index |= 0x1;
 
-		img = orgImg;
 		if (n instanceof SandTile) {
 			img = 4 + 8;
 			index = 0;
@@ -59,8 +56,6 @@ public class FloorTile extends Tile {
 			else
 				// Row 2, first 4 columns
 				img = 2 * Art.floorTiles.length + (imageIndex & 3);
-		} else {
-		    img = TurnSynchronizer.synchedRandom.nextInt(4); 
 		}
 		minimapColor = Art.floorTileColors[img & 7][img / 8];
 	}
