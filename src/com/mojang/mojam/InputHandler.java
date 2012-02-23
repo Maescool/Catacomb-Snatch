@@ -41,7 +41,7 @@ public class InputHandler implements KeyListener {
 		mappings.put(KeyEvent.VK_F, keys.upgrade);
 		mappings.put(KeyEvent.VK_ESCAPE, keys.pause);
 		mappings.put(KeyEvent.VK_F2, keys.screenShot);
-
+		
 		mappings.put(KeyEvent.VK_Y, keys.sprint);
 		mappings.put(KeyEvent.VK_NUMPAD0, keys.sprint);
 		
