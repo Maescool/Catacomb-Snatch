@@ -1,12 +1,15 @@
 package com.mojang.mojam.entity.building;
 
 import com.mojang.mojam.MojamComponent;
-import com.mojang.mojam.entity.*;
+import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.level.DifficultyInformation;
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.Screen;
 
 public class ShopItem extends Building {
 
