@@ -17,25 +17,17 @@ public class Bitmap {
 	}
 
 	public void blit(Bitmap bitmap, int x, int y) {
-		int x0 = x;
-		int x1 = x + bitmap.w;
-		int y0 = y;
-		int y1 = y + bitmap.h;
-		if (x0 < 0)
-			x0 = 0;
-		if (y0 < 0)
-			y0 = 0;
-		if (x1 > w)
-			x1 = w;
-		if (y1 > h)
-			y1 = h;
-		int ww = x1 - x0;
+	
+	    Rect blitArea = new Rect(x, y, bitmap.w, bitmap.h);
+		adjustBlitArea(blitArea);	
+		
+		int blitWidth = blitArea.bottomRightX - blitArea.topLeftX;
 
-		for (int yy = y0; yy < y1; yy++) {
-			int tp = yy * w + x0;
-			int sp = (yy - y) * bitmap.w + (x0 - x);
+		for (int yy = blitArea.topLeftY; yy < blitArea.bottomRightY; yy++) {
+			int tp = yy * w + blitArea.topLeftX;
+			int sp = (yy - y) * bitmap.w + (blitArea.topLeftX - x);
 			tp -= sp;
-			for (int xx = sp; xx < sp + ww; xx++) {
+			for (int xx = sp; xx < sp + blitWidth; xx++) {
 				int col = bitmap.pixels[xx];
 				if (col < 0)
 					pixels[tp + xx] = col;
@@ -43,47 +35,31 @@ public class Bitmap {
 		}
 	}
 
-	public void blit(Bitmap bitmap, int x, int y, int www, int hhh) {
-		int x0 = x;
-		int x1 = x + www;
-		int y0 = y;
-		int y1 = y + hhh;
-		if (x0 < 0)
-			x0 = 0;
-		if (y0 < 0)
-			y0 = 0;
-		if (x1 > w)
-			x1 = w;
-		if (y1 > h)
-			y1 = h;
-		int ww = x1 - x0;
-
-		for (int yy = y0; yy < y1; yy++) {
-			int tp = yy * w + x0;
-			int sp = (yy - y) * bitmap.w + (x0 - x);
-			tp -= sp;
-			for (int xx = sp; xx < sp + ww; xx++) {
-				int col = bitmap.pixels[xx];
-				if (col < 0)
-					pixels[tp + xx] = col;
-			}
-		}
+	public void blit(Bitmap bitmap, int x, int y, int width, int height) {
+		
+	    Rect blitArea = new Rect(x, y, width, height);
+        adjustBlitArea(blitArea);
+        		
+        int blitWidth = blitArea.bottomRightX - blitArea.topLeftX;
+        
+        for (int yy = blitArea.topLeftY; yy < blitArea.bottomRightY; yy++) {
+            int tp = yy * w + blitArea.topLeftX;
+            int sp = (yy - y) * bitmap.w + (blitArea.topLeftX - x);
+            tp -= sp;
+            for (int xx = sp; xx < sp + blitWidth; xx++) {
+                int col = bitmap.pixels[xx];
+                if (col < 0)
+                    pixels[tp + xx] = col;
+            }
+        }
 	}
 
 	public void colorBlit(Bitmap bitmap, int x, int y, int color) {
-		int x0 = x;
-		int x1 = x + bitmap.w;
-		int y0 = y;
-		int y1 = y + bitmap.h;
-		if (x0 < 0)
-			x0 = 0;
-		if (y0 < 0)
-			y0 = 0;
-		if (x1 > w)
-			x1 = w;
-		if (y1 > h)
-			y1 = h;
-		int ww = x1 - x0;
+	    
+	    Rect blitArea = new Rect(x, y, bitmap.w, bitmap.h);
+        adjustBlitArea(blitArea);
+                
+        int blitWidth = blitArea.bottomRightX - blitArea.topLeftX;
 
 		int a2 = (color >> 24) & 0xff;
 		int a1 = 256 - a2;
@@ -92,10 +68,10 @@ public class Bitmap {
 		int gg = color & 0xff00;
 		int bb = color & 0xff;
 
-		for (int yy = y0; yy < y1; yy++) {
-			int tp = yy * w + x0;
-			int sp = (yy - y) * bitmap.w + (x0 - x);
-			for (int xx = 0; xx < ww; xx++) {
+		for (int yy = blitArea.topLeftY; yy < blitArea.bottomRightY; yy++) {
+			int tp = yy * w + blitArea.topLeftX;
+			int sp = (yy - y) * bitmap.w + (blitArea.topLeftX - x);
+			for (int xx = 0; xx < blitWidth; xx++) {
 				int col = bitmap.pixels[sp + xx];
 				if (col < 0) {
 					int r = (col & 0xff0000);
@@ -111,26 +87,26 @@ public class Bitmap {
 		}
 	}
 
-	public void fill(int x, int y, int bw, int bh, int color) {
-		int x0 = x;
-		int x1 = x + bw;
-		int y0 = y;
-		int y1 = y + bh;
-		if (x0 < 0)
-			x0 = 0;
-		if (y0 < 0)
-			y0 = 0;
-		if (x1 > w)
-			x1 = w;
-		if (y1 > h)
-			y1 = h;
-		int ww = x1 - x0;
+	public void fill(int x, int y, int width, int height, int color) {
+	    
+	    Rect blitArea = new Rect(x, y, width, height);
+        adjustBlitArea(blitArea);
+                
+        int blitWidth = blitArea.bottomRightX - blitArea.topLeftX;
 
-		for (int yy = y0; yy < y1; yy++) {
-			int tp = yy * w + x0;
-			for (int xx = 0; xx < ww; xx++) {
+		for (int yy = blitArea.topLeftY; yy < blitArea.bottomRightY; yy++) {
+			int tp = yy * w + blitArea.topLeftX;
+			for (int xx = 0; xx < blitWidth; xx++) {
 				pixels[tp + xx] = color;
 			}
 		}
+	}
+	
+	private void adjustBlitArea(Rect blitArea){
+	    
+	    if (blitArea.topLeftX < 0) blitArea.topLeftX = 0;
+        if (blitArea.topLeftY < 0) blitArea.topLeftY = 0;
+        if (blitArea.bottomRightX > w) blitArea.bottomRightX = w;
+        if (blitArea.bottomRightY > h) blitArea.bottomRightY = h;
 	}
 }
