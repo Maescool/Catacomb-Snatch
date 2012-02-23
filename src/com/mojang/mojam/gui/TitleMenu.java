@@ -96,7 +96,12 @@ public class TitleMenu extends GuiMenu {
 
 	@Override
 	public void buttonPressed(ClickableComponent button) {
-		// nothing
+		// move LordLard on click
+		int startY = 140;
+		int item = ((button.getY() - startY) / 30) - 1;
+		if (item >= 0 && item < buttons.size()) {
+			selectedItem = item;
+		}
 	}
 
 }
