@@ -192,6 +192,23 @@ public class Player extends Mob implements LootCollector {
 			xa++;
 		}
 
+		if (keys.pause.isDown){
+			PauseMenu(870,600);
+			
+			while (keys.pause.isDown != true){
+				try {
+			
+        			Thread.currentThread();
+        			Thread.sleep(500);
+        		}
+        		catch (InterruptedException localInterruptedException) {
+        	       localInterruptedException.printStackTrace();
+        		}
+				}
+		}
+		
+		
+		
 		if (!mouseAiming && !keys.fire.isDown && !mouseButtons.isDown(mouseFireButton) && xa * xa + ya * ya != 0) {
 			aimVector.set(xa, ya);
 			aimVector.normalizeSelf();
