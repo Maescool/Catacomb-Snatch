@@ -277,11 +277,11 @@ public class Player extends Mob implements LootCollector {
 			primaryFire(xa, ya);
 		} else {
 			if (wasShooting) {
-				suckRadius = 60;
+				suckRadius = 0;
 			}
 			wasShooting = false;
-			if (suckRadius > 0) {
-				suckRadius--;
+			if (suckRadius < 60) {
+				suckRadius++;
 			}
 			takeDelay = 15;
 		}
