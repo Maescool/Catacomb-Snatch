@@ -1,9 +1,9 @@
 package com.mojang.mojam.entity.mob;
 
 import com.mojang.mojam.entity.Entity;
-import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.network.TurnSynchronizer;
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
 
 public class Scarab extends Mob {
 	public int facing;
