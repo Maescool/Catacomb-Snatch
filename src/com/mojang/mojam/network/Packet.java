@@ -1,9 +1,17 @@
 package com.mojang.mojam.network;
 
-import java.io.*;
-import java.util.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.mojang.mojam.network.packet.*;
+import com.mojang.mojam.network.packet.ChangeKeyCommand;
+import com.mojang.mojam.network.packet.ChangeMouseButtonCommand;
+import com.mojang.mojam.network.packet.ChangeMouseCoordinateCommand;
+import com.mojang.mojam.network.packet.StartGamePacket;
+import com.mojang.mojam.network.packet.TurnPacket;
 
 public abstract class Packet {
 
@@ -23,10 +31,11 @@ public abstract class Packet {
 	static {
 		map(10, StartGamePacket.class);
 		map(11, TurnPacket.class);
-		map(12, StartGamePacketCustom.class);
 
 		map(100, ChangeKeyCommand.class);
 		map(101, PauseCommand.class);
+		map(104, ChangeMouseButtonCommand.class);
+		map(105, ChangeMouseCoordinateCommand.class);
 	}
 
 	public final int getId() {
