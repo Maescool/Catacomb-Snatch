@@ -489,6 +489,21 @@ public class MojamComponent extends Canvas implements Runnable,
 			if (synchronizer.preTurn()) {
 				synchronizer.postTurn();
 
+				
+				for (int index = 0; index < mouseButtons.currentState.length; index++) {
+					boolean nextState = mouseButtons.nextState[index];
+					if (mouseButtons.isDown(index) != nextState) {
+						synchronizer.addCommand(new ChangeMouseButtonCommand(index,nextState));
+					}
+				}
+				
+				synchronizer.addCommand(new ChangeMouseCoordinateCommand(mouseButtons.getX(), mouseButtons.getY(), mouseButtons.mouseHidden));
+									
+				mouseButtons.tick();
+				for (MouseButtons sMouseButtons : synchedMouseButtons) {
+					sMouseButtons.tick();
+				}
+				
 				if (!paused) {
 					for (int index = 0; index < keys.getAll().size(); index++) {
 						Keys.Key key = keys.getAll().get(index);
@@ -513,17 +528,7 @@ public class MojamComponent extends Canvas implements Runnable,
 					if (keys.fullscreen.wasPressed()) {
 						setFullscreen(!fullscreen);
 					}
-						
-					
-					for (int index = 0; index < mouseButtons.currentState.length; index++) {
-						boolean nextState = mouseButtons.nextState[index];
-						if (mouseButtons.isDown(index) != nextState) {
-							synchronizer.addCommand(new ChangeMouseButtonCommand(index,nextState));
-						}
-					}
-					
-					synchronizer.addCommand(new ChangeMouseCoordinateCommand(mouseButtons.getX(), mouseButtons.getY(), mouseButtons.mouseHidden));
-										
+											
 					level.tick();
 				}
 		
@@ -540,10 +545,7 @@ public class MojamComponent extends Canvas implements Runnable,
 					takeScreenShot();
 				}
 			}
-			mouseButtons.tick();
-			for (MouseButtons sMouseButtons : synchedMouseButtons) {
-				sMouseButtons.tick();
-			}
+
 		}
 
 		
@@ -579,18 +581,27 @@ public class MojamComponent extends Canvas implements Runnable,
 		guiFrame.setResizable(false);
 		guiFrame.setLocationRelativeTo(null);
 		guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		guiFrame.setVisible(true);
+		
 		Options.loadProperties();
+		int newScale = Options.getAsBoolean(Options.GAME_SCALE, Options.VALUE_TRUE) ? 2 : 1;
+		if(newScale != SCALE) scaleChanged = true;
+		SCALE = newScale;
 		setFullscreen(Boolean.parseBoolean(Options.get(Options.FULLSCREEN, Options.VALUE_FALSE)));
-		setScale(Options.getAsBoolean(Options.GAME_SCALE, Options.VALUE_TRUE) ? 2 : 1);
 		mc.start();
 	}
 
 	public static void setScale(int scale){
 		SCALE = scale;
-		if(!fullscreen) guiFrame.setSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
-		else scaleChanged = true;
-		setFullscreen(fullscreen);
+		if(!fullscreen){
+			guiFrame.setPreferredSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
+			guiFrame.setSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
+		}
+		else {
+			SCALE = 2;
+			scaleChanged = true;
+			setFullscreen(fullscreen);
+		}
+		
 	}
 	
 	public static void setFullscreen(boolean fs) {
@@ -602,7 +613,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		guiFrame.setUndecorated(fs);
 		device.setFullScreenWindow(fs ? guiFrame : null);
 		// display window
-		if(scaleChanged || !fs) guiFrame.setSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
+		if(scaleChanged) guiFrame.setSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
 		guiFrame.setLocationRelativeTo(null);
 		guiFrame.setVisible(true);
 		fullscreen = fs;

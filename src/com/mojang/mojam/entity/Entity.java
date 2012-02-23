@@ -30,6 +30,11 @@ public abstract class Entity implements BBOwner {
 	public void setPos(double x, double y) {
 		pos.set(x, y);
 	}
+	
+	public void setPos(Vec2 position) {
+	    pos.x = position.x;
+	    pos.y = position.y;
+    }
 
 	public void setSize(int xr, int yr) {
 		radius.set(xr, yr);
