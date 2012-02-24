@@ -47,7 +47,13 @@ public class Slider extends ClickableComponent
                 isDown = true;
                 
                 pos = Mth.clamp((int) mx - (SLIDER_WIDTH / 2), getX(), getX() + getWidth() - SLIDER_WIDTH);
-                value = 1.0f / (float)(getX() + getWidth() - SLIDER_WIDTH - getX()) * (float)(pos - getX());
+                float newValue = 1.0f / (float)(getX() + getWidth() - SLIDER_WIDTH - getX()) * (float)(pos - getX());
+                
+                if(newValue != value)
+                {
+                    value = newValue;
+                    performClick = true;
+                }
             }
         }
     }
