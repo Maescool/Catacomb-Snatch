@@ -110,7 +110,7 @@ public class Building extends Mob implements IUsable {
 
 		final int cost = upgradeCosts[upgradeLevel];
 		if (cost > p.getScore()) {
-			Notifications.getInstance().add("You dont have enough money");
+			Notifications.getInstance().add("You dont have enough money (" + cost + ")");
 			return false;
 		}
 
@@ -119,7 +119,7 @@ public class Building extends Mob implements IUsable {
 		++upgradeLevel;
 		p.useMoney(cost);
 		upgradeComplete();
-		Notifications.getInstance().add("Upgraded to level " + upgradeLevel);
+		Notifications.getInstance().add("Upgraded to level " + (upgradeLevel+1));
 		return true;
 	}
 
