@@ -395,7 +395,7 @@ public class Player extends Mob implements LootCollector {
                 payCost(COST_RAIL);
             } else if (score < COST_RAIL) {
             	if(this.team == this.localTeam) {
-            		  Notifications.getInstance().add("You need " + COST_RAIL + " to build a rail");
+            		  Notifications.getInstance().add(MojamComponent.texts.buildRail(COST_RAIL));
             	}
               
             }
@@ -406,7 +406,7 @@ public class Player extends Mob implements LootCollector {
                     payCost(COST_DROID);
                 } else {
                 	if(this.team == this.localTeam) {
-                		Notifications.getInstance().add("You need " + COST_DROID + " for a rail droid");
+                		Notifications.getInstance().add(MojamComponent.texts.buildDroid(COST_DROID));
                 	}
                 }
             } else {
@@ -418,7 +418,7 @@ public class Player extends Mob implements LootCollector {
                     }
                 } else if (score < COST_REMOVE_RAIL) {
                 	if(this.team == this.localTeam) {
-                		Notifications.getInstance().add("You need " + COST_REMOVE_RAIL + " to remove a rail");
+                		Notifications.getInstance().add(MojamComponent.texts.removeRail(COST_REMOVE_RAIL));
                 	}
                 }
                 MojamComponent.soundPlayer.playSound("/sound/Track Place.wav", (float) pos.x, (float) pos.y);
@@ -628,7 +628,7 @@ public class Player extends Mob implements LootCollector {
     	if(b.team != this.team && b.team != Team.Neutral) {
     		
     		if(this.team == localTeam) {
-    		 Notifications.getInstance().add("You can not pick that up!");
+    		 Notifications.getInstance().add(MojamComponent.texts.getStatic("gameplay.cantPickup"));
     		}
     		 return;
     	}
