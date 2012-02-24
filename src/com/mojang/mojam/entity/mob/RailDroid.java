@@ -14,9 +14,11 @@ public class RailDroid extends Mob {
 	private int pauseTime = 0;
 	public boolean carrying = false;
 	public int swapTime = 0;
+	public int team;
 
 	public RailDroid(double x, double y, int team) {
 		super(x, y, team);
+		this.team = team;
 		this.setSize(10, 8);
 		deathPoints = 1;
 	}

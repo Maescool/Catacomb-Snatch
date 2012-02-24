@@ -26,6 +26,7 @@ public abstract class Entity implements BBOwner {
 	public double xd, yd;
 	public int minimapIcon = -1;
 	public int minimapColor = -1;
+	public int team;
 
 	public void setPos(double x, double y) {
 		pos.set(x, y);

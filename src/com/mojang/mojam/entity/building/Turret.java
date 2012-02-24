@@ -16,6 +16,7 @@ public class Turret extends Building {
 	private int delay;
 	private double radius;
 	private double radiusSqr;
+	public int team;
 
 	private int[] upgradeRadius = new int[] { 3 * Tile.WIDTH, 5 * Tile.WIDTH, 7 * Tile.WIDTH };
 	private int[] upgradeDelay = new int[] { 24, 21, 18 };
@@ -24,6 +25,7 @@ public class Turret extends Building {
 
 	public Turret(double x, double y, int team) {
 		super(x, y, team);
+		this.team = team;
 		setStartHealth(10);
 		freezeTime = 10;
 	}
@@ -46,7 +48,7 @@ public class Turret extends Building {
 		Entity closest = null;
 		double closestDist = 99999999.0f;
 		for (Entity e : entities) {
-			if (!(e instanceof Mob) || e instanceof RailDroid || e instanceof Bomb)
+			if (!(e instanceof Mob) || (e instanceof RailDroid && e.team == this.team) || e instanceof Bomb)
 				continue;
 			if (!((Mob) e).isNotFriendOf(this))
 				continue;
