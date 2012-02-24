@@ -4,13 +4,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Random;
 
 import javax.imageio.ImageIO;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.building.ShopItem;
-import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.HoleTile;
@@ -19,11 +17,9 @@ import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.tile.DestroyableWallTile;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.SandTile;
-import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.level.tile.UnbreakableRailTile;
 import com.mojang.mojam.level.tile.UnpassableSandTile;
 import com.mojang.mojam.level.tile.WallTile;
-import com.mojang.mojam.network.TurnSynchronizer;
 
 public class GameMode {
 

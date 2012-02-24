@@ -45,6 +45,7 @@ import com.mojang.mojam.gui.GuiPregame;
 import com.mojang.mojam.gui.HostingWaitMenu;
 import com.mojang.mojam.gui.HowToPlay;
 import com.mojang.mojam.gui.JoinGameMenu;
+import com.mojang.mojam.gui.KeyBindingsMenu;
 import com.mojang.mojam.gui.LevelSelect;
 import com.mojang.mojam.gui.OptionsMenu;
 import com.mojang.mojam.gui.PauseMenu;
@@ -55,7 +56,6 @@ import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.LevelList;
 import com.mojang.mojam.level.gamemode.GameMode;
-import com.mojang.mojam.level.gamemode.GameModeVanilla;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.mc.EnumOS2;
 import com.mojang.mojam.mc.EnumOSMappingHelper;
@@ -104,6 +104,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	private Stack<GuiMenu> menuStack = new Stack<GuiMenu>();
 
+	private InputHandler inputHandler;
 	private boolean mouseMoved = false;
 	private int mouseHideTime = 0;
 	public MouseButtons mouseButtons = new MouseButtons();
@@ -137,7 +138,6 @@ public class MojamComponent extends Canvas implements Runnable,
 		this.setMaximumSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT
 				* SCALE));
 
-		this.addKeyListener(new InputHandler(keys));
 		this.addMouseMotionListener(this);
 		this.addMouseListener(this);
 
@@ -152,6 +152,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	public void setLocale(Locale locale) {
 		MojamComponent.locale = locale;
 		MojamComponent.texts = new Texts(locale);
+		Locale.setDefault(locale);
 	}
 
 	@Override
@@ -208,6 +209,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	}
 
 	private void init() {
+		initInput();
 		soundPlayer = new SoundPlayer();
 		
 		if( ! Options.getAsBoolean(Options.MUTE_MUSIC, Options.VALUE_FALSE))
@@ -225,6 +227,11 @@ public class MojamComponent extends Canvas implements Runnable,
 
 		// hide cursor, since we're drawing our own one
 		setCursor(emptyCursor);
+	}
+	
+	private void initInput(){
+		inputHandler = new InputHandler(keys);
+		addKeyListener(inputHandler);
 	}
 
 	public void showError(String s) {
@@ -818,6 +825,8 @@ public class MojamComponent extends Canvas implements Runnable,
 			addMenu(new DifficultySelect(false));
 		} else if (id == TitleMenu.SELECT_DIFFICULTY_HOSTING_ID) {
 			addMenu(new DifficultySelect(true));
+		} else if (id == TitleMenu.KEY_BINDINGS_ID) {
+			addMenu(new KeyBindingsMenu(keys, inputHandler));
 		} else if (id == TitleMenu.EXIT_GAME_ID) {
 			System.exit(0);
 		} else if (id == TitleMenu.RETURN_ID) {
@@ -952,9 +961,9 @@ public class MojamComponent extends Canvas implements Runnable,
 			screencapture = new Robot().createScreenCapture(guiFrame
 					.getBounds());
 
-			File file = new File("screenShot" + sShotCounter++ + ".png");
+			File file = new File(getMojamDir()+"/"+"screenShot" + sShotCounter++ + ".png");
 			while(file.exists()) {
-			    file = new File("screenShot" + sShotCounter++ + ".png");
+			    file = new File(getMojamDir()+"/"+"screenShot" + sShotCounter++ + ".png");
 			}
 			
 			ImageIO.write(screencapture, "png", file);
