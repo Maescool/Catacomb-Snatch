@@ -23,18 +23,18 @@ public class Texts {
 	}
 
 	public String player1Win() {
-		return MessageFormat.format(getStatic("player1Win"), getStatic("player1Name").toUpperCase());
+		return MessageFormat.format(getStatic("gameplay.player1Win"), getStatic("gameplay.player1Name").toUpperCase());
 	}
 
 	public String player2Win() {
-		return MessageFormat.format(getStatic("player2Win"), getStatic("player2Name").toUpperCase());
+		return MessageFormat.format(getStatic("gameplay.player2Win"), getStatic("gameplay.player2Name").toUpperCase());
 	}
 	
 	public String playerName(int team) {
 		if(team == Team.Team1) {
-			return getStatic("player1Name");
+			return getStatic("gameplay.player1Name");
 		}
-		return getStatic("player2Name");
+		return getStatic("gameplay.player2Name");
 	}
 	
 	public String playerWin(int team) {
@@ -65,7 +65,7 @@ public class Texts {
 	}
 
 	public String FPS(int fps) {
-		return MessageFormat.format(getStatic("FPS"), fps);
+		return MessageFormat.format(getStatic("gameplay.FPS"), fps);
 	}
 
 	public String nextLevel(int nextLevel) {

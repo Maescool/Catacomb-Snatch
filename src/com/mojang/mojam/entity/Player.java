@@ -615,7 +615,7 @@ public class Player extends Mob implements LootCollector {
     	if(b.team != this.team && b.team != Team.Neutral) {
     		
     		if(this.team == localTeam) {
-    		 Notifications.getInstance().add(MojamComponent.texts.getStatic("cantPickup"));
+    		 Notifications.getInstance().add(MojamComponent.texts.getStatic("gameplay.cantPickup"));
     		}
     		 return;
     	}
