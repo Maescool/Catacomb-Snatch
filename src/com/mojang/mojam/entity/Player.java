@@ -612,7 +612,7 @@ public class Player extends Mob implements LootCollector {
     }
 
     public void pickup(Building b) {
-    	if(b.team != this.team) {
+    	if(b.team != this.team && b.team != Team.Neutral) {
     		
     		if(this.team == localTeam) {
     		 Notifications.getInstance().add("You can not pick that up!");
