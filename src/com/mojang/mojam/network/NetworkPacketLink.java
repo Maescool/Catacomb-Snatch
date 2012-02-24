@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.Socket;
 import java.util.*;
 
+import com.mojang.mojam.MojamComponent;
+
 public class NetworkPacketLink implements PacketLink {
 
 	private static final int SEND_BUFFER_SIZE = 1024 * 5;
@@ -75,6 +77,7 @@ public class NetworkPacketLink implements PacketLink {
 					}
 				} catch (Exception e) {
 				}
+				MojamComponent.instance.showError("Partner disconnected");
 			}
 		};
 

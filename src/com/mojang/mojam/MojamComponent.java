@@ -776,6 +776,9 @@ public class MojamComponent extends Canvas implements Runnable,
 			try {
 				if (isServer) {
 					localId = 0;
+					if(serverSocket != null && !serverSocket.isClosed()){
+						serverSocket.close();
+					}
 					serverSocket = new ServerSocket(3000);
 					serverSocket.setSoTimeout(1000);
 
