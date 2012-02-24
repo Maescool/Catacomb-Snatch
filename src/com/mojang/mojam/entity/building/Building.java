@@ -107,6 +107,7 @@ public class Building extends Mob implements IUsable {
 
 	public boolean upgrade(Player p) {
 		if (upgradeLevel >= maxUpgradeLevel) {
+			MojamComponent.soundPlayer.playSound("/sound/Fail.wav", (float) pos.x, (float) pos.y, true);
 			if(this.team == this.localTeam) {
 				Notifications.getInstance().add("Fully upgraded already");
 			}
@@ -115,6 +116,7 @@ public class Building extends Mob implements IUsable {
 
 		final int cost = upgradeCosts[upgradeLevel];
 		if (cost > p.getScore()) {
+			MojamComponent.soundPlayer.playSound("/sound/Fail.wav", (float) pos.x, (float) pos.y, true);
 			if(this.team == this.localTeam) {
 				Notifications.getInstance().add("You dont have enough money (" + cost + ")");
 			}
