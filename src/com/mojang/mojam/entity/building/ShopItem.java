@@ -17,7 +17,7 @@ public class ShopItem extends Building {
     public static final int SHOP_TURRET = 0;
     public static final int SHOP_HARVESTER = 1;
     public static final int SHOP_BOMB = 2;
-    public static final int[] COST = {150, 300, 500};
+    public static final int[] COST = {};
     private final int type;
     private int effectiveCost;
 
@@ -28,6 +28,18 @@ public class ShopItem extends Building {
         if (team == Team.Team1) {
             facing = 4;
         }
+    }
+    
+    public void CreativeBuilding(){
+    	if(MojamComponent.player.creative == true){
+    		COST[1] = 0;
+    		COST[2] = 0;
+    		COST[3] = 0;
+    	}else{
+    		COST[1] = 150;
+    		COST[2] = 300;
+    		COST[3] = 500;
+    	}
     }
 
     @Override
