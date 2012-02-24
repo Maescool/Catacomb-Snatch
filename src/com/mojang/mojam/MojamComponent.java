@@ -595,7 +595,7 @@ public class MojamComponent extends Canvas implements Runnable,
 				packetLink.sendPacket(new StartGamePacket(
 						TurnSynchronizer.synchedSeed, TitleMenu.level.getUniversalPath(),DifficultyList.getDifficultyID(TitleMenu.difficulty)));
 			} else {*/
-				packetLink.sendPacket(new StartGamePacketCustom());
+				packetLink.sendPacket(new StartGamePacketCustom(TurnSynchronizer.synchedSeed));
 			//}
 			popMenu();
 
@@ -708,7 +708,9 @@ public class MojamComponent extends Canvas implements Runnable,
 				StartPregamePacket sgPacker = (StartPregamePacket) packet;
 				TitleMenu.difficulty = DifficultyList.getDifficulties().get(sgPacker.getDifficulty());
 				synchronizer.onStartGamePacket(sgPacker.getGameSeed());
-				level = sgPacker.getLevel();
+				synchronizer.setStarted(false);
+				//createLevel(sgPacker.levelInfo, TitleMenu.defaultGameMode);
+				level = TitleMenu.defaultGameMode.decorateLevel(sgPacker.getLevel());
 				LevelList.createLevelList();
 				paused = true;
 				initLevel();
@@ -717,6 +719,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		} else if(packet instanceof StartGamePacketCustom){
 			if (!isServer) {
 				StartGamePacketCustom sgPacker = (StartGamePacketCustom) packet;
+				synchronizer.setStarted(true);
 				popMenu();
 				paused = false;
 			}
