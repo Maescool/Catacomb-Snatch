@@ -51,7 +51,8 @@ public class Turret extends Building {
 			if (!((Mob) e).isNotFriendOf(this))
 				continue;
 			final double dist = e.pos.distSqr(pos);
-			if (dist < radiusSqr && dist < closestDist && !isTargetBehindWall(e.pos.x, e.pos.y)) {
+			Bullet bullet = new Bullet(this, pos.x, pos.y, 0);
+			if (dist < radiusSqr && dist < closestDist && !isTargetBehindWall(e.pos.x, e.pos.y, bullet)) {
 				closestDist = dist;
 				closest = e;
 			}
@@ -78,62 +79,6 @@ public class Turret extends Building {
 		}
 
 		delayTicks = delay;
-	}
-
-	private boolean isTargetBehindWall(double dx2, double dy2) {
-		int x1 = (int) pos.x / Tile.WIDTH;
-		int y1 = (int) pos.y / Tile.HEIGHT;
-		int x2 = (int) dx2 / Tile.WIDTH;
-		int y2 = (int) dy2 / Tile.HEIGHT;
-
-		Bullet bullet = new Bullet(this, pos.x, pos.y, 0);
-
-		int dx, dy, inx, iny, e;
-		Tile temp;
-
-		dx = x2 - x1;
-		dy = y2 - y1;
-		inx = dx > 0 ? 1 : -1;
-		iny = dy > 0 ? 1 : -1;
-
-		dx = java.lang.Math.abs(dx);
-		dy = java.lang.Math.abs(dy);
-
-		if (dx >= dy) {
-			dy <<= 1;
-			e = dy - dx;
-			dx <<= 1;
-			while (x1 != x2) {
-				temp = level.getTile(x1, y1);
-				if (!temp.canPass(bullet))
-					return true;
-				if (e >= 0) {
-					y1 += iny;
-					e -= dx;
-				}
-				e += dy;
-				x1 += inx;
-			}
-		} else {
-			dx <<= 1;
-			e = dx - dy;
-			dy <<= 1;
-			while (y1 != y2) {
-				temp = level.getTile(x1, y1);
-				if (!temp.canPass(bullet))
-					return true;
-				if (e >= 0) {
-					x1 += inx;
-					e -= dy;
-				}
-				e += dx;
-				y1 += iny;
-			}
-		}
-		temp = level.getTile(x1, y1);
-		if (!temp.canPass(bullet))
-			return true;
-		return false;
 	}
 
 	public void render(Screen screen) {
