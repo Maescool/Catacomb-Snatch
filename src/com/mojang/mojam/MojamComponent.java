@@ -74,6 +74,7 @@ import com.mojang.mojam.network.packet.StartGamePacket;
 import com.mojang.mojam.network.packet.StartGamePacketCustom;
 import com.mojang.mojam.network.packet.TurnPacket;
 import com.mojang.mojam.resources.Texts;
+import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 import com.mojang.mojam.sound.SoundPlayer;
@@ -405,8 +406,9 @@ public class MojamComponent extends Canvas implements Runnable,
 		}
 
 		if (player != null && menuStack.size() == 0) {
-			Font.draw(screen, texts.health(player.health, player.maxHealth),
-					340, screen.h - 16);
+//			Font.draw(screen, texts.health(player.health, player.maxHealth),
+//					340, screen.h - 16);
+			screen.blit(Art.playerHealthBar[(int) (player.health / player.maxHealth * 15)][0], 340, screen.h - 15);
 			Font.draw(screen, texts.money(player.score), 340, screen.h - 27);
 			Font.draw(screen, texts.nextLevel((int) player.getNextLevel()),
 					340, screen.h - 38);
