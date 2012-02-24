@@ -23,18 +23,18 @@ public class Texts {
 	}
 
 	public String player1Win() {
-		return MessageFormat.format(getStatic("player1Win"), getStatic("player1Name").toUpperCase());
+		return MessageFormat.format(getStatic("gameplay.player1.Win"), getStatic("gameplay.player1.Name").toUpperCase());
 	}
 
 	public String player2Win() {
-		return MessageFormat.format(getStatic("player2Win"), getStatic("player2Name").toUpperCase());
+		return MessageFormat.format(getStatic("gameplay.player2.Win"), getStatic("gameplay.player2.Name").toUpperCase());
 	}
 	
 	public String playerName(int team) {
 		if(team == Team.Team1) {
-			return getStatic("player1Name");
+			return getStatic("gameplay.player1.Name");
 		}
-		return getStatic("player2Name");
+		return getStatic("gameplay.player2.Name");
 	}
 	
 	public String playerWin(int team) {
@@ -45,23 +45,23 @@ public class Texts {
 	}
 
 	public String hasDied(int team) {
-		return MessageFormat.format(getStatic("hasDied"), playerName(team));
+		return MessageFormat.format(getStatic("player.hasDied"), playerName(team));
 	}
 
 	public String score(int team, int score) {
-		return MessageFormat.format(getStatic("score"), playerName(team), score);
+		return MessageFormat.format(getStatic("player.score"), playerName(team), score);
 	}
 
 	public String cost(int cost) {
-		return MessageFormat.format(getStatic("cost"), String.valueOf(cost));
+		return MessageFormat.format(getStatic("building.cost"), String.valueOf(cost));
 	}
 
 	public String health(float health, float maxHealth) {
-		return MessageFormat.format(getStatic("health"), Math.floor(health / maxHealth * 100));
+		return MessageFormat.format(getStatic("player.health"), Math.floor(health / maxHealth * 100));
 	}
 
 	public String money(int money) {
-		return MessageFormat.format(getStatic("money"), money);
+		return MessageFormat.format(getStatic("player.money"), money);
 	}
 
 	public String FPS(int fps) {
@@ -69,15 +69,15 @@ public class Texts {
 	}
 
 	public String nextLevel(int nextLevel) {
-		return MessageFormat.format(getStatic("nextLevel"), nextLevel);
+		return MessageFormat.format(getStatic("player.nextLevel"), nextLevel);
 	}
 
 	public String playerExp(int pexp) {
-		return MessageFormat.format(getStatic("playerExp"), pexp);
+		return MessageFormat.format(getStatic("player.Exp"), pexp);
 	}
 
 	public String playerLevel(int plevel) {
-		return MessageFormat.format(getStatic("playerLevel"), plevel);
+		return MessageFormat.format(getStatic("player.Level"), plevel);
 	}
 
 }
