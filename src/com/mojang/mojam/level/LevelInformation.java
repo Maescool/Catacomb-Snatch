@@ -170,8 +170,10 @@ public class LevelInformation {
 		String levelName = dis.readUTF();
 		String levelPath = dis.readUTF();
 		System.out.println("INCOMMING: "+levelPath);
-		int i = levelPath.lastIndexOf(seperator);
-		levelPath = "levels"+seperator+"MP"+seperator+levelPath.substring(i);
+		if(!isPathVanilla(levelPath)){
+			int i = levelPath.lastIndexOf(seperator);
+			levelPath = "levels"+seperator+"MP"+seperator+levelPath.substring(i);
+		}
 		LevelInformation li = new LevelInformation(levelName, levelPath, dis.readBoolean());
 		li.setAuthor(dis.readUTF());
 		li.setDescription(dis.readUTF());

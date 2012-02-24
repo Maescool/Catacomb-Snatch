@@ -39,6 +39,7 @@ import com.mojang.mojam.gui.ButtonListener;
 import com.mojang.mojam.gui.ClickableComponent;
 import com.mojang.mojam.gui.DifficultySelect;
 import com.mojang.mojam.gui.Font;
+import com.mojang.mojam.gui.GuiChatWindow;
 import com.mojang.mojam.gui.GuiError;
 import com.mojang.mojam.gui.GuiMenu;
 import com.mojang.mojam.gui.GuiPregame;
@@ -69,7 +70,12 @@ import com.mojang.mojam.network.PacketListener;
 import com.mojang.mojam.network.PauseCommand;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.network.packet.ChangeKeyCommand;
-import com.mojang.mojam.network.packet.ChangeMouseButtonCommand;import com.mojang.mojam.network.packet.ChangeMouseCoordinateCommand;import com.mojang.mojam.network.packet.ReadyNotifyPacket;import com.mojang.mojam.network.packet.StartGamePacket;import com.mojang.mojam.network.packet.StartGamePacketCustom;
+import com.mojang.mojam.network.packet.ChangeMouseButtonCommand;
+import com.mojang.mojam.network.packet.ChangeMouseCoordinateCommand;
+import com.mojang.mojam.network.packet.ChatPacket;
+import com.mojang.mojam.network.packet.ReadyNotifyPacket;
+import com.mojang.mojam.network.packet.StartGamePacket;
+import com.mojang.mojam.network.packet.StartGamePacketCustom;
 import com.mojang.mojam.network.packet.StartPregamePacket;
 import com.mojang.mojam.network.packet.TurnPacket;
 import com.mojang.mojam.resources.Texts;
@@ -114,7 +120,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	public Player[] players = new Player[2];
 	public Player player;
 	public TurnSynchronizer synchronizer;
-	private PacketLink packetLink;
+	public PacketLink packetLink;
 	private ServerSocket serverSocket;
 	private boolean isMultiplayer;
 	public boolean isServer;
@@ -127,6 +133,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	private int createServerState = 0;
 	private static File mojamDir = null;
+	public GuiChatWindow chatWindow = new GuiChatWindow(this);
 
 	public MojamComponent() {
 		setLocale(new Locale("en"));
@@ -154,7 +161,11 @@ public class MojamComponent extends Canvas implements Runnable,
 		MojamComponent.texts = new Texts(locale);
 		Locale.setDefault(locale);
 	}
-
+	
+	public boolean isMultiplayer(){
+		return isMultiplayer;
+	}
+	
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
 		mouseMoved = true;
@@ -270,13 +281,13 @@ public class MojamComponent extends Canvas implements Runnable,
 
 		players[0] = new Player(synchedKeys[0], synchedMouseButtons[0], level.width
 				* Tile.WIDTH / 2 - 16, (level.height - 5 - 1) * Tile.HEIGHT
-				- 16, Team.Team1);
+				- 16, Team.Team1, 0);
 		players[0].setFacing(4);
 		level.addEntity(players[0]);
 		level.addEntity(new Base(34 * Tile.WIDTH, 7 * Tile.WIDTH, Team.Team1));
 		if (isMultiplayer) {
 			players[1] = new Player(synchedKeys[1], synchedMouseButtons[1], level.width
-					* Tile.WIDTH / 2 - 16, 7 * Tile.HEIGHT - 16, Team.Team2);
+					* Tile.WIDTH / 2 - 16, 7 * Tile.HEIGHT - 16, Team.Team2, 1);
 			// players[1] = new Player(synchedKeys[1], 10, 10);
 			level.addEntity(players[1]);
 			level.addEntity(new Base(32 * Tile.WIDTH - 20,
@@ -403,6 +414,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		if (!menuStack.isEmpty()) {
 			menuStack.peek().render(screen);
 		}
+		chatWindow.draw(screen);
 
 		if (Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE)) {
 			Font.draw(screen, texts.FPS(fps), 10, 10);
@@ -471,6 +483,8 @@ public class MojamComponent extends Canvas implements Runnable,
             }
         }
 		
+		chatWindow.tick();
+		
 		if (packetLink != null) {
 			packetLink.tick();
 		}
@@ -515,21 +529,28 @@ public class MojamComponent extends Canvas implements Runnable,
 					sMouseButtons.tick();
 				}
 				
+				
 				if (!paused) {
-					for (int index = 0; index < keys.getAll().size(); index++) {
-						Keys.Key key = keys.getAll().get(index);
-						boolean nextState = key.nextState;
-						if (key.isDown != nextState) {
-							synchronizer.addCommand(new ChangeKeyCommand(index,
-									nextState));
+					if(!chatWindow.isActive){
+						for (int index = 0; index < keys.getAll().size(); index++) {
+							Keys.Key key = keys.getAll().get(index);
+							boolean nextState = key.nextState;
+							if (key.isDown != nextState) {
+								synchronizer.addCommand(new ChangeKeyCommand(index,
+										nextState));
+							}
+						}
+	
+						keys.tick();
+						for (Keys skeys : synchedKeys) {
+							skeys.tick();
+						}
+						
+						if(keys.chat.wasPressed()) {
+							chatWindow.setActive(true);
 						}
 					}
-
-					keys.tick();
-					for (Keys skeys : synchedKeys) {
-						skeys.tick();
-					}
-
+					
 					if (keys.pause.wasPressed()) {
 						keys.release();
 						mouseButtons.releaseAll();
@@ -555,6 +576,8 @@ public class MojamComponent extends Canvas implements Runnable,
 				if (keys.screenShot.isDown) {
 					takeScreenShot();
 				}
+
+				// TODO:
 			}
 
 		}
@@ -568,12 +591,12 @@ public class MojamComponent extends Canvas implements Runnable,
 			createLevel(TitleMenu.level, TitleMenu.defaultGameMode);*/
 
 			synchronizer.setStarted(true);
-			if (TitleMenu.level.vanilla) {
+			/*if (TitleMenu.level.vanilla) {
 				packetLink.sendPacket(new StartGamePacket(
 						TurnSynchronizer.synchedSeed, TitleMenu.level.getUniversalPath(),DifficultyList.getDifficultyID(TitleMenu.difficulty)));
-			} else {
+			} else {*/
 				packetLink.sendPacket(new StartGamePacketCustom());
-			}
+			//}
 			popMenu();
 
 		} else if(createServerState == SERVERSTATE_SENDPREGAME){
@@ -586,7 +609,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			
 			packetLink.setPacketListener(MojamComponent.this);
 			packetLink.sendPacket(new StartPregamePacket(TurnSynchronizer.synchedSeed, level, DifficultyList.getDifficultyID(TitleMenu.difficulty)));
-			addMenu(new GuiPregame(level));
+			addMenu(new GuiPregame(this, level));
 		} else if(createServerState == SERVERSTATE_PREGAME){
 			// wait for everyone to ready up
 			if(areAllReady()){
@@ -689,7 +712,7 @@ public class MojamComponent extends Canvas implements Runnable,
 				LevelList.createLevelList();
 				paused = true;
 				initLevel();
-				addMenu(new GuiPregame(level));
+				addMenu(new GuiPregame(this, level));
 			}
 		} else if(packet instanceof StartGamePacketCustom){
 			if (!isServer) {
@@ -705,6 +728,9 @@ public class MojamComponent extends Canvas implements Runnable,
 			if(isServer){
 				packetLink.sendPacket(new ReadyNotifyPacket());
 			}
+		} else if(packet instanceof ChatPacket){
+			ChatPacket packer = (ChatPacket) packet;
+			chatWindow.addMessage(GuiChatWindow.formatMessage(packer.playerId, packer.message));
 		}
 	}
 	
@@ -838,9 +864,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			System.out.println("READY");
 			boolean flag = !player.isReady;
 			player.isReady = flag;
-			if(!isServer){
-				packetLink.sendPacket(new ReadyNotifyPacket());
-			}
+			packetLink.sendPacket(new ReadyNotifyPacket());
 		}
 	}
 	
@@ -863,7 +887,9 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (!menuStack.isEmpty()) {
+		if(chatWindow.isActive()){
+			chatWindow.onKeyPress(e);
+		} else if (!menuStack.isEmpty()) {
 			menuStack.peek().keyPressed(e);
 		}
 	}

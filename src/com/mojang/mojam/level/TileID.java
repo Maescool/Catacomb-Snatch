@@ -21,6 +21,7 @@ public class TileID {
 		registerTile((short) 4, UnbreakableRailTile.class, 0x969696);
 		registerTile((short) 5, UnpassableSandTile.class, 0x888800);
 		registerTile((short) 6, WallTile.class, 0xff0000);
+		registerTile((short) 7, DestroyableWallTile.class, 0xff7777);
 	}
 	
 	/**

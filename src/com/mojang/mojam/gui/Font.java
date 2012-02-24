@@ -7,7 +7,7 @@ import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
 public class Font {
-	public static String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ    " + "0123456789-.!?/%$\\=*+,;:()&#\"'";
+	public static String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ_   " + "0123456789-.!?/%$\\=*+,;:()&#\"'";
 	private static final int pxFontHeight = 8;
 	private static final int pxFontWidth = 8;
 	public static HashMap<String, Font> fonts = new HashMap<String, Font>();

@@ -19,11 +19,13 @@ import com.mojang.mojam.screen.Screen;
 
 public class GuiPregame extends GuiMenu {
 
+	public MojamComponent component;
 	public Level level;
 	private Bitmap minimap;
 	private boolean mapExists;
 	
-	public GuiPregame(Level level){
+	public GuiPregame(MojamComponent mc, Level level){
+		this.component = mc;
 		this.level = level;
 		
 		addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, "Cancel", 48, 330));
@@ -62,7 +64,7 @@ public class GuiPregame extends GuiMenu {
 		File outputFile = new File(path+".png");
 		while(outputFile.exists()) {
 			if(i++ > 100) {
-				MojamComponent.instance.showError("Map save error");
+				component.showError("Map save error");
 				return;
 			}
 			outputFile = new File(path+"_"+i+".png");
@@ -75,7 +77,7 @@ public class GuiPregame extends GuiMenu {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		MojamComponent.instance.handleAction(TitleMenu.BACK_ID);
+		component.handleAction(TitleMenu.BACK_ID);
 	}
 	
 	public void render(Screen screen) {
@@ -87,11 +89,11 @@ public class GuiPregame extends GuiMenu {
 		Font.draw(screen, "Author:", leftMargin, 50);
 		Font.draw(screen, "Desc:", leftMargin, 60);
 		Font.draw(screen, "Players", leftMargin/2, 155);
-		for(int i = 0; i < MojamComponent.instance.players.length; i++){
-			Player player = MojamComponent.instance.players[i];
+		for(int i = 0; i < component.players.length; i++){
+			Player player = component.players[i];
 			if(player.isReady) Font.setFont("");
 			else Font.setFont("red");
-			Font.draw(screen, "Playername_"+i, leftMargin, 165+i*10);
+			Font.draw(screen, component.players[i].name, leftMargin, 165+i*10);
 		}
 		Font.setFont("blue");
 		LevelInformation li = level.getInfo();
