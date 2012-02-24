@@ -39,6 +39,8 @@ public class GuiPregame extends GuiMenu {
 	}
 	
 	public boolean doesMapExist(Level level){
+		if(level.getInfo().vanilla) return true;
+		
 		System.out.println("TEST1:"+level.getInfo().getPath(false));
 		File file = new File(level.getInfo().getPath(false));
 		if(file.exists()){
