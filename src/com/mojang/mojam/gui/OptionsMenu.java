@@ -2,8 +2,6 @@ package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
 
-import paulscode.sound.SoundSystem;
-
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
 import com.mojang.mojam.screen.Art;

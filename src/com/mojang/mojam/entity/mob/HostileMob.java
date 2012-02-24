@@ -3,7 +3,6 @@ package com.mojang.mojam.entity.mob;
 import java.util.Set;
 
 import com.mojang.mojam.entity.Entity;
-import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.level.DifficultyInformation;
 
 
