@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.level.gamemode.GameMode;
 import com.mojang.mojam.mc.EnumOS2;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.resources.MD5Checksum;
@@ -29,7 +30,7 @@ public class LevelInformation {
 	
 	private Bitmap minimap;
 	private Level parent;
-	private String checksum;
+	private String checksum = "";
 	
 	public LevelInformation(){
 		this("BLANK MAP", "", false);
@@ -44,20 +45,27 @@ public class LevelInformation {
 		fileToInfo.put(levelFile, this);
 		
 		System.out.println("Map info added: "+levelFile+"("+(vanilla?"vanilla":"external")+")");
-		if(!vanilla){
-			try {
-				checksum = MD5Checksum.getMD5Checksum(getPath());
-				md5ToInfo.put(checksum, this);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			System.out.println("  MD5:"+checksum);
-		}
 	}
 	
 	public LevelInformation setParent(Level level){
 		this.parent = level;
 		return this;
+	}
+	
+	public String getChecksum(){
+		if(checksum == ""){
+			if(!vanilla){
+				try {
+					checksum = MD5Checksum.getMD5Checksum(getPath());
+					md5ToInfo.put(checksum, this);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				System.out.println(getPath());
+				System.out.println("  MD5:"+checksum);
+			}
+		}
+		return checksum;
 	}
 	
 	public String getPath()
@@ -123,7 +131,7 @@ public class LevelInformation {
 			Level l = parent;
 			if(l == null){
 				try {
-					l = Level.fromFile(this);
+					l = new GameMode().generateLevel(this);
 				} catch (IOException e) {
 					e.printStackTrace();
 					return null;

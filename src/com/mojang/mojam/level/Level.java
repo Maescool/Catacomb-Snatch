@@ -49,6 +49,7 @@ public class Level {
 	public List<Entity>[] entityMap;
 	public List<Entity> entities = new ArrayList<Entity>();
 	private Bitmap minimap;
+	private LevelInformation levelInfo;
 	private boolean seen[];
 	final int[] neighbourOffsets;
 
@@ -91,6 +92,37 @@ public class Level {
 		 */
 	}
 
+	public Level setInfo(LevelInformation li){
+		this.levelInfo = li;
+		this.levelInfo.setParent(this);
+		return this;
+	}
+	public LevelInformation getInfo(){
+		if(levelInfo == null){
+			levelInfo = new LevelInformation();
+		}
+		return levelInfo;
+	}
+	
+	public BufferedImage createMapImage(){
+		int w = width - 16;
+		int h = height - 16;
+		BufferedImage output = new BufferedImage (w, h, BufferedImage.TYPE_INT_RGB);
+		for (int y = 0; y < h; y++) {
+			for (int x = 0; x < w; x++) {
+				output.setRGB(x, y, TileID.tileToColor(getTile(x+8, y+8)));
+			}
+		}
+		int xBuffer = 8 * Tile.WIDTH;
+		int yBuffer = 8 * Tile.HEIGHT;
+		for(Entity entity : entities){
+			if(entity instanceof TreasurePile){
+				output.setRGB((int) ((entity.pos.x - xBuffer) / Tile.WIDTH), (int) ((entity.pos.y - yBuffer) / Tile.HEIGHT), 0xffff00);
+			}
+		}
+		return output;
+	}
+	
 	/*
 	public static Level fromFile(LevelInformation li) throws IOException {
 		BufferedImage bufferedImage;

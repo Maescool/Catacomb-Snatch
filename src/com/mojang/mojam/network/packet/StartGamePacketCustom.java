@@ -4,11 +4,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import com.mojang.mojam.level.Level;
-import com.mojang.mojam.level.LevelInformation;
-import com.mojang.mojam.level.TileID;
+import com.mojang.mojam.network.Packet;
 
-public class StartGamePacketCustom extends StartGamePacket {
+public class StartGamePacketCustom extends Packet {
 
 
 	public StartGamePacketCustom() {

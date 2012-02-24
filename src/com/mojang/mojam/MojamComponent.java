@@ -486,7 +486,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			}
 		}
 
-		if(level == null) {
+		if(level == null || (menuStack.size() > 0)) {
 			mouseButtons.tick();
 		} else 
 		if (level != null) {
@@ -552,13 +552,14 @@ public class MojamComponent extends Canvas implements Runnable,
 
 		}
 
-		if (createServerState == SERVERSTATE_STARTGAME) {			createServerState = SERVERSTATE_RUNGAME;
+		if (createServerState == SERVERSTATE_STARTGAME) {
+			createServerState = SERVERSTATE_RUNGAME;
 			/*synchronizer = new TurnSynchronizer(MojamComponent.this,
 					packetLink, localId, 2);
 
 			clearMenus();
-			createLevel(TitleMenu.level, TitleMenu.defaultGameMode);
-*/
+			createLevel(TitleMenu.level, TitleMenu.defaultGameMode);*/
+
 			synchronizer.setStarted(true);
 			if (TitleMenu.level.vanilla) {
 				packetLink.sendPacket(new StartGamePacket(
@@ -574,7 +575,7 @@ public class MojamComponent extends Canvas implements Runnable,
 					packetLink, localId, 2);
 
 			clearMenus();
-			createLevel(TitleMenu.level);
+			createLevel(TitleMenu.level, TitleMenu.defaultGameMode);
 			
 			packetLink.setPacketListener(MojamComponent.this);
 			packetLink.sendPacket(new StartPregamePacket(TurnSynchronizer.synchedSeed, level, DifficultyList.getDifficultyID(TitleMenu.difficulty)));
@@ -666,7 +667,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		if (packet instanceof StartGamePacket) {
 			if (!isServer) {
 				StartGamePacket sgPacker = (StartGamePacket) packet;
-				synchronizer.onStartGamePacket(sgPacker);
+				synchronizer.onStartGamePacket(sgPacker.getGameSeed());
 				TitleMenu.difficulty = DifficultyList.getDifficulties().get(sgPacker.getDifficulty());
 				createLevel(sgPacker.getLevelFile(), TitleMenu.defaultGameMode);
 			}
@@ -676,7 +677,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			if (!isServer) {
 				StartPregamePacket sgPacker = (StartPregamePacket) packet;
 				TitleMenu.difficulty = DifficultyList.getDifficulties().get(sgPacker.getDifficulty());
-				synchronizer.onStartGamePacket((StartGamePacket)packet);
+				synchronizer.onStartGamePacket(sgPacker.getGameSeed());
 				level = sgPacker.getLevel();
 				LevelList.createLevelList();
 				paused = true;
@@ -825,6 +826,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		} else if (id == TitleMenu.BACK_ID) {
 			popMenu();
 		} else if(id == TitleMenu.SEND_READY){
+			System.out.println("READY");
 			boolean flag = !player.isReady;
 			player.isReady = flag;
 			if(!isServer){

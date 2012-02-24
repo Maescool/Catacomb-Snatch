@@ -8,6 +8,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
@@ -36,8 +37,18 @@ public class GuiPregame extends GuiMenu {
 	}
 	
 	public boolean doesMapExist(Level level){
-		String checksum = MD5Checksum.getMD5Checksum(level.getInfo().getPath(false));
-		return LevelInformation.md5ToInfo.containsKey(checksum);
+		System.out.println("TEST1:"+level.getInfo().getPath(false));
+		File file = new File(level.getInfo().getPath(false));
+		if(file.exists()){
+			System.out.println("TEST2:"+MD5Checksum.getMD5Checksum(file.getPath()));
+			System.out.println("     :"+level.getInfo().getChecksum());
+			String cs = MD5Checksum.getMD5Checksum(file.getPath());
+			if(cs.equals(level.getInfo().getChecksum())){
+				System.out.println("  Match!");
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public void performSave(Level level_){
@@ -48,14 +59,14 @@ public class GuiPregame extends GuiMenu {
 		int i = 0;
 		int j = initialPath.lastIndexOf(".");
 		String path = initialPath.substring(0,j);
-		File outputFile;
-		do {
+		File outputFile = new File(path+".png");
+		while(outputFile.exists()) {
 			if(i++ > 100) {
 				MojamComponent.instance.showError("Map save error");
 				return;
 			}
 			outputFile = new File(path+"_"+i+".png");
-		} while(outputFile.exists());
+		};
 		outputFile.mkdirs();
 			
 		System.out.println("  path:"+outputFile.getPath());
@@ -68,6 +79,7 @@ public class GuiPregame extends GuiMenu {
 	}
 	
 	public void render(Screen screen) {
+		screen.clear(0);
 		screen.blit(Art.emptyBackground, 0, 0);
 		int leftMargin = 48;
 		Font.draw(screen, "Server Map", leftMargin/2, 24);
@@ -99,22 +111,18 @@ public class GuiPregame extends GuiMenu {
 	
 	@Override
 	public void buttonPressed(ClickableComponent button) {
-		
 	}
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		
 	}
 
 }
