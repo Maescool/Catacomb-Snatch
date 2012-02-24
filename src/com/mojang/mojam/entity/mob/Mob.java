@@ -225,9 +225,9 @@ public abstract class Mob extends Entity {
 		return (this.carrying != null);
 	}
     
-    public boolean isTargetBehindWall(double x, double y, double dx2, double dy2, Entity e) {
-        int x1 = (int) x / Tile.WIDTH;
-        int y1 = (int) y / Tile.HEIGHT;
+    public boolean isTargetBehindWall(double dx2, double dy2, Entity e) {
+        int x1 = (int) pos.x / Tile.WIDTH;
+        int y1 = (int) pos.y / Tile.HEIGHT;
         int x2 = (int) dx2 / Tile.WIDTH;
         int y2 = (int) dy2 / Tile.HEIGHT;
 

@@ -29,7 +29,7 @@ public abstract class HostileMob extends Mob {
                 closest = e;
             }
         }
-        if (closest != null && !isTargetBehindWall(pos.x, pos.y, closest.pos.x, closest.pos.y, closest)) {
+        if (closest != null && !isTargetBehindWall(closest.pos.x, closest.pos.y, closest)) {
             chasing=true;
             double angle = Math.atan2((closest.pos.y - pos.y), (closest.pos.x - pos.x));
             facing = (int) Math.abs(2*(angle+(3*Math.PI/4))/Math.PI) % 4; 
