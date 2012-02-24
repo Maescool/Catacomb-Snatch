@@ -17,28 +17,30 @@ public class ShopItem extends Building {
     public static final int SHOP_TURRET = 0;
     public static final int SHOP_HARVESTER = 1;
     public static final int SHOP_BOMB = 2;
-    public static final int[] COST = {};
+    public static final int[] COST = {150, 300, 500};
     private final int type;
     private int effectiveCost;
+    
 
     public ShopItem(double x, double y, int type, int team, int localTeam) {
         super(x, y, team, localTeam);
         this.type = type;
         isImmortal = true;
         if (team == Team.Team1) {
-            facing = 4;
+            facing = 4;   
         }
+        creativeBuilding();
     }
     
-    public void CreativeBuilding(){
-    	if(MojamComponent.player.creative == true){
+    public void creativeBuilding(){
+    	if(Player.creative == true){
+    		COST[0] = 0;
     		COST[1] = 0;
     		COST[2] = 0;
-    		COST[3] = 0;
     	}else{
-    		COST[1] = 150;
-    		COST[2] = 300;
-    		COST[3] = 500;
+    		COST[0] = 150;
+    		COST[1] = 300;
+    		COST[2] = 500;
     	}
     }
 
