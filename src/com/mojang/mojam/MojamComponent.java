@@ -78,6 +78,7 @@ import com.mojang.mojam.network.packet.StartGamePacket;
 import com.mojang.mojam.network.packet.StartGamePacketCustom;
 import com.mojang.mojam.network.packet.TurnPacket;
 import com.mojang.mojam.resources.Texts;
+import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 import com.mojang.mojam.sound.SoundPlayer;
@@ -90,6 +91,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	public static Locale locale;
 	public static Texts texts;
 	private static final long serialVersionUID = 1L;
+    public static final String GAME_TITLE = "Catacomb Snatch";
 	public static final int GAME_WIDTH = 512;
 	public static final int GAME_HEIGHT = GAME_WIDTH * 3 / 4;
 	public static final int SCALE = 2;
@@ -583,7 +585,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	public static void main(String[] args) {
 		MojamComponent mc = new MojamComponent();
-		guiFrame = new JFrame();
+		guiFrame = new JFrame(GAME_TITLE);
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(mc);
 		guiFrame.setContentPane(panel);
@@ -613,6 +615,8 @@ public class MojamComponent extends Canvas implements Runnable,
 		guiFrame.setLocationRelativeTo(null);
 		guiFrame.setVisible(true);
 		fullscreen = fs;
+		
+        Options.set(Options.FULLSCREEN, fullscreen);
 	}
 	
 	public static boolean isFulscreen() {
