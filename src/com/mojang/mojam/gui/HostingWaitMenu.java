@@ -30,10 +30,10 @@ public class HostingWaitMenu extends GuiMenu {
 
 		screen.clear(0);
 		screen.blit(Art.emptyBackground, 0, 0);
-		Font.draw(screen, MojamComponent.texts.getStatic("waitingForClient"), 100, 100);
+		Font.draw(screen, MojamComponent.texts.getStatic("mp.waitingForClient"), 100, 100);
 
-		Font.draw(screen, MojamComponent.texts.getStatic("localIP") + myIpLAN, 100, 120);
-		Font.draw(screen, MojamComponent.texts.getStatic("externalIP") + myIpWAN, 100, 140);
+		Font.draw(screen, MojamComponent.texts.getStatic("mp.localIP") + myIpLAN, 100, 120);
+		Font.draw(screen, MojamComponent.texts.getStatic("mp.externalIP") + myIpWAN, 100, 140);
 
 		super.render(screen);
 	}
