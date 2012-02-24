@@ -8,6 +8,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GraphicsDevice;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Robot;
 import java.awt.Toolkit;
@@ -23,11 +24,14 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Stack;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -587,6 +591,10 @@ public class MojamComponent extends Canvas implements Runnable,
 		guiFrame.setResizable(false);
 		guiFrame.setLocationRelativeTo(null);
 		guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		ArrayList<BufferedImage> icoList = new ArrayList<BufferedImage>();
+		icoList.add(Art.icon32);
+		icoList.add(Art.icon64);		
+		guiFrame.setIconImages(icoList);
 		guiFrame.setVisible(true);
 		Options.loadProperties();
 		setFullscreen(Boolean.parseBoolean(Options.get(Options.FULLSCREEN, Options.VALUE_FALSE)));
