@@ -71,6 +71,7 @@ import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.network.packet.ChangeKeyCommand;
 import com.mojang.mojam.network.packet.ChangeMouseButtonCommand;
 import com.mojang.mojam.network.packet.ChangeMouseCoordinateCommand;
+import com.mojang.mojam.network.packet.PingPacket;
 import com.mojang.mojam.network.packet.StartGamePacket;
 import com.mojang.mojam.network.packet.StartGamePacketCustom;
 import com.mojang.mojam.network.packet.TurnPacket;
@@ -100,6 +101,13 @@ public class MojamComponent extends Canvas implements Runnable,
 	private int fps;
 	public static Screen screen = new Screen(GAME_WIDTH, GAME_HEIGHT);
 	private Level level;
+	
+	// Latency counter
+	private static final int CACHE_EMPTY=0, CACHE_PRIMING=1, CACHE_PRIMED=2;
+	private static final int CACHE_SIZE = 5;
+	private int latencyCacheState = CACHE_EMPTY;
+	private int nextLatencyCacheIdx = 0;
+	private int[] latencyCache = new int[CACHE_SIZE];
 
 	private Stack<GuiMenu> menuStack = new Stack<GuiMenu>();
 
@@ -407,6 +415,10 @@ public class MojamComponent extends Canvas implements Runnable,
 		}
 
 		if (player != null && menuStack.size() == 0) {
+		    if (isMultiplayer) {
+		        Font.draw(screen, "Latency: " + (latencyCacheReady()?avgLatency():"-"), 10, 20);
+		    }
+		    
 			Font.draw(screen, texts.health(player.health, player.maxHealth),
 					340, screen.h - 16);
 			Font.draw(screen, texts.money(player.score), 340, screen.h - 27);
@@ -673,9 +685,31 @@ public class MojamComponent extends Canvas implements Runnable,
 				paused = false;
 				initLevel();
 			}
+		} else if (packet instanceof PingPacket) {
+		    PingPacket pp = (PingPacket)packet;
+		    synchronizer.onPingPacket(pp);
+		    if (pp.getType() == PingPacket.TYPE_ACK) {
+		        addToLatencyCache(pp.getLatency());
+		    }
 		}
 	}
 
+    private void addToLatencyCache(int latency) {
+        if (nextLatencyCacheIdx >= latencyCache.length) nextLatencyCacheIdx=0;
+        if (latencyCacheState != CACHE_PRIMED) {
+            if (nextLatencyCacheIdx == 0 && latencyCacheState == CACHE_PRIMING) latencyCacheState = CACHE_PRIMED;
+            if (latencyCacheState == CACHE_EMPTY) latencyCacheState = CACHE_PRIMING;
+        }
+        latencyCache[nextLatencyCacheIdx++] = latency;
+    }
+
+    private boolean latencyCacheReady() { return latencyCacheState == CACHE_PRIMED; }
+    private int avgLatency() {
+        int total = 0;
+        for (int latency : latencyCache) { total += latency; }
+        return total / latencyCache.length; // rounds down
+    }
+	
 	@Override
 	public void buttonPressed(ClickableComponent component) {
 		if (component instanceof Button) {
