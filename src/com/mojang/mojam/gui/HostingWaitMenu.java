@@ -30,7 +30,7 @@ public class HostingWaitMenu extends GuiMenu {
 
 		screen.clear(0);
 		screen.blit(Art.emptyBackground, 0, 0);
-		Font.draw(screen, MojamComponent.texts.getStatic("waitingForClient"), 100, 100);
+		Font.draw(screen, MojamComponent.texts.getStatic("mp.waitingForClient"), 100, 100);
 
 		Font.draw(screen, "Your internal IP:" + myIpLAN, 100, 120);
 		Font.draw(screen, "Your external IP:" + myIpWAN, 100, 140);
