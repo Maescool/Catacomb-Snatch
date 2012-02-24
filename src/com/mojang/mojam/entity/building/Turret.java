@@ -118,5 +118,6 @@ public class Turret extends Building {
 		radius = upgradeRadius[upgradeLevel];
 		radiusSqr = radius * radius;
 		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
+		justDroppedTicks = 80; //show the radius for a brief time
 	}
 }
