@@ -94,8 +94,7 @@ public class KeyBindingsMenu extends GuiMenu {
 				yOffset + 2 * 30));
 		addButton(new KeyBindingButton(TitleMenu.KEY_UPGRADE_ID, keys.upgrade, xOffset + 3 * 128,
 				yOffset + 3 * 30));
-		back = addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"),
-				(gameWidth - 128) / 2, yOffset + 6 * 30 - 24));
+		back = addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"), MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25));
 	}
 
 	private String getMenuText(Key key) {

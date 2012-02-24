@@ -16,7 +16,7 @@ public abstract class Mob extends Entity {
 
 	// private double speed = 0.82;
 	private double speed = 1.0;
-	protected int team;
+	public int team;
 	protected boolean doShowHealthBar = true;
     protected int healthBarOffset = 10;
 	double dir = 0;
@@ -27,11 +27,12 @@ public abstract class Mob extends Entity {
 	public float health = maxHealth;
 	public boolean isImmortal = false;
 	public double xBump, yBump;
-	public static Mob carrying = null;
+	public Mob carrying = null;
 	public int yOffs = 8;
 	public double xSlide;
 	public double ySlide;
 	public int deathPoints = 0;
+	public boolean chasing=false;
 
 	public Mob(double x, double y, int team) {
 		super();
@@ -219,4 +220,65 @@ public abstract class Mob extends Entity {
 
 	public void onPickup() {
 	}
+        
+	public boolean isCarrying() {
+		return (this.carrying != null);
+	}
+    
+    public boolean isTargetBehindWall(double dx2, double dy2, Entity e) {
+        int x1 = (int) pos.x / Tile.WIDTH;
+        int y1 = (int) pos.y / Tile.HEIGHT;
+        int x2 = (int) dx2 / Tile.WIDTH;
+        int y2 = (int) dy2 / Tile.HEIGHT;
+
+        int dx, dy, inx, iny, a;
+        Tile temp;
+
+        dx = x2 - x1;
+        dy = y2 - y1;
+        inx = dx > 0 ? 1 : -1;
+        iny = dy > 0 ? 1 : -1;
+
+        dx = java.lang.Math.abs(dx);
+        dy = java.lang.Math.abs(dy);
+
+        if (dx >= dy) {
+            dy <<= 1;
+            a = dy - dx;
+            dx <<= 1;
+            while (x1 != x2) {
+                temp = level.getTile(x1, y1);
+                if (!temp.canPass(e)) {
+                    return true;
+                }
+                if (a >= 0) {
+                    y1 += iny;
+                    a -= dx;
+                }
+                a += dy;
+                x1 += inx;
+            }
+        } else {
+            dx <<= 1;
+            a = dx - dy;
+            dy <<= 1;
+            while (y1 != y2) {
+                temp = level.getTile(x1, y1);
+                if (!temp.canPass(e)) {
+                    return true;
+                }
+                if (a >= 0) {
+                    x1 += inx;
+                    a -= dy;
+                }
+                a += dx;
+                y1 += iny;
+            }
+        }
+        temp = level.getTile(x1, y1);
+        if (!temp.canPass(e)) {
+            return true;
+        }
+        return false;
+    }
 }
