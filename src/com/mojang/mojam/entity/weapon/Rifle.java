@@ -27,11 +27,11 @@ public class Rifle implements IWeapon {
 	public Rifle(Player owner) {
 		setOwner(owner);
 		
-		creativeWeapon();
+		setWeaponMode();
 		
 		
 	}
-	public void creativeWeapon(){
+	public void setWeaponMode(){
 		if(owner.creative == true){
 			BULLET_DAMAGE = 100f;
 			accuracy = 1.0;

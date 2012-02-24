@@ -73,9 +73,9 @@ public class Player extends Mob implements LootCollector {
     private int deadDelay = 0;
     private int nextWalkSmokeTick = 0;
     private int regenDelay = 0;
-    public static boolean creative = true;
+    public static boolean creative = false;  //Set this to true for activation of creative mode!
     
-    public void creativeRail(){
+    public void setRailPrices(){
     	if (creative == true){
     		COST_RAIL = 0;
     		COST_DROID = 0;
@@ -106,7 +106,7 @@ public class Player extends Mob implements LootCollector {
 
         score = 0;
         weapon = new Rifle(this);
-        creativeRail();
+        setRailPrices();
     }
 
     private void checkForLevelUp() {

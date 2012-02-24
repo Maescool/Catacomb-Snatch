@@ -29,10 +29,9 @@ public class ShopItem extends Building {
         if (team == Team.Team1) {
             facing = 4;   
         }
-        creativeBuilding();
+        setBuildingCost();
     }
-    
-    public void creativeBuilding(){
+    public void setBuildingCost(){
     	if(Player.creative == true){
     		COST[0] = 0;
     		COST[1] = 0;
