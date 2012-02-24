@@ -79,5 +79,12 @@ public class Texts {
 	public String playerLevel(int plevel) {
 		return MessageFormat.format(getStatic("playerLevel"), plevel);
 	}
-
+	
+	public String upgradeNotEnoughMoney(int cost) {
+		return MessageFormat.format(getStatic("upgrade.notEnoughMoney"), cost);
+	}
+	
+	public String upgradeTo(int upgradelevel) {
+		return MessageFormat.format(getStatic("upgrade.to"), upgradelevel);
+	}
 }

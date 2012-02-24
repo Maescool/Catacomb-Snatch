@@ -34,7 +34,7 @@ public class DifficultySelect extends GuiMenu {
 		startGameButton = new Button(hosting ? TitleMenu.HOST_GAME_ID : TitleMenu.START_GAME_ID,  
 				MojamComponent.texts.getStatic("diffselect.start"), (MojamComponent.GAME_WIDTH - 256 - 30), 
 				MojamComponent.GAME_HEIGHT - 24 - 25);
-		cancelButton = new Button(TitleMenu.CANCEL_JOIN_ID, MojamComponent.texts.getStatic("diffselect.cancel"), 
+		cancelButton = new Button(TitleMenu.CANCEL_JOIN_ID, MojamComponent.texts.getStatic("cancel"), 
 				MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25);
 		
 		addButton(startGameButton);
