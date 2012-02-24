@@ -32,9 +32,10 @@ public class OptionsMenu extends GuiMenu {
 				Options.saveProperties();
 			}
 		});
+		
 		addButton(new Button(TitleMenu.KEY_BINDINGS_ID,
 				MojamComponent.texts.getStatic("options.keyBindings"), tab1, 30));
-
+		
 		ClickableComponent btnFs = addButton(new Checkbox(TitleMenu.FULLSCREEN_ID,
 				MojamComponent.texts.getStatic("options.fullscreen"), tab1, 60,
 				Options.getAsBoolean(Options.FULLSCREEN, Options.VALUE_FALSE)));
