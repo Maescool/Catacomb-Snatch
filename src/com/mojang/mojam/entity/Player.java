@@ -35,7 +35,7 @@ public class Player extends Mob implements LootCollector {
     public static final int COST_REMOVE_RAIL = 15;
     public static final int REGEN_INTERVAL = 60 * 3;
     public int plevel;
-    public int pnextlevel;
+//    public int pnextlevel;
     public double pexp;
     public double psprint;
     public boolean isSprint = false;
@@ -102,12 +102,15 @@ public class Player extends Mob implements LootCollector {
     }
 
     private double nextLevel() {
-        double next = (plevel * 7) * (plevel * 7);
-        pnextlevel = (int) next;
+        double next = this.xpNeededForLevel(plevel);
         return next;
     }
 
-    public double getNextLevel() {
+    public double xpNeededForLevel(int level){
+        return (level * 7) * (level * 7);
+    }
+    
+    public double xpNeededForNextLevel() {
         double next = nextLevel() - pexp;
         return next;
     }

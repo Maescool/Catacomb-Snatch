@@ -31,8 +31,13 @@ public class Art {
 	public static Bitmap pauseScreen = load("/art/screen/pause_screen.png");
 	public static Bitmap[][] button = cut("/art/screen/button.png", 128, 24);
     public static Bitmap[][] checkbox = cut("/art/screen/checkbox.png", 24, 24);
-	public static Bitmap panel = load("/art/screen/panel.png");
-        public static Bitmap background = load("/art/screen/BACKGROUND.png");
+	public static Bitmap panel = load("/art/screen/panel/panel.png");
+	public static Bitmap[][] panel_healthBar = cut("/art/screen/panel/panel_healthbar.png", 91, 6);
+	public static Bitmap panel_heart = load("/art/screen/panel/p_heart.png");
+	public static Bitmap panel_coin = load("/art/screen/panel/p_coin.png");
+	public static Bitmap[][] panel_xpBar = cut("/art/screen/panel/panel_xpbar.png", 91, 6);
+	public static Bitmap panel_level = load("/art/screen/panel/p_level.png");
+    public static Bitmap background = load("/art/screen/BACKGROUND.png");
         
 	public static Bitmap[][] harvester = cut("/art/building/bot_vacuum.png", 32, 56);
 	public static Bitmap[][] harvester2 = cut("/art/building/bot_vacuum2.png", 32, 56);
