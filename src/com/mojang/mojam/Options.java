@@ -15,7 +15,8 @@ public class Options {
 	
     public static final String DRAW_FPS = "drawFps";
     public static final String FULLSCREEN = "fullscreen";
-    public static final String MUTE_MUSIC = "muteMusic";
+    public static final String MUSIC = "music";
+    public static final String VOLUME = "volume";
 
     public static final String VALUE_TRUE = "true";
     public static final String VALUE_FALSE = "false";
@@ -36,6 +37,14 @@ public class Options {
     
     public static Boolean getAsBoolean(String key, String defaultValue) {
         return Boolean.parseBoolean(get(key, defaultValue));
+    }
+
+    public static float getAsFloat(String key) {
+        return Float.parseFloat(get(key));
+    }
+    
+    public static float getAsFloat(String key, String defaultValue) {
+        return Float.parseFloat(get(key, defaultValue));
     }
     
 	public static void set(String key, String value) {
