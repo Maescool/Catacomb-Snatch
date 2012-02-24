@@ -1,5 +1,6 @@
 package com.mojang.mojam.level;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.TreeSet;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
+import com.mojang.mojam.entity.building.TreasurePile;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
@@ -32,6 +34,7 @@ public class Level {
 	public List<Entity>[] entityMap;
 	public List<Entity> entities = new ArrayList<Entity>();
 	private Bitmap minimap;
+	private LevelInformation levelInfo;
 	private boolean seen[];
 	final int[] neighbourOffsets;
 
@@ -73,8 +76,38 @@ public class Level {
 		 * random.nextInt(Team.MaxTeams))); }
 		 */
 	}
-
-
+	
+	public Level setInfo(LevelInformation li){
+		this.levelInfo = li;
+		this.levelInfo.setParent(this);
+		return this;
+	}
+	public LevelInformation getInfo(){
+		if(levelInfo == null){
+			levelInfo = new LevelInformation();
+		}
+		return levelInfo;
+	}
+	
+	public BufferedImage createMapImage(){
+		int w = width - 16;
+		int h = height - 16;
+		BufferedImage output = new BufferedImage (w, h, BufferedImage.TYPE_INT_RGB);
+		for (int y = 0; y < h; y++) {
+			for (int x = 0; x < w; x++) {
+				output.setRGB(x, y, TileID.tileToColor(getTile(x+8, y+8)));
+			}
+		}
+		int xBuffer = 8 * Tile.WIDTH;
+		int yBuffer = 8 * Tile.HEIGHT;
+		for(Entity entity : entities){
+			if(entity instanceof TreasurePile){
+				output.setRGB((int) ((entity.pos.x - xBuffer) / Tile.WIDTH), (int) ((entity.pos.y - yBuffer) / Tile.HEIGHT), 0xffff00);
+			}
+		}
+		return output;
+	}
+	
 	public void setTile(int x, int y, Tile tile) {
 		final int index = x + y * width;
 		tiles[index] = tile;

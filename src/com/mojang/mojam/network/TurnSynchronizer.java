@@ -130,9 +130,9 @@ public class TurnSynchronizer {
 				packet.getTurnNumber(), packet.getPlayerCommandList());
 	}
 
-	public synchronized void onStartGamePacket(StartGamePacket packet) {
+	public synchronized void onStartGamePacket(long gameSeed) {
 		setStarted(true);
-		synchedSeed = packet.getGameSeed();
+		synchedSeed = gameSeed;
 		synchedRandom.setSeed(synchedSeed);
 	}
 

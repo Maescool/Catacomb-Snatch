@@ -10,7 +10,7 @@ public class GuiError extends GuiMenu {
 	
 	public GuiError(String message){
 		this.message = message;
-		addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, "Main Menu", 125, 300));
+		addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, "Main Menu", 15, 300));
 	}
 	
 	@Override

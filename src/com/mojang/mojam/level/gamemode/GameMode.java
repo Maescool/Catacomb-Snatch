@@ -39,9 +39,15 @@ public class GameMode {
 		int h = bufferedImage.getHeight() + LEVEL_BORDER_SIZE;
 		
 		newLevel = new Level(w, h);
+		newLevel.setInfo(li.copy());
 		
 		processLevelImage(bufferedImage, w, h);
-		darkenMap(w, h);
+		return decorateLevel(newLevel);
+	}
+	
+	public Level decorateLevel(Level level){
+		newLevel = level;
+		darkenMap(level.width, level.height);
 		
 		setupPlayerSpawnArea();
 		setTickItems();

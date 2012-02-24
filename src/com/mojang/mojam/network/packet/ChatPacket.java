@@ -6,23 +6,30 @@ import java.io.IOException;
 
 import com.mojang.mojam.network.Packet;
 
-public class StartGamePacketCustom extends Packet {
+public class ChatPacket extends Packet {
 
-	public long seed;
-
-	public StartGamePacketCustom() {}
-	public StartGamePacketCustom(long seed) {
-		this.seed = seed;
+	public int playerId;
+	public String message;
+	
+	public ChatPacket(){
 	}
-
+	
+	public ChatPacket(int playerId, String message){
+		this.playerId = playerId;
+		this.message = message;
+	}
+	
+	
 	@Override
 	public void read(DataInputStream dis) throws IOException {
-		seed = dis.readLong();
+		playerId = dis.readInt();
+		message = dis.readUTF();
 	}
 
 	@Override
 	public void write(DataOutputStream dos) throws IOException {
-		dos.writeLong(seed);
+		dos.writeInt(playerId);
+		dos.writeUTF(message);
 	}
 
 }

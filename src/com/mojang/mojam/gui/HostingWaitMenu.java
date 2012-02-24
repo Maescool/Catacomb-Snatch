@@ -34,6 +34,8 @@ public class HostingWaitMenu extends GuiMenu {
 
 		Font.draw(screen, "Your internal IP:" + myIpLAN, 100, 120);
 		Font.draw(screen, "Your external IP:" + myIpWAN, 100, 140);
+		
+		Font.draw(screen, "Level name: " + TitleMenu.level.getName(), 120, 170);
 
 		super.render(screen);
 	}

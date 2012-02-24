@@ -31,6 +31,7 @@ public class TitleMenu extends GuiMenu {
 	public static final int BACK_ID = 1014;
 	public static final int IGNORE_ID = 1015;
 	public static final int OPTIONS_ID = 1015;
+	public static final int SEND_READY = 1016;
 
 	public static final int FULLSCREEN_ID = 2000;
 	public static final int FPS_ID = 2001;
