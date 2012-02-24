@@ -188,7 +188,7 @@ public class RailDroid extends Mob {
 			}
 		}
 		if (carrying && swapTime == 0) {
-			if (pos.y < 7 * Tile.HEIGHT) {
+			if (pos.y < 8 * Tile.HEIGHT) {
 				carrying = false;
 				level.player2Score += 2;
 			}
