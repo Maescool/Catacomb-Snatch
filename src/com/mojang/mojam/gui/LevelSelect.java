@@ -53,7 +53,7 @@ public class LevelSelect extends GuiMenu {
 		startGameButton = (Button) addButton(new Button(bHosting ? TitleMenu.SELECT_DIFFICULTY_HOSTING_ID : 
 			TitleMenu.SELECT_DIFFICULTY_ID, MojamComponent.texts.getStatic("levelselect.start"), 
 			MojamComponent.GAME_WIDTH - 256 - 30, MojamComponent.GAME_HEIGHT - 24 - 25));
-		cancelButton = (Button) addButton(new Button(TitleMenu.CANCEL_JOIN_ID, MojamComponent.texts.getStatic("levelselect.cancel"), 
+		cancelButton = (Button) addButton(new Button(TitleMenu.CANCEL_JOIN_ID, MojamComponent.texts.getStatic("cancel"), 
 				MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25));
 		updateButton = (Button) addButton(new Button(TitleMenu.UPDATE_LEVELS, MojamComponent.texts.getStatic("levelselect.update"), 
 				MojamComponent.GAME_WIDTH - 128 - 18, 20));
