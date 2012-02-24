@@ -87,4 +87,16 @@ public class Texts {
 	public String upgradeTo(int upgradelevel) {
 		return MessageFormat.format(getStatic("upgrade.to"), upgradelevel);
 	}
+	
+	public String buildRail(int cost) {
+		return MessageFormat.format(getStatic("build.rail"), cost);
+	}
+	
+	public String buildDroid(int cost) {
+		return MessageFormat.format(getStatic("build.droid"), cost);
+	}
+	
+	public String removeRail(int cost) {
+		return MessageFormat.format(getStatic("remove.rail"), cost);
+	}
 }
