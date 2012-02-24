@@ -30,9 +30,9 @@ import com.mojang.mojam.screen.Screen;
 
 public class Player extends Mob implements LootCollector {
 
-    public static final int COST_RAIL = 10;
-    public static final int COST_DROID = 50;
-    public static final int COST_REMOVE_RAIL = 15;
+    public static int COST_RAIL;
+    public static int COST_DROID;
+    public static int COST_REMOVE_RAIL;
     public static final int REGEN_INTERVAL = 60 * 3;
     public int plevel;
     public int pnextlevel;
@@ -73,6 +73,19 @@ public class Player extends Mob implements LootCollector {
     private int deadDelay = 0;
     private int nextWalkSmokeTick = 0;
     private int regenDelay = 0;
+    public static boolean creative = false;  //Set this to true for activation of creative mode!
+    
+    public void setRailPrices(){
+    	if (creative == true){
+    		COST_RAIL = 0;
+    		COST_DROID = 0;
+    		COST_REMOVE_RAIL = 0;
+    	}else{
+     		COST_RAIL = 10;
+    		COST_DROID = 50;
+    		COST_REMOVE_RAIL = 15;
+    	}
+    }
 
     public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team, int localTeam) {
         super(x, y, team, localTeam);
@@ -93,6 +106,7 @@ public class Player extends Mob implements LootCollector {
 
         score = 0;
         weapon = new Rifle(this);
+        setRailPrices();
     }
 
     private void checkForLevelUp() {

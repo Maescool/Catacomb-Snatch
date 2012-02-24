@@ -35,8 +35,9 @@ public class Harvester extends Building implements LootCollector {
 		freezeTime = 10;
 		makeUpgradeableWithCosts(new int[] { 500, 1000, 5000 });
 		healthBarOffset = 13;
-		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());		
+		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
 	}
+	
 	public Bitmap areaBitmap;
 	
 	public void notifySucking() {
