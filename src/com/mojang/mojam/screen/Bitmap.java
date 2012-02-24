@@ -1,6 +1,6 @@
 package com.mojang.mojam.screen;
 
-import java.util.*;
+import java.util.Arrays;
 
 public class Bitmap {
 	public int w, h;
@@ -102,6 +102,7 @@ public class Bitmap {
 		}
 	}
 	
+
 	private void adjustBlitArea(Rect blitArea){
 	    
 	    if (blitArea.topLeftX < 0) blitArea.topLeftX = 0;
@@ -109,4 +110,41 @@ public class Bitmap {
         if (blitArea.bottomRightX > w) blitArea.bottomRightX = w;
         if (blitArea.bottomRightY > h) blitArea.bottomRightY = h;
 	}
+
+	public void rectangle(int x, int y, int bw, int bh, int color) {
+		int x0 = x;
+		int x1 = x + bw;
+		int y0 = y;
+		int y1 = y + bh;
+		if (x0 < 0)
+			x0 = 0;
+		if (y0 < 0)
+			y0 = 0;
+		if (x1 > w)
+			x1 = w;
+		if (y1 > h)
+			y1 = h;
+		int ww = x1 - x0;
+		int hh = y1 - y0;
+		int longside = (ww>hh?ww:hh);
+
+		for (int yy = y0; yy < y1; yy++) {
+			int tp = yy * w + x0;
+			pixels[tp] = color;
+			pixels[tp+ww-1] = color;
+		}
+		
+		for (int xx = 0; xx < ww; xx++) {
+			pixels[xx] = color;
+			pixels[xx+(ww*hh)-longside] = color;
+		}	
+		
+	}
+
+	public static Bitmap rectangleBitmap(int x, int y, int x2, int y2, int color) {
+		Bitmap rect = new Bitmap(x2,y2);	
+		rect.rectangle(x, y, x2, y2, color);	
+		return rect;
+	}
+
 }

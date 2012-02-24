@@ -21,8 +21,8 @@ public class ShopItem extends Building {
     private final int type;
     private int effectiveCost;
 
-    public ShopItem(double x, double y, int type, int team) {
-        super(x, y, team);
+    public ShopItem(double x, double y, int type, int team, int localTeam) {
+        super(x, y, team, localTeam);
         this.type = type;
         isImmortal = true;
         if (team == Team.Team1) {
@@ -66,19 +66,22 @@ public class ShopItem extends Building {
                 Building item = null;
                 switch (type) {
                     case SHOP_TURRET:
-                        item = new Turret(pos.x, pos.y, team);
+                        item = new Turret(pos.x, pos.y, team,localTeam);
                         break;
                     case SHOP_HARVESTER:
-                        item = new Harvester(pos.x, pos.y, team);
+                        item = new Harvester(pos.x, pos.y, team, localTeam);
                         break;
                     case SHOP_BOMB:
-                        item = new Bomb(pos.x, pos.y);
+                        item = new Bomb(pos.x, pos.y, localTeam);
                         break;
                 }
                 level.addEntity(item);
                 player.pickup(item);
             } else if (player.getScore() < effectiveCost) {
-                Notifications.getInstance().add("You dont have enough money");
+            	if(this.team == this.localTeam) {
+            		 Notifications.getInstance().add("You dont have enough money (" + effectiveCost + ")");
+            	}
+               
             }
         }
     }
