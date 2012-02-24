@@ -1,13 +1,17 @@
 package com.mojang.mojam.entity.mob;
 
 import com.mojang.mojam.MojamComponent;
-import com.mojang.mojam.entity.*;
+import com.mojang.mojam.entity.Bullet;
+import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.animation.EnemyDieAnimation;
 import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.loot.Loot;
-import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.level.tile.Tile;
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.math.Vec2;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.Screen;
 
 public abstract class Mob extends Entity {
 
@@ -33,11 +37,14 @@ public abstract class Mob extends Entity {
 	public double ySlide;
 	public int deathPoints = 0;
 	public boolean chasing=false;
-
-	public Mob(double x, double y, int team) {
+	public int justDroppedTicks = 0;
+	public int localTeam;
+	
+	public Mob(double x, double y, int team, int localTeam) {
 		super();
 		setPos(x, y);
 		this.team = team;
+		this.localTeam = localTeam;
 	}
 
 	public void init() {
@@ -153,6 +160,7 @@ public abstract class Mob extends Entity {
 				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h / 2 - yOffs, (col << 24) + 255 * 65536);
 			}
 		} else {
+					
 			screen.blit(image, pos.x - image.w / 2, pos.y - image.h / 2 - yOffs);
 		}
 
@@ -174,6 +182,7 @@ public abstract class Mob extends Entity {
 	protected void renderCarrying(Screen screen, int yOffs) {
 		if (carrying == null)
 			return;
+
 		Bitmap image = carrying.getSprite();
 		screen.blit(image, carrying.pos.x - image.w / 2, carrying.pos.y - image.h + 8 + yOffs);// image.h
 		// / 2 - 8);

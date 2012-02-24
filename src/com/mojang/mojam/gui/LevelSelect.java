@@ -26,10 +26,11 @@ public class LevelSelect extends GuiMenu {
 	private Button cancelButton;
 	private Button updateButton;
 	public boolean bHosting;
+	private int localTeam;
 	
-	public LevelSelect(boolean bHosting) {
-
-		super();
+	public LevelSelect(boolean bHosting, int localTeam) {
+		super();		
+		this.localTeam = localTeam;
 		this.bHosting = bHosting;
 		
 		// get all levels
@@ -38,7 +39,7 @@ public class LevelSelect extends GuiMenu {
 
 		// create buttons
 		levelButtons = new LevelButton[levels.size()];
-		setupLevelButtons();
+		setupLevelButtons(localTeam);
 
 		// -
 		TitleMenu.level = levels.get(0);
@@ -55,12 +56,12 @@ public class LevelSelect extends GuiMenu {
 		addButtonListener(this);
 	}
 
-	private void setupLevelButtons() {
+	private void setupLevelButtons(int localTeam) {
 		int y = 0;
 		for (int i = 0; i < levels.size(); i++) {
 			int x = i % xButtons;
 
-			levelButtons[i] = (LevelButton) addButton(new LevelButton(i, levels.get(i), xStart + x * xSpacing, yStart + ySpacing * y));
+			levelButtons[i] = (LevelButton) addButton(new LevelButton(i, levels.get(i), xStart + x * xSpacing, yStart + ySpacing * y,localTeam));
 			if (i == 0) {
 				activeButton = levelButtons[i];
 				activeButton.setActive(true);

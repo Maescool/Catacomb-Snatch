@@ -10,8 +10,8 @@ public class Scarab extends Mob {
 	public int walkTime;
 	public int stepTime;
 
-	public Scarab(double x, double y) {
-		super(x, y, Team.Neutral);
+	public Scarab(double x, double y, int localTeam) {
+		super(x, y, Team.Neutral, localTeam);
 		setPos(x, y);
 		setStartHealth(5);
 		dir = TurnSynchronizer.synchedRandom.nextDouble() * Math.PI * 2;

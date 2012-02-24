@@ -17,13 +17,16 @@ public class Building extends Mob implements IUsable {
 	public boolean highlight = false;
 	private int healingTime = HEALING_INTERVAL;
 
-	public Building(double x, double y, int team) {
-		super(x, y, team);
+	public Building(double x, double y, int team, int localTeam) {
+		super(x, y, team, localTeam);
+
 		setStartHealth(20);
 		freezeTime = 10;
 		spawnTime = TurnSynchronizer.synchedRandom.nextInt(SPAWN_INTERVAL);
 	}
 
+
+	
 	@Override
 	public void render(Screen screen) {
 		super.render(screen);
@@ -104,13 +107,19 @@ public class Building extends Mob implements IUsable {
 
 	public boolean upgrade(Player p) {
 		if (upgradeLevel >= maxUpgradeLevel) {
-			Notifications.getInstance().add("Fully upgraded already");
+			MojamComponent.soundPlayer.playSound("/sound/Fail.wav", (float) pos.x, (float) pos.y, true);
+			if(this.team == this.localTeam) {
+				Notifications.getInstance().add("Fully upgraded already");
+			}
 			return false;
 		}
 
 		final int cost = upgradeCosts[upgradeLevel];
 		if (cost > p.getScore()) {
-			Notifications.getInstance().add("You dont have enough money (" + cost + ")");
+			MojamComponent.soundPlayer.playSound("/sound/Fail.wav", (float) pos.x, (float) pos.y, true);
+			if(this.team == this.localTeam) {
+				Notifications.getInstance().add("You dont have enough money (" + cost + ")");
+			}
 			return false;
 		}
 
@@ -119,7 +128,10 @@ public class Building extends Mob implements IUsable {
 		++upgradeLevel;
 		p.useMoney(cost);
 		upgradeComplete();
-		Notifications.getInstance().add("Upgraded to level " + (upgradeLevel+1));
+		
+		if(this.team == this.localTeam) {
+			Notifications.getInstance().add("Upgraded to level " + (upgradeLevel+1));
+		}
 		return true;
 	}
 
