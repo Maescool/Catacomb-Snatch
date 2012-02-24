@@ -32,7 +32,6 @@ public class OptionsMenu extends GuiMenu {
 				Options.saveProperties();
 			}
 		});
-
 		addButton(new Button(TitleMenu.KEY_BINDINGS_ID,
 				MojamComponent.texts.getStatic("options.keyBindings"), tab1, 30));
 
