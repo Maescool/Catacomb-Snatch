@@ -463,16 +463,16 @@ public class MojamComponent extends Canvas implements Runnable,
 	private void tick() {
 	    //Not-In-Focus-Pause
 	    if (this.isFocusOwner() && level != null) {
-	        paused2 = false;
+	        paused = false;
 	    }
 
 	    if (!this.isFocusOwner() && level != null) {
 	        keys.release();
 	        mouseButtons.releaseAll();
-	        if (!paused2) { 
+	        if (!paused) { 
 	          PauseCommand pauseCommand = new PauseCommand(true);
 	          synchronizer.addCommand(pauseCommand);
-	          paused2 = true;
+	          paused = true;
 	        }
 	    }
 		if (level != null && level.victoryConditions != null) {
