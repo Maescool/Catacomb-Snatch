@@ -26,8 +26,10 @@ public class GameMode {
 	public static final int LEVEL_BORDER_SIZE = 16;
 	
 	protected Level newLevel;
+	int localTeam;
 	
-	public Level generateLevel(LevelInformation li)  throws IOException {
+	public Level generateLevel(LevelInformation li, int localTeam)  throws IOException {
+		this.localTeam = localTeam;
 		BufferedImage bufferedImage;
 		//System.out.println("Loading level from file: "+li.getPath());
 		if(li.vanilla){
@@ -121,18 +123,18 @@ public class GameMode {
 		newLevel.maxMonsters = 1500 + (int)DifficultyInformation.calculateStrength(500);	
 		
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 - 1.5), 4.5 * 32,
-				ShopItem.SHOP_TURRET, Team.Team2));
+				ShopItem.SHOP_TURRET, Team.Team2,localTeam));
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 - .5), 4.5 * 32,
-				ShopItem.SHOP_HARVESTER, Team.Team2));
+				ShopItem.SHOP_HARVESTER, Team.Team2,localTeam));
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 + .5), 4.5 * 32,
-				ShopItem.SHOP_BOMB, Team.Team2));
+				ShopItem.SHOP_BOMB, Team.Team2,localTeam));
 
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 - 1.5), (newLevel.height - 4.5) * 32,
-				ShopItem.SHOP_TURRET, Team.Team1));
+				ShopItem.SHOP_TURRET, Team.Team1,localTeam));
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 - .5), (newLevel.height - 4.5) * 32,
-				ShopItem.SHOP_HARVESTER, Team.Team1));
+				ShopItem.SHOP_HARVESTER, Team.Team1,localTeam));
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 + .5), (newLevel.height - 4.5) * 32,
-				ShopItem.SHOP_BOMB, Team.Team1));
+				ShopItem.SHOP_BOMB, Team.Team1,localTeam));
 		
 		newLevel.setTile(31, 7, new UnbreakableRailTile(new SandTile()));
 		newLevel.setTile(31, 63 - 7, new UnbreakableRailTile(new SandTile()));

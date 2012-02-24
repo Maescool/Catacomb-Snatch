@@ -2,6 +2,7 @@ package com.mojang.mojam.entity.building;
 
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.mob.Mob;
+import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 
@@ -9,8 +10,8 @@ public class TreasurePile extends Building {
 
 	private int treasures = 40;
 
-	public TreasurePile(double x, double y, int team) {
-		super(x, y, team);
+	public TreasurePile(double x, double y, int team, int localTeam) {
+		super(x, y, Team.Neutral,localTeam);
 		setStartHealth(20);
 		freezeTime = 10;
 		minimapIcon = 5;

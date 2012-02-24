@@ -35,7 +35,7 @@ public class GameModeVanilla extends GameMode {
 		
 		if (color == 0xffff00) {
 			TreasurePile t = new TreasurePile(x * Tile.WIDTH + 16, y
-					* Tile.HEIGHT, Team.Neutral);
+					* Tile.HEIGHT, Team.Neutral,localTeam);
 			newLevel.setTile(x, y, new FloorTile());
 			newLevel.addEntity(t);
 		}

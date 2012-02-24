@@ -19,8 +19,8 @@ public class Mummy extends HostileMob {
     public static double ATTACK_RADIUS = 128.0;
     public boolean chasing = false;
 
-    public Mummy(double x, double y) {
-        super(x, y, Team.Neutral);
+    public Mummy(double x, double y, int localTeam) {
+        super(x, y, Team.Neutral,localTeam);
         setPos(x, y);
         setStartHealth(7);
         dir = TurnSynchronizer.synchedRandom.nextDouble() * Math.PI * 2;
