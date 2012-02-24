@@ -31,6 +31,7 @@ public class Art {
 	public static Bitmap pauseScreen = load("/art/screen/pause_screen.png");
 	public static Bitmap[][] button = cut("/art/screen/button.png", 128, 24);
     public static Bitmap[][] checkbox = cut("/art/screen/checkbox.png", 24, 24);
+    public static Bitmap[][] slider = cut("/art/screen/slider.png", 16, 24);
 	public static Bitmap panel = load("/art/screen/panel.png");
         public static Bitmap background = load("/art/screen/BACKGROUND.png");
         

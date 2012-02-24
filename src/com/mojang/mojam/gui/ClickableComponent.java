@@ -10,7 +10,7 @@ public abstract class ClickableComponent extends VisibleComponent {
 	private List<ButtonListener> listeners;
 
 	private boolean isPressed;
-	private boolean performClick = false;
+	protected boolean performClick = false;
 
 	public ClickableComponent(int x, int y, int w, int h) {
 		super(x, y, w, h);
