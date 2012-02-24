@@ -88,13 +88,14 @@ public class MojamComponent extends Canvas implements Runnable,
 	public static Locale locale;
 	public static Texts texts;
 	private static final long serialVersionUID = 1L;
-    public static final String GAME_TITLE = "Catacomb Snatch";
+  public static final String GAME_TITLE = "Catacomb Snatch";
 	public static final int GAME_WIDTH = 512;
 	public static final int GAME_HEIGHT = GAME_WIDTH * 3 / 4;
 	public static final int SCALE = 2;
 	private static JFrame guiFrame;
 	private boolean running = true;
 	private boolean paused;
+	private boolean paused2;
 	private Cursor emptyCursor;
 	private double framerate = 60;
 	private int fps;
@@ -199,7 +200,8 @@ public class MojamComponent extends Canvas implements Runnable,
 	public void start() {
 		running = true;
 		Thread thread = new Thread(this);
-		thread.setPriority(Thread.MAX_PRIORITY);
+		//TODO : Make it an option
+		//thread.setPriority(Thread.MAX_PRIORITY);
 		thread.start();
 	}
 
@@ -461,6 +463,21 @@ public class MojamComponent extends Canvas implements Runnable,
 	}
 
 	private void tick() {
+		//Not-In-Focus-Pause
+		if (this.isFocusOwner() && level != null) {
+			paused2 = false;
+		}
+		
+		if (!this.isFocusOwner() && level != null) {
+			keys.release();
+			mouseButtons.releaseAll();
+			if (!paused2) { 
+			  PauseCommand pauseCommand = new PauseCommand(true);
+			  synchronizer.addCommand(pauseCommand);
+			  paused2 = true;
+			}
+		}
+		
 		if (level != null && level.victoryConditions != null) {
 			if(level.victoryConditions.isVictoryConditionAchieved()) {
 				addMenu(new WinMenu(GAME_WIDTH, GAME_HEIGHT, level.victoryConditions.playerVictorious()));
