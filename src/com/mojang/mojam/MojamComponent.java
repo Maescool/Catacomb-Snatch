@@ -115,6 +115,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	private boolean isMultiplayer;
 	private boolean isServer;
 	private int localId;
+	private int localTeam; //local team is the team of the client. This can be used to check if something should be only rendered on one person's screen
 	private Thread hostThread;
 	private static boolean fullscreen = false;
 	public static SoundPlayer soundPlayer;
@@ -248,7 +249,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	private synchronized void createLevel(LevelInformation li, GameMode mode) {
 		try {
 			//level = Level.fromFile(li);
-			level = mode.generateLevel(li);
+			level = mode.generateLevel(li,localTeam);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			showError("Unable to load map.");
@@ -262,20 +263,19 @@ public class MojamComponent extends Canvas implements Runnable,
 		if (level == null)
 			return;
 		//level.init();
-
 		players[0] = new Player(synchedKeys[0], synchedMouseButtons[0], level.width
 				* Tile.WIDTH / 2 - 16, (level.height - 5 - 1) * Tile.HEIGHT
-				- 16, Team.Team1);
+				- 16, Team.Team1,localTeam );
 		players[0].setFacing(4);
 		level.addEntity(players[0]);
-		level.addEntity(new Base(34 * Tile.WIDTH, 7 * Tile.WIDTH, Team.Team1));
+		level.addEntity(new Base(34 * Tile.WIDTH, 7 * Tile.WIDTH, Team.Team1,localTeam));
 		if (isMultiplayer) {
 			players[1] = new Player(synchedKeys[1], synchedMouseButtons[1], level.width
-					* Tile.WIDTH / 2 - 16, 7 * Tile.HEIGHT - 16, Team.Team2);
-			// players[1] = new Player(synchedKeys[1], 10, 10);
+					* Tile.WIDTH / 2 - 16, 7 * Tile.HEIGHT - 16, Team.Team2, localTeam);
+			players[1].setLocalTeam(localTeam);
 			level.addEntity(players[1]);
 			level.addEntity(new Base(32 * Tile.WIDTH - 20,
-					32 * Tile.WIDTH - 20, Team.Team2));
+					32 * Tile.WIDTH - 20, Team.Team2,localTeam));
 		}
 		player = players[localId];
 		player.setCanSee(true);
@@ -686,21 +686,22 @@ public class MojamComponent extends Canvas implements Runnable,
 			isMultiplayer = false;
 
 			localId = 0;
+			localTeam= Team.Team1;
 			synchronizer = new TurnSynchronizer(this, null, 0, 1);
 			synchronizer.setStarted(true);
 
 			createLevel(TitleMenu.level, TitleMenu.defaultGameMode);
 			soundPlayer.stopBackgroundMusic();
 		} else if (id == TitleMenu.SELECT_LEVEL_ID) {
-			addMenu(new LevelSelect(false));
+			addMenu(new LevelSelect(false,localTeam));
 		} else if (id == TitleMenu.SELECT_HOST_LEVEL_ID) {
-			addMenu(new LevelSelect(true));
+			addMenu(new LevelSelect(true,localTeam));
 		} else if (id == TitleMenu.UPDATE_LEVELS) {
 			GuiMenu menu = menuStack.pop();
 			if (menu instanceof LevelSelect) {
-				addMenu(new LevelSelect(((LevelSelect) menu).bHosting));
+				addMenu(new LevelSelect(((LevelSelect) menu).bHosting, localTeam));
 			} else {
-				addMenu(new LevelSelect(false));
+				addMenu(new LevelSelect(false,localTeam));
 			}
 		} else if (id == TitleMenu.HOST_GAME_ID) {
 			addMenu(new HostingWaitMenu());
@@ -709,6 +710,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			try {
 				if (isServer) {
 					localId = 0;
+					localTeam= Team.Team1;
 					serverSocket = new ServerSocket(3000);
 					serverSocket.setSoTimeout(1000);
 
@@ -768,6 +770,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 			try {
 				localId = 1;
+				localTeam= Team.Team2;
 				packetLink = new ClientSidePacketLink(TitleMenu.ip, 3000);
 				synchronizer = new TurnSynchronizer(this, packetLink, localId,2);
 				packetLink.setPacketListener(this);

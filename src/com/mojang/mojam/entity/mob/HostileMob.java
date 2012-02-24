@@ -9,8 +9,8 @@ import com.mojang.mojam.level.DifficultyInformation;
 
 public abstract class HostileMob extends Mob {
 
-	public HostileMob(double x, double y, int team) {
-		super(x, y, team);
+	public HostileMob(double x, double y, int team, int localTeam) {
+		super(x, y, team,localTeam);
 	}
 
 	@Override

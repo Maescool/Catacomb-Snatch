@@ -11,8 +11,8 @@ public class Snake extends HostileMob {
 	public int walkTime;
 	public int stepTime;
 
-	public Snake(double x, double y) {
-		super(x, y, Team.Neutral);
+	public Snake(double x, double y, int localTeam) {
+		super(x, y, Team.Neutral, localTeam);
 		setPos(x, y);
 		setStartHealth(3);
 		dir = TurnSynchronizer.synchedRandom.nextDouble() * Math.PI * 2;

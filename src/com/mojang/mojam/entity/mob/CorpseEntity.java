@@ -3,8 +3,8 @@ package com.mojang.mojam.entity.mob;
 import com.mojang.mojam.screen.*;
 
 public class CorpseEntity extends Mob {
-	public CorpseEntity(double x, double y) {
-		super(x, y, Team.Neutral);
+	public CorpseEntity(double x, double y,int localTeam) {
+		super(x, y, Team.Neutral,localTeam);
 		setStartHealth(2);
 		freezeTime = 10;
 	}

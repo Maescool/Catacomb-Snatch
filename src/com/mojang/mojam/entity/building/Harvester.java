@@ -1,5 +1,6 @@
 package com.mojang.mojam.entity.building;
 
+import java.awt.Color;
 import java.util.Random;
 
 import com.mojang.mojam.entity.Entity;
@@ -23,19 +24,21 @@ public class Harvester extends Building implements LootCollector {
 	private boolean isEmptying = false;
 	private Player emptyingPlayer = null;
 	private int emptyingSpeed = 50;
-	private double radius;
+	private int radius;
 	private int[] upgradeRadius = new int[] { (int) (1.5 * Tile.WIDTH),
 			2 * Tile.WIDTH, (int) (2.5 * Tile.WIDTH) };
 	private int[] upgradeCapacities = new int[] { 1500, 2500, 3500 };
 
-	public Harvester(double x, double y, int team) {
-		super(x, y, team);
+	public Harvester(double x, double y, int team, int localTeam) {
+		super(x, y, team,localTeam);
 		setStartHealth(10);
 		freezeTime = 10;
 		makeUpgradeableWithCosts(new int[] { 500, 1000, 5000 });
 		healthBarOffset = 13;
+		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());		
 	}
-
+	public Bitmap areaBitmap;
+	
 	public void notifySucking() {
 		harvestingTicks = 30;
 	}
@@ -106,6 +109,7 @@ public class Harvester extends Building implements LootCollector {
 	    health += 10;
         radius = upgradeRadius[upgradeLevel];
 		capacity = upgradeCapacities[upgradeLevel];
+		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
 	}
 
 	public boolean canTake() {
@@ -113,6 +117,11 @@ public class Harvester extends Building implements LootCollector {
 	}
 
 	public void render(Screen screen) {
+		
+		if(justDroppedTicks-- > 0 && localTeam==team) {
+			screen.blit(areaBitmap, pos.x - areaBitmap.w / 2, pos.y - areaBitmap.h / 2 - yOffs);	
+		}
+		
 		Bitmap image = getSprite();
 
 		if (hurtTime > 0) {
@@ -137,7 +146,10 @@ public class Harvester extends Building implements LootCollector {
 		if (health < maxHealth)
             addHealthBar(screen);
 
-		addMoneyBar(screen);
+		if(team ==localTeam) {
+			addMoneyBar(screen);
+		}
+		
 	}
 	
 	private void addMoneyBar(Screen screen) {
