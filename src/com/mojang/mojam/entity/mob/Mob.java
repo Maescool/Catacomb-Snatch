@@ -27,7 +27,7 @@ public abstract class Mob extends Entity {
 	public float health = maxHealth;
 	public boolean isImmortal = false;
 	public double xBump, yBump;
-	public static Mob carrying = null;
+	public Mob carrying = null;
 	public int yOffs = 8;
 	public double xSlide;
 	public double ySlide;
@@ -219,4 +219,8 @@ public abstract class Mob extends Entity {
 
 	public void onPickup() {
 	}
+        
+        public boolean isCarrying() {
+            return (this.carrying != null);
+        }
 }
