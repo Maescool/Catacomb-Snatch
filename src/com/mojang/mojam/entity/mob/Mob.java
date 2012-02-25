@@ -7,6 +7,7 @@ import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.animation.EnemyDieAnimation;
 import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.loot.Loot;
+import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.screen.Art;
@@ -39,6 +40,8 @@ public abstract class Mob extends Entity {
 	public boolean chasing=false;
 	public int justDroppedTicks = 0;
 	public int localTeam;
+	public static final int HEALING_INTERVAL = 15;
+	private int healingTime = HEALING_INTERVAL;
 	
 	public Mob(double x, double y, int team, int localTeam) {
 		super();
@@ -78,6 +81,15 @@ public abstract class Mob extends Entity {
 	}
 
 	public void tick() {
+		//Mob health regeneration - when not Nightmare mode ;)
+		if (hurtTime <= 0 && TitleMenu.difficulty.difficultyName != MojamComponent.texts.getStatic("diffselect.nightmare")) {
+			if (health < maxHealth) {
+				if (--healingTime <= 0) {
+					++health;
+					healingTime = HEALING_INTERVAL;
+				}
+			}
+		}
 		if (hurtTime > 0) {
 			hurtTime--;
 		}
@@ -193,6 +205,7 @@ public abstract class Mob extends Entity {
 	public void hurt(Entity source, float damage) {
 		if (isImmortal)
 			return;
+		healingTime = HEALING_INTERVAL;
 
 		if (freezeTime <= 0) {
 			
