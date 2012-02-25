@@ -466,6 +466,10 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
             }
         } else if (button.getId() == TitleMenu.JOIN_GAME_ID) {
             addMenu(new JoinGameMenu());
+        } else if (button.getId() == TitleMenu.HOW_TO_PLAY_ID) {
+            addMenu(new HowToPlay());
+        } else if (button.getId() == TitleMenu.BACK_ID) {
+            popMenu();
         } else if (button.getId() == TitleMenu.CANCEL_JOIN_ID) {
             popMenu();
             if (hostThread != null) {
