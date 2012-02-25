@@ -64,7 +64,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
     private boolean running = true;
     private Cursor emptyCursor;
     private double framerate = 60;
-   // private int fps;
+    private int fps;
     private Screen screen = new Screen(GAME_WIDTH, GAME_HEIGHT);
     private Level level;
 	private boolean paused;
@@ -287,7 +287,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
             if (System.currentTimeMillis() - lastTimer1 > 1000) {
                 lastTimer1 += 1000;
-               // fps = frames;
+                fps = frames;
                 frames = 0;
             }
         }
@@ -501,7 +501,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
                                     }
                                     if (socket == null) {
-                                        System.out.println("asdf");
                                         continue;
                                     }
                                     fail = false;
