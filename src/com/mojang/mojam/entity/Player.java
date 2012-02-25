@@ -74,7 +74,7 @@ public class Player extends Mob implements LootCollector {
     private int deadDelay = 0;
     private int nextWalkSmokeTick = 0;
     private int regenDelay = 0;
-    boolean isImmortal;
+    public boolean isImmortal;
     public static boolean creative = Options.getAsBoolean(Options.CREATIVE); 
     
     public void setRailPricesandImmortality(){
