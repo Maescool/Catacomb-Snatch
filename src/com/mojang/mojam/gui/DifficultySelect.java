@@ -11,6 +11,8 @@ import com.mojang.mojam.screen.Screen;
 
 public class DifficultySelect extends GuiMenu {
 	
+	private static final int DEFAULT_DIFFICULTY = 1;
+	
 	private ArrayList<DifficultyInformation> difficulties = DifficultyList.getDifficulties();
 	
 	private Checkbox[] DifficultyCheckboxes;
@@ -29,10 +31,13 @@ public class DifficultySelect extends GuiMenu {
 		DifficultyCheckboxes = new Checkbox[difficulties.size()];
 		setupDifficultyButtons();
 		
-		TitleMenu.difficulty = difficulties.get(0);
+		TitleMenu.difficulty = difficulties.get(DEFAULT_DIFFICULTY);
 		
-		startGameButton = new Button(hosting ? TitleMenu.HOST_GAME_ID : TitleMenu.START_GAME_ID,  "Start Game", (MojamComponent.GAME_WIDTH - 256 - 30), MojamComponent.GAME_HEIGHT - 24 - 25);
-		cancelButton = new Button(TitleMenu.CANCEL_JOIN_ID, "Cancel", MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25);
+		startGameButton = new Button(hosting ? TitleMenu.HOST_GAME_ID : TitleMenu.START_GAME_ID,  
+				MojamComponent.texts.getStatic("diffselect.start"), (MojamComponent.GAME_WIDTH - 256 - 30), 
+				MojamComponent.GAME_HEIGHT - 24 - 25);
+		cancelButton = new Button(TitleMenu.CANCEL_JOIN_ID, MojamComponent.texts.getStatic("cancel"), 
+				MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25);
 		
 		addButton(startGameButton);
 		addButton(cancelButton);
@@ -47,7 +52,7 @@ public class DifficultySelect extends GuiMenu {
             
             DifficultyCheckboxes[i] = (Checkbox) addButton(new Checkbox(i, difficulties.get(i).difficultyName, xStart + x * xSpacing, yStart + ySpacing * y));
             
-            if (i == 0) {
+            if (i == DEFAULT_DIFFICULTY) {
                 DifficultyCheckboxes[i].checked = true;
             }
         
@@ -60,7 +65,7 @@ public class DifficultySelect extends GuiMenu {
 	public void render(Screen screen) {
 		screen.blit(Art.emptyBackground, 0, 0);
 		super.render(screen);
-		Font.draw(screen, "Choose a difficulty", 20, 20);
+		Font.draw(screen, MojamComponent.texts.getStatic("diffselect.title"), 20, 20);
 	}
 
 	@Override

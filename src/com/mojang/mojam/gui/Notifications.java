@@ -34,7 +34,6 @@ public class Notifications {
 
 	public void add(String message, int life) {
 		notes.add(new Note(message, life));
-		System.out.println(notes.size());
 	}
 
 	public void render(Screen screen) {

@@ -24,6 +24,8 @@ public class PauseMenu extends GuiMenu {
 				(gameWidth - 128) / 2, 200));
 		addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, MojamComponent.texts.getStatic("pausemenu.backtomain"),
 				(gameWidth - 128) / 2, 230));
+		addButton(new Button(TitleMenu.EXIT_GAME_ID, MojamComponent.texts.getStatic("pausemenu.exit"),
+				(gameWidth - 128) / 2, 260));
 
 	}
 
@@ -35,7 +37,7 @@ public class PauseMenu extends GuiMenu {
 
 		super.render(screen);
 
-		screen.blit(Art.lordLard[0][6], (gameWidth - 128) / 2 - 40,
+		screen.blit(Art.getLocalPlayerArt()[0][6], (gameWidth - 128) / 2 - 40,
 				130 + selectedItem * 30);
 	}
 
@@ -47,7 +49,7 @@ public class PauseMenu extends GuiMenu {
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
 			selectedItem++;
-			if (selectedItem > 3) {
+			if (selectedItem > 4) {
 				selectedItem = 0;
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {

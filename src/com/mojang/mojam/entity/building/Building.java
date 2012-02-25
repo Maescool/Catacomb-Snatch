@@ -2,8 +2,11 @@ package com.mojang.mojam.entity.building;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.*;
+import com.mojang.mojam.entity.animation.EnemyDieAnimation;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.gui.Notifications;
+import com.mojang.mojam.level.HoleTile;
+import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.*;
@@ -17,13 +20,16 @@ public class Building extends Mob implements IUsable {
 	public boolean highlight = false;
 	private int healingTime = HEALING_INTERVAL;
 
-	public Building(double x, double y, int team) {
-		super(x, y, team);
+	public Building(double x, double y, int team, int localTeam) {
+		super(x, y, team, localTeam);
+
 		setStartHealth(20);
 		freezeTime = 10;
 		spawnTime = TurnSynchronizer.synchedRandom.nextInt(SPAWN_INTERVAL);
 	}
 
+
+	
 	@Override
 	public void render(Screen screen) {
 		super.render(screen);
@@ -89,6 +95,7 @@ public class Building extends Mob implements IUsable {
 
 	public void slideMove(double xa, double ya) {
 		super.move(xa, ya);
+		checkForHoleTiles((int) pos.x/Tile.WIDTH, (int) pos.y/Tile.HEIGHT);
 	}
 
 	//
@@ -104,13 +111,19 @@ public class Building extends Mob implements IUsable {
 
 	public boolean upgrade(Player p) {
 		if (upgradeLevel >= maxUpgradeLevel) {
-			Notifications.getInstance().add("Fully upgraded already");
+			MojamComponent.soundPlayer.playSound("/sound/Fail.wav", (float) pos.x, (float) pos.y, true);
+			if(this.team == this.localTeam) {
+				Notifications.getInstance().add(MojamComponent.texts.getStatic("upgrade.full"));
+			}
 			return false;
 		}
 
 		final int cost = upgradeCosts[upgradeLevel];
 		if (cost > p.getScore()) {
-			Notifications.getInstance().add("You dont have enough money");
+			MojamComponent.soundPlayer.playSound("/sound/Fail.wav", (float) pos.x, (float) pos.y, true);
+			if(this.team == this.localTeam) {
+				Notifications.getInstance().add(MojamComponent.texts.upgradeNotEnoughMoney(cost));
+			}
 			return false;
 		}
 
@@ -119,7 +132,10 @@ public class Building extends Mob implements IUsable {
 		++upgradeLevel;
 		p.useMoney(cost);
 		upgradeComplete();
-		Notifications.getInstance().add("Upgraded to level " + upgradeLevel);
+		
+		if(this.team == this.localTeam) {
+			Notifications.getInstance().add(MojamComponent.texts.upgradeTo(upgradeLevel+1));
+		}
 		return true;
 	}
 
@@ -150,4 +166,14 @@ public class Building extends Mob implements IUsable {
 	public boolean isAllowedToCancel() {
 		return true;
 	}
+	
+    public void checkForHoleTiles(int x, int y) {
+        if (level.getTile(x, y) instanceof HoleTile) {
+            if (!removed) {
+                remove();
+                level.addEntity(new EnemyDieAnimation(pos.x, pos.y));
+                MojamComponent.soundPlayer.playSound("/sound/Fall.wav", (float) pos.x, (float) pos.y);
+            }
+        }
+    }
 }

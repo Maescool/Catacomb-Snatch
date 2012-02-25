@@ -3,6 +3,7 @@ package com.mojang.mojam.entity.building;
 import java.util.Set;
 
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.animation.LargeBombExplodeAnimation;
 import com.mojang.mojam.entity.mob.*;
@@ -11,10 +12,12 @@ import com.mojang.mojam.screen.*;
 public class Bomb extends Building {
 
 	public static final double BOMB_DISTANCE = 50;
+	private boolean hit = false;
+	private Bullet fakeBullet = new Bullet(MojamComponent.instance.player,1,1,0);
 
-	public Bomb(double x, double y) {
-		super(x, y, Team.Neutral);
-		setStartHealth(5);
+	public Bomb(double x, double y, int localTeam) {
+		super(x, y, Team.Neutral,localTeam);
+		setStartHealth(8);
 		yOffs = 2;
 		setSize(7, 7);
 		doShowHealthBar = false;
@@ -42,6 +45,8 @@ public class Bomb extends Building {
 	}
 
 	public void tick() {
+		if (hit)
+			super.hurt(fakeBullet, 2);
 
 		if (health <= 0) {
 			if (--hurtTime <= 0) {
@@ -63,6 +68,10 @@ public class Bomb extends Building {
 
 	@Override
 	public void hurt(Entity source, float damage) {
-		super.hurt(source, damage);
+		
+	}
+
+	public void hit() {
+		hit = true;;
 	}
 }

@@ -5,10 +5,10 @@ import java.util.HashMap;
 import com.mojang.mojam.level.tile.*;
 
 public class TileID {
-	
-	private static HashMap<Short, Class> shortToTileMap = new HashMap<Short, Class>();
-	private static HashMap<Class, Short> tileToShortMap = new HashMap<Class, Short>();
-	
+
+	private static HashMap<Short, Class<? extends Tile>> shortToTileMap = new HashMap<Short, Class<? extends Tile>>();
+	private static HashMap<Class<? extends Tile>, Short> tileToShortMap = new HashMap<Class<? extends Tile>, Short>();
+
 	static {
 		registerTile((short) 0, FloorTile.class);
 		registerTile((short) 1, HoleTile.class);
@@ -18,40 +18,35 @@ public class TileID {
 		registerTile((short) 5, UnpassableSandTile.class);
 		registerTile((short) 6, WallTile.class);
 	}
-	
+
 	/**
-	 * This must be called once so that tiles can be sent via- multiplayer.
-	 * They will need a constructor with no arguments
+	 * This must be called once so that tiles can be sent via- multiplayer. They
+	 * will need a constructor with no arguments
 	 */
-	public static void registerTile(short id, Class tileclass){
+	public static void registerTile(short id, Class<? extends Tile> tileclass) {
 		shortToTileMap.put(id, tileclass);
 		tileToShortMap.put(tileclass, id);
 	}
-	
-	public static short tileToShort(Tile tile){
-		if(!tileToShortMap.containsKey(tile.getClass())) return 0;
+
+	public static short tileToShort(Tile tile) {
+		if (!tileToShortMap.containsKey(tile.getClass()))
+			return 0;
 		return tileToShortMap.get(tile.getClass());
 	}
-	
-	public static Tile shortToTile(short i, Level l, int x, int y){
+
+	public static Tile shortToTile(short i, Level l, int x, int y) {
 		Tile tile = new FloorTile();
-		try
-        {
-            Class class1 = (Class)shortToTileMap.get(i);
-            if(class1 == UnbreakableRailTile.class){
-            	tile = (Tile)class1.getConstructor(new Class[] {
-            			Tile.class }).newInstance(new Object[] {
-                        		 new FloorTile() });
-            }
-            else if (class1 != null)
-            {
-                tile = (Tile)class1.getConstructor().newInstance();
-            }
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace();
-        }
-        return tile;
+		try {
+			Class<? extends Tile> class1 = shortToTileMap.get(i);
+			if (class1 == UnbreakableRailTile.class) {
+				tile = (Tile) class1.getConstructor(new Class[] { Tile.class })
+						.newInstance(new Object[] { new FloorTile() });
+			} else if (class1 != null) {
+				tile = (Tile) class1.getConstructor().newInstance();
+			}
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		}
+		return tile;
 	}
 }

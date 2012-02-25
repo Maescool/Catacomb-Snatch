@@ -1,12 +1,17 @@
 package com.mojang.mojam.entity.building;
 
+import java.awt.Color;
 import java.util.Set;
 
-import com.mojang.mojam.entity.*;
-import com.mojang.mojam.entity.mob.*;
+import com.mojang.mojam.entity.Bullet;
+import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.mob.Mob;
+import com.mojang.mojam.entity.mob.RailDroid;
 import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.tile.Tile;
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.Screen;
 
 public class Turret extends Building {
 	
@@ -14,18 +19,23 @@ public class Turret extends Building {
 	
 	private int delayTicks = 0;
 	private int delay;
-	private double radius;
-	private double radiusSqr;
+	public int team;
+	public int radius;
+	public int radiusSqr;
 
 	private int[] upgradeRadius = new int[] { 3 * Tile.WIDTH, 5 * Tile.WIDTH, 7 * Tile.WIDTH };
 	private int[] upgradeDelay = new int[] { 24, 21, 18 };
 
 	private int facing = 0;
 
-	public Turret(double x, double y, int team) {
-		super(x, y, team);
+	public Bitmap areaBitmap;
+
+	public Turret(double x, double y, int team, int localTeam) {
+		super(x, y, team, localTeam);
+		this.team = team;
 		setStartHealth(10);
 		freezeTime = 10;
+		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
 	}
 
 	public void init() {
@@ -46,12 +56,13 @@ public class Turret extends Building {
 		Entity closest = null;
 		double closestDist = 99999999.0f;
 		for (Entity e : entities) {
-			if (!(e instanceof Mob) || e instanceof RailDroid || e instanceof Bomb)
+			if (!(e instanceof Mob) || (e instanceof RailDroid && e.team == this.team) || e instanceof Bomb)
 				continue;
 			if (!((Mob) e).isNotFriendOf(this))
 				continue;
 			final double dist = e.pos.distSqr(pos);
-			if (dist < radiusSqr && dist < closestDist && !isTargetBehindWall(e.pos.x, e.pos.y)) {
+			Bullet bullet = new Bullet(this, pos.x, pos.y, 0);
+			if (dist < radiusSqr && dist < closestDist && !isTargetBehindWall(e.pos.x, e.pos.y, bullet)) {
 				closestDist = dist;
 				closest = e;
 			}
@@ -59,10 +70,6 @@ public class Turret extends Building {
 		if (closest == null)
 			return;
 		
-		
-		if (Player.carrying == this && upgradeLevel > 0)
-			return;
-
 		double invDist = 1.0 / Math.sqrt(closestDist);
 		double yd = closest.pos.y - pos.y;
 		double xd = closest.pos.x - pos.x;
@@ -84,63 +91,12 @@ public class Turret extends Building {
 		delayTicks = delay;
 	}
 
-	private boolean isTargetBehindWall(double dx2, double dy2) {
-		int x1 = (int) pos.x / Tile.WIDTH;
-		int y1 = (int) pos.y / Tile.HEIGHT;
-		int x2 = (int) dx2 / Tile.WIDTH;
-		int y2 = (int) dy2 / Tile.HEIGHT;
-
-		Bullet bullet = new Bullet(this, pos.x, pos.y, 0);
-
-		int dx, dy, inx, iny, e;
-		Tile temp;
-
-		dx = x2 - x1;
-		dy = y2 - y1;
-		inx = dx > 0 ? 1 : -1;
-		iny = dy > 0 ? 1 : -1;
-
-		dx = java.lang.Math.abs(dx);
-		dy = java.lang.Math.abs(dy);
-
-		if (dx >= dy) {
-			dy <<= 1;
-			e = dy - dx;
-			dx <<= 1;
-			while (x1 != x2) {
-				temp = level.getTile(x1, y1);
-				if (!temp.canPass(bullet))
-					return true;
-				if (e >= 0) {
-					y1 += iny;
-					e -= dx;
-				}
-				e += dy;
-				x1 += inx;
-			}
-		} else {
-			dx <<= 1;
-			e = dx - dy;
-			dy <<= 1;
-			while (y1 != y2) {
-				temp = level.getTile(x1, y1);
-				if (!temp.canPass(bullet))
-					return true;
-				if (e >= 0) {
-					x1 += inx;
-					e -= dy;
-				}
-				e += dx;
-				y1 += iny;
-			}
-		}
-		temp = level.getTile(x1, y1);
-		if (!temp.canPass(bullet))
-			return true;
-		return false;
-	}
-
 	public void render(Screen screen) {
+		
+		if(justDroppedTicks-- > 0 && localTeam==team) {
+				screen.blit(areaBitmap, pos.x-radius , pos.y-radius - yOffs);	
+		}
+		
 		super.render(screen);
 	}
 
@@ -161,5 +117,7 @@ public class Turret extends Building {
 		delay = upgradeDelay[upgradeLevel];
 		radius = upgradeRadius[upgradeLevel];
 		radiusSqr = radius * radius;
+		areaBitmap = Bitmap.rangeBitmap(radius,Color.YELLOW.getRGB());
+		justDroppedTicks = 80; //show the radius for a brief time
 	}
 }

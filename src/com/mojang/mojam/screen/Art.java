@@ -6,6 +6,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.Options;
 
 public class Art {
 	public static Bitmap[][] floorTiles = cut("/art/map/floortiles.png", 32, 32);
@@ -17,12 +18,22 @@ public class Art {
 	public static Bitmap[][] darkness = cut("/art/map/dark.png", 32, 32);
 	public static Bitmap[][] mapIcons = cut("/art/map/mapicons.png", 5, 5);
 	public static Bitmap shadow = load("/art/map/shadow.png");
-      	public static Bitmap[][] rails = cut("/art/map/rails.png", 32, 38);
+    public static Bitmap[][] rails = cut("/art/map/rails.png", 32, 38);
+
+    
+    public static Bitmap[][] getLocalPlayerArt() {	
+ 	   if(Options.getAsBoolean(Options.ALTERNATIVE)) {
+ 			return Art.duchessDonut;
+ 		}
+ 	   return Art.lordLard;
+    }
 
 	public static Bitmap[][] lordLard = cut("/art/player/lord_lard_sheet.png", 32, 32);
 	public static Bitmap[][] herrSpeck = cut("/art/player/herr_von_speck_sheet.png", 32, 32);
 	public static Bitmap[][] startLordLard = cut("/art/player/start_lordlard.png", 32, 32);
 	public static Bitmap[][] startHerrSpeck = cut("/art/player/start_herrspeck.png", 32, 32);
+	
+	public static Bitmap[][] duchessDonut = cut("/art/player/duchess_donut_sheet.png", 32, 32);
         
 	public static Bitmap titleScreen = load("/art/screen/TITLESCREEN.png");
 	public static Bitmap howToPlayScreen = load("/art/screen/how_to_play.png");
@@ -31,8 +42,9 @@ public class Art {
 	public static Bitmap pauseScreen = load("/art/screen/pause_screen.png");
 	public static Bitmap[][] button = cut("/art/screen/button.png", 128, 24);
     public static Bitmap[][] checkbox = cut("/art/screen/checkbox.png", 24, 24);
+    public static Bitmap[][] slider = cut("/art/screen/slider.png", 16, 24);
 	public static Bitmap panel = load("/art/screen/panel.png");
-        public static Bitmap background = load("/art/screen/BACKGROUND.png");
+    public static Bitmap background = load("/art/screen/BACKGROUND.png");
         
 	public static Bitmap[][] harvester = cut("/art/building/bot_vacuum.png", 32, 56);
 	public static Bitmap[][] harvester2 = cut("/art/building/bot_vacuum2.png", 32, 56);
@@ -48,7 +60,7 @@ public class Art {
 	public static Bitmap[][] font_red = cut("/art/fonts/font_red.png", 8, 8);
 	public static Bitmap[][] font_gold = cut("/art/fonts/font_gold.png", 8, 8);
 
-        public static Bitmap[][] raildroid = cut("/art/mob/raildroid.png", 32, 32);
+    public static Bitmap[][] raildroid = cut("/art/mob/raildroid.png", 32, 32);
 	public static Bitmap[][] mummy = cut("/art/mob/enemy_mummy_anim_48.png", 48, 48);
 	public static Bitmap[][] snake = cut("/art/mob/enemy_snake_anim_48.png", 48, 48);
 	public static Bitmap[][] scarab = cut("/art/mob/enemy_scarab_anim_48.png", 48, 48);
@@ -79,6 +91,9 @@ public class Art {
 	public static Bitmap[][] fxDust24 = cut("/art/effects/fx_dust1_24.png", 24, 24);
 	public static Bitmap[][] moneyBar = cut("/art/effects/bar_blue.png", 32, 4);
 	public static Bitmap[][] healthBar = cut("/art/effects/bar_green.png", 32, 4);
+		
+	public static BufferedImage icon32 = loadBufferedImage("/art/icon/icon32.png");
+	public static BufferedImage icon64 = loadBufferedImage("/art/icon/icon64.png");
 
 	public static Bitmap[][] cut(String string, int w, int h) {
 		return cut(string, w, h, 0, 0);
@@ -149,6 +164,18 @@ public class Art {
 			bi.getRGB(0, 0, w, h, result.pixels, 0, w);
 
 			return result;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	private static BufferedImage loadBufferedImage(String string) {
+		try {
+			BufferedImage bi = ImageIO.read(MojamComponent.class
+					.getResource(string));
+			return bi;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

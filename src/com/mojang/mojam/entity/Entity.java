@@ -26,6 +26,7 @@ public abstract class Entity implements BBOwner {
 	public double xd, yd;
 	public int minimapIcon = -1;
 	public int minimapColor = -1;
+	public int team;
 
 	public void setPos(double x, double y) {
 		pos.set(x, y);
@@ -62,7 +63,10 @@ public abstract class Entity implements BBOwner {
 	public void render(Screen screen) {
 		screen.blit(Art.floorTiles[3][0], pos.x - Tile.WIDTH / 2, pos.y - Tile.HEIGHT / 2 - 8);
 	}
-
+	
+	public void renderTop(Screen screen) {
+	}
+	
 	protected boolean move(double xa, double ya) {
 		List<BB> bbs = level.getClipBBs(this);
 		if (physicsSlide) {

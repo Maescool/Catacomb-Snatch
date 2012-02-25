@@ -1,45 +1,30 @@
 package com.mojang.mojam.level;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
-
-import javax.imageio.ImageIO;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
-import com.mojang.mojam.entity.building.ShopItem;
-import com.mojang.mojam.entity.building.SpawnerEntity;
-import com.mojang.mojam.entity.building.TreasurePile;
-import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
-import com.mojang.mojam.gui.TitleMenu;
-import com.mojang.mojam.level.tile.DestroyableWallTile;
+import com.mojang.mojam.level.gamemode.ILevelTickItem;
+import com.mojang.mojam.level.gamemode.IVictoryConditions;
 import com.mojang.mojam.level.tile.FloorTile;
-import com.mojang.mojam.level.tile.SandTile;
 import com.mojang.mojam.level.tile.Tile;
-import com.mojang.mojam.level.tile.UnbreakableRailTile;
-import com.mojang.mojam.level.tile.UnpassableSandTile;
 import com.mojang.mojam.level.tile.WallTile;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.math.Vec2;
-import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
 public class Level {
-	public static final int TARGET_SCORE = 100;
+	public int TARGET_SCORE = 100;
 
 	public final int width, height;
 
@@ -50,8 +35,10 @@ public class Level {
 	private boolean seen[];
 	final int[] neighbourOffsets;
 
+	public List<ILevelTickItem> tickItems = new ArrayList<ILevelTickItem>();;
 	public int maxMonsters;
 
+	public IVictoryConditions victoryConditions;
 	public int player1Score = 0;
 	public int player2Score = 0;
 
@@ -77,7 +64,7 @@ public class Level {
 			entityMap[i] = new ArrayList<Entity>();
 		}
 
-		seen = new boolean[(width + 1) * (height + 1)];
+		setSeen(new boolean[(width + 1) * (height + 1)]);
 
 		/*
 		 * for (int i = 0; i < 10; i++) { double x = random.nextInt(width) *
@@ -87,117 +74,6 @@ public class Level {
 		 */
 	}
 
-	public static Level fromFile(LevelInformation li) throws IOException {
-		BufferedImage bufferedImage;
-		//System.out.println("Loading level from file: "+li.getPath());
-		if(li.vanilla){
-			bufferedImage = ImageIO.read(MojamComponent.class.getResource(li.getPath()));
-		} else {
-			bufferedImage = ImageIO.read(new File(li.getPath()));
-		}
-		int w = bufferedImage.getWidth() + 16;
-		int h = bufferedImage.getHeight() + 16;
-
-		int[] rgbs = new int[w * h];
-		Arrays.fill(rgbs, 0xffA8A800);
-
-		for (int y = 0 + 4; y < h - 4; y++) {
-			for (int x = 31 - 3; x < 32 + 3; x++) {
-				rgbs[x + y * w] = 0xff888800;
-			}
-		}
-		for (int y = 0 + 5; y < h - 5; y++) {
-			for (int x = 31 - 1; x < 32 + 1; x++) {
-				rgbs[x + y * w] = 0xffA8A800;
-			}
-		}
-
-		bufferedImage.getRGB(0, 0, w - 16, h - 16, rgbs, 8 + 8 * w, w);
-
-		Level l = new Level(h, w);
-
-		for (int y = 0; y < h; y++) {
-			for (int x = 0; x < w; x++) {
-				int col = rgbs[x + y * w] & 0xffffff;
-
-				Tile tile = new FloorTile();
-				if (col == 0xA8A800) {
-					tile = new SandTile();
-				} else if (col == 0x969696) {
-					tile = new UnbreakableRailTile(new FloorTile());
-				} else if (col == 0x888800) {
-					tile = new UnpassableSandTile();
-				} else if (col == 0xFF7777) {
-					tile = new DestroyableWallTile();
-				} else if (col == 0x000000) {
-					tile = new HoleTile();
-				} else if (col == 0xff0000) {
-					tile = new WallTile();
-				} else if (col == 0xffff00) {
-					TreasurePile t = new TreasurePile(x * Tile.WIDTH + 16, y
-							* Tile.HEIGHT, Team.Neutral);
-					l.addEntity(t);
-				}
-
-				l.setTile(x, y, tile);
-			}
-		}
-
-		l.setTile(31, 7, new UnbreakableRailTile(new SandTile()));
-		l.setTile(31, 63 - 7, new UnbreakableRailTile(new SandTile()));
-
-		for (int y = 0; y < h + 1; y++) {
-			for (int x = 0; x < w + 1; x++) {
-				if (x <= 8 || y <= 8 || x >= w - 8 || y >= h - 8) {
-					l.seen[x + y * (w + 1)] = true;
-				}
-			}
-		}
-
-		return l;
-	}
-
-	public void init() {
-		Random random = TurnSynchronizer.synchedRandom;
-
-		maxMonsters = 1500 + (int)DifficultyInformation.calculateStrength(500);
-
-		for (int i = 0; i < 11; i++) {
-			double x = (random.nextInt(width - 16) + 8) * Tile.WIDTH
-					+ Tile.WIDTH / 2;
-			double y = (random.nextInt(height - 16) + 8) * Tile.HEIGHT
-					+ Tile.HEIGHT / 2 - 4;
-			final Tile tile = getTile((int) (x / Tile.WIDTH),
-					(int) (y / Tile.HEIGHT));
-			if (tile instanceof FloorTile) {
-				addEntity(new SpawnerEntity(x, y, Team.Neutral, 0));
-			}
-		}
-
-		addEntity(new ShopItem(32 * (width / 2 - 1.5), 4.5 * 32,
-				ShopItem.SHOP_TURRET, Team.Team2));
-		addEntity(new ShopItem(32 * (width / 2 - .5), 4.5 * 32,
-				ShopItem.SHOP_HARVESTER, Team.Team2));
-		addEntity(new ShopItem(32 * (width / 2 + .5), 4.5 * 32,
-				ShopItem.SHOP_BOMB, Team.Team2));
-
-		addEntity(new ShopItem(32 * (width / 2 - 1.5), (height - 4.5) * 32,
-				ShopItem.SHOP_TURRET, Team.Team1));
-		addEntity(new ShopItem(32 * (width / 2 - .5), (height - 4.5) * 32,
-				ShopItem.SHOP_HARVESTER, Team.Team1));
-		addEntity(new ShopItem(32 * (width / 2 + .5), (height - 4.5) * 32,
-				ShopItem.SHOP_BOMB, Team.Team1));
-
-		// test turret
-		// addEntity(new Turret(1024, 390, Team.Team1));
-		// and harvester
-		// addEntity(new Harvester(1064, 350, Team.Team1));
-
-		// addEntity(new Bomb(1024, 360));
-		// addEntity(new Bomb(1064, 360));
-		// addEntity(new Bomb(1024 - 40, 360));
-		// addEntity(new Bomb(1024 - 80, 360));
-	}
 
 	public void setTile(int x, int y, Tile tile) {
 		final int index = x + y * width;
@@ -357,32 +233,9 @@ public class Level {
 		e.removed = true;
 	}
 
-	public void tick() {
-		Random random = TurnSynchronizer.synchedRandom;
-		for (int i = 0; i < 1; i++) {
-			double x = (random.nextInt(width - 16) + 8) * Tile.WIDTH
-					+ Tile.WIDTH / 2;
-			double y = (random.nextInt(height - 16) + 8) * Tile.HEIGHT
-					+ Tile.HEIGHT / 2 - 4;
-			final Tile tile = getTile((int) (x / Tile.WIDTH),
-					(int) (y / Tile.HEIGHT));
-			if (tile instanceof FloorTile) {
-				double r = 32 * 8;
-				if (getEntities(new BB(null, x - r, y - r, x + r, y + r),
-						Player.class).size() == 0) {
-					r = 32 * 8;
-					if (getEntities(new BB(null, x - r, y - r, x + r, y + r),
-							SpawnerEntity.class).size() == 0) {
-						r = 32 * 4;
-						if (getEntities(
-								new BB(null, x - r, y - r, x + r, y + r),
-								Turret.class).size() == 0) {
-							addEntity(new SpawnerEntity(x, y, Team.Neutral,
-									random.nextInt(4)));
-						}
-					}
-				}
-			}
+	public void tick() {		
+		for(int i = 0; i < tickItems.size(); i++) {
+			tickItems.get(i).tick(this);
 		}
 
 		for (int i = 0; i < entities.size(); i++) {
@@ -402,14 +255,15 @@ public class Level {
 				removeFromEntityMap(e);
 			}
 		}
-
+		if(victoryConditions != null)
+			victoryConditions.updateVictoryConditions(this);
 		Notifications.getInstance().tick();
 	}
 
 	private boolean hasSeen(int x, int y) {
-		return seen[x + y * (width + 1)] || seen[(x + 1) + y * (width + 1)]
-				|| seen[x + (y + 1) * (width + 1)]
-				|| seen[(x + 1) + (y + 1) * (width + 1)];
+		return getSeen()[x + y * (width + 1)] || getSeen()[(x + 1) + y * (width + 1)]
+				|| getSeen()[x + (y + 1) * (width + 1)]
+				|| getSeen()[(x + 1) + (y + 1) * (width + 1)];
 	}
 
 	public void render(Screen screen, int xScroll, int yScroll) {
@@ -483,6 +337,9 @@ public class Level {
 				}
 			}
 		}
+		for (Entity e : visibleEntities) {
+			e.renderTop(screen);
+		}
 		/*
 		 * for (int y = y0; y <= y1 + 2; y++) { for (int x = x0; x <= x1; x++) {
 		 * if (x < 0 || x >= width || y < 0 || y >= height) {
@@ -506,10 +363,10 @@ public class Level {
 			for (int x = x0; x <= x1; x++) {
 				if (x < 0 || x >= width)
 					continue;
-				boolean c0 = !seen[x + y * (width + 1)];
-				boolean c1 = !seen[(x + 1) + y * (width + 1)];
-				boolean c2 = !seen[x + (y + 1) * (width + 1)];
-				boolean c3 = !seen[(x + 1) + (y + 1) * (width + 1)];
+				boolean c0 = !getSeen()[x + y * (width + 1)];
+				boolean c1 = !getSeen()[(x + 1) + y * (width + 1)];
+				boolean c2 = !getSeen()[x + (y + 1) * (width + 1)];
+				boolean c3 = !getSeen()[(x + 1) + (y + 1) * (width + 1)];
 
 				if (!(c0 || c1 || c2 || c3))
 					continue;
@@ -608,21 +465,25 @@ public class Level {
 		}
 		screen.blit(Art.panel, 0, screen.h - 80);
 		screen.blit(minimap, 429, screen.h - 80 + 5);
-
-		Font.draw(screen, MojamComponent.texts.score(Team.Team1, player1Score * 100 / TARGET_SCORE), 140, screen.h - 20);
+		
+		String player1score =  MojamComponent.texts.score(Team.Team1, player1Score * 100 / TARGET_SCORE);
+		Font.draw(screen, player1score, 280-player1score.length()*10, screen.h - 20); //adjust so it fits in the box
 		Font.draw(screen, MojamComponent.texts.score(Team.Team2, player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
-
+		
+		screen.blit(Art.getLocalPlayerArt()[0][2], 262, screen.h-42);
+		screen.blit(Art.herrSpeck[0][6], 19, screen.h-42);
+		
 		Notifications.getInstance().render(screen);
 	}
 
 	private boolean canSee(int x, int y) {
 		if (x < 0 || y < 1 || x >= width || y >= height)
 			return true;
-		return seen[x + (y - 1) * (width + 1)]
-				|| seen[(x + 1) + (y - 1) * (width + 1)]
-				|| seen[x + y * (width + 1)] || seen[(x + 1) + y * (width + 1)]
-				|| seen[x + (y + 1) * (width + 1)]
-				|| seen[(x + 1) + (y + 1) * (width + 1)];
+		return getSeen()[x + (y - 1) * (width + 1)]
+				|| getSeen()[(x + 1) + (y - 1) * (width + 1)]
+				|| getSeen()[x + y * (width + 1)] || getSeen()[(x + 1) + y * (width + 1)]
+				|| getSeen()[x + (y + 1) * (width + 1)]
+				|| getSeen()[(x + 1) + (y + 1) * (width + 1)];
 	}
 
 	public List<BB> getClipBBs(Entity e) {
@@ -693,10 +554,10 @@ public class Level {
 			Tile tile = getTile(xx, yy);
 			if (tile instanceof WallTile)
 				return;
-			seen[xx + yy * (width + 1)] = true;
-			seen[(xx + 1) + yy * (width + 1)] = true;
-			seen[xx + (yy + 1) * (width + 1)] = true;
-			seen[(xx + 1) + (yy + 1) * (width + 1)] = true;
+			getSeen()[xx + yy * (width + 1)] = true;
+			getSeen()[(xx + 1) + yy * (width + 1)] = true;
+			getSeen()[xx + (yy + 1) * (width + 1)] = true;
+			getSeen()[(xx + 1) + (yy + 1) * (width + 1)] = true;
 		}
 	}
 
@@ -719,5 +580,13 @@ public class Level {
 			}
 		}
 		return count;
+	}
+
+	public boolean[] getSeen() {
+		return seen;
+	}
+
+	public void setSeen(boolean seen[]) {
+		this.seen = seen;
 	}
 }
