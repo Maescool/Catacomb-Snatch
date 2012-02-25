@@ -741,7 +741,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	}
 
 	public void handleAction(int id) {
-		if (id == TitleMenu.RETURN_TO_TITLESCREEN) {
+		if (id == TitleMenu.SURRENDER_AND_DISCONNECT) {
 			clearMenus();
 			TitleMenu menu = new TitleMenu(GAME_WIDTH, GAME_HEIGHT);
 			addMenu(menu);

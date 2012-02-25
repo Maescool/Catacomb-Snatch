@@ -22,7 +22,7 @@ public class PauseMenu extends GuiMenu {
 				(gameWidth - 128) / 2, 170));
 		addButton(new Button(TitleMenu.OPTIONS_ID, MojamComponent.texts.getStatic("titlemenu.options"),
 				(gameWidth - 128) / 2, 200));
-		addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, MojamComponent.texts.getStatic("pausemenu.backtomain"),
+		addButton(new Button(TitleMenu.SURRENDER_AND_DISCONNECT, MojamComponent.texts.getStatic("Surrender"),
 				(gameWidth - 128) / 2, 230));
 
 	}

@@ -32,6 +32,7 @@ public class TitleMenu extends GuiMenu {
 	public static final int OPTIONS_ID = 1016;
     public static final int LEVELS_NEXT_PAGE_ID = 1017;
     public static final int LEVELS_PREVIOUS_PAGE_ID = 1018;
+    public static final int SURRENDER_AND_DISCONNECT = 1019;
 
 	public static final int FULLSCREEN_ID = 2000;
 	public static final int FPS_ID = 2001;
