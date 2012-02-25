@@ -62,6 +62,9 @@ public class OptionsMenu extends GuiMenu {
 				MojamComponent.texts.getStatic("options.alternative"), xOffset, yOffset += offset,
 				Options.getAsBoolean(Options.ALTERNATIVE, Options.VALUE_FALSE)));
 		
+		addButton(new Button(TitleMenu.CREDITS_ID,
+				MojamComponent.texts.getStatic("options.credits"), xOffset, yOffset += offset));
+		
 		back = addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"),
 				xOffset, (yOffset += offset) + 20));
 
