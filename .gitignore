@@ -9,3 +9,4 @@ build
 *.class
 *.sw?
 lib/.tmp/
+/doc
