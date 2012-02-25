@@ -1,7 +1,9 @@
 package com.mojang.mojam.entity.mob;
 
+import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.building.TreasurePile;
+import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.level.tile.*;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.network.TurnSynchronizer;
@@ -250,6 +252,7 @@ public class RailDroid extends Mob {
 	@Override
 	protected boolean shouldBlock(Entity e) {
 		// if (e instanceof Player && ((Player) e).team == team) return false;
+		if(e instanceof Bullet && ((Bullet) e).owner instanceof Turret && ((Bullet) e).owner.team == team) return false;
 		return super.shouldBlock(e);
 	}
 
