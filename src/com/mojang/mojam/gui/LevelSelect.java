@@ -173,36 +173,46 @@ public class LevelSelect extends GuiMenu {
 
     @Override
     public void keyPressed(KeyEvent e) {
+
+    	if (e.getKeyCode() == KeyEvent.VK_PAGE_UP && hasPreviousPage()) {
+    		goToPage(currentPage - 1);
+    	}
+    	else if (e.getKeyCode() == KeyEvent.VK_PAGE_DOWN && hasNextPage()) {
+    		goToPage(currentPage + 1);
+    	}
+    	else {
     	
-        // Compute new id
-        int activeButtonId = activeButton.getId();
-    	int nextActiveButtonId = -2;
-    	if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
-    		nextActiveButtonId = bestExistingLevelId(activeButtonId - 1, currentPage * LEVELS_PER_PAGE + 8);
-    	}
-    	else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
-            nextActiveButtonId = bestExistingLevelId(activeButtonId + 1, currentPage * LEVELS_PER_PAGE);
-    	}
-    	else if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
-    		nextActiveButtonId = bestExistingLevelId(activeButtonId - 3, activeButtonId + 6, activeButtonId + 3);
-    	}
-    	else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
-    		nextActiveButtonId = bestExistingLevelId(activeButtonId + 3, activeButtonId - 6, activeButtonId - 3);
-    	}
-    
-    	// Update active button
-    	if (nextActiveButtonId >= 0 && nextActiveButtonId < levelButtons.length) {
-    		activeButton.setActive(false);
-    		activeButton = levelButtons[nextActiveButtonId];
-    		activeButton.setActive(true);
-    	}
-    
-    	// Start on Enter, Cancel on Escape
-    	if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
-    		startGameButton.postClick();
-    	}
-    	if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-    		cancelButton.postClick();
+	        // Compute new id
+	        int activeButtonId = activeButton.getId();
+	    	int nextActiveButtonId = -2;
+	    	if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
+	    		nextActiveButtonId = bestExistingLevelId(activeButtonId - 1, currentPage * LEVELS_PER_PAGE + 8);
+	    	}
+	    	else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
+	            nextActiveButtonId = bestExistingLevelId(activeButtonId + 1, currentPage * LEVELS_PER_PAGE);
+	    	}
+	    	else if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
+	    		nextActiveButtonId = bestExistingLevelId(activeButtonId - 3, activeButtonId + 6, activeButtonId + 3);
+	    	}
+	    	else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
+	    		nextActiveButtonId = bestExistingLevelId(activeButtonId + 3, activeButtonId - 6, activeButtonId - 3);
+	    	}
+	    
+	    	// Update active button
+	    	if (nextActiveButtonId >= 0 && nextActiveButtonId < levelButtons.length) {
+	    		activeButton.setActive(false);
+	    		activeButton = levelButtons[nextActiveButtonId];
+	    		activeButton.setActive(true);
+	    	}
+	    
+	    	// Start on Enter, Cancel on Escape
+	    	if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
+	    		startGameButton.postClick();
+	    	}
+	    	if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+	    		cancelButton.postClick();
+	    	}
+    	
     	}
     	
     }
