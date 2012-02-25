@@ -73,17 +73,20 @@ public class Player extends Mob implements LootCollector {
     private int deadDelay = 0;
     private int nextWalkSmokeTick = 0;
     private int regenDelay = 0;
+    boolean isImmortal;
     public static boolean creative = false;  //Set this to true for activation of creative mode!
     
-    public void setRailPrices(){
+    public void setRailPricesandImmortality(){
     	if (creative == true){
     		COST_RAIL = 0;
     		COST_DROID = 0;
     		COST_REMOVE_RAIL = 0;
+    		isImmortal = true;
     	}else{
      		COST_RAIL = 10;
     		COST_DROID = 50;
     		COST_REMOVE_RAIL = 15;
+    		isImmortal = false;
     	}
     }
 
@@ -106,7 +109,7 @@ public class Player extends Mob implements LootCollector {
 
         score = 0;
         weapon = new Rifle(this);
-        setRailPrices();
+        setRailPricesandImmortality();
     }
 
     private void checkForLevelUp() {
