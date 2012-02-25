@@ -23,6 +23,8 @@ public class Art {
 	public static Bitmap[][] herrSpeck = cut("/art/player/herr_von_speck_sheet.png", 32, 32);
 	public static Bitmap[][] startLordLard = cut("/art/player/start_lordlard.png", 32, 32);
 	public static Bitmap[][] startHerrSpeck = cut("/art/player/start_herrspeck.png", 32, 32);
+	
+	public static Bitmap[][] duchessDonut = cut("/art/player/duchess_donut_sheet.png", 32, 32);;
         
 	public static Bitmap titleScreen = load("/art/screen/TITLESCREEN.png");
 	public static Bitmap howToPlayScreen = load("/art/screen/how_to_play.png");

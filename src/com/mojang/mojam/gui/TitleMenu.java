@@ -38,6 +38,7 @@ public class TitleMenu extends GuiMenu {
 	public static final int VOLUME = 2002;
     public static final int MUSIC = 2003;
     public static final int CREATIVE_ID = 2004;
+    public static final int ALTERNATIVE_ID = 2005;
 
 	public static final int KEY_BINDINGS_ID = 3000;
 	public static final int KEY_UP_ID = 3001;
