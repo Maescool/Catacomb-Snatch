@@ -557,9 +557,13 @@ public class Player extends Mob implements LootCollector {
         if (muzzleTicks > 0 && !behind) {
             screen.blit(Art.muzzle[muzzleImage][0], xmuzzle, ymuzzle);
         }
+	}
 
-        renderCarrying(screen, (frame == 0 || frame == 3) ? -1 : 0);
-    }
+	@Override
+	public void renderTop(Screen screen) {
+		int frame = (walkTime / 4 % 6 + 6) % 6;
+		renderCarrying(screen, (frame == 0 || frame == 3) ? -1 : 0);
+	}
     
     @Override
     protected void renderCarrying(Screen screen, int yOffs) {
@@ -636,10 +640,11 @@ public class Player extends Mob implements LootCollector {
     		}
     		 return;
     	}
-    	
-        level.removeEntity(b);
-        carrying = b;
-        carrying.onPickup();
+    	if (b.health > 0) {
+	        level.removeEntity(b);
+	        carrying = b;
+	        carrying.onPickup();
+    	}
     }
 
     public void setFacing(int facing) {
