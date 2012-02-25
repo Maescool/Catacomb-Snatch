@@ -35,7 +35,7 @@ public class Turret extends Building {
 		this.team = team;
 		setStartHealth(10);
 		freezeTime = 10;
-		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());		
+		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
 	}
 
 	public void init() {
@@ -94,7 +94,7 @@ public class Turret extends Building {
 	public void render(Screen screen) {
 		
 		if(justDroppedTicks-- > 0 && localTeam==team) {
-				screen.blit(areaBitmap, pos.x - areaBitmap.w / 2, pos.y - areaBitmap.h / 2 - yOffs);	
+				screen.blit(areaBitmap, pos.x-radius , pos.y-radius - yOffs);	
 		}
 		
 		super.render(screen);
@@ -117,7 +117,7 @@ public class Turret extends Building {
 		delay = upgradeDelay[upgradeLevel];
 		radius = upgradeRadius[upgradeLevel];
 		radiusSqr = radius * radius;
-		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
+		areaBitmap = Bitmap.rangeBitmap(radius,Color.YELLOW.getRGB());
 		justDroppedTicks = 80; //show the radius for a brief time
 	}
 }
