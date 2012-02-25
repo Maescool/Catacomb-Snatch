@@ -573,7 +573,7 @@ public class Player extends Mob implements LootCollector {
 				screen.blit(turret.areaBitmap, turret.pos.x-turret.radius , turret.pos.y-turret.radius - yOffs);	
 			} else if(carrying instanceof Harvester) {
 				Harvester harvester = (Harvester)carrying;
-				screen.blit(harvester.areaBitmap, pos.x - harvester.areaBitmap.w / 2, pos.y - harvester.areaBitmap.h / 2 - yOffs);	
+				screen.blit(harvester.areaBitmap, harvester.pos.x-harvester.radius , harvester.pos.y-harvester.radius - yOffs);	
 			}//TODO make an interface to clean this up
        	}
 		
