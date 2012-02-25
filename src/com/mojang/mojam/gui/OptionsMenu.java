@@ -15,6 +15,8 @@ public class OptionsMenu extends GuiMenu {
 	private boolean fps;
 	private float musicVolume;
 	private float volume;
+	private boolean creative;
+	private boolean alternative;
 
 	private int textY;
 
@@ -53,7 +55,12 @@ public class OptionsMenu extends GuiMenu {
 				musicVolume));
 
 		ClickableComponent creativeModeBtn = addButton(new Checkbox(TitleMenu.CREATIVE_ID,
-				"Creative Mode", xOffset, yOffset += offset, Player.creative));
+				MojamComponent.texts.getStatic("options.creative"), xOffset, yOffset += offset,
+				Options.getAsBoolean(Options.CREATIVE, Options.VALUE_FALSE)));	
+
+		ClickableComponent alternativeSkinBtn = addButton(new Checkbox(TitleMenu.ALTERNATIVE_ID,
+				MojamComponent.texts.getStatic("options.alternative"), xOffset, yOffset += offset,
+				Options.getAsBoolean(Options.ALTERNATIVE, Options.VALUE_FALSE)));
 
 		back = addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"),
 				xOffset, (yOffset += offset) + 20));
@@ -66,6 +73,7 @@ public class OptionsMenu extends GuiMenu {
 				MojamComponent.setFullscreen(fullscreen);
 			}
 		});
+		
 		fpsBtn.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
@@ -73,6 +81,7 @@ public class OptionsMenu extends GuiMenu {
 				Options.set(Options.DRAW_FPS, fps);
 			}
 		});
+		
 		soundVol.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
@@ -83,6 +92,7 @@ public class OptionsMenu extends GuiMenu {
 				MojamComponent.soundPlayer.soundSystem.setMasterVolume(slider.value);
 			}
 		});
+		
 		musicVol.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
@@ -94,12 +104,23 @@ public class OptionsMenu extends GuiMenu {
 						slider.value);
 			}
 		});
+		
 		creativeModeBtn.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
-				Player.creative = !Player.creative;
+				creative = !creative;
+				Options.set(Options.CREATIVE, creative);
 			}
 		});
+		
+		alternativeSkinBtn.addListener(new ButtonListener() {
+			@Override
+			public void buttonPressed(ClickableComponent button) {
+				alternative = !alternative;
+				Options.set(Options.ALTERNATIVE, alternative);
+			}
+		});
+		
 		back.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
@@ -113,6 +134,8 @@ public class OptionsMenu extends GuiMenu {
 		fps = Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE);
 		musicVolume = Options.getAsFloat(Options.MUSIC, "1.0f");
 		volume = Options.getAsFloat(Options.VOLUME, "1.0f");
+		creative = Options.getAsBoolean(Options.CREATIVE, Options.VALUE_FALSE);
+		alternative = Options.getAsBoolean(Options.ALTERNATIVE, Options.VALUE_FALSE);
 	}
 
 	@Override
