@@ -6,8 +6,8 @@ import com.mojang.mojam.level.tile.*;
 
 public class TileID {
 
-	private static HashMap<Short, Class> shortToTileMap = new HashMap<Short, Class>();
-	private static HashMap<Class, Short> tileToShortMap = new HashMap<Class, Short>();
+	private static HashMap<Short, Class<? extends Tile>> shortToTileMap = new HashMap<Short, Class<? extends Tile>>();
+	private static HashMap<Class<? extends Tile>, Short> tileToShortMap = new HashMap<Class<? extends Tile>, Short>();
 
 	static {
 		registerTile((short) 0, FloorTile.class);
@@ -23,7 +23,7 @@ public class TileID {
 	 * This must be called once so that tiles can be sent via- multiplayer. They
 	 * will need a constructor with no arguments
 	 */
-	public static void registerTile(short id, Class tileclass) {
+	public static void registerTile(short id, Class<? extends Tile> tileclass) {
 		shortToTileMap.put(id, tileclass);
 		tileToShortMap.put(tileclass, id);
 	}
@@ -37,7 +37,7 @@ public class TileID {
 	public static Tile shortToTile(short i, Level l, int x, int y) {
 		Tile tile = new FloorTile();
 		try {
-			Class class1 = shortToTileMap.get(i);
+			Class<? extends Tile> class1 = shortToTileMap.get(i);
 			if (class1 == UnbreakableRailTile.class) {
 				tile = (Tile) class1.getConstructor(new Class[] { Tile.class })
 						.newInstance(new Object[] { new FloorTile() });
