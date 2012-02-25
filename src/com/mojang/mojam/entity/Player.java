@@ -77,11 +77,8 @@ public class Player extends Mob implements LootCollector {
 	private int regenDelay = 0;
 	boolean isImmortal;
 	//* this is crap
-	public static boolean creative = Options.getAsBoolean(Options.CREATIVE,
-			Options.VALUE_FALSE);
+	public static boolean creative = Options.getAsBoolean(Options.CREATIVE);
 	//*
-	private boolean alternative = Options.getAsBoolean(Options.ALTERNATIVE,
-			Options.VALUE_FALSE);
 
 	public void setRailPricesandImmortality() {
 		if (creative == true) {
@@ -559,7 +556,7 @@ public class Player extends Mob implements LootCollector {
 	@Override
 	public void render(Screen screen) {
 		Bitmap[][] sheet = Art.lordLard;
-		if(alternative) {
+		if(Options.getAsBoolean(Options.ALTERNATIVE)) {
 			sheet = Art.duchessDonut;
 		}
 		if(team == Team.Team2) {
