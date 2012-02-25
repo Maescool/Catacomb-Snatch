@@ -41,3 +41,21 @@ task run() {
     }
   }
 }
+apply plugin: 'macAppBundle'
+
+macAppBundle {
+    mainClassName = "com.mojang.mojam.MojamComponent"
+    icon = "cs_icons.icns"
+}
+
+buildscript {
+    repositories {
+        ivy {
+            artifactPattern 'http://gradle-macappbundle.googlecode.com/files/[module]-[revision].[ext]'
+        }
+    }
+
+    dependencies {
+        classpath 'edu.sc.seis:gradle-macappbundle:1.0.3'
+    }
+}
