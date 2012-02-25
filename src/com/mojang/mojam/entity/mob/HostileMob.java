@@ -40,8 +40,8 @@ public abstract class HostileMob extends Mob {
 	}
 	public void tick() {	
 		super.tick();
-		Tile ThisTile = level.getTile((int)pos.x/Tile.WIDTH, (int)pos.y/Tile.HEIGHT);
-		if (!ThisTile.canPass(this)){
+		Tile thisTile = level.getTile((int)pos.x/Tile.WIDTH, (int)pos.y/Tile.HEIGHT);
+		if (!thisTile.canPass(this)){
 			remove();
 		}
 	}
