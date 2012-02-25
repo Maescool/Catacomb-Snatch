@@ -479,7 +479,9 @@ public class Player extends Mob implements LootCollector {
         }
 
         if (selected != null) {
-            if (selected.pos.distSqr(getInteractPosition()) > INTERACT_DISTANCE) {
+            if (selected.removed!=false){
+            	selected = null;
+            } else if (selected.pos.distSqr(getInteractPosition()) > INTERACT_DISTANCE) {
                 ((IUsable) selected).setHighlighted(false);
                 selected = null;
             } else if (selected instanceof IUsable && (keys.use.wasPressed() || mouseButtons.isDown(mouseUseButton))) {
