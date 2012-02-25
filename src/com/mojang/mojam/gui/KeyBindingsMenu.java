@@ -15,11 +15,14 @@ public class KeyBindingsMenu extends GuiMenu {
 
 	class KeyBindingButton extends Button {
 
+		private final int MAX_LABEL_LENGTH = 13;
+		
 		private Key key;
 		private boolean selected = false;
 
 		public KeyBindingButton(int id, Key key, int x, int y) {
-			super(id, getMenuText(key), x, y);
+			super(id, null, x, y);
+			this.setLabel(trimToFitButton(getMenuText(key)));
 			this.key = key;
 		}
 
@@ -39,9 +42,20 @@ public class KeyBindingsMenu extends GuiMenu {
 		@Override
 		public void setLabel(String label) {
 			if (selected) {
-				label = "-" + label + "-";
+				super.setLabel("-" + trimToFitButton(label) + "-");
 			}
-			super.setLabel(label);
+			else {
+				super.setLabel(trimToFitButton(label));
+			}
+		}
+		
+		public String trimToFitButton(String label) {
+			if (label.length() > MAX_LABEL_LENGTH) {
+				return label.substring(0, MAX_LABEL_LENGTH - 2) + "...";
+			}
+			else {
+				return label;
+			}
 		}
 
 		public boolean isSelected() {
