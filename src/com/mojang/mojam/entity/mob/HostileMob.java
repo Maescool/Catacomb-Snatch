@@ -4,6 +4,7 @@ import java.util.Set;
 
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.level.DifficultyInformation;
+import com.mojang.mojam.level.tile.Tile;
 
 
 public abstract class HostileMob extends Mob {
@@ -36,5 +37,12 @@ public abstract class HostileMob extends Mob {
         	chasing=false;
         }
         return facing;
+	}
+	public void tick() {	
+		super.tick();
+		Tile thisTile = level.getTile((int)pos.x/Tile.WIDTH, (int)pos.y/Tile.HEIGHT);
+		if (!thisTile.canPass(this)){
+			remove();
+		}
 	}
 }
