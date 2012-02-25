@@ -124,20 +124,21 @@ public class Bitmap {
 			x1 = w;
 		if (y1 > h)
 			y1 = h;
-		int ww = x1 - x0;
-		int hh = y1 - y0;
-		int longside = (ww>hh?ww:hh);
 
 		for (int yy = y0; yy < y1; yy++) {
-			int tp = yy * w + x0;
-			pixels[tp] = color;
-			pixels[tp+ww-1] = color;
+			setPixel(x0, yy, color);
+			setPixel(x1 - 1, yy, color);
 		}
-		
-		for (int xx = 0; xx < ww; xx++) {
-			pixels[xx] = color;
-			pixels[xx+(ww*hh)-longside] = color;
-		}	
+
+		for (int xx = x0; xx < x1; xx++) {
+			setPixel(xx, y0, color);
+			setPixel(xx, y1 - 1, color);
+		}
+	}
+
+	private void setPixel(int x, int y, int color) {
+		System.out.println(x+y*w);
+		pixels[x+y*w]=color;
 		
 	}
 
@@ -145,6 +146,37 @@ public class Bitmap {
 		Bitmap rect = new Bitmap(x2,y2);	
 		rect.rectangle(x, y, x2, y2, color);	
 		return rect;
+	}
+
+	public static Bitmap rangeBitmap(int radius, int color) {
+		Bitmap circle = new Bitmap(radius*2+100,radius*2+100);	
+		
+		circle.circle(radius, radius, radius, color);	
+		return circle;
+	}
+
+	private void circle(int centerX, int centerY, int radius, int color) {
+		int d = 3 - (2 * radius);
+		int x = 0;
+		int y = radius;
+	
+		do {
+		setPixel(centerX + x, centerY + y, color);
+		setPixel(centerX + x, centerY - y, color);
+		setPixel(centerX - x, centerY + y, color);
+		setPixel(centerX - x, centerY - y, color);
+		setPixel(centerX + y, centerY + x, color);
+		setPixel(centerX + y, centerY - x, color);
+		setPixel(centerX - y, centerY + x, color);
+		setPixel(centerX - y, centerY - x, color);
+		if (d < 0) {
+		d = d + (4 * x) + 6;
+		} else {
+		d = d + 4 * (x - y) + 10;
+		y--;
+		}
+		x++;
+		} while (x <= y);
 	}
 
 }
