@@ -29,7 +29,6 @@ public class LevelSelect extends GuiMenu {
 	
 	private Button startGameButton;
 	private Button cancelButton;
-	private Button updateButton;
     private Button previousPageButton;
     private Button nextPageButton;
     private boolean outdatedLevelButtons = false;
@@ -42,27 +41,27 @@ public class LevelSelect extends GuiMenu {
 		this.localTeam = localTeam;
 		this.bHosting = bHosting;
 		
-		// get all levels
+		// Get all levels
 		LevelList.resetLevels();
 		levels = LevelList.getLevels();
-
-		// -
 		TitleMenu.level = levels.get(0);
 
-		// start + cancel button
+		// Add main buttons
 		startGameButton = (Button) addButton(new Button(bHosting ? TitleMenu.SELECT_DIFFICULTY_HOSTING_ID : 
 			TitleMenu.SELECT_DIFFICULTY_ID, MojamComponent.texts.getStatic("levelselect.start"), 
 			MojamComponent.GAME_WIDTH - 256 - 30, MojamComponent.GAME_HEIGHT - 24 - 25));
 		cancelButton = (Button) addButton(new Button(TitleMenu.CANCEL_JOIN_ID, MojamComponent.texts.getStatic("cancel"), 
 				MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25));
-		updateButton = (Button) addButton(new Button(TitleMenu.UPDATE_LEVELS, MojamComponent.texts.getStatic("levelselect.update"), 
+		addButton(new Button(TitleMenu.UPDATE_LEVELS, MojamComponent.texts.getStatic("levelselect.update"), 
 				MojamComponent.GAME_WIDTH - 128 - 18, 20));
 
 		// Add page buttons
-        previousPageButton = (Button) addButton(new Button(TitleMenu.LEVELS_PREVIOUS_PAGE_ID, "(", 
-                xStart, MojamComponent.GAME_HEIGHT - 24 - 25, 30));
-        nextPageButton = (Button) addButton(new Button(TitleMenu.LEVELS_PREVIOUS_PAGE_ID, ")", 
-                xStart + 40, MojamComponent.GAME_HEIGHT - 24 - 25, 30));
+		if (levels.size() > LEVELS_PER_PAGE) {
+	        previousPageButton = (Button) addButton(new Button(TitleMenu.LEVELS_PREVIOUS_PAGE_ID, "(", 
+	                xStart, MojamComponent.GAME_HEIGHT - 24 - 25, 30));
+	        nextPageButton = (Button) addButton(new Button(TitleMenu.LEVELS_PREVIOUS_PAGE_ID, ")", 
+	                xStart + 40, MojamComponent.GAME_HEIGHT - 24 - 25, 30));
+		}
         
         // Create level
 		goToPage(0);
@@ -116,7 +115,7 @@ public class LevelSelect extends GuiMenu {
     private boolean hasNextPage() {
         return (currentPage + 1) * LEVELS_PER_PAGE < levels.size();
     }
-    
+	
     @Override
     public void tick(MouseButtons mouseButtons) {
         super.tick(mouseButtons);
@@ -133,16 +132,18 @@ public class LevelSelect extends GuiMenu {
     	Font.draw(screen, MojamComponent.texts.getStatic("levelselect.title"), 20, 20);
     	
     	// Draw disabled page buttons
-    	if (!hasPreviousPage()) {
-    	    previousPageButton.render(screen);
-    	    screen.fill(previousPageButton.getX() + 4, previousPageButton.getY() + 4,
-    	            previousPageButton.getWidth() - 8, previousPageButton.getHeight() - 8, 0x75401f);
+    	if (levels.size() > LEVELS_PER_PAGE) {
+	    	if (!hasPreviousPage()) {
+	    	    previousPageButton.render(screen);
+	    	    screen.fill(previousPageButton.getX() + 4, previousPageButton.getY() + 4,
+	    	            previousPageButton.getWidth() - 8, previousPageButton.getHeight() - 8, 0x75401f);
+	    	}
+	        if (!hasNextPage()) {
+	            nextPageButton.render(screen);
+	            screen.fill(nextPageButton.getX() + 4, nextPageButton.getY() + 4,
+	                    nextPageButton.getWidth() - 8, nextPageButton.getHeight() - 8, 0x75401f);
+	        }
     	}
-        if (!hasNextPage()) {
-            nextPageButton.render(screen);
-            screen.fill(nextPageButton.getX() + 4, nextPageButton.getY() + 4,
-                    nextPageButton.getWidth() - 8, nextPageButton.getHeight() - 8, 0x75401f);
-        }
     	
     }
 
@@ -172,18 +173,15 @@ public class LevelSelect extends GuiMenu {
 
     @Override
     public void keyPressed(KeyEvent e) {
-    
-        // Keyboard navigation emporarily disabled, TODO adapt for paging
-        
-    	/*
+    	
         // Compute new id
         int activeButtonId = activeButton.getId();
     	int nextActiveButtonId = -2;
     	if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
-    		nextActiveButtonId = bestExistingLevelId(activeButtonId - 1, levelButtons.length - 1);
+    		nextActiveButtonId = bestExistingLevelId(activeButtonId - 1, currentPage * LEVELS_PER_PAGE + 8);
     	}
     	else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
-            nextActiveButtonId = bestExistingLevelId(activeButtonId + 1, 0);
+            nextActiveButtonId = bestExistingLevelId(activeButtonId + 1, currentPage * LEVELS_PER_PAGE);
     	}
     	else if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
     		nextActiveButtonId = bestExistingLevelId(activeButtonId - 3, activeButtonId + 6, activeButtonId + 3);
@@ -197,7 +195,7 @@ public class LevelSelect extends GuiMenu {
     		activeButton.setActive(false);
     		activeButton = levelButtons[nextActiveButtonId];
     		activeButton.setActive(true);
-    	}*/
+    	}
     
     	// Start on Enter, Cancel on Escape
     	if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
@@ -211,8 +209,8 @@ public class LevelSelect extends GuiMenu {
 
     public int bestExistingLevelId(int... options) {
     	for (int option : options) {
-    		if (option >= 0 && option < levelButtons.length) {
-    			return option;
+    		if (option >= 0 && option < levels.size()) {
+        		return option % LEVELS_PER_PAGE;
     		}
     	}
     	return -2;

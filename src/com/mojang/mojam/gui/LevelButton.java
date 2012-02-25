@@ -20,6 +20,8 @@ public class LevelButton extends ClickableComponent {
 	public static final int WIDTH = 140;
 	public static final int HEIGHT = 84;
 
+    private final int MAX_LABEL_LENGTH = 15;
+    
 	/**
 	 * Generates a minimap bitmap
 	 * 
@@ -100,10 +102,10 @@ public class LevelButton extends ClickableComponent {
 			screen.blit(minimap, getX() + (getWidth() - minimap.w) / 2, getY() + 4);
 
 			// map name
-			Font.drawCentered(screen, levelInfo.levelName, getX() + getWidth() / 2, getY() + 4 + minimap.h + 8);
+			Font.drawCentered(screen, trimToFitButton(levelInfo.levelName), getX() + getWidth() / 2, getY() + 4 + minimap.h + 8);
 		} else {
 			Font.setFont("red");
-			Font.drawCentered(screen, levelInfo.levelName, getX() + getWidth() / 2, getY() + 4 + 32);
+			Font.drawCentered(screen, trimToFitButton(levelInfo.levelName), getX() + getWidth() / 2, getY() + 4 + 32);
 			Font.setFont("");
 		}
 	}
@@ -117,5 +119,14 @@ public class LevelButton extends ClickableComponent {
 
 	public void setActive(boolean active) {
 		isActive = active;
+	}
+
+	public String trimToFitButton(String label) {
+		if (label.length() > MAX_LABEL_LENGTH) {
+			return label.substring(0, MAX_LABEL_LENGTH - 2) + "...";
+		}
+		else {
+			return label;
+		}
 	}
 }
