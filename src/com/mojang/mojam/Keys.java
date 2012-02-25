@@ -3,6 +3,7 @@ package com.mojang.mojam;
 import java.util.*;
 
 public class Keys {
+	
     public final class Key {
         public boolean nextState = false;
         public boolean wasDown = false;
@@ -40,6 +41,7 @@ public class Keys {
     public Key build = new Key();
     public Key use = new Key();
     public Key upgrade = new Key();
+    public Key pause = new Key();
 
     public void tick() {
         for (Key key : all)

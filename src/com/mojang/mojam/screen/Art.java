@@ -26,6 +26,7 @@ public class Art {
     public static Bitmap titleScreen = load("/TITLESCREEN.png");
     public static Bitmap howToPlayScreen = load("/how_to_play.png");
     public static Bitmap gameOverScreen = load("/game_over.png");
+    public static Bitmap emptyBackground = load("/empty_background.png");
     public static Bitmap panel = load("/panel.png");
     public static Bitmap shadow = load("/shadow.png");
     public static Bitmap[][] slave = cut("/mob/slave.png", 32, 32);

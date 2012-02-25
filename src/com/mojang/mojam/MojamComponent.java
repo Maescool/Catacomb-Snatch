@@ -1,24 +1,57 @@
 package com.mojang.mojam;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
+import java.awt.BorderLayout;
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.*;
-import java.util.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
+import java.util.Random;
+import java.util.Stack;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.building.Base;
 import com.mojang.mojam.entity.mob.Team;
-import com.mojang.mojam.gui.*;
 import com.mojang.mojam.gui.Button;
+import com.mojang.mojam.gui.ButtonListener;
 import com.mojang.mojam.gui.Font;
+import com.mojang.mojam.gui.GuiMenu;
+import com.mojang.mojam.gui.HostingWaitMenu;
+import com.mojang.mojam.gui.HowToPlay;
+import com.mojang.mojam.gui.JoinGameMenu;
+import com.mojang.mojam.gui.PauseMenu;
+import com.mojang.mojam.gui.TitleMenu;
+import com.mojang.mojam.gui.WinMenu;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.tile.Tile;
-import com.mojang.mojam.network.*;
-import com.mojang.mojam.network.packet.*;
+import com.mojang.mojam.network.ClientSidePacketLink;
+import com.mojang.mojam.network.CommandListener;
+import com.mojang.mojam.network.NetworkCommand;
+import com.mojang.mojam.network.NetworkPacketLink;
+import com.mojang.mojam.network.Packet;
+import com.mojang.mojam.network.PacketLink;
+import com.mojang.mojam.network.PacketListener;
+import com.mojang.mojam.network.TurnSynchronizer;
+import com.mojang.mojam.network.packet.ChangeKeyCommand;
+import com.mojang.mojam.network.packet.PauseCommand;
+import com.mojang.mojam.network.packet.StartGamePacket;
+import com.mojang.mojam.network.packet.TurnPacket;
 import com.mojang.mojam.screen.Screen;
 import com.mojang.mojam.sound.SoundPlayer;
 
@@ -31,9 +64,11 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
     private boolean running = true;
     private Cursor emptyCursor;
     private double framerate = 60;
-    private int fps;
+   // private int fps;
     private Screen screen = new Screen(GAME_WIDTH, GAME_HEIGHT);
     private Level level;
+	private boolean paused;
+	private boolean pausedUntilFocus;
 
     private Stack<GuiMenu> menuStack = new Stack<GuiMenu>();
 
@@ -137,6 +172,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
         }
 
         level.init();
+        paused = false;
 
         players[0] = new Player(synchedKeys[0], level.width * Tile.WIDTH / 2 - 16, (level.height - 5 - 1) * Tile.HEIGHT - 16, Team.Team1);
         players[0].setFacing(4);
@@ -150,6 +186,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
         }
         player = players[localId];
         player.setCanSee(true);
+        
     }
 
     public void run() {
@@ -250,7 +287,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
             if (System.currentTimeMillis() - lastTimer1 > 1000) {
                 lastTimer1 += 1000;
-                fps = frames;
+               // fps = frames;
                 frames = 0;
             }
         }
@@ -289,16 +326,22 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
             g.drawImage(screen.image, 0, 0, GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE, null);
         }
 
-//        String msg = "FPS: " + fps;
-//        g.setColor(Color.LIGHT_GRAY);
-//        g.drawString(msg, 11, 11);
-//        g.setColor(Color.WHITE);
-//        g.drawString(msg, 10, 10);
-
     }
 
     private void tick() {
         if (level != null) {
+
+    		// Not in focus pause
+    		if (this.isFocusOwner() && pausedUntilFocus) {
+    			pausedUntilFocus = false;
+    		}
+    		if (!this.isFocusOwner() && !pausedUntilFocus) {
+    			if (!pausedUntilFocus) { 
+    			  synchronizer.addCommand(new PauseCommand(true));
+    			  pausedUntilFocus = true;
+    			}
+    		}
+        	
             if (level.player1Score >= Level.TARGET_SCORE) {
                 addMenu(new WinMenu(GAME_WIDTH, GAME_HEIGHT, 1));
                 level = null;
@@ -319,15 +362,25 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
                 for (int index = 0; index < keys.getAll().size(); index++) {
                     Keys.Key key = keys.getAll().get(index);
                     boolean nextState = key.nextState;
-                    if (key.isDown != nextState) {
+                    if (key.isDown != nextState && !paused) {
                         synchronizer.addCommand(new ChangeKeyCommand(index, nextState));
                     }
                 }
-                keys.tick();
-                for (Keys skeys : synchedKeys) {
-                    skeys.tick();
-                }
-                level.tick();
+                
+            	if (!paused) {
+	                keys.tick();
+	                for (Keys skeys : synchedKeys) {
+	                    skeys.tick();
+	                }
+	                
+					if (keys.pause.wasPressed()) {
+						keys.release();
+						mouseButtons.releaseAll();
+						synchronizer.addCommand(new PauseCommand(true));
+					}
+	                
+	                level.tick();
+            	}
             }
         }
         mouseButtons.setPosition(getMousePosition());
@@ -386,6 +439,16 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
             ChangeKeyCommand ckc = (ChangeKeyCommand) packet;
             synchedKeys[playerId].getAll().get(ckc.getKey()).nextState = ckc.getNextState();
         }
+        
+        if (packet instanceof PauseCommand) {
+			PauseCommand pc = (PauseCommand) packet;
+			paused = pc.isPaused();
+			if (paused) {
+				addMenu(new PauseMenu(GAME_WIDTH, GAME_HEIGHT));
+			} else {
+				popMenu();
+			}
+		}
     }
 
     public void handle(Packet packet) {
@@ -394,7 +457,9 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
                 synchronizer.onStartGamePacket((StartGamePacket) packet);
                 createLevel();
             }
-        } else if (packet instanceof TurnPacket) {
+        }
+        
+        if (packet instanceof TurnPacket) {
             synchronizer.onTurnPacket((TurnPacket) packet);
         }
     }
@@ -404,8 +469,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
             clearMenus();
             TitleMenu menu = new TitleMenu(GAME_WIDTH, GAME_HEIGHT);
             addMenu(menu);
-
-
         } else if (button.getId() == TitleMenu.START_GAME_ID) {
             clearMenus();
             isMultiplayer = false;
@@ -470,6 +533,13 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
             addMenu(new HowToPlay());
         } else if (button.getId() == TitleMenu.BACK_ID) {
             popMenu();
+        } else if (button.getId() == TitleMenu.BACK_TO_GAME_ID) {
+        	popMenu();
+            if (paused) {
+				keys.release();
+				mouseButtons.releaseAll();
+            	synchronizer.addCommand(new PauseCommand(false));
+            }
         } else if (button.getId() == TitleMenu.CANCEL_JOIN_ID) {
             popMenu();
             if (hostThread != null) {

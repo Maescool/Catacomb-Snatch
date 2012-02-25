@@ -20,8 +20,9 @@ public abstract class Packet {
     static {
         map(10, StartGamePacket.class);
         map(11, TurnPacket.class);
-
+        
         map(100, ChangeKeyCommand.class);
+		map(101, PauseCommand.class);
     }
 
     public final int getId() {
