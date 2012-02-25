@@ -5,6 +5,7 @@ import java.util.Random;
 import com.mojang.mojam.Keys;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
+import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.animation.EnemyDieAnimation;
 import com.mojang.mojam.entity.animation.SmokePuffAnimation;
 import com.mojang.mojam.entity.building.Building;
@@ -30,9 +31,9 @@ import com.mojang.mojam.screen.Screen;
 
 public class Player extends Mob implements LootCollector {
 
-    public static final int COST_RAIL = 10;
-    public static final int COST_DROID = 50;
-    public static final int COST_REMOVE_RAIL = 15;
+    public static int COST_RAIL;
+    public static int COST_DROID;
+    public static int COST_REMOVE_RAIL;
     public static final int REGEN_INTERVAL = 60 * 3;
     public int plevel;
     public int pnextlevel;
@@ -73,6 +74,22 @@ public class Player extends Mob implements LootCollector {
     private int deadDelay = 0;
     private int nextWalkSmokeTick = 0;
     private int regenDelay = 0;
+    boolean isImmortal;
+    public static boolean creative = Options.getAsBoolean(Options.CREATIVE); 
+    
+    public void setRailPricesandImmortality(){
+    	if (creative == true){
+    		COST_RAIL = 0;
+    		COST_DROID = 0;
+    		COST_REMOVE_RAIL = 0;
+    		isImmortal = true;
+    	}else{
+     		COST_RAIL = 10;
+    		COST_DROID = 50;
+    		COST_REMOVE_RAIL = 15;
+    		isImmortal = false;
+    	}
+    }
 
     public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team, int localTeam) {
         super(x, y, team, localTeam);
@@ -93,6 +110,7 @@ public class Player extends Mob implements LootCollector {
 
         score = 0;
         weapon = new Rifle(this);
+        setRailPricesandImmortality();
     }
 
     private void checkForLevelUp() {
@@ -382,7 +400,7 @@ public class Player extends Mob implements LootCollector {
                 payCost(COST_RAIL);
             } else if (score < COST_RAIL) {
             	if(this.team == this.localTeam) {
-            		  Notifications.getInstance().add("You need " + COST_RAIL + " to build a rail");
+            		  Notifications.getInstance().add(MojamComponent.texts.buildRail(COST_RAIL));
             	}
               
             }
@@ -393,7 +411,7 @@ public class Player extends Mob implements LootCollector {
                     payCost(COST_DROID);
                 } else {
                 	if(this.team == this.localTeam) {
-                		Notifications.getInstance().add("You need " + COST_DROID + " for a rail droid");
+                		Notifications.getInstance().add(MojamComponent.texts.buildDroid(COST_DROID));
                 	}
                 }
             } else {
@@ -405,7 +423,7 @@ public class Player extends Mob implements LootCollector {
                     }
                 } else if (score < COST_REMOVE_RAIL) {
                 	if(this.team == this.localTeam) {
-                		Notifications.getInstance().add("You need " + COST_REMOVE_RAIL + " to remove a rail");
+                		Notifications.getInstance().add(MojamComponent.texts.removeRail(COST_REMOVE_RAIL));
                 	}
                 }
                 MojamComponent.soundPlayer.playSound("/sound/Track Place.wav", (float) pos.x, (float) pos.y);
@@ -461,7 +479,9 @@ public class Player extends Mob implements LootCollector {
         }
 
         if (selected != null) {
-            if (selected.pos.distSqr(getInteractPosition()) > INTERACT_DISTANCE) {
+            if (selected.removed!=false){
+            	selected = null;
+            } else if (selected.pos.distSqr(getInteractPosition()) > INTERACT_DISTANCE) {
                 ((IUsable) selected).setHighlighted(false);
                 selected = null;
             } else if (selected instanceof IUsable && (keys.use.wasPressed() || mouseButtons.isDown(mouseUseButton))) {
@@ -507,11 +527,8 @@ public class Player extends Mob implements LootCollector {
 
     @Override
     public void render(Screen screen) {
-        Bitmap[][] sheet = Art.lordLard;
-        if (team == Team.Team2) {
-            sheet = Art.herrSpeck;
-        }
-
+        Bitmap[][] sheet = Art.getLocalPlayerArt();
+		
         if (dead) {
             // don't draw anything if we are dead (in a hole)
             return;
@@ -540,16 +557,20 @@ public class Player extends Mob implements LootCollector {
         if (muzzleTicks > 0 && !behind) {
             screen.blit(Art.muzzle[muzzleImage][0], xmuzzle, ymuzzle);
         }
+	}
 
-        renderCarrying(screen, (frame == 0 || frame == 3) ? -1 : 0);
-    }
+	@Override
+	public void renderTop(Screen screen) {
+		int frame = (walkTime / 4 % 6 + 6) % 6;
+		renderCarrying(screen, (frame == 0 || frame == 3) ? -1 : 0);
+	}
     
     @Override
     protected void renderCarrying(Screen screen, int yOffs) {
     	if(carrying != null && carrying.team == this.localTeam ) {
 			if(carrying instanceof Turret) {
 				Turret turret = (Turret)carrying;
-				screen.blit(turret.areaBitmap, pos.x - turret.areaBitmap.w / 2, pos.y - turret.areaBitmap.h / 2 - yOffs);	
+				screen.blit(turret.areaBitmap, turret.pos.x-turret.radius , turret.pos.y-turret.radius - yOffs);	
 			} else if(carrying instanceof Harvester) {
 				Harvester harvester = (Harvester)carrying;
 				screen.blit(harvester.areaBitmap, pos.x - harvester.areaBitmap.w / 2, pos.y - harvester.areaBitmap.h / 2 - yOffs);	
@@ -615,14 +636,15 @@ public class Player extends Mob implements LootCollector {
     	if(b.team != this.team && b.team != Team.Neutral) {
     		
     		if(this.team == localTeam) {
-    		 Notifications.getInstance().add("You can not pick that up!");
+    		 Notifications.getInstance().add(MojamComponent.texts.getStatic("gameplay.cantPickup"));
     		}
     		 return;
     	}
-    	
-        level.removeEntity(b);
-        carrying = b;
-        carrying.onPickup();
+    	if (b.health > 0) {
+	        level.removeEntity(b);
+	        carrying = b;
+	        carrying.onPickup();
+    	}
     }
 
     public void setFacing(int facing) {

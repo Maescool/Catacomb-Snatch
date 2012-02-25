@@ -1,6 +1,7 @@
 package com.mojang.mojam.entity.building;
 
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Team;
@@ -20,14 +21,27 @@ public class ShopItem extends Building {
     public static final int[] COST = {150, 300, 500};
     private final int type;
     private int effectiveCost;
+    
 
     public ShopItem(double x, double y, int type, int team, int localTeam) {
         super(x, y, team, localTeam);
         this.type = type;
         isImmortal = true;
         if (team == Team.Team1) {
-            facing = 4;
+            facing = 4;   
         }
+        setBuildingCost();
+    }
+    public void setBuildingCost(){
+    	if(Player.creative == true){
+    		COST[0] = 0;
+    		COST[1] = 0;
+    		COST[2] = 0;
+    	}else{
+    		COST[0] = 150;
+    		COST[1] = 300;
+    		COST[2] = 500;
+    	}
     }
 
     @Override
@@ -79,7 +93,7 @@ public class ShopItem extends Building {
                 player.pickup(item);
             } else if (player.getScore() < effectiveCost) {
             	if(this.team == this.localTeam) {
-            		 Notifications.getInstance().add("You dont have enough money (" + effectiveCost + ")");
+            		 Notifications.getInstance().add(MojamComponent.texts.upgradeNotEnoughMoney(effectiveCost));
             	}
                
             }

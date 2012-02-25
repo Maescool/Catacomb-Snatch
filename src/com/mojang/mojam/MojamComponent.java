@@ -71,6 +71,7 @@ import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.network.packet.ChangeKeyCommand;
 import com.mojang.mojam.network.packet.ChangeMouseButtonCommand;
 import com.mojang.mojam.network.packet.ChangeMouseCoordinateCommand;
+import com.mojang.mojam.network.packet.PingPacket;
 import com.mojang.mojam.network.packet.StartGamePacket;
 import com.mojang.mojam.network.packet.StartGamePacketCustom;
 import com.mojang.mojam.network.packet.TurnPacket;
@@ -88,18 +89,26 @@ public class MojamComponent extends Canvas implements Runnable,
 	public static Locale locale;
 	public static Texts texts;
 	private static final long serialVersionUID = 1L;
-    public static final String GAME_TITLE = "Catacomb Snatch";
+	public static final String GAME_TITLE = "Catacomb Snatch";
 	public static final int GAME_WIDTH = 512;
 	public static final int GAME_HEIGHT = GAME_WIDTH * 3 / 4;
 	public static final int SCALE = 2;
 	private static JFrame guiFrame;
 	private boolean running = true;
 	private boolean paused;
+	private boolean paused2;
 	private Cursor emptyCursor;
 	private double framerate = 60;
 	private int fps;
 	public static Screen screen = new Screen(GAME_WIDTH, GAME_HEIGHT);
 	private Level level;
+	
+	// Latency counter
+	private static final int CACHE_EMPTY=0, CACHE_PRIMING=1, CACHE_PRIMED=2;
+	private static final int CACHE_SIZE = 5;
+	private int latencyCacheState = CACHE_EMPTY;
+	private int nextLatencyCacheIdx = 0;
+	private int[] latencyCache = new int[CACHE_SIZE];
 
 	private Stack<GuiMenu> menuStack = new Stack<GuiMenu>();
 
@@ -199,7 +208,8 @@ public class MojamComponent extends Canvas implements Runnable,
 	public void start() {
 		running = true;
 		Thread thread = new Thread(this);
-		thread.setPriority(Thread.MAX_PRIORITY);
+		//TODO : Make it an option
+		//thread.setPriority(Thread.MAX_PRIORITY);
 		thread.start();
 	}
 
@@ -344,6 +354,7 @@ public class MojamComponent extends Canvas implements Runnable,
 				createBufferStrategy(3);
 				continue;
 			}
+
 			if (shouldRender) {
 				frames++;
 				Graphics g = bs.getDrawGraphics();
@@ -407,6 +418,10 @@ public class MojamComponent extends Canvas implements Runnable,
 		}
 
 		if (player != null && menuStack.size() == 0) {
+		    if (isMultiplayer) {
+		        Font.draw(screen, texts.latency(latencyCacheReady()?""+avgLatency():"-"), 10, 20);
+		    }
+		    
 			Font.draw(screen, texts.health(player.health, player.maxHealth),
 					340, screen.h - 16);
 			Font.draw(screen, texts.money(player.score), 340, screen.h - 27);
@@ -461,6 +476,26 @@ public class MojamComponent extends Canvas implements Runnable,
 	}
 
 	private void tick() {
+		//Not-In-Focus-Pause
+		if (this.isFocusOwner() && level != null) {
+			paused2 = false;
+		}
+		
+		if (!this.isFocusOwner() && level != null) {
+			keys.release();
+			mouseButtons.releaseAll();
+			if (!paused2) { 
+			  PauseCommand pauseCommand = new PauseCommand(true);
+			  synchronizer.addCommand(pauseCommand);
+			  paused2 = true;
+			}
+		}
+
+		if (requestToggleFullscreen || keys.fullscreen.wasPressed()) {
+		    requestToggleFullscreen = false;
+		    setFullscreen(!fullscreen);
+		}
+		
 		if (level != null && level.victoryConditions != null) {
 			if(level.victoryConditions.isVictoryConditionAchieved()) {
 				addMenu(new WinMenu(GAME_WIDTH, GAME_HEIGHT, level.victoryConditions.playerVictorious()));
@@ -534,15 +569,8 @@ public class MojamComponent extends Canvas implements Runnable,
 						synchronizer.addCommand(new PauseCommand(true));
 					}
 					
-					if (keys.fullscreen.wasPressed()) {
-						setFullscreen(!fullscreen);
-					}
-											
 					level.tick();
 				}
-		
-				
-				
 
 				// every 4 minutes, start new background music :)
 				if (System.currentTimeMillis() / 1000 > nextMusicInterval) {
@@ -557,7 +585,6 @@ public class MojamComponent extends Canvas implements Runnable,
 
 		}
 
-		
 		if (createServerState == 1) {
 			createServerState = 2;
 
@@ -600,23 +627,30 @@ public class MojamComponent extends Canvas implements Runnable,
 		mc.start();
 	}
 
-	public static void setFullscreen(boolean fs) {
-		GraphicsDevice device = guiFrame.getGraphicsConfiguration().getDevice();
-		// hide window
-		guiFrame.setVisible(false);
-		guiFrame.dispose();
-		// change options
-		guiFrame.setUndecorated(fs);
-		device.setFullScreenWindow(fs ? guiFrame : null);
-		// display window
-		guiFrame.setLocationRelativeTo(null);
-		guiFrame.setVisible(true);
-		fullscreen = fs;
-		
-        Options.set(Options.FULLSCREEN, fullscreen);
+	private static void setFullscreen(boolean fs) {
+	    if (fs != fullscreen) {
+    		GraphicsDevice device = guiFrame.getGraphicsConfiguration().getDevice();
+    		// hide window
+    		guiFrame.setVisible(false);
+    		guiFrame.dispose();
+    		// change options
+    		guiFrame.setUndecorated(fs);
+    		device.setFullScreenWindow(fs ? guiFrame : null);
+    		// display window
+    		guiFrame.setLocationRelativeTo(null);
+    		guiFrame.setVisible(true);
+    		instance.requestFocusInWindow();
+    		fullscreen = fs;
+	    }
+	    Options.set(Options.FULLSCREEN, fullscreen);
+	}
+
+	private static volatile boolean requestToggleFullscreen = false;
+	public static void toggleFullscreen() {
+	    requestToggleFullscreen = true; // only toggle fullscreen in the tick() loop
 	}
 	
-	public static boolean isFulscreen() {
+	public static boolean isFullscreen() {
 		return fullscreen;
 	}
 
@@ -673,9 +707,31 @@ public class MojamComponent extends Canvas implements Runnable,
 				paused = false;
 				initLevel();
 			}
+		} else if (packet instanceof PingPacket) {
+		    PingPacket pp = (PingPacket)packet;
+		    synchronizer.onPingPacket(pp);
+		    if (pp.getType() == PingPacket.TYPE_ACK) {
+		        addToLatencyCache(pp.getLatency());
+		    }
 		}
 	}
 
+    private void addToLatencyCache(int latency) {
+        if (nextLatencyCacheIdx >= latencyCache.length) nextLatencyCacheIdx=0;
+        if (latencyCacheState != CACHE_PRIMED) {
+            if (nextLatencyCacheIdx == 0 && latencyCacheState == CACHE_PRIMING) latencyCacheState = CACHE_PRIMED;
+            if (latencyCacheState == CACHE_EMPTY) latencyCacheState = CACHE_PRIMING;
+        }
+        latencyCache[nextLatencyCacheIdx++] = latency;
+    }
+
+    private boolean latencyCacheReady() { return latencyCacheState == CACHE_PRIMED; }
+    private int avgLatency() {
+        int total = 0;
+        for (int latency : latencyCache) { total += latency; }
+        return total / latencyCache.length; // rounds down
+    }
+	
 	@Override
 	public void buttonPressed(ClickableComponent component) {
 		if (component instanceof Button) {

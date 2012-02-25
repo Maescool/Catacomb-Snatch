@@ -28,7 +28,7 @@ public class WinMenu extends GuiMenu {
 		super.render(screen);
 
 		if (winningPlayer == 1)
-			screen.blit(Art.lordLard[0][6], (gameWidth - 128) / 2 - 40, 190 + selectedItem * 40);
+			screen.blit(Art.getLocalPlayerArt()[0][6], (gameWidth - 128) / 2 - 40, 190 + selectedItem * 40);
 		if (winningPlayer == 2)
 			screen.blit(Art.herrSpeck[0][6], (gameWidth - 128) / 2 - 40, 190 + selectedItem * 40);
 	}
