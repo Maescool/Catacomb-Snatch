@@ -354,6 +354,7 @@ public class MojamComponent extends Canvas implements Runnable,
 				createBufferStrategy(3);
 				continue;
 			}
+
 			if (shouldRender) {
 				frames++;
 				Graphics g = bs.getDrawGraphics();
@@ -489,6 +490,11 @@ public class MojamComponent extends Canvas implements Runnable,
 			  paused2 = true;
 			}
 		}
+
+		if (requestToggleFullscreen || keys.fullscreen.wasPressed()) {
+		    requestToggleFullscreen = false;
+		    setFullscreen(!fullscreen);
+		}
 		
 		if (level != null && level.victoryConditions != null) {
 			if(level.victoryConditions.isVictoryConditionAchieved()) {
@@ -563,15 +569,8 @@ public class MojamComponent extends Canvas implements Runnable,
 						synchronizer.addCommand(new PauseCommand(true));
 					}
 					
-					if (keys.fullscreen.wasPressed()) {
-						setFullscreen(!fullscreen);
-					}
-											
 					level.tick();
 				}
-		
-				
-				
 
 				// every 4 minutes, start new background music :)
 				if (System.currentTimeMillis() / 1000 > nextMusicInterval) {
@@ -586,7 +585,6 @@ public class MojamComponent extends Canvas implements Runnable,
 
 		}
 
-		
 		if (createServerState == 1) {
 			createServerState = 2;
 
@@ -629,23 +627,30 @@ public class MojamComponent extends Canvas implements Runnable,
 		mc.start();
 	}
 
-	public static void setFullscreen(boolean fs) {
-		GraphicsDevice device = guiFrame.getGraphicsConfiguration().getDevice();
-		// hide window
-		guiFrame.setVisible(false);
-		guiFrame.dispose();
-		// change options
-		guiFrame.setUndecorated(fs);
-		device.setFullScreenWindow(fs ? guiFrame : null);
-		// display window
-		guiFrame.setLocationRelativeTo(null);
-		guiFrame.setVisible(true);
-		fullscreen = fs;
-		
-        Options.set(Options.FULLSCREEN, fullscreen);
+	private static void setFullscreen(boolean fs) {
+	    if (fs != fullscreen) {
+    		GraphicsDevice device = guiFrame.getGraphicsConfiguration().getDevice();
+    		// hide window
+    		guiFrame.setVisible(false);
+    		guiFrame.dispose();
+    		// change options
+    		guiFrame.setUndecorated(fs);
+    		device.setFullScreenWindow(fs ? guiFrame : null);
+    		// display window
+    		guiFrame.setLocationRelativeTo(null);
+    		guiFrame.setVisible(true);
+    		instance.requestFocusInWindow();
+    		fullscreen = fs;
+	    }
+	    Options.set(Options.FULLSCREEN, fullscreen);
+	}
+
+	private static volatile boolean requestToggleFullscreen = false;
+	public static void toggleFullscreen() {
+	    requestToggleFullscreen = true; // only toggle fullscreen in the tick() loop
 	}
 	
-	public static boolean isFulscreen() {
+	public static boolean isFullscreen() {
 		return fullscreen;
 	}
 

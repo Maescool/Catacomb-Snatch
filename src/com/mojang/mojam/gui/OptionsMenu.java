@@ -68,9 +68,9 @@ public class OptionsMenu extends GuiMenu {
 		fullscreenBtn.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
-				fullscreen = !fullscreen;
-				Options.set(Options.FULLSCREEN, fullscreen);
-				MojamComponent.setFullscreen(fullscreen);
+			    fullscreen = !fullscreen;
+			    Options.set(Options.FULLSCREEN, fullscreen);
+			    MojamComponent.toggleFullscreen();
 			}
 		});
 		fpsBtn.addListener(new ButtonListener() {
