@@ -89,7 +89,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	public static Locale locale;
 	public static Texts texts;
 	private static final long serialVersionUID = 1L;
-  public static final String GAME_TITLE = "Catacomb Snatch";
+	public static final String GAME_TITLE = "Catacomb Snatch";
 	public static final int GAME_WIDTH = 512;
 	public static final int GAME_HEIGHT = GAME_WIDTH * 3 / 4;
 	public static final int SCALE = 2;
@@ -418,7 +418,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 		if (player != null && menuStack.size() == 0) {
 		    if (isMultiplayer) {
-		        Font.draw(screen, "Latency: " + (latencyCacheReady()?avgLatency():"-"), 10, 20);
+		        Font.draw(screen, texts.latency(latencyCacheReady()?""+avgLatency():"-"), 10, 20);
 		    }
 		    
 			Font.draw(screen, texts.health(player.health, player.maxHealth),

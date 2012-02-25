@@ -68,6 +68,10 @@ public class Texts {
 		return MessageFormat.format(getStatic("gameplay.FPS"), fps);
 	}
 
+	public String latency(String ms) {
+	    return MessageFormat.format(getStatic("gameplay.latency"), ms);
+	}
+
 	public String nextLevel(int nextLevel) {
 		return MessageFormat.format(getStatic("player.nextLevel"), nextLevel);
 	}
