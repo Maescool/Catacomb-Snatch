@@ -5,6 +5,7 @@ import java.util.Random;
 import com.mojang.mojam.Keys;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
+import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.animation.EnemyDieAnimation;
 import com.mojang.mojam.entity.animation.SmokePuffAnimation;
 import com.mojang.mojam.entity.building.Building;
@@ -74,7 +75,7 @@ public class Player extends Mob implements LootCollector {
     private int nextWalkSmokeTick = 0;
     private int regenDelay = 0;
     boolean isImmortal;
-    public static boolean creative = false;  //Set this to true for activation of creative mode!
+    public static boolean creative = Options.getAsBoolean(Options.CREATIVE);  //Set this to true for activation of creative mode!
     
     public void setRailPricesandImmortality(){
     	if (creative == true){
@@ -524,7 +525,10 @@ public class Player extends Mob implements LootCollector {
 
     @Override
     public void render(Screen screen) {
-        Bitmap[][] sheet = Art.lordLard;
+        Bitmap[][] sheet = Art.getLocalPlayerArt();
+		if(Options.getAsBoolean(Options.ALTERNATIVE)) {
+			sheet = Art.duchessDonut;
+		}
         if (team == Team.Team2) {
             sheet = Art.herrSpeck;
         }
