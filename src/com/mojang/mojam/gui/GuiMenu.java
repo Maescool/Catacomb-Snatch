@@ -15,6 +15,15 @@ public abstract class GuiMenu extends GuiComponent implements ButtonListener, Ke
 		button.addListener(this);
 		return button;
 	}
+	
+    protected ClickableComponent removeButton(ClickableComponent button) {
+        if (buttons.remove(button)) {
+            return button;
+        }
+        else {
+            return null;
+        }
+    }
 
 	@Override
 	public void render(Screen screen) {

@@ -6,7 +6,6 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.gamemode.GameMode;
-import com.mojang.mojam.level.gamemode.GameModeGoldRush;
 import com.mojang.mojam.level.gamemode.GameModeVanilla;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
@@ -30,11 +29,15 @@ public class TitleMenu extends GuiMenu {
 	public static final int SELECT_DIFFICULTY_HOSTING_ID = 1013;
 	public static final int BACK_ID = 1014;
 	public static final int IGNORE_ID = 1015;
-	public static final int OPTIONS_ID = 1015;
+	public static final int OPTIONS_ID = 1016;
+    public static final int LEVELS_NEXT_PAGE_ID = 1017;
+    public static final int LEVELS_PREVIOUS_PAGE_ID = 1018;
 
 	public static final int FULLSCREEN_ID = 2000;
 	public static final int FPS_ID = 2001;
-	public static final int MUTE_MUSIC = 2002;
+	public static final int VOLUME = 2002;
+    public static final int MUSIC = 2003;
+    public static final int CREATIVE_ID = 2004;
 
 	public static final int KEY_BINDINGS_ID = 3000;
 	public static final int KEY_UP_ID = 3001;

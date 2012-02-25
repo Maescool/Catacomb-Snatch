@@ -4,8 +4,8 @@ import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 
 public class Base extends Building {
-	public Base(double x, double y, int team) {
-		super(x, y, team);
+	public Base(double x, double y, int team, int localTeam) {
+		super(x, y, team, localTeam);
 		setStartHealth(20);
 		freezeTime = 10;
 	}

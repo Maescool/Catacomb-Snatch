@@ -4,14 +4,20 @@ import java.awt.event.KeyEvent;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
+import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.sound.SoundPlayer;
 
 public class OptionsMenu extends GuiMenu {
 
 	private boolean fullscreen;
 	private boolean fps;
-	private boolean muteMusic;
+	private float musicVolume;
+    private float volume;
+	
+	private ClickableComponent btnMusic;
+    private ClickableComponent btnFx;
 
 	int tab1 = 30;
 
@@ -27,10 +33,10 @@ public class OptionsMenu extends GuiMenu {
 				Options.saveProperties();
 			}
 		});
-
+		
 		addButton(new Button(TitleMenu.KEY_BINDINGS_ID,
 				MojamComponent.texts.getStatic("options.keyBindings"), tab1, 30));
-
+		
 		ClickableComponent btnFs = addButton(new Checkbox(TitleMenu.FULLSCREEN_ID,
 				MojamComponent.texts.getStatic("options.fullscreen"), tab1, 60,
 				Options.getAsBoolean(Options.FULLSCREEN, Options.VALUE_FALSE)));
@@ -54,17 +60,40 @@ public class OptionsMenu extends GuiMenu {
 			}
 		});
 
-		ClickableComponent btnPlayMusic = addButton(new Checkbox(TitleMenu.MUTE_MUSIC,
-				MojamComponent.texts.getStatic("options.mutemusic"), tab1, 120, muteMusic));
-		btnPlayMusic.addListener(new ButtonListener() {
+        btnFx = addButton(new Slider(TitleMenu.VOLUME,
+                MojamComponent.texts.getStatic("options.volume"), tab1, 120, volume));
+        
+        btnFx.addListener(new ButtonListener() {
+            @Override
+            public void buttonPressed(ClickableComponent button) {
+                Slider slider = (Slider)btnFx;
+                volume = slider.value;
+                
+                Options.set(Options.VOLUME, volume+"");
+                MojamComponent.soundPlayer.soundSystem.setMasterVolume(slider.value);
+            }
+        });
+
+        btnMusic = addButton(new Slider(TitleMenu.MUSIC,
+                MojamComponent.texts.getStatic("options.music"), tab1, 150, musicVolume));
+        
+        btnMusic.addListener(new ButtonListener() {
+            @Override
+            public void buttonPressed(ClickableComponent button) {
+                Slider slider = (Slider)btnMusic;
+                musicVolume = slider.value;
+                
+                Options.set(Options.MUSIC, musicVolume+"");
+                MojamComponent.soundPlayer.soundSystem.setVolume(SoundPlayer.BACKGROUND_TRACK, slider.value);
+            }
+        });
+
+        ClickableComponent btnCrea = addButton(new Checkbox(TitleMenu.CREATIVE_ID,
+				"Creative Mode", tab1, 180, Player.creative));
+		btnCrea.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
-				muteMusic = !muteMusic;
-				Options.set(Options.MUTE_MUSIC, muteMusic);
-				if (muteMusic)
-					MojamComponent.soundPlayer.stopBackgroundMusic();
-				else
-					MojamComponent.soundPlayer.startBackgroundMusic();
+				Player.creative = !Player.creative;
 			}
 		});
 	}
@@ -72,7 +101,8 @@ public class OptionsMenu extends GuiMenu {
 	private void loadOptions() {
 		fullscreen = Options.getAsBoolean(Options.FULLSCREEN, Options.VALUE_FALSE);
 		fps = Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE);
-		muteMusic = Options.getAsBoolean(Options.MUTE_MUSIC, Options.VALUE_FALSE);
+		musicVolume = Options.getAsFloat(Options.MUSIC, "1.0f");
+		volume = Options.getAsFloat(Options.VOLUME, "1.0f");
 	}
 
 	@Override
