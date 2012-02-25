@@ -519,7 +519,10 @@ public class Player extends Mob implements LootCollector {
     @Override
     public void render(Screen screen) {
         Bitmap[][] sheet = Art.getLocalPlayerArt();
-		
+        if (team == Team.Team2) {
+            sheet = Art.herrSpeck;
+        }
+        
         if (dead) {
             // don't draw anything if we are dead (in a hole)
             return;
