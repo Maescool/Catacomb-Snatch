@@ -2,6 +2,7 @@ package com.mojang.mojam.entity.mob;
 
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.level.DifficultyInformation;
+import com.mojang.mojam.level.HoleTile;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
@@ -55,9 +56,11 @@ public class Bat extends HostileMob {
 
 	@Override
 	public void render(Screen screen) {
-		if (tick % 2 == 0)
+		if (tick % 2 == 0) {
+			if(!(level.getTile(pos) instanceof HoleTile))
 			screen.blit(Art.batShadow, pos.x - Art.batShadow.w / 2, pos.y
-					- Art.batShadow.h / 2 - yOffs + 16);
+					- Art.batShadow.h / 2 - yOffs + 16);			
+		}
 		super.render(screen);
 
 	}
