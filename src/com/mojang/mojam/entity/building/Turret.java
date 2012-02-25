@@ -39,6 +39,7 @@ public class Turret extends Building {
 	}
 
 	public void init() {
+		super.init();
 		makeUpgradeableWithCosts(new int[] { DifficultyInformation.calculateCosts(500), 
 				DifficultyInformation.calculateCosts(1000), 
 				DifficultyInformation.calculateCosts(5000)});
