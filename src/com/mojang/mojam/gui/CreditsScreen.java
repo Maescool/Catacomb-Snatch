@@ -14,15 +14,16 @@ public class CreditsScreen extends GuiMenu {
 	private ClickableComponent back;
 	public String text = "Project team\n"
 			+ "Leader: @Maescool\n"
+			+ "Original game: Mojang AB\n"
 			+ "Official developers: @Borsty, @danielduner, @flet, @judgedead53, @Maescool, @master-lincoln, @mkalam-alami, @Scorpion1122\n"
-			+ "Community management: @Austin01 (website manager, webmaster), @zorro300 (MCForums thread)\n";
+			+ "Community management: @Austin01 (website manager, webmaster), @zorro300 (MCForums thread)\n"
+			+ "Other contributors:\nhttps://github.com/Maescool/Catacomb-Snatch/contributors";
 
 	public CreditsScreen(int gameWidth, int gameHeight) {
 		super();
 		this.gameWidth = gameWidth;
 		this.gameHeight = gameHeight;
 
-		
 		addText(new Text(TitleMenu.CREDITS_TITLE_ID,
 				MojamComponent.texts.getStatic("options.credits"), (gameWidth - 512) / 2, 50));
 		addText(new Text(TitleMenu.CREDITS_TEXT_ID,

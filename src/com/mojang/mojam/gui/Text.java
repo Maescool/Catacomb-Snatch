@@ -23,7 +23,7 @@ public class Text extends VisibleComponent
     		String[] strings = label.split("\n");
 			Integer amount = 0;
 			for (String text: strings) {
-				Font.drawMulti(screen, text, getX() + 24 + 4, (getY() + getHeight() / 2 - 4) + amount * 32, 512);
+				Font.drawMulti(screen, text, getX() + 24 + 4, (getY() + getHeight() / 2 - 4) + amount * 20, 512);
 				++amount;
 			}
     	} else {
