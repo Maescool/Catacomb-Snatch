@@ -1,0 +1,11 @@
+bin/
+.gradle
+build
+/nbproject/private/
+*~
+.DS_Store
+/dist/
+.settings
+*.class
+*.sw?
+lib/.tmp/
