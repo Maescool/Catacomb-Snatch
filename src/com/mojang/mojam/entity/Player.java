@@ -86,7 +86,7 @@ public class Player extends Mob implements LootCollector {
     	}else{
      		COST_RAIL = 10;
     		COST_DROID = 50;
-    		COST_REMOVE_RAIL = 15;
+    		COST_REMOVE_RAIL = 0;
     		isImmortal = false;
     	}
     }
