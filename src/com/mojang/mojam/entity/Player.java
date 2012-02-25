@@ -70,8 +70,8 @@ public class Player extends Mob implements LootCollector {
     public double muzzleX = 0;
     public double muzzleY = 0;
     private int muzzleImage = 0;
-    public boolean dead = false;
-    public int deadDelay = 0;
+    private boolean dead = false;
+    private int deadDelay = 0;
     private int nextWalkSmokeTick = 0;
     private int regenDelay = 0;
     boolean isImmortal;
@@ -209,9 +209,9 @@ public class Player extends Mob implements LootCollector {
         int y = (int) pos.y / Tile.HEIGHT;
 
         if ( !dead && fallDownHole()){
-    		dead = true;
-    		carrying = null;
-    		deadDelay = 50;
+        	dead = true;
+        	carrying = null;
+        	deadDelay = 50;
         }
 
         if (dead && deadDelay <= 0) {
