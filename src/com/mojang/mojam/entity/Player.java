@@ -208,7 +208,11 @@ public class Player extends Mob implements LootCollector {
         int x = (int) pos.x / Tile.WIDTH;
         int y = (int) pos.y / Tile.HEIGHT;
 
-        checkForHoleTiles(x, y);
+        if ( !dead && fallDownHole()){
+        	dead = true;
+        	carrying = null;
+        	deadDelay = 50;
+        }
 
         if (dead && deadDelay <= 0) {
             dead = false;
@@ -377,20 +381,7 @@ public class Player extends Mob implements LootCollector {
         }
         weapon.primaryFire(xa, ya);
     }
-
-    private void checkForHoleTiles(int x, int y) {
-
-        if (level.getTile(x, y) instanceof HoleTile) {
-            if (!dead) {
-                dead = true;
-                carrying = null;
-                level.addEntity(new EnemyDieAnimation(pos.x, pos.y));
-                MojamComponent.soundPlayer.playSound("/sound/Fall.wav", (float) pos.x, (float) pos.y);
-                deadDelay = 50;
-            }
-        }
-    }
-
+    
     private void handleRailBuilding(int x, int y) {
 
         if (level.getTile(x, y).isBuildable()) {
@@ -528,7 +519,10 @@ public class Player extends Mob implements LootCollector {
     @Override
     public void render(Screen screen) {
         Bitmap[][] sheet = Art.getLocalPlayerArt();
-		
+        if (team == Team.Team2) {
+            sheet = Art.herrSpeck;
+        }
+        
         if (dead) {
             // don't draw anything if we are dead (in a hole)
             return;
@@ -573,7 +567,7 @@ public class Player extends Mob implements LootCollector {
 				screen.blit(turret.areaBitmap, turret.pos.x-turret.radius , turret.pos.y-turret.radius - yOffs);	
 			} else if(carrying instanceof Harvester) {
 				Harvester harvester = (Harvester)carrying;
-				screen.blit(harvester.areaBitmap, pos.x - harvester.areaBitmap.w / 2, pos.y - harvester.areaBitmap.h / 2 - yOffs);	
+				screen.blit(harvester.areaBitmap, harvester.pos.x-harvester.radius , harvester.pos.y-harvester.radius - yOffs);	
 			}//TODO make an interface to clean this up
        	}
 		

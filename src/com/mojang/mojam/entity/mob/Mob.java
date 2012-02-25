@@ -7,6 +7,7 @@ import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.animation.EnemyDieAnimation;
 import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.loot.Loot;
+import com.mojang.mojam.level.HoleTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.screen.Art;
@@ -291,4 +292,19 @@ public abstract class Mob extends Entity {
         }
         return false;
     }
+    
+    public boolean fallDownHole() {
+    	int x=(int) pos.x/Tile.WIDTH;
+    	int y=(int) pos.y/Tile.HEIGHT;
+        if (level.getTile(x, y) instanceof HoleTile) {
+        	level.addEntity(new EnemyDieAnimation(pos.x, pos.y));
+        	MojamComponent.soundPlayer.playSound("/sound/Fall.wav", (float) pos.x, (float) pos.y);
+        	if (!(this instanceof Player)){
+        		remove();
+        	}
+        	return true;
+        }
+        return false;
+    }
+    
 }
