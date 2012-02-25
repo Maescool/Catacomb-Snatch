@@ -21,6 +21,9 @@ public class Options {
     public static final String VALUE_TRUE = "true";
     public static final String VALUE_FALSE = "false";
     
+    public static final String CREATIVE = "creative";
+    public static final String ALTERNATIVE = "alternative";
+    
 	private static Properties properties = new Properties();
 	
     public static String get(String key) {

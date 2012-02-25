@@ -138,9 +138,9 @@ public class KeyBindingsMenu extends GuiMenu {
 		super.render(screen);
 		ClickableComponent button = buttons.get(selectedItem);
 		if (button == back) {
-			screen.blit(Art.lordLard[0][6], back.getX() - 64, back.getY() - 8);
+			screen.blit(Art.getLocalPlayerArt()[0][6], back.getX() - 64, back.getY() - 8);
 		} else {
-			screen.blit(Art.lordLard[0][6], button.getX() - textWidth - 32, button.getY() - 8);
+			screen.blit(Art.getLocalPlayerArt()[0][6], button.getX() - textWidth - 32, button.getY() - 8);
 		}
 	}
 
