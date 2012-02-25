@@ -39,6 +39,7 @@ public abstract class Mob extends Entity {
 	public boolean chasing=false;
 	public int justDroppedTicks = 0;
 	public int localTeam;
+	public int strength = 0;
 	
 	/**
 	 * Generic mob constructor
