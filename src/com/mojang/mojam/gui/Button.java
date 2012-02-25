@@ -7,8 +7,8 @@ import com.mojang.mojam.screen.Screen;
 
 public class Button extends ClickableComponent {
 
-    private static final int DEFAULT_BUTTON_WIDTH = 128;
-    private static final int BUTTON_HEIGHT = 24;
+    public static final int BUTTON_WIDTH = 128;
+    public static final int BUTTON_HEIGHT = 24;
     
 	private final int id;
 
@@ -19,7 +19,7 @@ public class Button extends ClickableComponent {
     private Bitmap middleBitmap = null;
 
 	public Button(int id, String label, int x, int y) {
-		super(x, y, DEFAULT_BUTTON_WIDTH, BUTTON_HEIGHT);
+		super(x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
 		this.id = id;
 		this.label = label;
 	}
@@ -57,7 +57,7 @@ public class Button extends ClickableComponent {
 	private void blitBackground(Screen screen, int bitmapId) {
 	    
 	    // Default width button
-	    if (getWidth() == DEFAULT_BUTTON_WIDTH) {
+	    if (getWidth() == BUTTON_WIDTH) {
             screen.blit(Art.button[0][bitmapId], getX(), getY());
 	    }
 	    
@@ -67,7 +67,7 @@ public class Button extends ClickableComponent {
     	    if (mainBitmap != Art.button[0][bitmapId]) {
     	        mainBitmap = Art.button[0][bitmapId];
     	        rightBorderBitmap = new Bitmap(10, BUTTON_HEIGHT);
-    	        rightBorderBitmap.blit(mainBitmap, - DEFAULT_BUTTON_WIDTH + 10, 0);
+    	        rightBorderBitmap.blit(mainBitmap, - BUTTON_WIDTH + 10, 0);
                 middleBitmap = new Bitmap(1, BUTTON_HEIGHT);
                 middleBitmap.blit(mainBitmap, -10, 0);
     	    }
