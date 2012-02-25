@@ -1,5 +1,6 @@
 package com.mojang.mojam.entity.mob;
 
+import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.building.TreasurePile;
 import com.mojang.mojam.level.tile.*;
@@ -35,12 +36,16 @@ public class RailDroid extends Mob {
 	public boolean carrying = false;
 	public int swapTime = 0;
 	public int team;
+	public static boolean creative = Options.getAsBoolean(Options.CREATIVE);
 
 	public RailDroid(double x, double y, int team, int localTeam) {
 		super(x, y, team, localTeam);
 		this.team = team;
 		this.setSize(10, 8);
 		deathPoints = 1;
+		
+		if(creative)
+			isImmortal = true;
 	}
 
 	public void tick() {
