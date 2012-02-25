@@ -55,6 +55,8 @@ public class FloorTile extends Tile {
 			else
 				// Row 2, first 4 columns
 				img = 2 * Art.floorTiles.length + (imageIndex & 3);
+		} else {
+		    img = 3;
 		}
 		minimapColor = Art.floorTileColors[img & 7][img / 8];
 	}
