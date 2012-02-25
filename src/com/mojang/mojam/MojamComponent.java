@@ -776,7 +776,7 @@ public class MojamComponent extends Canvas implements Runnable,
 				if (isServer) {
 					localId = 0;
 					localTeam= Team.Team1;
-					serverSocket = new ServerSocket(3000);
+					serverSocket = new ServerSocket(Options.getAsInteger(Options.MP_PORT, 3000));
 					serverSocket.setSoTimeout(1000);
 
 					hostThread = new Thread() {
@@ -832,11 +832,16 @@ public class MojamComponent extends Canvas implements Runnable,
 			menuStack.clear();
 			isMultiplayer = true;
 			isServer = false;
-
+			
+			String[] data = TitleMenu.ip.split(":");
+			String ip = data[0];
+			Integer port = (data.length > 0) ? Integer.parseInt(data[1]) : 3000;
+			Options.set(Options.MP_PORT, port);
+			
 			try {
 				localId = 1;
 				localTeam= Team.Team2;
-				packetLink = new ClientSidePacketLink(TitleMenu.ip, 3000);
+				packetLink = new ClientSidePacketLink(ip, Options.getAsInteger(Options.MP_PORT));
 				synchronizer = new TurnSynchronizer(this, packetLink, localId,2);
 				packetLink.setPacketListener(this);
 			} catch (Exception e) {
