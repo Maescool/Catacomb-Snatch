@@ -337,6 +337,9 @@ public class Level {
 				}
 			}
 		}
+		for (Entity e : visibleEntities) {
+			e.renderTop(screen);
+		}
 		/*
 		 * for (int y = y0; y <= y1 + 2; y++) { for (int x = x0; x <= x1; x++) {
 		 * if (x < 0 || x >= width || y < 0 || y >= height) {
