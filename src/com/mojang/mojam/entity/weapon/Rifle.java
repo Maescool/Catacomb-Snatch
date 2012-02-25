@@ -34,7 +34,7 @@ public class Rifle implements IWeapon {
 	public void setWeaponMode(){
 		if(owner.creative == true){
 			BULLET_DAMAGE = 100f;
-			accuracy = 1.0;
+			accuracy = 0;
 		}else{
 			BULLET_DAMAGE = .5f;
 			accuracy = 0.15;
