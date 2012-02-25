@@ -45,4 +45,14 @@ public abstract class HostileMob extends Mob {
 			remove();
 		}
 	}
+	
+	public void collide(Entity entity, double xa, double ya) {
+		if (entity instanceof Mob) {
+			Mob mob = (Mob) entity;
+			if (isNotFriendOf(mob)) {
+				mob.hurt(this, DifficultyInformation.calculateStrength(strength));
+			}
+		}
+	}
+
 }

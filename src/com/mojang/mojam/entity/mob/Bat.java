@@ -1,7 +1,5 @@
 package com.mojang.mojam.entity.mob;
 
-import com.mojang.mojam.entity.Entity;
-import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.HoleTile;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
@@ -19,6 +17,7 @@ public class Bat extends HostileMob {
 		minimapColor = 0xffff0000;
 		yOffs = 5;
 		deathPoints = 1;
+		strength = 1;
 	}
 
 	public void tick() {
@@ -63,17 +62,5 @@ public class Bat extends HostileMob {
 		}
 		super.render(screen);
 
-	}
-
-	@Override
-	public void collide(Entity entity, double xa, double ya) {
-		super.collide(entity, xa, ya);
-
-		if (entity instanceof Mob) {
-			Mob mob = (Mob) entity;
-			if (isNotFriendOf(mob)) {
-				mob.hurt(this, DifficultyInformation.calculateStrength(1));
-			}
-		}
 	}
 }
