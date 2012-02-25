@@ -208,8 +208,6 @@ public class MojamComponent extends Canvas implements Runnable,
 	public void start() {
 		running = true;
 		Thread thread = new Thread(this);
-		//TODO : Make it an option
-		//thread.setPriority(Thread.MAX_PRIORITY);
 		thread.start();
 	}
 
@@ -484,7 +482,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		if (!this.isFocusOwner() && level != null) {
 			keys.release();
 			mouseButtons.releaseAll();
-			if (!paused2) { 
+			if (!paused && !paused2) { 
 			  PauseCommand pauseCommand = new PauseCommand(true);
 			  synchronizer.addCommand(pauseCommand);
 			  paused2 = true;
