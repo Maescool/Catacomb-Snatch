@@ -45,6 +45,8 @@ public class CreditsScreen extends GuiMenu {
 
 		screen.blit(Art.mojangLogo, (gameWidth - Art.mojangLogo.w) / 2, previousY += 20);
 		previousY += 20;
+		addText(new Text(TitleMenu.CREDITS_TITLE_ID, "* " + MojamComponent.texts.getStatic("credits.note"),
+				(gameWidth - 512) / 2, previousY += 20));
 		
 		addText(new Text(TitleMenu.CREDITS_TITLE_ID, MojamComponent.texts.getStatic("credits.leadDev"),
 			(gameWidth - 512) / 2, previousY += 20));
