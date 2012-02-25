@@ -208,7 +208,11 @@ public class Player extends Mob implements LootCollector {
         int x = (int) pos.x / Tile.WIDTH;
         int y = (int) pos.y / Tile.HEIGHT;
 
-        checkForHoleTiles(x, y);
+        if ( !dead && fallDownHole()){
+        	dead = true;
+        	carrying = null;
+        	deadDelay = 50;
+        }
 
         if (dead && deadDelay <= 0) {
             dead = false;
@@ -377,20 +381,7 @@ public class Player extends Mob implements LootCollector {
         }
         weapon.primaryFire(xa, ya);
     }
-
-    private void checkForHoleTiles(int x, int y) {
-
-        if (level.getTile(x, y) instanceof HoleTile) {
-            if (!dead) {
-                dead = true;
-                carrying = null;
-                level.addEntity(new EnemyDieAnimation(pos.x, pos.y));
-                MojamComponent.soundPlayer.playSound("/sound/Fall.wav", (float) pos.x, (float) pos.y);
-                deadDelay = 50;
-            }
-        }
-    }
-
+    
     private void handleRailBuilding(int x, int y) {
 
         if (level.getTile(x, y).isBuildable()) {
