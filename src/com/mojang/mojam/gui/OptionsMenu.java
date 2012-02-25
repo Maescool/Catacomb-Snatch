@@ -14,6 +14,7 @@ public class OptionsMenu extends GuiMenu {
 	private boolean fullscreen;
 	private boolean fps;
 	private float musicVolume;
+	private float soundsVolume;
 	private float volume;
 	private boolean creative;
 	private boolean alternative;
@@ -51,8 +52,11 @@ public class OptionsMenu extends GuiMenu {
 				volume));
 
 		ClickableComponent musicVol = addButton(new Slider(TitleMenu.MUSIC,
-				MojamComponent.texts.getStatic("options.music"), xOffset, yOffset += offset,
+				MojamComponent.texts.getStatic("options.music"), xOffset - xOffset/3 - 4, yOffset += offset,
 				musicVolume));
+		ClickableComponent soundsVol = addButton(new Slider(TitleMenu.SOUNDS,
+				MojamComponent.texts.getStatic("options.sounds"), xOffset + xOffset/3 + 4, yOffset,
+				soundsVolume));
 
 		ClickableComponent creativeModeBtn = addButton(new Checkbox(TitleMenu.CREATIVE_ID,
 			MojamComponent.texts.getStatic("options.creative"), xOffset, yOffset += offset,
@@ -101,6 +105,15 @@ public class OptionsMenu extends GuiMenu {
 						slider.value);
 			}
 		});
+		soundsVol.addListener(new ButtonListener() {
+			@Override
+			public void buttonPressed(ClickableComponent button) {
+				Slider slider = (Slider) button;
+				soundsVolume = slider.value;
+
+				Options.set(Options.SOUNDS, soundsVolume + "");
+			}
+		});
 		creativeModeBtn.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
@@ -128,6 +141,7 @@ public class OptionsMenu extends GuiMenu {
 		fullscreen = Options.getAsBoolean(Options.FULLSCREEN, Options.VALUE_FALSE);
 		fps = Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE);
 		musicVolume = Options.getAsFloat(Options.MUSIC, "1.0f");
+		soundsVolume = Options.getAsFloat(Options.SOUNDS, "1.0f");
 		volume = Options.getAsFloat(Options.VOLUME, "1.0f");
 		creative = Options.getAsBoolean(Options.CREATIVE, Options.VALUE_FALSE);
 		alternative = Options.getAsBoolean(Options.ALTERNATIVE, Options.VALUE_FALSE);
