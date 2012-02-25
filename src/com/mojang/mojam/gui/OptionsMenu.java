@@ -31,9 +31,9 @@ public class OptionsMenu extends GuiMenu {
 		int gameHeight = MojamComponent.GAME_HEIGHT;
 		int offset = 32;
 		int xOffset = (gameWidth - Button.BUTTON_WIDTH) / 2;
-		int yOffset = (gameHeight - (7 * offset + 20 + 32)) / 2;
+		int yOffset = (gameHeight - (7 * offset + 20 + (offset * 2))) / 2;
 		textY = yOffset;
-		yOffset += 32;
+		yOffset += offset;
 
 		addButton(new Button(TitleMenu.KEY_BINDINGS_ID,
 				MojamComponent.texts.getStatic("options.keyBindings"), xOffset, yOffset));
