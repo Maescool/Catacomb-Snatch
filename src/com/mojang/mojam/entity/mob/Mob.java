@@ -40,6 +40,14 @@ public abstract class Mob extends Entity {
 	public int justDroppedTicks = 0;
 	public int localTeam;
 	
+	/**
+	 * Generic mob constructor
+	 * 
+	 * @param x Initial x axis coordinate
+	 * @param y Initial y axis coordinate
+	 * @param team Team number
+	 * @param localTeam Local team number
+	 */
 	public Mob(double x, double y, int team, int localTeam) {
 		super();
 		setPos(x, y);
