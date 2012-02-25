@@ -1,12 +1,19 @@
 package com.mojang.mojam.entity.building;
 
 import com.mojang.mojam.MojamComponent;
-import com.mojang.mojam.entity.*;
+import com.mojang.mojam.entity.Bullet;
+import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.IUsable;
+import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.gui.Notifications;
+import com.mojang.mojam.level.HoleTile;
+import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.network.TurnSynchronizer;
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.Screen;
 
 public class Building extends Mob implements IUsable {
 	public static final int SPAWN_INTERVAL = 60;
@@ -16,6 +23,7 @@ public class Building extends Mob implements IUsable {
 	public int spawnTime = 0;
 	public boolean highlight = false;
 	private int healingTime = HEALING_INTERVAL;
+	public Mob carriedBy = null;
 
 	public Building(double x, double y, int team, int localTeam) {
 		super(x, y, team, localTeam);
@@ -25,8 +33,6 @@ public class Building extends Mob implements IUsable {
 		spawnTime = TurnSynchronizer.synchedRandom.nextInt(SPAWN_INTERVAL);
 	}
 
-
-	
 	@Override
 	public void render(Screen screen) {
 		super.render(screen);
@@ -34,7 +40,7 @@ public class Building extends Mob implements IUsable {
 	}
 
 	protected void renderMarker(Screen screen) {
-		if (highlight) {
+		if (highlight && !isCarried()) {
 			BB bb = getBB();
 			bb = bb.grow((getSprite().w - (bb.x1 - bb.x0)) / (3 + Math.sin(System.currentTimeMillis() * .01)));
 			int width = (int) (bb.x1 - bb.x0);
@@ -65,9 +71,29 @@ public class Building extends Mob implements IUsable {
 				}
 			}
 		}
+		
+		if (!isCarried()) {
+		    int x = (int) pos.x / Tile.WIDTH;
+		    int y = (int) pos.y / Tile.HEIGHT;
+		    if (level.getTile(x, y) instanceof HoleTile) {
+		        health = 0;
+		    }
+		}
 
 		xd = 0.0;
 		yd = 0.0;
+	}
+	
+	public void onPickup(Mob mob) {
+	    carriedBy = mob;
+	}
+	
+	public void onDrop() {
+	    carriedBy = null;
+	}
+	
+	public boolean isCarried() {
+	    return carriedBy != null;
 	}
 
 	@Override

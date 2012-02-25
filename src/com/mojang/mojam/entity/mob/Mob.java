@@ -5,6 +5,7 @@ import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.animation.EnemyDieAnimation;
+import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.level.tile.Tile;
@@ -31,7 +32,7 @@ public abstract class Mob extends Entity {
 	public float health = maxHealth;
 	public boolean isImmortal = false;
 	public double xBump, yBump;
-	public Mob carrying = null;
+	public Building carrying = null;
 	public int yOffs = 8;
 	public double xSlide;
 	public double ySlide;
@@ -167,9 +168,6 @@ public abstract class Mob extends Entity {
 		if (doShowHealthBar && health < maxHealth) {
             addHealthBar(screen);
         }
-
-		// @todo maybe not have the rendering of carried item here..
-		renderCarrying(screen, 0);
 	}
 
 	protected void addHealthBar(Screen screen) {
@@ -183,9 +181,9 @@ public abstract class Mob extends Entity {
 		if (carrying == null)
 			return;
 
-		Bitmap image = carrying.getSprite();
-		screen.blit(image, carrying.pos.x - image.w / 2, carrying.pos.y - image.h + 8 + yOffs);// image.h
-		// / 2 - 8);
+		carrying.yOffs -= yOffs;
+		carrying.render(screen);
+		carrying.yOffs += yOffs;
 	}
 
 	public abstract Bitmap getSprite();
@@ -227,9 +225,24 @@ public abstract class Mob extends Entity {
 		return deathPoints;
 	}
 
-	public void onPickup() {
+	public void pickup(Building b) {
+        if (b.health > 0) {
+            level.removeEntity(b);
+            carrying = b;
+            carrying.onPickup(this);
+        }
 	}
-        
+	
+	public void drop() {
+        carrying.removed = false;
+        carrying.freezeTime = 10;
+        carrying.justDroppedTicks=80;
+        carrying.setPos(pos);
+        level.addEntity(carrying);
+        carrying.onDrop();
+        carrying = null;
+	}
+
 	public boolean isCarrying() {
 		return (this.carrying != null);
 	}
