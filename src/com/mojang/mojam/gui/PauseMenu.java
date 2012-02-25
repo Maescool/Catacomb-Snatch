@@ -35,7 +35,7 @@ public class PauseMenu extends GuiMenu {
 
 		super.render(screen);
 
-		screen.blit(Art.lordLard[0][6], (gameWidth - 128) / 2 - 40,
+		screen.blit(Art.getLocalPlayerArt()[0][6], (gameWidth - 128) / 2 - 40,
 				130 + selectedItem * 30);
 	}
 

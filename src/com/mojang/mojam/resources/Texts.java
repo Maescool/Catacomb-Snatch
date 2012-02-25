@@ -4,7 +4,10 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.mob.Team;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
 
 public class Texts {
 	protected final ResourceBundle texts;
@@ -23,7 +26,8 @@ public class Texts {
 	}
 
 	public String player1Win() {
-		return MessageFormat.format(getStatic("gameplay.player1Win"), getStatic("gameplay.player1Name").toUpperCase());
+		
+		return MessageFormat.format(getStatic("gameplay.player1Win"),getPlayer1Name());
 	}
 
 	public String player2Win() {
@@ -32,7 +36,7 @@ public class Texts {
 	
 	public String playerName(int team) {
 		if(team == Team.Team1) {
-			return getStatic("gameplay.player1Name");
+			return getPlayer1Name();
 		}
 		return getStatic("gameplay.player2Name");
 	}
@@ -103,4 +107,11 @@ public class Texts {
 	public String removeRail(int cost) {
 		return MessageFormat.format(getStatic("build.removeRail"), cost);
 	}
+	
+	  public String getPlayer1Name() {	
+	 	   if(Options.getAsBoolean(Options.ALTERNATIVE)) {
+	 			return getStatic("gameplay.player1NameAlt").toUpperCase();
+	 		}
+	 	   return getStatic("gameplay.player1Name").toUpperCase();
+	    }
 }
