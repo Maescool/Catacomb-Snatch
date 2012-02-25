@@ -1,18 +1,18 @@
 package com.mojang.mojam.entity.mob;
 
 import com.mojang.mojam.entity.Entity;
-import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.network.TurnSynchronizer;
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
 
 public class Snake extends HostileMob {
 	public int facing;
 	public int walkTime;
 	public int stepTime;
 
-	public Snake(double x, double y) {
-		super(x, y, Team.Neutral);
+	public Snake(double x, double y, int localTeam) {
+		super(x, y, Team.Neutral, localTeam);
 		setPos(x, y);
 		setStartHealth(3);
 		dir = TurnSynchronizer.synchedRandom.nextDouble() * Math.PI * 2;
@@ -79,7 +79,7 @@ public class Snake extends HostileMob {
 	}
 
 	@Override
-	public String getDeatchSound() {
+	public String getDeathSound() {
 		return "/sound/Enemy Death 2.wav";
 	}
 }

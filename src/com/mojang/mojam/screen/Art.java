@@ -30,6 +30,8 @@ public class Art {
 	public static Bitmap gameOverScreen = load("/art/screen/game_over.png");
 	public static Bitmap pauseScreen = load("/art/screen/pause_screen.png");
 	public static Bitmap[][] button = cut("/art/screen/button.png", 128, 24);
+    public static Bitmap[][] checkbox = cut("/art/screen/checkbox.png", 24, 24);
+    public static Bitmap[][] slider = cut("/art/screen/slider.png", 16, 24);
 	public static Bitmap panel = load("/art/screen/panel.png");
         public static Bitmap background = load("/art/screen/BACKGROUND.png");
         
@@ -50,6 +52,7 @@ public class Art {
         public static Bitmap[][] raildroid = cut("/art/mob/raildroid.png", 32, 32);
 	public static Bitmap[][] mummy = cut("/art/mob/enemy_mummy_anim_48.png", 48, 48);
 	public static Bitmap[][] snake = cut("/art/mob/enemy_snake_anim_48.png", 48, 48);
+	public static Bitmap[][] scarab = cut("/art/mob/enemy_scarab_anim_48.png", 48, 48);
 	public static Bitmap[][] bat = cut("/art/mob/enemy_bat_32.png", 32, 32);
 	public static Bitmap batShadow = load("/art/mob/shadow.png");
 
@@ -77,6 +80,9 @@ public class Art {
 	public static Bitmap[][] fxDust24 = cut("/art/effects/fx_dust1_24.png", 24, 24);
 	public static Bitmap[][] moneyBar = cut("/art/effects/bar_blue.png", 32, 4);
 	public static Bitmap[][] healthBar = cut("/art/effects/bar_green.png", 32, 4);
+		
+	public static BufferedImage icon32 = loadBufferedImage("/art/icon/icon32.png");
+	public static BufferedImage icon64 = loadBufferedImage("/art/icon/icon64.png");
 
 	public static Bitmap[][] cut(String string, int w, int h) {
 		return cut(string, w, h, 0, 0);
@@ -147,6 +153,18 @@ public class Art {
 			bi.getRGB(0, 0, w, h, result.pixels, 0, w);
 
 			return result;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	private static BufferedImage loadBufferedImage(String string) {
+		try {
+			BufferedImage bi = ImageIO.read(MojamComponent.class
+					.getResource(string));
+			return bi;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

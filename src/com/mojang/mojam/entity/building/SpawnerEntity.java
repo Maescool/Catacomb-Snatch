@@ -14,7 +14,7 @@ public class SpawnerEntity extends Building {
 	public int type;
 
 	public SpawnerEntity(double x, double y, int team, int type) {
-		super(x, y, team);
+		super(x, y, team, 0);
 
 		this.type = type;
 		setStartHealth(20);
@@ -48,11 +48,13 @@ public class SpawnerEntity extends Building {
 		Tile spawntile = level.getTile(xin, yin);
 		Mob te = null;
 		if (type == 0)
-			te = new Bat(x, y);
+			te = new Bat(x, y, localTeam);
 		if (type == 1)
-			te = new Snake(x, y);
+			te = new Snake(x, y,localTeam);
 		if (type == 2)
-			te = new Mummy(x, y);
+			te = new Mummy(x, y,localTeam);
+		if (type == 3)
+			te = new Scarab(x, y,localTeam);
 		if (level.countEntities(Mob.class) < level.maxMonsters && level.getEntities(te.getBB().grow(8), te.getClass()).size() == 0 && spawntile.canPass(te))
 			level.addEntity(te);
 	}

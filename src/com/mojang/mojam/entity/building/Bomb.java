@@ -12,8 +12,8 @@ public class Bomb extends Building {
 
 	public static final double BOMB_DISTANCE = 50;
 
-	public Bomb(double x, double y) {
-		super(x, y, Team.Neutral);
+	public Bomb(double x, double y, int localTeam) {
+		super(x, y, Team.Neutral,localTeam);
 		setStartHealth(5);
 		yOffs = 2;
 		setSize(7, 7);

@@ -6,6 +6,7 @@ import java.util.Random;
 import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
+import com.mojang.mojam.level.gamemode.GameMode;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
@@ -27,13 +28,13 @@ public class LevelButton extends ClickableComponent {
 	 * @throws IOException
 	 *             map file not found?
 	 */
-	public LevelButton(int id, LevelInformation levelInfo, int x, int y) {
+	public LevelButton(int id, LevelInformation levelInfo, int x, int y, int localTeam) {
 		super(x, y, WIDTH, HEIGHT);
 
 		this.id = id;
 		this.levelInfo = levelInfo;
 
-		buildMinimap();
+		buildMinimap(localTeam);
 	}
 
 	/**
@@ -41,23 +42,23 @@ public class LevelButton extends ClickableComponent {
 	 * 
 	 * @return build successful
 	 */
-	private boolean buildMinimap() {
+	private boolean buildMinimap(int localTeam) {
 
 		// back it up and use a local new one instead, just to make sure
 		Random backupRandom = TurnSynchronizer.synchedRandom;
 		TurnSynchronizer.synchedRandom = new Random();
-
+		
 		// load level
 		Level l;
 		try {
-			l = Level.fromFile(levelInfo);
+			l = new GameMode().generateLevel(levelInfo,localTeam);
 		} catch (IOException e) {
 			return false;
 		}
 
 		int w = l.width;
 		int h = l.height;
-
+		
 		minimap = new Bitmap(w, h);
 
 		for (int y = 0; y < h; y++) {

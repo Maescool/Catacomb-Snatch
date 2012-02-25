@@ -4,3 +4,5 @@ build
 /nbproject/private/
 *~
 .DS_Store
+/dist/
+.settings

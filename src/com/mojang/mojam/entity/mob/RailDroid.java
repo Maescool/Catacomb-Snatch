@@ -14,9 +14,11 @@ public class RailDroid extends Mob {
 	private int pauseTime = 0;
 	public boolean carrying = false;
 	public int swapTime = 0;
+	public int team;
 
-	public RailDroid(double x, double y, int team) {
-		super(x, y, team);
+	public RailDroid(double x, double y, int team, int localTeam) {
+		super(x, y, team, localTeam);
+		this.team = team;
 		this.setSize(10, 8);
 		deathPoints = 1;
 	}
@@ -186,7 +188,7 @@ public class RailDroid extends Mob {
 			}
 		}
 		if (carrying && swapTime == 0) {
-			if (pos.y < 7 * Tile.HEIGHT) {
+			if (pos.y < 8 * Tile.HEIGHT) {
 				carrying = false;
 				level.player2Score += 2;
 			}
@@ -254,9 +256,10 @@ public class RailDroid extends Mob {
 	public void render(Screen screen) {
 		super.render(screen);
 		if (carrying) {
-			screen.blit(Art.bullets[0][0], pos.x - 8, pos.y - 24 - yOffs);
-
-		}
+            screen.blit(Art.bullets[0][0], pos.x - 8, pos.y - 20 - yOffs);
+        } else {
+        	screen.blit(Art.bullets[1][1], pos.x - 8, pos.y - 20 - yOffs);
+        }
 	}
 
 }
