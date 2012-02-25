@@ -619,7 +619,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		icoList.add(Art.icon32);
 		icoList.add(Art.icon64);		
 		guiFrame.setIconImages(icoList);
-		// guiFrame.setVisible(true);
+		guiFrame.setVisible(true);
 
 		Options.loadProperties();
 		setFullscreen(Boolean.parseBoolean(Options.get(Options.FULLSCREEN, Options.VALUE_FALSE)));
