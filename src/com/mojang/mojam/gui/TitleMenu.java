@@ -106,7 +106,7 @@ public class TitleMenu extends GuiMenu {
 			e.consume();
 			buttons.get(selectedItem).postClick();
 		} else if (e.getKeyCode() == KeyEvent.VK_F11) {
-			MojamComponent.setFullscreen(!MojamComponent.isFulscreen());
+			MojamComponent.toggleFullscreen();
 		}
 	}
 
