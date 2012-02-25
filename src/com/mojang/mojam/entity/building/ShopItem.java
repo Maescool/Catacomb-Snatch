@@ -93,7 +93,7 @@ public class ShopItem extends Building {
                 player.pickup(item);
             } else if (player.getScore() < effectiveCost) {
             	if(this.team == this.localTeam) {
-            		 Notifications.getInstance().add("You dont have enough money (" + effectiveCost + ")");
+            		 Notifications.getInstance().add(MojamComponent.texts.upgradeNotEnoughMoney(effectiveCost));
             	}
                
             }
