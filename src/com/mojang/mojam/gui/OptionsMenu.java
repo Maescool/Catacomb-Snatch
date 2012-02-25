@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
+import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 import com.mojang.mojam.sound.SoundPlayer;
@@ -86,6 +87,15 @@ public class OptionsMenu extends GuiMenu {
                 MojamComponent.soundPlayer.soundSystem.setVolume(SoundPlayer.BACKGROUND_TRACK, slider.value);
             }
         });
+
+        ClickableComponent btnCrea = addButton(new Checkbox(TitleMenu.CREATIVE_ID,
+				"Creative Mode", tab1, 180, Player.creative));
+		btnCrea.addListener(new ButtonListener() {
+			@Override
+			public void buttonPressed(ClickableComponent button) {
+				Player.creative = !Player.creative;
+			}
+		});
 	}
 
 	private void loadOptions() {
