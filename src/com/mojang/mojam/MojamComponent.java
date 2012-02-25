@@ -82,8 +82,9 @@ import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 import com.mojang.mojam.sound.SoundPlayer;
 
-public class MojamComponent extends Canvas implements Runnable, MouseMotionListener,
-		CommandListener, PacketListener, MouseListener, ButtonListener, KeyListener {
+public class MojamComponent extends Canvas implements Runnable,
+		MouseMotionListener, CommandListener, PacketListener, MouseListener,
+		ButtonListener, KeyListener {
 
 	public static MojamComponent instance;
 	public static Locale locale;
@@ -105,7 +106,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private Chat chat = new Chat();
 
 	// Latency counter
-	private static final int CACHE_EMPTY = 0, CACHE_PRIMING = 1, CACHE_PRIMED = 2;
+	private static final int CACHE_EMPTY=0, CACHE_PRIMING=1, CACHE_PRIMED=2;
 	private static final int CACHE_SIZE = 5;
 	private int latencyCacheState = CACHE_EMPTY;
 	private int nextLatencyCacheIdx = 0;
@@ -119,7 +120,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public MouseButtons mouseButtons = new MouseButtons();
 	public Keys keys = new Keys();
 	public Keys[] synchedKeys = { new Keys(), new Keys() };
-	public MouseButtons[] synchedMouseButtons = { new MouseButtons(), new MouseButtons() };
+	public MouseButtons[] synchedMouseButtons = {new MouseButtons(), new MouseButtons() };
 	public Player[] players = new Player[2];
 	public Player player;
 	public TurnSynchronizer synchronizer;
@@ -128,8 +129,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private boolean isMultiplayer;
 	private boolean isServer;
 	private int localId;
-	private int localTeam; // local team is the team of the client. This can be used to check if
-							// something should be only rendered on one person's screen
+	private int localTeam; //local team is the team of the client. This can be used to check if something should be only rendered on one person's screen
 	private Thread hostThread;
 	private static boolean fullscreen = false;
 	public static SoundPlayer soundPlayer;
@@ -142,9 +142,12 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public MojamComponent() {
 		setLocale(new Locale("en"));
 
-		this.setPreferredSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
-		this.setMinimumSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
-		this.setMaximumSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
+		this.setPreferredSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT
+				* SCALE));
+		this.setMinimumSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT
+				* SCALE));
+		this.setMaximumSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT
+				* SCALE));
 
 		this.addMouseMotionListener(this);
 		this.addMouseListener(this);
@@ -157,7 +160,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		instance = this;
 		LevelList.createLevelList();
 	}
-
+	
 	public void setLocale(Locale locale) {
 		MojamComponent.locale = locale;
 		MojamComponent.texts = new Texts(locale);
@@ -175,10 +178,12 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {}
+	public void mouseClicked(MouseEvent e) {
+	}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {}
+	public void mouseEntered(MouseEvent e) {
+	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
@@ -196,10 +201,12 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	}
 
 	@Override
-	public void paint(Graphics g) {}
+	public void paint(Graphics g) {
+	}
 
 	@Override
-	public void update(Graphics g) {}
+	public void update(Graphics g) {
+	}
 
 	public void start() {
 		running = true;
@@ -215,13 +222,13 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private void init() {
 		initInput();
 		soundPlayer = new SoundPlayer();
-
+		
 		soundPlayer.startTitleMusic();
 
 		try {
 			emptyCursor = Toolkit.getDefaultToolkit().createCustomCursor(
-					new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB), new Point(0, 0),
-					"empty");
+					new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB),
+					new Point(0, 0), "empty");
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 		}
@@ -231,8 +238,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		// hide cursor, since we're drawing our own one
 		setCursor(emptyCursor);
 	}
-
-	private void initInput() {
+	
+	private void initInput(){
 		inputHandler = new InputHandler(keys);
 		addKeyListener(inputHandler);
 	}
@@ -255,8 +262,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 	private synchronized void createLevel(LevelInformation li, GameMode mode) {
 		try {
-			// level = Level.fromFile(li);
-			level = mode.generateLevel(li, localTeam);
+			//level = Level.fromFile(li);
+			level = mode.generateLevel(li,localTeam);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			showError("Unable to load map.");
@@ -269,19 +276,20 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private synchronized void initLevel() {
 		if (level == null)
 			return;
-		// level.init();
-		players[0] = new Player(synchedKeys[0], synchedMouseButtons[0], level.width * Tile.WIDTH
-				/ 2 - 16, (level.height - 5 - 1) * Tile.HEIGHT - 16, Team.Team1, localTeam);
+		//level.init();
+		players[0] = new Player(synchedKeys[0], synchedMouseButtons[0], level.width
+				* Tile.WIDTH / 2 - 16, (level.height - 5 - 1) * Tile.HEIGHT
+				- 16, Team.Team1,localTeam );
 		players[0].setFacing(4);
 		level.addEntity(players[0]);
-		level.addEntity(new Base(34 * Tile.WIDTH, 7 * Tile.WIDTH, Team.Team1, localTeam));
+		level.addEntity(new Base(34 * Tile.WIDTH, 7 * Tile.WIDTH, Team.Team1,localTeam));
 		if (isMultiplayer) {
 			players[1] = new Player(synchedKeys[1], synchedMouseButtons[1], level.width
 					* Tile.WIDTH / 2 - 16, 7 * Tile.HEIGHT - 16, Team.Team2, localTeam);
 			players[1].setLocalTeam(localTeam);
 			level.addEntity(players[1]);
-			level.addEntity(new Base(32 * Tile.WIDTH - 20, 32 * Tile.WIDTH - 20, Team.Team2,
-					localTeam));
+			level.addEntity(new Base(32 * Tile.WIDTH - 20,
+					32 * Tile.WIDTH - 20, Team.Team2,localTeam));
 		}
 		player = players[localId];
 		player.setCanSee(true);
@@ -398,7 +406,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		if (level != null) {
 			int xScroll = (int) (player.pos.x - screen.w / 2);
 			int yScroll = (int) (player.pos.y - (screen.h - 24) / 2);
-			soundPlayer.setListenerPosition((float) player.pos.x, (float) player.pos.y);
+			soundPlayer.setListenerPosition((float) player.pos.x,
+					(float) player.pos.y);
 			level.render(screen, xScroll, yScroll);
 		}
 		if (!menuStack.isEmpty()) {
@@ -410,12 +419,12 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		}
 
 		if (player != null && menuStack.size() == 0) {
-			if (isMultiplayer) {
-				Font.draw(screen, texts.latency(latencyCacheReady() ? "" + avgLatency() : "-"), 10,
-						20);
-			}
-
-			Font.draw(screen, texts.health(player.health, player.maxHealth), 340, screen.h - 16);
+		    if (isMultiplayer) {
+		        Font.draw(screen, texts.latency(latencyCacheReady()?""+avgLatency():"-"), 10, 20);
+		    }
+		    
+			Font.draw(screen, texts.health(player.health, player.maxHealth),
+					340, screen.h - 16);
 			Font.draw(screen, texts.money(player.score), 340, screen.h - 27);
 			Font.draw(screen, texts.nextLevel((int) player.getNextLevel()), 340, screen.h - 38);
 			Font.draw(screen, texts.playerExp((int) player.pexp), 340, screen.h - 49);
@@ -429,7 +438,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		g.setColor(Color.BLACK);
 
 		g.fillRect(0, 0, getWidth(), getHeight());
-		g.translate((getWidth() - GAME_WIDTH * SCALE) / 2, (getHeight() - GAME_HEIGHT * SCALE) / 2);
+		g.translate((getWidth() - GAME_WIDTH * SCALE) / 2,
+				(getHeight() - GAME_HEIGHT * SCALE) / 2);
 		g.clipRect(0, 0, GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE);
 
 		if (!menuStack.isEmpty() || level != null) {
@@ -437,7 +447,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			// render mouse
 			renderMouse(screen, mouseButtons);
 
-			g.drawImage(screen.image, 0, 0, GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE, null);
+			g.drawImage(screen.image, 0, 0, GAME_WIDTH * SCALE, GAME_HEIGHT
+					* SCALE, null);
 		}
 
 	}
@@ -461,23 +472,24 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			marker.pixels[i + crosshairSizeHalf * crosshairSize] = 0xffffffff;
 		}
 
-		screen.blit(marker, mouseButtons.getX() / SCALE - crosshairSizeHalf - 2,
+		screen.blit(marker,
+				mouseButtons.getX() / SCALE - crosshairSizeHalf - 2,
 				mouseButtons.getY() / SCALE - crosshairSizeHalf - 2);
 	}
 
 	private void tick() {
-		// Not-In-Focus-Pause
+		//Not-In-Focus-Pause
 		if (this.isFocusOwner() && level != null) {
 			paused2 = false;
 		}
-
+		
 		if (!this.isFocusOwner() && level != null) {
 			keys.release();
 			mouseButtons.releaseAll();
-			if (!paused && !paused2) {
-				PauseCommand pauseCommand = new PauseCommand(true);
-				synchronizer.addCommand(pauseCommand);
-				paused2 = true;
+			if (!paused && !paused2) { 
+			  PauseCommand pauseCommand = new PauseCommand(true);
+			  synchronizer.addCommand(pauseCommand);
+			  paused2 = true;
 			}
 		}
 		if (isMultiplayer) {
@@ -485,19 +497,18 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		}
 
 		if (requestToggleFullscreen || keys.fullscreen.wasPressed()) {
-			requestToggleFullscreen = false;
-			setFullscreen(!fullscreen);
+		    requestToggleFullscreen = false;
+		    setFullscreen(!fullscreen);
 		}
-
+		
 		if (level != null && level.victoryConditions != null) {
-			if (level.victoryConditions.isVictoryConditionAchieved()) {
-				addMenu(new WinMenu(GAME_WIDTH, GAME_HEIGHT,
-						level.victoryConditions.playerVictorious()));
-				level = null;
-				return;
-			}
-		}
-
+			if(level.victoryConditions.isVictoryConditionAchieved()) {
+				addMenu(new WinMenu(GAME_WIDTH, GAME_HEIGHT, level.victoryConditions.playerVictorious()));
+                level = null;
+                return;
+            }
+        }
+		
 		if (packetLink != null) {
 			packetLink.tick();
 		}
@@ -520,33 +531,35 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			}
 		}
 
-		if (level == null) {
+		if(level == null) {
 			mouseButtons.tick();
-		} else if (level != null) {
+		} else 
+		if (level != null) {
 			if (synchronizer.preTurn()) {
 				synchronizer.postTurn();
 
+				
 				for (int index = 0; index < mouseButtons.currentState.length; index++) {
 					boolean nextState = mouseButtons.nextState[index];
 					if (mouseButtons.isDown(index) != nextState) {
-						synchronizer.addCommand(new ChangeMouseButtonCommand(index, nextState));
+						synchronizer.addCommand(new ChangeMouseButtonCommand(index,nextState));
 					}
 				}
-
-				synchronizer.addCommand(new ChangeMouseCoordinateCommand(mouseButtons.getX(),
-						mouseButtons.getY(), mouseButtons.mouseHidden));
-
+				
+				synchronizer.addCommand(new ChangeMouseCoordinateCommand(mouseButtons.getX(), mouseButtons.getY(), mouseButtons.mouseHidden));
+									
 				mouseButtons.tick();
 				for (MouseButtons sMouseButtons : synchedMouseButtons) {
 					sMouseButtons.tick();
 				}
-
+				
 				if (!paused) {
 					for (int index = 0; index < keys.getAll().size(); index++) {
 						Keys.Key key = keys.getAll().get(index);
 						boolean nextState = key.nextState;
 						if (key.isDown != nextState) {
-							synchronizer.addCommand(new ChangeKeyCommand(index, nextState));
+							synchronizer.addCommand(new ChangeKeyCommand(index,
+									nextState));
 						}
 					}
 
@@ -560,7 +573,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 						mouseButtons.releaseAll();
 						synchronizer.addCommand(new PauseCommand(true));
 					}
-
+					
 					level.tick();
 				}
 
@@ -580,19 +593,19 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		if (createServerState == 1) {
 			createServerState = 2;
 
-			synchronizer = new TurnSynchronizer(MojamComponent.this, packetLink, localId, 2);
+			synchronizer = new TurnSynchronizer(MojamComponent.this,
+					packetLink, localId, 2);
 
 			clearMenus();
 			createLevel(TitleMenu.level, TitleMenu.defaultGameMode);
 
 			synchronizer.setStarted(true);
 			if (TitleMenu.level.vanilla) {
-				packetLink.sendPacket(new StartGamePacket(TurnSynchronizer.synchedSeed,
-						TitleMenu.level.getUniversalPath(), DifficultyList
-								.getDifficultyID(TitleMenu.difficulty)));
+				packetLink.sendPacket(new StartGamePacket(
+						TurnSynchronizer.synchedSeed, TitleMenu.level.getUniversalPath(),DifficultyList.getDifficultyID(TitleMenu.difficulty)));
 			} else {
-				packetLink.sendPacket(new StartGamePacketCustom(TurnSynchronizer.synchedSeed,
-						level, DifficultyList.getDifficultyID(TitleMenu.difficulty)));
+				packetLink.sendPacket(new StartGamePacketCustom(
+						TurnSynchronizer.synchedSeed, level, DifficultyList.getDifficultyID(TitleMenu.difficulty)));
 			}
 			packetLink.setPacketListener(MojamComponent.this);
 
@@ -628,7 +641,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ArrayList<BufferedImage> icoList = new ArrayList<BufferedImage>();
 		icoList.add(Art.icon32);
-		icoList.add(Art.icon64);
+		icoList.add(Art.icon64);		
 		guiFrame.setIconImages(icoList);
 		guiFrame.setVisible(true);
 		Options.loadProperties();
@@ -637,29 +650,28 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	}
 
 	private static void setFullscreen(boolean fs) {
-		if (fs != fullscreen) {
-			GraphicsDevice device = guiFrame.getGraphicsConfiguration().getDevice();
-			// hide window
-			guiFrame.setVisible(false);
-			guiFrame.dispose();
-			// change options
-			guiFrame.setUndecorated(fs);
-			device.setFullScreenWindow(fs ? guiFrame : null);
-			// display window
-			guiFrame.setLocationRelativeTo(null);
-			guiFrame.setVisible(true);
-			instance.requestFocusInWindow();
-			fullscreen = fs;
-		}
-		Options.set(Options.FULLSCREEN, fullscreen);
+	    if (fs != fullscreen) {
+    		GraphicsDevice device = guiFrame.getGraphicsConfiguration().getDevice();
+    		// hide window
+    		guiFrame.setVisible(false);
+    		guiFrame.dispose();
+    		// change options
+    		guiFrame.setUndecorated(fs);
+    		device.setFullScreenWindow(fs ? guiFrame : null);
+    		// display window
+    		guiFrame.setLocationRelativeTo(null);
+    		guiFrame.setVisible(true);
+    		instance.requestFocusInWindow();
+    		fullscreen = fs;
+	    }
+	    Options.set(Options.FULLSCREEN, fullscreen);
 	}
 
 	private static volatile boolean requestToggleFullscreen = false;
-
 	public static void toggleFullscreen() {
-		requestToggleFullscreen = true; // only toggle fullscreen in the tick() loop
+	    requestToggleFullscreen = true; // only toggle fullscreen in the tick() loop
 	}
-
+	
 	public static boolean isFullscreen() {
 		return fullscreen;
 	}
@@ -669,19 +681,22 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 		if (packet instanceof ChangeKeyCommand) {
 			ChangeKeyCommand ckc = (ChangeKeyCommand) packet;
-			synchedKeys[playerId].getAll().get(ckc.getKey()).nextState = ckc.getNextState();
+			synchedKeys[playerId].getAll().get(ckc.getKey()).nextState = ckc
+					.getNextState();
 		}
-
+		
 		if (packet instanceof ChangeMouseButtonCommand) {
 			ChangeMouseButtonCommand ckc = (ChangeMouseButtonCommand) packet;
 			synchedMouseButtons[playerId].nextState[ckc.getButton()] = ckc.getNextState();
 		}
-
+		
 		if (packet instanceof ChangeMouseCoordinateCommand) {
 			ChangeMouseCoordinateCommand ccc = (ChangeMouseCoordinateCommand) packet;
 			synchedMouseButtons[playerId].setPosition(new Point(ccc.getX(), ccc.getY()));
 			synchedMouseButtons[playerId].mouseHidden = ccc.isMouseHidden();
 		}
+		
+		
 
 		if (packet instanceof ChatCommand) {
 			ChatCommand cc = (ChatCommand) packet;
@@ -705,8 +720,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			if (!isServer) {
 				StartGamePacket sgPacker = (StartGamePacket) packet;
 				synchronizer.onStartGamePacket(sgPacker);
-				TitleMenu.difficulty = DifficultyList.getDifficulties().get(
-						sgPacker.getDifficulty());
+				TitleMenu.difficulty = DifficultyList.getDifficulties().get(sgPacker.getDifficulty());
 				createLevel(sgPacker.getLevelFile(), TitleMenu.defaultGameMode);
 			}
 		} else if (packet instanceof TurnPacket) {
@@ -714,46 +728,37 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		} else if (packet instanceof StartGamePacketCustom) {
 			if (!isServer) {
 				StartGamePacketCustom sgPacker = (StartGamePacketCustom) packet;
-				synchronizer.onStartGamePacket((StartGamePacket) packet);
-				TitleMenu.difficulty = DifficultyList.getDifficulties().get(
-						sgPacker.getDifficulty());
+				synchronizer.onStartGamePacket((StartGamePacket)packet);
+				TitleMenu.difficulty = DifficultyList.getDifficulties().get(sgPacker.getDifficulty());
 				level = sgPacker.getLevel();
 				paused = false;
 				initLevel();
 			}
 		} else if (packet instanceof PingPacket) {
-			PingPacket pp = (PingPacket) packet;
-			synchronizer.onPingPacket(pp);
-			if (pp.getType() == PingPacket.TYPE_ACK) {
-				addToLatencyCache(pp.getLatency());
-			}
+		    PingPacket pp = (PingPacket)packet;
+		    synchronizer.onPingPacket(pp);
+		    if (pp.getType() == PingPacket.TYPE_ACK) {
+		        addToLatencyCache(pp.getLatency());
+		    }
 		}
 	}
 
-	private void addToLatencyCache(int latency) {
-		if (nextLatencyCacheIdx >= latencyCache.length)
-			nextLatencyCacheIdx = 0;
-		if (latencyCacheState != CACHE_PRIMED) {
-			if (nextLatencyCacheIdx == 0 && latencyCacheState == CACHE_PRIMING)
-				latencyCacheState = CACHE_PRIMED;
-			if (latencyCacheState == CACHE_EMPTY)
-				latencyCacheState = CACHE_PRIMING;
-		}
-		latencyCache[nextLatencyCacheIdx++] = latency;
-	}
+    private void addToLatencyCache(int latency) {
+        if (nextLatencyCacheIdx >= latencyCache.length) nextLatencyCacheIdx=0;
+        if (latencyCacheState != CACHE_PRIMED) {
+            if (nextLatencyCacheIdx == 0 && latencyCacheState == CACHE_PRIMING) latencyCacheState = CACHE_PRIMED;
+            if (latencyCacheState == CACHE_EMPTY) latencyCacheState = CACHE_PRIMING;
+        }
+        latencyCache[nextLatencyCacheIdx++] = latency;
+    }
 
-	private boolean latencyCacheReady() {
-		return latencyCacheState == CACHE_PRIMED;
-	}
-
-	private int avgLatency() {
-		int total = 0;
-		for (int latency : latencyCache) {
-			total += latency;
-		}
-		return total / latencyCache.length; // rounds down
-	}
-
+    private boolean latencyCacheReady() { return latencyCacheState == CACHE_PRIMED; }
+    private int avgLatency() {
+        int total = 0;
+        for (int latency : latencyCache) { total += latency; }
+        return total / latencyCache.length; // rounds down
+    }
+	
 	@Override
 	public void buttonPressed(ClickableComponent component) {
 		if (component instanceof Button) {
@@ -774,22 +779,22 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			chat.clear();
 
 			localId = 0;
-			localTeam = Team.Team1;
+			localTeam= Team.Team1;
 			synchronizer = new TurnSynchronizer(this, null, 0, 1);
 			synchronizer.setStarted(true);
 
 			createLevel(TitleMenu.level, TitleMenu.defaultGameMode);
 			soundPlayer.stopBackgroundMusic();
 		} else if (id == TitleMenu.SELECT_LEVEL_ID) {
-			addMenu(new LevelSelect(false, localTeam));
+			addMenu(new LevelSelect(false,localTeam));
 		} else if (id == TitleMenu.SELECT_HOST_LEVEL_ID) {
-			addMenu(new LevelSelect(true, localTeam));
+			addMenu(new LevelSelect(true,localTeam));
 		} else if (id == TitleMenu.UPDATE_LEVELS) {
 			GuiMenu menu = menuStack.pop();
 			if (menu instanceof LevelSelect) {
 				addMenu(new LevelSelect(((LevelSelect) menu).bHosting, localTeam));
 			} else {
-				addMenu(new LevelSelect(false, localTeam));
+				addMenu(new LevelSelect(false,localTeam));
 			}
 		} else if (id == TitleMenu.HOST_GAME_ID) {
 			addMenu(new HostingWaitMenu());
@@ -799,7 +804,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			try {
 				if (isServer) {
 					localId = 0;
-					localTeam = Team.Team1;
+					localTeam= Team.Team1;
 					serverSocket = new ServerSocket(3000);
 					serverSocket.setSoTimeout(1000);
 
@@ -817,7 +822,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 									}
 									if (socket == null) {
-										System.out.println("Waiting for player to connect");
+										System.out
+												.println("Waiting for player to connect");
 										continue;
 									}
 									fail = false;
@@ -833,7 +839,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 							if (fail) {
 								try {
 									serverSocket.close();
-								} catch (IOException e) {}
+								} catch (IOException e) {
+								}
 							}
 						};
 					};
@@ -858,9 +865,9 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 			try {
 				localId = 1;
-				localTeam = Team.Team2;
+				localTeam= Team.Team2;
 				packetLink = new ClientSidePacketLink(TitleMenu.ip, 3000);
-				synchronizer = new TurnSynchronizer(this, packetLink, localId, 2);
+				synchronizer = new TurnSynchronizer(this, packetLink, localId,2);
 				packetLink.setPacketListener(this);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -962,32 +969,36 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		switch (EnumOSMappingHelper.enumOSMappingArray[getOs().ordinal()]) {
 		case 1: // '\001'
 		case 2: // '\002'
-			file = new File(s1, (new StringBuilder()).append('.').append(s).append('/').toString());
+			file = new File(s1, (new StringBuilder()).append('.').append(s)
+					.append('/').toString());
 			break;
 
 		case 3: // '\003'
 			String s2 = System.getenv("APPDATA");
 			if (s2 != null) {
-				file = new File(s2, (new StringBuilder()).append(".").append(s).append('/')
-						.toString());
+				file = new File(s2, (new StringBuilder()).append(".").append(s)
+						.append('/').toString());
 			} else {
-				file = new File(s1, (new StringBuilder()).append('.').append(s).append('/')
-						.toString());
+				file = new File(s1, (new StringBuilder()).append('.').append(s)
+						.append('/').toString());
 			}
 			break;
 
 		case 4: // '\004'
-			file = new File(s1, (new StringBuilder()).append("Library/Application Support/")
-					.append(s).toString());
+			file = new File(s1, (new StringBuilder())
+					.append("Library/Application Support/").append(s)
+					.toString());
 			break;
 
 		default:
-			file = new File(s1, (new StringBuilder()).append(s).append('/').toString());
+			file = new File(s1, (new StringBuilder()).append(s).append('/')
+					.toString());
 			break;
 		}
 		if (!file.exists() && !file.mkdirs()) {
 			throw new RuntimeException((new StringBuilder())
-					.append("The working directory could not be created: ").append(file).toString());
+					.append("The working directory could not be created: ")
+					.append(file).toString());
 		} else {
 			return file;
 		}
@@ -997,13 +1008,14 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		BufferedImage screencapture;
 
 		try {
-			screencapture = new Robot().createScreenCapture(guiFrame.getBounds());
+			screencapture = new Robot().createScreenCapture(guiFrame
+					.getBounds());
 
-			File file = new File(getMojamDir() + "/" + "screenShot" + sShotCounter++ + ".png");
-			while (file.exists()) {
-				file = new File(getMojamDir() + "/" + "screenShot" + sShotCounter++ + ".png");
+			File file = new File(getMojamDir()+"/"+"screenShot" + sShotCounter++ + ".png");
+			while(file.exists()) {
+			    file = new File(getMojamDir()+"/"+"screenShot" + sShotCounter++ + ".png");
 			}
-
+			
 			ImageIO.write(screencapture, "png", file);
 		} catch (AWTException e) {
 			e.printStackTrace();
