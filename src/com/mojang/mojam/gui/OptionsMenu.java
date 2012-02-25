@@ -15,7 +15,9 @@ public class OptionsMenu extends GuiMenu {
 	private boolean fps;
 	private float musicVolume;
 	private float volume;
-
+	private boolean creative;
+	private boolean alternative;
+	
 	private int textY;
 
 	private ClickableComponent back;
@@ -53,8 +55,13 @@ public class OptionsMenu extends GuiMenu {
 				musicVolume));
 
 		ClickableComponent creativeModeBtn = addButton(new Checkbox(TitleMenu.CREATIVE_ID,
-				"Creative Mode", xOffset, yOffset += offset, Player.creative));
+			MojamComponent.texts.getStatic("options.creative"), xOffset, yOffset += offset,
+			Options.getAsBoolean(Options.CREATIVE, Options.VALUE_FALSE)));  
 
+		ClickableComponent alternativeSkinBtn = addButton(new Checkbox(TitleMenu.ALTERNATIVE_ID,
+				MojamComponent.texts.getStatic("options.alternative"), xOffset, yOffset += offset,
+				Options.getAsBoolean(Options.ALTERNATIVE, Options.VALUE_FALSE)));
+		
 		back = addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"),
 				xOffset, (yOffset += offset) + 20));
 
@@ -97,7 +104,16 @@ public class OptionsMenu extends GuiMenu {
 		creativeModeBtn.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
-				Player.creative = !Player.creative;
+				creative = !creative;
+				Options.set(Options.CREATIVE, creative);
+			}
+		});
+
+		alternativeSkinBtn.addListener(new ButtonListener() {
+			@Override
+			public void buttonPressed(ClickableComponent button) {
+				alternative = !alternative;
+				Options.set(Options.ALTERNATIVE, alternative);
 			}
 		});
 		back.addListener(new ButtonListener() {
@@ -113,6 +129,8 @@ public class OptionsMenu extends GuiMenu {
 		fps = Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE);
 		musicVolume = Options.getAsFloat(Options.MUSIC, "1.0f");
 		volume = Options.getAsFloat(Options.VOLUME, "1.0f");
+		creative = Options.getAsBoolean(Options.CREATIVE, Options.VALUE_FALSE);
+		alternative = Options.getAsBoolean(Options.ALTERNATIVE, Options.VALUE_FALSE);
 	}
 
 	@Override
@@ -121,7 +139,7 @@ public class OptionsMenu extends GuiMenu {
 		super.render(screen);
 		Font.drawCentered(screen, MojamComponent.texts.getStatic("titlemenu.options"),
 				MojamComponent.GAME_WIDTH / 2, textY);
-		screen.blit(Art.lordLard[0][6], buttons.get(selectedItem).getX() - 40,
+		screen.blit(Art.getLocalPlayerArt()[0][6], buttons.get(selectedItem).getX() - 40,
 				buttons.get(selectedItem).getY() - 8);
 	}
 
