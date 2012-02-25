@@ -208,9 +208,6 @@ public class MojamComponent extends Canvas implements Runnable,
 	public void start() {
 		running = true;
 		Thread thread = new Thread(this);
-		if (Options.getAsBoolean(Options.MAX_PRIORITY, "false")) {
-		  thread.setPriority(Thread.MAX_PRIORITY);
-		}
 		thread.start();
 	}
 

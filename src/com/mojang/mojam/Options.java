@@ -24,8 +24,6 @@ public class Options {
     public static final String CREATIVE = "creative";
     public static final String ALTERNATIVE = "alternative";
     
-    public static final String MAX_PRIORITY = "maxPriority";
-    
 	private static Properties properties = new Properties();
 	
     public static String get(String key) {
