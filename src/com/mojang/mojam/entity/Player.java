@@ -638,10 +638,11 @@ public class Player extends Mob implements LootCollector {
     		}
     		 return;
     	}
-    	
-        level.removeEntity(b);
-        carrying = b;
-        carrying.onPickup();
+    	if (b.health > 0) {
+	        level.removeEntity(b);
+	        carrying = b;
+	        carrying.onPickup();
+    	}
     }
 
     public void setFacing(int facing) {
