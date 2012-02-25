@@ -34,6 +34,7 @@ public class Building extends Mob implements IUsable {
 	public void render(Screen screen) {
 		super.render(screen);
 		renderMarker(screen);
+		renderInfo(screen);
 	}
 
 	protected void renderMarker(Screen screen) {
@@ -55,6 +56,20 @@ public class Building extends Mob implements IUsable {
 		}
 	}
 
+    protected void renderInfo(Screen screen) {
+    	//Draw iiAtlas' shop item info graphics
+        if (highlight) {
+        	Bitmap discriptionText = new Bitmap(110, 25);
+            BB bb = getBB();
+            
+            if(bb.x0 == 966.0) discriptionText = Art.turretText;
+            if(bb.x0 == 998.0) discriptionText = Art.harvesterText;
+            if(bb.x0 == 1030.0) discriptionText = Art.bombText;
+            
+            screen.blit(discriptionText, ((int) bb.x0 - (getSprite().w / 2)), ((int) bb.y0 + 30), 110, 25);  
+        }
+    }
+	
 	public void tick() {
 		super.tick();
 		if (freezeTime > 0) {
