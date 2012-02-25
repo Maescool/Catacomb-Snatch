@@ -5,6 +5,7 @@ import java.util.Random;
 import com.mojang.mojam.Keys;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
+import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.animation.EnemyDieAnimation;
 import com.mojang.mojam.entity.animation.SmokePuffAnimation;
 import com.mojang.mojam.entity.building.Building;
@@ -74,7 +75,7 @@ public class Player extends Mob implements LootCollector {
     private int nextWalkSmokeTick = 0;
     private int regenDelay = 0;
     boolean isImmortal;
-    public static boolean creative = false;  //Set this to true for activation of creative mode!
+    public static boolean creative = Options.getAsBoolean(Options.CREATIVE); 
     
     public void setRailPricesandImmortality(){
     	if (creative == true){
@@ -524,11 +525,8 @@ public class Player extends Mob implements LootCollector {
 
     @Override
     public void render(Screen screen) {
-        Bitmap[][] sheet = Art.lordLard;
-        if (team == Team.Team2) {
-            sheet = Art.herrSpeck;
-        }
-
+        Bitmap[][] sheet = Art.getLocalPlayerArt();
+		
         if (dead) {
             // don't draw anything if we are dead (in a hole)
             return;
@@ -557,16 +555,20 @@ public class Player extends Mob implements LootCollector {
         if (muzzleTicks > 0 && !behind) {
             screen.blit(Art.muzzle[muzzleImage][0], xmuzzle, ymuzzle);
         }
+	}
 
-        renderCarrying(screen, (frame == 0 || frame == 3) ? -1 : 0);
-    }
+	@Override
+	public void renderTop(Screen screen) {
+		int frame = (walkTime / 4 % 6 + 6) % 6;
+		renderCarrying(screen, (frame == 0 || frame == 3) ? -1 : 0);
+	}
     
     @Override
     protected void renderCarrying(Screen screen, int yOffs) {
     	if(carrying != null && carrying.team == this.localTeam ) {
 			if(carrying instanceof Turret) {
 				Turret turret = (Turret)carrying;
-				screen.blit(turret.areaBitmap, pos.x - turret.areaBitmap.w / 2, pos.y - turret.areaBitmap.h / 2 - yOffs);	
+				screen.blit(turret.areaBitmap, turret.pos.x-turret.radius , turret.pos.y-turret.radius - yOffs);	
 			} else if(carrying instanceof Harvester) {
 				Harvester harvester = (Harvester)carrying;
 				screen.blit(harvester.areaBitmap, pos.x - harvester.areaBitmap.w / 2, pos.y - harvester.areaBitmap.h / 2 - yOffs);	
@@ -636,10 +638,11 @@ public class Player extends Mob implements LootCollector {
     		}
     		 return;
     	}
-    	
-        level.removeEntity(b);
-        carrying = b;
-        carrying.onPickup();
+    	if (b.health > 0) {
+	        level.removeEntity(b);
+	        carrying = b;
+	        carrying.onPickup();
+    	}
     }
 
     public void setFacing(int facing) {
