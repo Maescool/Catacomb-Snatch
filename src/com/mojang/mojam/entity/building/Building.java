@@ -265,4 +265,8 @@ public class Building extends Mob implements IUsable {
 	public void buildingRegen(boolean regen) {
 		healthRegenB = regen;
 	}
+	
+	public boolean buildingRegenEnabled() {
+		return healthRegenB;
+	}
 }
