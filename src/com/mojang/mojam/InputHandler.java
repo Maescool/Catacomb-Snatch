@@ -30,7 +30,7 @@ public class InputHandler implements KeyListener {
 		initKey(keys.pause, KeyEvent.VK_ESCAPE);
 		initKey(keys.screenShot, KeyEvent.VK_F2);
 		initKey(keys.fullscreen, KeyEvent.VK_F11);
-		initKey(keys.chat, KeyEvent.VK_ENTER);
+		initKey(keys.chat, KeyEvent.VK_T);
 	}
 
 	private void initKey(Key key, int defaultKeyCode) {

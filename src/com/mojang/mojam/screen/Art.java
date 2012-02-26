@@ -2,6 +2,8 @@ package com.mojang.mojam.screen;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -31,6 +33,7 @@ public class Art {
 	// Player starting points and tooltips
 	public static Bitmap[][] startLordLard = cut("/art/player/start_lordlard.png", 32, 32);
 	public static Bitmap[][] startHerrSpeck = cut("/art/player/start_herrspeck.png", 32, 32);
+	public static Bitmap tooltipBackground = load("/art/screen/tooltipBackground.png");
     public static Bitmap turretText = load("/art/screen/atlasTurretText.png");
     public static Bitmap harvesterText = load("/art/screen/atlasHarvesterText.png");
     public static Bitmap bombText = load("/art/screen/atlasBombText.png");
@@ -41,6 +44,7 @@ public class Art {
 	public static Bitmap emptyBackground = load("/art/screen/empty_background.png");
 	public static Bitmap gameOverScreen = load("/art/screen/game_over.png");
 	public static Bitmap pauseScreen = load("/art/screen/pause_screen.png");
+	public static Bitmap mojangLogo = load("/art/logo/mojang.png");
 	
 	// UI elements
 	public static Bitmap[][] button = cut("/art/screen/button.png", 128, 24);
@@ -65,6 +69,10 @@ public class Art {
 	public static Bitmap[][] font_red = cut("/art/fonts/font_red.png", 8, 8);
 	public static Bitmap[][] font_gold = cut("/art/fonts/font_gold.png", 8, 8);
 	
+	public static Bitmap[][] font_small_black = cutv("/art/fonts/font_small_black.png", 7);
+    public static Bitmap[][] font_small_white = cutv("/art/fonts/font_small_white.png", 7);
+    public static Bitmap[][] font_small_gold = cutv("/art/fonts/font_small_gold.png", 7);
+
 	// Mob
     public static Bitmap[][] raildroid = cut("/art/mob/raildroid.png", 32, 32);
 	public static Bitmap[][] mummy = cut("/art/mob/enemy_mummy_anim_48.png", 48, 48);
@@ -163,6 +171,51 @@ public class Art {
 		return null;
 	}
 
+    private static Bitmap[][] cutv(String string, int h) {
+        try {
+            BufferedImage bi = ImageIO.read(MojamComponent.class.getResource(string));
+
+            int yTiles = bi.getHeight() / h;
+
+            int xTiles = 0;
+            Bitmap[][] result = new Bitmap[yTiles][];
+            for (int y = 0; y < yTiles; y++) {
+                List<Bitmap> row = new ArrayList<Bitmap>();
+                int xCursor=0;
+                while (xCursor < bi.getWidth()) {
+                    int w = 0;
+                    while (xCursor + w < bi.getWidth() && bi.getRGB(xCursor + w, y * h) != 0xffed1c24) {
+                        w++;
+                    }
+                    if (w > 0) {
+                        Bitmap bitmap = new Bitmap(w, h);
+                        bi.getRGB(xCursor, y * h, w, h, bitmap.pixels, 0, w );
+                        row.add(bitmap);
+                    }
+                    xCursor += w+1;
+                }
+                if (xTiles < row.size()) xTiles = row.size();
+                result[y] = row.toArray(new Bitmap[0]);
+            }
+
+            Bitmap[][] resultT = new Bitmap[xTiles][yTiles];
+            for (int x = 0; x < xTiles; x++) {
+                for (int y = 0; y < yTiles; y++) {
+                    try {
+                        resultT[x][y] = result[y][x];
+                    } catch (IndexOutOfBoundsException e) {
+                        resultT[x][y] = null;
+                    }
+                }
+            }
+
+            return resultT;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+	
 	private static int[][] getColors(Bitmap[][] tiles) {
 		int[][] result = new int[tiles.length][tiles[0].length];
 		for (int y = 0; y < tiles[0].length; y++) {

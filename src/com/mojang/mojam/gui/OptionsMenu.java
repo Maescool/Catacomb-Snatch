@@ -13,6 +13,7 @@ public class OptionsMenu extends GuiMenu {
 	private boolean fullscreen;
 	private boolean fps;
 	private float musicVolume;
+	private float soundsVolume;
 	private float volume;
 	private boolean creative;
 	private boolean alternative;
@@ -30,9 +31,9 @@ public class OptionsMenu extends GuiMenu {
 		int gameHeight = MojamComponent.GAME_HEIGHT;
 		int offset = 32;
 		int xOffset = (gameWidth - Button.BUTTON_WIDTH) / 2;
-		int yOffset = (gameHeight - (7 * offset + 20 + 32)) / 2;
+		int yOffset = (gameHeight - (7 * offset + 20 + (offset * 2))) / 2;
 		textY = yOffset;
-		yOffset += 32;
+		yOffset += offset;
 
 		addButton(new Button(TitleMenu.KEY_BINDINGS_ID,
 				MojamComponent.texts.getStatic("options.keyBindings"), xOffset, yOffset));
@@ -50,8 +51,11 @@ public class OptionsMenu extends GuiMenu {
 				volume));
 
 		ClickableComponent musicVol = addButton(new Slider(TitleMenu.MUSIC,
-				MojamComponent.texts.getStatic("options.music"), xOffset, yOffset += offset,
+				MojamComponent.texts.getStatic("options.music"), xOffset - xOffset/3 - 6, yOffset += offset,
 				musicVolume));
+		ClickableComponent soundsVol = addButton(new Slider(TitleMenu.SOUND,
+				MojamComponent.texts.getStatic("options.sounds"), xOffset + xOffset/3 + 6, yOffset,
+				soundsVolume));
 
 		ClickableComponent creativeModeBtn = addButton(new Checkbox(TitleMenu.CREATIVE_ID,
 			MojamComponent.texts.getStatic("options.creative"), xOffset, yOffset += offset,
@@ -60,6 +64,9 @@ public class OptionsMenu extends GuiMenu {
 		ClickableComponent alternativeSkinBtn = addButton(new Checkbox(TitleMenu.ALTERNATIVE_ID,
 				MojamComponent.texts.getStatic("options.alternative"), xOffset, yOffset += offset,
 				Options.getAsBoolean(Options.ALTERNATIVE, Options.VALUE_FALSE)));
+		
+		addButton(new Button(TitleMenu.CREDITS_ID,
+				MojamComponent.texts.getStatic("options.credits"), xOffset, yOffset += offset));
 		
 		back = addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"),
 				xOffset, (yOffset += offset) + 20));
@@ -100,6 +107,15 @@ public class OptionsMenu extends GuiMenu {
 						slider.value);
 			}
 		});
+		soundsVol.addListener(new ButtonListener() {
+			@Override
+			public void buttonPressed(ClickableComponent button) {
+				Slider slider = (Slider) button;
+				soundsVolume = slider.value;
+
+				Options.set(Options.SOUND, soundsVolume + "");
+			}
+		});
 		creativeModeBtn.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
@@ -127,6 +143,7 @@ public class OptionsMenu extends GuiMenu {
 		fullscreen = Options.getAsBoolean(Options.FULLSCREEN, Options.VALUE_FALSE);
 		fps = Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE);
 		musicVolume = Options.getAsFloat(Options.MUSIC, "1.0f");
+		soundsVolume = Options.getAsFloat(Options.SOUND, "1.0f");
 		volume = Options.getAsFloat(Options.VOLUME, "1.0f");
 		creative = Options.getAsBoolean(Options.CREATIVE, Options.VALUE_FALSE);
 		alternative = Options.getAsBoolean(Options.ALTERNATIVE, Options.VALUE_FALSE);
