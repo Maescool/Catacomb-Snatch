@@ -186,27 +186,4 @@ public class Art {
 
 		return null;
 	}
-
-	private static Bitmap[] cut(String string, int h) {
-		try {
-			BufferedImage bi = ImageIO.read(MojamComponent.class
-					.getResource(string));
-
-			int yTiles = bi.getHeight() / h;
-			int w = bi.getWidth();
-
-			Bitmap[] result = new Bitmap[yTiles];
-
-			for (int y = 0; y < yTiles; y++) {
-				result[y] = new Bitmap(w, h);
-				bi.getRGB(0, y * h, w, h, result[y].pixels, 0, w);
-			}
-
-			return result;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return null;
-	}
 }
