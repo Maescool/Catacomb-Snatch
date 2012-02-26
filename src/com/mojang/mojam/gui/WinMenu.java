@@ -3,14 +3,16 @@ package com.mojang.mojam.gui;
 import java.awt.event.KeyEvent;
 
 import com.mojang.mojam.MojamComponent;
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Screen;
 
 public class WinMenu extends GuiMenu {
 	private int selectedItem = 0;
 	private final int gameWidth;
 	private int winningPlayer;
+	private int characterID;
 
-	public WinMenu(int gameWidth, int gameHeight, int winningPlayer) {
+	public WinMenu(int gameWidth, int gameHeight, int winningPlayer, int characterID) {
 		super();
 		this.winningPlayer = winningPlayer;
 		this.gameWidth = gameWidth;
@@ -23,14 +25,11 @@ public class WinMenu extends GuiMenu {
 		screen.clear(0);
 		screen.blit(Art.gameOverScreen, 0, 0);
 
-		Font.draw(screen, MojamComponent.texts.playerWin(winningPlayer), 180, 160);
+		Font.draw(screen, MojamComponent.texts.winCharacter(winningPlayer, characterID), 180, 160);
 
 		super.render(screen);
 
-		if (winningPlayer == 1)
-			screen.blit(Art.getLocalPlayerArt()[0][6], (gameWidth - 128) / 2 - 40, 190 + selectedItem * 40);
-		if (winningPlayer == 2)
-			screen.blit(Art.herrSpeck[0][6], (gameWidth - 128) / 2 - 40, 190 + selectedItem * 40);
+		screen.blit(Art.getPlayer(characterID)[0][6], (gameWidth - 128) / 2 - 40, 190 + selectedItem * 40);
 	}
 
 	@Override

@@ -16,15 +16,14 @@ public class OptionsMenu extends GuiMenu {
 	private float soundsVolume;
 	private float volume;
 	private boolean creative;
-	private boolean alternative;
-	
+
 	private int textY;
 
 	private ClickableComponent back;
 
 	private int selectedItem;
 
-	public OptionsMenu() {
+	public OptionsMenu(boolean inGame) {
 		loadOptions();
 
 		int gameWidth = MojamComponent.GAME_WIDTH;
@@ -37,6 +36,12 @@ public class OptionsMenu extends GuiMenu {
 
 		addButton(new Button(TitleMenu.KEY_BINDINGS_ID,
 				MojamComponent.texts.getStatic("options.keyBindings"), xOffset, yOffset));
+
+		if (!inGame) {
+			addButton(new Button(TitleMenu.CHARACTER_ID,
+					MojamComponent.texts.getStatic("options.characterSelect"), xOffset,
+					yOffset += offset));
+		}
 
 		ClickableComponent fullscreenBtn = addButton(new Checkbox(TitleMenu.FULLSCREEN_ID,
 				MojamComponent.texts.getStatic("options.fullscreen"), xOffset, yOffset += offset,
@@ -51,32 +56,28 @@ public class OptionsMenu extends GuiMenu {
 				volume));
 
 		ClickableComponent musicVol = addButton(new Slider(TitleMenu.MUSIC,
-				MojamComponent.texts.getStatic("options.music"), xOffset - xOffset/3 - 6, yOffset += offset,
-				musicVolume));
+				MojamComponent.texts.getStatic("options.music"), xOffset - xOffset / 3 - 6,
+				yOffset += offset, musicVolume));
 		ClickableComponent soundsVol = addButton(new Slider(TitleMenu.SOUND,
-				MojamComponent.texts.getStatic("options.sounds"), xOffset + xOffset/3 + 6, yOffset,
-				soundsVolume));
+				MojamComponent.texts.getStatic("options.sounds"), xOffset + xOffset / 3 + 6,
+				yOffset, soundsVolume));
 
 		ClickableComponent creativeModeBtn = addButton(new Checkbox(TitleMenu.CREATIVE_ID,
-			MojamComponent.texts.getStatic("options.creative"), xOffset, yOffset += offset,
-			Options.getAsBoolean(Options.CREATIVE, Options.VALUE_FALSE)));  
+				MojamComponent.texts.getStatic("options.creative"), xOffset, yOffset += offset,
+				Options.getAsBoolean(Options.CREATIVE, Options.VALUE_FALSE)));
 
-		ClickableComponent alternativeSkinBtn = addButton(new Checkbox(TitleMenu.ALTERNATIVE_ID,
-				MojamComponent.texts.getStatic("options.alternative"), xOffset, yOffset += offset,
-				Options.getAsBoolean(Options.ALTERNATIVE, Options.VALUE_FALSE)));
-		
 		addButton(new Button(TitleMenu.CREDITS_ID,
 				MojamComponent.texts.getStatic("options.credits"), xOffset, yOffset += offset));
-		
+
 		back = addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"),
 				xOffset, (yOffset += offset) + 20));
 
 		fullscreenBtn.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
-			    fullscreen = !fullscreen;
-			    Options.set(Options.FULLSCREEN, fullscreen);
-			    MojamComponent.toggleFullscreen();
+				fullscreen = !fullscreen;
+				Options.set(Options.FULLSCREEN, fullscreen);
+				MojamComponent.toggleFullscreen();
 			}
 		});
 		fpsBtn.addListener(new ButtonListener() {
@@ -123,14 +124,6 @@ public class OptionsMenu extends GuiMenu {
 				Options.set(Options.CREATIVE, creative);
 			}
 		});
-
-		alternativeSkinBtn.addListener(new ButtonListener() {
-			@Override
-			public void buttonPressed(ClickableComponent button) {
-				alternative = !alternative;
-				Options.set(Options.ALTERNATIVE, alternative);
-			}
-		});
 		back.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
@@ -146,7 +139,6 @@ public class OptionsMenu extends GuiMenu {
 		soundsVolume = Options.getAsFloat(Options.SOUND, "1.0f");
 		volume = Options.getAsFloat(Options.VOLUME, "1.0f");
 		creative = Options.getAsBoolean(Options.CREATIVE, Options.VALUE_FALSE);
-		alternative = Options.getAsBoolean(Options.ALTERNATIVE, Options.VALUE_FALSE);
 	}
 
 	@Override
@@ -155,8 +147,8 @@ public class OptionsMenu extends GuiMenu {
 		super.render(screen);
 		Font.drawCentered(screen, MojamComponent.texts.getStatic("titlemenu.options"),
 				MojamComponent.GAME_WIDTH / 2, textY);
-		screen.blit(Art.getLocalPlayerArt()[0][6], buttons.get(selectedItem).getX() - 40,
-				buttons.get(selectedItem).getY() - 8);
+		screen.blit(Art.getLocalPlayerArt()[0][6], buttons.get(selectedItem).getX() - 40, buttons
+				.get(selectedItem).getY() - 8);
 	}
 
 	@Override

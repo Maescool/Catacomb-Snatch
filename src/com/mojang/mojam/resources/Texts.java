@@ -4,7 +4,6 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.mob.Team;
 
 public class Texts {
@@ -23,35 +22,26 @@ public class Texts {
 		}
 	}
 
-	public String player1Win() {
-
-		return MessageFormat.format(getStatic("gameplay.player1Win"),getPlayer1Name());
-	}
-
-	public String player2Win() {
-		return MessageFormat.format(getStatic("gameplay.player2Win"), getStatic("gameplay.player2Name").toUpperCase());
-	}
-
-	public String playerName(int team) {
-		if(team == Team.Team1) {
-			return getPlayer1Name();
+	public String winCharacter(int team, int characterID) {
+		String winMessage;
+		if (team == Team.Team1) {
+			winMessage = getStatic("gameplay.player1Win");
+		} else {
+			winMessage = getStatic("gameplay.player2Win");
 		}
-		return getStatic("gameplay.player2Name");
+		return MessageFormat.format(winMessage, playerNameCharacter(characterID));
 	}
 
-	public String playerWin(int team) {
-		if(team == Team.Team1) {
-			return player1Win();
-		}
-		return player2Win();
+	public String playerNameCharacter(int characterID) {
+		return getStatic("gameplay.player" + (characterID + 1) + "Name");
 	}
 
-	public String hasDied(int team) {
-		return MessageFormat.format(getStatic("player.hasDied"), playerName(team));
+	public String hasDiedCharacter(int characterID) {
+		return MessageFormat.format(getStatic("player.hasDied"), playerNameCharacter(characterID));
 	}
 
-	public String score(int team, int score) {
-		return MessageFormat.format(getStatic("player.score"), playerName(team), score);
+	public String scoreCharacter(int characterID, int score) {
+		return MessageFormat.format(getStatic("player.score"), playerNameCharacter(characterID), score);
 	}
 
 	public String cost(int cost) {
@@ -114,10 +104,4 @@ public class Texts {
 		return MessageFormat.format(getStatic("build.removeRail"), cost);
 	}
 
-	public String getPlayer1Name() {	
-		if(Options.getAsBoolean(Options.ALTERNATIVE)) {
-			return getStatic("gameplay.player1NameAlt").toUpperCase();
-		}
-		return getStatic("gameplay.player1Name").toUpperCase();
-	}
 }
