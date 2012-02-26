@@ -65,6 +65,7 @@ public class CharacterSelectionMenu extends GuiMenu {
 			selected.setSelected(true);
 		} else {
 			Options.set(Options.CHARACTER_ID, selected.getCharacterID());
+			Options.saveProperties();
 			MojamComponent.instance.playerCharacter = selected.getCharacterID();
 		}
 	}
