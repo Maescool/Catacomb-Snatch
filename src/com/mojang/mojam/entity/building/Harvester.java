@@ -24,7 +24,7 @@ public class Harvester extends Building implements LootCollector {
 	private boolean isEmptying = false;
 	private Player emptyingPlayer = null;
 	private int emptyingSpeed = 50;
-	private int radius;
+	public int radius;
 	private int[] upgradeRadius = new int[] { (int) (1.5 * Tile.WIDTH),
 			2 * Tile.WIDTH, (int) (2.5 * Tile.WIDTH) };
 	private int[] upgradeCapacities = new int[] { 1500, 2500, 3500 };
@@ -35,8 +35,12 @@ public class Harvester extends Building implements LootCollector {
 		freezeTime = 10;
 		makeUpgradeableWithCosts(new int[] { 500, 1000, 5000 });
 		healthBarOffset = 13;
+<<<<<<< HEAD
 		areaBitmap = Bitmap.rectangleBitmap(0, 0, radius * 2, radius * 2,
 				Color.YELLOW.getRGB());
+=======
+		areaBitmap = Bitmap.rangeBitmap(radius,Color.YELLOW.getRGB());
+>>>>>>> upstream/master
 	}
 
 	public Bitmap areaBitmap;
@@ -111,9 +115,14 @@ public class Harvester extends Building implements LootCollector {
 		health += 10;
 		radius = upgradeRadius[upgradeLevel];
 		capacity = upgradeCapacities[upgradeLevel];
+<<<<<<< HEAD
 		areaBitmap = Bitmap.rectangleBitmap(0, 0, radius * 2, radius * 2,
 				Color.YELLOW.getRGB());
 		justDroppedTicks = 80; // show the radius for a brief time
+=======
+		areaBitmap = Bitmap.rangeBitmap(radius,Color.YELLOW.getRGB());
+		justDroppedTicks = 80; //show the radius for a brief time
+>>>>>>> upstream/master
 	}
 
 	public boolean canTake() {
@@ -121,10 +130,16 @@ public class Harvester extends Building implements LootCollector {
 	}
 
 	public void render(Screen screen) {
+<<<<<<< HEAD
 
 		if (justDroppedTicks-- > 0 && localTeam == team) {
 			screen.blit(areaBitmap, pos.x - areaBitmap.w / 2, pos.y
 					- areaBitmap.h / 2 - yOffs);
+=======
+		
+		if(justDroppedTicks-- > 0 && localTeam==team) {
+			screen.blit(areaBitmap, pos.x-radius , pos.y-radius - yOffs);	
+>>>>>>> upstream/master
 		}
 
 		Bitmap image = getSprite();

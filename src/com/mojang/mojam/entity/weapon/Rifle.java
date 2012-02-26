@@ -49,8 +49,16 @@ public class Rifle implements IWeapon {
 	@Override
 	public void primaryFire(double xDir, double yDir) {
 		wasShooting = true;
-		if (curShootDelay-- <= 0) {
-			double dir = getBulletDirection(accuracy);
+		int delay = 0;
+		if (owner.isSprint)
+			delay -= shootDelay * 2;
+
+		if (curShootDelay-- <= delay) {
+			double dir;
+			if (owner.isSprint)
+				dir = getBulletDirection(accuracy * 2);
+			else
+				dir = getBulletDirection(accuracy);
 			xDir = Math.cos(dir);
 			yDir = Math.sin(dir);
 			applyImpuls(xDir, yDir, 1);

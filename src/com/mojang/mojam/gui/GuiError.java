@@ -10,18 +10,20 @@ import com.mojang.mojam.screen.Screen;
 public class GuiError extends GuiMenu {
 
 	private String message;
-	
+
 	/**
 	 * Constructor
 	 * 
-	 * @param message Error message
+	 * @param message
+	 *            Error message
 	 */
-	public GuiError(String message){
+	public GuiError(String message) {
 		this.message = message;
-		
-		addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, "Main Menu", 125, 300));
+
+		addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, "Main Menu", 125,
+				300));
 	}
-	
+
 	@Override
 	public void render(Screen screen) {
 		screen.clear(0);
@@ -30,20 +32,5 @@ public class GuiError extends GuiMenu {
 		Font.setFont("");
 		Font.drawMulti(screen, message, 20, 40, 300);
 		super.render(screen);
-	}
-	
-	@Override
-	public void keyPressed(KeyEvent arg0) {
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-	}
-	
-	public void buttonPressed(ClickableComponent button) {
 	}
 }

@@ -63,16 +63,6 @@ public class HostingWaitMenu extends GuiMenu {
 		}
 	}
 
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// nothing
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// nothing
-	}
-
 	/**
 	 * Get the WAN IP of this host
 	 */

@@ -59,5 +59,4 @@ public class JoinGameMenu extends GuiMenu {
 			TitleMenu.ip += e.getKeyChar();
 		}
 	}
-
 }

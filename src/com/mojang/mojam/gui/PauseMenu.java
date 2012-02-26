@@ -17,14 +17,19 @@ public class PauseMenu extends GuiMenu {
 		this.gameWidth = gameWidth;
 
 		resumeButton = (Button) addButton(new Button(TitleMenu.RETURN_ID,
-				MojamComponent.texts.getStatic("pausemenu.resume"), (gameWidth - 128) / 2, 140));
-		addButton(new Button(TitleMenu.HOW_TO_PLAY, MojamComponent.texts.getStatic("pausemenu.help"),
+				MojamComponent.texts.getStatic("pausemenu.resume"),
+				(gameWidth - 128) / 2, 140));
+		addButton(new Button(TitleMenu.HOW_TO_PLAY,
+				MojamComponent.texts.getStatic("pausemenu.help"),
 				(gameWidth - 128) / 2, 170));
-		addButton(new Button(TitleMenu.OPTIONS_ID, MojamComponent.texts.getStatic("titlemenu.options"),
+		addButton(new Button(TitleMenu.OPTIONS_ID,
+				MojamComponent.texts.getStatic("titlemenu.options"),
 				(gameWidth - 128) / 2, 200));
-		addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, MojamComponent.texts.getStatic("pausemenu.backtomain"),
+		addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN,
+				MojamComponent.texts.getStatic("pausemenu.backtomain"),
 				(gameWidth - 128) / 2, 230));
-		addButton(new Button(TitleMenu.EXIT_GAME_ID, MojamComponent.texts.getStatic("pausemenu.exit"),
+		addButton(new Button(TitleMenu.EXIT_GAME_ID,
+				MojamComponent.texts.getStatic("pausemenu.exit"),
 				(gameWidth - 128) / 2, 260));
 
 	}
@@ -47,30 +52,19 @@ public class PauseMenu extends GuiMenu {
 			if (selectedItem < 1) {
 				selectedItem = 0;
 			}
-		} else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
+		} else if (e.getKeyCode() == KeyEvent.VK_DOWN
+				|| e.getKeyCode() == KeyEvent.VK_S) {
 			selectedItem++;
 			if (selectedItem > 4) {
 				selectedItem = 0;
 			}
-		} else if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
+		} else if (e.getKeyCode() == KeyEvent.VK_ENTER
+				|| e.getKeyCode() == KeyEvent.VK_E) {
 			e.consume();
 			buttons.get(selectedItem).postClick();
-			//Resume on Escape
+			// Resume on Escape
 		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			resumeButton.postClick();
 		}
 	}
-
-	public void keyReleased(KeyEvent arg0) {
-	}
-
-	public void keyTyped(KeyEvent arg0) {
-	}
-
-	@Override
-	public void buttonPressed(ClickableComponent button) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

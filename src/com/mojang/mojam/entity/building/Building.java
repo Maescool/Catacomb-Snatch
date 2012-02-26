@@ -96,7 +96,11 @@ public class Building extends Mob implements IUsable {
 
 	public void slideMove(double xa, double ya) {
 		super.move(xa, ya);
+<<<<<<< HEAD
 		checkForHoleTiles((int) pos.x / Tile.WIDTH, (int) pos.y / Tile.HEIGHT);
+=======
+		fallDownHole();
+>>>>>>> upstream/master
 	}
 
 	//
@@ -173,6 +177,7 @@ public class Building extends Mob implements IUsable {
 	public boolean isAllowedToCancel() {
 		return true;
 	}
+<<<<<<< HEAD
 
 	public void checkForHoleTiles(int x, int y) {
 		if (level.getTile(x, y) instanceof HoleTile) {
@@ -184,4 +189,6 @@ public class Building extends Mob implements IUsable {
 			}
 		}
 	}
+=======
+>>>>>>> upstream/master
 }
