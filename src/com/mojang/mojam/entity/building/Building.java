@@ -175,6 +175,17 @@ public class Building extends Mob implements IUsable {
 		super.move(xa, ya);
 		fallDownHole();
 	}
+	
+	//
+	//upgrade
+	//
+	/**
+	 * IF YOU REMOVE THIS, I COME TO YOUR HOUSE AND KILL YOU
+	 * IN YOUR SLEEP!
+	 * or nicer said, this is used by other functions
+	 */
+	protected void upgradeComplete() {
+	}
 
 	@Override
 	public boolean upgrade(Player p) {
@@ -204,6 +215,7 @@ public class Building extends Mob implements IUsable {
 
 		++upgradeLevel;
 		p.useMoney(cost);
+		upgradeComplete();
 
 		if (this.team == this.localTeam) {
 			Notifications.getInstance().add(
@@ -223,6 +235,7 @@ public class Building extends Mob implements IUsable {
 		} else {
 			upgradeCosts = costs;
 			maxUpgradeLevel = costs.length - 1;
+			upgradeComplete();
 		}
 		return;
 	}
