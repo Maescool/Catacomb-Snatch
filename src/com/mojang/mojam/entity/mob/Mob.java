@@ -43,12 +43,22 @@ public abstract class Mob extends Entity {
 	public int justDroppedTicks = 0;
 	public int localTeam;
 	public int strength = 0;
+	public int healingInterval;
+	public int healingTime;
+	public boolean healthRegen = true;
 	
 	public Mob(double x, double y, int team, int localTeam) {
 		super();
 		setPos(x, y);
 		this.team = team;
 		this.localTeam = localTeam;
+		healingInterval = 25;
+		try {
+			if (TitleMenu.difficulty.difficultyID == 3) healingInterval = 15; 
+		} catch (Exception e) {
+			
+		}
+		healingTime = healingInterval;
 	}
 
 	public void init() {
@@ -82,6 +92,16 @@ public abstract class Mob extends Entity {
 	}
 
 	public void tick() {
+		if (TitleMenu.difficulty.difficultyID >= 1 && healthRegen) {
+	  	if (hurtTime <= 0) {
+			  if (health < maxHealth) {
+			  	if (--healingTime <= 0) {
+			  		health++;
+			  		healingTime = healingInterval;
+			  	}
+			  }
+			}
+		}
 		if (hurtTime > 0) {
 			hurtTime--;
 		}
@@ -194,6 +214,8 @@ public abstract class Mob extends Entity {
 	public void hurt(Entity source, float damage) {
 		if (isImmortal)
 			return;
+		
+		healingTime = healingInterval;
 
 		if (freezeTime <= 0) {
 			
