@@ -33,7 +33,7 @@ public class ShopItem extends Building {
         setBuildingCost();
     }
     public void setBuildingCost(){
-    	if(Player.creative == true){
+    	if(Options.getAsBoolean(Options.CREATIVE)){
     		COST[0] = 0;
     		COST[1] = 0;
     		COST[2] = 0;
@@ -48,6 +48,7 @@ public class ShopItem extends Building {
     public void render(Screen screen) {
         super.render(screen);
         // Bitmap image = getSprite();
+        if(team == localTeam)
         Font.drawCentered(screen, MojamComponent.texts.cost(effectiveCost), (int) (pos.x), (int) (pos.y + 10));
     }
 

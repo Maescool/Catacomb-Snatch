@@ -6,8 +6,6 @@ import java.util.ResourceBundle;
 
 import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.mob.Team;
-import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
 
 public class Texts {
 	protected final ResourceBundle texts;

@@ -31,7 +31,7 @@ public class OptionsMenu extends GuiMenu {
 		int xOffset = (gameWidth - Button.BUTTON_WIDTH) / 2;
 		int yOffset = (gameHeight - (8 * offset + 20 + 32)) / 2;
 		textY = yOffset;
-		yOffset += 32;
+		yOffset += offset;
 
 		addButton(new Button(TitleMenu.KEY_BINDINGS_ID,
 				MojamComponent.texts.getStatic("options.keyBindings"), xOffset, yOffset));
@@ -61,6 +61,9 @@ public class OptionsMenu extends GuiMenu {
 		ClickableComponent creativeModeBtn = addButton(new Checkbox(TitleMenu.CREATIVE_ID,
 				MojamComponent.texts.getStatic("options.creative"), xOffset, yOffset += offset,
 				Options.getAsBoolean(Options.CREATIVE, Options.VALUE_FALSE)));
+		
+		addButton(new Button(TitleMenu.CREDITS_ID,
+				MojamComponent.texts.getStatic("options.credits"), xOffset, yOffset += offset));
 
 		back = addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"),
 				xOffset, (yOffset += offset) + 20));
