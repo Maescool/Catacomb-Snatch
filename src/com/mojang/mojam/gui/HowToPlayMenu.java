@@ -9,6 +9,7 @@ import com.mojang.mojam.screen.Screen;
 public class HowToPlayMenu extends GuiMenu {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	private final static int goalX = 350;
 	private final static int imgTab = 70;
 	private final static int tab1 = 100;
@@ -20,6 +21,8 @@ public class HowToPlayMenu extends GuiMenu {
 	 * Constructor
 	 */
 =======
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 	private int goalX = 350;
 	private int imgTab = 70;
 	private int tab1 = 100;
@@ -27,6 +30,9 @@ public class HowToPlayMenu extends GuiMenu {
 	private int goalTopMargin = 20;
 	private int vspace = 55;
 	
+<<<<<<< HEAD
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 	public HowToPlayMenu() {
 		addButton(new Button(TitleMenu.BACK_ID,
@@ -46,6 +52,7 @@ public class HowToPlayMenu extends GuiMenu {
 		printHelpText(screen);
 	}
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 	/**
 	 * Draw the help text onto the given screen
@@ -67,6 +74,9 @@ public class HowToPlayMenu extends GuiMenu {
 
 =======
 	private void printHelpText(Screen screen) {
+=======
+	private void printHelpText(Screen screen) {
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 
 		// Game goal
 		Font.drawCentered(screen, MojamComponent.texts.getStatic("help.goal") + ":", goalX, goalTopMargin);
@@ -162,5 +172,8 @@ public class HowToPlayMenu extends GuiMenu {
 		
 	}
 
+<<<<<<< HEAD
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 }
