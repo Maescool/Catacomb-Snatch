@@ -31,7 +31,7 @@ public class Building extends Mob implements IUsable {
 	protected int upgradeLevel = 0;
 	private int maxUpgradeLevel = 0;
 	private int[] upgradeCosts = null;
-	public boolean healthRegenB = false;
+	protected boolean healthRegenB = false;
 
 	/**
 	 * Constructor
@@ -262,4 +262,7 @@ public class Building extends Mob implements IUsable {
 		return true;
 	}
 	
+	public void buildingRegen(boolean regen) {
+		healthRegenB = regen;
+	}
 }
