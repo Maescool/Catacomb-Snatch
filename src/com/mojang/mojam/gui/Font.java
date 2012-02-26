@@ -17,19 +17,20 @@ public class Font {
     private static final int GLYPH_HEIGHT = 8;
     private static final int GLYPH_WIDTH = 8;
     
-	private static final HashMap<String, Font> fonts = new HashMap<String, Font>();
+    private static final String DEFAULT_FONT = "gold";
+	private static final HashMap<String, Font> FONTS = new HashMap<String, Font>();
     private static Font currentFont;
 
 	protected Bitmap[][] bitmapData;
 
     static {
         //fonts.put("", new Font(Art.font_default));
-        fonts.put("red", new Font(Art.font_red));
-        fonts.put("blue", new Font(Art.font_blue));
-        fonts.put("gray", new Font(Art.font_gray));
-        fonts.put("sm_black", new VFont(Art.font_small_black));
-        fonts.put("", new Font(Art.font_gold));
-        currentFont = getFont("");
+        FONTS.put("red", new Font(Art.font_red));
+        FONTS.put("blue", new Font(Art.font_blue));
+        FONTS.put("gray", new Font(Art.font_gray));
+        FONTS.put("sm_black", new VFont(Art.font_small_black));
+        FONTS.put("gold", new Font(Art.font_gold));
+        currentFont = getFont(DEFAULT_FONT);
     }
 
     /**
@@ -51,10 +52,10 @@ public class Font {
     }
 
     public static Font getFont(String font) {
-        Font returnFont = fonts.get(font);
+        Font returnFont = FONTS.get(font);
         if(returnFont == null){
             System.out.println("BAD FONT: "+currentFont);
-            return fonts.get("");
+            return FONTS.get(DEFAULT_FONT);
         }
         
         return returnFont;
