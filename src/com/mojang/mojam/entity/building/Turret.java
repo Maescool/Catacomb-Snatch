@@ -39,9 +39,11 @@ public class Turret extends Building {
 	}
 
 	public void init() {
-		makeUpgradeableWithCosts(new int[] { DifficultyInformation.calculateCosts(500), 
-				DifficultyInformation.calculateCosts(1000), 
-				DifficultyInformation.calculateCosts(5000)});
+		if(Player.creative == true){
+			makeUpgradeableWithCosts(new int[] { 0, 0, 0 });
+    	}else{
+    		makeUpgradeableWithCosts(new int[] { 500, 1000, 5000 });
+		}
 	}
 
 	public void tick() {
