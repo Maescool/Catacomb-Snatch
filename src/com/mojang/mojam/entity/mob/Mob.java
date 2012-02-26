@@ -8,6 +8,7 @@ import com.mojang.mojam.entity.animation.EnemyDieAnimation;
 import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.loot.Loot;
+import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.HoleTile;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.tile.Tile;
@@ -53,11 +54,8 @@ public abstract class Mob extends Entity {
 		this.team = team;
 		this.localTeam = localTeam;
 		healingInterval = 25;
-		try {
-			if (TitleMenu.difficulty.difficultyID == 3) healingInterval = 15; 
-		} catch (Exception e) {
-			
-		}
+		DifficultyInformation difficulty = TitleMenu.difficulty;
+		if (difficulty != null && difficulty.difficultyID == 3) healingInterval = 15;
 		healingTime = healingInterval;
 	}
 
