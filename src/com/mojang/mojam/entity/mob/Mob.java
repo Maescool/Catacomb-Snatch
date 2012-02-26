@@ -258,7 +258,8 @@ public abstract class Mob extends Entity {
 
         int dx, dy, inx, iny, a;
         Tile temp;
-
+        Tile dTile1;
+        Tile dTile2;
         dx = x2 - x1;
         dy = y2 - y1;
         inx = dx > 0 ? 1 : -1;
@@ -277,6 +278,11 @@ public abstract class Mob extends Entity {
                     return true;
                 }
                 if (a >= 0) {
+                	dTile1=level.getTile(x1+inx,y1);
+                	dTile2=level.getTile(x1,y1+iny);
+                	if (!(dTile1.canPass(e)||dTile2.canPass(e))){
+                		return true;
+                	}
                     y1 += iny;
                     a -= dx;
                 }
@@ -293,7 +299,12 @@ public abstract class Mob extends Entity {
                     return true;
                 }
                 if (a >= 0) {
-                    x1 += inx;
+                	dTile1=level.getTile(x1+inx,y1);
+                	dTile2=level.getTile(x1,y1+iny);
+                	if (!(dTile1.canPass(e)||dTile2.canPass(e))){
+                		return true;
+                	}
+                	x1 += inx;
                     a -= dy;
                 }
                 a += dx;
