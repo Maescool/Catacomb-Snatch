@@ -49,8 +49,8 @@ public class Building extends Mob implements IUsable {
 		super(x, y, team, localTeam);
 
 		setStartHealth(20);
-		disableMobHealthRegen(true);
-		disableBuildingHealthRegen(false);
+		healthRegen = false;
+		healthRegenB = true;
 		freezeTime = 10;
 		spawnTime = TurnSynchronizer.synchedRandom.nextInt(SPAWN_INTERVAL);
 	}
@@ -262,7 +262,4 @@ public class Building extends Mob implements IUsable {
 		return true;
 	}
 	
-  public void disableBuildingHealthRegen(boolean disable) {
-  	this.healthRegenB = !disable;
-  }
 }

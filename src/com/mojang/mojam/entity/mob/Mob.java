@@ -343,8 +343,4 @@ public abstract class Mob extends Entity {
         return false;
     }
     
-    public void disableMobHealthRegen(boolean disable) {
-    	this.healthRegen = !disable;
-    }
-    
 }
