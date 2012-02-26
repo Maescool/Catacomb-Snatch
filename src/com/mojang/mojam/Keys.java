@@ -47,6 +47,7 @@ public class Keys {
 	public Key fullscreen = new Key("fullscreen");
 	public Key sprint = new Key("sprint");
 	public Key screenShot = new Key("screenShot");
+	public Key chat = new Key("chat");
 
 	public void tick() {
 		for (Key key : all)
