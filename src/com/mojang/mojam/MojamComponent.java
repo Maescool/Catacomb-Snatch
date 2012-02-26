@@ -866,7 +866,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			isServer = false;
 			chat.clear();
 			
-			String[] data = TitleMenu.ip.split(":");
+			String[] data = TitleMenu.ip.trim().split(":");
 			String ip = data[0];
 			Integer port = (data.length > 0) ? Integer.parseInt(data[1]) : Options.getAsInteger(Options.MP_PORT, 3000);
 			
