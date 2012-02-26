@@ -55,7 +55,8 @@ public class Building extends Mob implements IUsable {
 	public void render(Screen screen) {
 		super.render(screen);
 		renderMarker(screen);
-		renderInfo(screen);
+		if(team == localTeam)
+			renderInfo(screen);
 	}
 
 	/**
