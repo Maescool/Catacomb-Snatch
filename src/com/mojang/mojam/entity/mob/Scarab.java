@@ -4,7 +4,7 @@ import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 
-public class Scarab extends Mob {
+public class Scarab extends HostileMob {
 	public int facing;
 	public int walkTime;
 	public int stepTime;
@@ -38,7 +38,12 @@ public class Scarab extends Mob {
 		walkTime++;
 
 		if (walkTime / 12 % 4 != 0) {
-			stepTime++;
+            if (shouldBounceOffWall(xd, yd)) {
+                facing = (facing + 2) % 4;
+                xd = -xd;
+                yd = -yd;
+            }			
+            stepTime++;
 			if (!move(xd, yd)
 					|| (walkTime > 10 && TurnSynchronizer.synchedRandom
 							.nextInt(200) == 0)) {

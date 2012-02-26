@@ -76,6 +76,57 @@ public class Bitmap {
         }
 	}
 
+	/**
+	 * Draws a Bitmap semi-transparent
+	 * @param bitmap image to draw
+	 * @param x position on screen
+	 * @param y position on screen
+	 * @param opacity range from 0x00 to 0xff
+	 */
+    public void opacityBlit(Bitmap bitmap, int x, int y, int opacity) {
+
+        if(opacity == 0)
+        {
+            this.blit(bitmap, x, y);
+            return;
+        }
+        
+        opacity *= (int)Math.pow(16, 6);
+        
+        Rect blitArea = new Rect(x, y, bitmap.w, bitmap.h);
+        adjustBlitArea(blitArea);
+                
+        int blitWidth = blitArea.bottomRightX - blitArea.topLeftX;
+
+        for (int yy = blitArea.topLeftY; yy < blitArea.bottomRightY; yy++) {
+            int tp = yy * w + blitArea.topLeftX;
+            int sp = (yy - y) * bitmap.w + (blitArea.topLeftX - x);
+            for (int xx = 0; xx < blitWidth; xx++) {
+                int col = bitmap.pixels[sp + xx];
+                if (col < 0) {
+                    int color = pixels[tp + xx];
+                    color += opacity;
+                    
+                    int a2 = (color >> 24) & 0xff;
+                    int a1 = 256 - a2;
+
+                    int rr = color & 0xff0000;
+                    int gg = color & 0xff00;
+                    int bb = color & 0xff;
+                    
+                    int r = (col & 0xff0000);
+                    int g = (col & 0xff00);
+                    int b = (col & 0xff);
+
+                    r = ((r * a1 + rr * a2) >> 8) & 0xff0000;
+                    g = ((g * a1 + gg * a2) >> 8) & 0xff00;
+                    b = ((b * a1 + bb * a2) >> 8) & 0xff;
+                    pixels[tp + xx] = 0xff000000 | r | g | b;
+                }
+            }
+        }
+    }
+
 	public void colorBlit(Bitmap bitmap, int x, int y, int color) {
 	    
 	    Rect blitArea = new Rect(x, y, bitmap.w, bitmap.h);
@@ -108,6 +159,31 @@ public class Bitmap {
 			}
 		}
 	}
+
+
+    /**
+     * Fills semi-transparent region on screen
+     * @param x position on screen
+     * @param y position on screen
+     * @param width of the region
+     * @param height of the region
+     * @param color to fill the region
+     * @param opacity range from 0x00 to 0xff
+     */
+    public void opacityFill(int x, int y, int width, int height, int color, int opacity) {
+
+        if(opacity == 0)
+        {
+            this.fill(x, y, width, height, color);
+            return;
+        }
+        
+        Bitmap bmp = new Bitmap(width, height);
+        bmp.fill(0, 0, width, height, color);
+        
+        this.opacityBlit(bmp, x, y, opacity);
+    }
+    
 
 	public void fill(int x, int y, int width, int height, int color) {
 	    

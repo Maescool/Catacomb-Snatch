@@ -13,6 +13,9 @@ import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
+/**
+ * Defense turret. Automatically aims and shoots at the nearest monster.
+ */
 public class Turret extends Building {
 	
 	private static final float BULLET_DAMAGE = .75f;
@@ -30,6 +33,14 @@ public class Turret extends Building {
 
 	public Bitmap areaBitmap;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param x Initial X coordinate
+	 * @param y Initial Y coordinate
+	 * @param team Team number
+	 * @param localTeam Local team number
+	 */
 	public Turret(double x, double y, int team, int localTeam) {
 		super(x, y, team, localTeam);
 		this.team = team;
@@ -38,12 +49,14 @@ public class Turret extends Building {
 		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
 	}
 
+	@Override
 	public void init() {
 		makeUpgradeableWithCosts(new int[] { DifficultyInformation.calculateCosts(500), 
 				DifficultyInformation.calculateCosts(1000), 
 				DifficultyInformation.calculateCosts(5000)});
 	}
 
+	@Override
 	public void tick() {
 		super.tick();
 		if (--freezeTime > 0)
@@ -94,6 +107,7 @@ public class Turret extends Building {
 		}
 	}
 
+	@Override
 	public void render(Screen screen) {
 		
 		if(justDroppedTicks-- > 0 && localTeam==team) {
@@ -103,6 +117,7 @@ public class Turret extends Building {
 		super.render(screen);
 	}
 
+	@Override
 	public Bitmap getSprite() {
 		switch (upgradeLevel) {
 		case 1:
@@ -114,6 +129,7 @@ public class Turret extends Building {
 		}
 	}
 
+	@Override
 	protected void upgradeComplete() {
 		maxHealth += 10;
 		health = maxHealth;

@@ -8,6 +8,7 @@ import com.mojang.mojam.entity.animation.EnemyDieAnimation;
 import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.loot.Loot;
+import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.HoleTile;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.tile.Tile;
@@ -43,12 +44,18 @@ public abstract class Mob extends Entity {
 	public int justDroppedTicks = 0;
 	public int localTeam;
 	public int strength = 0;
+	public int healingInterval;
+	public int healingTime;
+	public boolean healthRegen = true;
 	
 	public Mob(double x, double y, int team, int localTeam) {
 		super();
 		setPos(x, y);
 		this.team = team;
 		this.localTeam = localTeam;
+		DifficultyInformation difficulty = TitleMenu.difficulty;
+		healingInterval = (difficulty != null && difficulty.difficultyID == 3) ? 15 : 25;
+		healingTime = healingInterval;
 	}
 
 	public void init() {
@@ -82,6 +89,16 @@ public abstract class Mob extends Entity {
 	}
 
 	public void tick() {
+		if (TitleMenu.difficulty.difficultyID >= 1 && healthRegen) {
+	  	if (hurtTime <= 0) {
+			  if (health < maxHealth) {
+			  	if (--healingTime <= 0) {
+			  		health++;
+			  		healingTime = healingInterval;
+			  	}
+			  }
+			}
+		}
 		if (hurtTime > 0) {
 			hurtTime--;
 		}
@@ -194,6 +211,8 @@ public abstract class Mob extends Entity {
 	public void hurt(Entity source, float damage) {
 		if (isImmortal)
 			return;
+		
+		healingTime = healingInterval;
 
 		if (freezeTime <= 0) {
 			

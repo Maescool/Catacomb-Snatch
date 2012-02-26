@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.gui.Font.FontName;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
@@ -52,7 +53,7 @@ public class CreditsScreen extends GuiMenu {
 		Font.draw(screen, MojamComponent.texts.getStatic("credits.others"),
 				(gameWidth - 512) / 2 + 30, 230);
 
-		Font.setFont("gray");
+		Font.setFont(FontName.GRAY);
 		drawNames(leadDev, screen, 120);
 		drawNames(officialDev, screen, 150);
 		drawNames(communityMan, screen, 210);
