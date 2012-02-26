@@ -280,7 +280,7 @@ public abstract class Mob extends Entity {
                 if (a >= 0) {
                 	dTile1=level.getTile(x1+inx,y1);
                 	dTile2=level.getTile(x1,y1+iny);
-                	if (!(dTile1.canPass(e)&&dTile2.canPass(e))){
+                	if (!(dTile1.canPass(e)||dTile2.canPass(e))){
                 		return true;
                 	}
                     y1 += iny;
@@ -301,7 +301,7 @@ public abstract class Mob extends Entity {
                 if (a >= 0) {
                 	dTile1=level.getTile(x1+inx,y1);
                 	dTile2=level.getTile(x1,y1+iny);
-                	if (!(dTile1.canPass(e)&&dTile2.canPass(e))){
+                	if (!(dTile1.canPass(e)||dTile2.canPass(e))){
                 		return true;
                 	}
                 	x1 += inx;
