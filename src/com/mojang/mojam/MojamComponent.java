@@ -483,15 +483,15 @@ public class MojamComponent extends Canvas implements Runnable,
 			paused2 = false;
 		}
 		
-//		if (!this.isFocusOwner() && level != null) {
-//			keys.release();
-//			mouseButtons.releaseAll();
-//			if (!paused && !paused2) { 
-//			  PauseCommand pauseCommand = new PauseCommand(true);
-//			  synchronizer.addCommand(pauseCommand);
-//			  paused2 = true;
-//			}
-//		}
+		if (!this.isFocusOwner() && level != null) {
+			keys.release();
+			mouseButtons.releaseAll();
+			if (!paused && !paused2) { 
+			  PauseCommand pauseCommand = new PauseCommand(true);
+			  synchronizer.addCommand(pauseCommand);
+			  paused2 = true;
+			}
+		}
 		if (isMultiplayer) {
 			tickChat();
 		}
