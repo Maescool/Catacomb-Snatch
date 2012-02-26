@@ -14,7 +14,6 @@ import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.level.gamemode.ILevelTickItem;
 import com.mojang.mojam.level.gamemode.IVictoryConditions;
-import com.mojang.mojam.level.tile.DestroyableWallTile;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.level.tile.WallTile;
@@ -32,8 +31,6 @@ public class Level {
 	public Tile[] tiles;
 	public List<Entity>[] entityMap;
 	public List<Entity> entities = new ArrayList<Entity>();
-	public List<Tile>[] tileMap;
-	public List<Tile> tilesList = new ArrayList<Tile>();
 	private Bitmap minimap;
 	private boolean seen[];
 	final int[] neighbourOffsets;

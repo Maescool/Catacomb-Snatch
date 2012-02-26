@@ -1,7 +1,6 @@
 package com.mojang.mojam.level.tile;
 
 import java.util.List;
-import java.util.Vector;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
