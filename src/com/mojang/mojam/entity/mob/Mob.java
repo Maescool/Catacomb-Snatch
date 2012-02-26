@@ -51,9 +51,9 @@ public abstract class Mob extends Entity {
 		setPos(x, y);
 		this.team = team;
 		this.localTeam = localTeam;
-		healingInterval = 15;
+		healingInterval = 25;
 		try {
-			if (TitleMenu.difficulty.difficultyID == 3) healingInterval = 10; 
+			if (TitleMenu.difficulty.difficultyID == 3) healingInterval = 15; 
 		} catch (Exception e) {
 			
 		}
