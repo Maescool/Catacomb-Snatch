@@ -33,6 +33,7 @@ public class Player extends Mob implements LootCollector {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	public static int COST_RAIL;
 	public static int COST_DROID;
 	public static int COST_REMOVE_RAIL;
@@ -585,6 +586,8 @@ public class Player extends Mob implements LootCollector {
 =======
 =======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
     public static int COST_RAIL;
     public static int COST_DROID;
     public static int COST_REMOVE_RAIL;
@@ -1112,6 +1115,9 @@ public class Player extends Mob implements LootCollector {
             screen.blit(Art.muzzle[muzzleImage][0], xmuzzle, ymuzzle);
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 =======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
@@ -1122,6 +1128,7 @@ public class Player extends Mob implements LootCollector {
 		int frame = (walkTime / 4 % 6 + 6) % 6;
 		renderCarrying(screen, (frame == 0 || frame == 3) ? -1 : 0);
 	}
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -1311,6 +1318,8 @@ public class Player extends Mob implements LootCollector {
 =======
 =======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
     
     @Override
     protected void renderCarrying(Screen screen, int yOffs) {
@@ -1482,6 +1491,9 @@ public class Player extends Mob implements LootCollector {
         return pos;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 =======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring

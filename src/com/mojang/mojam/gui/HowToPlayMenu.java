@@ -10,6 +10,7 @@ public class HowToPlayMenu extends GuiMenu {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	private final static int goalX = 350;
 	private final static int imgTab = 70;
 	private final static int tab1 = 100;
@@ -23,6 +24,8 @@ public class HowToPlayMenu extends GuiMenu {
 =======
 =======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 	private int goalX = 350;
 	private int imgTab = 70;
 	private int tab1 = 100;
@@ -31,6 +34,9 @@ public class HowToPlayMenu extends GuiMenu {
 	private int vspace = 55;
 	
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 =======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
@@ -54,6 +60,7 @@ public class HowToPlayMenu extends GuiMenu {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	/**
 	 * Draw the help text onto the given screen
 	 * 
@@ -74,6 +81,9 @@ public class HowToPlayMenu extends GuiMenu {
 
 =======
 	private void printHelpText(Screen screen) {
+=======
+	private void printHelpText(Screen screen) {
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 =======
 	private void printHelpText(Screen screen) {
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
@@ -173,6 +183,9 @@ public class HowToPlayMenu extends GuiMenu {
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 =======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring

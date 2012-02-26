@@ -23,6 +23,7 @@ public class DifficultySelect extends GuiMenu {
 	private final int yStart = 75;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 	private ArrayList<DifficultyInformation> difficulties = DifficultyList
 			.getDifficulties();
@@ -38,6 +39,12 @@ public class DifficultySelect extends GuiMenu {
 	 * @param hosting
 	 *            True if this side of a multiplayer game is the host
 	 */
+=======
+	
+	private Button startGameButton;
+	private Button cancelButton;
+
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 =======
 	
 	private Button startGameButton;
@@ -112,6 +119,7 @@ public class DifficultySelect extends GuiMenu {
 	}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 	/**
 	 * Get the number of the currently selected checkbox
@@ -126,6 +134,8 @@ public class DifficultySelect extends GuiMenu {
 		}
 		return null;
 =======
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 =======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
     
