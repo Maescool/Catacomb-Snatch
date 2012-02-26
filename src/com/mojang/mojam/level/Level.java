@@ -14,6 +14,7 @@ import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.level.gamemode.ILevelTickItem;
 import com.mojang.mojam.level.gamemode.IVictoryConditions;
+import com.mojang.mojam.level.tile.DestroyableWallTile;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.level.tile.WallTile;
@@ -167,6 +168,36 @@ public class Level {
 
 		return result;
 	}
+	
+	public Set<Tile> getTiles(double xx0, double yy0, double xx1,
+			double yy1) {
+		int x0 = (int) (xx0) / Tile.WIDTH;
+		int x1 = (int) (xx1) / Tile.WIDTH;
+		int y0 = (int) (yy0) / Tile.HEIGHT;
+		int y1 = (int) (yy1) / Tile.HEIGHT;
+
+		Set<Tile> result = new TreeSet<Tile>(new TileComparator());
+
+		for (int y = y0; y <= y1; y++) {
+			if (y < 0 || y >= height)
+				continue;
+			for (int x = x0; x <= x1; x++) {
+				if (x < 0 || x >= width)
+					continue;
+				List<Entity> entities = entityMap[x + y * width];
+				for (int i = 0; i < entities.size(); i++) {
+					Entity e = entities.get(i);
+					if (e.removed)
+						continue;
+					if (e.intersects(xx0, yy0, xx1, yy1)) {
+						result.add(e);
+					}
+				}
+			}
+		}
+
+		return result;
+	}
 
 	public Set<Entity> getEntities(BB bb, Class<? extends Entity> c) {
 		return getEntities(bb.x0, bb.y0, bb.x1, bb.y1, c);
@@ -291,6 +322,9 @@ public class Level {
 		 * == null) rowEntities[y] = new ArrayList<Entity>();
 		 * rowEntities[y].add(e); }
 		 */
+		Set<DestroyableWallTile> visibleDestWalls = getTiles(xScroll - Tile.WIDTH, yScroll
+				- Tile.HEIGHT, xScroll + screen.w + Tile.WIDTH, yScroll
+				+ screen.h + Tile.HEIGHT);
 
 		screen.setOffset(-xScroll, -yScroll);
 
