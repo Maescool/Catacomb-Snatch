@@ -109,7 +109,7 @@ public class Font {
 		int length = msg.length();
 		for (int i = 0; i < length; i++) {
 			int charPosition = LETTERS.indexOf(msg.charAt(i));
-			
+			//charPosition = -1;
 			if (charPosition >= 0) {
 				screen.blit(getFont().bitmapData[charPosition % 30][charPosition / 30], x, y);
 				x += 8;
@@ -117,7 +117,7 @@ public class Font {
 				char c = msg.charAt(i);
 				Bitmap characterBitmap = FontFactory.getFontCharacter(c, fontSize);
 				double heightOffset = FontFactory.getHeightOffset(c, fontSize);
-				screen.blit(characterBitmap, x+1, (int)(y+heightOffset+0.5));
+				screen.blit(characterBitmap, x+1, y+heightOffset);
 				x += characterBitmap.w+2;
 			}
 
