@@ -29,6 +29,8 @@ public class Font {
         FONTS.put("blue", new Font(Art.font_blue));
         FONTS.put("gray", new Font(Art.font_gray));
         FONTS.put("sm_black", new VFont(Art.font_small_black));
+        FONTS.put("sm_white", new VFont(Art.font_small_white));
+        FONTS.put("sm_gold", new VFont(Art.font_small_gold));
         FONTS.put("gold", new Font(Art.font_gold));
         currentFont = getFont(DEFAULT_FONT);
     }

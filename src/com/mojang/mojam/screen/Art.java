@@ -33,6 +33,7 @@ public class Art {
 	// Player starting points and tooltips
 	public static Bitmap[][] startLordLard = cut("/art/player/start_lordlard.png", 32, 32);
 	public static Bitmap[][] startHerrSpeck = cut("/art/player/start_herrspeck.png", 32, 32);
+	public static Bitmap tooltipBackground = load("/art/screen/tooltipBackground.png");
     public static Bitmap turretText = load("/art/screen/atlasTurretText.png");
     public static Bitmap harvesterText = load("/art/screen/atlasHarvesterText.png");
     public static Bitmap bombText = load("/art/screen/atlasBombText.png");
