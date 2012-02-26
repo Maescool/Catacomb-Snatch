@@ -23,11 +23,10 @@ public class ShopItem extends Building {
     private final int type;
     private int effectiveCost;
     
-    // TODO Use Texts framework!
     private final String[][] TOOLTIPS = { 
-            {"TURRET",    "Used for defense.", "Attacks nearby enemies."},
-            {"HARVESTER", "Gathers treasure.", "Use to reclaim loot."},
-            {"BOMB",      "Destroys cracked walls.", "Use to create shortcuts."}
+            MojamComponent.texts.shopTooltipLines("turret"),
+            MojamComponent.texts.shopTooltipLines("harvester"),
+            MojamComponent.texts.shopTooltipLines("bomb")
     };
 
     public ShopItem(double x, double y, int type, int team, int localTeam) {
