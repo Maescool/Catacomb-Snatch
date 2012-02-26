@@ -8,6 +8,7 @@ import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.animation.LargeBombExplodeAnimation;
 import com.mojang.mojam.entity.animation.TileExplodeAnimation;
+import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.screen.Art;
@@ -15,13 +16,16 @@ import com.mojang.mojam.screen.Screen;
 
 public class DestroyableWallTile extends WallTile {
 	static final int WALLHEIGHT = 56;
-	protected float maxHealth = 250;
-	protected float health = maxHealth;
+	protected static float maxHealth = 350;
+	protected float health;
 	protected int healthBarOffset = 10;
 
 	public void init(Level level, int x, int y) {
 		super.init(level, x, y);
 		minimapColor = Art.wallTileColors[img % 3][0];
+	  if (TitleMenu.difficulty.difficultyID == 1) maxHealth = 375; 
+	  if (TitleMenu.difficulty.difficultyID == 2) maxHealth = 450; 
+	  if (TitleMenu.difficulty.difficultyID == 3) maxHealth = 675; 
 	}
 
 	public boolean canPass(Entity e) {
@@ -77,7 +81,14 @@ public class DestroyableWallTile extends WallTile {
 	}
 	
 	public void hurt(float damage) {
-		health -= damage;
+		float damageg = 0;
+		if (MojamComponent.instance.player.plevel >= 3) {
+			damageg = damage / 2;
+		}
+		if (MojamComponent.instance.player.plevel >= 8) {
+			damageg = damage;
+		}
+		health -= damageg;
 		if (health < 1) {
 			MojamComponent.soundPlayer.playSound("/sound/Explosion 2.wav",
 					(float) x * Tile.WIDTH, (float) y * Tile.HEIGHT);
@@ -86,10 +97,8 @@ public class DestroyableWallTile extends WallTile {
 	}
 	
 	public void handleCollision(Entity entity, double xa, double ya) {
-		try {
+		if (entity instanceof Bullet) {
 		  ((Bullet)entity).handleCollision(this, xa, ya);
-		} catch (Exception e) {
-			
 		}
 	}
 
