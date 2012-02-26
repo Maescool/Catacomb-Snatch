@@ -52,8 +52,10 @@ public class LevelSelect extends GuiMenu {
 			MojamComponent.GAME_WIDTH - 256 - 30, MojamComponent.GAME_HEIGHT - 24 - 25));
 		cancelButton = (Button) addButton(new Button(TitleMenu.CANCEL_JOIN_ID, MojamComponent.texts.getStatic("cancel"), 
 				MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25));
-		addButton(new Button(TitleMenu.UPDATE_LEVELS, MojamComponent.texts.getStatic("levelselect.update"), 
+		/*addButton(new Button(TitleMenu.UPDATE_LEVELS, MojamComponent.texts.getStatic("levelselect.update"), 
 				MojamComponent.GAME_WIDTH - 128 - 18, 20));
+		 //levels already load by default, no update needed
+		*/
 
 		// Add page buttons
 		if (levels.size() > LEVELS_PER_PAGE) {
