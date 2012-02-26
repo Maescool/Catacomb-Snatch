@@ -78,7 +78,7 @@ public class Chat implements KeyListener {
 		if (open) {
 			if (e.getKeyChar() == KeyEvent.VK_BACK_SPACE && currentMessage.length() > 0) {
 				currentMessage = currentMessage.substring(0, currentMessage.length() - 1);
-			} else if (Font.isDrawableCharacter(e.getKeyChar())) {
+			} else {
 				if (currentMessage.length() < MAX_MESSAGE_LENGTH) {
 					currentMessage += e.getKeyChar();
 				}

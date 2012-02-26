@@ -33,6 +33,10 @@ public class Font {
         currentFont = getFont(DEFAULT_FONT);
     }
 
+    protected Font(Bitmap[][] bitmapData) {
+        this.bitmapData = bitmapData;
+    }
+
     /**
      * Set the font to use for all following calls
      * 
@@ -88,10 +92,6 @@ public class Font {
         return GLYPH_HEIGHT;
     }
 
-    protected Font(Bitmap[][] bitmapData) {
-        this.bitmapData = bitmapData;
-    }
-
 	/**
 	 * Check if the given character is drawable
 	 * 
@@ -114,7 +114,7 @@ public class Font {
     public static void draw(Screen screen, String msg, int x, int y) {
         getFont().drawFont(screen, msg, x, y);
     }
-
+	
     /**
      * Draw the given text onto the given screen at the given position.
      * If the length exceeds width, the text will be drawn in multiple lines.
@@ -152,11 +152,19 @@ public class Font {
         msg = msg.toUpperCase();
         int length = msg.length();
         for (int i = 0; i < length; i++) {
-			int c = LETTERS.indexOf(msg.charAt(i));
-            if (c < 0)
-                continue;
-            screen.blit(bitmapData[c % 30][c / 30], x, y);
-            x += 8;
+            int charPosition = LETTERS.indexOf(msg.charAt(i));
+            
+            if (charPosition >= 0) {
+                screen.blit(getFont().bitmapData[charPosition % 30][charPosition / 30], x, y);
+                x += 8;
+            } else {
+                char c = msg.charAt(i);
+                Bitmap characterBitmap = FontFactory.getFontCharacter(c, 10);
+                double heightOffset = FontFactory.getHeightOffset(c);
+                screen.blit(characterBitmap, x+1, (int)(y+heightOffset+0.5));
+                x += characterBitmap.w+2;
+            }
+
             if(x > width){
                 x = startX;
                 y += 10;
