@@ -14,8 +14,10 @@ import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
+/**
+ * Harvester building. Automatically collects all coins within a given radius around itself
+ */
 public class Harvester extends Building implements LootCollector {
-
 	private int capacity = 1500;
 	private int money = 0;
 	private int time = 0;
@@ -28,7 +30,17 @@ public class Harvester extends Building implements LootCollector {
 	private int[] upgradeRadius = new int[] { (int) (1.5 * Tile.WIDTH),
 			2 * Tile.WIDTH, (int) (2.5 * Tile.WIDTH) };
 	private int[] upgradeCapacities = new int[] { 1500, 2500, 3500 };
+	
+	public Bitmap areaBitmap;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param x Initial X coordinate
+	 * @param y Initial Y coordinate
+	 * @param team Team number
+	 * @param localTeam Local team number
+	 */
 	public Harvester(double x, double y, int team, int localTeam) {
 		super(x, y, team,localTeam);
 		setStartHealth(10);
@@ -39,16 +51,17 @@ public class Harvester extends Building implements LootCollector {
 		areaBitmap = Bitmap.rangeBitmap(radius,Color.YELLOW.getRGB());
 	}
 	
-	public Bitmap areaBitmap;
-	
+	@Override
 	public void notifySucking() {
 		harvestingTicks = 30;
 	}
 
+	@Override
 	public boolean isAllowedToCancel() {
 		return !isEmptying;
 	}
 
+	@Override
 	public void tick() {
 		super.tick();
 		if (--freezeTime > 0) {
@@ -106,6 +119,7 @@ public class Harvester extends Building implements LootCollector {
         }
 	}
 
+	@Override
 	protected void upgradeComplete() {
 	    maxHealth += 10;
 	    health += 10;
@@ -115,10 +129,16 @@ public class Harvester extends Building implements LootCollector {
 	    if (upgradeLevel != 0) justDroppedTicks = 80; //show the radius for a brief time
 	}
 
+	/**
+	 * Check if this collector still hascapacity for additional coins
+	 * 
+	 * @return True if remaining capacity is more than zero, false if not
+	 */
 	public boolean canTake() {
 		return money < capacity;
 	}
 
+	@Override
 	public void render(Screen screen) {
 		
 		if(justDroppedTicks-- > 0 && localTeam==team) {
@@ -138,12 +158,17 @@ public class Harvester extends Building implements LootCollector {
 		
 	}
 	
+	/**
+	 * Draw the money bar onto the given screen
+	 * 
+	 * @param screen Screen
+	 */
 	private void addMoneyBar(Screen screen) {
-        
 	    int start = (int) (money * 20 / capacity);
         screen.blit(Art.moneyBar[start][0], pos.x - 16, pos.y + 8);
     }
 	
+	@Override
 	public void take(Loot loot) {
 		loot.remove();
 		money += loot.getScoreValue();
@@ -152,19 +177,24 @@ public class Harvester extends Building implements LootCollector {
 		}
 	}
 
+	@Override
 	public double getSuckPower() {
 		return radius / 60.0;
 	}
 
+	@Override
 	public void flash() {
 	}
 
+	@Override
 	public int getScore() {
 		return money;
 	}
 
+	/**
+	 * Drop all money, comes with a nice animation
+	 */
 	public void dropAllMoney() {
-
 		while (money > 0) {
 			double dir = TurnSynchronizer.synchedRandom.nextDouble() * Math.PI
 					* 2;
@@ -177,6 +207,7 @@ public class Harvester extends Building implements LootCollector {
 		money = 0;
 	}
 
+	@Override
 	public void use(Entity user) {
 		if(money > 0) {
 			isEmptying = true;

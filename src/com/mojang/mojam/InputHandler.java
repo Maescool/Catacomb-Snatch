@@ -10,10 +10,18 @@ import java.util.Map.Entry;
 
 import com.mojang.mojam.Keys.Key;
 
+/**
+ * Key input handler class
+ */
 public class InputHandler implements KeyListener {
 
 	private Map<Integer, Key> mappings = new HashMap<Integer, Key>();
 
+	/**
+	 * Constructor
+	 * 
+	 * @param keys
+	 */
 	public InputHandler(Keys keys) {
 		// controls
 		initKey(keys.up, KeyEvent.VK_W);

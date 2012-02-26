@@ -9,6 +9,7 @@ import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
+import com.mojang.mojam.gui.Font.FontName;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
@@ -109,10 +110,10 @@ public class Building extends Mob implements IUsable {
                         (int)(pos.y + 20 - teamYOffset), 110, 25);
 		        
 		        String[] tooltip = s.getTooltip();
-		        Font f = Font.getFont("sm_gold");
+		        Font f = Font.getFont(FontName.SM_GOLD);
 		        for (int i=0; i<tooltip.length; i++) {
 		            f.drawFont(screen, tooltip[i], (int)(pos.x - image.w + 8), (int)pos.y + 22 - teamYOffset + (i==0?0:1) + i*(f.getFontStringHeight()+1));
-		            f = Font.getFont("sm_white");
+		            f = Font.getFont(FontName.SM_WHITE);
 		        }
 		    }
 		}
@@ -137,14 +138,27 @@ public class Building extends Mob implements IUsable {
 		yd = 0.0;
 	}
 	
+	/**
+	 * Called if this building is picked up
+	 * 
+	 * @param mob Reference to the mob object carrying this building
+	 */
 	public void onPickup(Mob mob) {
 	    carriedBy = mob;
 	}
 	
+	/**
+	 * Called if this building is dropped by its carrier
+	 */
 	public void onDrop() {
 	    carriedBy = null;
 	}
 	
+	/**
+	 * Check if this building is being carried
+	 * 
+	 * @return True if carried, false if not
+	 */
 	public boolean isCarried() {
 	    return carriedBy != null;
 	}
@@ -177,13 +191,8 @@ public class Building extends Mob implements IUsable {
 		fallDownHole();
 	}
 	
-	//
-	//upgrade
-	//
 	/**
-	 * IF YOU REMOVE THIS, I COME TO YOUR HOUSE AND KILL YOU
-	 * IN YOUR SLEEP!
-	 * or nicer said, this is used by other functions
+	 * Called if building upgrade is complete
 	 */
 	protected void upgradeComplete() {
 	}
@@ -226,7 +235,7 @@ public class Building extends Mob implements IUsable {
 	}
 
 	/**
-	 * Make the building upgradeable
+	 * Make this building upgradeable
 	 * 
 	 * @param costs Cost vector
 	 */
@@ -263,10 +272,20 @@ public class Building extends Mob implements IUsable {
 		return true;
 	}
 	
+	/**
+	 * Set regeneration status for this building
+	 * 
+	 * @param regen True if building can regenerate, false if not
+	 */
 	public void buildingRegen(boolean regen) {
 		healthRegenB = regen;
 	}
 	
+	/**
+	 * Check if this building is able to regenerate
+	 * 
+	 * @return True if building can regenerate, false if not
+	 */
 	public boolean buildingRegenEnabled() {
 		return healthRegenB;
 	}
