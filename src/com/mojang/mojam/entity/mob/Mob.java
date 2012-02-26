@@ -248,6 +248,7 @@ public abstract class Mob extends Entity {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 	public boolean isTargetBehindWall(double dx2, double dy2, Entity e) {
 		int x1 = (int) pos.x / Tile.WIDTH;
@@ -329,6 +330,8 @@ public abstract class Mob extends Entity {
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 =======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
     
     public boolean isTargetBehindWall(double dx2, double dy2, Entity e) {
         int x1 = (int) pos.x / Tile.WIDTH;
@@ -390,6 +393,9 @@ public abstract class Mob extends Entity {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 =======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring

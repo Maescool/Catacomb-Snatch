@@ -108,8 +108,12 @@ public class MojamComponent extends Canvas implements Runnable,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	private Chat chat = new Chat();
 
+=======
+	
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 =======
 	
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
@@ -725,11 +729,14 @@ public class MojamComponent extends Canvas implements Runnable,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 		if (packet instanceof ChatCommand) {
 			ChatCommand cc = (ChatCommand) packet;
 			chat.addMessage(cc.getMessage());
 		}
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 =======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 =======
