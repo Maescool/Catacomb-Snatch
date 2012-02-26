@@ -12,6 +12,9 @@ import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
+/**
+ * Generic shop item, available from the players base
+ */
 public class ShopItem extends Building {
 
     private int facing = 0;
@@ -29,6 +32,14 @@ public class ShopItem extends Building {
             MojamComponent.texts.shopTooltipLines("bomb")
     };
 
+	/**
+	 * Constructor
+	 * 
+	 * @param x Initial X coordinate
+	 * @param y Initial Y coordinate
+	 * @param team Team number
+	 * @param localTeam Local team number
+	 */
     public ShopItem(double x, double y, int type, int team, int localTeam) {
         super(x, y, team, localTeam);
         this.type = type;
@@ -39,6 +50,10 @@ public class ShopItem extends Building {
         setBuildingCost();
         yOffs = YOFFS[type];
     }
+    
+    /**
+     * Set building cost depending if creative mode is on or not
+     */
     public void setBuildingCost(){
     	if(Options.getAsBoolean(Options.CREATIVE)){
     		COST[0] = 0;
@@ -59,14 +74,17 @@ public class ShopItem extends Building {
         }
     }
 
+    @Override
     public void init() {
         effectiveCost = DifficultyInformation.calculateCosts(COST[type]);
     }
 
+    @Override
     public void tick() {
         super.tick();
     }
 
+    @Override
     public Bitmap getSprite() {
         switch (type) {
             case SHOP_TURRET:
@@ -79,6 +97,11 @@ public class ShopItem extends Building {
         return Art.turret[facing][0];
     }
     
+    /**
+     * Get tool tip
+     * 
+     * @return Tool tip
+     */
     public String[] getTooltip() {
         return TOOLTIPS[type];
     }
