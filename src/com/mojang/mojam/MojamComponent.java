@@ -417,20 +417,21 @@ public class MojamComponent extends Canvas implements Runnable,
 		}
 
 		if (Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE)) {
-			Font.draw(screen, texts.FPS(fps), 10, 10);
+			Font.defaultFont().draw(screen, texts.FPS(fps), 10, 10);
 		}
 
 		if (player != null && menuStack.size() == 0) {
+			Font font = Font.defaultFont();
 		    if (isMultiplayer) {
-		        Font.draw(screen, texts.latency(latencyCacheReady()?""+avgLatency():"-"), 10, 20);
+		    	font.draw(screen, texts.latency(latencyCacheReady()?""+avgLatency():"-"), 10, 20);
 		    }
 		    
-			Font.draw(screen, texts.health(player.health, player.maxHealth),
+		    font.draw(screen, texts.health(player.health, player.maxHealth),
 					340, screen.h - 16);
-			Font.draw(screen, texts.money(player.score), 340, screen.h - 27);
-			Font.draw(screen, texts.nextLevel((int) player.getNextLevel()), 340, screen.h - 38);
-			Font.draw(screen, texts.playerExp((int) player.pexp), 340, screen.h - 49);
-			Font.draw(screen, texts.playerLevel(player.plevel), 340, screen.h - 60);
+		    font.draw(screen, texts.money(player.score), 340, screen.h - 27);
+		    font.draw(screen, texts.nextLevel((int) player.getNextLevel()), 340, screen.h - 38);
+		    font.draw(screen, texts.playerExp((int) player.pexp), 340, screen.h - 49);
+		    font.draw(screen, texts.playerLevel(player.plevel), 340, screen.h - 60);
 		}
 
 		if (isMultiplayer && menuStack.isEmpty()) {

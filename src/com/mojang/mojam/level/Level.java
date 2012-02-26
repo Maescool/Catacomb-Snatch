@@ -467,8 +467,8 @@ public class Level {
 		screen.blit(minimap, 429, screen.h - 80 + 5);
 		
 		String player1score =  MojamComponent.texts.score(Team.Team1, player1Score * 100 / TARGET_SCORE);
-		Font.draw(screen, player1score, 280-player1score.length()*10, screen.h - 20); //adjust so it fits in the box
-		Font.draw(screen, MojamComponent.texts.score(Team.Team2, player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
+		Font.defaultFont().draw(screen, player1score, 280-player1score.length()*10, screen.h - 20); //adjust so it fits in the box
+		Font.defaultFont().draw(screen, MojamComponent.texts.score(Team.Team2, player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
 		
 		screen.blit(Art.getLocalPlayerArt()[0][2], 262, screen.h-42);
 		screen.blit(Art.herrSpeck[0][6], 19, screen.h-42);

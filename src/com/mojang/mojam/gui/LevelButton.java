@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Random;
 
 import com.mojang.mojam.MouseButtons;
-import com.mojang.mojam.gui.Font.FontName;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.gamemode.GameMode;
@@ -114,11 +113,9 @@ public class LevelButton extends ClickableComponent {
 			screen.blit(minimap, getX() + (getWidth() - minimap.w) / 2, getY() + 4);
 
 			// map name
-			Font.drawCentered(screen, trimToFitButton(levelName), getX() + getWidth() / 2, getY() + 4 + minimap.h + 8);
+			Font.defaultFont().drawCentered(screen, trimToFitButton(levelName), getX() + getWidth() / 2, getY() + 4 + minimap.h + 8);
 		} else {
-			Font.setFont(FontName.RED);
-			Font.drawCentered(screen, trimToFitButton(levelName), getX() + getWidth() / 2, getY() + 4 + 32);
-			Font.setFontToDefault();
+			Font.FONT_RED.drawCentered(screen, trimToFitButton(levelName), getX() + getWidth() / 2, getY() + 4 + 32);
 		}
 	}
 

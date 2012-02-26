@@ -153,7 +153,7 @@ public class OptionsMenu extends GuiMenu {
 	public void render(Screen screen) {
 		screen.blit(Art.background, 0, 0);
 		super.render(screen);
-		Font.drawCentered(screen, MojamComponent.texts.getStatic("titlemenu.options"),
+		Font.defaultFont().drawCentered(screen, MojamComponent.texts.getStatic("titlemenu.options"),
 				MojamComponent.GAME_WIDTH / 2, textY);
 		screen.blit(Art.getLocalPlayerArt()[0][6], buttons.get(selectedItem).getX() - 40,
 				buttons.get(selectedItem).getY() - 8);

@@ -23,7 +23,7 @@ public class WinMenu extends GuiMenu {
 		screen.clear(0);
 		screen.blit(Art.gameOverScreen, 0, 0);
 
-		Font.draw(screen, MojamComponent.texts.playerWin(winningPlayer), 180, 160);
+		Font.defaultFont().draw(screen, MojamComponent.texts.playerWin(winningPlayer), 180, 160);
 
 		super.render(screen);
 

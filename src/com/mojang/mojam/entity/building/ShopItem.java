@@ -70,7 +70,7 @@ public class ShopItem extends Building {
     public void render(Screen screen) {
         super.render(screen);
         if(team == localTeam) {
-            Font.drawCentered(screen, MojamComponent.texts.cost(effectiveCost), (int) (pos.x), (int) (pos.y + 10));
+            Font.defaultFont().drawCentered(screen, MojamComponent.texts.cost(effectiveCost), (int) (pos.x), (int) (pos.y + 10));
         }
     }
 

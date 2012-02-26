@@ -137,8 +137,8 @@ public class KeyBindingsMenu extends GuiMenu {
 		screen.blit(Art.background, 0, 0);
 		Texts txts = MojamComponent.texts;
 		String txt = txts.getStatic("options.keyBindings");
-		Font.draw(screen, txt, (MojamComponent.GAME_WIDTH - Font.getStringWidth(txt)) / 2,
-				yOffset - 40);
+		int stringWith = Font.defaultFont().calculateStringWidth(txt);
+		Font.defaultFont().draw(screen, txt, (MojamComponent.GAME_WIDTH - stringWith) / 2, yOffset - 40);
 		write(screen, txts.getStatic("keys.up"), 0, 0);
 		write(screen, txts.getStatic("keys.down"), 0, 1);
 		write(screen, txts.getStatic("keys.left"), 0, 2);
@@ -161,8 +161,9 @@ public class KeyBindingsMenu extends GuiMenu {
 	}
 
 	private void write(Screen screen, String txt, int column, int row) {
-		Font.draw(screen, txt + ": ", BORDER + 32 + textWidth + column
-				* (Button.BUTTON_WIDTH + 32 + textWidth) - Font.getStringWidth(txt + ": "), yOffset
+		int stringWidth = Font.defaultFont().calculateStringWidth(txt + ": ");
+		Font.defaultFont().draw(screen, txt + ": ", BORDER + 32 + textWidth + column
+				* (Button.BUTTON_WIDTH + 32 + textWidth) - stringWidth, yOffset
 				+ 8 + row * BUTTON_SPACING);
 	}
 

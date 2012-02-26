@@ -131,7 +131,7 @@ public class LevelSelect extends GuiMenu {
     public void render(Screen screen) {
     	screen.blit(Art.emptyBackground, 0, 0);
     	super.render(screen);
-    	Font.draw(screen, MojamComponent.texts.getStatic("levelselect.title"), 20, 20);
+    	Font.defaultFont().draw(screen, MojamComponent.texts.getStatic("levelselect.title"), 20, 20);
     	
     	// Draw disabled page buttons
     	if (levels.size() > LEVELS_PER_PAGE) {

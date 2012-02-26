@@ -65,7 +65,7 @@ public class DifficultySelect extends GuiMenu {
 	public void render(Screen screen) {
 		screen.blit(Art.emptyBackground, 0, 0);
 		super.render(screen);
-		Font.draw(screen, MojamComponent.texts.getStatic("diffselect.title"), 20, 20);
+		Font.defaultFont().draw(screen, MojamComponent.texts.getStatic("diffselect.title"), 20, 20);
 	}
 
 	@Override

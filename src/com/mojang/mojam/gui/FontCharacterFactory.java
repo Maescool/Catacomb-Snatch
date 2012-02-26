@@ -7,27 +7,27 @@ import java.util.HashMap;
 
 import com.mojang.mojam.screen.Bitmap;
 
-public class FontFactory {
+public class FontCharacterFactory {
 
-	private static HashMap<String, Bitmap> characterCache = new HashMap<String, Bitmap>();
-	private static HashMap<String, Integer> characterHeightOffset = new HashMap<String, Integer>();
+	java.awt.Font systemFont;
+	private Color[] gradient;
+	private Color shadowColor;
+	
+	private HashMap<Character, Bitmap> characterCache = new HashMap<Character, Bitmap>();
+	private HashMap<Character, Integer> characterHeightOffset = new HashMap<Character, Integer>();
+	
+	public FontCharacterFactory(java.awt.Font systemFont, Color[] gradient, Color shadowColor) {
+		this.systemFont = systemFont;
+		this.gradient = gradient;
+		this.shadowColor = shadowColor;
+	}
 
-	private static Color[] goldGradient = {
-		new Color(241, 216, 145),
-		new Color(242, 236, 153),
-		new Color(250, 250, 214),
-		new Color(255, 255, 255),
-		new Color(250, 250, 214),
-		new Color(234, 221, 91),
-		new Color(240, 195, 137) };
-
-	public static Bitmap getFontCharacter(char character, int fontSize) {
-		String key = makeKey(character, fontSize);
-		if (characterCache.containsKey(key)) {
-			return characterCache.get(key);
+	public Bitmap getFontCharacter(char character) {
+		if (characterCache.containsKey(character)) {
+			return characterCache.get(character);
 		}
-
-		java.awt.Font font = new java.awt.Font("SansSerif", java.awt.Font.BOLD, fontSize);
+		
+		int fontSize = systemFont.getSize();
 		BufferedImage image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graphics = image.createGraphics();
 		
@@ -36,14 +36,21 @@ public class FontFactory {
 
 		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		graphics = image.createGraphics();
-		graphics.setFont(font);
+		graphics.setFont(systemFont);
 
 		int positionX = fontSize;
 		int positionY = 2*fontSize;
-		Color shadowColor = Color.BLACK;
-		graphics.setColor(shadowColor);
-		graphics.drawString(Character.toString(character), positionX+1, positionY+1);
-		Color mainLetterColor = Color.MAGENTA;
+		if(shadowColor != null) {
+			graphics.setColor(shadowColor);
+			graphics.drawString(Character.toString(character), positionX+1, positionY+1);
+		}
+		
+		Color mainLetterColor;
+		if(shadowColor!=Color.MAGENTA) { // Any color will do, as long as it's different from the shadow color
+			mainLetterColor = Color.MAGENTA;
+		} else {
+			mainLetterColor = Color.YELLOW;
+		}
 		graphics.setColor(mainLetterColor);
 		graphics.drawString(Character.toString(character), positionX, positionY);
 
@@ -63,8 +70,8 @@ public class FontFactory {
 			}
 			emptyRowsTop++;
 		}
-		int hardcodedOffset = 3;
-		characterHeightOffset.put(key, emptyRowsTop-fontSize-hardcodedOffset);
+		int hardcodedOffset = (shadowColor!=null) ? 3 : 2;
+		characterHeightOffset.put(character, emptyRowsTop-fontSize-hardcodedOffset);
 		
 		pixels = automaticCrop(pixels);
 		
@@ -74,11 +81,10 @@ public class FontFactory {
 		}
 		height = pixels[0].length;
 
-		Color[] gradient = goldGradient;
 		int row = 0;
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				if (pixels[x][y] != 0 && pixels[x][y] != shadowColor.getRGB()) {
+				if (pixels[x][y] != 0 && (shadowColor==null || pixels[x][y] != shadowColor.getRGB())) {
 					pixels[x][y] = gradient[row].getRGB();
 				}
 			}
@@ -86,21 +92,16 @@ public class FontFactory {
 		}
 
 		Bitmap characterBitmap = new Bitmap(pixels);
-		characterCache.put(key, characterBitmap);
+		characterCache.put(character, characterBitmap);
 
 		return characterBitmap;
 	}
 
-	public static int getHeightOffset(char character, int fontSize) {
-		String key = makeKey(character, fontSize);
-		if (!characterHeightOffset.containsKey(key)) {
-			getFontCharacter(character, fontSize);
+	public int getHeightOffset(char character) {
+		if (!characterHeightOffset.containsKey(character)) {
+			getFontCharacter(character);
 		}
-		return characterHeightOffset.get(key);
-	}
-	
-	private static String makeKey(char character, int fontSize){
-		return character + ":" + fontSize;
+		return characterHeightOffset.get(character);
 	}
 
 	private static int[][] automaticCrop(int[][] pixels) {
