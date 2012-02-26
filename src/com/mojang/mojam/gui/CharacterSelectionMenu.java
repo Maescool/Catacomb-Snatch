@@ -9,7 +9,17 @@ import com.mojang.mojam.screen.Screen;
 
 public class CharacterSelectionMenu extends GuiMenu {
 
+	private CharacterButton lordLard;
+	private CharacterButton herrSpeck;
+	private CharacterButton duchessDonut;
+	private CharacterButton countessCruller;
+
 	private CharacterButton selected;
+
+	private Button focus;
+
+	private Button select;
+	private Button back;
 
 	private int xOffset, yOffset;
 
@@ -22,16 +32,19 @@ public class CharacterSelectionMenu extends GuiMenu {
 		int gameHeight = MojamComponent.GAME_HEIGHT;
 		xOffset = (gameWidth - (CharacterButton.WIDTH * 2 + 20)) / 2;
 		yOffset = (gameHeight - (CharacterButton.HEIGHT * 2 + 20)) / 2;
-		selected = (CharacterButton) addButton(new CharacterButton(TitleMenu.CHARACTER_BUTTON_ID,
-				Art.LORD_LARD, Art.getPlayer(Art.LORD_LARD)[0][6], xOffset, yOffset));
+		selected = lordLard = (CharacterButton) addButton(new CharacterButton(
+				TitleMenu.CHARACTER_BUTTON_ID, Art.LORD_LARD, Art.getPlayer(Art.LORD_LARD)[0][6],
+				xOffset, yOffset));
 		selected.setSelected(true);
-		addButton(new CharacterButton(TitleMenu.CHARACTER_BUTTON_ID, Art.HERR_VON_SPECK,
-				Art.getPlayer(Art.HERR_VON_SPECK)[0][2], xOffset + 20 + CharacterButton.WIDTH,
-				yOffset));
-		addButton(new CharacterButton(TitleMenu.CHARACTER_BUTTON_ID, Art.DUCHESS_DONUT,
+		herrSpeck = (CharacterButton) addButton(new CharacterButton(TitleMenu.CHARACTER_BUTTON_ID,
+				Art.HERR_VON_SPECK, Art.getPlayer(Art.HERR_VON_SPECK)[0][2], xOffset + 20
+						+ CharacterButton.WIDTH, yOffset));
+		duchessDonut = (CharacterButton) addButton(new CharacterButton(
+				TitleMenu.CHARACTER_BUTTON_ID, Art.DUCHESS_DONUT,
 				Art.getPlayer(Art.DUCHESS_DONUT)[0][6], xOffset, yOffset + 20
 						+ CharacterButton.HEIGHT));
-		addButton(new CharacterButton(TitleMenu.CHARACTER_BUTTON_ID, Art.COUNTESS_CRULLER,
+		countessCruller = (CharacterButton) addButton(new CharacterButton(
+				TitleMenu.CHARACTER_BUTTON_ID, Art.COUNTESS_CRULLER,
 				Art.getPlayer(Art.COUNTESS_CRULLER)[0][2], xOffset + 20 + CharacterButton.WIDTH,
 				yOffset + 20 + CharacterButton.HEIGHT));
 		if (Options.isCharacterIDset()) {
@@ -45,8 +58,12 @@ public class CharacterSelectionMenu extends GuiMenu {
 			}
 			selected.setSelected(true);
 		}
-		addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("character.select"),
-				(gameWidth - 128) / 2, yOffset + 2 * CharacterButton.HEIGHT + 20 + 30));
+		focus = select = (Button) addButton(new Button(TitleMenu.BACK_ID,
+				MojamComponent.texts.getStatic("character.select"), (gameWidth - 128) / 2, yOffset
+						+ 2 * CharacterButton.HEIGHT + 20 + 30));
+		back = (Button) addButton(new Button(TitleMenu.BACK_ID,
+				MojamComponent.texts.getStatic("back"), (gameWidth - 128) / 2, yOffset + 2
+						* CharacterButton.HEIGHT + 20 + 60));
 	}
 
 	@Override
@@ -55,6 +72,10 @@ public class CharacterSelectionMenu extends GuiMenu {
 		super.render(screen);
 		Font.drawCentered(screen, MojamComponent.texts.getStatic("character.text"),
 				MojamComponent.GAME_WIDTH / 2, yOffset - 24);
+		if (focus == back || focus == select) {
+			screen.blit(Art.getPlayer(selected.getCharacterID())[0][6], focus.getX() - 64 - 40,
+					focus.getY() - 8);
+		}
 	}
 
 	@Override
@@ -63,8 +84,9 @@ public class CharacterSelectionMenu extends GuiMenu {
 			selected.setSelected(false);
 			selected = (CharacterButton) button;
 			selected.setSelected(true);
-		} else {
+		} else if (button == select) {
 			Options.set(Options.CHARACTER_ID, selected.getCharacterID());
+			Options.saveProperties();
 			MojamComponent.instance.playerCharacter = selected.getCharacterID();
 		}
 	}
@@ -73,7 +95,66 @@ public class CharacterSelectionMenu extends GuiMenu {
 	public void keyTyped(KeyEvent e) {}
 
 	@Override
-	public void keyPressed(KeyEvent e) {}
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
+			if (focus == herrSpeck) {
+				herrSpeck.setFocus(false);
+				lordLard.setFocus(true);
+				focus = lordLard;
+			} else if (focus == countessCruller) {
+				countessCruller.setFocus(false);
+				duchessDonut.setFocus(true);
+				focus = duchessDonut;
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
+			if (focus == lordLard) {
+				lordLard.setFocus(false);
+				herrSpeck.setFocus(true);
+				focus = herrSpeck;
+			} else if (focus == duchessDonut) {
+				duchessDonut.setFocus(false);
+				countessCruller.setFocus(true);
+				focus = countessCruller;
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
+			if (focus == back) {
+				focus = select;
+			} else if (focus == select) {
+				duchessDonut.setFocus(true);
+				focus = duchessDonut;
+			} else if (focus == duchessDonut) {
+				duchessDonut.setFocus(false);
+				lordLard.setFocus(true);
+				focus = lordLard;
+			} else if (focus == countessCruller) {
+				countessCruller.setFocus(false);
+				herrSpeck.setFocus(true);
+				focus = herrSpeck;
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
+			if (focus == select) {
+				focus = back;
+			} else if (focus == duchessDonut) {
+				duchessDonut.setFocus(false);
+				focus = select;
+			} else if (focus == countessCruller) {
+				countessCruller.setFocus(false);
+				focus = select;
+			} else if (focus == lordLard) {
+				lordLard.setFocus(false);
+				duchessDonut.setFocus(true);
+				focus = duchessDonut;
+			} else if (focus == herrSpeck) {
+				herrSpeck.setFocus(false);
+				countessCruller.setFocus(true);
+				focus = countessCruller;
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
+			focus.postClick();
+		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			back.postClick();
+		}
+	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {}
