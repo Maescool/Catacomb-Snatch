@@ -100,14 +100,15 @@ public class Building extends Mob implements IUsable {
 		    if (this instanceof ShopItem) {
 		        ShopItem s = (ShopItem)this;
 		        Bitmap image = getSprite();
+		        int teamYOffset = (team == 2) ? 90 : 0;
 		        screen.blit(Art.tooltipBackground,
                         (int)(pos.x - image.w / 2 - 10),
-                        (int)(pos.y + 20 - (team==2?80:0)), 110, 25);
+                        (int)(pos.y + 20 - teamYOffset), 110, 25);
 		        
 		        String[] tooltip = s.getTooltip();
 		        Font f = Font.getFont("sm_gold");
 		        for (int i=0; i<tooltip.length; i++) {
-		            f.drawFont(screen, tooltip[i], (int)(pos.x - image.w + 8), (int)pos.y + 22 - (team==2?80:0) + (i==0?0:1) + i*(f.getFontStringHeight()+1));
+		            f.drawFont(screen, tooltip[i], (int)(pos.x - image.w + 8), (int)pos.y + 22 - teamYOffset + (i==0?0:1) + i*(f.getFontStringHeight()+1));
 		            f = Font.getFont("sm_white");
 		        }
 		    }

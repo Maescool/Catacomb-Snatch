@@ -217,6 +217,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	public void stop() {
 		running = false;
+		soundPlayer.stopBackgroundMusic();
 		soundPlayer.shutdown();
 	}
 
@@ -807,7 +808,7 @@ public class MojamComponent extends Canvas implements Runnable,
 				if (isServer) {
 					localId = 0;
 					localTeam= Team.Team1;
-					serverSocket = new ServerSocket(3000);
+					serverSocket = new ServerSocket(Options.getAsInteger(Options.MP_PORT, 3000));
 					serverSocket.setSoTimeout(1000);
 
 					hostThread = new Thread() {
@@ -864,11 +865,15 @@ public class MojamComponent extends Canvas implements Runnable,
 			isMultiplayer = true;
 			isServer = false;
 			chat.clear();
-
+			
+			String[] data = TitleMenu.ip.trim().split(":");
+			String ip = data[0];
+			Integer port = (data.length > 1) ? Integer.parseInt(data[1]) : Options.getAsInteger(Options.MP_PORT, 3000);
+			
 			try {
 				localId = 1;
 				localTeam= Team.Team2;
-				packetLink = new ClientSidePacketLink(TitleMenu.ip.trim(), 3000);
+				packetLink = new ClientSidePacketLink(ip, port);
 				synchronizer = new TurnSynchronizer(this, packetLink, localId,2);
 				packetLink.setPacketListener(this);
 			} catch (Exception e) {
