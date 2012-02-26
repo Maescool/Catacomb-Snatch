@@ -18,6 +18,7 @@ public class ShopItem extends Building {
     public static final int SHOP_TURRET = 0;
     public static final int SHOP_HARVESTER = 1;
     public static final int SHOP_BOMB = 2;
+    public static final int[] YOFFS = { 10, 22, 7 };
     public static final int[] COST = {150, 300, 500};
     private final int type;
     private int effectiveCost;
@@ -31,6 +32,7 @@ public class ShopItem extends Building {
             facing = 4;   
         }
         setBuildingCost();
+        yOffs = YOFFS[type];
     }
     public void setBuildingCost(){
     	if(Options.getAsBoolean(Options.CREATIVE)){
@@ -47,7 +49,6 @@ public class ShopItem extends Building {
     @Override
     public void render(Screen screen) {
         super.render(screen);
-        // Bitmap image = getSprite();
         Font.drawCentered(screen, MojamComponent.texts.cost(effectiveCost), (int) (pos.x), (int) (pos.y + 10));
     }
 

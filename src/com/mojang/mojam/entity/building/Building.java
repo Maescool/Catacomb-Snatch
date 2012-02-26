@@ -71,7 +71,7 @@ public class Building extends Mob implements IUsable {
             if(this.team == 1) {
             	screen.blit(discriptionText, ((int) bb.x0 - (getSprite().w / 2)), ((int) bb.y0 + 30), 110, 25);  
             }else if(this.team == 2) {
-            	screen.blit(discriptionText, ((int) bb.x1 - (getSprite().w / 2) - 30), ((int) bb.y1 - 60), 110, 25);
+            	screen.blit(discriptionText, ((int) bb.x1 - (getSprite().w / 2) - 30), ((int) bb.y1 - 80), 110, 25);
             }
         }
     }
