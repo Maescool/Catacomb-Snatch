@@ -59,16 +59,25 @@ public class Font {
 	public static void draw(Screen screen, String msg, int x, int y) {
 		drawMulti(screen, msg, x, y, 99999);
 	}
+	
 	public static void drawMulti(Screen screen, String msg, int x, int y, int width) {
 		int startX = x;
 		msg = msg.toUpperCase();
 		int length = msg.length();
 		for (int i = 0; i < length; i++) {
-			int c = letters.indexOf(msg.charAt(i));
-			if (c < 0)
-				continue;
-			screen.blit(getFont().bitmapData[c % 30][c / 30], x, y);
-			x += 8;
+			int charPosition = letters.indexOf(msg.charAt(i));
+			
+			if (charPosition >= 0) {
+				screen.blit(getFont().bitmapData[charPosition % 30][charPosition / 30], x, y);
+				x += 8;
+			} else {
+				char c = msg.charAt(i);
+				Bitmap characterBitmap = FontFactory.getFontCharacter(c, 10);
+				double heightOffset = FontFactory.getHeightOffset(c);
+				screen.blit(characterBitmap, x+1, (int)(y+heightOffset+0.5));
+				x += characterBitmap.w+2;
+			}
+
 			if(x > width){
 				x = startX;
 				y += 10;
