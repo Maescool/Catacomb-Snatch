@@ -4,7 +4,7 @@ import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 
-public class Scarab extends Mob {
+public class Scarab extends HostileMob {
 	public int facing;
 	public int walkTime;
 	public int stepTime;
