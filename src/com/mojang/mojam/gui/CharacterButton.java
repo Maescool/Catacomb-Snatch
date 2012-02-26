@@ -25,6 +25,7 @@ public class CharacterButton extends Button {
 	private int characterID;
 	private Bitmap characterArt;
 	private boolean selected;
+	private boolean hasFocus;
 
 	public CharacterButton(int id, int characterID, Bitmap characterArt, int x, int y) {
 		super(id, MojamComponent.texts.playerNameCharacter(characterID), x, y, WIDTH, HEIGHT);
@@ -44,9 +45,18 @@ public class CharacterButton extends Button {
 		return characterID;
 	}
 
+	public void setFocus(boolean focus) {
+		this.hasFocus = focus;
+	}
+
+	public boolean hasFocus() {
+		return hasFocus;
+	}
+
 	@Override
 	public void render(Screen screen) {
-		screen.blit(backgrounds[isSelected() ? 2 : (isPressed() ? 1 : 0)], getX(), getY());
+		screen.blit(backgrounds[isSelected() ? 2 : (isPressed() || hasFocus ? 1 : 0)], getX(),
+				getY());
 		screen.blit(characterArt, getX() + (WIDTH - characterArt.w) / 2, getY() + 8);
 		Font.defaultFont().drawCentered(screen, getLabel(), getX() + WIDTH / 2, getY() + HEIGHT - 12);
 	}
