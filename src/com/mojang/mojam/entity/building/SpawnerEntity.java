@@ -1,5 +1,6 @@
 package com.mojang.mojam.entity.building;
 
+import com.mojang.mojam.Snatch;
 import com.mojang.mojam.entity.mob.*;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.level.DifficultyInformation;
@@ -55,6 +56,7 @@ public class SpawnerEntity extends Building {
 			te = new Mummy(x, y,localTeam);
 		if (type == 3)
 			te = new Scarab(x, y,localTeam);
+		if((Mob) Snatch.getEntityById(type,x,y)!=null)te = (Mob) Snatch.getEntityById(type,x,y);
 		if (level.countEntities(Mob.class) < level.maxMonsters && level.getEntities(te.getBB().grow(8), te.getClass()).size() == 0 && spawntile.canPass(te))
 			level.addEntity(te);
 	}

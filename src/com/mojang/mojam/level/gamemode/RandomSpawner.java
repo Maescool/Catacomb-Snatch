@@ -2,6 +2,7 @@ package com.mojang.mojam.level.gamemode;
 
 import java.util.Random;
 
+import com.mojang.mojam.Snatch;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.building.Turret;
@@ -38,7 +39,7 @@ public class RandomSpawner implements ILevelTickItem {
 							new BB(null, x - r, y - r, x + r, y + r),
 							Turret.class).size() == 0) {
 						level.addEntity(new SpawnerEntity(x, y, Team.Neutral,
-								random.nextInt(4)));
+								random.nextInt(Snatch.spawnList.size())));
 					}
 				}
 			}

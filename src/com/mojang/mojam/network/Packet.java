@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mojang.mojam.Snatch;
 import com.mojang.mojam.network.packet.ChangeKeyCommand;
 import com.mojang.mojam.network.packet.ChangeMouseButtonCommand;
 import com.mojang.mojam.network.packet.ChangeMouseCoordinateCommand;
@@ -51,6 +52,7 @@ public abstract class Packet {
 	public static void writePacket(Packet packet, DataOutputStream dos)
 			throws IOException {
 		dos.write(packet.getId());
+		Snatch.sendPacket(packet);
 		packet.write(dos);
 	}
 
@@ -76,7 +78,7 @@ public abstract class Packet {
 			System.out.println("Reached end of stream");
 			return null;
 		}
-
+		Snatch.receivePacket(packet);
 		return packet;
 	}
 

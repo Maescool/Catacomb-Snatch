@@ -21,6 +21,7 @@ import com.mojang.mojam.entity.mob.Bat;
 import com.mojang.mojam.entity.mob.Mummy;
 import com.mojang.mojam.entity.mob.Snake;
 import com.mojang.mojam.level.Level;
+import com.mojang.mojam.network.NetworkCommand;
 import com.mojang.mojam.network.Packet;
 
 public final class Snatch
@@ -343,6 +344,12 @@ public final class Snatch
 		{
 			m.OnReceivePacket(packet);
 		}
+	}
+
+	public static void handlePacket(Packet packet)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -153,6 +153,8 @@ public class MojamComponent extends Canvas implements Runnable,
 		TitleMenu menu = new TitleMenu(GAME_WIDTH, GAME_HEIGHT);
 		addMenu(menu);
 		addKeyListener(this);
+		Snatch.init(this);
+
 
 		instance = this;
 		LevelList.createLevelList();
@@ -215,6 +217,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	public void stop() {
 		running = false;
+		Snatch.onStop();
 		soundPlayer.shutdown();
 	}
 
@@ -292,6 +295,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		}
 		player = players[localId];
 		player.setCanSee(true);
+		Snatch.createLevel(level);
 	}
 
 	@Override
@@ -318,7 +322,10 @@ public class MojamComponent extends Canvas implements Runnable,
 		int min = 999999999;
 		int max = 0;
 
-		while (running) {
+		Snatch.runOnce();
+		
+
+while (running) {
 			if (!this.hasFocus()) {
 				keys.release();
 			}
@@ -401,7 +408,10 @@ public class MojamComponent extends Canvas implements Runnable,
 		}
 	}
 
-	private synchronized void render(Graphics g) {
+	private synchronized void render(Graphics g)
+	{
+		Snatch.startRender();
+
 		if (level != null) {
 			int xScroll = (int) (player.pos.x - screen.w / 2);
 			int yScroll = (int) (player.pos.y - (screen.h - 24) / 2);
@@ -449,6 +459,7 @@ public class MojamComponent extends Canvas implements Runnable,
 					* SCALE, null);
 		}
 
+		Snatch.afterRender();
 	}
 
 	private void renderMouse(Screen screen, MouseButtons mouseButtons) {
@@ -497,8 +508,10 @@ public class MojamComponent extends Canvas implements Runnable,
 		}
 		
 		if (level != null && level.victoryConditions != null) {
-			if(level.victoryConditions.isVictoryConditionAchieved()) {
+	Snatch.updateTick();			
+if(level.victoryConditions.isVictoryConditionAchieved()) {
 				addMenu(new WinMenu(GAME_WIDTH, GAME_HEIGHT, level.victoryConditions.playerVictorious()));
+				Snatch.onWin(level.victoryConditions.playerVictorious());
                 level = null;
                 return;
             }
@@ -559,6 +572,7 @@ public class MojamComponent extends Canvas implements Runnable,
 					}
 
 					keys.tick();
+					//TODO: Keyloading from Snatch
 					for (Keys skeys : synchedKeys) {
 						skeys.tick();
 					}
@@ -605,6 +619,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			packetLink.setPacketListener(MojamComponent.this);
 
 		}
+		Snatch.afterTick();
 	}
 
 	public static void main(String[] args) {
@@ -714,6 +729,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		        addToLatencyCache(pp.getLatency());
 		    }
 		}
+		Snatch.handlePacket(packet);
 	}
 
     private void addToLatencyCache(int latency) {
