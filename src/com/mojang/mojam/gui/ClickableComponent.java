@@ -53,7 +53,7 @@ public abstract class ClickableComponent extends VisibleComponent {
 	/**
 	 * This component is being clicked on?
 	 * 
-	 * @return
+	 * @return boolean
 	 */
 	public boolean isPressed() {
 		return isPressed;
