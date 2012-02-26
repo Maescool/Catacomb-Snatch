@@ -25,6 +25,7 @@ public class Building extends Mob implements IUsable {
 	public int spawnTime = 0;
 	public boolean highlight = false;
 	private int healingTime = HEALING_INTERVAL;
+	public Mob carriedBy = null;
 
 	protected int upgradeLevel = 0;
 	private int maxUpgradeLevel = 0;
@@ -64,7 +65,7 @@ public class Building extends Mob implements IUsable {
 	 *            Screen
 	 */
 	protected void renderMarker(Screen screen) {
-		if (highlight) {
+		if (highlight && !isCarried()) {
 			BB bb = getBB();
 			bb = bb.grow((getSprite().w - (bb.x1 - bb.x0))
 					/ (3 + Math.sin(System.currentTimeMillis() * .01)));
@@ -130,9 +131,21 @@ public class Building extends Mob implements IUsable {
 				}
 			}
 		}
-
+		
 		xd = 0.0;
 		yd = 0.0;
+	}
+	
+	public void onPickup(Mob mob) {
+	    carriedBy = mob;
+	}
+	
+	public void onDrop() {
+	    carriedBy = null;
+	}
+	
+	public boolean isCarried() {
+	    return carriedBy != null;
 	}
 
 	@Override
