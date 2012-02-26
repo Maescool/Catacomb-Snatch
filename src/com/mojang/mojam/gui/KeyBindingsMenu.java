@@ -16,7 +16,7 @@ public class KeyBindingsMenu extends GuiMenu {
 	class KeyBindingButton extends Button {
 
 		private final int MAX_LABEL_LENGTH = 13;
-		
+
 		private Key key;
 		private boolean selected = false;
 
@@ -43,17 +43,15 @@ public class KeyBindingsMenu extends GuiMenu {
 		public void setLabel(String label) {
 			if (selected) {
 				super.setLabel("-" + trimToFitButton(label) + "-");
-			}
-			else {
+			} else {
 				super.setLabel(trimToFitButton(label));
 			}
 		}
-		
+
 		public String trimToFitButton(String label) {
 			if (label.length() > MAX_LABEL_LENGTH) {
 				return label.substring(0, MAX_LABEL_LENGTH - 2) + "...";
-			}
-			else {
+			} else {
 				return label;
 			}
 		}
@@ -118,6 +116,8 @@ public class KeyBindingsMenu extends GuiMenu {
 				* BUTTON_SPACING));
 		addButton(new KeyBindingButton(TitleMenu.KEY_UPGRADE_ID, keys.upgrade, tab2, yOffset + 3
 				* BUTTON_SPACING));
+		addButton(new KeyBindingButton(TitleMenu.KEY_CHAT_ID, keys.chat, tab2, yOffset + 4
+				* BUTTON_SPACING));
 		back = addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"),
 				(gameWidth - Button.BUTTON_WIDTH) / 2, yOffset + numRows * BUTTON_SPACING
 						- Button.BUTTON_HEIGHT + 32));
@@ -149,12 +149,14 @@ public class KeyBindingsMenu extends GuiMenu {
 		write(screen, txts.getStatic("keys.build"), 1, 1);
 		write(screen, txts.getStatic("keys.use"), 1, 2);
 		write(screen, txts.getStatic("keys.upgrade"), 1, 3);
+		write(screen, txts.getStatic("keys.chat"), 1, 4);
 		super.render(screen);
 		ClickableComponent button = buttons.get(selectedItem);
 		if (button == back) {
 			screen.blit(Art.getLocalPlayerArt()[0][6], back.getX() - 64, back.getY() - 8);
 		} else {
-			screen.blit(Art.getLocalPlayerArt()[0][6], button.getX() - textWidth - 32, button.getY() - 8);
+			screen.blit(Art.getLocalPlayerArt()[0][6], button.getX() - textWidth - 32,
+					button.getY() - 8);
 		}
 	}
 
@@ -198,7 +200,9 @@ public class KeyBindingsMenu extends GuiMenu {
 					selectedItem = 0;
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
-				if (selectedItem >= 5) {
+				if (buttons.get(selectedItem) == back) {
+					selectedItem -= 6;
+				} else if (selectedItem >= 5) {
 					selectedItem -= 5;
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {

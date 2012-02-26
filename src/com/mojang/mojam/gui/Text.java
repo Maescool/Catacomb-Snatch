@@ -1,7 +1,5 @@
 package com.mojang.mojam.gui;
 
-import java.util.ArrayList;
-
 import com.mojang.mojam.screen.Screen;
 
 public class Text extends VisibleComponent

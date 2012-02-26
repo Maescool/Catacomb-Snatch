@@ -5,8 +5,10 @@ import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.animation.EnemyDieAnimation;
+import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.loot.Loot;
+import com.mojang.mojam.level.HoleTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.screen.Art;
@@ -31,7 +33,7 @@ public abstract class Mob extends Entity {
 	public float health = maxHealth;
 	public boolean isImmortal = false;
 	public double xBump, yBump;
-	public Mob carrying = null;
+	public Building carrying = null;
 	public int yOffs = 8;
 	public double xSlide;
 	public double ySlide;
@@ -39,6 +41,7 @@ public abstract class Mob extends Entity {
 	public boolean chasing=false;
 	public int justDroppedTicks = 0;
 	public int localTeam;
+	public int strength = 0;
 	
 	public Mob(double x, double y, int team, int localTeam) {
 		super();
@@ -167,9 +170,6 @@ public abstract class Mob extends Entity {
 		if (doShowHealthBar && health < maxHealth) {
             addHealthBar(screen);
         }
-
-		// @todo maybe not have the rendering of carried item here..
-		renderCarrying(screen, 0);
 	}
 
 	protected void addHealthBar(Screen screen) {
@@ -183,9 +183,9 @@ public abstract class Mob extends Entity {
 		if (carrying == null)
 			return;
 
-		Bitmap image = carrying.getSprite();
-		screen.blit(image, carrying.pos.x - image.w / 2, carrying.pos.y - image.h + 8 + yOffs);// image.h
-		// / 2 - 8);
+		carrying.yOffs -= yOffs;
+		carrying.render(screen);
+		carrying.yOffs += yOffs;
 	}
 
 	public abstract Bitmap getSprite();
@@ -227,9 +227,24 @@ public abstract class Mob extends Entity {
 		return deathPoints;
 	}
 
-	public void onPickup() {
+	public void pickup(Building b) {
+        if (b.health > 0) {
+            level.removeEntity(b);
+            carrying = b;
+            carrying.onPickup(this);
+        }
 	}
-        
+	
+	public void drop() {
+        carrying.removed = false;
+        carrying.freezeTime = 10;
+        carrying.justDroppedTicks=80;
+        carrying.setPos(pos);
+        level.addEntity(carrying);
+        carrying.onDrop();
+        carrying = null;
+	}
+
 	public boolean isCarrying() {
 		return (this.carrying != null);
 	}
@@ -290,4 +305,19 @@ public abstract class Mob extends Entity {
         }
         return false;
     }
+    
+    public boolean fallDownHole() {
+    	int x=(int) pos.x/Tile.WIDTH;
+    	int y=(int) pos.y/Tile.HEIGHT;
+        if (level.getTile(x, y) instanceof HoleTile) {
+        	level.addEntity(new EnemyDieAnimation(pos.x, pos.y));
+        	MojamComponent.soundPlayer.playSound("/sound/Fall.wav", (float) pos.x, (float) pos.y);
+        	if (!(this instanceof Player)){
+        		remove();
+        	}
+        	return true;
+        }
+        return false;
+    }
+    
 }
