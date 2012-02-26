@@ -98,28 +98,29 @@ public class KeyBindingsMenu extends GuiMenu {
 		int tab2 = gameWidth - BORDER - Button.BUTTON_WIDTH;
 		yOffset = (gameHeight - (numRows * BUTTON_SPACING + 32)) / 2;
 
-		addButton(new KeyBindingButton(TitleMenu.KEY_UP_ID, keys.up, tab1,
-				yOffset + 0 * BUTTON_SPACING));
-		addButton(new KeyBindingButton(TitleMenu.KEY_DOWN_ID, keys.down, tab1,
-				yOffset + 1 * BUTTON_SPACING));
-		addButton(new KeyBindingButton(TitleMenu.KEY_LEFT_ID, keys.left, tab1,
-				yOffset + 2 * BUTTON_SPACING));
-		addButton(new KeyBindingButton(TitleMenu.KEY_RIGHT_ID, keys.right,
-				tab1, yOffset + 3 * BUTTON_SPACING));
-		addButton(new KeyBindingButton(TitleMenu.KEY_SPRINT_ID, keys.sprint,
-				tab1, yOffset + 4 * BUTTON_SPACING));
-		addButton(new KeyBindingButton(TitleMenu.KEY_FIRE_ID, keys.fire, tab2,
-				yOffset + 0 * BUTTON_SPACING));
-		addButton(new KeyBindingButton(TitleMenu.KEY_BUILD_ID, keys.build,
-				tab2, yOffset + 1 * BUTTON_SPACING));
-		addButton(new KeyBindingButton(TitleMenu.KEY_USE_ID, keys.use, tab2,
-				yOffset + 2 * BUTTON_SPACING));
-		addButton(new KeyBindingButton(TitleMenu.KEY_UPGRADE_ID, keys.upgrade,
-				tab2, yOffset + 3 * BUTTON_SPACING));
-		back = addButton(new Button(TitleMenu.BACK_ID,
-				MojamComponent.texts.getStatic("back"),
-				(gameWidth - Button.BUTTON_WIDTH) / 2, yOffset + numRows
-						* BUTTON_SPACING - Button.BUTTON_HEIGHT + 32));
+		addButton(new KeyBindingButton(TitleMenu.KEY_UP_ID, keys.up, tab1, yOffset + 0
+				* BUTTON_SPACING));
+		addButton(new KeyBindingButton(TitleMenu.KEY_DOWN_ID, keys.down, tab1, yOffset + 1
+				* BUTTON_SPACING));
+		addButton(new KeyBindingButton(TitleMenu.KEY_LEFT_ID, keys.left, tab1, yOffset + 2
+				* BUTTON_SPACING));
+		addButton(new KeyBindingButton(TitleMenu.KEY_RIGHT_ID, keys.right, tab1, yOffset + 3
+				* BUTTON_SPACING));
+		addButton(new KeyBindingButton(TitleMenu.KEY_SPRINT_ID, keys.sprint, tab1, yOffset + 4
+				* BUTTON_SPACING));
+		addButton(new KeyBindingButton(TitleMenu.KEY_FIRE_ID, keys.fire, tab2, yOffset + 0
+				* BUTTON_SPACING));
+		addButton(new KeyBindingButton(TitleMenu.KEY_BUILD_ID, keys.build, tab2, yOffset + 1
+				* BUTTON_SPACING));
+		addButton(new KeyBindingButton(TitleMenu.KEY_USE_ID, keys.use, tab2, yOffset + 2
+				* BUTTON_SPACING));
+		addButton(new KeyBindingButton(TitleMenu.KEY_UPGRADE_ID, keys.upgrade, tab2, yOffset + 3
+				* BUTTON_SPACING));
+		addButton(new KeyBindingButton(TitleMenu.KEY_CHAT_ID, keys.chat, tab2, yOffset + 4
+				* BUTTON_SPACING));
+		back = addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"),
+				(gameWidth - Button.BUTTON_WIDTH) / 2, yOffset + numRows * BUTTON_SPACING
+						- Button.BUTTON_HEIGHT + 32));
 	}
 
 	private String getMenuText(Key key) {
@@ -149,14 +150,15 @@ public class KeyBindingsMenu extends GuiMenu {
 		write(screen, txts.getStatic("keys.build"), 1, 1);
 		write(screen, txts.getStatic("keys.use"), 1, 2);
 		write(screen, txts.getStatic("keys.upgrade"), 1, 3);
+		write(screen, txts.getStatic("keys.chat"), 1, 4);
 		super.render(screen);
 		ClickableComponent button = buttons.get(selectedItem);
 		if (button == back) {
 			screen.blit(Art.getLocalPlayerArt()[0][6], back.getX() - 64,
 					back.getY() - 8);
 		} else {
-			screen.blit(Art.getLocalPlayerArt()[0][6], button.getX()
-					- textWidth - 32, button.getY() - 8);
+			screen.blit(Art.getLocalPlayerArt()[0][6], button.getX() - textWidth - 32,
+					button.getY() - 8);
 		}
 	}
 
@@ -205,9 +207,10 @@ public class KeyBindingsMenu extends GuiMenu {
 				if (selectedItem >= buttons.size()) {
 					selectedItem = 0;
 				}
-			} else if (e.getKeyCode() == KeyEvent.VK_LEFT
-					|| e.getKeyCode() == KeyEvent.VK_A) {
-				if (selectedItem >= 5) {
+			} else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
+				if (buttons.get(selectedItem) == back) {
+					selectedItem -= 6;
+				} else if (selectedItem >= 5) {
 					selectedItem -= 5;
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_RIGHT

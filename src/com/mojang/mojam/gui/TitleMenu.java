@@ -50,6 +50,7 @@ public class TitleMenu extends GuiMenu {
 	public static final int KEY_USE_ID = 3007;
 	public static final int KEY_BUILD_ID = 3008;
 	public static final int KEY_UPGRADE_ID = 3009;
+	public static final int KEY_CHAT_ID = 3010;
 
 	public static LevelInformation level = null;
 	public static GameMode defaultGameMode = new GameModeVanilla();

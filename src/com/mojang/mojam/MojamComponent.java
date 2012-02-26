@@ -71,6 +71,7 @@ import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.network.packet.ChangeKeyCommand;
 import com.mojang.mojam.network.packet.ChangeMouseButtonCommand;
 import com.mojang.mojam.network.packet.ChangeMouseCoordinateCommand;
+import com.mojang.mojam.network.packet.ChatCommand;
 import com.mojang.mojam.network.packet.PingPacket;
 import com.mojang.mojam.network.packet.StartGamePacket;
 import com.mojang.mojam.network.packet.StartGamePacketCustom;
@@ -102,6 +103,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	private int fps;
 	public static Screen screen = new Screen(GAME_WIDTH, GAME_HEIGHT);
 	private Level level;
+	private Chat chat = new Chat();
 
 	// Latency counter
 	private static final int CACHE_EMPTY = 0, CACHE_PRIMING = 1,
@@ -157,6 +159,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		TitleMenu menu = new TitleMenu(GAME_WIDTH, GAME_HEIGHT);
 		addMenu(menu);
 		addKeyListener(this);
+		addKeyListener(chat);
 
 		instance = this;
 		LevelList.createLevelList();
@@ -430,12 +433,13 @@ public class MojamComponent extends Canvas implements Runnable,
 			Font.draw(screen, texts.health(player.health, player.maxHealth),
 					340, screen.h - 16);
 			Font.draw(screen, texts.money(player.score), 340, screen.h - 27);
-			Font.draw(screen, texts.nextLevel((int) player.getNextLevel()),
-					340, screen.h - 38);
-			Font.draw(screen, texts.playerExp((int) player.pexp), 340,
-					screen.h - 49);
-			Font.draw(screen, texts.playerLevel(player.plevel), 340,
-					screen.h - 60);
+			Font.draw(screen, texts.nextLevel((int) player.getNextLevel()), 340, screen.h - 38);
+			Font.draw(screen, texts.playerExp((int) player.pexp), 340, screen.h - 49);
+			Font.draw(screen, texts.playerLevel(player.plevel), 340, screen.h - 60);
+		}
+
+		if (isMultiplayer && menuStack.isEmpty()) {
+			chat.render(screen);
 		}
 
 		g.setColor(Color.BLACK);
@@ -494,6 +498,9 @@ public class MojamComponent extends Canvas implements Runnable,
 				synchronizer.addCommand(pauseCommand);
 				paused2 = true;
 			}
+		}
+		if (isMultiplayer) {
+			tickChat();
 		}
 
 		if (requestToggleFullscreen || keys.fullscreen.wasPressed()) {
@@ -617,6 +624,24 @@ public class MojamComponent extends Canvas implements Runnable,
 		}
 	}
 
+	private void tickChat() {
+		if (chat.isOpen()) {
+			keys.release();
+		}
+
+		if (keys.chat.wasReleased()) {
+			chat.open();
+		}
+
+		chat.tick();
+
+		String msg = chat.getWaitingMessage();
+		if (msg != null) {
+			synchronizer
+			.addCommand(new ChatCommand(texts.playerName(player.localTeam) + ": " + msg));
+		}
+	}
+
 	public static void main(String[] args) {
 		MojamComponent mc = new MojamComponent();
 		guiFrame = new JFrame(GAME_TITLE);
@@ -688,6 +713,11 @@ public class MojamComponent extends Canvas implements Runnable,
 			synchedMouseButtons[playerId].setPosition(new Point(ccc.getX(), ccc
 					.getY()));
 			synchedMouseButtons[playerId].mouseHidden = ccc.isMouseHidden();
+		}
+
+		if (packet instanceof ChatCommand) {
+			ChatCommand cc = (ChatCommand) packet;
+			chat.addMessage(cc.getMessage());
 		}
 
 		if (packet instanceof PauseCommand) {
@@ -773,6 +803,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		} else if (id == TitleMenu.START_GAME_ID) {
 			clearMenus();
 			isMultiplayer = false;
+			chat.clear();
 
 			localId = 0;
 			localTeam = Team.Team1;
@@ -797,6 +828,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			addMenu(new HostingWaitMenu());
 			isMultiplayer = true;
 			isServer = true;
+			chat.clear();
 			try {
 				if (isServer) {
 					localId = 0;
@@ -857,6 +889,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			menuStack.clear();
 			isMultiplayer = true;
 			isServer = false;
+			chat.clear();
 
 			try {
 				localId = 1;
