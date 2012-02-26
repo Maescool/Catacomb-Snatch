@@ -192,7 +192,7 @@ public abstract class Mob extends Entity {
 
 	protected void addHealthBar(Screen screen) {
         
-        int start = (int) (health * 21 / maxHealth);
+        int start = (int) (health * 20 / maxHealth);
         
         screen.blit(Art.healthBar[start][0], pos.x - 16, pos.y + healthBarOffset);
     }

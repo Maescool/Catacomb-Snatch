@@ -421,16 +421,21 @@ public class MojamComponent extends Canvas implements Runnable,
 		}
 
 		if (player != null && menuStack.size() == 0) {
+		
+		    addHealthBar(screen);
+		    addXpBar(screen);
+		    addScore(screen);
+				
 		    if (isMultiplayer) {
 		        Font.draw(screen, texts.latency(latencyCacheReady()?""+avgLatency():"-"), 10, 20);
 		    }
 		    
-			Font.draw(screen, texts.health(player.health, player.maxHealth),
+	/*		Font.draw(screen, texts.health(player.health, player.maxHealth),
 					340, screen.h - 16);
 			Font.draw(screen, texts.money(player.score), 340, screen.h - 27);
-			Font.draw(screen, texts.nextLevel((int) player.getNextLevel()), 340, screen.h - 38);
+			Font.draw(screen, texts.nextLevel((int) player.xpNeededForNextLevel()), 340, screen.h - 38);
 			Font.draw(screen, texts.playerExp((int) player.pexp), 340, screen.h - 49);
-			Font.draw(screen, texts.playerLevel(player.plevel), 340, screen.h - 60);
+			Font.draw(screen, texts.playerLevel(player.plevel), 340, screen.h - 60);*/
 		}
 
 		if (isMultiplayer && menuStack.isEmpty()) {
@@ -455,6 +460,30 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	}
 
+	private void addHealthBar(Screen screen){
+	  
+	    int start = 44 - (int) (player.health * 44 / player.maxHealth);
+	    screen.blit(Art.panel_healthBar[0][start], 315, screen.h - 17);
+	    screen.blit(Art.panel_heart, 316, screen.h - 24);
+	    Font.draw(screen, texts.health(player.health, player.maxHealth), 335, screen.h - 21);
+        
+	}
+	
+	private void addXpBar(Screen screen){
+	    int xpSinceLastLevelUp = (int)(player.pexp - player.xpNeededForLevel(player.plevel-1));
+	    int xpNeededForNextLevel = (int)(player.xpNeededForLevel(player.plevel) - player.xpNeededForLevel(player.plevel-1));
+	    int index = 44 - (int) (xpSinceLastLevelUp * 44 / xpNeededForNextLevel);
+	    
+	    screen.blit(Art.panel_xpBar[0][index], 315, screen.h - 32);
+        screen.blit(Art.panel_level, 316, screen.h - 40);
+        Font.draw(screen, texts.playerLevel(player.plevel), 335, screen.h - 36);
+    }
+	
+	private void addScore(Screen screen){
+	    screen.blit(Art.panel_coin, 316, screen.h - 54);
+        Font.draw(screen, texts.money(player.score), 335, screen.h - 51);
+	}
+	
 	private void renderMouse(Screen screen, MouseButtons mouseButtons) {
 
 		if (mouseButtons.mouseHidden)
