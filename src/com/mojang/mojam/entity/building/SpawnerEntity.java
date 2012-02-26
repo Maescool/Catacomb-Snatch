@@ -6,13 +6,27 @@ import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.screen.*;
 
+/**
+ * Spawner entity. A sarcophage which spawns enemies of a given type onto the field.
+ */
 public class SpawnerEntity extends Building {
+	/** Spawn interval in frames*/
 	public static final int SPAWN_INTERVAL = 60 * 4;
 
 	public int spawnTime = 0;
 
 	public int type;
 
+	private int lastIndex = 0;
+
+	/**
+	 * Constructor
+	 * 
+	 * @param x Initial X coordinate
+	 * @param y Initial Y coordinate
+	 * @param team Team number
+	 * @param type Mob type
+	 */
 	public SpawnerEntity(double x, double y, int team, int type) {
 		super(x, y, team, 0);
 
@@ -25,6 +39,7 @@ public class SpawnerEntity extends Building {
 		deathPoints = type * 5 + 5;
 	}
 
+	@Override
 	public void tick() {
 		super.tick();
 		if (freezeTime > 0)
@@ -36,6 +51,9 @@ public class SpawnerEntity extends Building {
 		}
 	}
 
+	/**
+	 * Spawn a new enemy of the given type onto the field.
+	 */
 	private void spawn() {
 		double x = pos.x + (TurnSynchronizer.synchedRandom.nextFloat() - 0.5)
 				* 5;
@@ -59,12 +77,7 @@ public class SpawnerEntity extends Building {
 			level.addEntity(te);
 	}
 
-	public void die() {
-		super.die();
-	}
-
-	private int lastIndex = 0;
-
+	@Override
 	public Bitmap getSprite() {
 		int newIndex = (int)(3 - (3 * health) / maxHealth);
 		if (newIndex != lastIndex) {
