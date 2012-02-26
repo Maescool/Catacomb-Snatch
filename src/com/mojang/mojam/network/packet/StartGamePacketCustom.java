@@ -12,11 +12,11 @@ public class StartGamePacketCustom extends StartGamePacket {
 	private long gameSeed;
 	public Level level;
 	public int levelWidth, levelHeight;
+	public int playerCharacterID, opponentCharacterID;
 	public Short[] shorts;
 	public int difficulty;
-	
-	public StartGamePacketCustom() {
-	}
+
+	public StartGamePacketCustom() {}
 
 	public StartGamePacketCustom(long gameSeed, Level level, int difficulty) {
 		this.gameSeed = gameSeed;
@@ -29,9 +29,11 @@ public class StartGamePacketCustom extends StartGamePacket {
 		gameSeed = dis.readLong();
 		levelWidth = dis.readInt();
 		levelHeight = dis.readInt();
-		
+		playerCharacterID = dis.readInt();
+		opponentCharacterID = dis.readInt();
+
 		shorts = new Short[levelWidth * levelHeight];
-		for(int i = 0; i < shorts.length; i++){
+		for (int i = 0; i < shorts.length; i++) {
 			shorts[i] = dis.readShort();
 		}
 		this.difficulty = dis.readInt();
@@ -42,7 +44,9 @@ public class StartGamePacketCustom extends StartGamePacket {
 		dos.writeLong(gameSeed);
 		dos.writeInt(level.width);
 		dos.writeInt(level.height);
-		for(int i = 0; i < level.tiles.length; i++){
+		dos.writeInt(level.getPlayerCharacterID());
+		dos.writeInt(level.getOpponentCharacterID());
+		for (int i = 0; i < level.tiles.length; i++) {
 			dos.writeShort(TileID.tileToShort(level.tiles[i]));
 		}
 		dos.writeInt(difficulty);
@@ -51,11 +55,11 @@ public class StartGamePacketCustom extends StartGamePacket {
 	public long getGameSeed() {
 		return gameSeed;
 	}
-	
+
 	public Level getLevel() {
-		level = new Level(levelWidth, levelHeight);
-		for(int x = 0; x < level.width; x++){
-			for(int y = 0; y < level.width; y++){
+		level = new Level(levelWidth, levelHeight, playerCharacterID, opponentCharacterID);
+		for (int x = 0; x < level.width; x++) {
+			for (int y = 0; y < level.width; y++) {
 				int index = x + y * level.width;
 				level.setTile(x, y, TileID.shortToTile(shorts[index], level, x, y));
 			}

@@ -76,6 +76,7 @@ public class Player extends Mob implements LootCollector {
     private int regenDelay = 0;
     boolean isImmortal;
     public static boolean creative = Options.getAsBoolean(Options.CREATIVE); 
+    private int characterID;
     
     public void setRailPricesandImmortality(){
     	if (creative == true){
@@ -91,10 +92,11 @@ public class Player extends Mob implements LootCollector {
     	}
     }
 
-    public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team, int localTeam) {
+    public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team, int localTeam, int characterID) {
         super(x, y, team, localTeam);
         this.keys = keys;
         this.mouseButtons = mouseButtons;
+        this.characterID = characterID;
 
         startX = x;
         startY = y;
@@ -518,15 +520,12 @@ public class Player extends Mob implements LootCollector {
 
     @Override
     public void render(Screen screen) {
-        Bitmap[][] sheet = Art.getLocalPlayerArt();
-        if (team == Team.Team2) {
-            sheet = Art.herrSpeck;
-        }
-        
-        if (dead) {
+    	if (dead) {
             // don't draw anything if we are dead (in a hole)
             return;
         }
+
+        Bitmap[][] sheet = Art.getPlayerArt(characterID);
 
         int frame = (walkTime / 4 % 6 + 6) % 6;
 
@@ -687,7 +686,7 @@ public class Player extends Mob implements LootCollector {
     }
 
     private void revive() {
-        Notifications.getInstance().add(MojamComponent.texts.hasDied(team));
+        Notifications.getInstance().add(MojamComponent.texts.hasDied(characterID));
         carrying = null;
         dropAllMoney();
         pos.set(startX, startY);

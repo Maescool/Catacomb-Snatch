@@ -9,11 +9,13 @@ public class WinMenu extends GuiMenu {
 	private int selectedItem = 0;
 	private final int gameWidth;
 	private int winningPlayer;
+	private int characterID;
 
-	public WinMenu(int gameWidth, int gameHeight, int winningPlayer) {
+	public WinMenu(int gameWidth, int gameHeight, int winningPlayer, int characterID) {
 		super();
 		this.winningPlayer = winningPlayer;
 		this.gameWidth = gameWidth;
+		this.characterID = characterID;
 
 		addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, "Ok", (gameWidth - 128) / 2, 200));
 	}
@@ -23,14 +25,11 @@ public class WinMenu extends GuiMenu {
 		screen.clear(0);
 		screen.blit(Art.gameOverScreen, 0, 0);
 
-		Font.draw(screen, MojamComponent.texts.playerWin(winningPlayer), 180, 160);
+		Font.draw(screen, MojamComponent.texts.playerWin(winningPlayer,characterID), 180, 160);
 
 		super.render(screen);
 
-		if (winningPlayer == 1)
-			screen.blit(Art.getLocalPlayerArt()[0][6], (gameWidth - 128) / 2 - 40, 190 + selectedItem * 40);
-		if (winningPlayer == 2)
-			screen.blit(Art.herrSpeck[0][6], (gameWidth - 128) / 2 - 40, 190 + selectedItem * 40);
+		screen.blit(Art.getPlayerArt(characterID)[0][6], (gameWidth - 128) / 2 - 40, 190 + selectedItem * 40);
 	}
 
 	@Override

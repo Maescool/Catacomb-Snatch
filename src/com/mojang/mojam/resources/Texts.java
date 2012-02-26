@@ -20,40 +20,27 @@ public class Texts {
 		if (texts.containsKey(property)) {
 			return texts.getString(property);
 		} else {
-			System.err.println("Missing text property {"+property+"}");
-			return "{"+property+"}";
+			System.err.println("Missing text property {" + property + "}");
+			return "{" + property + "}";
 		}
 	}
 
-	public String player1Win() {
-
-		return MessageFormat.format(getStatic("gameplay.player1Win"),getPlayer1Name());
-	}
-
-	public String player2Win() {
-		return MessageFormat.format(getStatic("gameplay.player2Win"), getStatic("gameplay.player2Name").toUpperCase());
-	}
-
-	public String playerName(int team) {
-		if(team == Team.Team1) {
-			return getPlayer1Name();
+	public String playerWin(int team, int characterID) {
+		String winMessage;
+		if (team == Team.Team1) {
+			winMessage = getStatic("player1Win");
+		}else{
+			winMessage = getStatic("player2Win");
 		}
-		return getStatic("gameplay.player2Name");
+		return MessageFormat.format(winMessage, getPlayerName(characterID));
 	}
 
-	public String playerWin(int team) {
-		if(team == Team.Team1) {
-			return player1Win();
-		}
-		return player2Win();
+	public String hasDied(int characterID) {
+		return MessageFormat.format(getStatic("player.hasDied"), getPlayerName(characterID));
 	}
 
-	public String hasDied(int team) {
-		return MessageFormat.format(getStatic("player.hasDied"), playerName(team));
-	}
-
-	public String score(int team, int score) {
-		return MessageFormat.format(getStatic("player.score"), playerName(team), score);
+	public String score(int score, int characterID) {
+		return MessageFormat.format(getStatic("player.score"), getPlayerName(characterID), score);
 	}
 
 	public String cost(int cost) {
@@ -61,7 +48,8 @@ public class Texts {
 	}
 
 	public String health(float health, float maxHealth) {
-		return MessageFormat.format(getStatic("player.health"), Math.floor(health / maxHealth * 100));
+		return MessageFormat.format(getStatic("player.health"),
+				Math.floor(health / maxHealth * 100));
 	}
 
 	public String money(int money) {
@@ -108,10 +96,7 @@ public class Texts {
 		return MessageFormat.format(getStatic("build.removeRail"), cost);
 	}
 
-	public String getPlayer1Name() {	
-		if(Options.getAsBoolean(Options.ALTERNATIVE)) {
-			return getStatic("gameplay.player1NameAlt").toUpperCase();
-		}
-		return getStatic("gameplay.player1Name").toUpperCase();
+	public String getPlayerName(int characterID) {
+		return getStatic("gameplay.player" + (characterID + 1) + "Name").toUpperCase();
 	}
 }

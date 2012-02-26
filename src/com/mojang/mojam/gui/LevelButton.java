@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.util.Random;
 
 import com.mojang.mojam.MouseButtons;
+import com.mojang.mojam.Options;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.gamemode.GameMode;
 import com.mojang.mojam.network.TurnSynchronizer;
+import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
@@ -53,7 +55,7 @@ public class LevelButton extends ClickableComponent {
 		// load level
 		Level l;
 		try {
-			l = new GameMode().generateLevel(levelInfo,localTeam);
+			l = new GameMode().generateLevel(levelInfo,localTeam,Options.getCharacterID(),Art.CHARACTER_HERR_SPECK);
 		} catch (IOException e) {
 			return false;
 		}

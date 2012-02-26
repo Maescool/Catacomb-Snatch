@@ -38,16 +38,21 @@ public class Level {
 	public List<ILevelTickItem> tickItems = new ArrayList<ILevelTickItem>();;
 	public int maxMonsters;
 
+	private int playerCharacterID;
+	private int opponentCharacterID;
+	
 	public IVictoryConditions victoryConditions;
 	public int player1Score = 0;
 	public int player2Score = 0;
 
 	@SuppressWarnings("unchecked")
-	public Level(int width, int height) {
+	public Level(int width, int height,int playerCharacterID, int opponentCharacterID) {
 		neighbourOffsets = new int[] { -1, 1, -width, width };
 		this.width = width;
 		this.height = height;
-
+		this.playerCharacterID = playerCharacterID;
+		this.opponentCharacterID = opponentCharacterID;
+		
 		minimap = new Bitmap(width, height);
 
 		tiles = new Tile[width * height];
@@ -73,7 +78,14 @@ public class Level {
 		 * random.nextInt(Team.MaxTeams))); }
 		 */
 	}
-
+	
+	public int getPlayerCharacterID() {
+		return playerCharacterID;
+	}
+	
+	public int getOpponentCharacterID() {
+		return opponentCharacterID;
+	}
 
 	public void setTile(int x, int y, Tile tile) {
 		final int index = x + y * width;
@@ -305,7 +317,7 @@ public class Level {
 				int yt = y - 4;
 				if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4
 						&& (xt != 3 || yt < 3)) {
-					screen.blit(Art.startHerrSpeck[xt][yt], x * Tile.WIDTH, y
+					screen.blit(Art.getBaseArt(opponentCharacterID)[xt][yt], x * Tile.WIDTH, y
 							* Tile.HEIGHT);
 					continue;
 				}
@@ -313,7 +325,7 @@ public class Level {
 				yt = y - (64 - 8);
 				if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4
 						&& (xt != 3 || yt > 0)) {
-					screen.blit(Art.startLordLard[xt][yt], x * Tile.WIDTH, y
+					screen.blit(Art.getBaseArt(playerCharacterID)[xt][yt], x * Tile.WIDTH, y
 							* Tile.HEIGHT);
 					continue;
 				}
@@ -466,12 +478,12 @@ public class Level {
 		screen.blit(Art.panel, 0, screen.h - 80);
 		screen.blit(minimap, 429, screen.h - 80 + 5);
 		
-		String player1score =  MojamComponent.texts.score(Team.Team1, player1Score * 100 / TARGET_SCORE);
+		String player1score =  MojamComponent.texts.score(player1Score * 100 / TARGET_SCORE,playerCharacterID);
 		Font.draw(screen, player1score, 280-player1score.length()*10, screen.h - 20); //adjust so it fits in the box
-		Font.draw(screen, MojamComponent.texts.score(Team.Team2, player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
+		Font.draw(screen, MojamComponent.texts.score(player2Score * 100 / TARGET_SCORE,opponentCharacterID), 56, screen.h - 36);
 		
-		screen.blit(Art.getLocalPlayerArt()[0][2], 262, screen.h-42);
-		screen.blit(Art.herrSpeck[0][6], 19, screen.h-42);
+		screen.blit(Art.getPlayerArt(playerCharacterID)[0][2], 262, screen.h-42);
+		screen.blit(Art.getPlayerArt(opponentCharacterID)[0][6], 19, screen.h-42);
 		
 		Notifications.getInstance().render(screen);
 	}
