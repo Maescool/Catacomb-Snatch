@@ -54,6 +54,7 @@ public class ShopItem extends Building {
     public void render(Screen screen) {
         super.render(screen);
         // Bitmap image = getSprite();
+        if(team == localTeam)
         Font.drawCentered(screen, MojamComponent.texts.cost(effectiveCost), (int) (pos.x), (int) (pos.y + 10));
     }
 
