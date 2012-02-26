@@ -625,7 +625,8 @@ public class MojamComponent extends Canvas implements Runnable,
 
 		String msg = chat.getWaitingMessage();
 		if (msg != null) {
-			synchronizer.addCommand(new ChatCommand(msg));
+			synchronizer
+			.addCommand(new ChatCommand(texts.playerName(player.localTeam) + ": " + msg));
 		}
 	}
 
