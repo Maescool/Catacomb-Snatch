@@ -1,12 +1,8 @@
 package com.mojang.mojam.entity;
 
-import java.util.List;
-
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.building.Bomb;
 import com.mojang.mojam.entity.mob.*;
-import com.mojang.mojam.level.tile.DestroyableWallTile;
-import com.mojang.mojam.math.BB;
 import com.mojang.mojam.screen.*;
 
 public class Bullet extends Entity {
@@ -75,19 +71,5 @@ public class Bullet extends Entity {
 		if (hit) {
 			MojamComponent.soundPlayer.playSound("/sound/Shot 2.wav", (float) pos.x, (float) pos.y);
 		}
-	}
-	
-	public final boolean blocks(DestroyableWallTile wall) {
-		return true;
-	}
-	
-	public void handleCollision(DestroyableWallTile wall, double xa, double ya) {
-		if (this.blocks(wall)) {
-			this.collide(wall, xa, ya);
-		}
-	}
-	
-	public void collide(DestroyableWallTile wall, double xa, double ya) {
-		wall.hurt();
 	}
 }
