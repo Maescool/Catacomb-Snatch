@@ -137,14 +137,27 @@ public class Building extends Mob implements IUsable {
 		yd = 0.0;
 	}
 	
+	/**
+	 * Called if this building is picked up
+	 * 
+	 * @param mob Reference to the mob object carrying this building
+	 */
 	public void onPickup(Mob mob) {
 	    carriedBy = mob;
 	}
 	
+	/**
+	 * Called if this building is dropped by its carrier
+	 */
 	public void onDrop() {
 	    carriedBy = null;
 	}
 	
+	/**
+	 * Check if this building is being carried
+	 * 
+	 * @return True if carried, false if not
+	 */
 	public boolean isCarried() {
 	    return carriedBy != null;
 	}
@@ -177,13 +190,8 @@ public class Building extends Mob implements IUsable {
 		fallDownHole();
 	}
 	
-	//
-	//upgrade
-	//
 	/**
-	 * IF YOU REMOVE THIS, I COME TO YOUR HOUSE AND KILL YOU
-	 * IN YOUR SLEEP!
-	 * or nicer said, this is used by other functions
+	 * Called if building upgrade is complete
 	 */
 	protected void upgradeComplete() {
 	}
@@ -226,7 +234,7 @@ public class Building extends Mob implements IUsable {
 	}
 
 	/**
-	 * Make the building upgradeable
+	 * Make this building upgradeable
 	 * 
 	 * @param costs Cost vector
 	 */
@@ -263,10 +271,20 @@ public class Building extends Mob implements IUsable {
 		return true;
 	}
 	
+	/**
+	 * Set regeneration status for this building
+	 * 
+	 * @param regen True if building can regenerate, false if not
+	 */
 	public void buildingRegen(boolean regen) {
 		healthRegenB = regen;
 	}
 	
+	/**
+	 * Check if this building is able to regenerate
+	 * 
+	 * @return True if building can regenerate, false if not
+	 */
 	public boolean buildingRegenEnabled() {
 		return healthRegenB;
 	}
