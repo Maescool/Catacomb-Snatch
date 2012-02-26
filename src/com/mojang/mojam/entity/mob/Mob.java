@@ -45,6 +45,7 @@ public abstract class Mob extends Entity {
 	public int strength = 0;
 	public int healingInterval;
 	public int healingTime;
+	public boolean healthRegen = true;
 	
 	public Mob(double x, double y, int team, int localTeam) {
 		super();
@@ -91,7 +92,7 @@ public abstract class Mob extends Entity {
 	}
 
 	public void tick() {
-		if (TitleMenu.difficulty.difficultyID >= 1) {
+		if (TitleMenu.difficulty.difficultyID >= 1 && healthRegen) {
 	  	if (hurtTime <= 0) {
 			  if (health < maxHealth) {
 			  	if (--healingTime <= 0) {
@@ -340,6 +341,10 @@ public abstract class Mob extends Entity {
         	return true;
         }
         return false;
+    }
+    
+    public void disableMobHealthRegen(boolean disable) {
+    	this.healthRegen = !disable;
     }
     
 }
