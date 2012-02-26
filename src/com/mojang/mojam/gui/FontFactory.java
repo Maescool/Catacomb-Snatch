@@ -38,7 +38,6 @@ public class FontFactory {
 		Rectangle2D bounds = layout.getBounds();
 		double heightOffset = bounds.getY() - layoutStandardLetter.getBounds().getY();
 		characterHeightOffset.put(character, heightOffset);
-		System.out.println(character + ": " + heightOffset);
 
 		int width = (int) (bounds.getWidth() + 0.5) + 10;
 		int height = (int) (bounds.getHeight() + 0.5) + 10;
