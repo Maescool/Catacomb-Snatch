@@ -94,6 +94,7 @@ public class Art {
 		
 	public static BufferedImage icon32 = loadBufferedImage("/art/icon/icon32.png");
 	public static BufferedImage icon64 = loadBufferedImage("/art/icon/icon64.png");
+	public static Bitmap mojangLogo = load("/art/logo/mojang.png");
 
 	public static Bitmap[][] cut(String string, int w, int h) {
 		return cut(string, w, h, 0, 0);
