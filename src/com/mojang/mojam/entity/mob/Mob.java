@@ -13,6 +13,7 @@ import com.mojang.mojam.level.HoleTile;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.Vec2;
+import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
@@ -23,7 +24,7 @@ public abstract class Mob extends Entity {
 	public final static int MoveControlFlag = 1;
 
 	// private double speed = 0.82;
-	private double speed = 1.0;
+	public double speed = 1.0;
 	public int team;
 	protected boolean doShowHealthBar = true;
     protected int healthBarOffset = 10;
@@ -47,6 +48,10 @@ public abstract class Mob extends Entity {
 	public int healingInterval;
 	public int healingTime;
 	public boolean healthRegen = true;
+    public int facing;
+    public int walkTime;
+    public int stepTime;
+    public int limp;
 	
 	public Mob(double x, double y, int team, int localTeam) {
 		super();
@@ -351,4 +356,37 @@ public abstract class Mob extends Entity {
         return false;
     }
     
+    public void walk(){
+    	switch (facing) {
+        case 0:
+            yd -= speed;
+            break;
+        case 1:
+            xd += speed;
+            break;
+        case 2:
+            yd += speed;
+            break;
+        case 3:
+            xd -= speed;
+            break;
+    	}
+    	walkTime++;
+
+    	if (walkTime / 12 % limp != 0) {
+    		if (shouldBounceOffWall(xd, yd)) {
+    			facing = (facing + 2) % 4;
+    			xd = -xd;
+    			yd = -yd;
+    		}
+
+    		stepTime++;
+    		if ((!move(xd, yd) || (walkTime > 10 && TurnSynchronizer.synchedRandom.nextInt(200) == 0) && chasing==false)) {
+    			facing = TurnSynchronizer.synchedRandom.nextInt(4);
+    			walkTime = 0;
+    		}
+    	}
+    	xd *= 0.2;
+    	yd *= 0.2;
+    }
 }
