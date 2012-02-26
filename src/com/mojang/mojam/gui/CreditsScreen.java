@@ -1,12 +1,10 @@
 package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
 import com.mojang.mojam.MojamComponent;
-import com.mojang.mojam.Options;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
@@ -17,11 +15,11 @@ public class CreditsScreen extends GuiMenu {
 	private ClickableComponent back;
 	
 	public String officialGame   = "Mojang AB";
-	public String[] leadDev      = {"@Maescool"};
-	public String[] officialDev  = {"@Borsty", "@danielduner", "@flet", "@judgedead53", "@Maescool",
-			"@master-lincoln", "@mkalam-alami", "@Scorpion1122"};
-	public String[] communityMan = {"@Austin01", "@zorro300"};
-	public String[] others = {"@xPaw", "@BubblegumBalloon", "@Elosanda", "@GreenLightning"};
+	public String[] leadDev      = {"Maescool"};
+	public String[] officialDev  = {"Borsty", "danielduner", "flet", "judgedead53", "Maescool",
+			"master-lincoln", "mkalam-alami", "Scorpion1122"};
+	public String[] communityMan = {"Austin01", "zorro300"};
+	public String[] others = {"xPaw", "BubblegumBalloon", "Elosanda", "GreenLightning"};
 
 	public CreditsScreen(int gameWidth, int gameHeight) {
 		super();
@@ -29,37 +27,43 @@ public class CreditsScreen extends GuiMenu {
 		this.gameHeight = gameHeight;
 
 		back = addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"),
-				(gameWidth - 128) / 2, gameHeight - 50 - 30));
+				(gameWidth - 128) / 2, gameHeight - 50 - 10));
 	}
 
 	public void render(Screen screen) {
-		int previousY = 0;
 		
 		screen.clear(0);
 		screen.blit(Art.emptyBackground, 0, 0);
 
 		super.render(screen);
 
-		screen.blit(Art.getLocalPlayerArt()[0][6], (gameWidth - 128) / 2 - 40,
-				gameHeight - 50 - 40);
-
-		screen.blit(Art.mojangLogo, (gameWidth - Art.mojangLogo.w) / 2, previousY += 20);
-		previousY += 20;
-		addText(new Text(TitleMenu.CREDITS_TITLE_ID, "* " + MojamComponent.texts.getStatic("credits.note"),
-				(gameWidth - 512) / 2, previousY += 20));
+		// Mojang logo
+		screen.blit(Art.mojangLogo, (gameWidth - Art.mojangLogo.w) / 2, 30);
 		
-		addText(new Text(TitleMenu.CREDITS_TITLE_ID, MojamComponent.texts.getStatic("credits.leadDev"),
-			(gameWidth - 512) / 2, previousY += 20));
-		previousY = drawNames(leadDev, screen, previousY += 20);
-		addText(new Text(TitleMenu.CREDITS_TITLE_ID, MojamComponent.texts.getStatic("credits.maintainers"),
-			(gameWidth - 512) / 2, previousY += 20));
-		previousY = drawNames(officialDev, screen, previousY += 20);
-		addText(new Text(TitleMenu.CREDITS_TITLE_ID, MojamComponent.texts.getStatic("credits.communityMan"),
-			(gameWidth - 512) / 2, previousY += 20));
-		previousY = drawNames(communityMan, screen, previousY += 20);
-		addText(new Text(TitleMenu.CREDITS_TITLE_ID, MojamComponent.texts.getStatic("credits.others"),
-				(gameWidth - 512) / 2, previousY += 20));
-		previousY = drawNames(others, screen, previousY += 20);
+		Font.draw(screen, "* " + MojamComponent.texts.getStatic("credits.note"),
+				(gameWidth - 512) / 2 + 30, 80);
+
+		Font.draw(screen, MojamComponent.texts.getStatic("credits.leadDev"),
+				(gameWidth - 512) / 2 + 30, 110);
+		Font.draw(screen, MojamComponent.texts.getStatic("credits.maintainers"),
+				(gameWidth - 512) / 2 + 30, 140);
+		Font.draw(screen, MojamComponent.texts.getStatic("credits.communityMan"),
+				(gameWidth - 512) / 2 + 30, 200);
+		Font.draw(screen, MojamComponent.texts.getStatic("credits.others"),
+				(gameWidth - 512) / 2 + 30, 230);
+
+		Font.setFont("gray");
+		drawNames(leadDev, screen, 120);
+		drawNames(officialDev, screen, 150);
+		drawNames(communityMan, screen, 210);
+		drawNames(others, screen, 240);
+
+		Font.setFontToDefault();
+
+		// Back button character
+		screen.blit(Art.getLocalPlayerArt()[0][6], (gameWidth - 128) / 2 - 40,
+				gameHeight - 50 - 20);
+	
 	}
 	
 	public int drawNames(String[] names, Screen screen, Integer y) {
