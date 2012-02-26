@@ -85,6 +85,14 @@ public class Texts {
 	public String playerLevel(int plevel) {
 		return MessageFormat.format(getStatic("player.level"), plevel);
 	}
+	
+	public String[] shopTooltipLines(String shopItemName) {
+	    return new String[] { 
+	            getStatic("shop." + shopItemName + "TooltipTitle"),
+	            getStatic("shop." + shopItemName + "TooltipLine1"),
+	            getStatic("shop." + shopItemName + "TooltipLine2"),
+	    };
+	}
 
 	public String upgradeNotEnoughMoney(int cost) {
 		return MessageFormat.format(getStatic("upgrade.notEnoughMoney"), cost);
