@@ -40,7 +40,8 @@ public class FontFactory {
 
 		int positionX = fontSize;
 		int positionY = 2*fontSize;
-		graphics.setColor(Color.BLACK);
+		Color shadowColor = Color.BLACK;
+		graphics.setColor(shadowColor);
 		graphics.drawString(Character.toString(character), positionX+1, positionY+1);
 		Color mainLetterColor = Color.MAGENTA;
 		graphics.setColor(mainLetterColor);
@@ -77,7 +78,7 @@ public class FontFactory {
 		int row = 0;
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				if (pixels[x][y] != 0 && pixels[x][y] != Color.black.getRGB()) {
+				if (pixels[x][y] != 0 && pixels[x][y] != shadowColor.getRGB()) {
 					pixels[x][y] = gradient[row].getRGB();
 				}
 			}
