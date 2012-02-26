@@ -6,7 +6,6 @@ import com.mojang.mojam.Keys;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.Options;
-import com.mojang.mojam.entity.animation.EnemyDieAnimation;
 import com.mojang.mojam.entity.animation.SmokePuffAnimation;
 import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.building.Harvester;
@@ -20,7 +19,6 @@ import com.mojang.mojam.entity.particle.Sparkle;
 import com.mojang.mojam.entity.weapon.IWeapon;
 import com.mojang.mojam.entity.weapon.Rifle;
 import com.mojang.mojam.gui.Notifications;
-import com.mojang.mojam.level.HoleTile;
 import com.mojang.mojam.level.tile.RailTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.Vec2;
@@ -29,8 +27,10 @@ import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
+/**
+ * Implements the player entity
+ */
 public class Player extends Mob implements LootCollector {
-
     public static int COST_RAIL;
     public static int COST_DROID;
     public static int COST_REMOVE_RAIL;
@@ -75,22 +75,17 @@ public class Player extends Mob implements LootCollector {
     private int nextWalkSmokeTick = 0;
     private int regenDelay = 0;
     boolean isImmortal;
-    public static boolean creative = Options.getAsBoolean(Options.CREATIVE); 
-    
-    public void setRailPricesandImmortality(){
-    	if (creative == true){
-    		COST_RAIL = 0;
-    		COST_DROID = 0;
-    		COST_REMOVE_RAIL = 0;
-    		isImmortal = true;
-    	}else{
-     		COST_RAIL = 10;
-    		COST_DROID = 50;
-    		COST_REMOVE_RAIL = 0;
-    		isImmortal = false;
-    	}
-    }
 
+    /**
+     * Constructor
+     * 
+     * @param keys Key bindings for this player
+     * @param mouseButtons Mouse Button state
+     * @param x Initial x coordinate
+     * @param y Initial y coordinate
+     * @param team Team number
+     * @param localTeam Local team number
+     */
     public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team, int localTeam) {
         super(x, y, team, localTeam);
         this.keys = keys;
@@ -110,44 +105,69 @@ public class Player extends Mob implements LootCollector {
 
         score = 0;
         weapon = new Rifle(this);
-        setRailPricesandImmortality();
+        setRailPricesAndImmortality();
+    }
+    
+    /**
+     * Handle creative mode
+     */
+    private void setRailPricesAndImmortality(){
+    	if (Options.getAsBoolean(Options.CREATIVE)){
+    		COST_RAIL = 0;
+    		COST_DROID = 0;
+    		COST_REMOVE_RAIL = 0;
+    		isImmortal = true;
+    	}else{
+     		COST_RAIL = 10;
+    		COST_DROID = 50;
+    		COST_REMOVE_RAIL = 0;
+    		isImmortal = false;
+    	}
     }
 
-    private void checkForLevelUp() {
+    /**
+     * Check if the player has reached enough XP for a levelup
+     */
+    private void handleLevelUp() {
         if (pexp >= nextLevel()) {
-            levelUp();
+            this.maxHealth++;
+            this.regenDelay = 2;
+            plevel++;
+            psprint += 0.1;
+            maxTimeSprint += 20;
+
+            MojamComponent.soundPlayer.playSound("/sound/levelUp.wav", (float) pos.x, (float) pos.y, true);
         }
     }
 
+    /**
+     * Calculate how much XP is needed to reach the next level
+     * 
+     * @return XP value
+     */
     private double nextLevel() {
         double next = (plevel * 7) * (plevel * 7);
         pnextlevel = (int) next;
         return next;
     }
 
+    /**
+     * Calculate how much XP is missing to reach the next level
+     * 
+     * @return Missing XP value
+     */
     public double getNextLevel() {
         double next = nextLevel() - pexp;
         return next;
     }
 
-    private void levelUp() {
-        this.maxHealth++;
-        this.regenDelay = 2;
-        plevel++;
-        psprint += 0.1;
-        maxTimeSprint += 20;
-
-        MojamComponent.soundPlayer.playSound("/sound/levelUp.wav", (float) pos.x, (float) pos.y, true);
-    }
 
     @Override
     public void tick() {
 
-        // if mouse is in use, update player orientation before level tick
+        // If the mouse is used, update player orientation before level tick
         if (!mouseButtons.mouseHidden) {
-
-            // update player mouse, in world pixels relative to
-            // player
+            // Update player mouse, in world pixels relative to player
             setAimByMouse(
                     ((mouseButtons.getX() / MojamComponent.SCALE) - (MojamComponent.screen.w / 2)),
                     (((mouseButtons.getY() / MojamComponent.SCALE) + 24) - (MojamComponent.screen.h / 2)));
@@ -157,7 +177,7 @@ public class Player extends Mob implements LootCollector {
 
         time++;
 
-        checkForLevelUp();
+        handleLevelUp();
         flashMiniMapIcon();
         regeneratePlayer();
         countdownTimers();
@@ -166,6 +186,7 @@ public class Player extends Mob implements LootCollector {
         double xa = 0;
         double ya = 0;
 
+        // Handle keys
         if (!dead) {
             if (keys.up.isDown) {
                 ya--;
@@ -181,12 +202,14 @@ public class Player extends Mob implements LootCollector {
             }
         }
 
+        // Handle mouse aiming
         if (!mouseAiming && !keys.fire.isDown && !mouseButtons.isDown(mouseFireButton) && xa * xa + ya * ya != 0) {
             aimVector.set(xa, ya);
             aimVector.normalizeSelf();
             updateFacing();
         }
 
+        // Move player if it is not standing still
         if (xa != 0 || ya != 0) {
             handleMovement(xa, ya);
         }
@@ -197,6 +220,7 @@ public class Player extends Mob implements LootCollector {
             move(xd + xBump, yd + yBump);
 
         }
+        
         xd *= 0.4;
         yd *= 0.4;
         xBump *= 0.8;
@@ -208,7 +232,7 @@ public class Player extends Mob implements LootCollector {
         int x = (int) pos.x / Tile.WIDTH;
         int y = (int) pos.y / Tile.HEIGHT;
 
-        if ( !dead && fallDownHole()){
+        if (!dead && fallDownHole()) {
         	dead = true;
         	carrying = null;
         	deadDelay = 50;
@@ -234,16 +258,20 @@ public class Player extends Mob implements LootCollector {
         }
     }
 
+    /**
+     * Update the display cycle of the player indicator on the minimap
+     */
     private void flashMiniMapIcon() {
-
         minimapIcon = time / 3 % 4;
         if (minimapIcon == 3) {
             minimapIcon = 1;
         }
     }
 
+    /**
+     * Handle player health regeneration
+     */    
     private void regeneratePlayer() {
-
         if (regenDelay > 0) {
             regenDelay--;
             if (regenDelay == 0) {
@@ -257,8 +285,10 @@ public class Player extends Mob implements LootCollector {
         }
     }
 
+    /**
+     * Count down the internal timers
+     */
     private void countdownTimers() {
-
         if (flashTime > 0) {
             flashTime = 0;
         }
@@ -276,16 +306,21 @@ public class Player extends Mob implements LootCollector {
         }
     }
 
+    /**
+     * Play step sounds synchronized to player movement and carrying status
+     */
     private void playStepSound() {
-
         if (keys.up.isDown || keys.down.isDown || keys.left.isDown || keys.right.isDown) {
             int stepCount = 25;
+            
             if (carrying == null) {
                 stepCount = 15;
             }
+            
             if (isSprint) {
                 stepCount *= 0.6;
             }
+            
             if (steps % stepCount == 0) {
                 MojamComponent.soundPlayer.playSound("/sound/Step " + (TurnSynchronizer.synchedRandom.nextInt(2) + 1) + ".wav", (float) pos.x, (float) pos.y, true);
             }
@@ -293,13 +328,20 @@ public class Player extends Mob implements LootCollector {
         }
     }
 
+    /**
+     * Handler player movement
+     * 
+     * @param xa Position change on the x axis
+     * @param ya Position change on the y axis
+     */
     private void handleMovement(double xa, double ya) {
-
         int facing2 = (int) ((Math.atan2(-xa, ya) * 8 / (Math.PI * 2) + 8.5)) & 7;
         int diff = facing - facing2;
+        
         if (diff >= 4) {
             diff -= 8;
         }
+        
         if (diff < -4) {
             diff += 8;
         }
@@ -311,6 +353,7 @@ public class Player extends Mob implements LootCollector {
                 walkTime++;
             }
         }
+        
         if (diff > 2 || diff < -4) {
             walkTime--;
         } else {
@@ -355,13 +398,23 @@ public class Player extends Mob implements LootCollector {
         yd += ya;
     }
 
+    /**
+     * Handle weapon fire
+     * 
+     * @param xa Position change on the x axis
+     * @param ya Position change on the y axis
+     */
     private void handleWeaponFire(double xa, double ya) {
-
         weapon.weapontick();
+        
         if (!dead
                 && (carrying == null && keys.fire.isDown
                 || carrying == null && mouseButtons.isDown(mouseFireButton))) {
-            primaryFire(xa, ya);
+            wasShooting = true;
+            if (takeDelay > 0) {
+                takeDelay--;
+            }
+            weapon.primaryFire(xa, ya);
         } else {
             if (wasShooting) {
                 suckRadius = 0;
@@ -374,14 +427,12 @@ public class Player extends Mob implements LootCollector {
         }
     }
 
-    private void primaryFire(double xa, double ya) {
-        wasShooting = true;
-        if (takeDelay > 0) {
-            takeDelay--;
-        }
-        weapon.primaryFire(xa, ya);
-    }
-    
+    /**
+     * Handle rail building
+     * 
+     * @param xa Position change on the x axis
+     * @param ya Position change on the y axis
+     */
     private void handleRailBuilding(int x, int y) {
 
         if (level.getTile(x, y).isBuildable()) {
@@ -422,6 +473,9 @@ public class Player extends Mob implements LootCollector {
         }
     }
 
+    /**
+     * Handle object carrying
+     */
     private void handleCarrying() {
 
         carrying.setPos(pos.x, pos.y - 20);
@@ -438,8 +492,10 @@ public class Player extends Mob implements LootCollector {
         }
     }
 
+    /**
+     * Drop a carried entity onto the floor, making it a part of the level again
+     */
     private void dropCarrying() {
-
         carrying.removed = false;
         carrying.xSlide = aimVector.x * 5;
         carrying.ySlide = aimVector.y * 5;
@@ -450,8 +506,10 @@ public class Player extends Mob implements LootCollector {
         carrying = null;
     }
 
+    /**
+     * Handle interaction with entities
+     */
     private void handleEntityInteraction() {
-
         Entity closest = null;
         double closestDist = Double.MAX_VALUE;
         for (Entity e : level.getEntitiesSlower(pos.x - INTERACT_DISTANCE, pos.y - INTERACT_DISTANCE, pos.x + INTERACT_DISTANCE, pos.y + INTERACT_DISTANCE, Building.class)) {
@@ -484,6 +542,11 @@ public class Player extends Mob implements LootCollector {
         }
     }
 
+    /**
+     * Pay for an item
+     * 
+     * @param cost Item cost
+     */
     public void payCost(int cost) {
         score -= cost;
 
@@ -497,15 +560,23 @@ public class Player extends Mob implements LootCollector {
         }
     }
 
-    public void addScore(int s) {
-        if (s > 0) {
-            score += s;
+    /**
+     * Add score points
+     * 
+     * @param points Points
+     */
+    public void addScore(int points) {
+        if (points > 0) {
+            score += points;
         }
     }
 
+    /**
+     * Drop all money. Animated, loot items will fall on the floor.
+     */
     public void dropAllMoney() {
-
         score /= 2;
+        
         while (score > 0) {
             double dir = TurnSynchronizer.synchedRandom.nextDouble() * Math.PI * 2;
             Loot loot = new Loot(pos.x, pos.y, Math.cos(dir), Math.sin(dir), score / 2);
@@ -626,6 +697,11 @@ public class Player extends Mob implements LootCollector {
         return pos.add(new Vec2(Math.cos((facing) * (Math.PI) / 4 + Math.PI / 2), Math.sin((facing) * (Math.PI) / 4 + Math.PI / 2)).scale(30));
     }
 
+    /**
+     * Pickup a building and carry it around, removing it from the level
+     * 
+     * @param b Building
+     */
     public void pickup(Building b) {
     	if(b.team != this.team && b.team != Team.Neutral) {
     		
@@ -641,6 +717,11 @@ public class Player extends Mob implements LootCollector {
     	}
     }
 
+    /**
+     * Set player orientation
+     * 
+     * @param facing New Orientation
+     */
     public void setFacing(int facing) {
         this.facing = facing;
     }
@@ -686,6 +767,9 @@ public class Player extends Mob implements LootCollector {
         }
     }
 
+    /**
+     * Revive the player. Carried items are lost, as is all the money.
+     */
     private void revive() {
         Notifications.getInstance().add(MojamComponent.texts.hasDied(team));
         carrying = null;
@@ -705,7 +789,10 @@ public class Player extends Mob implements LootCollector {
     }
 
     /**
-     * used to update player orientation, values relative to player.
+     * Orientate the player in the direction of the given mouse coordinates
+     * 
+     * @param x X coordinate
+     * @param y Y coordinate
      */
     public void setAimByMouse(int x, int y) {
         mouseAiming = true;
@@ -714,22 +801,34 @@ public class Player extends Mob implements LootCollector {
         updateFacing();
     }
 
+    /**
+     * Disable mouse aiming and activate keyboard aiming
+     */
     public void setAimByKeyboard() {
         mouseAiming = false;
     }
 
     /**
-     * Update facing for rendering
+     * Update player orientation for rendering
      */
     public void updateFacing() {
         facing = (int) ((Math.atan2(-aimVector.x, aimVector.y) * 8 / (Math.PI * 2) + 8.5)) & 7;
     }
 
+    /**
+     * Get current player position
+     * 
+     * @return Position
+     */
     public Vec2 getPosition() {
         return pos;
     }
 
-	public void setLocalTeam(int i) {
-		this.localTeam = i;
+    /**
+     * Set local team number
+     * @param localTeam Local team number
+     */
+	public void setLocalTeam(int localTeam) {
+		this.localTeam = localTeam;
 	}
 }
