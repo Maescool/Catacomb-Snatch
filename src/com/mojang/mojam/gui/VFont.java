@@ -8,8 +8,8 @@ public class VFont extends Font {
     private static final int GLYPH_HEIGHT = 6;
     private static final int SPACE = 1;
     
-    protected VFont(Bitmap[][] bitmapData) {
-        super(bitmapData);
+    protected VFont(Bitmap[][] bitmapData, FontName fontName) {
+        super(bitmapData, fontName);
     }
 
     @Override

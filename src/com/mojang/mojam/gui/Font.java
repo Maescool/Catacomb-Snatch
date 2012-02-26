@@ -11,6 +11,10 @@ import com.mojang.mojam.screen.Screen;
  */
 public class Font {
 	
+	public enum FontName {
+		RED, BLUE, GRAY, SM_BLACK, SM_WHITE, SM_GOLD, GOLD
+	}
+	
     /** List of available letters */
     private static final String LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ    " + "0123456789-.!?/%$\\=*+,;:()&#\"'";
 
@@ -18,26 +22,27 @@ public class Font {
     private static final int GLYPH_HEIGHT = 8;
     private static final int GLYPH_WIDTH = 8;
     
-    private static final String DEFAULT_FONT = "gold";
-	private static final HashMap<String, Font> FONTS = new HashMap<String, Font>();
+    private static final FontName DEFAULT_FONT = FontName.GOLD;
+	private static final HashMap<FontName, Font> FONTS = new HashMap<FontName, Font>();
     private static Font currentFont;
 
 	protected Bitmap[][] bitmapData;
+	protected FontName fontName;
 
     static {
-        //fonts.put("", new Font(Art.font_default));
-        FONTS.put("red", new Font(Art.font_red));
-        FONTS.put("blue", new Font(Art.font_blue));
-        FONTS.put("gray", new Font(Art.font_gray));
-        FONTS.put("sm_black", new VFont(Art.font_small_black));
-        FONTS.put("sm_white", new VFont(Art.font_small_white));
-        FONTS.put("sm_gold", new VFont(Art.font_small_gold));
-        FONTS.put("gold", new Font(Art.font_gold));
+        FONTS.put(FontName.RED, new Font(Art.font_red, FontName.RED));
+        FONTS.put(FontName.BLUE, new Font(Art.font_blue, FontName.BLUE));
+        FONTS.put(FontName.GRAY, new Font(Art.font_gray, FontName.GRAY));
+        FONTS.put(FontName.SM_BLACK, new VFont(Art.font_small_black, FontName.SM_BLACK));
+        FONTS.put(FontName.SM_WHITE, new VFont(Art.font_small_white, FontName.SM_WHITE));
+        FONTS.put(FontName.SM_GOLD, new VFont(Art.font_small_gold, FontName.SM_GOLD));
+        FONTS.put(FontName.GOLD, new Font(Art.font_gold, FontName.GOLD));
         currentFont = getFont(DEFAULT_FONT);
     }
 
-    protected Font(Bitmap[][] bitmapData) {
+    protected Font(Bitmap[][] bitmapData, FontName fontName) {
         this.bitmapData = bitmapData;
+        this.fontName = fontName;
     }
 
     /**
@@ -45,7 +50,7 @@ public class Font {
      * 
      * @param name Font name
      */
-    public static void setFont(String fontName) {
+    public static void setFont(FontName fontName) {
         currentFont = getFont(fontName);
     }
     
@@ -65,7 +70,7 @@ public class Font {
         return currentFont;
     }
 
-    public static Font getFont(String font) {
+    public static Font getFont(FontName font) {
         Font returnFont = FONTS.get(font);
         if(returnFont == null){
             System.out.println("BAD FONT: "+currentFont);
