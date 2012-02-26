@@ -210,7 +210,7 @@ public class Building extends Mob implements IUsable {
 		}
 
 		final int cost = upgradeCosts[upgradeLevel];
-		if (cost > p.getScore() && !Options.getAsBoolean(Options.CREATIVE)) {
+		if (cost > p.getScore() && !Options.getAsBoolean(Options.CREATIVE_FREEUPGRADE)) {
 			MojamComponent.soundPlayer.playSound("/sound/Fail.wav",
 					(float) pos.x, (float) pos.y, true);
 			if (this.team == this.localTeam) {

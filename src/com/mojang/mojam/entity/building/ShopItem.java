@@ -55,7 +55,7 @@ public class ShopItem extends Building {
      * Set building cost depending if creative mode is on or not
      */
     public void setBuildingCost(){
-    	if(Options.getAsBoolean(Options.CREATIVE)){
+    	if(Options.getAsBoolean(Options.CREATIVE_FREEBUILDINGS)){
     		COST[0] = 0;
     		COST[1] = 0;
     		COST[2] = 0;

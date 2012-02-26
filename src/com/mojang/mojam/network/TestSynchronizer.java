@@ -8,9 +8,6 @@ public class TestSynchronizer {
 
 	private static ServerSocket serverSocket;
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) throws Exception {
 
 		PacketLink packetLink = null;

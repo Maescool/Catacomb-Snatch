@@ -4,6 +4,8 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.Options;
+import com.mojang.mojam.level.CreativeSettingsList;
 import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.DifficultyList;
 import com.mojang.mojam.screen.Art;
@@ -14,8 +16,11 @@ public class DifficultySelect extends GuiMenu {
 	private static final int DEFAULT_DIFFICULTY = 1;
 	
 	private ArrayList<DifficultyInformation> difficulties = DifficultyList.getDifficulties();
+	private String[] creativeSettings = CreativeSettingsList.getCreativeSettings();
 	
 	private Checkbox[] DifficultyCheckboxes;
+	private Checkbox[] CreativeModeCheckboxes;
+	
 	private final int xButtons = 3;
 	private final int xSpacing = Checkbox.WIDTH + 8;
 	private final int ySpacing = Checkbox.HEIGHT + 8;
@@ -29,7 +34,13 @@ public class DifficultySelect extends GuiMenu {
 		super();
 		
 		DifficultyCheckboxes = new Checkbox[difficulties.size()];
+		CreativeModeCheckboxes = new Checkbox[creativeSettings.length];
+		
 		setupDifficultyButtons();
+		
+		// Add creative mode options if activated
+		if(Options.getAsBoolean(Options.CREATIVE))
+			setupCreativeModeButtons();
 		
 		TitleMenu.difficulty = difficulties.get(DEFAULT_DIFFICULTY);
 		
@@ -60,6 +71,23 @@ public class DifficultySelect extends GuiMenu {
                 y++;
         }
 	}
+	
+	/**
+	 * Add checkboxes for creative mode
+	 */
+	private void setupCreativeModeButtons()
+	{
+        for (int i = 0; i < creativeSettings.length; i++) {
+       
+        	CreativeModeCheckboxes[i] = (Checkbox) addButton(
+        			new Checkbox(i + difficulties.size(), MojamComponent.texts.getStatic(creativeSettings[i]),
+        					xStart, yStart + ySpacing * (i + 3)));
+            
+            if (Options.getAsBoolean(creativeSettings[i])) {
+            	CreativeModeCheckboxes[i].checked = true;
+            }
+        }
+	}
 
 	@Override
 	public void render(Screen screen) {
@@ -71,11 +99,23 @@ public class DifficultySelect extends GuiMenu {
 	@Override
 	public void buttonPressed(ClickableComponent button) {
 		if (button instanceof Checkbox) {
-
 		    Checkbox cb = (Checkbox) button;
-			TitleMenu.difficulty = difficulties.get(cb.getId());
+		    
+		    // Handle difficulties
+		    if(cb.getId() < difficulties.size()){
+		    	TitleMenu.difficulty = difficulties.get(cb.getId());
 			
-			checkOnlyOne(cb);
+		    	checkOnlyOne(cb);
+		    }
+		    else
+		    {
+		    	// Handle creative mode settings
+		    	CreativeModeCheckboxes[cb.getId() - difficulties.size()].checked = !CreativeModeCheckboxes[cb.getId() - difficulties.size()].checked;
+		    	
+		    	Options.set(creativeSettings[cb.getId() - difficulties.size()], CreativeModeCheckboxes[cb.getId() - difficulties.size()].checked);
+		    }
+		    
+		    Options.saveProperties();
 		}
 	}
     
@@ -139,13 +179,5 @@ public class DifficultySelect extends GuiMenu {
 			}
 		}
 		return -2;
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
 	}
 }
