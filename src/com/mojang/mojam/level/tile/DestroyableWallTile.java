@@ -16,16 +16,17 @@ import com.mojang.mojam.screen.Screen;
 
 public class DestroyableWallTile extends WallTile {
 	static final int WALLHEIGHT = 56;
-	protected static float maxHealth = 350;
-	protected float health;
+	protected float maxHealth = 350;
+	protected float health = maxHealth;
 	protected int healthBarOffset = 10;
 
 	public void init(Level level, int x, int y) {
 		super.init(level, x, y);
 		minimapColor = Art.wallTileColors[img % 3][0];
-	  if (TitleMenu.difficulty.difficultyID == 1) maxHealth = 375; 
-	  if (TitleMenu.difficulty.difficultyID == 2) maxHealth = 450; 
-	  if (TitleMenu.difficulty.difficultyID == 3) maxHealth = 675; 
+	  if (TitleMenu.difficulty != null) {
+	    maxHealth = maxHealth + (float)((TitleMenu.difficulty.difficultyID + 1) * 50); 
+	  }
+	  health = maxHealth;
 	}
 
 	public boolean canPass(Entity e) {
@@ -83,9 +84,9 @@ public class DestroyableWallTile extends WallTile {
 	public void hurt(float damage) {
 		float damageg = 0;
 		if (MojamComponent.instance.player.plevel >= 3) {
-			damageg = damage / 2;
+			damageg = (damage / 4)*3;
 		}
-		if (MojamComponent.instance.player.plevel >= 8) {
+		if (MojamComponent.instance.player.plevel >= 5) {
 			damageg = damage;
 		}
 		health -= damageg;
