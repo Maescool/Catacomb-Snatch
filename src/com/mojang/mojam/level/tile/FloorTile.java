@@ -50,7 +50,7 @@ public class FloorTile extends Tile {
 		}
 
 		if (index > 0) {
-			// If shadows are cast on this tile...
+		    // If shadows are cast on this tile...
 			int imageIndex = shadowImages[index];
 			if (imageIndex < 4) // Row 1, first 4 columns
 				img = Art.floorTiles.length + (imageIndex & 3);
@@ -58,36 +58,28 @@ public class FloorTile extends Tile {
 				// Row 2, first 4 columns
 				img = 2 * Art.floorTiles.length + (imageIndex & 3);
 		} else {
-			// No shadows are cast, it's a plain floor tile
-			if ((img >= 8 && img <= 11) || (img >= 16 && img <= 18)) {
-				// This tile currently has shadows
-				if (TurnSynchronizer.synchedRandom != null) {
-					// Make this a random floor tile with no shadows
-					img = TurnSynchronizer.synchedRandom.nextInt(4);
-				} else {
-					// Be defensive! If we got here, then somehow we got called
-					// in the render() phase, which
-					// probably should never happen.
-					//
-					// Give a warning, and carry on with a non-random number.
-					// This may put multiplayer
-					// games out of sync, but it's better than a
-					// NullPointerException crash.
-					//
-					// This warning can be removed if we don't see a problem. I
-					// haven't seen this warning yet
-					// in my testing, but problems have happened before when
-					// adding use of synchedRandom into methods
-					// where it previously wasn't used, so I'm being cautious.
-					System.err
-							.println("WARNING: Averted crash in FloorTile#neighbourChanged(); synchedRandom is null");
-					System.err
-							.println("         This should not happen, it means we got called during render phase.");
-					System.err
-							.println("You may experience sync problems in multiplayer.");
-					img = 3;
-				}
-			}
+		    // No shadows are cast, it's a plain floor tile
+		    if ((img >= 8 && img <= 11) || (img >= 16 && img <= 18)) {
+		        // This tile currently has shadows
+		        if (TurnSynchronizer.synchedRandom != null) {
+		            // Make this a random floor tile with no shadows
+		            img = TurnSynchronizer.synchedRandom.nextInt(4);
+		        } else {
+		            // Be defensive! If we got here, then somehow we got called in the render() phase, which 
+		            // probably should never happen.
+		            //
+		            // Give a warning, and carry on with a non-random number. This may put multiplayer
+		            // games out of sync, but it's better than a NullPointerException crash.
+		            //
+		            // This warning can be removed if we don't see a problem. I haven't seen this warning yet
+		            // in my testing, but problems have happened before when adding use of synchedRandom into methods
+		            // where it previously wasn't used, so I'm being cautious.
+		            System.err.println("WARNING: Averted crash in FloorTile#neighbourChanged(); synchedRandom is null");
+		            System.err.println("         This should not happen, it means we got called during render phase.");
+		            System.err.println("You may experience sync problems in multiplayer.");
+		            img = 3;
+		        }
+		    }
 		}
 		minimapColor = Art.floorTileColors[img & 7][img / 8];
 	}

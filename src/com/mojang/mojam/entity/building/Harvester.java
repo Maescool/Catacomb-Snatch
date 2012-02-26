@@ -30,16 +30,20 @@ public class Harvester extends Building implements LootCollector {
 	private int[] upgradeCapacities = new int[] { 1500, 2500, 3500 };
 
 	public Harvester(double x, double y, int team, int localTeam) {
-		super(x, y, team, localTeam);
+		super(x, y, team,localTeam);
 		setStartHealth(10);
 		freezeTime = 10;
 		makeUpgradeableWithCosts(new int[] { 500, 1000, 5000 });
 		healthBarOffset = 13;
+<<<<<<< HEAD
 		areaBitmap = Bitmap.rangeBitmap(radius, Color.YELLOW.getRGB());
+=======
+		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 	}
-
+	
 	public Bitmap areaBitmap;
-
+	
 	public void notifySucking() {
 		harvestingTicks = 30;
 	}
@@ -96,22 +100,27 @@ public class Harvester extends Building implements LootCollector {
 	public Bitmap getSprite() {
 		int frame = isHarvesting ? (4 + ((time >> 3) % 5)) : (time >> 3) % 4;
 		switch (upgradeLevel) {
-		case 1:
-			return Art.harvester2[frame][0];
-		case 2:
-			return Art.harvester3[frame][0];
-		default:
-			return Art.harvester[frame][0];
-		}
+        case 1:
+            return Art.harvester2[frame][0];
+        case 2:
+            return Art.harvester3[frame][0];
+        default:
+            return Art.harvester[frame][0];
+        }
 	}
 
 	protected void upgradeComplete() {
-		maxHealth += 10;
-		health += 10;
-		radius = upgradeRadius[upgradeLevel];
+	    maxHealth += 10;
+	    health += 10;
+        radius = upgradeRadius[upgradeLevel];
 		capacity = upgradeCapacities[upgradeLevel];
+<<<<<<< HEAD
 		areaBitmap = Bitmap.rangeBitmap(radius, Color.YELLOW.getRGB());
 		justDroppedTicks = 80; // show the radius for a brief time
+=======
+		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
+		justDroppedTicks = 80; //show the radius for a brief time
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 	}
 
 	public boolean canTake() {
@@ -119,17 +128,22 @@ public class Harvester extends Building implements LootCollector {
 	}
 
 	public void render(Screen screen) {
+<<<<<<< HEAD
 
 		if (justDroppedTicks-- > 0 && localTeam == team) {
 			screen.blit(areaBitmap, pos.x - radius, pos.y - radius - yOffs);
+=======
+		
+		if(justDroppedTicks-- > 0 && localTeam==team) {
+			screen.blit(areaBitmap, pos.x - areaBitmap.w / 2, pos.y - areaBitmap.h / 2 - yOffs);	
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 		}
-
+		
 		Bitmap image = getSprite();
 
 		if (hurtTime > 0) {
 			if (hurtTime > 40 - 6 && hurtTime / 2 % 2 == 0) {
-				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h
-						+ 8, 0xa0ffffff);
+				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h + 8, 0xa0ffffff);
 			} else {
 				if (health < 0) {
 					health = 0;
@@ -138,31 +152,29 @@ public class Harvester extends Building implements LootCollector {
 				if (hurtTime < 10) {
 					col = col * hurtTime / 10;
 				}
-				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h
-						+ 8, (col << 24) + 255 * 65536);
+				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h + 8, (col << 24) + 255 * 65536);
 			}
 		} else if (capacity - money < 500) {
-			screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h + 8,
-					0x77ff7200);
+			screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h + 8, 0x77ff7200);
 		} else {
 			screen.blit(image, pos.x - image.w / 2, pos.y - image.h + 8);
 		}
 		renderMarker(screen);
 		if (health < maxHealth)
-			addHealthBar(screen);
+            addHealthBar(screen);
 
-		if (team == localTeam) {
+		if(team ==localTeam) {
 			addMoneyBar(screen);
 		}
-
+		
 	}
-
+	
 	private void addMoneyBar(Screen screen) {
-
-		int start = (int) (money * 20 / capacity);
-		screen.blit(Art.moneyBar[start][0], pos.x - 16, pos.y + 8);
-	}
-
+        
+	    int start = (int) (money * 20 / capacity);
+        screen.blit(Art.moneyBar[start][0], pos.x - 16, pos.y + 8);
+    }
+	
 	public void take(Loot loot) {
 		loot.remove();
 		money += loot.getScoreValue();
@@ -197,7 +209,7 @@ public class Harvester extends Building implements LootCollector {
 	}
 
 	public void use(Entity user) {
-		if (money > 0) {
+		if(money > 0) {
 			isEmptying = true;
 			if (user instanceof Player) {
 				emptyingPlayer = (Player) user;

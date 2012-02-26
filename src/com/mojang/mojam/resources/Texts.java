@@ -6,6 +6,8 @@ import java.util.ResourceBundle;
 
 import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.mob.Team;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
 
 public class Texts {
 	protected final ResourceBundle texts;
@@ -18,54 +20,48 @@ public class Texts {
 		if (texts.containsKey(property)) {
 			return texts.getString(property);
 		} else {
-			System.err.println("Missing text property {" + property + "}");
-			return "{" + property + "}";
+			System.err.println("Missing text property {"+property+"}");
+			return "{"+property+"}";
 		}
 	}
 
 	public String player1Win() {
 
-		return MessageFormat.format(getStatic("gameplay.player1Win"),
-				getPlayer1Name());
+		return MessageFormat.format(getStatic("gameplay.player1Win"),getPlayer1Name());
 	}
 
 	public String player2Win() {
-		return MessageFormat.format(getStatic("gameplay.player2Win"),
-				getStatic("gameplay.player2Name").toUpperCase());
+		return MessageFormat.format(getStatic("gameplay.player2Win"), getStatic("gameplay.player2Name").toUpperCase());
 	}
 
 	public String playerName(int team) {
-		if (team == Team.Team1) {
+		if(team == Team.Team1) {
 			return getPlayer1Name();
 		}
 		return getStatic("gameplay.player2Name");
 	}
 
 	public String playerWin(int team) {
-		if (team == Team.Team1) {
+		if(team == Team.Team1) {
 			return player1Win();
 		}
 		return player2Win();
 	}
 
 	public String hasDied(int team) {
-		return MessageFormat.format(getStatic("player.hasDied"),
-				playerName(team));
+		return MessageFormat.format(getStatic("player.hasDied"), playerName(team));
 	}
 
 	public String score(int team, int score) {
-		return MessageFormat.format(getStatic("player.score"),
-				playerName(team), score);
+		return MessageFormat.format(getStatic("player.score"), playerName(team), score);
 	}
 
 	public String cost(int cost) {
-		return MessageFormat.format(getStatic("player.cost"),
-				String.valueOf(cost));
+		return MessageFormat.format(getStatic("player.cost"), String.valueOf(cost));
 	}
 
 	public String health(float health, float maxHealth) {
-		return MessageFormat.format(getStatic("player.health"),
-				Math.floor(health / maxHealth * 100));
+		return MessageFormat.format(getStatic("player.health"), Math.floor(health / maxHealth * 100));
 	}
 
 	public String money(int money) {
@@ -112,8 +108,8 @@ public class Texts {
 		return MessageFormat.format(getStatic("build.removeRail"), cost);
 	}
 
-	public String getPlayer1Name() {
-		if (Options.getAsBoolean(Options.ALTERNATIVE)) {
+	public String getPlayer1Name() {	
+		if(Options.getAsBoolean(Options.ALTERNATIVE)) {
 			return getStatic("gameplay.player1NameAlt").toUpperCase();
 		}
 		return getStatic("gameplay.player1Name").toUpperCase();

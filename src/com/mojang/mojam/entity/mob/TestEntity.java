@@ -4,8 +4,8 @@ import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.*;
 
 public class TestEntity extends Mob {
-	public TestEntity(double x, double y, int localTeam) {
-		super(x, y, Team.Neutral, localTeam);
+	public TestEntity(double x, double y,int localTeam) {
+		super(x, y, Team.Neutral,localTeam);
 		setPos(x, y);
 		setStartHealth(1);
 		dir = TurnSynchronizer.synchedRandom.nextDouble() * Math.PI * 2;

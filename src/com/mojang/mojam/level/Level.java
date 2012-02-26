@@ -74,6 +74,7 @@ public class Level {
 		 */
 	}
 
+
 	public void setTile(int x, int y, Tile tile) {
 		final int index = x + y * width;
 		tiles[index] = tile;
@@ -232,8 +233,8 @@ public class Level {
 		e.removed = true;
 	}
 
-	public void tick() {
-		for (int i = 0; i < tickItems.size(); i++) {
+	public void tick() {		
+		for(int i = 0; i < tickItems.size(); i++) {
 			tickItems.get(i).tick(this);
 		}
 
@@ -254,14 +255,13 @@ public class Level {
 				removeFromEntityMap(e);
 			}
 		}
-		if (victoryConditions != null)
+		if(victoryConditions != null)
 			victoryConditions.updateVictoryConditions(this);
 		Notifications.getInstance().tick();
 	}
 
 	private boolean hasSeen(int x, int y) {
-		return getSeen()[x + y * (width + 1)]
-				|| getSeen()[(x + 1) + y * (width + 1)]
+		return getSeen()[x + y * (width + 1)] || getSeen()[(x + 1) + y * (width + 1)]
 				|| getSeen()[x + (y + 1) * (width + 1)]
 				|| getSeen()[(x + 1) + (y + 1) * (width + 1)];
 	}
@@ -465,19 +465,14 @@ public class Level {
 		}
 		screen.blit(Art.panel, 0, screen.h - 80);
 		screen.blit(minimap, 429, screen.h - 80 + 5);
-
-		String player1score = MojamComponent.texts.score(Team.Team1,
-				player1Score * 100 / TARGET_SCORE);
-		Font.draw(screen, player1score, 280 - player1score.length() * 10,
-				screen.h - 20); // adjust so it fits in the box
-		Font.draw(
-				screen,
-				MojamComponent.texts.score(Team.Team2, player2Score * 100
-						/ TARGET_SCORE), 56, screen.h - 36);
-
-		screen.blit(Art.getLocalPlayerArt()[0][2], 262, screen.h - 42);
-		screen.blit(Art.herrSpeck[0][6], 19, screen.h - 42);
-
+		
+		String player1score =  MojamComponent.texts.score(Team.Team1, player1Score * 100 / TARGET_SCORE);
+		Font.draw(screen, player1score, 280-player1score.length()*10, screen.h - 20); //adjust so it fits in the box
+		Font.draw(screen, MojamComponent.texts.score(Team.Team2, player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
+		
+		screen.blit(Art.getLocalPlayerArt()[0][2], 262, screen.h-42);
+		screen.blit(Art.herrSpeck[0][6], 19, screen.h-42);
+		
 		Notifications.getInstance().render(screen);
 	}
 
@@ -486,8 +481,7 @@ public class Level {
 			return true;
 		return getSeen()[x + (y - 1) * (width + 1)]
 				|| getSeen()[(x + 1) + (y - 1) * (width + 1)]
-				|| getSeen()[x + y * (width + 1)]
-				|| getSeen()[(x + 1) + y * (width + 1)]
+				|| getSeen()[x + y * (width + 1)] || getSeen()[(x + 1) + y * (width + 1)]
 				|| getSeen()[x + (y + 1) * (width + 1)]
 				|| getSeen()[(x + 1) + (y + 1) * (width + 1)];
 	}
@@ -576,7 +570,7 @@ public class Level {
 			setTile(x, y, tile);
 		}
 	}
-
+	
 	// counts how many of a certain entitiy class are in play
 	public <T> int countEntities(Class<T> entityType) {
 		int count = 0;

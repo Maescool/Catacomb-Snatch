@@ -31,11 +31,11 @@ public abstract class Entity implements BBOwner {
 	public void setPos(double x, double y) {
 		pos.set(x, y);
 	}
-
+	
 	public void setPos(Vec2 position) {
-		pos.x = position.x;
-		pos.y = position.y;
-	}
+	    pos.x = position.x;
+	    pos.y = position.y;
+    }
 
 	public void setSize(int xr, int yr) {
 		radius.set(xr, yr);
@@ -57,18 +57,16 @@ public abstract class Entity implements BBOwner {
 	}
 
 	public BB getBB() {
-		return new BB(this, pos.x - radius.x, pos.y - radius.y, pos.x
-				+ radius.x, pos.y + radius.y);
+		return new BB(this, pos.x - radius.x, pos.y - radius.y, pos.x + radius.x, pos.y + radius.y);
 	}
 
 	public void render(Screen screen) {
-		screen.blit(Art.floorTiles[3][0], pos.x - Tile.WIDTH / 2, pos.y
-				- Tile.HEIGHT / 2 - 8);
+		screen.blit(Art.floorTiles[3][0], pos.x - Tile.WIDTH / 2, pos.y - Tile.HEIGHT / 2 - 8);
 	}
-
+	
 	public void renderTop(Screen screen) {
 	}
-
+	
 	protected boolean move(double xa, double ya) {
 		List<BB> bbs = level.getClipBBs(this);
 		if (physicsSlide) {
@@ -156,8 +154,7 @@ public abstract class Entity implements BBOwner {
 	}
 
 	public final boolean blocks(Entity e) {
-		return isBlocking && e.isBlocking && shouldBlock(e)
-				&& e.shouldBlock(this);
+		return isBlocking && e.isBlocking && shouldBlock(e) && e.shouldBlock(this);
 	}
 
 	protected boolean shouldBlock(Entity e) {

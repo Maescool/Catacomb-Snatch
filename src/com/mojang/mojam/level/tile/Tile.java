@@ -24,8 +24,7 @@ public class Tile implements BBOwner {
 		this.level = level;
 		this.x = x;
 		this.y = y;
-		if (img == -1)
-			img = TurnSynchronizer.synchedRandom.nextInt(4);
+		if (img == -1) img = TurnSynchronizer.synchedRandom.nextInt(4);
 		minimapColor = Art.floorTileColors[img & 7][img / 8];
 	}
 

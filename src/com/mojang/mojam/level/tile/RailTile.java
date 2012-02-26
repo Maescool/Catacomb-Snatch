@@ -90,17 +90,13 @@ public class RailTile extends Tile {
 
 	public boolean remove() {
 		level.setTile(x, y, parent);
-
+		
 		// trigger neighbours checks
-		if (connections[Facing.NORTH])
-			((RailTile) level.getTile(x, y - 1)).neighbourChanged(null);
-		if (connections[Facing.SOUTH])
-			((RailTile) level.getTile(x, y + 1)).neighbourChanged(null);
-		if (connections[Facing.WEST])
-			((RailTile) level.getTile(x - 1, y)).neighbourChanged(null);
-		if (connections[Facing.EAST])
-			((RailTile) level.getTile(x + 1, y)).neighbourChanged(null);
-
+		if ( connections[Facing.NORTH] ) ( (RailTile) level.getTile(x, y - 1) ).neighbourChanged( null );
+		if ( connections[Facing.SOUTH] ) ( (RailTile) level.getTile(x, y + 1) ).neighbourChanged( null );
+		if ( connections[Facing.WEST] ) ( (RailTile) level.getTile(x - 1, y) ).neighbourChanged( null );
+		if ( connections[Facing.EAST] ) ( (RailTile) level.getTile(x + 1, y) ).neighbourChanged( null );
+		
 		return true;
 	}
 }

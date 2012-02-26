@@ -17,10 +17,10 @@ public class Bitmap {
 	}
 
 	public void blit(Bitmap bitmap, int x, int y) {
-
-		Rect blitArea = new Rect(x, y, bitmap.w, bitmap.h);
-		adjustBlitArea(blitArea);
-
+	
+	    Rect blitArea = new Rect(x, y, bitmap.w, bitmap.h);
+		adjustBlitArea(blitArea);	
+		
 		int blitWidth = blitArea.bottomRightX - blitArea.topLeftX;
 
 		for (int yy = blitArea.topLeftY; yy < blitArea.bottomRightY; yy++) {
@@ -36,30 +36,30 @@ public class Bitmap {
 	}
 
 	public void blit(Bitmap bitmap, int x, int y, int width, int height) {
-
-		Rect blitArea = new Rect(x, y, width, height);
-		adjustBlitArea(blitArea);
-
-		int blitWidth = blitArea.bottomRightX - blitArea.topLeftX;
-
-		for (int yy = blitArea.topLeftY; yy < blitArea.bottomRightY; yy++) {
-			int tp = yy * w + blitArea.topLeftX;
-			int sp = (yy - y) * bitmap.w + (blitArea.topLeftX - x);
-			tp -= sp;
-			for (int xx = sp; xx < sp + blitWidth; xx++) {
-				int col = bitmap.pixels[xx];
-				if (col < 0)
-					pixels[tp + xx] = col;
-			}
-		}
+		
+	    Rect blitArea = new Rect(x, y, width, height);
+        adjustBlitArea(blitArea);
+        		
+        int blitWidth = blitArea.bottomRightX - blitArea.topLeftX;
+        
+        for (int yy = blitArea.topLeftY; yy < blitArea.bottomRightY; yy++) {
+            int tp = yy * w + blitArea.topLeftX;
+            int sp = (yy - y) * bitmap.w + (blitArea.topLeftX - x);
+            tp -= sp;
+            for (int xx = sp; xx < sp + blitWidth; xx++) {
+                int col = bitmap.pixels[xx];
+                if (col < 0)
+                    pixels[tp + xx] = col;
+            }
+        }
 	}
 
 	public void colorBlit(Bitmap bitmap, int x, int y, int color) {
-
-		Rect blitArea = new Rect(x, y, bitmap.w, bitmap.h);
-		adjustBlitArea(blitArea);
-
-		int blitWidth = blitArea.bottomRightX - blitArea.topLeftX;
+	    
+	    Rect blitArea = new Rect(x, y, bitmap.w, bitmap.h);
+        adjustBlitArea(blitArea);
+                
+        int blitWidth = blitArea.bottomRightX - blitArea.topLeftX;
 
 		int a2 = (color >> 24) & 0xff;
 		int a1 = 256 - a2;
@@ -88,11 +88,11 @@ public class Bitmap {
 	}
 
 	public void fill(int x, int y, int width, int height, int color) {
-
-		Rect blitArea = new Rect(x, y, width, height);
-		adjustBlitArea(blitArea);
-
-		int blitWidth = blitArea.bottomRightX - blitArea.topLeftX;
+	    
+	    Rect blitArea = new Rect(x, y, width, height);
+        adjustBlitArea(blitArea);
+                
+        int blitWidth = blitArea.bottomRightX - blitArea.topLeftX;
 
 		for (int yy = blitArea.topLeftY; yy < blitArea.bottomRightY; yy++) {
 			int tp = yy * w + blitArea.topLeftX;
@@ -101,17 +101,14 @@ public class Bitmap {
 			}
 		}
 	}
+	
 
-	private void adjustBlitArea(Rect blitArea) {
-
-		if (blitArea.topLeftX < 0)
-			blitArea.topLeftX = 0;
-		if (blitArea.topLeftY < 0)
-			blitArea.topLeftY = 0;
-		if (blitArea.bottomRightX > w)
-			blitArea.bottomRightX = w;
-		if (blitArea.bottomRightY > h)
-			blitArea.bottomRightY = h;
+	private void adjustBlitArea(Rect blitArea){
+	    
+	    if (blitArea.topLeftX < 0) blitArea.topLeftX = 0;
+        if (blitArea.topLeftY < 0) blitArea.topLeftY = 0;
+        if (blitArea.bottomRightX > w) blitArea.bottomRightX = w;
+        if (blitArea.bottomRightY > h) blitArea.bottomRightY = h;
 	}
 
 	public void rectangle(int x, int y, int bw, int bh, int color) {
@@ -140,21 +137,21 @@ public class Bitmap {
 	}
 
 	private void setPixel(int x, int y, int color) {
-		System.out.println(x + y * w);
-		pixels[x + y * w] = color;
-
+		System.out.println(x+y*w);
+		pixels[x+y*w]=color;
+		
 	}
 
 	public static Bitmap rectangleBitmap(int x, int y, int x2, int y2, int color) {
-		Bitmap rect = new Bitmap(x2, y2);
-		rect.rectangle(x, y, x2, y2, color);
+		Bitmap rect = new Bitmap(x2,y2);	
+		rect.rectangle(x, y, x2, y2, color);	
 		return rect;
 	}
 
 	public static Bitmap rangeBitmap(int radius, int color) {
-		Bitmap circle = new Bitmap(radius * 2 + 100, radius * 2 + 100);
-
-		circle.circle(radius, radius, radius, color);
+		Bitmap circle = new Bitmap(radius*2+100,radius*2+100);	
+		
+		circle.circle(radius, radius, radius, color);	
 		return circle;
 	}
 
@@ -162,23 +159,23 @@ public class Bitmap {
 		int d = 3 - (2 * radius);
 		int x = 0;
 		int y = radius;
-
+	
 		do {
-			setPixel(centerX + x, centerY + y, color);
-			setPixel(centerX + x, centerY - y, color);
-			setPixel(centerX - x, centerY + y, color);
-			setPixel(centerX - x, centerY - y, color);
-			setPixel(centerX + y, centerY + x, color);
-			setPixel(centerX + y, centerY - x, color);
-			setPixel(centerX - y, centerY + x, color);
-			setPixel(centerX - y, centerY - x, color);
-			if (d < 0) {
-				d = d + (4 * x) + 6;
-			} else {
-				d = d + 4 * (x - y) + 10;
-				y--;
-			}
-			x++;
+		setPixel(centerX + x, centerY + y, color);
+		setPixel(centerX + x, centerY - y, color);
+		setPixel(centerX - x, centerY + y, color);
+		setPixel(centerX - x, centerY - y, color);
+		setPixel(centerX + y, centerY + x, color);
+		setPixel(centerX + y, centerY - x, color);
+		setPixel(centerX - y, centerY + x, color);
+		setPixel(centerX - y, centerY - x, color);
+		if (d < 0) {
+		d = d + (4 * x) + 6;
+		} else {
+		d = d + 4 * (x - y) + 10;
+		y--;
+		}
+		x++;
 		} while (x <= y);
 	}
 

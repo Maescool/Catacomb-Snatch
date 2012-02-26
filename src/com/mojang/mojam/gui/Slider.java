@@ -27,8 +27,7 @@ public class Slider extends ClickableComponent {
 		this.id = id;
 		this.label = label;
 		this.value = value;
-		this.pos = (int) ((float) (getX() + getWidth() - SLIDER_WIDTH - getX()) * value)
-				+ getX();
+		this.pos = (int) ((float) (getX() + getWidth() - SLIDER_WIDTH - getX()) * value) + getX();
 	}
 
 	@Override
@@ -45,10 +44,9 @@ public class Slider extends ClickableComponent {
 			} else if (mouseButtons.isDown(1)) {
 				isDown = true;
 
-				pos = Mth.clamp((int) mx - (SLIDER_WIDTH / 2), getX(), getX()
-						+ getWidth() - SLIDER_WIDTH);
-				float newValue = 1.0f
-						/ (float) (getX() + getWidth() - SLIDER_WIDTH - getX())
+				pos = Mth.clamp((int) mx - (SLIDER_WIDTH / 2), getX(), getX() + getWidth()
+						- SLIDER_WIDTH);
+				float newValue = 1.0f / (float) (getX() + getWidth() - SLIDER_WIDTH - getX())
 						* (float) (pos - getX());
 
 				if (newValue != value) {
@@ -61,11 +59,9 @@ public class Slider extends ClickableComponent {
 
 	@Override
 	public void render(Screen screen) {
-		screen.fill(getX() + SLIDER_WIDTH, getY(), getWidth() - SLIDER_WIDTH
-				* 2, getHeight(), 0);
+		screen.fill(getX() + SLIDER_WIDTH, getY(), getWidth() - SLIDER_WIDTH * 2, getHeight(), 0);
 		screen.blit(Art.slider[1][0], getX(), getY());
-		screen.blit(Art.slider[1][1], getX() + getWidth() - SLIDER_WIDTH,
-				getY());
+		screen.blit(Art.slider[1][1], getX() + getWidth() - SLIDER_WIDTH, getY());
 
 		if (isDown)
 			screen.blit(Art.slider[0][1], pos, getY());
@@ -79,8 +75,8 @@ public class Slider extends ClickableComponent {
 		else
 			view = (Math.round(value * 100.0f)) + "%";
 
-		Font.drawCentered(screen, label + ": " + view, getX() + getWidth() / 2,
-				getY() + getHeight() / 2);
+		Font.drawCentered(screen, label + ": " + view, getX() + getWidth() / 2, getY()
+				+ getHeight() / 2);
 	}
 
 	public int getId() {
@@ -89,11 +85,9 @@ public class Slider extends ClickableComponent {
 
 	public void setValue(float value) {
 		this.value = value;
-		pos = (int) ((float) (getX() + getWidth() - SLIDER_WIDTH - getX()) * value)
-				+ getX();
+		pos = (int) ((float) (getX() + getWidth() - SLIDER_WIDTH - getX()) * value) + getX();
 	}
 
 	@Override
-	protected void clicked(MouseButtons mouseButtons) {
-	}
+	protected void clicked(MouseButtons mouseButtons) {}
 }

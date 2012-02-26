@@ -59,7 +59,8 @@ public class Loot extends Entity {
 	}
 
 	public void tick() {
-		if (level.getTile(pos) instanceof HoleTile) {
+		if(level.getTile(pos) instanceof HoleTile)
+		{
 			remove();
 		}
 		animTime++;

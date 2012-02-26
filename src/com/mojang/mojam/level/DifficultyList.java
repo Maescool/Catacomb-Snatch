@@ -10,14 +10,10 @@ public class DifficultyList {
 
 	private static void createDifficultyList() {
 		Difficulties = new ArrayList<DifficultyInformation>();
-		Difficulties.add(new DifficultyInformation(MojamComponent.texts
-				.getStatic("diffselect.easy"), .5f, .5f, 1.5f, .5f));
-		Difficulties.add(new DifficultyInformation(MojamComponent.texts
-				.getStatic("diffselect.normal"), 1, 1, 1, 1));
-		Difficulties.add(new DifficultyInformation(MojamComponent.texts
-				.getStatic("diffselect.hard"), 3, 3, .5f, 1.5f));
-		Difficulties.add(new DifficultyInformation(MojamComponent.texts
-				.getStatic("diffselect.nightmare"), 6, 5, .25f, 2.5f));
+		Difficulties.add(new DifficultyInformation(MojamComponent.texts.getStatic("diffselect.easy"), .5f, .5f, 1.5f, .5f));
+		Difficulties.add(new DifficultyInformation(MojamComponent.texts.getStatic("diffselect.normal"), 1, 1, 1, 1));
+		Difficulties.add(new DifficultyInformation(MojamComponent.texts.getStatic("diffselect.hard"), 3, 3, .5f, 1.5f));
+		Difficulties.add(new DifficultyInformation(MojamComponent.texts.getStatic("diffselect.nightmare"), 6, 5, .25f, 2.5f));
 	}
 
 	public static ArrayList<DifficultyInformation> getDifficulties() {
@@ -26,14 +22,14 @@ public class DifficultyList {
 		}
 		return Difficulties;
 	}
-
+	
 	public static int getDifficultyID(DifficultyInformation di) {
-		if (Difficulties == null)
+		if ( Difficulties == null )
 			createDifficultyList();
-		for (int i = 0; i < Difficulties.size(); i++)
+		for (int i = 0; i < Difficulties.size();i++)
 			if (Difficulties.get(i) == di)
 				return i;
 		return 1; // default to normal
 	}
-
+	
 }

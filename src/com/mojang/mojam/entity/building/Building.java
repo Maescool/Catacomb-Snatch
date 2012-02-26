@@ -17,7 +17,7 @@ public class Building extends Mob implements IUsable {
 	public static final int SPAWN_INTERVAL = 60;
 	public static final int MIN_BUILDING_DISTANCE = 1700; // Sqr
 	public static final int HEALING_INTERVAL = 15;
-
+	
 	public int spawnTime = 0;
 	public boolean highlight = false;
 	private int healingTime = HEALING_INTERVAL;
@@ -30,6 +30,8 @@ public class Building extends Mob implements IUsable {
 		spawnTime = TurnSynchronizer.synchedRandom.nextInt(SPAWN_INTERVAL);
 	}
 
+
+	
 	@Override
 	public void render(Screen screen) {
 		super.render(screen);
@@ -39,16 +41,13 @@ public class Building extends Mob implements IUsable {
 	protected void renderMarker(Screen screen) {
 		if (highlight) {
 			BB bb = getBB();
-			bb = bb.grow((getSprite().w - (bb.x1 - bb.x0))
-					/ (3 + Math.sin(System.currentTimeMillis() * .01)));
+			bb = bb.grow((getSprite().w - (bb.x1 - bb.x0)) / (3 + Math.sin(System.currentTimeMillis() * .01)));
 			int width = (int) (bb.x1 - bb.x0);
 			int height = (int) (bb.y1 - bb.y0);
 			Bitmap marker = new Bitmap(width, height);
 			for (int y = 0; y < height; y++) {
 				for (int x = 0; x < width; x++) {
-					if ((x < 2 || x > width - 3 || y < 2 || y > height - 3)
-							&& (x < 5 || x > width - 6)
-							&& (y < 5 || y > height - 6)) {
+					if ((x < 2 || x > width - 3 || y < 2 || y > height - 3) && (x < 5 || x > width - 6) && (y < 5 || y > height - 6)) {
 						int i = x + y * width;
 						marker.pixels[i] = 0xffffffff;
 					}
@@ -98,7 +97,11 @@ public class Building extends Mob implements IUsable {
 
 	public void slideMove(double xa, double ya) {
 		super.move(xa, ya);
+<<<<<<< HEAD
 		fallDownHole();
+=======
+		checkForHoleTiles((int) pos.x/Tile.WIDTH, (int) pos.y/Tile.HEIGHT);
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 	}
 
 	//
@@ -114,36 +117,30 @@ public class Building extends Mob implements IUsable {
 
 	public boolean upgrade(Player p) {
 		if (upgradeLevel >= maxUpgradeLevel) {
-			MojamComponent.soundPlayer.playSound("/sound/Fail.wav",
-					(float) pos.x, (float) pos.y, true);
-			if (this.team == this.localTeam) {
-				Notifications.getInstance().add(
-						MojamComponent.texts.getStatic("upgrade.full"));
+			MojamComponent.soundPlayer.playSound("/sound/Fail.wav", (float) pos.x, (float) pos.y, true);
+			if(this.team == this.localTeam) {
+				Notifications.getInstance().add(MojamComponent.texts.getStatic("upgrade.full"));
 			}
 			return false;
 		}
 
 		final int cost = upgradeCosts[upgradeLevel];
 		if (cost > p.getScore()) {
-			MojamComponent.soundPlayer.playSound("/sound/Fail.wav",
-					(float) pos.x, (float) pos.y, true);
-			if (this.team == this.localTeam) {
-				Notifications.getInstance().add(
-						MojamComponent.texts.upgradeNotEnoughMoney(cost));
+			MojamComponent.soundPlayer.playSound("/sound/Fail.wav", (float) pos.x, (float) pos.y, true);
+			if(this.team == this.localTeam) {
+				Notifications.getInstance().add(MojamComponent.texts.upgradeNotEnoughMoney(cost));
 			}
 			return false;
 		}
 
-		MojamComponent.soundPlayer.playSound("/sound/Upgrade.wav",
-				(float) pos.x, (float) pos.y, true);
+		MojamComponent.soundPlayer.playSound("/sound/Upgrade.wav", (float) pos.x, (float) pos.y, true);
 
 		++upgradeLevel;
 		p.useMoney(cost);
 		upgradeComplete();
-
-		if (this.team == this.localTeam) {
-			Notifications.getInstance().add(
-					MojamComponent.texts.upgradeTo(upgradeLevel + 1));
+		
+		if(this.team == this.localTeam) {
+			Notifications.getInstance().add(MojamComponent.texts.upgradeTo(upgradeLevel+1));
 		}
 		return true;
 	}
@@ -163,7 +160,7 @@ public class Building extends Mob implements IUsable {
 			((Player) user).pickup(this);
 		}
 	}
-
+  
 	public boolean isHighlightable() {
 		return true;
 	}
@@ -175,4 +172,17 @@ public class Building extends Mob implements IUsable {
 	public boolean isAllowedToCancel() {
 		return true;
 	}
+<<<<<<< HEAD
+=======
+	
+    public void checkForHoleTiles(int x, int y) {
+        if (level.getTile(x, y) instanceof HoleTile) {
+            if (!removed) {
+                remove();
+                level.addEntity(new EnemyDieAnimation(pos.x, pos.y));
+                MojamComponent.soundPlayer.playSound("/sound/Fall.wav", (float) pos.x, (float) pos.y);
+            }
+        }
+    }
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 }

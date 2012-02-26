@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
+import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 import com.mojang.mojam.sound.SoundPlayer;

@@ -4,11 +4,9 @@ import java.awt.event.KeyEvent;
 
 import com.mojang.mojam.screen.Screen;
 
-/**
- * Generic error message
- */
 public class GuiError extends GuiMenu {
 
+<<<<<<< HEAD
 	private String message;
 
 	/**
@@ -22,6 +20,13 @@ public class GuiError extends GuiMenu {
 
 		addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, "Main Menu", 125,
 				300));
+=======
+	String message;
+	
+	public GuiError(String message){
+		this.message = message;
+		addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, "Main Menu", 125, 300));
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 	}
 
 	@Override
@@ -33,4 +38,23 @@ public class GuiError extends GuiMenu {
 		Font.drawMulti(screen, message, 20, 40, 300);
 		super.render(screen);
 	}
+<<<<<<< HEAD
+=======
+	
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+	}
+	
+	public void buttonPressed(ClickableComponent button) {
+	}
+
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 }

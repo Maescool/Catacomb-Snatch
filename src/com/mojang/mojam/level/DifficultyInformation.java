@@ -11,9 +11,7 @@ public class DifficultyInformation {
 	public final float mobSpawnModifier;
 	public final float shopCostsModifier;
 
-	public DifficultyInformation(String difficultyName,
-			float mobHealthModifier, float mobStrengthModifier,
-			float mobSpawnModifier, float shopCostsModifier) {
+	public DifficultyInformation(String difficultyName, float mobHealthModifier, float mobStrengthModifier, float mobSpawnModifier, float shopCostsModifier ) {
 		this.difficultyName = difficultyName;
 		this.mobHealthModifier = mobHealthModifier;
 		this.mobStrengthModifier = mobStrengthModifier;
@@ -22,29 +20,29 @@ public class DifficultyInformation {
 	}
 
 	public static float calculateHealth(float baseHealth) {
-		if (TitleMenu.difficulty != null)
+		if(TitleMenu.difficulty != null)
 			return baseHealth * TitleMenu.difficulty.mobHealthModifier;
 		else
 			return 0;
 	}
 
 	public static float calculateStrength(int baseStrength) {
-		if (TitleMenu.difficulty != null)
+		if(TitleMenu.difficulty != null)
 			return baseStrength * TitleMenu.difficulty.mobStrengthModifier;
 		else
 			return 0;
 	}
 
 	public static int calculateSpawntime(int baseSpawntime) {
-		if (TitleMenu.difficulty != null)
-			return (int) (baseSpawntime * TitleMenu.difficulty.mobSpawnModifier);
+		if(TitleMenu.difficulty != null)
+			return (int)(baseSpawntime * TitleMenu.difficulty.mobSpawnModifier);
 		else
 			return 0;
 	}
 
 	public static int calculateCosts(int baseCost) {
-		if (TitleMenu.difficulty != null)
-			return (int) (baseCost * TitleMenu.difficulty.shopCostsModifier);
+		if(TitleMenu.difficulty != null)
+			return (int)(baseCost * TitleMenu.difficulty.shopCostsModifier);
 		else
 			return 0;
 	}

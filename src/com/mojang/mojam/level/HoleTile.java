@@ -30,6 +30,6 @@ public class HoleTile extends Tile {
 	}
 
 	public boolean canPass(Entity e) {
-		return ((e instanceof Bullet) || (e instanceof Bat) || (e instanceof Player));
+		return ((e instanceof Bullet) || (e instanceof Bat) || (e instanceof Player));	
 	}
 }

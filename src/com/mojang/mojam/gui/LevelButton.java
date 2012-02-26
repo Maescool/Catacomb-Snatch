@@ -11,10 +11,8 @@ import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
-/**
- * A level button is a clickable button with a level minimap drawn on it.
- */
 public class LevelButton extends ClickableComponent {
+
 	private int id;
 	private Bitmap minimap;
 	private LevelInformation levelInfo;
@@ -22,26 +20,17 @@ public class LevelButton extends ClickableComponent {
 	public static final int WIDTH = 140;
 	public static final int HEIGHT = 84;
 
-	private final int MAX_LABEL_LENGTH = 15;
-
+    private final int MAX_LABEL_LENGTH = 15;
+    
 	/**
-	 * Constructor
+	 * Generates a minimap bitmap
 	 * 
-	 * @param id
-	 *            Component id
-	 * @param levelInfo
-	 *            Level info
-	 * @param x
-	 *            X coordinate
-	 * @param y
-	 *            Y coordinate
-	 * @param localTeam
-	 *            Local team number
+	 * @param mapfile
+	 *            path to resource (same as with Level.class)
 	 * @throws IOException
 	 *             map file not found?
 	 */
-	public LevelButton(int id, LevelInformation levelInfo, int x, int y,
-			int localTeam) {
+	public LevelButton(int id, LevelInformation levelInfo, int x, int y, int localTeam) {
 		super(x, y, WIDTH, HEIGHT);
 
 		this.id = id;
@@ -60,18 +49,18 @@ public class LevelButton extends ClickableComponent {
 		// back it up and use a local new one instead, just to make sure
 		Random backupRandom = TurnSynchronizer.synchedRandom;
 		TurnSynchronizer.synchedRandom = new Random();
-
+		
 		// load level
 		Level l;
 		try {
-			l = new GameMode().generateLevel(levelInfo, localTeam);
+			l = new GameMode().generateLevel(levelInfo,localTeam);
 		} catch (IOException e) {
 			return false;
 		}
 
 		int w = l.width;
 		int h = l.height;
-
+		
 		minimap = new Bitmap(w, h);
 
 		for (int y = 0; y < h; y++) {
@@ -93,34 +82,30 @@ public class LevelButton extends ClickableComponent {
 	static {
 		background[0] = new Bitmap(WIDTH, HEIGHT);
 		background[0].fill(0, 0, WIDTH, HEIGHT, 0xff522d16);
-		background[0].fill(1, 1, WIDTH - 2, HEIGHT - 2, 0);
+		background[0].fill(1, 1, WIDTH-2, HEIGHT-2, 0);
 		background[1] = new Bitmap(WIDTH, HEIGHT);
 		background[1].fill(0, 0, WIDTH, HEIGHT, 0xff26150a);
-		background[1].fill(1, 1, WIDTH - 2, HEIGHT - 2, 0);
+		background[1].fill(1, 1, WIDTH-2, HEIGHT-2, 0);
 		background[2] = new Bitmap(WIDTH, HEIGHT);
 		background[2].fill(0, 0, WIDTH, HEIGHT, 0xff26150a);
-		background[2].fill(1, 1, WIDTH - 2, HEIGHT - 2, 0xff3a210f);
+		background[2].fill(1, 1, WIDTH-2, HEIGHT-2, 0xff3a210f);
 	}
 
 	@Override
 	public void render(Screen screen) {
 
 		// render background
-		screen.blit(background[isPressed() ? 1 : (isActive ? 2 : 0)], getX(),
-				getY());
-
+		screen.blit(background[isPressed() ? 1 : (isActive ? 2 : 0)], getX(), getY());
+		
 		// render minimap
 		if (minimap != null) {
-			screen.blit(minimap, getX() + (getWidth() - minimap.w) / 2,
-					getY() + 4);
+			screen.blit(minimap, getX() + (getWidth() - minimap.w) / 2, getY() + 4);
 
 			// map name
-			Font.drawCentered(screen, trimToFitButton(levelInfo.levelName),
-					getX() + getWidth() / 2, getY() + 4 + minimap.h + 8);
+			Font.drawCentered(screen, trimToFitButton(levelInfo.levelName), getX() + getWidth() / 2, getY() + 4 + minimap.h + 8);
 		} else {
 			Font.setFont("red");
-			Font.drawCentered(screen, trimToFitButton(levelInfo.levelName),
-					getX() + getWidth() / 2, getY() + 4 + 32);
+			Font.drawCentered(screen, trimToFitButton(levelInfo.levelName), getX() + getWidth() / 2, getY() + 4 + 32);
 			Font.setFont("");
 		}
 	}
@@ -139,7 +124,8 @@ public class LevelButton extends ClickableComponent {
 	public String trimToFitButton(String label) {
 		if (label.length() > MAX_LABEL_LENGTH) {
 			return label.substring(0, MAX_LABEL_LENGTH - 2) + "...";
-		} else {
+		}
+		else {
 			return label;
 		}
 	}

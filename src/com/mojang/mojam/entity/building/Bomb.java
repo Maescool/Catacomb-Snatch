@@ -13,11 +13,10 @@ public class Bomb extends Building {
 
 	public static final double BOMB_DISTANCE = 50;
 	private boolean hit = false;
-	private Bullet fakeBullet = new Bullet(MojamComponent.instance.player, 1,
-			1, 0);
+	private Bullet fakeBullet = new Bullet(MojamComponent.instance.player,1,1,0);
 
 	public Bomb(double x, double y, int localTeam) {
-		super(x, y, Team.Neutral, localTeam);
+		super(x, y, Team.Neutral,localTeam);
 		setStartHealth(8);
 		yOffs = 2;
 		setSize(7, 7);
@@ -69,11 +68,10 @@ public class Bomb extends Building {
 
 	@Override
 	public void hurt(Entity source, float damage) {
-
+		
 	}
 
 	public void hit() {
-		hit = true;
-		;
+		hit = true;;
 	}
 }

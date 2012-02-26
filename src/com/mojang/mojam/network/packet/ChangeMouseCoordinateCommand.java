@@ -34,9 +34,11 @@ public class ChangeMouseCoordinateCommand extends NetworkCommand {
 		dos.writeBoolean(mouseHidden);
 	}
 
+
 	public int getX() {
 		return x;
 	}
+
 
 	public int getY() {
 		return y;
@@ -45,5 +47,7 @@ public class ChangeMouseCoordinateCommand extends NetworkCommand {
 	public boolean isMouseHidden() {
 		return mouseHidden;
 	}
+
+
 
 }

@@ -6,11 +6,9 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
-/**
- * "How to play" screen
- */
 public class HowToPlayMenu extends GuiMenu {
 
+<<<<<<< HEAD
 	private final static int goalX = 350;
 	private final static int imgTab = 70;
 	private final static int tab1 = 100;
@@ -21,6 +19,15 @@ public class HowToPlayMenu extends GuiMenu {
 	/**
 	 * Constructor
 	 */
+=======
+	private int goalX = 350;
+	private int imgTab = 70;
+	private int tab1 = 100;
+	private int tab2 = 210;
+	private int goalTopMargin = 20;
+	private int vspace = 55;
+	
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 	public HowToPlayMenu() {
 		addButton(new Button(TitleMenu.BACK_ID,
 				MojamComponent.texts.getStatic("back"),
@@ -33,13 +40,13 @@ public class HowToPlayMenu extends GuiMenu {
 		addButton(new Panel(imgTab - 67, goalTopMargin + 55 + 10, 189, 235));
 	}
 
-	@Override
 	public void render(Screen screen) {
 		screen.blit(Art.background, 0, 0);
 		super.render(screen);
 		printHelpText(screen);
 	}
 
+<<<<<<< HEAD
 	/**
 	 * Draw the help text onto the given screen
 	 * 
@@ -58,6 +65,17 @@ public class HowToPlayMenu extends GuiMenu {
 		Font.drawCentered(screen, MojamComponent.texts.getStatic("help.help4"),
 				goalX, goalTopMargin + 40);
 
+=======
+	private void printHelpText(Screen screen) {
+
+		// Game goal
+		Font.drawCentered(screen, MojamComponent.texts.getStatic("help.goal") + ":", goalX, goalTopMargin);
+		Font.drawCentered(screen, MojamComponent.texts.getStatic("help.help1"), goalX, goalTopMargin+10);
+		Font.drawCentered(screen, MojamComponent.texts.getStatic("help.help2"), goalX, goalTopMargin+20);
+		Font.drawCentered(screen, MojamComponent.texts.getStatic("help.help3"), goalX, goalTopMargin+30);
+		Font.drawCentered(screen, MojamComponent.texts.getStatic("help.help4"), goalX, goalTopMargin+40);
+		
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 		// Turret
 		int line = 102;
 		screen.blit(Art.turret[7][0], imgTab - 60, line);
@@ -132,4 +150,17 @@ public class HowToPlayMenu extends GuiMenu {
 			buttons.get(0).postClick();
 		}
 	}
+<<<<<<< HEAD
+=======
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+	}
+
+	@Override
+	public void buttonPressed(ClickableComponent button) {
+		
+	}
+
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 }

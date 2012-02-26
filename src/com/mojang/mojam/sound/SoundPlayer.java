@@ -16,7 +16,7 @@ public class SoundPlayer {
 	private boolean wavPlaybackSupport = true;
 	private boolean muted = false;
 
-	private float volume = Options.getAsFloat(Options.VOLUME, "1.0f");
+    private float volume = Options.getAsFloat(Options.VOLUME, "1.0f");
 	private float musicVolume = Options.getAsFloat(Options.MUSIC, "1.0f");
 
 	public static final String BACKGROUND_TRACK = "background";
@@ -42,9 +42,9 @@ public class SoundPlayer {
 		} catch (SoundSystemException ex) {
 			soundSystem = null;
 		}
-
+		
 		soundSystem.setMasterVolume(volume);
-		soundSystem.setVolume(BACKGROUND_TRACK, musicVolume);
+        soundSystem.setVolume(BACKGROUND_TRACK, musicVolume);
 	}
 
 	private boolean hasOggPlaybackSupport() {
@@ -68,12 +68,10 @@ public class SoundPlayer {
 				stopBackgroundMusic();
 
 			String backgroundTrack = "/sound/ThemeTitle.ogg";
-			soundSystem.backgroundMusic(BACKGROUND_TRACK,
-					SoundPlayer.class.getResource(backgroundTrack),
-					backgroundTrack, false);
+			soundSystem.backgroundMusic(BACKGROUND_TRACK, SoundPlayer.class.getResource(backgroundTrack), backgroundTrack, false);
 		}
 
-		soundSystem.setVolume(BACKGROUND_TRACK, musicVolume);
+        soundSystem.setVolume(BACKGROUND_TRACK, musicVolume);
 	}
 
 	public void startEndMusic() {
@@ -82,26 +80,20 @@ public class SoundPlayer {
 				stopBackgroundMusic();
 
 			String backgroundTrack = "/sound/ThemeEnd.ogg";
-			soundSystem.backgroundMusic(BACKGROUND_TRACK,
-					SoundPlayer.class.getResource(backgroundTrack),
-					backgroundTrack, false);
+            soundSystem.backgroundMusic(BACKGROUND_TRACK, SoundPlayer.class.getResource(backgroundTrack), backgroundTrack, false);
 		}
 
-		soundSystem.setVolume(BACKGROUND_TRACK, musicVolume);
+        soundSystem.setVolume(BACKGROUND_TRACK, musicVolume);
 	}
 
 	public void startBackgroundMusic() {
-		if (!isMuted() && hasOggPlaybackSupport()
-				&& !isPlaying(BACKGROUND_TRACK)) {
-			String backgroundTrack = "/sound/Background "
-					+ (TurnSynchronizer.synchedRandom.nextInt(4) + 1) + ".ogg";
+		if (!isMuted() && hasOggPlaybackSupport() && !isPlaying(BACKGROUND_TRACK)) {
+			String backgroundTrack = "/sound/Background " + (TurnSynchronizer.synchedRandom.nextInt(4) + 1) + ".ogg";
 
-			soundSystem.backgroundMusic(BACKGROUND_TRACK,
-					SoundPlayer.class.getResource(backgroundTrack),
-					backgroundTrack, false);
+            soundSystem.backgroundMusic(BACKGROUND_TRACK, SoundPlayer.class.getResource(backgroundTrack), backgroundTrack, false);
 		}
 
-		soundSystem.setVolume(BACKGROUND_TRACK, musicVolume);
+        soundSystem.setVolume(BACKGROUND_TRACK, musicVolume);
 	}
 
 	public void stopBackgroundMusic() {
@@ -120,21 +112,15 @@ public class SoundPlayer {
 		return playSound(sourceName, x, y, false);
 	}
 
-	public boolean playSound(String sourceName, float x, float y,
-			boolean blocking) {
+	public boolean playSound(String sourceName, float x, float y, boolean blocking) {
 		return playSound(sourceName, x, y, blocking, 0);
 	}
 
-	private boolean playSound(String sourceName, float x, float y,
-			boolean blocking, int index) {
-		if (index < MAX_SOURCES_PER_SOUND && !isMuted()
-				&& hasWavPlaybackSupport()) {
+	private boolean playSound(String sourceName, float x, float y, boolean blocking, int index) {
+		if (index < MAX_SOURCES_PER_SOUND && !isMuted() && hasWavPlaybackSupport()) {
 			String indexedSourceName = sourceName + index;
 			if (!loaded.contains(indexedSourceName)) {
-				soundSystem.newSource(false, indexedSourceName,
-						SoundPlayer.class.getResource(sourceName), sourceName,
-						false, x, y, 0, SoundSystemConfig.ATTENUATION_ROLLOFF,
-						SoundSystemConfig.getDefaultRolloff());
+				soundSystem.newSource(false, indexedSourceName, SoundPlayer.class.getResource(sourceName), sourceName, false, x, y, 0, SoundSystemConfig.ATTENUATION_ROLLOFF, SoundSystemConfig.getDefaultRolloff());
 				loaded.add(indexedSourceName);
 			} else if (isPlaying(indexedSourceName)) {
 				if (blocking) {
@@ -148,10 +134,8 @@ public class SoundPlayer {
 			soundSystem.stop(indexedSourceName);
 			soundSystem.setPriority(indexedSourceName, false);
 			soundSystem.setPosition(indexedSourceName, x, y, 0);
-			soundSystem.setAttenuation(indexedSourceName,
-					SoundSystemConfig.ATTENUATION_ROLLOFF);
-			soundSystem.setDistOrRoll(indexedSourceName,
-					SoundSystemConfig.getDefaultRolloff());
+			soundSystem.setAttenuation(indexedSourceName, SoundSystemConfig.ATTENUATION_ROLLOFF);
+			soundSystem.setDistOrRoll(indexedSourceName, SoundSystemConfig.getDefaultRolloff());
 			soundSystem.setPitch(indexedSourceName, 1.0f);
 			soundSystem.play(indexedSourceName);
 			return true;

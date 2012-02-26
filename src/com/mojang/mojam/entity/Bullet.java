@@ -44,8 +44,7 @@ public class Bullet extends Entity {
 	protected boolean shouldBlock(Entity e) {
 		if (e instanceof Bullet)
 			return false;
-		if ((e instanceof Mob) && !(e instanceof RailDroid)
-				&& !((Mob) e).isNotFriendOf(owner))
+		if ((e instanceof Mob) && !(e instanceof RailDroid) && !((Mob) e).isNotFriendOf(owner))
 			return false;
 		return e != owner;
 	}
@@ -60,10 +59,9 @@ public class Bullet extends Entity {
 		if (entity instanceof Mob) {
 			Mob mobEnt = (Mob) entity;
 			if (entity instanceof Bomb) {
-				((Bomb) entity).hit();
-			} else if (mobEnt.isNotFriendOf(owner)
-					|| (entity instanceof RailDroid)) {
-				mobEnt.hurt(this, damage);
+				((Bomb)entity).hit();
+			} else if (mobEnt.isNotFriendOf(owner) || (entity instanceof RailDroid)) {
+				mobEnt.hurt(this,damage);
 				hit = true;
 			}
 		} else {
@@ -71,8 +69,7 @@ public class Bullet extends Entity {
 			hit = true;
 		}
 		if (hit) {
-			MojamComponent.soundPlayer.playSound("/sound/Shot 2.wav",
-					(float) pos.x, (float) pos.y);
+			MojamComponent.soundPlayer.playSound("/sound/Shot 2.wav", (float) pos.x, (float) pos.y);
 		}
 	}
 }

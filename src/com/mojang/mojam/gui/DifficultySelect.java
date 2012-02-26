@@ -9,17 +9,19 @@ import com.mojang.mojam.level.DifficultyList;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
-/**
- * Difficulty selection Checkbox group
- */
 public class DifficultySelect extends GuiMenu {
 
 	private static final int DEFAULT_DIFFICULTY = 1;
+	
+	private ArrayList<DifficultyInformation> difficulties = DifficultyList.getDifficulties();
+	
+	private Checkbox[] DifficultyCheckboxes;
 	private final int xButtons = 3;
 	private final int xSpacing = Checkbox.WIDTH + 8;
 	private final int ySpacing = Checkbox.HEIGHT + 8;
 	private final int xStart = (MojamComponent.GAME_WIDTH - (xSpacing * xButtons)) / 2;
 	private final int yStart = 75;
+<<<<<<< HEAD
 
 	private ArrayList<DifficultyInformation> difficulties = DifficultyList
 			.getDifficulties();
@@ -35,6 +37,12 @@ public class DifficultySelect extends GuiMenu {
 	 * @param hosting
 	 *            True if this side of a multiplayer game is the host
 	 */
+=======
+	
+	private Button startGameButton;
+	private Button cancelButton;
+
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 	public DifficultySelect(boolean hosting) {
 		super();
 
@@ -95,6 +103,7 @@ public class DifficultySelect extends GuiMenu {
 			checkOnlyOne(cb);
 		}
 	}
+<<<<<<< HEAD
 
 	/**
 	 * Get the number of the currently selected checkbox
@@ -108,6 +117,28 @@ public class DifficultySelect extends GuiMenu {
 			}
 		}
 		return null;
+=======
+    
+    public Checkbox getActiveCheckbox()
+    {
+        for(Checkbox box : DifficultyCheckboxes) {
+            if(box.checked == true) {
+                return box;
+            }   
+        } 
+        return null;
+    }
+	
+	public void checkOnlyOne(Checkbox active)
+	{
+        for(Checkbox box : DifficultyCheckboxes) {
+            if(active.getId() == box.getId()) {
+                box.checked = true;
+            } else {
+                box.checked = false;
+            }
+        } 
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 	}
 
 	public void checkOnlyOne(Checkbox active) {

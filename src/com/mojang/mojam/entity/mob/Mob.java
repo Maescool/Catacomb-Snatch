@@ -15,6 +15,7 @@ import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
 public abstract class Mob extends Entity {
+
 	public final static double CARRYSPEEDMOD = 1.2;
 	public final static int MoveControlFlag = 1;
 
@@ -22,7 +23,7 @@ public abstract class Mob extends Entity {
 	private double speed = 1.0;
 	public int team;
 	protected boolean doShowHealthBar = true;
-	protected int healthBarOffset = 10;
+    protected int healthBarOffset = 10;
 	double dir = 0;
 	public int hurtTime = 0;
 	public int freezeTime = 0;
@@ -36,22 +37,18 @@ public abstract class Mob extends Entity {
 	public double xSlide;
 	public double ySlide;
 	public int deathPoints = 0;
-	public boolean chasing = false;
+	public boolean chasing=false;
 	public int justDroppedTicks = 0;
 	public int localTeam;
 	public int strength = 0;
-
+	
 	/**
 	 * Generic mob constructor
 	 * 
-	 * @param x
-	 *            Initial x axis coordinate
-	 * @param y
-	 *            Initial y axis coordinate
-	 * @param team
-	 *            Team number
-	 * @param localTeam
-	 *            Local team number
+	 * @param x Initial x axis coordinate
+	 * @param y Initial y axis coordinate
+	 * @param team Team number
+	 * @param localTeam Local team number
 	 */
 	public Mob(double x, double y, int team, int localTeam) {
 		super();
@@ -136,15 +133,13 @@ public abstract class Mob extends Entity {
 			for (int i = 0; i < loots; i++) {
 				double dir = i * Math.PI * 2 / particles;
 
-				level.addEntity(new Loot(pos.x, pos.y, Math.cos(dir), Math
-						.sin(dir), getDeathPoints()));
+				level.addEntity(new Loot(pos.x, pos.y, Math.cos(dir), Math.sin(dir), getDeathPoints()));
 			}
 		}
 
 		level.addEntity(new EnemyDieAnimation(pos.x, pos.y));
 
-		MojamComponent.soundPlayer.playSound(getDeathSound(), (float) pos.x,
-				(float) pos.y);
+		MojamComponent.soundPlayer.playSound(getDeathSound(), (float) pos.x, (float) pos.y);
 	}
 
 	public String getDeathSound() {
@@ -154,9 +149,7 @@ public abstract class Mob extends Entity {
 	public boolean shouldBounceOffWall(double xd, double yd) {
 		if (bounceWallTime > 0)
 			return false;
-		Tile nextTile = level.getTile(
-				(int) (pos.x / Tile.WIDTH + Math.signum(xd)), (int) (pos.y
-						/ Tile.HEIGHT + Math.signum(yd)));
+		Tile nextTile = level.getTile((int) (pos.x / Tile.WIDTH + Math.signum(xd)), (int) (pos.y / Tile.HEIGHT + Math.signum(yd)));
 		boolean re = (nextTile != null && !nextTile.canPass(this));
 		if (re)
 			bounceWallTime = 10;
@@ -167,45 +160,41 @@ public abstract class Mob extends Entity {
 		Bitmap image = getSprite();
 		if (hurtTime > 0) {
 			if (hurtTime > 40 - 6 && hurtTime / 2 % 2 == 0) {
-				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h
-						/ 2 - yOffs, 0xa0ffffff);
+				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h / 2 - yOffs, 0xa0ffffff);
 			} else {
 				if (health < 0)
 					health = 0;
 				int col = (int) (180 - health * 180 / maxHealth);
 				if (hurtTime < 10)
 					col = col * hurtTime / 10;
-				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h
-						/ 2 - yOffs, (col << 24) + 255 * 65536);
+				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h / 2 - yOffs, (col << 24) + 255 * 65536);
 			}
 		} else {
-
+					
 			screen.blit(image, pos.x - image.w / 2, pos.y - image.h / 2 - yOffs);
 		}
 
 		if (doShowHealthBar && health < maxHealth) {
-			addHealthBar(screen);
-		}
+            addHealthBar(screen);
+        }
 
 		// @todo maybe not have the rendering of carried item here..
 		renderCarrying(screen, 0);
 	}
 
 	protected void addHealthBar(Screen screen) {
-
-		int start = (int) (health * 21 / maxHealth);
-
-		screen.blit(Art.healthBar[start][0], pos.x - 16, pos.y
-				+ healthBarOffset);
-	}
+        
+        int start = (int) (health * 21 / maxHealth);
+        
+        screen.blit(Art.healthBar[start][0], pos.x - 16, pos.y + healthBarOffset);
+    }
 
 	protected void renderCarrying(Screen screen, int yOffs) {
 		if (carrying == null)
 			return;
 
 		Bitmap image = carrying.getSprite();
-		screen.blit(image, carrying.pos.x - image.w / 2, carrying.pos.y
-				- image.h + 8 + yOffs);// image.h
+		screen.blit(image, carrying.pos.x - image.w / 2, carrying.pos.y - image.h + 8 + yOffs);// image.h
 		// / 2 - 8);
 	}
 
@@ -216,16 +205,15 @@ public abstract class Mob extends Entity {
 			return;
 
 		if (freezeTime <= 0) {
-
-			if (source instanceof Bullet && !(this instanceof SpawnerEntity)
-					&& !(this instanceof RailDroid)) {
+			
+			if (source instanceof Bullet && !(this instanceof SpawnerEntity) && !(this instanceof RailDroid)) {
 				Bullet bullet = (Bullet) source;
 				if (bullet.owner instanceof Player) {
 					Player pl = (Player) bullet.owner;
 					pl.pexp++;
 				}
 			}
-
+			
 			hurtTime = 40;
 			freezeTime = 5;
 			health -= damage;
@@ -251,10 +239,11 @@ public abstract class Mob extends Entity {
 
 	public void onPickup() {
 	}
-
+        
 	public boolean isCarrying() {
 		return (this.carrying != null);
 	}
+<<<<<<< HEAD
 
 	public boolean isTargetBehindWall(double dx2, double dy2, Entity e) {
 		int x1 = (int) pos.x / Tile.WIDTH;
@@ -327,4 +316,63 @@ public abstract class Mob extends Entity {
 		}
 		return false;
 	}
+=======
+    
+    public boolean isTargetBehindWall(double dx2, double dy2, Entity e) {
+        int x1 = (int) pos.x / Tile.WIDTH;
+        int y1 = (int) pos.y / Tile.HEIGHT;
+        int x2 = (int) dx2 / Tile.WIDTH;
+        int y2 = (int) dy2 / Tile.HEIGHT;
+
+        int dx, dy, inx, iny, a;
+        Tile temp;
+
+        dx = x2 - x1;
+        dy = y2 - y1;
+        inx = dx > 0 ? 1 : -1;
+        iny = dy > 0 ? 1 : -1;
+
+        dx = java.lang.Math.abs(dx);
+        dy = java.lang.Math.abs(dy);
+
+        if (dx >= dy) {
+            dy <<= 1;
+            a = dy - dx;
+            dx <<= 1;
+            while (x1 != x2) {
+                temp = level.getTile(x1, y1);
+                if (!temp.canPass(e)) {
+                    return true;
+                }
+                if (a >= 0) {
+                    y1 += iny;
+                    a -= dx;
+                }
+                a += dy;
+                x1 += inx;
+            }
+        } else {
+            dx <<= 1;
+            a = dx - dy;
+            dy <<= 1;
+            while (y1 != y2) {
+                temp = level.getTile(x1, y1);
+                if (!temp.canPass(e)) {
+                    return true;
+                }
+                if (a >= 0) {
+                    x1 += inx;
+                    a -= dy;
+                }
+                a += dx;
+                y1 += iny;
+            }
+        }
+        temp = level.getTile(x1, y1);
+        if (!temp.canPass(e)) {
+            return true;
+        }
+        return false;
+    }
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 }
