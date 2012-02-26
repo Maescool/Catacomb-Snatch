@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mojang.mojam.MouseButtons;
+import com.mojang.mojam.MojamComponent;
 
 public abstract class ClickableComponent extends VisibleComponent {
 
@@ -20,8 +21,8 @@ public abstract class ClickableComponent extends VisibleComponent {
 	public void tick(MouseButtons mouseButtons) {
 		super.tick(mouseButtons);
 
-		int mx = mouseButtons.getX() / 2;
-		int my = mouseButtons.getY() / 2;
+		int mx = mouseButtons.getX() / MojamComponent.SCALE;
+		int my = mouseButtons.getY() / MojamComponent.SCALE;
 		isPressed = false;
 		if (mx >= getX() && my >= getY() && mx < (getX() + getWidth()) && my < (getY() + getHeight())) {
 			if (mouseButtons.isRelased(1)) {

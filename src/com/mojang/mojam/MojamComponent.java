@@ -94,7 +94,8 @@ public class MojamComponent extends Canvas implements Runnable,
 	public static final String GAME_TITLE = "Catacomb Snatch";
 	public static final int GAME_WIDTH = 512;
 	public static final int GAME_HEIGHT = GAME_WIDTH * 3 / 4;
-	public static final int SCALE = 2;
+	public static int SCALE = 1;
+	
 	private static JFrame guiFrame;
 	private boolean running = true;
 	private boolean paused;
@@ -115,6 +116,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	private Stack<GuiMenu> menuStack = new Stack<GuiMenu>();
 
+	private static int scaleNow = 1;
 	private InputHandler inputHandler;
 	private boolean mouseMoved = false;
 	private int mouseHideTime = 0;
@@ -143,12 +145,9 @@ public class MojamComponent extends Canvas implements Runnable,
 	public MojamComponent() {
 		setLocale(new Locale("en"));
 
-		this.setPreferredSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT
-				* SCALE));
-		this.setMinimumSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT
-				* SCALE));
-		this.setMaximumSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT
-				* SCALE));
+		this.setPreferredSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
+		this.setMinimumSize(new Dimension(GAME_WIDTH * 1, GAME_HEIGHT * 1));
+		this.setMaximumSize(new Dimension(GAME_WIDTH * 2, GAME_HEIGHT * 2));
 
 		this.addMouseMotionListener(this);
 		this.addMouseListener(this);
@@ -642,31 +641,54 @@ public class MojamComponent extends Canvas implements Runnable,
 		guiFrame.setResizable(false);
 		guiFrame.setLocationRelativeTo(null);
 		guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 		ArrayList<BufferedImage> icoList = new ArrayList<BufferedImage>();
 		icoList.add(Art.icon32);
 		icoList.add(Art.icon64);		
 		guiFrame.setIconImages(icoList);
 		guiFrame.setVisible(true);
+
 		Options.loadProperties();
 		setFullscreen(Boolean.parseBoolean(Options.get(Options.FULLSCREEN, Options.VALUE_FALSE)));
+		setScale(Boolean.parseBoolean(Options.get(Options.GAME_SCALE, Options.VALUE_TRUE)) ? 2 : 1);
 		mc.start();
 	}
 
+	
+	public static void setScale(int scale){
+		if(!fullscreen){
+			SCALE = scale;
+			guiFrame.setPreferredSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
+			guiFrame.setSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
+		}
+		else {
+			scaleNow = scale;
+		}
+	}
+		
 	private static void setFullscreen(boolean fs) {
 	    if (fs != fullscreen) {
     		GraphicsDevice device = guiFrame.getGraphicsConfiguration().getDevice();
     		// hide window
     		guiFrame.setVisible(false);
     		guiFrame.dispose();
+    		
     		// change options
     		guiFrame.setUndecorated(fs);
     		device.setFullScreenWindow(fs ? guiFrame : null);
+    		
     		// display window
     		guiFrame.setLocationRelativeTo(null);
     		guiFrame.setVisible(true);
     		instance.requestFocusInWindow();
     		fullscreen = fs;
+    		
+    		if(fs)
+    	    	SCALE = 2;
+    	    else
+    	    	setScale(scaleNow);
 	    }
+	    
 	    Options.set(Options.FULLSCREEN, fullscreen);
 	}
 

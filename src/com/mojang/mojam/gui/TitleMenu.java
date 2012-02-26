@@ -35,10 +35,12 @@ public class TitleMenu extends GuiMenu {
 
 	public static final int FULLSCREEN_ID = 2000;
 	public static final int FPS_ID = 2001;
-	public static final int VOLUME = 2002;
-    public static final int MUSIC = 2003;
-    public static final int CREATIVE_ID = 2004;
-    public static final int ALTERNATIVE_ID = 2005;
+	public static final int GAME_SCALE = 2002;
+	public static final int VOLUME = 2003;
+    public static final int MUSIC = 2004;
+    
+    public static final int CREATIVE_ID = 2005;
+    public static final int ALTERNATIVE_ID = 2006;
 
 	public static final int CREDITS_ID = 4000;
 	public static final int CREDITS_TITLE_ID = 4001;
