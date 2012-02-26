@@ -6,12 +6,21 @@ import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
+/**
+ * Font handling class
+ */
 public class Font {
-	public static String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ    " + "0123456789-.!?/%$\\=*+,;:()&#\"'";
-	private static final int pxFontHeight = 8;
-	private static final int pxFontWidth = 8;
-	public static HashMap<String, Font> fonts = new HashMap<String, Font>();
+	/** List of available letters */
+	private static final String LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ    " + "0123456789-.!?/%$\\=*+,;:()&#\"'";
+	
+	/** Font glyph height/width */
+	private static final int GLYPH_HEIGHT = 8;
+	private static final int GLYPH_WIDTH = 8;
+	
+	private static final HashMap<String, Font> fonts = new HashMap<String, Font>();
 	private static String currentFont = "";
+
+	private Bitmap[][] bitmapData;
 
 	static {
 		fonts.put("", new Font(Art.font_default));
@@ -21,50 +30,95 @@ public class Font {
 		fonts.put("", new Font(Art.font_gold));
 	}
 	
-	public static void addFont(String s){
-		s = s.toLowerCase();
-		String s1 = s.substring(s.indexOf("font_")+5);
+	/**
+	 * Add a font to the font list
+	 * 
+	 * @param name Font name
+	 */
+	public static void addFont(String name){
+		name = name.toLowerCase();
+		String s1 = name.substring(name.indexOf("font_")+5);
 		int mid= s1.lastIndexOf(".");
 		String fontName = s1.substring(0, mid); 
-		fonts.put(fontName, new Font(Art.cut(s, 8, 8)));
+		fonts.put(fontName, new Font(Art.cut(name, 8, 8)));
 		System.out.println("ADDED FONT:"+fontName);
 	}
 	
-	public static void setFont(String s){
-		currentFont = s;
+	/**
+	 * Set the font to use for all following calls
+	 * 
+	 * @param name Font name
+	 */
+	public static void setFont(String name){
+		currentFont = name;
 	}
 	
+	/**
+	 * Get the current font object
+	 * 
+	 * @return Font on success, null on error
+	 */
 	public static Font getFont(){
 		Font returnFont = fonts.get(currentFont);
+		
 		if(returnFont == null){
 			System.out.println("BAD FONT: "+currentFont);
 			return fonts.get("");
 		}
+		
 		return returnFont;
 	}
 	
-	public static int getStringWidth(String s) {
-		return s.length() * pxFontWidth;
+	/**
+	 * Calculate the width of the given string if drawn with the current font
+	 * 
+	 * @param text
+	 * @return Width (in pixels)
+	 */
+	public static int getStringWidth(String text) {
+		return text.length() * GLYPH_WIDTH;
 	}
 
+	/**
+	 * Get the height of the current font
+	 * 
+	 * @return Height (in pixels)
+	 */
 	public static int getStringHeight() {
-		return pxFontHeight;
+		return GLYPH_HEIGHT;
 	}
-
-	public Bitmap[][] bitmapData;
+	
 	private Font(Bitmap[][] bitmapData) {
 		this.bitmapData = bitmapData;
 	}
-
-	public static void draw(Screen screen, String msg, int x, int y) {
-		drawMulti(screen, msg, x, y, 99999);
+	
+	/**
+	 * Check if the given character is drawable
+	 * 
+	 * @param c Character
+	 * @return True if drawable, false if not
+	 */
+	public static boolean isDrawableCharacter(char c)
+	{
+		return LETTERS.indexOf(Character.toUpperCase(c)) >= 0;		
 	}
+
+	/**
+	 * Draw the given text onto the given screen at the given position.
+	 * If the length exceeds width, the text will be drawn in multiple lines.
+	 * 
+	 * @param screen Screen
+	 * @param msg Message
+	 * @param x X coordinate
+	 * @param y Y coordinate
+	 * @param width Maximum line width
+	 */
 	public static void drawMulti(Screen screen, String msg, int x, int y, int width) {
 		int startX = x;
 		msg = msg.toUpperCase();
 		int length = msg.length();
 		for (int i = 0; i < length; i++) {
-			int c = letters.indexOf(msg.charAt(i));
+			int c = LETTERS.indexOf(msg.charAt(i));
 			if (c < 0)
 				continue;
 			screen.blit(getFont().bitmapData[c % 30][c / 30], x, y);
@@ -77,7 +131,26 @@ public class Font {
 	}
 
 	/**
-	 * draws the text centered
+	 * Draw the given text onto the given screen at the given position.
+	 * Will never create multiple lines, even if the message is too long.
+	 * 
+	 * @param screen Screen
+	 * @param msg Message
+	 * @param x X coordinate
+	 * @param y Y coordinate
+	 */
+	public static void draw(Screen screen, String msg, int x, int y) {
+		drawMulti(screen, msg, x, y, 99999);
+	}
+
+	/**
+	 * Draw the given text onto the given screen, centered
+	 * Will never create multiple lines, even if the message is too long.
+	 * 
+	 * @param screen 
+	 * @param msg 
+	 * @param x 
+	 * @param y 
 	 */
 	public static void drawCentered(Screen screen, String msg, int x, int y) {
 		int width = getStringWidth(msg);
