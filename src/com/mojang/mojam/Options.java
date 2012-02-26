@@ -11,6 +11,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Properties;
 
+import com.mojang.mojam.screen.Art;
+
 public class Options {
 	
     public static final String DRAW_FPS = "drawFps";
@@ -23,11 +25,30 @@ public class Options {
     public static final String VALUE_FALSE = "false";
     
     public static final String CREATIVE = "creative";
-    public static final String ALTERNATIVE = "alternative";
+    public static final String CHARACTER_ID = "character";
     
     public static final String MP_PORT = "mpPort";
     
 	private static Properties properties = new Properties();
+	
+	public static int getCharacterID() {
+		String value = properties.getProperty(CHARACTER_ID);
+		if (value == null) {
+			return Art.LORD_LARD;
+		}
+		int id = Art.LORD_LARD;
+		try {
+			id = Integer.parseInt(value);
+		} catch (NumberFormatException e) {}
+		if (id < 0 || id >= Art.NUM_CHARACTERS) {
+			return Art.LORD_LARD;
+		}
+		return id;
+	}
+
+	public static boolean isCharacterIDset() {
+		return properties.get(CHARACTER_ID) != null;
+	}
 	
     public static String get(String key) {
         return properties.getProperty(key);

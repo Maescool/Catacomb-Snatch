@@ -75,6 +75,7 @@ public class Player extends Mob implements LootCollector {
     private int nextWalkSmokeTick = 0;
     private int regenDelay = 0;
     boolean isImmortal;
+    private int characterID;
 
     /**
      * Constructor
@@ -86,10 +87,11 @@ public class Player extends Mob implements LootCollector {
      * @param team Team number
      * @param localTeam Local team number
      */
-    public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team, int localTeam) {
+    public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team, int localTeam, int characterID) {
         super(x, y, team, localTeam);
         this.keys = keys;
         this.mouseButtons = mouseButtons;
+        this.characterID = characterID;
 
         startX = x;
         startY = y;
@@ -586,10 +588,7 @@ public class Player extends Mob implements LootCollector {
 
     @Override
     public void render(Screen screen) {
-        Bitmap[][] sheet = Art.getLocalPlayerArt();
-        if (team == Team.Team2) {
-            sheet = Art.herrSpeck;
-        }
+        Bitmap[][] sheet = Art.getPlayer(characterID);
         
         if (dead) {
             // don't draw anything if we are dead (in a hole)
@@ -772,7 +771,7 @@ public class Player extends Mob implements LootCollector {
      * Revive the player. Carried items are lost, as is all the money.
      */
     private void revive() {
-        Notifications.getInstance().add(MojamComponent.texts.hasDied(team));
+        Notifications.getInstance().add(MojamComponent.texts.hasDiedCharacter(characterID));
         carrying = null;
         dropAllMoney();
         pos.set(startX, startY);

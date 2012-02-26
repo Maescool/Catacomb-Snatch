@@ -3,6 +3,7 @@ package com.mojang.mojam.gui;
 import java.io.IOException;
 import java.util.Random;
 
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.gui.Font.FontName;
 import com.mojang.mojam.level.Level;
@@ -77,7 +78,7 @@ public class LevelButton extends ClickableComponent {
 		// Load level
 		Level l;
 		try {
-			l = new GameMode().generateLevel(levelInfo, localTeam);
+			l = new GameMode().generateLevel(levelInfo, localTeam, MojamComponent.instance.playerCharacter, MojamComponent.instance.opponentCharacter);
 		} catch (IOException e) {
 			return false;
 		}
