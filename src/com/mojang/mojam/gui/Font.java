@@ -7,18 +7,21 @@ import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
 public class Font {
-	public static String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ    " + "0123456789-.!?/%$\\=*+,;:()&#\"'";
+	
+	public static final String LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ    " + "0123456789-.!?/%$\\=*+,;:()&#\"'";
+	private static final String DEFAULT_FONT = "gold";
+	
 	private static final int pxFontHeight = 8;
 	private static final int pxFontWidth = 8;
 	public static HashMap<String, Font> fonts = new HashMap<String, Font>();
-	private static String currentFont = "";
+	private static String currentFont = DEFAULT_FONT;
 
 	static {
-		fonts.put("", new Font(Art.font_default));
-		fonts.put("", new Font(Art.font_red));
-		fonts.put("", new Font(Art.font_blue));
-		fonts.put("", new Font(Art.font_gray));
-		fonts.put("", new Font(Art.font_gold));
+		fonts.put("default", new Font(Art.font_default));
+		fonts.put("red", new Font(Art.font_red));
+		fonts.put("blue", new Font(Art.font_blue));
+		fonts.put("gray", new Font(Art.font_gray));
+		fonts.put("gold", new Font(Art.font_gold));
 	}
 	
 	public static void addFont(String s){
@@ -31,7 +34,16 @@ public class Font {
 	}
 	
 	public static void setFont(String s){
-		currentFont = s;
+		if (fonts.containsKey(s)) {
+			currentFont = s;
+		}
+		else {
+			System.out.println("Invalid font request: " + s);
+		}
+	}
+	
+	public static void setFontToDefault() {
+		currentFont = DEFAULT_FONT;
 	}
 	
 	public static Font getFont(){
@@ -64,7 +76,7 @@ public class Font {
 		msg = msg.toUpperCase();
 		int length = msg.length();
 		for (int i = 0; i < length; i++) {
-			int c = letters.indexOf(msg.charAt(i));
+			int c = LETTERS.indexOf(msg.charAt(i));
 			if (c < 0)
 				continue;
 			screen.blit(getFont().bitmapData[c % 30][c / 30], x, y);
