@@ -791,14 +791,14 @@ public class MojamComponent extends Canvas implements Runnable,
 			addMenu(new LevelSelect(false,localTeam));
 		} else if (id == TitleMenu.SELECT_HOST_LEVEL_ID) {
 			addMenu(new LevelSelect(true,localTeam));
-		} else if (id == TitleMenu.UPDATE_LEVELS) {
+		} /*else if (id == TitleMenu.UPDATE_LEVELS) {
 			GuiMenu menu = menuStack.pop();
 			if (menu instanceof LevelSelect) {
 				addMenu(new LevelSelect(((LevelSelect) menu).bHosting, localTeam));
 			} else {
 				addMenu(new LevelSelect(false,localTeam));
 			}
-		} else if (id == TitleMenu.HOST_GAME_ID) {
+		}*/ else if (id == TitleMenu.HOST_GAME_ID) {
 			addMenu(new HostingWaitMenu());
 			isMultiplayer = true;
 			isServer = true;
