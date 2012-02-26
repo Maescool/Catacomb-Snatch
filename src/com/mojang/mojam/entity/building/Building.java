@@ -1,14 +1,13 @@
 package com.mojang.mojam.entity.building;
 
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.IUsable;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.gui.Notifications;
-import com.mojang.mojam.level.HoleTile;
-import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
@@ -37,6 +36,7 @@ public class Building extends Mob implements IUsable {
 	public void render(Screen screen) {
 		super.render(screen);
 		renderMarker(screen);
+		renderInfo(screen);
 	}
 
 	protected void renderMarker(Screen screen) {
@@ -58,6 +58,24 @@ public class Building extends Mob implements IUsable {
 		}
 	}
 
+    protected void renderInfo(Screen screen) {
+    	//Draw iiAtlas' shop item info graphics
+        if (highlight) {
+        	Bitmap discriptionText = new Bitmap(110, 25);
+            BB bb = getBB();
+            
+            if(bb.x0 == 966.0) discriptionText = Art.turretText;
+            if(bb.x0 == 998.0) discriptionText = Art.harvesterText;
+            if(bb.x0 == 1030.0) discriptionText = Art.bombText;
+            
+            if(this.team == 1) {
+            	screen.blit(discriptionText, ((int) bb.x0 - (getSprite().w / 2)), ((int) bb.y0 + 30), 110, 25);  
+            }else if(this.team == 2) {
+            	screen.blit(discriptionText, ((int) bb.x1 - (getSprite().w / 2) - 30), ((int) bb.y1 - 60), 110, 25);
+            }
+        }
+    }
+	
 	public void tick() {
 		super.tick();
 		if (freezeTime > 0) {
@@ -134,7 +152,7 @@ public class Building extends Mob implements IUsable {
 		}
 
 		final int cost = upgradeCosts[upgradeLevel];
-		if (cost > p.getScore()) {
+		if (cost > p.getScore() && !Options.getAsBoolean(Options.CREATIVE)) {
 			MojamComponent.soundPlayer.playSound("/sound/Fail.wav", (float) pos.x, (float) pos.y, true);
 			if(this.team == this.localTeam) {
 				Notifications.getInstance().add(MojamComponent.texts.upgradeNotEnoughMoney(cost));

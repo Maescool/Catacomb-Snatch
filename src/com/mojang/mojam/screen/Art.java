@@ -64,6 +64,10 @@ public class Art {
 	
 	public static Bitmap[][] font_small_black = cutv("/art/fonts/font_small_black.png", 7);
 
+    public static Bitmap turretText = load("/art/screen/atlasTurretText.png");
+    public static Bitmap harvesterText = load("/art/screen/atlasHarvesterText.png");
+    public static Bitmap bombText = load("/art/screen/atlasBombText.png");
+
     public static Bitmap[][] raildroid = cut("/art/mob/raildroid.png", 32, 32);
 	public static Bitmap[][] mummy = cut("/art/mob/enemy_mummy_anim_48.png", 48, 48);
 	public static Bitmap[][] snake = cut("/art/mob/enemy_snake_anim_48.png", 48, 48);
