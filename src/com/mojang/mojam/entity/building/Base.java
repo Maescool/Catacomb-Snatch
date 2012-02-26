@@ -4,7 +4,7 @@ import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 
 /**
- * Building base class
+ * Player base
  */
 public class Base extends Building {
 	/**
