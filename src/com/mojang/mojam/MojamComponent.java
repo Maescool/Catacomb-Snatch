@@ -40,6 +40,7 @@ import com.mojang.mojam.gui.ButtonListener;
 import com.mojang.mojam.gui.ClickableComponent;
 import com.mojang.mojam.gui.DifficultySelect;
 import com.mojang.mojam.gui.Font;
+import com.mojang.mojam.gui.GameTypeSelectMenu;
 import com.mojang.mojam.gui.GuiError;
 import com.mojang.mojam.gui.GuiMenu;
 import com.mojang.mojam.gui.HostingWaitMenu;
@@ -217,6 +218,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	public void stop() {
 		running = false;
+		soundPlayer.stopBackgroundMusic();
 		soundPlayer.shutdown();
 	}
 
@@ -807,7 +809,7 @@ public class MojamComponent extends Canvas implements Runnable,
 				if (isServer) {
 					localId = 0;
 					localTeam= Team.Team1;
-					serverSocket = new ServerSocket(3000);
+					serverSocket = new ServerSocket(Options.getAsInteger(Options.MP_PORT, 3000));
 					serverSocket.setSoTimeout(1000);
 
 					hostThread = new Thread() {
@@ -864,11 +866,15 @@ public class MojamComponent extends Canvas implements Runnable,
 			isMultiplayer = true;
 			isServer = false;
 			chat.clear();
-
+			
+			String[] data = TitleMenu.ip.trim().split(":");
+			String ip = data[0];
+			Integer port = (data.length > 1) ? Integer.parseInt(data[1]) : Options.getAsInteger(Options.MP_PORT, 3000);
+			
 			try {
 				localId = 1;
 				localTeam= Team.Team2;
-				packetLink = new ClientSidePacketLink(TitleMenu.ip, 3000);
+				packetLink = new ClientSidePacketLink(ip, port);
 				synchronizer = new TurnSynchronizer(this, packetLink, localId,2);
 				packetLink.setPacketListener(this);
 			} catch (Exception e) {
@@ -895,7 +901,9 @@ public class MojamComponent extends Canvas implements Runnable,
 			popMenu();
 		} else if (id == TitleMenu.CREDITS_ID) {
 			addMenu(new CreditsScreen(GAME_WIDTH, GAME_HEIGHT));
-		} 
+		} else if (id == TitleMenu.GAME_TYPE_SELECT_ID) {
+			addMenu(new GameTypeSelectMenu(GAME_WIDTH, GAME_HEIGHT));
+		}
 	}
 
 	private void clearMenus() {

@@ -31,6 +31,7 @@ public class Building extends Mob implements IUsable {
 	protected int upgradeLevel = 0;
 	private int maxUpgradeLevel = 0;
 	private int[] upgradeCosts = null;
+	protected boolean healthRegenB = false;
 
 	/**
 	 * Constructor
@@ -48,6 +49,8 @@ public class Building extends Mob implements IUsable {
 		super(x, y, team, localTeam);
 
 		setStartHealth(20);
+		healthRegen = false;
+		healthRegenB = true;
 		freezeTime = 10;
 		spawnTime = TurnSynchronizer.synchedRandom.nextInt(SPAWN_INTERVAL);
 	}
@@ -100,14 +103,15 @@ public class Building extends Mob implements IUsable {
 		    if (this instanceof ShopItem) {
 		        ShopItem s = (ShopItem)this;
 		        Bitmap image = getSprite();
+		        int teamYOffset = (team == 2) ? 90 : 0;
 		        screen.blit(Art.tooltipBackground,
                         (int)(pos.x - image.w / 2 - 10),
-                        (int)(pos.y + 20 - (team==2?80:0)), 110, 25);
+                        (int)(pos.y + 20 - teamYOffset), 110, 25);
 		        
 		        String[] tooltip = s.getTooltip();
 		        Font f = Font.getFont("sm_gold");
 		        for (int i=0; i<tooltip.length; i++) {
-		            f.drawFont(screen, tooltip[i], (int)(pos.x - image.w + 8), (int)pos.y + 22 - (team==2?80:0) + (i==0?0:1) + i*(f.getFontStringHeight()+1));
+		            f.drawFont(screen, tooltip[i], (int)(pos.x - image.w + 8), (int)pos.y + 22 - teamYOffset + (i==0?0:1) + i*(f.getFontStringHeight()+1));
 		            f = Font.getFont("sm_white");
 		        }
 		    }
@@ -120,7 +124,7 @@ public class Building extends Mob implements IUsable {
 		if (freezeTime > 0) {
 			return;
 		}
-		if (hurtTime <= 0) {
+		if (hurtTime <= 0 && healthRegenB) {
 			if (health < maxHealth) {
 				if (--healingTime <= 0) {
 					++health;
@@ -257,5 +261,13 @@ public class Building extends Mob implements IUsable {
 	@Override
 	public boolean isAllowedToCancel() {
 		return true;
+	}
+	
+	public void buildingRegen(boolean regen) {
+		healthRegenB = regen;
+	}
+	
+	public boolean buildingRegenEnabled() {
+		return healthRegenB;
 	}
 }

@@ -95,7 +95,7 @@ public class Chat implements KeyListener {
 			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				open = false;
 				currentMessage = "";
-			} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			} else if (e.getKeyCode() == KeyEvent.VK_T) {
 				open = false;
 				if (!currentMessage.equals("")) {
 					waitingMessage = currentMessage;
