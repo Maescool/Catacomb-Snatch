@@ -9,12 +9,14 @@ import com.mojang.mojam.screen.Screen;
 public class PauseMenu extends GuiMenu {
 	private int selectedItem = 0;
 	private final int gameWidth;
+    private final int gameHeight;
 
 	private Button resumeButton;
 
 	public PauseMenu(int gameWidth, int gameHeight) {
 		super();
 		this.gameWidth = gameWidth;
+        this.gameHeight = gameHeight;
 
 		resumeButton = (Button) addButton(new Button(TitleMenu.RETURN_ID,
 				MojamComponent.texts.getStatic("pausemenu.resume"), (gameWidth - 128) / 2, 140));
@@ -31,8 +33,9 @@ public class PauseMenu extends GuiMenu {
 
 	public void render(Screen screen) {
 
-		screen.clear(0);
-		screen.blit(Art.emptyBackground, 0, 0);
+		//screen.clear(0);
+		//screen.blit(Art.emptyBackground, 0, 0);
+	    screen.opacityFill(0, 0, gameWidth, gameHeight, 0xff000000, 0x30);
 		screen.blit(Art.pauseScreen, 0, 0);
 
 		super.render(screen);
