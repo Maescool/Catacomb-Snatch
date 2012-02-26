@@ -868,7 +868,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			try {
 				localId = 1;
 				localTeam= Team.Team2;
-				packetLink = new ClientSidePacketLink(TitleMenu.ip, 3000);
+				packetLink = new ClientSidePacketLink(TitleMenu.ip.trim(), 3000);
 				synchronizer = new TurnSynchronizer(this, packetLink, localId,2);
 				packetLink.setPacketListener(this);
 			} catch (Exception e) {
