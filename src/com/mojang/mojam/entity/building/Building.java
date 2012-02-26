@@ -9,6 +9,7 @@ import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
+import com.mojang.mojam.gui.Font.FontName;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
@@ -109,10 +110,10 @@ public class Building extends Mob implements IUsable {
                         (int)(pos.y + 20 - teamYOffset), 110, 25);
 		        
 		        String[] tooltip = s.getTooltip();
-		        Font f = Font.getFont("sm_gold");
+		        Font f = Font.getFont(FontName.SM_GOLD);
 		        for (int i=0; i<tooltip.length; i++) {
 		            f.drawFont(screen, tooltip[i], (int)(pos.x - image.w + 8), (int)pos.y + 22 - teamYOffset + (i==0?0:1) + i*(f.getFontStringHeight()+1));
-		            f = Font.getFont("sm_white");
+		            f = Font.getFont(FontName.SM_WHITE);
 		        }
 		    }
 		}
