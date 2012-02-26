@@ -37,7 +37,6 @@ public class TitleMenu extends GuiMenu {
 	public static final int FPS_ID = 2001;
 	public static final int VOLUME = 2002;
     public static final int MUSIC = 2003;
-<<<<<<< HEAD
     public static final int SOUND = 2004;
     public static final int CREATIVE_ID = 2005;
     public static final int ALTERNATIVE_ID = 2006;
@@ -46,12 +45,6 @@ public class TitleMenu extends GuiMenu {
 	public static final int CREDITS_TITLE_ID = 4001;
 	public static final int CREDITS_TEXT_ID = 4002;
 	
-=======
-    public static final int SOUNDS = 2004;
-    public static final int CREATIVE_ID = 2005;
-    public static final int ALTERNATIVE_ID = 2006;
-
->>>>>>> 70735591af7d43afb528ddb602993645616f5397
 	public static final int KEY_BINDINGS_ID = 3000;
 	public static final int KEY_UP_ID = 3001;
 	public static final int KEY_DOWN_ID = 3002;

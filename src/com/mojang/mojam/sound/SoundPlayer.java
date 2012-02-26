@@ -18,11 +18,7 @@ public class SoundPlayer {
 
     private float volume = Options.getAsFloat(Options.VOLUME, "1.0f");
 	private float musicVolume = Options.getAsFloat(Options.MUSIC, "1.0f");
-<<<<<<< HEAD
 	private float soundVolume = Options.getAsFloat(Options.SOUND, "1.0f");
-=======
-	private float soundVolume = Options.getAsFloat(Options.SOUNDS, "1.0f");
->>>>>>> 70735591af7d43afb528ddb602993645616f5397
 
 	public static final String BACKGROUND_TRACK = "background";
 	private static final int MAX_SOURCES_PER_SOUND = 5;
@@ -142,10 +138,7 @@ public class SoundPlayer {
 			soundSystem.setAttenuation(indexedSourceName, SoundSystemConfig.ATTENUATION_ROLLOFF);
 			soundSystem.setDistOrRoll(indexedSourceName, SoundSystemConfig.getDefaultRolloff());
 			soundSystem.setPitch(indexedSourceName, 1.0f);
-<<<<<<< HEAD
 			soundVolume = Options.getAsFloat(Options.SOUND, "1.0f");
-=======
->>>>>>> 70735591af7d43afb528ddb602993645616f5397
 			soundSystem.setVolume(indexedSourceName, soundVolume);
 			soundSystem.play(indexedSourceName);
 			return true;
