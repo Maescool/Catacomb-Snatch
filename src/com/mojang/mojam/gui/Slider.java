@@ -59,9 +59,9 @@ public class Slider extends ClickableComponent {
 
 	@Override
 	public void render(Screen screen) {
-		screen.fill(getX() + SLIDER_WIDTH, getY(), getWidth() - SLIDER_WIDTH * 2, getHeight(), 0);
-		screen.blit(Art.slider[1][0], getX(), getY());
-		screen.blit(Art.slider[1][1], getX() + getWidth() - SLIDER_WIDTH, getY());
+		screen.opacityFill(getX() + SLIDER_WIDTH, getY(), getWidth() - SLIDER_WIDTH * 2, getHeight(), 0xff000000, 0x80);
+	    screen.opacityBlit(Art.slider[1][0], getX(), getY(), 0x80);
+		screen.opacityBlit(Art.slider[1][1], getX() + getWidth() - SLIDER_WIDTH, getY(), 0x80);
 
 		if (isDown)
 			screen.blit(Art.slider[0][1], pos, getY());

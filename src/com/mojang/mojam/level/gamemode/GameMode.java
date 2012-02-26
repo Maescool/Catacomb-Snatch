@@ -28,7 +28,7 @@ public class GameMode {
 	protected Level newLevel;
 	int localTeam;
 	
-	public Level generateLevel(LevelInformation li, int localTeam)  throws IOException {
+	public Level generateLevel(LevelInformation li, int localTeam, int player1Character, int player2Character)  throws IOException {
 		this.localTeam = localTeam;
 		BufferedImage bufferedImage;
 		//System.out.println("Loading level from file: "+li.getPath());
@@ -40,7 +40,7 @@ public class GameMode {
 		int w = bufferedImage.getWidth() + LEVEL_BORDER_SIZE;
 		int h = bufferedImage.getHeight() + LEVEL_BORDER_SIZE;
 		
-		newLevel = new Level(w, h);
+		newLevel = new Level(w, h, player1Character, player2Character);
 		
 		processLevelImage(bufferedImage, w, h);
 		darkenMap(w, h);

@@ -24,8 +24,8 @@ public class Button extends ClickableComponent {
 		this.label = label;
 	}
 
-    public Button(int id, String label, int x, int y, int w) {
-        super(x, y, w, BUTTON_HEIGHT);
+    public Button(int id, String label, int x, int y, int w, int h) {
+        super(x, y, w, h);
         this.id = id;
         this.label = label;
     }

@@ -14,6 +14,13 @@ import com.mojang.mojam.Options;
  * Art management class
  */
 public class Art {
+	
+	public static final int LORD_LARD = 0;
+	public static final int HERR_VON_SPECK = 1;
+	public static final int DUCHESS_DONUT = 2;
+	public static final int COUNTESS_CRULLER = 3;
+	public static final int NUM_CHARACTERS = 4;
+	
 	public static Bitmap[][] floorTiles = cut("/art/map/floortiles.png", 32, 32);
 	public static int[][] floorTileColors = getColors(floorTiles);
 	public static Bitmap[][] wallTiles = cut("/art/map/floortiles.png", 32, 56, 0, 104);
@@ -26,13 +33,52 @@ public class Art {
     public static Bitmap[][] rails = cut("/art/map/rails.png", 32, 38);
 
     // Player sheets
-	public static Bitmap[][] lordLard = cut("/art/player/lord_lard_sheet.png", 32, 32);
-	public static Bitmap[][] herrSpeck = cut("/art/player/herr_von_speck_sheet.png", 32, 32);
-	public static Bitmap[][] duchessDonut = cut("/art/player/duchess_donut_sheet.png", 32, 32);
+	private static Bitmap[][] lordLard = cut("/art/player/lord_lard_sheet.png", 32, 32);
+	private static Bitmap[][] herrSpeck = cut("/art/player/herr_von_speck_sheet.png", 32, 32);
+	private static Bitmap[][] duchessDonut = cut("/art/player/duchess_donut_sheet.png", 32, 32);
+	private static Bitmap[][] countessCruller = cut("/art/player/countess_cruller_sheet.png", 32, 32);
+	
+	public static Bitmap[][] getPlayer(int characterID) {
+		switch (characterID) {
+		case LORD_LARD:
+			return lordLard;
+		case HERR_VON_SPECK:
+			return herrSpeck;
+		case DUCHESS_DONUT:
+			return duchessDonut;
+		case COUNTESS_CRULLER:
+			return countessCruller;
+		default:
+			return lordLard;
+		}
+	}
+	
+	public static Bitmap[][] getLocalPlayerArt() {
+		return getPlayer(MojamComponent.instance.playerCharacter);
+	}
 
-	// Player starting points and tooltips
-	public static Bitmap[][] startLordLard = cut("/art/player/start_lordlard.png", 32, 32);
-	public static Bitmap[][] startHerrSpeck = cut("/art/player/start_herrspeck.png", 32, 32);
+	// Player starting points
+	private static Bitmap[][] startLordLard = cut("/art/player/start_lordlard.png", 32, 32);
+	private static Bitmap[][] startHerrSpeck = cut("/art/player/start_herrspeck.png", 32, 32);
+	private static Bitmap[][] startDuchessDonut = startLordLard;
+	private static Bitmap[][] startCountessCruller = cut("/art/player/start_cruller.png", 32, 32);
+	
+	public static Bitmap[][] getPlayerBase(int characterID) {
+		switch (characterID) {
+		case LORD_LARD:
+			return startLordLard;
+		case HERR_VON_SPECK:
+			return startHerrSpeck;
+		case DUCHESS_DONUT:
+			return startDuchessDonut;
+		case COUNTESS_CRULLER:
+			return startCountessCruller;
+		default:
+			return startLordLard;
+		}
+	}
+	
+	// Tooltips
 	public static Bitmap tooltipBackground = load("/art/screen/tooltipBackground.png");
     public static Bitmap turretText = load("/art/screen/atlasTurretText.png");
     public static Bitmap harvesterText = load("/art/screen/atlasHarvesterText.png");
@@ -111,19 +157,7 @@ public class Art {
 	// Icons
 	public static BufferedImage icon32 = loadBufferedImage("/art/icon/icon32.png");
 	public static BufferedImage icon64 = loadBufferedImage("/art/icon/icon64.png");
-    
-	/**
-	 * Get the player sheet of the local player
-	 * 
-	 * @return Local player sheet
-	 */
-    public static Bitmap[][] getLocalPlayerArt() {	
- 	   if(Options.getAsBoolean(Options.ALTERNATIVE)) {
- 			return Art.duchessDonut;
- 		}
- 	   return Art.lordLard;
-    }
-
+	
     /**
      * Return the bitmaps for a given piece of art, cut out from a sheet
      * 

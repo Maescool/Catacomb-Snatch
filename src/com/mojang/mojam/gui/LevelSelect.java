@@ -60,9 +60,9 @@ public class LevelSelect extends GuiMenu {
 		// Add page buttons
 		if (levels.size() > LEVELS_PER_PAGE) {
 	        previousPageButton = (Button) addButton(new Button(TitleMenu.LEVELS_PREVIOUS_PAGE_ID, "(", 
-	                xStart, MojamComponent.GAME_HEIGHT - 24 - 25, 30));
+	                xStart, MojamComponent.GAME_HEIGHT - 24 - 25, 30, Button.BUTTON_HEIGHT));
 	        nextPageButton = (Button) addButton(new Button(TitleMenu.LEVELS_PREVIOUS_PAGE_ID, ")", 
-	                xStart + 40, MojamComponent.GAME_HEIGHT - 24 - 25, 30));
+	                xStart + 40, MojamComponent.GAME_HEIGHT - 24 - 25, 30, Button.BUTTON_HEIGHT));
 		}
         
         // Create level
