@@ -48,7 +48,8 @@ public class TreasurePile extends Building {
 
 	/**
 	 * Get the amount of remaining treasure
-	 * @return
+	 * 
+	 * @return Remaining treasure
 	 */
 	public int getRemainingTreasure() {
 		return treasures;
