@@ -85,5 +85,13 @@ public class JoinGameMenu extends GuiMenu {
 		// nothing
 	}
 
+<<<<<<< HEAD
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+	@Override
+	public void buttonPressed(ClickableComponent button) {
+		// nothing
+	}
+
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 }

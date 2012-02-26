@@ -101,7 +101,11 @@ public class Building extends Mob implements IUsable {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fallDownHole();
+=======
+		checkForHoleTiles((int) pos.x/Tile.WIDTH, (int) pos.y/Tile.HEIGHT);
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 =======
 		checkForHoleTiles((int) pos.x/Tile.WIDTH, (int) pos.y/Tile.HEIGHT);
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
@@ -188,7 +192,10 @@ public class Building extends Mob implements IUsable {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 =======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 =======
@@ -208,6 +215,9 @@ public class Building extends Mob implements IUsable {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 =======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring

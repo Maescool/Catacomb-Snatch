@@ -39,7 +39,11 @@ public class Harvester extends Building implements LootCollector {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		areaBitmap = Bitmap.rangeBitmap(radius, Color.YELLOW.getRGB());
+=======
+		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 =======
 		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
@@ -130,8 +134,13 @@ public class Harvester extends Building implements LootCollector {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		areaBitmap = Bitmap.rangeBitmap(radius, Color.YELLOW.getRGB());
 		justDroppedTicks = 80; // show the radius for a brief time
+=======
+		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
+		justDroppedTicks = 80; //show the radius for a brief time
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 =======
 		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
 		justDroppedTicks = 80; //show the radius for a brief time
@@ -159,9 +168,15 @@ public class Harvester extends Building implements LootCollector {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 		if (justDroppedTicks-- > 0 && localTeam == team) {
 			screen.blit(areaBitmap, pos.x - radius, pos.y - radius - yOffs);
+=======
+		
+		if(justDroppedTicks-- > 0 && localTeam==team) {
+			screen.blit(areaBitmap, pos.x - areaBitmap.w / 2, pos.y - areaBitmap.h / 2 - yOffs);	
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 =======
 		
 		if(justDroppedTicks-- > 0 && localTeam==team) {
