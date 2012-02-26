@@ -20,13 +20,6 @@ public class Art {
 	public static Bitmap shadow = load("/art/map/shadow.png");
     public static Bitmap[][] rails = cut("/art/map/rails.png", 32, 38);
 
-    
-    public static Bitmap[][] getLocalPlayerArt() {	
- 	   if(Options.getAsBoolean(Options.ALTERNATIVE)) {
- 			return Art.duchessDonut;
- 		}
- 	   return Art.lordLard;
-    }
 
 	public static Bitmap[][] lordLard = cut("/art/player/lord_lard_sheet.png", 32, 32);
 	public static Bitmap[][] herrSpeck = cut("/art/player/herr_von_speck_sheet.png", 32, 32);
@@ -209,4 +202,11 @@ public class Art {
 
 		return null;
 	}
+	
+    public static Bitmap[][] getLocalPlayerArt() {	
+  	   if(Options.getAsBoolean(Options.ALTERNATIVE)) {
+  			return Art.duchessDonut;
+  		}
+  	   return Art.lordLard;
+     }
 }
