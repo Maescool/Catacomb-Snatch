@@ -76,6 +76,13 @@ public class Bitmap {
         }
 	}
 
+	/**
+	 * Draws a Bitmap semi-transparent
+	 * @param bitmap image to draw
+	 * @param x position on screen
+	 * @param y position on screen
+	 * @param opacity range from 0x00 to 0xff
+	 */
     public void opacityBlit(Bitmap bitmap, int x, int y, int opacity) {
 
         if(opacity == 0)
@@ -153,6 +160,16 @@ public class Bitmap {
 		}
 	}
 
+
+    /**
+     * Fills semi-transparent region on screen
+     * @param x position on screen
+     * @param y position on screen
+     * @param width of the region
+     * @param height of the region
+     * @param color to fill the region
+     * @param opacity range from 0x00 to 0xff
+     */
     public void opacityFill(int x, int y, int width, int height, int color, int opacity) {
 
         if(opacity == 0)
