@@ -8,11 +8,8 @@ import com.mojang.mojam.entity.animation.EnemyDieAnimation;
 import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.loot.Loot;
-<<<<<<< HEAD
 import com.mojang.mojam.level.HoleTile;
-=======
 import com.mojang.mojam.gui.TitleMenu;
->>>>>>> 70735591af7d43afb528ddb602993645616f5397
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.screen.Art;
