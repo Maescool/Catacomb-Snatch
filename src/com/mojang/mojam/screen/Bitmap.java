@@ -159,7 +159,6 @@ public class Bitmap {
 	}
 
 	private void setPixel(int x, int y, int color) {
-		System.out.println(x+y*w);
 		pixels[x+y*w]=color;
 		
 	}
