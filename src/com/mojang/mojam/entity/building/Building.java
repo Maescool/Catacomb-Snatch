@@ -1,15 +1,18 @@
 package com.mojang.mojam.entity.building;
 
 import com.mojang.mojam.MojamComponent;
-import com.mojang.mojam.entity.*;
-import com.mojang.mojam.entity.animation.EnemyDieAnimation;
+import com.mojang.mojam.Options;
+import com.mojang.mojam.entity.Bullet;
+import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.IUsable;
+import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.gui.Notifications;
-import com.mojang.mojam.level.HoleTile;
-import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.network.TurnSynchronizer;
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.Screen;
 
 public class Building extends Mob implements IUsable {
 	public static final int SPAWN_INTERVAL = 60;
@@ -119,7 +122,7 @@ public class Building extends Mob implements IUsable {
 		}
 
 		final int cost = upgradeCosts[upgradeLevel];
-		if (cost > p.getScore()) {
+		if (cost > p.getScore() && !Options.getAsBoolean(Options.CREATIVE)) {
 			MojamComponent.soundPlayer.playSound("/sound/Fail.wav", (float) pos.x, (float) pos.y, true);
 			if(this.team == this.localTeam) {
 				Notifications.getInstance().add(MojamComponent.texts.upgradeNotEnoughMoney(cost));

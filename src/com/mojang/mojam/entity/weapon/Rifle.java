@@ -1,6 +1,7 @@
 package com.mojang.mojam.entity.weapon;
 
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
@@ -26,7 +27,7 @@ public class Rifle implements IWeapon {
 		
 	}
 	public void setWeaponMode(){
-		if(owner.creative == true){
+		if(Options.getAsBoolean(Options.CREATIVE)){
 			BULLET_DAMAGE = 100f;
 			accuracy = 0;
 		}else{
