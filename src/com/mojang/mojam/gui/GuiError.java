@@ -9,6 +9,7 @@ public class GuiError extends GuiMenu {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	private String message;
 
 	/**
@@ -23,6 +24,8 @@ public class GuiError extends GuiMenu {
 		addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, "Main Menu", 125,
 				300));
 =======
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 =======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 =======
@@ -64,6 +67,9 @@ public class GuiError extends GuiMenu {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 =======
 >>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
