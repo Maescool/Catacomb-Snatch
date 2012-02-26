@@ -117,7 +117,7 @@ public class LevelButton extends ClickableComponent {
 		} else {
 			Font.setFont("red");
 			Font.drawCentered(screen, trimToFitButton(levelName), getX() + getWidth() / 2, getY() + 4 + 32);
-			Font.setFont("");
+			Font.setFontToDefault();
 		}
 	}
 

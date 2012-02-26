@@ -51,6 +51,7 @@ import com.mojang.mojam.gui.OptionsMenu;
 import com.mojang.mojam.gui.PauseMenu;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.gui.WinMenu;
+import com.mojang.mojam.gui.CreditsScreen;
 import com.mojang.mojam.level.DifficultyList;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
@@ -790,14 +791,14 @@ public class MojamComponent extends Canvas implements Runnable,
 			addMenu(new LevelSelect(false,localTeam));
 		} else if (id == TitleMenu.SELECT_HOST_LEVEL_ID) {
 			addMenu(new LevelSelect(true,localTeam));
-		} else if (id == TitleMenu.UPDATE_LEVELS) {
+		} /*else if (id == TitleMenu.UPDATE_LEVELS) {
 			GuiMenu menu = menuStack.pop();
 			if (menu instanceof LevelSelect) {
 				addMenu(new LevelSelect(((LevelSelect) menu).bHosting, localTeam));
 			} else {
 				addMenu(new LevelSelect(false,localTeam));
 			}
-		} else if (id == TitleMenu.HOST_GAME_ID) {
+		}*/ else if (id == TitleMenu.HOST_GAME_ID) {
 			addMenu(new HostingWaitMenu());
 			isMultiplayer = true;
 			isServer = true;
@@ -892,7 +893,9 @@ public class MojamComponent extends Canvas implements Runnable,
 			keys.tick();
 		} else if (id == TitleMenu.BACK_ID) {
 			popMenu();
-		}
+		} else if (id == TitleMenu.CREDITS_ID) {
+			addMenu(new CreditsScreen(GAME_WIDTH, GAME_HEIGHT));
+		} 
 	}
 
 	private void clearMenus() {

@@ -49,7 +49,7 @@ public class JoinGameMenu extends GuiMenu {
 
 		if (e.getKeyChar() == KeyEvent.VK_BACK_SPACE && TitleMenu.ip.length() > 0) {
 			TitleMenu.ip = TitleMenu.ip.substring(0, TitleMenu.ip.length() - 1);
-		} else if (Font.isDrawableCharacter(e.getKeyChar())) {
+		} else {
 			TitleMenu.ip += e.getKeyChar();
 		}
 	}
