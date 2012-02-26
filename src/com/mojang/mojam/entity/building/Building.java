@@ -31,6 +31,7 @@ public class Building extends Mob implements IUsable {
 	protected int upgradeLevel = 0;
 	private int maxUpgradeLevel = 0;
 	private int[] upgradeCosts = null;
+	protected boolean healthRegenB = false;
 
 	/**
 	 * Constructor
@@ -48,6 +49,8 @@ public class Building extends Mob implements IUsable {
 		super(x, y, team, localTeam);
 
 		setStartHealth(20);
+		healthRegen = false;
+		healthRegenB = true;
 		freezeTime = 10;
 		spawnTime = TurnSynchronizer.synchedRandom.nextInt(SPAWN_INTERVAL);
 	}
@@ -121,7 +124,7 @@ public class Building extends Mob implements IUsable {
 		if (freezeTime > 0) {
 			return;
 		}
-		if (hurtTime <= 0) {
+		if (hurtTime <= 0 && healthRegenB) {
 			if (health < maxHealth) {
 				if (--healingTime <= 0) {
 					++health;
@@ -258,5 +261,13 @@ public class Building extends Mob implements IUsable {
 	@Override
 	public boolean isAllowedToCancel() {
 		return true;
+	}
+	
+	public void buildingRegen(boolean regen) {
+		healthRegenB = regen;
+	}
+	
+	public boolean buildingRegenEnabled() {
+		return healthRegenB;
 	}
 }
