@@ -479,15 +479,12 @@ public class Player extends Mob implements LootCollector {
     private void handleCarrying() {
 
         carrying.setPos(pos.x, pos.y - 20);
-        if (!(carrying instanceof Turret)) {
-            carrying.tick();
-        }
+        carrying.tick();
         if (keys.use.wasPressed() || mouseButtons.isDown(mouseUseButton)) {
-            boolean allowed = true;
             mouseButtons.setNextState(mouseUseButton, false);
 
-            if (allowed && (!(carrying instanceof IUsable) || (carrying instanceof IUsable && ((IUsable) carrying).isAllowedToCancel()))) {
-                dropCarrying();
+            if (((IUsable) carrying).isAllowedToCancel()) {
+                drop();
             }
         }
     }
@@ -697,24 +694,28 @@ public class Player extends Mob implements LootCollector {
         return pos.add(new Vec2(Math.cos((facing) * (Math.PI) / 4 + Math.PI / 2), Math.sin((facing) * (Math.PI) / 4 + Math.PI / 2)).scale(30));
     }
 
+
     /**
      * Pickup a building and carry it around, removing it from the level
      * 
      * @param b Building
      */
+    @Override
     public void pickup(Building b) {
-    	if(b.team != this.team && b.team != Team.Neutral) {
-    		
-    		if(this.team == localTeam) {
-    		 Notifications.getInstance().add(MojamComponent.texts.getStatic("gameplay.cantPickup"));
-    		}
-    		 return;
-    	}
-    	if (b.health > 0) {
-	        level.removeEntity(b);
-	        carrying = b;
-	        carrying.onPickup();
-    	}
+        if(b.team != this.team && b.team != Team.Neutral) {
+
+            if(this.team == localTeam) {
+                Notifications.getInstance().add(MojamComponent.texts.getStatic("gameplay.cantPickup"));
+            }
+            return;
+        }
+        super.pickup(b);
+    }
+
+    public void drop() {
+        carrying.xSlide = aimVector.x * 5;
+        carrying.ySlide = aimVector.y * 5;
+        super.drop();
     }
 
     /**
