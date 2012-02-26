@@ -27,7 +27,7 @@ public class Rifle implements IWeapon {
 		
 	}
 	public void setWeaponMode(){
-		if(Options.getAsBoolean(Options.CREATIVE)){
+		if(Options.getAsBoolean(Options.CREATIVE_WEAPONDAMAGE)){
 			BULLET_DAMAGE = 100f;
 			accuracy = 0;
 		}else{

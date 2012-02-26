@@ -2,6 +2,7 @@ package com.mojang.mojam.level.gamemode;
 
 import java.util.Random;
 
+import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.building.TreasurePile;
 import com.mojang.mojam.entity.mob.Team;
@@ -23,7 +24,7 @@ public class GameModeVanilla extends GameMode {
 					+ Tile.HEIGHT / 2 - 4;
 			final Tile tile = newLevel.getTile((int) (x / Tile.WIDTH),
 					(int) (y / Tile.HEIGHT));
-			if (tile instanceof FloorTile) {
+			if (tile instanceof FloorTile && !Options.getAsBoolean(Options.CREATIVE_SPAWNERS)) {
 				newLevel.addEntity(new SpawnerEntity(x, y, Team.Neutral, 0));
 			}
 		}
@@ -43,7 +44,8 @@ public class GameModeVanilla extends GameMode {
 	
 	@Override
 	protected void setTickItems() {
-		newLevel.tickItems.add(new RandomSpawner());
+		if(!Options.getAsBoolean(Options.CREATIVE_SPAWNERS))
+			newLevel.tickItems.add(new RandomSpawner());
 	}
 	
 	@Override

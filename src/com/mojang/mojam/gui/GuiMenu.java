@@ -1,5 +1,6 @@
 package com.mojang.mojam.gui;
 
+import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.*;
 
@@ -67,4 +68,15 @@ public abstract class GuiMenu extends GuiComponent implements ButtonListener, Ke
 		}
 	}
 
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+	}	
+	
+	@Override
+    public void keyPressed(KeyEvent e)	{
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+	}
 }

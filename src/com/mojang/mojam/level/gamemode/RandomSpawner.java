@@ -2,6 +2,7 @@ package com.mojang.mojam.level.gamemode;
 
 import java.util.Random;
 
+import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.building.Turret;
@@ -36,7 +37,7 @@ public class RandomSpawner implements ILevelTickItem {
 					r = 32 * 4;
 					if (level.getEntities(
 							new BB(null, x - r, y - r, x + r, y + r),
-							Turret.class).size() == 0) {
+							Turret.class).size() == 0 && !Options.getAsBoolean(Options.CREATIVE_SPAWNERS)) {
 						level.addEntity(new SpawnerEntity(x, y, Team.Neutral,
 								random.nextInt(4)));
 					}

@@ -11,5 +11,4 @@ public abstract class GuiComponent {
 	public void tick(MouseButtons mouseButtons) {
 
 	}
-
 }

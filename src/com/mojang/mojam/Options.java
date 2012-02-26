@@ -21,7 +21,14 @@ public class Options {
     public static final String VALUE_TRUE = "true";
     public static final String VALUE_FALSE = "false";
     
+    // Creative mode options
     public static final String CREATIVE = "creative";
+    public static final String CREATIVE_IMMORTAL = "creative.immortal";
+    public static final String CREATIVE_SPAWNERS = "creative.spawners";
+    public static final String CREATIVE_FREEBUILDINGS = "creative.freebuilding";
+    public static final String CREATIVE_FREEUPGRADE = "creative.freeupgrade";
+    public static final String CREATIVE_WEAPONDAMAGE = "creative.weapondamage";
+    
     public static final String ALTERNATIVE = "alternative";
     
 	private static Properties properties = new Properties();

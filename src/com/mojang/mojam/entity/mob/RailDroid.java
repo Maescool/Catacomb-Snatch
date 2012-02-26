@@ -39,7 +39,7 @@ public class RailDroid extends Mob {
 	public boolean carrying = false;
 	public int swapTime = 0;
 	public int team;
-	public static boolean creative = Options.getAsBoolean(Options.CREATIVE);
+	public static boolean creative = Options.getAsBoolean(Options.CREATIVE_IMMORTAL);
 
 	public RailDroid(double x, double y, int team, int localTeam) {
 		super(x, y, team, localTeam);

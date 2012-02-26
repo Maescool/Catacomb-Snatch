@@ -112,7 +112,7 @@ public class Player extends Mob implements LootCollector {
      * Handle creative mode
      */
     private void setRailPricesAndImmortality(){
-    	if (Options.getAsBoolean(Options.CREATIVE)){
+    	if (Options.getAsBoolean(Options.CREATIVE_IMMORTAL)){
     		COST_RAIL = 0;
     		COST_DROID = 0;
     		COST_REMOVE_RAIL = 0;

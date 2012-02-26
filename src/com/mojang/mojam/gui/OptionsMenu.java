@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
+import com.mojang.mojam.level.CreativeSettingsList;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 import com.mojang.mojam.sound.SoundPlayer;
@@ -103,11 +104,20 @@ public class OptionsMenu extends GuiMenu {
 						slider.value);
 			}
 		});
+		
+		// Handle creative mode button
 		creativeModeBtn.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
 				creative = !creative;
 				Options.set(Options.CREATIVE, creative);
+				
+				// Reset all creative mode sub-settings if disabled
+				if(!creative)
+				{
+					for(String setting: CreativeSettingsList.getCreativeSettings())
+						Options.set(setting, false);
+				}
 			}
 		});
 
