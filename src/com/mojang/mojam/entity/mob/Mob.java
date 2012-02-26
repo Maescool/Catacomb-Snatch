@@ -5,8 +5,11 @@ import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.animation.EnemyDieAnimation;
+import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.loot.Loot;
+import com.mojang.mojam.level.HoleTile;
+import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.screen.Art;
@@ -31,7 +34,7 @@ public abstract class Mob extends Entity {
 	public float health = maxHealth;
 	public boolean isImmortal = false;
 	public double xBump, yBump;
-	public Mob carrying = null;
+	public Building carrying = null;
 	public int yOffs = 8;
 	public double xSlide;
 	public double ySlide;
@@ -39,12 +42,23 @@ public abstract class Mob extends Entity {
 	public boolean chasing=false;
 	public int justDroppedTicks = 0;
 	public int localTeam;
+	public int strength = 0;
+	public int healingInterval;
+	public int healingTime;
+	public boolean healthRegen = true;
 	
 	public Mob(double x, double y, int team, int localTeam) {
 		super();
 		setPos(x, y);
 		this.team = team;
 		this.localTeam = localTeam;
+		healingInterval = 25;
+		try {
+			if (TitleMenu.difficulty.difficultyID == 3) healingInterval = 15; 
+		} catch (Exception e) {
+			
+		}
+		healingTime = healingInterval;
 	}
 
 	public void init() {
@@ -78,6 +92,16 @@ public abstract class Mob extends Entity {
 	}
 
 	public void tick() {
+		if (TitleMenu.difficulty.difficultyID >= 1 && healthRegen) {
+	  	if (hurtTime <= 0) {
+			  if (health < maxHealth) {
+			  	if (--healingTime <= 0) {
+			  		health++;
+			  		healingTime = healingInterval;
+			  	}
+			  }
+			}
+		}
 		if (hurtTime > 0) {
 			hurtTime--;
 		}
@@ -167,9 +191,6 @@ public abstract class Mob extends Entity {
 		if (doShowHealthBar && health < maxHealth) {
             addHealthBar(screen);
         }
-
-		// @todo maybe not have the rendering of carried item here..
-		renderCarrying(screen, 0);
 	}
 
 	protected void addHealthBar(Screen screen) {
@@ -183,9 +204,9 @@ public abstract class Mob extends Entity {
 		if (carrying == null)
 			return;
 
-		Bitmap image = carrying.getSprite();
-		screen.blit(image, carrying.pos.x - image.w / 2, carrying.pos.y - image.h + 8 + yOffs);// image.h
-		// / 2 - 8);
+		carrying.yOffs -= yOffs;
+		carrying.render(screen);
+		carrying.yOffs += yOffs;
 	}
 
 	public abstract Bitmap getSprite();
@@ -193,6 +214,8 @@ public abstract class Mob extends Entity {
 	public void hurt(Entity source, float damage) {
 		if (isImmortal)
 			return;
+		
+		healingTime = healingInterval;
 
 		if (freezeTime <= 0) {
 			
@@ -227,9 +250,24 @@ public abstract class Mob extends Entity {
 		return deathPoints;
 	}
 
-	public void onPickup() {
+	public void pickup(Building b) {
+        if (b.health > 0) {
+            level.removeEntity(b);
+            carrying = b;
+            carrying.onPickup(this);
+        }
 	}
-        
+	
+	public void drop() {
+        carrying.removed = false;
+        carrying.freezeTime = 10;
+        carrying.justDroppedTicks=80;
+        carrying.setPos(pos);
+        level.addEntity(carrying);
+        carrying.onDrop();
+        carrying = null;
+	}
+
 	public boolean isCarrying() {
 		return (this.carrying != null);
 	}
@@ -242,7 +280,8 @@ public abstract class Mob extends Entity {
 
         int dx, dy, inx, iny, a;
         Tile temp;
-
+        Tile dTile1;
+        Tile dTile2;
         dx = x2 - x1;
         dy = y2 - y1;
         inx = dx > 0 ? 1 : -1;
@@ -261,6 +300,11 @@ public abstract class Mob extends Entity {
                     return true;
                 }
                 if (a >= 0) {
+                	dTile1=level.getTile(x1+inx,y1);
+                	dTile2=level.getTile(x1,y1+iny);
+                	if (!(dTile1.canPass(e)||dTile2.canPass(e))){
+                		return true;
+                	}
                     y1 += iny;
                     a -= dx;
                 }
@@ -277,7 +321,12 @@ public abstract class Mob extends Entity {
                     return true;
                 }
                 if (a >= 0) {
-                    x1 += inx;
+                	dTile1=level.getTile(x1+inx,y1);
+                	dTile2=level.getTile(x1,y1+iny);
+                	if (!(dTile1.canPass(e)||dTile2.canPass(e))){
+                		return true;
+                	}
+                	x1 += inx;
                     a -= dy;
                 }
                 a += dx;
@@ -290,4 +339,19 @@ public abstract class Mob extends Entity {
         }
         return false;
     }
+    
+    public boolean fallDownHole() {
+    	int x=(int) pos.x/Tile.WIDTH;
+    	int y=(int) pos.y/Tile.HEIGHT;
+        if (level.getTile(x, y) instanceof HoleTile) {
+        	level.addEntity(new EnemyDieAnimation(pos.x, pos.y));
+        	MojamComponent.soundPlayer.playSound("/sound/Fall.wav", (float) pos.x, (float) pos.y);
+        	if (!(this instanceof Player)){
+        		remove();
+        	}
+        	return true;
+        }
+        return false;
+    }
+    
 }

@@ -4,6 +4,7 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.mob.Team;
 
 public class Texts {
@@ -12,31 +13,32 @@ public class Texts {
 	public Texts(Locale locale) {
 		texts = ResourceBundle.getBundle("translations/texts", locale);
 	}
-	
+
 	public String getStatic(String property) {
-	    if (texts.containsKey(property)) {
-	        return texts.getString(property);
-	    } else {
-	    	System.err.println("Missing text property {"+property+"}");
-	        return "{"+property+"}";
-	    }
+		if (texts.containsKey(property)) {
+			return texts.getString(property);
+		} else {
+			System.err.println("Missing text property {"+property+"}");
+			return "{"+property+"}";
+		}
 	}
 
 	public String player1Win() {
-		return MessageFormat.format(getStatic("player1Win"), getStatic("player1Name").toUpperCase());
+
+		return MessageFormat.format(getStatic("gameplay.player1Win"),getPlayer1Name());
 	}
 
 	public String player2Win() {
-		return MessageFormat.format(getStatic("player2Win"), getStatic("player2Name").toUpperCase());
+		return MessageFormat.format(getStatic("gameplay.player2Win"), getStatic("gameplay.player2Name").toUpperCase());
 	}
-	
+
 	public String playerName(int team) {
 		if(team == Team.Team1) {
-			return getStatic("player1Name");
+			return getPlayer1Name();
 		}
-		return getStatic("player2Name");
+		return getStatic("gameplay.player2Name");
 	}
-	
+
 	public String playerWin(int team) {
 		if(team == Team.Team1) {
 			return player1Win();
@@ -45,39 +47,77 @@ public class Texts {
 	}
 
 	public String hasDied(int team) {
-		return MessageFormat.format(getStatic("hasDied"), playerName(team));
+		return MessageFormat.format(getStatic("player.hasDied"), playerName(team));
 	}
 
 	public String score(int team, int score) {
-		return MessageFormat.format(getStatic("score"), playerName(team), score);
+		return MessageFormat.format(getStatic("player.score"), playerName(team), score);
 	}
 
 	public String cost(int cost) {
-		return MessageFormat.format(getStatic("cost"), String.valueOf(cost));
+		return MessageFormat.format(getStatic("player.cost"), String.valueOf(cost));
 	}
 
 	public String health(float health, float maxHealth) {
-		return MessageFormat.format(getStatic("health"), Math.floor(health * 100 / maxHealth ));
+		return MessageFormat.format(getStatic("player.health"), Math.floor(health * 100 / maxHealth));
 	}
 
 	public String money(int money) {
-		return MessageFormat.format(getStatic("money"), money);
+		return MessageFormat.format(getStatic("player.money"), money);
 	}
 
 	public String FPS(int fps) {
-		return MessageFormat.format(getStatic("FPS"), fps);
+		return MessageFormat.format(getStatic("gameplay.FPS"), fps);
+	}
+
+	public String latency(String ms) {
+		return MessageFormat.format(getStatic("gameplay.latency"), ms);
 	}
 
 	public String nextLevel(int nextLevel) {
-		return MessageFormat.format(getStatic("nextLevel"), nextLevel);
+		return MessageFormat.format(getStatic("player.nextLevel"), nextLevel);
 	}
 
 	public String playerExp(int pexp) {
-		return MessageFormat.format(getStatic("playerExp"), pexp);
+		return MessageFormat.format(getStatic("player.exp"), pexp);
 	}
 
 	public String playerLevel(int plevel) {
-		return MessageFormat.format(getStatic("playerLevel"), plevel);
+		return MessageFormat.format(getStatic("player.level"), plevel);
+	}
+	
+	public String[] shopTooltipLines(String shopItemName) {
+	    return new String[] { 
+	            getStatic("shop." + shopItemName + "TooltipTitle"),
+	            getStatic("shop." + shopItemName + "TooltipLine1"),
+	            getStatic("shop." + shopItemName + "TooltipLine2"),
+	    };
 	}
 
+	public String upgradeNotEnoughMoney(int cost) {
+		return MessageFormat.format(getStatic("upgrade.notEnoughMoney"), cost);
+	}
+
+	public String upgradeTo(int upgradelevel) {
+		return MessageFormat.format(getStatic("upgrade.to"), upgradelevel);
+	}
+
+	public String buildRail(int cost) {
+		return MessageFormat.format(getStatic("build.rail"), cost);
+	}
+
+	public String buildDroid(int cost) {
+		return MessageFormat.format(getStatic("build.droid"), cost);
+	}
+
+	public String removeRail(int cost) {
+		return MessageFormat.format(getStatic("build.removeRail"), cost);
+	}
+
+	public String getPlayer1Name() {	
+		if(Options.getAsBoolean(Options.ALTERNATIVE)) {
+			return getStatic("gameplay.player1NameAlt").toUpperCase();
+		}
+		return getStatic("gameplay.player1Name").toUpperCase();
+	}
 }

@@ -1,11 +1,10 @@
 package com.mojang.mojam.entity.mob;
 
-import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 
-public class Scarab extends Mob {
+public class Scarab extends HostileMob {
 	public int facing;
 	public int walkTime;
 	public int stepTime;
@@ -18,8 +17,8 @@ public class Scarab extends Mob {
 		minimapColor = 0xffff0000;
 		yOffs = 10;
 		facing = TurnSynchronizer.synchedRandom.nextInt(4);
-
 		deathPoints = 4;
+		strength = 2;
 	}
 
 	public void tick() {
@@ -39,7 +38,12 @@ public class Scarab extends Mob {
 		walkTime++;
 
 		if (walkTime / 12 % 4 != 0) {
-			stepTime++;
+            if (shouldBounceOffWall(xd, yd)) {
+                facing = (facing + 2) % 4;
+                xd = -xd;
+                yd = -yd;
+            }			
+            stepTime++;
 			if (!move(xd, yd)
 					|| (walkTime > 10 && TurnSynchronizer.synchedRandom
 							.nextInt(200) == 0)) {
@@ -57,18 +61,6 @@ public class Scarab extends Mob {
 
 	public Bitmap getSprite() {
 		return Art.scarab[((stepTime / 6) & 3)][(facing + 3) & 3];
-	}
-	
-	@Override
-	public void collide(Entity entity, double xa, double ya) {
-		super.collide(entity, xa, ya);
-
-		if (entity instanceof Mob) {
-			Mob mob = (Mob) entity;
-			if (isNotFriendOf(mob)) {
-				mob.hurt(this, 2);
-			}
-		}
 	}
 
 	@Override

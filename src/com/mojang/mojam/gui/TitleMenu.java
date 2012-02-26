@@ -6,7 +6,6 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.gamemode.GameMode;
-import com.mojang.mojam.level.gamemode.GameModeGoldRush;
 import com.mojang.mojam.level.gamemode.GameModeVanilla;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
@@ -30,12 +29,22 @@ public class TitleMenu extends GuiMenu {
 	public static final int SELECT_DIFFICULTY_HOSTING_ID = 1013;
 	public static final int BACK_ID = 1014;
 	public static final int IGNORE_ID = 1015;
-	public static final int OPTIONS_ID = 1015;
+	public static final int OPTIONS_ID = 1016;
+    public static final int LEVELS_NEXT_PAGE_ID = 1017;
+    public static final int LEVELS_PREVIOUS_PAGE_ID = 1018;
 
 	public static final int FULLSCREEN_ID = 2000;
 	public static final int FPS_ID = 2001;
-	public static final int MUTE_MUSIC = 2002;
+	public static final int VOLUME = 2002;
+    public static final int MUSIC = 2003;
+    public static final int SOUND = 2004;
+    public static final int CREATIVE_ID = 2005;
+    public static final int ALTERNATIVE_ID = 2006;
 
+	public static final int CREDITS_ID = 4000;
+	public static final int CREDITS_TITLE_ID = 4001;
+	public static final int CREDITS_TEXT_ID = 4002;
+	
 	public static final int KEY_BINDINGS_ID = 3000;
 	public static final int KEY_UP_ID = 3001;
 	public static final int KEY_DOWN_ID = 3002;
@@ -46,7 +55,8 @@ public class TitleMenu extends GuiMenu {
 	public static final int KEY_USE_ID = 3007;
 	public static final int KEY_BUILD_ID = 3008;
 	public static final int KEY_UPGRADE_ID = 3009;
-
+	public static final int KEY_CHAT_ID = 3010;
+	
 	public static LevelInformation level = null;
 	public static GameMode defaultGameMode= new GameModeVanilla();
 	public static DifficultyInformation difficulty = null;
@@ -84,7 +94,7 @@ public class TitleMenu extends GuiMenu {
 
 		super.render(screen);
 
-		screen.blit(Art.lordLard[0][6], (gameWidth - 128) / 2 - 40, 160 + selectedItem * 30);
+		screen.blit(Art.getLocalPlayerArt()[0][6], (gameWidth - 128) / 2 - 40, 160 + selectedItem * 30);
 	}
 
 	@Override
@@ -103,7 +113,7 @@ public class TitleMenu extends GuiMenu {
 			e.consume();
 			buttons.get(selectedItem).postClick();
 		} else if (e.getKeyCode() == KeyEvent.VK_F11) {
-			MojamComponent.setFullscreen(!MojamComponent.isFulscreen());
+			MojamComponent.toggleFullscreen();
 		}
 	}
 

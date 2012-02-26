@@ -13,6 +13,9 @@ import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
+/**
+ * Defense turret. Automatically aims and shoots at the nearest monster.
+ */
 public class Turret extends Building {
 	
 	private static final float BULLET_DAMAGE = .75f;
@@ -30,20 +33,30 @@ public class Turret extends Building {
 
 	public Bitmap areaBitmap;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param x Initial X coordinate
+	 * @param y Initial Y coordinate
+	 * @param team Team number
+	 * @param localTeam Local team number
+	 */
 	public Turret(double x, double y, int team, int localTeam) {
 		super(x, y, team, localTeam);
 		this.team = team;
 		setStartHealth(10);
 		freezeTime = 10;
-		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());		
+		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
 	}
 
+	@Override
 	public void init() {
 		makeUpgradeableWithCosts(new int[] { DifficultyInformation.calculateCosts(500), 
 				DifficultyInformation.calculateCosts(1000), 
 				DifficultyInformation.calculateCosts(5000)});
 	}
 
+	@Override
 	public void tick() {
 		super.tick();
 		if (--freezeTime > 0)
@@ -51,55 +64,60 @@ public class Turret extends Building {
 		if (--delayTicks > 0)
 			return;
 
-		Set<Entity> entities = level.getEntities(pos.x - radius, pos.y - radius, pos.x + radius, pos.y + radius);
-
-		Entity closest = null;
-		double closestDist = 99999999.0f;
-		for (Entity e : entities) {
-			if (!(e instanceof Mob) || (e instanceof RailDroid && e.team == this.team) || e instanceof Bomb)
-				continue;
-			if (!((Mob) e).isNotFriendOf(this))
-				continue;
-			final double dist = e.pos.distSqr(pos);
-			Bullet bullet = new Bullet(this, pos.x, pos.y, 0);
-			if (dist < radiusSqr && dist < closestDist && !isTargetBehindWall(e.pos.x, e.pos.y, bullet)) {
-				closestDist = dist;
-				closest = e;
-			}
+		if (!isCarried()) {
+		    // find target
+    		Set<Entity> entities = level.getEntities(pos.x - radius, pos.y - radius, pos.x + radius, pos.y + radius);
+    
+    		Entity closest = null;
+    		double closestDist = 99999999.0f;
+    		for (Entity e : entities) {
+    			if (!(e instanceof Mob) || (e instanceof RailDroid && e.team == this.team) || e instanceof Bomb)
+    				continue;
+    			if (!((Mob) e).isNotFriendOf(this))
+    				continue;
+    			final double dist = e.pos.distSqr(pos);
+    			Bullet bullet = new Bullet(this, pos.x, pos.y, 0);
+    			if (dist < radiusSqr && dist < closestDist && !isTargetBehindWall(e.pos.x, e.pos.y, bullet)) {
+    				closestDist = dist;
+    				closest = e;
+    			}
+    		}
+    		if (closest != null) {
+    		    // shoot
+        		double invDist = 1.0 / Math.sqrt(closestDist);
+        		double yd = closest.pos.y - pos.y;
+        		double xd = closest.pos.x - pos.x;
+        		double angle = (Math.atan2(yd, xd) + Math.PI * 1.625);
+        		facing = (8 + (int) (angle / Math.PI * 4)) & 7;
+        		Bullet bullet = new Bullet(this, xd * invDist, yd * invDist, BULLET_DAMAGE * ((upgradeLevel + 1) / 2.f));
+        		bullet.pos.y -= 10;
+        		level.addEntity(bullet);
+        
+        		if (upgradeLevel > 0) {
+        			Bullet second_bullet = new Bullet(this, xd * invDist, yd * invDist, BULLET_DAMAGE * ((upgradeLevel + 1) / 2.f));
+        			level.addEntity(second_bullet);
+        			if (facing == 0 || facing == 4) {
+        				bullet.pos.x -= 5;
+        				second_bullet.pos.x += 5;
+        			}
+        		}
+        
+        		delayTicks = delay;
+    		}
 		}
-		if (closest == null)
-			return;
-		
-		double invDist = 1.0 / Math.sqrt(closestDist);
-		double yd = closest.pos.y - pos.y;
-		double xd = closest.pos.x - pos.x;
-		double angle = (Math.atan2(yd, xd) + Math.PI * 1.625);
-		facing = (8 + (int) (angle / Math.PI * 4)) & 7;
-		Bullet bullet = new Bullet(this, xd * invDist, yd * invDist, BULLET_DAMAGE * ((upgradeLevel + 1) / 2.f));
-		bullet.pos.y -= 10;
-		level.addEntity(bullet);
-
-		if (upgradeLevel > 0) {
-			Bullet second_bullet = new Bullet(this, xd * invDist, yd * invDist, BULLET_DAMAGE * ((upgradeLevel + 1) / 2.f));
-			level.addEntity(second_bullet);
-			if (facing == 0 || facing == 4) {
-				bullet.pos.x -= 5;
-				second_bullet.pos.x += 5;
-			}
-		}
-
-		delayTicks = delay;
 	}
 
+	@Override
 	public void render(Screen screen) {
 		
 		if(justDroppedTicks-- > 0 && localTeam==team) {
-				screen.blit(areaBitmap, pos.x - areaBitmap.w / 2, pos.y - areaBitmap.h / 2 - yOffs);	
+				screen.blit(areaBitmap, pos.x-radius , pos.y-radius - yOffs);	
 		}
 		
 		super.render(screen);
 	}
 
+	@Override
 	public Bitmap getSprite() {
 		switch (upgradeLevel) {
 		case 1:
@@ -111,13 +129,14 @@ public class Turret extends Building {
 		}
 	}
 
+	@Override
 	protected void upgradeComplete() {
 		maxHealth += 10;
 		health = maxHealth;
 		delay = upgradeDelay[upgradeLevel];
 		radius = upgradeRadius[upgradeLevel];
 		radiusSqr = radius * radius;
-		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
-		justDroppedTicks = 80; //show the radius for a brief time
+		areaBitmap = Bitmap.rangeBitmap(radius,Color.YELLOW.getRGB());
+		if (upgradeLevel != 0) justDroppedTicks = 80; //show the radius for a brief time
 	}
 }

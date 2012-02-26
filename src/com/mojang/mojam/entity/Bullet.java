@@ -1,6 +1,7 @@
 package com.mojang.mojam.entity;
 
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.entity.building.Bomb;
 import com.mojang.mojam.entity.mob.*;
 import com.mojang.mojam.screen.*;
 
@@ -57,7 +58,9 @@ public class Bullet extends Entity {
 	public void collide(Entity entity, double xa, double ya) {
 		if (entity instanceof Mob) {
 			Mob mobEnt = (Mob) entity;
-			if (mobEnt.isNotFriendOf(owner) || (entity instanceof RailDroid)) {
+			if (entity instanceof Bomb) {
+				((Bomb)entity).hit();
+			} else if (mobEnt.isNotFriendOf(owner) || (entity instanceof RailDroid)) {
 				mobEnt.hurt(this,damage);
 				hit = true;
 			}

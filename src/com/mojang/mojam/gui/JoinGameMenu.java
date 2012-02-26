@@ -14,8 +14,8 @@ public class JoinGameMenu extends GuiMenu {
 	public JoinGameMenu() {
 		super();
 
-		joinButton = (Button) addButton(new Button(TitleMenu.PERFORM_JOIN_ID, "Join", 100, 180));
-		cancelButton = (Button) addButton(new Button(TitleMenu.CANCEL_JOIN_ID, "Cancel", 250, 180));
+		joinButton = (Button) addButton(new Button(TitleMenu.PERFORM_JOIN_ID, MojamComponent.texts.getStatic("mp.join"), 100, 180));
+		cancelButton = (Button) addButton(new Button(TitleMenu.CANCEL_JOIN_ID, MojamComponent.texts.getStatic("cancel"), 250, 180));
 	}
 
 	@Override
@@ -23,7 +23,7 @@ public class JoinGameMenu extends GuiMenu {
 
 		screen.clear(0);
 		screen.blit(Art.emptyBackground, 0, 0);
-		Font.draw(screen, MojamComponent.texts.getStatic("enterIP"), 100, 100);
+		Font.draw(screen, MojamComponent.texts.getStatic("mp.enterIP"), 100, 100);
 		Font.draw(screen, TitleMenu.ip + "-", 100, 120);
 
 		super.render(screen);
@@ -49,7 +49,7 @@ public class JoinGameMenu extends GuiMenu {
 
 		if (e.getKeyChar() == KeyEvent.VK_BACK_SPACE && TitleMenu.ip.length() > 0) {
 			TitleMenu.ip = TitleMenu.ip.substring(0, TitleMenu.ip.length() - 1);
-		} else if (Font.letters.indexOf(Character.toUpperCase(e.getKeyChar())) >= 0) {
+		} else {
 			TitleMenu.ip += e.getKeyChar();
 		}
 	}

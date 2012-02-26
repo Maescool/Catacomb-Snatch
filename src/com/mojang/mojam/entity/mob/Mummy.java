@@ -1,13 +1,9 @@
 package com.mojang.mojam.entity.mob;
 
-import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
-import com.mojang.mojam.level.DifficultyInformation;
-import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
-import java.util.Set;
 
 public class Mummy extends HostileMob {
 
@@ -27,8 +23,8 @@ public class Mummy extends HostileMob {
         minimapColor = 0xffff0000;
         yOffs = 10;
         facing = TurnSynchronizer.synchedRandom.nextInt(4);
-
         deathPoints = 4;
+        strength = 2;
     }
 
     public void tick() {
@@ -59,7 +55,7 @@ public class Mummy extends HostileMob {
 
         if (walkTime / 12 % 3 != 0) {
             if (shouldBounceOffWall(xd, yd)) {
-                facing = facing + 2 % 4;
+                facing = (facing + 2) % 4;
                 xd = -xd;
                 yd = -yd;
             }
@@ -80,18 +76,6 @@ public class Mummy extends HostileMob {
 
     public Bitmap getSprite() {
         return Art.mummy[((stepTime / 6) & 3)][(facing + 1) & 3];
-    }
-
-    @Override
-    public void collide(Entity entity, double xa, double ya) {
-        super.collide(entity, xa, ya);
-
-        if (entity instanceof Mob) {
-            Mob mob = (Mob) entity;
-            if (isNotFriendOf(mob)) {
-                mob.hurt(this, DifficultyInformation.calculateStrength(2));
-            }
-        }
     }
 
     @Override

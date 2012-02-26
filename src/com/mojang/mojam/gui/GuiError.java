@@ -2,6 +2,7 @@ package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
 
+import com.mojang.mojam.gui.Font.FontName;
 import com.mojang.mojam.screen.Screen;
 
 public class GuiError extends GuiMenu {
@@ -16,9 +17,9 @@ public class GuiError extends GuiMenu {
 	@Override
 	public void render(Screen screen) {
 		screen.clear(0);
-		Font.setFont("red");
+		Font.setFont(FontName.RED);
 		Font.draw(screen, "ERROR", 15, 30);
-		Font.setFont("");
+		Font.setFontToDefault();
 		Font.drawMulti(screen, message, 20, 40, 300);
 		super.render(screen);
 	}

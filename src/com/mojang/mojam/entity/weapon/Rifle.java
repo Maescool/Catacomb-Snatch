@@ -1,6 +1,7 @@
 package com.mojang.mojam.entity.weapon;
 
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
@@ -9,23 +10,30 @@ import com.mojang.mojam.network.TurnSynchronizer;
 public class Rifle implements IWeapon {
 
 	private Player owner;
-	private static final float BULLET_DAMAGE = .5f;
+	private static float BULLET_DAMAGE;
 	
 	private int upgradeIndex = 1;
-	private double accuracy = 0.15;
+	private double accuracy;
 	private int shootDelay = 5;
-	private int burstCount = 3;
-	private int burstCooldown = 25;
 	
 	private boolean wasShooting;
 	private int curShootDelay = 0;	
 	
-	private boolean isBursting;
-	private int curBurstCount;
-	private int curBurstDelay;	
-	
 	public Rifle(Player owner) {
 		setOwner(owner);
+		
+		setWeaponMode();
+		
+		
+	}
+	public void setWeaponMode(){
+		if(Options.getAsBoolean(Options.CREATIVE)){
+			BULLET_DAMAGE = 100f;
+			accuracy = 0;
+		}else{
+			BULLET_DAMAGE = .5f;
+			accuracy = 0.15;
+		}
 	}
 	
 	@Override
@@ -36,8 +44,16 @@ public class Rifle implements IWeapon {
 	@Override
 	public void primaryFire(double xDir, double yDir) {
 		wasShooting = true;
-		if (curShootDelay-- <= 0) {
-			double dir = getBulletDirection(accuracy);
+		int delay = 0;
+		if(owner.isSprint)
+			delay -= shootDelay * 2;
+		
+		if (curShootDelay-- <= delay) {
+			double dir;
+			if(owner.isSprint)
+				dir = getBulletDirection(accuracy * 2);
+			else
+				dir = getBulletDirection(accuracy);
 			xDir = Math.cos(dir);
 			yDir = Math.sin(dir);			
 			applyImpuls(xDir, yDir, 1);
@@ -60,11 +76,6 @@ public class Rifle implements IWeapon {
 			curShootDelay = 0;
 		}
 		wasShooting = false;
-		
-		if(!isBursting) {
-			curBurstDelay--;
-		}
-		isBursting = false;
 	}
 	
 	private double getBulletDirection(double accuracy) {

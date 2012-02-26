@@ -15,10 +15,17 @@ public class Options {
 	
     public static final String DRAW_FPS = "drawFps";
     public static final String FULLSCREEN = "fullscreen";
-    public static final String MUTE_MUSIC = "muteMusic";
+    public static final String MUSIC = "music";
+    public static final String SOUND = "sound";
+    public static final String VOLUME = "volume";
 
     public static final String VALUE_TRUE = "true";
     public static final String VALUE_FALSE = "false";
+    
+    public static final String CREATIVE = "creative";
+    public static final String ALTERNATIVE = "alternative";
+    
+    public static final String MP_PORT = "mpPort";
     
 	private static Properties properties = new Properties();
 	
@@ -37,6 +44,22 @@ public class Options {
     public static Boolean getAsBoolean(String key, String defaultValue) {
         return Boolean.parseBoolean(get(key, defaultValue));
     }
+
+    public static float getAsFloat(String key) {
+        return Float.parseFloat(get(key));
+    }
+    
+    public static float getAsFloat(String key, String defaultValue) {
+        return Float.parseFloat(get(key, defaultValue));
+    }
+    
+    public static int getAsInteger(String key) {
+        return Integer.parseInt(get(key));
+    }
+    
+    public static int getAsInteger(String key, Integer defaultValue) {
+        return Integer.parseInt(get(key, Integer.toString(defaultValue)));
+    }
     
 	public static void set(String key, String value) {
 		properties.setProperty(key, value);
@@ -44,6 +67,10 @@ public class Options {
 	
     public static void set(String key, boolean value) {
         properties.setProperty(key, String.valueOf(value));
+    }
+    
+    public static void set(String key, Integer value) {
+    	properties.setProperty(key, String.valueOf(value));
     }
 
 	public static void loadProperties() {
