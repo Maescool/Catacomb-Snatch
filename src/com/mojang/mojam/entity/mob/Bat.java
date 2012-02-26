@@ -31,12 +31,12 @@ public class Bat extends HostileMob {
 				.nextDouble()) * 0.2;
 		xd += Math.cos(dir) * 1;
 		yd += Math.sin(dir) * 1;
-		
-		if (shouldBounceOffWall(xd, yd)){
+
+		if (shouldBounceOffWall(xd, yd)) {
 			xd = -xd;
 			yd = -yd;
 		}
-		
+
 		if (!move(xd, yd)) {
 			dir += (TurnSynchronizer.synchedRandom.nextDouble() - TurnSynchronizer.synchedRandom
 					.nextDouble()) * 0.8;
@@ -56,9 +56,9 @@ public class Bat extends HostileMob {
 	@Override
 	public void render(Screen screen) {
 		if (tick % 2 == 0) {
-			if(!(level.getTile(pos) instanceof HoleTile))
-			screen.blit(Art.batShadow, pos.x - Art.batShadow.w / 2, pos.y
-					- Art.batShadow.h / 2 - yOffs + 16);			
+			if (!(level.getTile(pos) instanceof HoleTile))
+				screen.blit(Art.batShadow, pos.x - Art.batShadow.w / 2, pos.y
+						- Art.batShadow.h / 2 - yOffs + 16);
 		}
 		super.render(screen);
 

@@ -6,7 +6,6 @@ import java.util.List;
 import com.mojang.mojam.MouseButtons;
 
 public abstract class ClickableComponent extends VisibleComponent {
-
 	private List<ButtonListener> listeners;
 
 	private boolean isPressed;
@@ -23,7 +22,8 @@ public abstract class ClickableComponent extends VisibleComponent {
 		int mx = mouseButtons.getX() / 2;
 		int my = mouseButtons.getY() / 2;
 		isPressed = false;
-		if (mx >= getX() && my >= getY() && mx < (getX() + getWidth()) && my < (getY() + getHeight())) {
+		if (mx >= getX() && my >= getY() && mx < (getX() + getWidth())
+				&& my < (getY() + getHeight())) {
 			if (mouseButtons.isRelased(1)) {
 				postClick();
 			} else if (mouseButtons.isDown(1)) {
@@ -51,9 +51,9 @@ public abstract class ClickableComponent extends VisibleComponent {
 	}
 
 	/**
-	 * This component is being clicked on?
+	 * Check if this component is currently pressed
 	 * 
-	 * @return
+	 * @return True if pressed, false if not
 	 */
 	public boolean isPressed() {
 		return isPressed;

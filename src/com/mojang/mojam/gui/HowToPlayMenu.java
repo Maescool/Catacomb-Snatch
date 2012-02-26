@@ -6,15 +6,21 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
+/**
+ * "How to play" screen
+ */
 public class HowToPlayMenu extends GuiMenu {
 
-	private int goalX = 350;
-	private int imgTab = 70;
-	private int tab1 = 100;
-	private int tab2 = 210;
-	private int goalTopMargin = 20;
-	private int vspace = 55;
+	private final static int goalX = 350;
+	private final static int imgTab = 70;
+	private final static int tab1 = 100;
+	private final static int tab2 = 210;
+	private final static int goalTopMargin = 20;
+	private final static int vspace = 55;
 	
+	/**
+	 * Constructor
+	 */
 	public HowToPlayMenu() {
 		addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"), MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25));
 		
@@ -24,15 +30,19 @@ public class HowToPlayMenu extends GuiMenu {
 		addButton(new Panel(imgTab - 67, goalTopMargin + 55 + 10, 189, 235));
 	}
 
+	@Override
 	public void render(Screen screen) {
 		screen.blit(Art.background, 0, 0);
 		super.render(screen);
 		printHelpText(screen);
 	}
 
+	/**
+	 * Draw the help text onto the given screen
+	 * 
+	 * @param screen Screen
+	 */
 	private void printHelpText(Screen screen) {
-
-		// Game goal
 		Font.drawCentered(screen, MojamComponent.texts.getStatic("help.goal") + ":", goalX, goalTopMargin);
 		Font.drawCentered(screen, MojamComponent.texts.getStatic("help.help1"), goalX, goalTopMargin+10);
 		Font.drawCentered(screen, MojamComponent.texts.getStatic("help.help2"), goalX, goalTopMargin+20);
@@ -107,7 +117,5 @@ public class HowToPlayMenu extends GuiMenu {
 
 	@Override
 	public void buttonPressed(ClickableComponent button) {
-		
 	}
-
 }

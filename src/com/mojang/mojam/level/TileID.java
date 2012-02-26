@@ -22,6 +22,11 @@ public class TileID {
 	/**
 	 * This must be called once so that tiles can be sent via- multiplayer. They
 	 * will need a constructor with no arguments
+	 * 
+	 * @param id
+	 *            Tile id
+	 * @param tileclass
+	 *            Tile class
 	 */
 	public static void registerTile(short id, Class<? extends Tile> tileclass) {
 		shortToTileMap.put(id, tileclass);

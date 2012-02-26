@@ -7,7 +7,7 @@ import java.io.IOException;
 import com.mojang.mojam.network.NetworkCommand;
 
 public class ChangeMouseButtonCommand extends NetworkCommand {
-	
+
 	private boolean nextState;
 	private int button;
 
@@ -38,6 +38,5 @@ public class ChangeMouseButtonCommand extends NetworkCommand {
 	public boolean getNextState() {
 		return nextState;
 	}
-	
 
 }

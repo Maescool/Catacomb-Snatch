@@ -9,22 +9,30 @@ import com.mojang.mojam.level.DifficultyList;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
+/**
+ * Difficulty selection Checkbox group
+ */
 public class DifficultySelect extends GuiMenu {
 	
 	private static final int DEFAULT_DIFFICULTY = 1;
-	
-	private ArrayList<DifficultyInformation> difficulties = DifficultyList.getDifficulties();
-	
-	private Checkbox[] DifficultyCheckboxes;
 	private final int xButtons = 3;
 	private final int xSpacing = Checkbox.WIDTH + 8;
 	private final int ySpacing = Checkbox.HEIGHT + 8;
 	private final int xStart = (MojamComponent.GAME_WIDTH - (xSpacing * xButtons)) / 2;
 	private final int yStart = 75;
 	
+	private ArrayList<DifficultyInformation> difficulties = DifficultyList.getDifficulties();
+	
+	private Checkbox[] DifficultyCheckboxes;
+	
 	private Button startGameButton;
 	private Button cancelButton;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param hosting True if this side of a multiplayer game is the host
+	 */
 	public DifficultySelect(boolean hosting) {
 		super();
 		
@@ -79,6 +87,11 @@ public class DifficultySelect extends GuiMenu {
 		}
 	}
     
+	/**
+	 * Get the number of the currently selected checkbox
+	 * 
+	 * @return Checkbox number
+	 */
     public Checkbox getActiveCheckbox()
     {
         for(Checkbox box : DifficultyCheckboxes) {

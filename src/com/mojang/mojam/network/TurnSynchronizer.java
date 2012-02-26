@@ -102,7 +102,8 @@ public class TurnSynchronizer {
 			commandSequence++;
 			nextTurnCommands = null;
 		}
-		if (turnSequence%50 == 0) sendPingPacket();
+		if (turnSequence % 50 == 0)
+			sendPingPacket();
 	}
 
 	public synchronized void addCommand(NetworkCommand command) {
@@ -121,11 +122,11 @@ public class TurnSynchronizer {
 		}
 
 	}
-	
+
 	private void sendPingPacket() {
-	    if (packetLink != null) {
-	        packetLink.sendPacket(new PingPacket());
-	    }
+		if (packetLink != null) {
+			packetLink.sendPacket(new PingPacket());
+		}
 	}
 
 	public void setStarted(boolean isStarted) {
@@ -144,11 +145,11 @@ public class TurnSynchronizer {
 	}
 
 	public synchronized void onPingPacket(PingPacket packet) {
-	    if (packet.getType() == PingPacket.TYPE_SYN && packetLink != null) {
-	        packetLink.sendPacket(PingPacket.ack(packet));
-	    }
+		if (packet.getType() == PingPacket.TYPE_SYN && packetLink != null) {
+			packetLink.sendPacket(PingPacket.ack(packet));
+		}
 	}
-	
+
 	private class TurnInfo {
 
 		public boolean isCommandsPopped;

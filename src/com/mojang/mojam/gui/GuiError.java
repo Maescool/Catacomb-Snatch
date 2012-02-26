@@ -4,12 +4,21 @@ import java.awt.event.KeyEvent;
 
 import com.mojang.mojam.screen.Screen;
 
+/**
+ * Generic error message
+ */
 public class GuiError extends GuiMenu {
 
-	String message;
+	private String message;
 	
+	/**
+	 * Constructor
+	 * 
+	 * @param message Error message
+	 */
 	public GuiError(String message){
 		this.message = message;
+		
 		addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, "Main Menu", 125, 300));
 	}
 	
@@ -37,5 +46,4 @@ public class GuiError extends GuiMenu {
 	
 	public void buttonPressed(ClickableComponent button) {
 	}
-
 }

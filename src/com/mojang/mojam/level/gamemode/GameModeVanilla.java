@@ -14,8 +14,8 @@ public class GameModeVanilla extends GameMode {
 	@Override
 	protected void setupPlayerSpawnArea() {
 		super.setupPlayerSpawnArea();
-		
-		Random random = TurnSynchronizer.synchedRandom;		
+
+		Random random = TurnSynchronizer.synchedRandom;
 		for (int i = 0; i < 11; i++) {
 			double x = (random.nextInt(newLevel.width - 16) + 8) * Tile.WIDTH
 					+ Tile.WIDTH / 2;
@@ -28,29 +28,29 @@ public class GameModeVanilla extends GameMode {
 			}
 		}
 	}
-	
+
 	@Override
 	protected void loadColorTile(int color, int x, int y) {
 		super.loadColorTile(color, x, y);
-		
+
 		if (color == 0xffff00) {
 			TreasurePile t = new TreasurePile(x * Tile.WIDTH + 16, y
-					* Tile.HEIGHT, Team.Neutral,localTeam);
+					* Tile.HEIGHT, Team.Neutral, localTeam);
 			newLevel.setTile(x, y, new FloorTile());
 			newLevel.addEntity(t);
 		}
 	}
-	
+
 	@Override
 	protected void setTickItems() {
 		newLevel.tickItems.add(new RandomSpawner());
 	}
-	
+
 	@Override
 	protected void setVictoryCondition() {
 		newLevel.victoryConditions = new FullTreasury();
 	}
-	
+
 	@Override
 	protected void setTargetScore() {
 		newLevel.TARGET_SCORE = 100;

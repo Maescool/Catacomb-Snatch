@@ -20,8 +20,8 @@ public class RandomSpawner implements ILevelTickItem {
 		int width = level.width;
 		int height = level.height;
 
-		double x = (random.nextInt(width - 16) + 8) * Tile.WIDTH
-				+ Tile.WIDTH / 2;
+		double x = (random.nextInt(width - 16) + 8) * Tile.WIDTH + Tile.WIDTH
+				/ 2;
 		double y = (random.nextInt(height - 16) + 8) * Tile.HEIGHT
 				+ Tile.HEIGHT / 2 - 4;
 		final Tile tile = level.getTile((int) (x / Tile.WIDTH),

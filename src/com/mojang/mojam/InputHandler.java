@@ -81,7 +81,8 @@ public class InputHandler implements KeyListener {
 	}
 
 	@Override
-	public void keyTyped(KeyEvent ke) {}
+	public void keyTyped(KeyEvent ke) {
+	}
 
 	private void toggle(KeyEvent ke, boolean state) {
 		Key key = mappings.get(ke.getKeyCode());

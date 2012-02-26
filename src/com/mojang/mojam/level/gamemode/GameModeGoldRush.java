@@ -12,8 +12,8 @@ public class GameModeGoldRush extends GameMode {
 	@Override
 	protected void setupPlayerSpawnArea() {
 		super.setupPlayerSpawnArea();
-		
-		Random random = TurnSynchronizer.synchedRandom;		
+
+		Random random = TurnSynchronizer.synchedRandom;
 		for (int i = 0; i < 15; i++) {
 			double x = (random.nextInt(newLevel.width - 16) + 8) * Tile.WIDTH
 					+ Tile.WIDTH / 2;
@@ -26,17 +26,17 @@ public class GameModeGoldRush extends GameMode {
 			}
 		}
 	}
-	
+
 	@Override
 	protected void setTickItems() {
 		newLevel.tickItems.add(new RandomSpawner());
 	}
-	
+
 	@Override
 	protected void setVictoryCondition() {
 		newLevel.victoryConditions = new GoldRush();
 	}
-	
+
 	@Override
 	protected void setTargetScore() {
 		newLevel.TARGET_SCORE = 5000;
