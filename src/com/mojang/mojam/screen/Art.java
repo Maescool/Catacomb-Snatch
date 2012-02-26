@@ -50,12 +50,12 @@ public class Art {
 	public static Bitmap[][] button = cut("/art/screen/button.png", 128, 24);
     public static Bitmap[][] checkbox = cut("/art/screen/checkbox.png", 24, 24);
 	public static Bitmap panel = load("/art/screen/panel/panel.png");
-	public static Bitmap[][] panel_healthBar = cut("/art/screen/panel/panel_healthbar.png", 91, 6);
+	public static Bitmap[][] panel_healthBar = cut("/art/screen/panel/panel_healthbar.png", 100, 6);
 	public static Bitmap panel_heart = load("/art/screen/panel/p_heart.png");
 	public static Bitmap panel_coin = load("/art/screen/panel/p_coin.png");
-	public static Bitmap[][] panel_xpBar = cut("/art/screen/panel/panel_xpbar.png", 91, 6);
-	public static Bitmap panel_level = load("/art/screen/panel/p_level.png");
-    public static Bitmap background = load("/art/screen/BACKGROUND.png");
+	public static Bitmap panel_star = load("/art/screen/panel/p_level.png");
+    public static Bitmap[][] panel_xpBar = cut("/art/screen/panel/panel_xpbar.png", 100, 6);
+	public static Bitmap background = load("/art/screen/BACKGROUND.png");
     public static Bitmap[][] slider = cut("/art/screen/slider.png", 16, 24);
 	
     // Buildings
@@ -138,7 +138,7 @@ public class Art {
      * @return Bitmap array
      */
 	public static Bitmap[][] cut(String string, int w, int h) {
-		return cut(string, w, h, 0, 0);
+	    return cut(string, w, h, 0, 0);
 	}
 
     /**
@@ -163,7 +163,7 @@ public class Art {
 
 			for (int x = 0; x < xTiles; x++) {
 				for (int y = 0; y < yTiles; y++) {
-					result[x][y] = new Bitmap(w, h);
+				    result[x][y] = new Bitmap(w, h);
 					bi.getRGB(bx + x * w, by + y * h, w, h,
 							result[x][y].pixels, 0, w);
 				}
