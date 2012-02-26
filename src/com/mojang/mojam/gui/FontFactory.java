@@ -2,9 +2,6 @@ package com.mojang.mojam.gui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.font.FontRenderContext;
-import java.awt.font.TextLayout;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
@@ -13,7 +10,7 @@ import com.mojang.mojam.screen.Bitmap;
 public class FontFactory {
 
 	private static HashMap<String, Bitmap> characterCache = new HashMap<String, Bitmap>();
-	private static HashMap<String, Double> characterHeightOffset = new HashMap<String, Double>();
+	private static HashMap<String, Integer> characterHeightOffset = new HashMap<String, Integer>();
 
 	private static Color[] goldGradient = {
 		new Color(241, 216, 145),
@@ -33,26 +30,21 @@ public class FontFactory {
 		java.awt.Font font = new java.awt.Font("SansSerif", java.awt.Font.BOLD, fontSize);
 		BufferedImage image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graphics = image.createGraphics();
-		FontRenderContext frc = graphics.getFontRenderContext();
-		TextLayout layout = new TextLayout(Character.toString(character), font, frc);
-		TextLayout layoutStandardLetter = new TextLayout(Character.toString('O'), font, frc);
-		Rectangle2D bounds = layout.getBounds();
-		double heightOffset = bounds.getY() - layoutStandardLetter.getBounds().getY();
-		characterHeightOffset.put(key, heightOffset);
-
-		int width = (int) (bounds.getWidth() + 0.5) + 10;
-		int height = (int) (bounds.getHeight() + 0.5) + 10;
+		
+		int width = 3*fontSize;
+		int height = 3*fontSize;
 
 		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		graphics = image.createGraphics();
-
 		graphics.setFont(font);
 
+		int positionX = fontSize;
+		int positionY = 2*fontSize;
 		graphics.setColor(Color.BLACK);
-		graphics.drawString(Character.toString(character), 3, height - 5);
+		graphics.drawString(Character.toString(character), positionX+1, positionY+1);
 		Color mainLetterColor = Color.MAGENTA;
 		graphics.setColor(mainLetterColor);
-		graphics.drawString(Character.toString(character), 2, height - 6);
+		graphics.drawString(Character.toString(character), positionX, positionY);
 
 		int[][] pixels = new int[width][height];
 		for (int y = 0; y < height; y++) {
@@ -61,7 +53,20 @@ public class FontFactory {
 			}
 		}
 
+		int emptyRowsTop = 0;
+		FindTop: for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				if (pixels[x][y] != 0) {
+					break FindTop;
+				}
+			}
+			emptyRowsTop++;
+		}
+		int hardcodedOffset = 3;
+		characterHeightOffset.put(key, emptyRowsTop-fontSize-hardcodedOffset);
+		
 		pixels = automaticCrop(pixels);
+		
 		width = pixels.length;
 		if (width == 0) {
 			return new Bitmap(pixels);
@@ -80,12 +85,12 @@ public class FontFactory {
 		}
 
 		Bitmap characterBitmap = new Bitmap(pixels);
-		characterCache.put(makeKey(character, fontSize), characterBitmap);
+		characterCache.put(key, characterBitmap);
 
 		return characterBitmap;
 	}
 
-	public static double getHeightOffset(char character, int fontSize) {
+	public static int getHeightOffset(char character, int fontSize) {
 		String key = makeKey(character, fontSize);
 		if (!characterHeightOffset.containsKey(key)) {
 			getFontCharacter(character, fontSize);
