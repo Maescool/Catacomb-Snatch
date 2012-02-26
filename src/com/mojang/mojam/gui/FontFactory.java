@@ -12,8 +12,8 @@ import com.mojang.mojam.screen.Bitmap;
 
 public class FontFactory {
 
-	private static HashMap<Character, Bitmap> characterCache = new HashMap<Character, Bitmap>();
-	private static HashMap<Character, Double> characterHeightOffset = new HashMap<Character, Double>();
+	private static HashMap<String, Bitmap> characterCache = new HashMap<String, Bitmap>();
+	private static HashMap<String, Double> characterHeightOffset = new HashMap<String, Double>();
 
 	private static Color[] goldGradient = {
 		new Color(241, 216, 145),
@@ -25,8 +25,9 @@ public class FontFactory {
 		new Color(240, 195, 137) };
 
 	public static Bitmap getFontCharacter(char character, int fontSize) {
-		if (characterCache.containsKey(character)) {
-			return characterCache.get(character);
+		String key = makeKey(character, fontSize);
+		if (characterCache.containsKey(key)) {
+			return characterCache.get(key);
 		}
 
 		java.awt.Font font = new java.awt.Font("SansSerif", java.awt.Font.BOLD, fontSize);
@@ -37,7 +38,7 @@ public class FontFactory {
 		TextLayout layoutStandardLetter = new TextLayout(Character.toString('O'), font, frc);
 		Rectangle2D bounds = layout.getBounds();
 		double heightOffset = bounds.getY() - layoutStandardLetter.getBounds().getY();
-		characterHeightOffset.put(character, heightOffset);
+		characterHeightOffset.put(key, heightOffset);
 
 		int width = (int) (bounds.getWidth() + 0.5) + 10;
 		int height = (int) (bounds.getHeight() + 0.5) + 10;
@@ -79,16 +80,21 @@ public class FontFactory {
 		}
 
 		Bitmap characterBitmap = new Bitmap(pixels);
-		characterCache.put(character, characterBitmap);
+		characterCache.put(makeKey(character, fontSize), characterBitmap);
 
 		return characterBitmap;
 	}
 
-	public static double getHeightOffset(char character) {
-		if (characterHeightOffset.containsKey(character)) {
-			return characterHeightOffset.get(character);
+	public static double getHeightOffset(char character, int fontSize) {
+		String key = makeKey(character, fontSize);
+		if (!characterHeightOffset.containsKey(key)) {
+			getFontCharacter(character, fontSize);
 		}
-		return 0;
+		return characterHeightOffset.get(key);
+	}
+	
+	private static String makeKey(char character, int fontSize){
+		return character + ":" + fontSize;
 	}
 
 	private static int[][] automaticCrop(int[][] pixels) {

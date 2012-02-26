@@ -104,6 +104,7 @@ public class Font {
 	 */
 	public static void drawMulti(Screen screen, String msg, int x, int y, int width) {
 		int startX = x;
+		int fontSize = 10;
 		msg = msg.toUpperCase();
 		int length = msg.length();
 		for (int i = 0; i < length; i++) {
@@ -114,15 +115,15 @@ public class Font {
 				x += 8;
 			} else {
 				char c = msg.charAt(i);
-				Bitmap characterBitmap = FontFactory.getFontCharacter(c, 10);
-				double heightOffset = FontFactory.getHeightOffset(c);
+				Bitmap characterBitmap = FontFactory.getFontCharacter(c, fontSize);
+				double heightOffset = FontFactory.getHeightOffset(c, fontSize);
 				screen.blit(characterBitmap, x+1, (int)(y+heightOffset+0.5));
 				x += characterBitmap.w+2;
 			}
 
 			if(x > width){
 				x = startX;
-				y += 10;
+				y += fontSize;
 			}
 		}
 	}
