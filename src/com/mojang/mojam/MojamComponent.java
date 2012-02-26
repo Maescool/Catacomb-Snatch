@@ -40,6 +40,7 @@ import com.mojang.mojam.gui.ButtonListener;
 import com.mojang.mojam.gui.ClickableComponent;
 import com.mojang.mojam.gui.DifficultySelect;
 import com.mojang.mojam.gui.Font;
+import com.mojang.mojam.gui.GameTypeSelectMenu;
 import com.mojang.mojam.gui.GuiError;
 import com.mojang.mojam.gui.GuiMenu;
 import com.mojang.mojam.gui.HostingWaitMenu;
@@ -900,7 +901,9 @@ public class MojamComponent extends Canvas implements Runnable,
 			popMenu();
 		} else if (id == TitleMenu.CREDITS_ID) {
 			addMenu(new CreditsScreen(GAME_WIDTH, GAME_HEIGHT));
-		} 
+		} else if (id == TitleMenu.GAME_TYPE_SELECT_ID) {
+			addMenu(new GameTypeSelectMenu(GAME_WIDTH, GAME_HEIGHT));
+		}
 	}
 
 	private void clearMenus() {
