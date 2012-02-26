@@ -7,6 +7,7 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.IUsable;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
+import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.network.TurnSynchronizer;
@@ -96,25 +97,20 @@ public class Building extends Mob implements IUsable {
 	protected void renderInfo(Screen screen) {
 		// Draw iiAtlas' shop item info graphics
 		if (highlight) {
-			Bitmap discriptionText = new Bitmap(110, 25);
-			BB bb = getBB();
-
-			if (bb.x0 == 966.0)
-				discriptionText = Art.turretText;
-			if (bb.x0 == 998.0)
-				discriptionText = Art.harvesterText;
-			if (bb.x0 == 1030.0)
-				discriptionText = Art.bombText;
-
-			if (this.team == 1) {
-				screen.blit(discriptionText,
-						((int) bb.x0 - (getSprite().w / 2)),
-						((int) bb.y0 + 30), 110, 25);
-			} else if (this.team == 2) {
-				screen.blit(discriptionText,
-						((int) bb.x1 - (getSprite().w / 2) - 30),
-						((int) bb.y1 - 60), 110, 25);
-			}
+		    if (this instanceof ShopItem) {
+		        ShopItem s = (ShopItem)this;
+		        Bitmap image = getSprite();
+		        screen.blit(Art.tooltipBackground,
+                        (int)(pos.x - image.w / 2 - 10),
+                        (int)(pos.y + 20 - (team==2?80:0)), 110, 25);
+		        
+		        String[] tooltip = s.getTooltip();
+		        Font f = Font.getFont("sm_gold");
+		        for (int i=0; i<tooltip.length; i++) {
+		            f.drawFont(screen, tooltip[i], (int)(pos.x - image.w + 8), (int)pos.y + 22 - (team==2?80:0) + (i==0?0:1) + i*(f.getFontStringHeight()+1));
+		            f = Font.getFont("sm_white");
+		        }
+		    }
 		}
 	}
 

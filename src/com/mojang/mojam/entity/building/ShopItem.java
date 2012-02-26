@@ -22,6 +22,12 @@ public class ShopItem extends Building {
     private final int type;
     private int effectiveCost;
     
+    // TODO Use Texts framework!
+    private final String[][] TOOLTIPS = { 
+            {"TURRET",    "Used for defense.", "Attacks nearby enemies."},
+            {"HARVESTER", "Gathers treasure.", "Use to reclaim loot."},
+            {"BOMB",      "Destroys cracked walls.", "Use to create shortcuts."}
+    };
 
     public ShopItem(double x, double y, int type, int team, int localTeam) {
         super(x, y, team, localTeam);
@@ -70,6 +76,10 @@ public class ShopItem extends Building {
                 return Art.bomb;
         }
         return Art.turret[facing][0];
+    }
+    
+    public String[] getTooltip() {
+        return TOOLTIPS[type];
     }
 
     @Override
