@@ -76,8 +76,10 @@ public class Chat implements KeyListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 		if (open) {
-			if (e.getKeyChar() == KeyEvent.VK_BACK_SPACE && currentMessage.length() > 0) {
-				currentMessage = currentMessage.substring(0, currentMessage.length() - 1);
+			if (e.getKeyChar() == KeyEvent.VK_BACK_SPACE
+					&& currentMessage.length() > 0) {
+				currentMessage = currentMessage.substring(0,
+						currentMessage.length() - 1);
 			} else if (Font.isPrintableCharacter(e.getKeyChar())) {
 				if (currentMessage.length() < MAX_MESSAGE_LENGTH) {
 					currentMessage += e.getKeyChar();
@@ -87,7 +89,8 @@ public class Chat implements KeyListener {
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {}
+	public void keyPressed(KeyEvent e) {
+	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {

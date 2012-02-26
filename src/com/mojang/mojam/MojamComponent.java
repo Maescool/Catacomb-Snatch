@@ -433,9 +433,12 @@ public class MojamComponent extends Canvas implements Runnable,
 			Font.draw(screen, texts.health(player.health, player.maxHealth),
 					340, screen.h - 16);
 			Font.draw(screen, texts.money(player.score), 340, screen.h - 27);
-			Font.draw(screen, texts.nextLevel((int) player.getNextLevel()), 340, screen.h - 38);
-			Font.draw(screen, texts.playerExp((int) player.pexp), 340, screen.h - 49);
-			Font.draw(screen, texts.playerLevel(player.plevel), 340, screen.h - 60);
+			Font.draw(screen, texts.nextLevel((int) player.getNextLevel()),
+					340, screen.h - 38);
+			Font.draw(screen, texts.playerExp((int) player.pexp), 340,
+					screen.h - 49);
+			Font.draw(screen, texts.playerLevel(player.plevel), 340,
+					screen.h - 60);
 		}
 
 		if (isMultiplayer && menuStack.isEmpty()) {
@@ -637,8 +640,8 @@ public class MojamComponent extends Canvas implements Runnable,
 
 		String msg = chat.getWaitingMessage();
 		if (msg != null) {
-			synchronizer
-			.addCommand(new ChatCommand(texts.playerName(player.localTeam) + ": " + msg));
+			synchronizer.addCommand(new ChatCommand(texts
+					.playerName(player.localTeam) + ": " + msg));
 		}
 	}
 

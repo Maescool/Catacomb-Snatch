@@ -10,7 +10,8 @@ public class ChatCommand extends NetworkCommand {
 
 	private String message;
 
-	public ChatCommand() {}
+	public ChatCommand() {
+	}
 
 	public ChatCommand(String message) {
 		this.message = message;

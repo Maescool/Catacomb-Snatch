@@ -11,9 +11,12 @@ import com.mojang.mojam.resources.Texts;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
+/**
+ * Allows manipulation of key bindings
+ */
 public class KeyBindingsMenu extends GuiMenu {
 
-	class KeyBindingButton extends Button {
+	private class KeyBindingButton extends Button {
 
 		private final int MAX_LABEL_LENGTH = 13;
 
