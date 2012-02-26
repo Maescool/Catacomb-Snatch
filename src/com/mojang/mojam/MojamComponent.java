@@ -217,6 +217,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	public void stop() {
 		running = false;
+		soundPlayer.stopBackgroundMusic();
 		soundPlayer.shutdown();
 	}
 
