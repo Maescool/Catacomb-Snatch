@@ -35,7 +35,31 @@ public class Harvester extends Building implements LootCollector {
 		freezeTime = 10;
 		makeUpgradeableWithCosts(new int[] { 500, 1000, 5000 });
 		healthBarOffset = 13;
-		areaBitmap = Bitmap.rangeBitmap(radius,Color.YELLOW.getRGB());
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+		areaBitmap = Bitmap.rangeBitmap(radius, Color.YELLOW.getRGB());
+=======
+		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 	}
 	
 	public Bitmap areaBitmap;
@@ -110,8 +134,38 @@ public class Harvester extends Building implements LootCollector {
 	    health += 10;
         radius = upgradeRadius[upgradeLevel];
 		capacity = upgradeCapacities[upgradeLevel];
-		areaBitmap = Bitmap.rangeBitmap(radius,Color.YELLOW.getRGB());
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+		areaBitmap = Bitmap.rangeBitmap(radius, Color.YELLOW.getRGB());
+		justDroppedTicks = 80; // show the radius for a brief time
+=======
+		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
 		justDroppedTicks = 80; //show the radius for a brief time
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
+		justDroppedTicks = 80; //show the radius for a brief time
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
+		justDroppedTicks = 80; //show the radius for a brief time
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
+		justDroppedTicks = 80; //show the radius for a brief time
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
+		justDroppedTicks = 80; //show the radius for a brief time
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
+		justDroppedTicks = 80; //show the radius for a brief time
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 	}
 
 	public boolean canTake() {
@@ -119,9 +173,45 @@ public class Harvester extends Building implements LootCollector {
 	}
 
 	public void render(Screen screen) {
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+		if (justDroppedTicks-- > 0 && localTeam == team) {
+			screen.blit(areaBitmap, pos.x - radius, pos.y - radius - yOffs);
+=======
 		
 		if(justDroppedTicks-- > 0 && localTeam==team) {
-			screen.blit(areaBitmap, pos.x-radius , pos.y-radius - yOffs);	
+			screen.blit(areaBitmap, pos.x - areaBitmap.w / 2, pos.y - areaBitmap.h / 2 - yOffs);	
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+		
+		if(justDroppedTicks-- > 0 && localTeam==team) {
+			screen.blit(areaBitmap, pos.x - areaBitmap.w / 2, pos.y - areaBitmap.h / 2 - yOffs);	
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+		
+		if(justDroppedTicks-- > 0 && localTeam==team) {
+			screen.blit(areaBitmap, pos.x - areaBitmap.w / 2, pos.y - areaBitmap.h / 2 - yOffs);	
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+		
+		if(justDroppedTicks-- > 0 && localTeam==team) {
+			screen.blit(areaBitmap, pos.x - areaBitmap.w / 2, pos.y - areaBitmap.h / 2 - yOffs);	
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+		
+		if(justDroppedTicks-- > 0 && localTeam==team) {
+			screen.blit(areaBitmap, pos.x - areaBitmap.w / 2, pos.y - areaBitmap.h / 2 - yOffs);	
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+		
+		if(justDroppedTicks-- > 0 && localTeam==team) {
+			screen.blit(areaBitmap, pos.x - areaBitmap.w / 2, pos.y - areaBitmap.h / 2 - yOffs);	
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 		}
 		
 		Bitmap image = getSprite();

@@ -42,6 +42,14 @@ public abstract class Mob extends Entity {
 	public int localTeam;
 	public int strength = 0;
 	
+	/**
+	 * Generic mob constructor
+	 * 
+	 * @param x Initial x axis coordinate
+	 * @param y Initial y axis coordinate
+	 * @param team Team number
+	 * @param localTeam Local team number
+	 */
 	public Mob(double x, double y, int team, int localTeam) {
 		super();
 		setPos(x, y);
@@ -235,6 +243,95 @@ public abstract class Mob extends Entity {
 	public boolean isCarrying() {
 		return (this.carrying != null);
 	}
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+	public boolean isTargetBehindWall(double dx2, double dy2, Entity e) {
+		int x1 = (int) pos.x / Tile.WIDTH;
+		int y1 = (int) pos.y / Tile.HEIGHT;
+		int x2 = (int) dx2 / Tile.WIDTH;
+		int y2 = (int) dy2 / Tile.HEIGHT;
+
+		int dx, dy, inx, iny, a;
+		Tile temp;
+
+		dx = x2 - x1;
+		dy = y2 - y1;
+		inx = dx > 0 ? 1 : -1;
+		iny = dy > 0 ? 1 : -1;
+
+		dx = java.lang.Math.abs(dx);
+		dy = java.lang.Math.abs(dy);
+
+		if (dx >= dy) {
+			dy <<= 1;
+			a = dy - dx;
+			dx <<= 1;
+			while (x1 != x2) {
+				temp = level.getTile(x1, y1);
+				if (!temp.canPass(e)) {
+					return true;
+				}
+				if (a >= 0) {
+					y1 += iny;
+					a -= dx;
+				}
+				a += dy;
+				x1 += inx;
+			}
+		} else {
+			dx <<= 1;
+			a = dx - dy;
+			dy <<= 1;
+			while (y1 != y2) {
+				temp = level.getTile(x1, y1);
+				if (!temp.canPass(e)) {
+					return true;
+				}
+				if (a >= 0) {
+					x1 += inx;
+					a -= dy;
+				}
+				a += dx;
+				y1 += iny;
+			}
+		}
+		temp = level.getTile(x1, y1);
+		if (!temp.canPass(e)) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean fallDownHole() {
+		int x = (int) pos.x / Tile.WIDTH;
+		int y = (int) pos.y / Tile.HEIGHT;
+		if (level.getTile(x, y) instanceof HoleTile) {
+			level.addEntity(new EnemyDieAnimation(pos.x, pos.y));
+			MojamComponent.soundPlayer.playSound("/sound/Fall.wav",
+					(float) pos.x, (float) pos.y);
+			if (!(this instanceof Player)) {
+				remove();
+			}
+			return true;
+		}
+		return false;
+	}
+=======
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
     
     public boolean isTargetBehindWall(double dx2, double dy2, Entity e) {
         int x1 = (int) pos.x / Tile.WIDTH;
@@ -292,19 +389,20 @@ public abstract class Mob extends Entity {
         }
         return false;
     }
-    
-    public boolean fallDownHole() {
-    	int x=(int) pos.x/Tile.WIDTH;
-    	int y=(int) pos.y/Tile.HEIGHT;
-        if (level.getTile(x, y) instanceof HoleTile) {
-        	level.addEntity(new EnemyDieAnimation(pos.x, pos.y));
-        	MojamComponent.soundPlayer.playSound("/sound/Fall.wav", (float) pos.x, (float) pos.y);
-        	if (!(this instanceof Player)){
-        		remove();
-        	}
-        	return true;
-        }
-        return false;
-    }
-    
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 }

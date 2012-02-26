@@ -1,15 +1,17 @@
 package com.mojang.mojam.entity.building;
 
 import com.mojang.mojam.MojamComponent;
-import com.mojang.mojam.entity.*;
-import com.mojang.mojam.entity.animation.EnemyDieAnimation;
+import com.mojang.mojam.entity.Bullet;
+import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.IUsable;
+import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.gui.Notifications;
-import com.mojang.mojam.level.HoleTile;
-import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.network.TurnSynchronizer;
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.Screen;
 
 public class Building extends Mob implements IUsable {
 	public static final int SPAWN_INTERVAL = 60;
@@ -95,7 +97,31 @@ public class Building extends Mob implements IUsable {
 
 	public void slideMove(double xa, double ya) {
 		super.move(xa, ya);
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
 		fallDownHole();
+=======
+		checkForHoleTiles((int) pos.x/Tile.WIDTH, (int) pos.y/Tile.HEIGHT);
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+		checkForHoleTiles((int) pos.x/Tile.WIDTH, (int) pos.y/Tile.HEIGHT);
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+		checkForHoleTiles((int) pos.x/Tile.WIDTH, (int) pos.y/Tile.HEIGHT);
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+		checkForHoleTiles((int) pos.x/Tile.WIDTH, (int) pos.y/Tile.HEIGHT);
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+		checkForHoleTiles((int) pos.x/Tile.WIDTH, (int) pos.y/Tile.HEIGHT);
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+		checkForHoleTiles((int) pos.x/Tile.WIDTH, (int) pos.y/Tile.HEIGHT);
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 	}
 
 	//
@@ -166,4 +192,47 @@ public class Building extends Mob implements IUsable {
 	public boolean isAllowedToCancel() {
 		return true;
 	}
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+	
+    public void checkForHoleTiles(int x, int y) {
+        if (level.getTile(x, y) instanceof HoleTile) {
+            if (!removed) {
+                remove();
+                level.addEntity(new EnemyDieAnimation(pos.x, pos.y));
+                MojamComponent.soundPlayer.playSound("/sound/Fall.wav", (float) pos.x, (float) pos.y);
+            }
+        }
+    }
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 }

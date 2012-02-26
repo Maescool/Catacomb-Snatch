@@ -1,6 +1,5 @@
 package com.mojang.mojam.entity.mob;
 
-
 import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Entity;
@@ -11,11 +10,20 @@ import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.*;
 
+/**
+ * Rail droid entity. Drives around on tracks and collects stuff from fountains
+ * or money from full loot collectors.
+ */
 public class RailDroid extends Mob {
 	private enum Direction {
 		UNKNOWN, LEFT, UP, RIGHT, DOWN;
 
-		private Direction turnBy180DegreesRight() {
+		/**
+		 * Turn this direction by 180 degrees
+		 * 
+		 * @return Resulting direction
+		 */
+		private Direction turnBy180Degrees() {
 			switch (this) {
 			case LEFT:
 				return RIGHT;
@@ -32,6 +40,8 @@ public class RailDroid extends Mob {
 		}
 	}
 
+	private final double SPEED = 0.7;
+
 	private Direction dir = Direction.UNKNOWN;
 	private Direction lDir = Direction.DOWN;
 	private int noTurnTime = 0;
@@ -39,71 +49,99 @@ public class RailDroid extends Mob {
 	public boolean carrying = false;
 	public int swapTime = 0;
 	public int team;
-	public static boolean creative = Options.getAsBoolean(Options.CREATIVE);
 
+	/**
+	 * Constructor
+	 * 
+	 * @param x
+	 *            Initial x axis coordinate
+	 * @param y
+	 *            Initial y axis coordinate
+	 * @param team
+	 *            Team number
+	 * @param localTeam
+	 *            Local team number
+	 */
 	public RailDroid(double x, double y, int team, int localTeam) {
 		super(x, y, team, localTeam);
 		this.team = team;
 		this.setSize(10, 8);
 		deathPoints = 1;
-		
-		if(creative)
+
+		// In "creative mode", the droid is immortal
+		if (Options.getAsBoolean(Options.CREATIVE))
 			isImmortal = true;
 	}
 
+	@Override
 	public void tick() {
-
 		xBump = yBump = 0;
-
 		super.tick();
+
 		if (freezeTime > 0)
 			return;
+
 		if (swapTime > 0)
 			swapTime--;
+
 		boolean hadPaused = pauseTime > 0;
 		if (pauseTime > 0) {
 			pauseTime--;
 			if (pauseTime > 0)
 				return;
 		}
+
+		// Calculate which floor tile the droid is on
 		int xt = (int) (pos.x / Tile.WIDTH);
 		int yt = (int) (pos.y / Tile.HEIGHT);
 
+		// Check if there are rail tiles in any direction
 		boolean cr = level.getTile(xt, yt) instanceof RailTile;
 		boolean lr = level.getTile(xt - 1, yt) instanceof RailTile;
 		boolean rr = level.getTile(xt + 1, yt) instanceof RailTile;
 		boolean ur = level.getTile(xt, yt - 1) instanceof RailTile;
 		boolean dr = level.getTile(xt, yt + 1) instanceof RailTile;
+
 		xd *= 0.4;
 		yd *= 0.4;
 
+		// Calculate how far the droid is away from the tile center
 		double xcd = pos.x - (xt * Tile.WIDTH + 16);
 		double ycd = pos.y - (yt * Tile.HEIGHT + 16);
+		// Check if the distance from the tile center is below the limit (two
+		// pixels)
 		boolean centerIsh = xcd * xcd + ycd * ycd < 2 * 2;
 		boolean xcenterIsh = xcd * xcd < 2 * 2;
 		boolean ycenterIsh = ycd * ycd < 2 * 2;
 
-		if (!xcenterIsh)
+		if (!xcenterIsh) {
 			ur = false;
-		if (!xcenterIsh)
 			dr = false;
+		}
 
-		if (!ycenterIsh)
+		if (!ycenterIsh) {
 			lr = false;
-		if (!ycenterIsh)
 			rr = false;
-
-		int lWeight = 0;
-		int uWeight = 0;
-		int rWeight = 0;
-		int dWeight = 0;
+		}
 
 		if (noTurnTime > 0)
 			noTurnTime--;
 
+		// The droid has reached the center of a rail tile or doesn't know what
+		// to do yet
 		if (noTurnTime == 0 && (!cr || dir == Direction.UNKNOWN || centerIsh)) {
 			noTurnTime = 4;
-			// int nd = 0;
+
+			// Every possible new direction gets a "weight". The direction with
+			// the biggest weight is chosen.
+			int lWeight = 0;
+			int uWeight = 0;
+			int rWeight = 0;
+			int dWeight = 0;
+
+			// If there is a rail tile on the "right" of the current direction,
+			// give this direction a big weight. This way parallel tracks are
+			// utilized as much as possible.
 			if (dir == Direction.LEFT && ur)
 				uWeight += 16;
 			if (dir == Direction.UP && rr)
@@ -138,6 +176,7 @@ public class RailDroid extends Mob {
 						rWeight += 4;
 				}
 			}
+
 			if (lWeight + uWeight + rWeight + dWeight == 0) {
 				if (lr)
 					lWeight += 1;
@@ -164,7 +203,7 @@ public class RailDroid extends Mob {
 			} else {
 				int res = TurnSynchronizer.synchedRandom.nextInt(totalWeight);
 				// dir = 0;
-				dir = dir.turnBy180DegreesRight();
+				dir = dir.turnBy180Degrees();
 
 				uWeight += lWeight;
 				rWeight += uWeight;
@@ -180,7 +219,6 @@ public class RailDroid extends Mob {
 					dir = Direction.DOWN;
 			}
 
-			// dir = nd;
 		}
 
 		if (cr) {
@@ -198,26 +236,24 @@ public class RailDroid extends Mob {
 				if (ycd > +r)
 					yd -= 0.3;
 			}
-			// if (!(dir == 1 || dir == 3) && xcd >= -r && xcd <= r) xd = -xcd;
-			// if (!(dir == 2 || dir == 4) && ycd >= -r && ycd <= r) yd = -ycd;
 		}
-		double speed = 0.7;
+
 		if (dir != Direction.UNKNOWN)
 			lDir = dir;
 		if (dir == Direction.LEFT)
-			xd -= speed;
+			xd -= SPEED;
 		if (dir == Direction.UP)
-			yd -= speed;
+			yd -= SPEED;
 		if (dir == Direction.RIGHT)
-			xd += speed;
+			xd += SPEED;
 		if (dir == Direction.DOWN)
-			yd += speed;
+			yd += SPEED;
 
 		Vec2 oldPos = pos.clone();
 		move(xd, yd);
 		if (dir != Direction.UNKNOWN && oldPos.distSqr(pos) < 0.1 * 0.1) {
 			if (hadPaused) {
-				dir = dir.turnBy180DegreesRight();
+				dir = dir.turnBy180Degrees();
 				noTurnTime = 0;
 			} else {
 				pauseTime = 10;
@@ -241,22 +277,24 @@ public class RailDroid extends Mob {
 				level.player1Score += 2;
 			}
 		}
-		// level.getTile(xt, yt)
 	}
 
 	@Override
 	public Bitmap getSprite() {
-		if (lDir == Direction.LEFT)
+		switch (lDir) {
+		case LEFT:
 			return Art.raildroid[1][1];
-		if (lDir == Direction.UP)
+		case UP:
 			return Art.raildroid[0][1];
-		if (lDir == Direction.RIGHT)
+		case RIGHT:
 			return Art.raildroid[1][0];
-		if (lDir == Direction.DOWN)
+		case DOWN:
+		default:
 			return Art.raildroid[0][0];
-		return Art.raildroid[0][0];
+		}
 	}
 
+	@Override
 	public void handleCollision(Entity entity, double xa, double ya) {
 		super.handleCollision(entity, xa, ya);
 		if (entity instanceof RailDroid) {
@@ -293,18 +331,20 @@ public class RailDroid extends Mob {
 
 	@Override
 	protected boolean shouldBlock(Entity e) {
-		// if (e instanceof Player && ((Player) e).team == team) return false;
-		if(e instanceof Bullet && ((Bullet) e).owner instanceof Turret && ((Bullet) e).owner.team == team) return false;
+		if (e instanceof Bullet && ((Bullet) e).owner instanceof Turret
+				&& ((Bullet) e).owner.team == team)
+			return false;
 		return super.shouldBlock(e);
 	}
 
+	@Override
 	public void render(Screen screen) {
 		super.render(screen);
+
 		if (carrying) {
 			screen.blit(Art.bullets[0][0], pos.x - 8, pos.y - 20 - yOffs);
 		} else {
 			screen.blit(Art.bullets[1][1], pos.x - 8, pos.y - 20 - yOffs);
 		}
 	}
-
 }

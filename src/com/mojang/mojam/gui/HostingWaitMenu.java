@@ -52,6 +52,11 @@ public class HostingWaitMenu extends GuiMenu {
 		}
 	}
 
+<<<<<<< HEAD
+	/**
+	 * Get the WAN IP of this host
+	 */
+=======
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// nothing
@@ -62,6 +67,22 @@ public class HostingWaitMenu extends GuiMenu {
 		// nothing
 	}
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 	public void searchIpWAN() {
 		URL whatismyip;
 		try {

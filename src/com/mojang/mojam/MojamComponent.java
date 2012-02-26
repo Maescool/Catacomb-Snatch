@@ -103,8 +103,32 @@ public class MojamComponent extends Canvas implements Runnable,
 	private int fps;
 	public static Screen screen = new Screen(GAME_WIDTH, GAME_HEIGHT);
 	private Level level;
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
 	private Chat chat = new Chat();
 
+=======
+	
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+	
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+	
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+	
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+	
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+	
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 	// Latency counter
 	private static final int CACHE_EMPTY=0, CACHE_PRIMING=1, CACHE_PRIMED=2;
 	private static final int CACHE_SIZE = 5;
@@ -426,9 +450,12 @@ public class MojamComponent extends Canvas implements Runnable,
 			Font.draw(screen, texts.health(player.health, player.maxHealth),
 					340, screen.h - 16);
 			Font.draw(screen, texts.money(player.score), 340, screen.h - 27);
-			Font.draw(screen, texts.nextLevel((int) player.getNextLevel()), 340, screen.h - 38);
-			Font.draw(screen, texts.playerExp((int) player.pexp), 340, screen.h - 49);
-			Font.draw(screen, texts.playerLevel(player.plevel), 340, screen.h - 60);
+			Font.draw(screen, texts.nextLevel((int) player.getNextLevel()),
+					340, screen.h - 38);
+			Font.draw(screen, texts.playerExp((int) player.pexp), 340,
+					screen.h - 49);
+			Font.draw(screen, texts.playerLevel(player.plevel), 340,
+					screen.h - 60);
 		}
 
 		if (isMultiplayer && menuStack.isEmpty()) {
@@ -625,8 +652,8 @@ public class MojamComponent extends Canvas implements Runnable,
 
 		String msg = chat.getWaitingMessage();
 		if (msg != null) {
-			synchronizer
-			.addCommand(new ChatCommand(texts.playerName(player.localTeam) + ": " + msg));
+			synchronizer.addCommand(new ChatCommand(texts
+					.playerName(player.localTeam) + ": " + msg));
 		}
 	}
 
@@ -698,11 +725,26 @@ public class MojamComponent extends Canvas implements Runnable,
 		}
 		
 		
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
 
 		if (packet instanceof ChatCommand) {
 			ChatCommand cc = (ChatCommand) packet;
 			chat.addMessage(cc.getMessage());
 		}
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
+=======
+>>>>>>> parent of cd61150... Cleanups, JavaDoc updates and some minor refactoring
 
 		if (packet instanceof PauseCommand) {
 			PauseCommand pc = (PauseCommand) packet;

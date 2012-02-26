@@ -11,9 +11,12 @@ import com.mojang.mojam.resources.Texts;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
+/**
+ * Allows manipulation of key bindings
+ */
 public class KeyBindingsMenu extends GuiMenu {
 
-	class KeyBindingButton extends Button {
+	private class KeyBindingButton extends Button {
 
 		private final int MAX_LABEL_LENGTH = 13;
 
@@ -137,7 +140,8 @@ public class KeyBindingsMenu extends GuiMenu {
 		screen.blit(Art.background, 0, 0);
 		Texts txts = MojamComponent.texts;
 		String txt = txts.getStatic("options.keyBindings");
-		Font.draw(screen, txt, (MojamComponent.GAME_WIDTH - Font.getStringWidth(txt)) / 2,
+		Font.draw(screen, txt,
+				(MojamComponent.GAME_WIDTH - Font.getStringWidth(txt)) / 2,
 				yOffset - 40);
 		write(screen, txts.getStatic("keys.up"), 0, 0);
 		write(screen, txts.getStatic("keys.down"), 0, 1);
@@ -153,7 +157,8 @@ public class KeyBindingsMenu extends GuiMenu {
 		super.render(screen);
 		ClickableComponent button = buttons.get(selectedItem);
 		if (button == back) {
-			screen.blit(Art.getLocalPlayerArt()[0][6], back.getX() - 64, back.getY() - 8);
+			screen.blit(Art.getLocalPlayerArt()[0][6], back.getX() - 64,
+					back.getY() - 8);
 		} else {
 			screen.blit(Art.getLocalPlayerArt()[0][6], button.getX() - textWidth - 32,
 					button.getY() - 8);
@@ -161,9 +166,13 @@ public class KeyBindingsMenu extends GuiMenu {
 	}
 
 	private void write(Screen screen, String txt, int column, int row) {
-		Font.draw(screen, txt + ": ", BORDER + 32 + textWidth + column
-				* (Button.BUTTON_WIDTH + 32 + textWidth) - Font.getStringWidth(txt + ": "), yOffset
-				+ 8 + row * BUTTON_SPACING);
+		Font.draw(
+				screen,
+				txt + ": ",
+				BORDER + 32 + textWidth + column
+						* (Button.BUTTON_WIDTH + 32 + textWidth)
+						- Font.getStringWidth(txt + ": "), yOffset + 8 + row
+						* BUTTON_SPACING);
 	}
 
 	@Override
@@ -189,12 +198,14 @@ public class KeyBindingsMenu extends GuiMenu {
 			selectedKey.setSelected(false);
 			selectedKey = null;
 		} else {
-			if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
+			if (e.getKeyCode() == KeyEvent.VK_UP
+					|| e.getKeyCode() == KeyEvent.VK_W) {
 				selectedItem--;
 				if (selectedItem < 0) {
 					selectedItem = buttons.size() - 1;
 				}
-			} else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
+			} else if (e.getKeyCode() == KeyEvent.VK_DOWN
+					|| e.getKeyCode() == KeyEvent.VK_S) {
 				selectedItem++;
 				if (selectedItem >= buttons.size()) {
 					selectedItem = 0;
@@ -205,13 +216,15 @@ public class KeyBindingsMenu extends GuiMenu {
 				} else if (selectedItem >= 5) {
 					selectedItem -= 5;
 				}
-			} else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
+			} else if (e.getKeyCode() == KeyEvent.VK_RIGHT
+					|| e.getKeyCode() == KeyEvent.VK_D) {
 				if (selectedItem < 5) {
 					selectedItem += 5;
 				} else if (buttons.get(selectedItem) == back) {
 					selectedItem--;
 				}
-			} else if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
+			} else if (e.getKeyCode() == KeyEvent.VK_ENTER
+					|| e.getKeyCode() == KeyEvent.VK_E) {
 				e.consume();
 				buttons.get(selectedItem).postClick();
 			} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -219,11 +232,4 @@ public class KeyBindingsMenu extends GuiMenu {
 			}
 		}
 	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {}
-
-	@Override
-	public void keyReleased(KeyEvent e) {}
-
 }
