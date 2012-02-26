@@ -24,7 +24,7 @@ public class Harvester extends Building implements LootCollector {
 	private boolean isEmptying = false;
 	private Player emptyingPlayer = null;
 	private int emptyingSpeed = 50;
-	private int radius;
+	public int radius;
 	private int[] upgradeRadius = new int[] { (int) (1.5 * Tile.WIDTH),
 			2 * Tile.WIDTH, (int) (2.5 * Tile.WIDTH) };
 	private int[] upgradeCapacities = new int[] { 1500, 2500, 3500 };
@@ -33,9 +33,10 @@ public class Harvester extends Building implements LootCollector {
 		super(x, y, team,localTeam);
 		setStartHealth(10);
 		freezeTime = 10;
+		yOffs = 20;
 		makeUpgradeableWithCosts(new int[] { 500, 1000, 5000 });
 		healthBarOffset = 13;
-		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
+		areaBitmap = Bitmap.rangeBitmap(radius,Color.YELLOW.getRGB());
 	}
 	
 	public Bitmap areaBitmap;
@@ -108,10 +109,10 @@ public class Harvester extends Building implements LootCollector {
 	protected void upgradeComplete() {
 	    maxHealth += 10;
 	    health += 10;
-        radius = upgradeRadius[upgradeLevel];
-		capacity = upgradeCapacities[upgradeLevel];
-		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
-		justDroppedTicks = 80; //show the radius for a brief time
+	    radius = upgradeRadius[upgradeLevel];
+	    capacity = upgradeCapacities[upgradeLevel];
+	    areaBitmap = Bitmap.rangeBitmap(radius,Color.YELLOW.getRGB());
+	    if (upgradeLevel != 0) justDroppedTicks = 80; //show the radius for a brief time
 	}
 
 	public boolean canTake() {
@@ -121,34 +122,17 @@ public class Harvester extends Building implements LootCollector {
 	public void render(Screen screen) {
 		
 		if(justDroppedTicks-- > 0 && localTeam==team) {
-			screen.blit(areaBitmap, pos.x - areaBitmap.w / 2, pos.y - areaBitmap.h / 2 - yOffs);	
+			screen.blit(areaBitmap, pos.x-radius , pos.y-radius - yOffs);	
 		}
 		
+		super.render(screen);
+
 		Bitmap image = getSprite();
-
-		if (hurtTime > 0) {
-			if (hurtTime > 40 - 6 && hurtTime / 2 % 2 == 0) {
-				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h + 8, 0xa0ffffff);
-			} else {
-				if (health < 0) {
-					health = 0;
-				}
-				int col = (int) (180 - health * 180 / maxHealth);
-				if (hurtTime < 10) {
-					col = col * hurtTime / 10;
-				}
-				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h + 8, (col << 24) + 255 * 65536);
-			}
-		} else if (capacity - money < 500) {
-			screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h + 8, 0x77ff7200);
-		} else {
-			screen.blit(image, pos.x - image.w / 2, pos.y - image.h + 8);
+		if (capacity - money < 500) {
+			screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h / 2 - yOffs, 0x77ff7200);
 		}
-		renderMarker(screen);
-		if (health < maxHealth)
-            addHealthBar(screen);
-
-		if(team ==localTeam) {
+		
+		if(team ==localTeam && !isCarried()) {
 			addMoneyBar(screen);
 		}
 		

@@ -33,7 +33,7 @@ public class ShopItem extends Building {
         setBuildingCost();
     }
     public void setBuildingCost(){
-    	if(Player.creative == true){
+    	if(Options.getAsBoolean(Options.CREATIVE)){
     		COST[0] = 0;
     		COST[1] = 0;
     		COST[2] = 0;
