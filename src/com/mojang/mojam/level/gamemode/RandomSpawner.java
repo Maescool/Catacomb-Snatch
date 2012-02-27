@@ -37,8 +37,7 @@ public class RandomSpawner implements ILevelTickItem {
 					if (level.getEntities(
 							new BB(null, x - r, y - r, x + r, y + r),
 							Turret.class).size() == 0) {
-						level.addEntity(new SpawnerEntity(x, y, Team.Neutral,
-								random.nextInt(4)));
+						level.addEntity(new SpawnerEntity(x, y,	random.nextInt(4)));
 					}
 				}
 			}

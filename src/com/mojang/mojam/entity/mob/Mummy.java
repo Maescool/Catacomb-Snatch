@@ -10,8 +10,8 @@ public class Mummy extends HostileMob {
     private int tick = 0;
     public static double ATTACK_RADIUS = 128.0;
 
-    public Mummy(double x, double y, int localTeam) {
-        super(x, y, Team.Neutral,localTeam);
+    public Mummy(double x, double y) {
+        super(x, y, Team.Neutral);
         setPos(x, y);
         setStartHealth(7);
         dir = TurnSynchronizer.synchedRandom.nextDouble() * Math.PI * 2;

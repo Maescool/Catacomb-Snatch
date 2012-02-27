@@ -10,26 +10,28 @@ import javax.imageio.ImageIO;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.building.ShopItem;
 import com.mojang.mojam.entity.mob.Team;
+import com.mojang.mojam.entity.mob.SpikeTrap;
 import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.HoleTile;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
+import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.level.tile.DestroyableWallTile;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.SandTile;
 import com.mojang.mojam.level.tile.UnbreakableRailTile;
 import com.mojang.mojam.level.tile.UnpassableSandTile;
 import com.mojang.mojam.level.tile.WallTile;
+import com.mojang.mojam.entity.building.SpawnerEntity;
+import com.mojang.mojam.entity.building.Turret;
 
 public class GameMode {
 
 	public static final int LEVEL_BORDER_SIZE = 16;
 	
 	protected Level newLevel;
-	int localTeam;
 	
-	public Level generateLevel(LevelInformation li, int localTeam, int player1Character, int player2Character)  throws IOException {
-		this.localTeam = localTeam;
+	public Level generateLevel(LevelInformation li,  int player1Character, int player2Character)  throws IOException {
 		BufferedImage bufferedImage;
 		//System.out.println("Loading level from file: "+li.getPath());
 		if(li.vanilla){
@@ -112,7 +114,30 @@ public class GameMode {
 		case 0xff0000:
 			newLevel.setTile(x, y, new WallTile());
 			break;
-			
+		case 0x0000ff:
+			newLevel.addEntity(new SpikeTrap(x * Tile.WIDTH,y * Tile.HEIGHT));
+			break;
+		case 0x006600:
+			newLevel.addEntity(new SpawnerEntity(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2, 0));
+			break;
+		case 0x009900:
+			newLevel.addEntity(new SpawnerEntity(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2, 1));
+			break;			
+		case 0x00CC00:
+			newLevel.addEntity(new SpawnerEntity(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2, 2));
+			break;
+		case 0x00FF00:
+			newLevel.addEntity(new SpawnerEntity(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2, 3));
+			break;
+		case 0x990099:
+			newLevel.addEntity(new Turret(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2,Team.Team1));
+			break;
+		case 0x990066:
+			newLevel.addEntity(new Turret(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2,Team.Neutral));
+			break;
+		case 0x990033:
+			newLevel.addEntity(new Turret(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2,Team.Team2));
+			break;
 		default:
 			newLevel.setTile(x, y, new FloorTile());
 			break;
@@ -123,18 +148,18 @@ public class GameMode {
 		newLevel.maxMonsters = 1500 + (int)DifficultyInformation.calculateStrength(500);	
 		
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 - 1.5), 4.5 * 32,
-				ShopItem.SHOP_TURRET, Team.Team2,localTeam));
+				ShopItem.SHOP_TURRET, Team.Team2));
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 - .5), 4.5 * 32,
-				ShopItem.SHOP_HARVESTER, Team.Team2,localTeam));
+				ShopItem.SHOP_HARVESTER, Team.Team2));
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 + .5), 4.5 * 32,
-				ShopItem.SHOP_BOMB, Team.Team2,localTeam));
+				ShopItem.SHOP_BOMB, Team.Team2));
 
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 - 1.5), (newLevel.height - 4.5) * 32,
-				ShopItem.SHOP_TURRET, Team.Team1,localTeam));
+				ShopItem.SHOP_TURRET, Team.Team1));
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 - .5), (newLevel.height - 4.5) * 32,
-				ShopItem.SHOP_HARVESTER, Team.Team1,localTeam));
+				ShopItem.SHOP_HARVESTER, Team.Team1));
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 + .5), (newLevel.height - 4.5) * 32,
-				ShopItem.SHOP_BOMB, Team.Team1,localTeam));
+				ShopItem.SHOP_BOMB, Team.Team1));
 		
 		newLevel.setTile(31, 7, new UnbreakableRailTile(new SandTile()));
 		newLevel.setTile(31, 63 - 7, new UnbreakableRailTile(new SandTile()));

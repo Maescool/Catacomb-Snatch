@@ -9,8 +9,8 @@ import com.mojang.mojam.screen.Screen;
 public class Bat extends HostileMob {
 	private int tick = 0;
 
-	public Bat(double x, double y, int localTeam) {
-		super(x, y, Team.Neutral, localTeam);
+	public Bat(double x, double y) {
+		super(x, y, Team.Neutral);
 		setPos(x, y);
 		setStartHealth(1);
 		dir = TurnSynchronizer.synchedRandom.nextDouble() * Math.PI * 2;

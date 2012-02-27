@@ -24,11 +24,10 @@ public class SpawnerEntity extends Building {
 	 * 
 	 * @param x Initial X coordinate
 	 * @param y Initial Y coordinate
-	 * @param team Team number
 	 * @param type Mob type
 	 */
-	public SpawnerEntity(double x, double y, int team, int type) {
-		super(x, y, team, 0);
+	public SpawnerEntity(double x, double y, int type) {
+		super(x, y, Team.Neutral);
 
 		this.type = type;
 		setStartHealth(20);
@@ -66,13 +65,13 @@ public class SpawnerEntity extends Building {
 		Tile spawntile = level.getTile(xin, yin);
 		Mob te = null;
 		if (type == 0)
-			te = new Bat(x, y, localTeam);
+			te = new Bat(x, y);
 		if (type == 1)
-			te = new Snake(x, y,localTeam);
+			te = new Snake(x, y);
 		if (type == 2)
-			te = new Mummy(x, y,localTeam);
+			te = new Mummy(x, y);
 		if (type == 3)
-			te = new Scarab(x, y,localTeam);
+			te = new Scarab(x, y);
 		if (level.countEntities(Mob.class) < level.maxMonsters && level.getEntities(te.getBB().grow(8), te.getClass()).size() == 0 && spawntile.canPass(te))
 			level.addEntity(te);
 	}

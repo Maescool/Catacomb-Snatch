@@ -3,6 +3,7 @@ package com.mojang.mojam.entity.building;
 import java.awt.Color;
 import java.util.Random;
 
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.animation.SmokeAnimation;
@@ -31,24 +32,25 @@ public class Harvester extends Building implements LootCollector {
 			2 * Tile.WIDTH, (int) (2.5 * Tile.WIDTH) };
 	private int[] upgradeCapacities = new int[] { 1500, 2500, 3500 };
 	
-	public Bitmap areaBitmap;
-
+	
+	private Bitmap areaBitmap;
+	private static final int RADIUS_COLOR = new Color(240, 210, 190).getRGB();
+	
 	/**
 	 * Constructor
 	 * 
 	 * @param x Initial X coordinate
 	 * @param y Initial Y coordinate
 	 * @param team Team number
-	 * @param localTeam Local team number
 	 */
-	public Harvester(double x, double y, int team, int localTeam) {
-		super(x, y, team,localTeam);
+	public Harvester(double x, double y, int team) {
+		super(x, y, team);
 		setStartHealth(10);
 		freezeTime = 10;
 		yOffs = 20;
 		makeUpgradeableWithCosts(new int[] { 500, 1000, 5000 });
 		healthBarOffset = 13;
-		areaBitmap = Bitmap.rangeBitmap(radius,Color.YELLOW.getRGB());
+		areaBitmap = Bitmap.rangeBitmap(radius,RADIUS_COLOR);
 	}
 	
 	@Override
@@ -125,7 +127,7 @@ public class Harvester extends Building implements LootCollector {
 	    health += 10;
 	    radius = upgradeRadius[upgradeLevel];
 	    capacity = upgradeCapacities[upgradeLevel];
-	    areaBitmap = Bitmap.rangeBitmap(radius,Color.YELLOW.getRGB());
+	    areaBitmap = Bitmap.rangeBitmap(radius,RADIUS_COLOR);
 	    if (upgradeLevel != 0) justDroppedTicks = 80; //show the radius for a brief time
 	}
 
@@ -141,8 +143,8 @@ public class Harvester extends Building implements LootCollector {
 	@Override
 	public void render(Screen screen) {
 		
-		if(justDroppedTicks-- > 0 && localTeam==team) {
-			screen.blit(areaBitmap, pos.x-radius , pos.y-radius - yOffs);	
+		if(justDroppedTicks-- > 0 && MojamComponent.localTeam==team) {
+			drawRadius(screen);
 		}
 		
 		super.render(screen);
@@ -152,7 +154,7 @@ public class Harvester extends Building implements LootCollector {
 			screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h / 2 - yOffs, 0x77ff7200);
 		}
 		
-		if(team ==localTeam && !isCarried()) {
+		if(team ==MojamComponent.localTeam && !isCarried()) {
 			addMoneyBar(screen);
 		}
 		
@@ -217,5 +219,9 @@ public class Harvester extends Building implements LootCollector {
 		} else {
 			super.use(user);
 		}
+	}
+	
+	public void drawRadius(Screen screen) {
+		screen.opacityBlit(areaBitmap, (int) pos.x-radius, (int) pos.y-radius - yOffs, 0xDD);	
 	}
 }

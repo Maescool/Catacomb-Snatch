@@ -3,6 +3,7 @@ package com.mojang.mojam.entity.building;
 import java.awt.Color;
 import java.util.Set;
 
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.mob.Mob;
@@ -31,7 +32,8 @@ public class Turret extends Building {
 
 	private int facing = 0;
 
-	public Bitmap areaBitmap;
+	private Bitmap areaBitmap;
+	private static final int RADIUS_COLOR = new Color(240, 210, 190).getRGB();
 
 	/**
 	 * Constructor
@@ -39,14 +41,13 @@ public class Turret extends Building {
 	 * @param x Initial X coordinate
 	 * @param y Initial Y coordinate
 	 * @param team Team number
-	 * @param localTeam Local team number
 	 */
-	public Turret(double x, double y, int team, int localTeam) {
-		super(x, y, team, localTeam);
+	public Turret(double x, double y, int team) {
+		super(x, y, team);
 		this.team = team;
 		setStartHealth(10);
 		freezeTime = 10;
-		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
+		areaBitmap = Bitmap.rangeBitmap(radius,RADIUS_COLOR);
 	}
 
 	@Override
@@ -110,8 +111,8 @@ public class Turret extends Building {
 	@Override
 	public void render(Screen screen) {
 		
-		if(justDroppedTicks-- > 0 && localTeam==team) {
-				screen.blit(areaBitmap, pos.x-radius , pos.y-radius - yOffs);	
+		if(justDroppedTicks-- > 0 && MojamComponent.localTeam==team) {
+				drawRadius(screen);
 		}
 		
 		super.render(screen);
@@ -136,7 +137,11 @@ public class Turret extends Building {
 		delay = upgradeDelay[upgradeLevel];
 		radius = upgradeRadius[upgradeLevel];
 		radiusSqr = radius * radius;
-		areaBitmap = Bitmap.rangeBitmap(radius,Color.YELLOW.getRGB());
+		areaBitmap = Bitmap.rangeBitmap(radius,RADIUS_COLOR);
 		if (upgradeLevel != 0) justDroppedTicks = 80; //show the radius for a brief time
+	}
+	
+	public void drawRadius(Screen screen) {
+		screen.opacityBlit(areaBitmap, (int) pos.x-radius, (int) pos.y-radius - yOffs, 0xDD);	
 	}
 }

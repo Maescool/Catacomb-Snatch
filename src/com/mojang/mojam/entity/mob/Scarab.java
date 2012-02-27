@@ -5,8 +5,8 @@ import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 
 public class Scarab extends HostileMob {
-	public Scarab(double x, double y, int localTeam) {
-		super(x, y, Team.Neutral, localTeam);
+	public Scarab(double x, double y) {
+		super(x, y, Team.Neutral);
 		setPos(x, y);
 		setStartHealth(5);
 		dir = TurnSynchronizer.synchedRandom.nextDouble() * Math.PI * 2;

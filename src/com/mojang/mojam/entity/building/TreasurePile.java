@@ -18,11 +18,9 @@ public class TreasurePile extends Building {
 	 * 
 	 * @param x Initial X coordinate
 	 * @param y Initial Y coordinate
-	 * @param team Team number
-	 * @param localTeam Local team number
 	 */
-	public TreasurePile(double x, double y, int team, int localTeam) {
-		super(x, y, Team.Neutral,localTeam);
+	public TreasurePile(double x, double y) {
+		super(x, y, Team.Neutral);
 		setStartHealth(20);
 		freezeTime = 10;
 		minimapIcon = 5;

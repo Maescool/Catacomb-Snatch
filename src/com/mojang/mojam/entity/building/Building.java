@@ -42,11 +42,9 @@ public class Building extends Mob implements IUsable {
 	 *            Initial Y coordinate
 	 * @param team
 	 *            Team number
-	 * @param localTeam
-	 *            Local team number
 	 */
-	public Building(double x, double y, int team, int localTeam) {
-		super(x, y, team, localTeam);
+	public Building(double x, double y, int team) {
+		super(x, y, team);
 
 		setStartHealth(20);
 		healthRegen = false;
@@ -59,7 +57,7 @@ public class Building extends Mob implements IUsable {
 	public void render(Screen screen) {
 		super.render(screen);
 		renderMarker(screen);
-		if(team == localTeam)
+		if(team == MojamComponent.localTeam)
 			renderInfo(screen);
 	}
 
@@ -201,7 +199,7 @@ public class Building extends Mob implements IUsable {
 		if (upgradeLevel >= maxUpgradeLevel) {
 			MojamComponent.soundPlayer.playSound("/sound/Fail.wav",
 					(float) pos.x, (float) pos.y, true);
-			if (this.team == this.localTeam) {
+			if (this.team == MojamComponent.localTeam) {
 				Notifications.getInstance().add(
 						MojamComponent.texts.getStatic("upgrade.full"));
 			}
@@ -212,7 +210,7 @@ public class Building extends Mob implements IUsable {
 		if (cost > p.getScore() && !Options.getAsBoolean(Options.CREATIVE)) {
 			MojamComponent.soundPlayer.playSound("/sound/Fail.wav",
 					(float) pos.x, (float) pos.y, true);
-			if (this.team == this.localTeam) {
+			if (this.team == MojamComponent.localTeam) {
 				Notifications.getInstance().add(
 						MojamComponent.texts.upgradeNotEnoughMoney(cost));
 			}
@@ -226,7 +224,7 @@ public class Building extends Mob implements IUsable {
 		p.useMoney(cost);
 		upgradeComplete();
 
-		if (this.team == this.localTeam) {
+		if (this.team == MojamComponent.localTeam) {
 			Notifications.getInstance().add(
 					MojamComponent.texts.upgradeTo(upgradeLevel + 1));
 		}
