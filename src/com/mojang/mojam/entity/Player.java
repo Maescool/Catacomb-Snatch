@@ -85,10 +85,9 @@ public class Player extends Mob implements LootCollector {
      * @param x Initial x coordinate
      * @param y Initial y coordinate
      * @param team Team number
-     * @param localTeam Local team number
      */
-    public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team, int localTeam, int characterID) {
-        super(x, y, team, localTeam);
+    public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team,  int characterID) {
+        super(x, y, team);
         this.keys = keys;
         this.mouseButtons = mouseButtons;
         this.characterID = characterID;
@@ -443,7 +442,7 @@ public class Player extends Mob implements LootCollector {
                 level.placeTile(x, y, new RailTile(level.getTile(x, y)), this);
                 payCost(COST_RAIL);
             } else if (score < COST_RAIL) {
-            	if(this.team == this.localTeam) {
+            	if(this.team == MojamComponent.localTeam) {
             		  Notifications.getInstance().add(MojamComponent.texts.buildRail(COST_RAIL));
             	}
               
@@ -451,10 +450,10 @@ public class Player extends Mob implements LootCollector {
         } else if (level.getTile(x, y) instanceof RailTile) {
             if ((y < 8 && team == Team.Team2) || (y > level.height - 9 && team == Team.Team1)) {
                 if (score >= COST_DROID) {
-                    level.addEntity(new RailDroid(pos.x, pos.y, team, localTeam));
+                    level.addEntity(new RailDroid(pos.x, pos.y, team));
                     payCost(COST_DROID);
                 } else {
-                	if(this.team == this.localTeam) {
+                	if(this.team == MojamComponent.localTeam) {
                 		Notifications.getInstance().add(MojamComponent.texts.buildDroid(COST_DROID));
                 	}
                 }
@@ -466,7 +465,7 @@ public class Player extends Mob implements LootCollector {
                         payCost(COST_REMOVE_RAIL);
                     }
                 } else if (score < COST_REMOVE_RAIL) {
-                	if(this.team == this.localTeam) {
+                	if(this.team == MojamComponent.localTeam) {
                 		Notifications.getInstance().add(MojamComponent.texts.removeRail(COST_REMOVE_RAIL));
                 	}
                 }
@@ -628,7 +627,7 @@ public class Player extends Mob implements LootCollector {
     
     @Override
     protected void renderCarrying(Screen screen, int yOffs) {
-    	if(carrying != null && carrying.team == this.localTeam ) {
+    	if(carrying != null && carrying.team == MojamComponent.localTeam ) {
 			if(carrying instanceof Turret) {
 				Turret turret = (Turret)carrying;
 				screen.blit(turret.areaBitmap, turret.pos.x-turret.radius , turret.pos.y-turret.radius - yOffs);	
@@ -703,7 +702,7 @@ public class Player extends Mob implements LootCollector {
     public void pickup(Building b) {
         if(b.team != this.team && b.team != Team.Neutral) {
 
-            if(this.team == localTeam) {
+            if(this.team == MojamComponent.localTeam) {
                 Notifications.getInstance().add(MojamComponent.texts.getStatic("gameplay.cantPickup"));
             }
             return;
@@ -824,11 +823,4 @@ public class Player extends Mob implements LootCollector {
         return pos;
     }
 
-    /**
-     * Set local team number
-     * @param localTeam Local team number
-     */
-	public void setLocalTeam(int localTeam) {
-		this.localTeam = localTeam;
-	}
 }
