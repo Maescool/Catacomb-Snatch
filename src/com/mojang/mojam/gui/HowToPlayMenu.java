@@ -14,8 +14,11 @@ public class HowToPlayMenu extends GuiMenu {
 	private int tab2 = 210;
 	private int goalTopMargin = 20;
 	private int vspace = 55;
+    private boolean inGame;
 	
-	public HowToPlayMenu() {
+	public HowToPlayMenu(boolean inGame) {
+	    this.inGame = inGame;
+	    
 		addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"), MojamComponent.GAME_WIDTH - 128 - 20, MojamComponent.GAME_HEIGHT - 24 - 25));
 		
 		// Background panels
@@ -25,7 +28,14 @@ public class HowToPlayMenu extends GuiMenu {
 	}
 
 	public void render(Screen screen) {
-		screen.blit(Art.background, 0, 0);
+	    
+	    if( ! inGame) {
+	        screen.blit(Art.background, 0, 0);
+	    } else {
+            screen.opacityFill(0, 0, MojamComponent.GAME_WIDTH, MojamComponent.GAME_HEIGHT, 0xff000000, 0x30);
+	    }
+		
+		
 		super.render(screen);
 		printHelpText(screen);
 	}
