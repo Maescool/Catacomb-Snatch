@@ -899,7 +899,7 @@ public class MojamComponent extends Canvas implements Runnable,
 				addMenu(new TitleMenu(GAME_WIDTH, GAME_HEIGHT));
 			}
 		} else if (id == TitleMenu.HOW_TO_PLAY) {
-			addMenu(new HowToPlayMenu());
+			addMenu(new HowToPlayMenu(level != null));
 		} else if (id == TitleMenu.OPTIONS_ID) {
 			addMenu(new OptionsMenu(level != null));
 		} else if (id == TitleMenu.SELECT_DIFFICULTY_ID) {
