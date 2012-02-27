@@ -17,9 +17,8 @@ public class Font {
 	 */
     static {
         String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ    " + "0123456789-.!?/%$\\=*+,;:()&#\"'";
-        int glyphWidth = 8;
         int glyphHeight = 8;
-        int letterSpacing = 0;
+        int spacing = 0;
         java.awt.Font systemFont = new java.awt.Font("SansSerif", java.awt.Font.BOLD, 10);
         Color shadowColor = Color.BLACK;
         
@@ -32,7 +31,7 @@ public class Font {
         	new Color(0x5c66ea),
         	new Color(0x8ab5f0)
         };
-        FONT_BLUE = new Font(Art.font_blue, letters, glyphWidth, glyphHeight,letterSpacing, systemFont, blueGradient, shadowColor);
+        FONT_BLUE = new Font(Art.font_blue, letters, glyphHeight,spacing, systemFont, blueGradient, shadowColor);
         
     	Color[] goldGradient = {
     		new Color(241, 216, 145),
@@ -42,7 +41,7 @@ public class Font {
     		new Color(250, 250, 214),
     		new Color(234, 221, 91),
     		new Color(240, 195, 137)};
-		FONT_GOLD = new Font(Art.font_gold, letters, glyphWidth, glyphHeight, letterSpacing, systemFont, goldGradient, shadowColor);
+		FONT_GOLD = new Font(Art.font_gold, letters, glyphHeight, spacing, systemFont, goldGradient, shadowColor);
 		
 		Color[] grayGradient = {
 	        	new Color(0xb2b2b2),
@@ -53,7 +52,7 @@ public class Font {
 	        	new Color(0x969696),
 	        	new Color(0xaeaeae)
 	        };
-		FONT_GRAY = new Font(Art.font_gray, letters, glyphWidth, glyphHeight, letterSpacing, systemFont, grayGradient, shadowColor);
+		FONT_GRAY = new Font(Art.font_gray, letters, glyphHeight, spacing, systemFont, grayGradient, shadowColor);
 		
 		Color[] redGradient = {
 	        	new Color(0xff657b),
@@ -64,17 +63,16 @@ public class Font {
 	        	new Color(0xff372d),
 	        	new Color(0xff5d8f)
 	        };
-		FONT_RED  = new Font(Art.font_red, letters, glyphWidth, glyphHeight, letterSpacing, systemFont, redGradient, shadowColor);
+		FONT_RED  = new Font(Art.font_red, letters, glyphHeight, spacing, systemFont, redGradient, shadowColor);
  
 		letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ    " + "abcdefghijklmnopqrstuvwxyz    " + "0123456789-.!?/%$\\=*+,;:()&#\"'";
-	    glyphWidth = 4;
         glyphHeight = 6;
-        letterSpacing = 1;
+        spacing = 1;
         systemFont = new java.awt.Font("SansSerif", java.awt.Font.PLAIN, 7);
         shadowColor = new Color(0, 0, 0, 0);
 	    
         Color[] smallBlackGradient = {new Color(0x000000)};
-        FONT_BLACK_SMALL = new Font(Art.font_small_black, letters, glyphWidth, glyphHeight, letterSpacing, systemFont, smallBlackGradient, null);
+        FONT_BLACK_SMALL = new Font(Art.font_small_black, letters, glyphHeight, spacing, systemFont, smallBlackGradient, null);
         
         Color[] smallGoldGradient = {
         		new Color(0xf0c389),
@@ -82,12 +80,12 @@ public class Font {
         		new Color(0xfbf5de),
         		new Color(0xfbf3df),
         		new Color(0xf1d891)};
-        FONT_GOLD_SMALL  = new Font(Art.font_small_gold,  letters, glyphWidth, glyphHeight, letterSpacing, systemFont, smallGoldGradient, null);
+        FONT_GOLD_SMALL  = new Font(Art.font_small_gold,  letters, glyphHeight, spacing, systemFont, smallGoldGradient, null);
         
         Color[] smallWhiteGradient = {new Color(0xffffff)};
-        FONT_WHITE_SMALL = new Font(Art.font_small_white, letters, glyphWidth, glyphHeight, letterSpacing, systemFont, smallWhiteGradient, null);
+        FONT_WHITE_SMALL = new Font(Art.font_small_white, letters, glyphHeight, spacing, systemFont, smallWhiteGradient, null);
 
-	    setDefaultFont(FONT_GOLD);
+	    setDefaultFont(FONT_GOLD_SMALL);
 	}
     
 	/**
@@ -110,17 +108,15 @@ public class Font {
 	
     private Bitmap[][] bitmapData;
     private String letters;
-    private int glyphWidth;
     private int glyphHeight;
     private int letterSpacing;
     
-    private FontCharacterFactory fontCharacterFactory;
+    protected FontCharacterFactory fontCharacterFactory;
 
-    protected Font(Bitmap[][] bitmapData, String letters, int glyphWidth, int glyphHeight,
+    protected Font(Bitmap[][] bitmapData, String letters, int glyphHeight,
     		int letterSpacing, java.awt.Font systemFont, Color[] gradient, Color shadowColor) {
         this.bitmapData = bitmapData;
         this.letters = letters;
-        this.glyphWidth = glyphWidth;
         this.glyphHeight = glyphHeight;
         this.letterSpacing = letterSpacing;
         this.fontCharacterFactory = new FontCharacterFactory(systemFont, gradient, shadowColor);
@@ -132,7 +128,14 @@ public class Font {
      * @param text
      */
     public int calculateStringWidth(String text) {
-        return text.length() * glyphWidth + (text.length()-1) * letterSpacing;
+        int w = 0;
+        for (int i = 0; i < text.length(); i++) {
+        	char character = text.charAt(i);
+            Bitmap image = getCharacterBitmap(character);
+            w += image.w + letterSpacing;
+        }
+        w -= letterSpacing;
+        return w;
     }
     
 	/**
@@ -155,27 +158,30 @@ public class Font {
 	 */
     public void draw(Screen screen, String msg, int x, int y, int width) {
     	int startX = x;
-		msg = msg.toUpperCase();
 		int length = msg.length();
 		for (int i = 0; i < length; i++) {
-			int charPosition = letters.indexOf(msg.charAt(i));
-
-			if (charPosition >= 0) {
-				screen.blit(bitmapData[charPosition % 30][charPosition / 30], x, y);
-				x += glyphWidth + letterSpacing;
-			} else {
-				char c = msg.charAt(i);
-				Bitmap characterBitmap = fontCharacterFactory.getFontCharacter(c);
-				double heightOffset = fontCharacterFactory.getHeightOffset(c);
-				screen.blit(characterBitmap, x, y+heightOffset);
-				x += characterBitmap.w + letterSpacing;
+			char character = msg.charAt(i);
+			Bitmap bitmap = getCharacterBitmap(character);
+			int heightOffset = 0;
+			if (letters.indexOf(character) < 0) {
+				heightOffset = fontCharacterFactory.getHeightOffset(character);
 			}
-			
-			if(x > width - glyphWidth){
+			screen.blit(bitmap, x, y+heightOffset);
+			x += bitmap.w + letterSpacing;
+			if(x > width - bitmap.w){
 				x = startX;
 				y += glyphHeight + 2;
 			}
 		}
+    }
+    
+    private Bitmap getCharacterBitmap(char character) {
+    	int charPosition = letters.indexOf(character);
+    	if (charPosition >= 0) {
+    		return bitmapData[charPosition % 30][charPosition / 30];
+    	} else {
+    		return fontCharacterFactory.getFontCharacter(character);
+    	}
     }
     
 	/**
