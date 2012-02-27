@@ -23,6 +23,7 @@ import com.mojang.mojam.level.tile.UnbreakableRailTile;
 import com.mojang.mojam.level.tile.UnpassableSandTile;
 import com.mojang.mojam.level.tile.WallTile;
 import com.mojang.mojam.entity.building.SpawnerEntity;
+import com.mojang.mojam.entity.building.Turret;
 
 public class GameMode {
 
@@ -114,19 +115,28 @@ public class GameMode {
 			newLevel.setTile(x, y, new WallTile());
 			break;
 		case 0x0000ff:
-                    newLevel.addEntity(new SpikeTrap(x * Tile.WIDTH,y * Tile.HEIGHT));
-                    break;
-		case 0xAA0000:
-			newLevel.addEntity(new SpawnerEntity(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2, 0, 0));
+			newLevel.addEntity(new SpikeTrap(x * Tile.WIDTH,y * Tile.HEIGHT));
 			break;
-		case 0x00AA00:
-			newLevel.addEntity(new SpawnerEntity(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2, 0, 1));
+		case 0x006600:
+			newLevel.addEntity(new SpawnerEntity(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2, 0));
+			break;
+		case 0x009900:
+			newLevel.addEntity(new SpawnerEntity(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2, 1));
 			break;			
-		case 0x0000AA:
-			newLevel.addEntity(new SpawnerEntity(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2, 0, 2));
+		case 0x00CC00:
+			newLevel.addEntity(new SpawnerEntity(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2, 2));
 			break;
-		case 0xAAAA00:
-			newLevel.addEntity(new SpawnerEntity(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2, 0, 3));
+		case 0x00FF00:
+			newLevel.addEntity(new SpawnerEntity(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2, 3));
+			break;
+		case 0x990099:
+			newLevel.addEntity(new Turret(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2,Team.Team1));
+			break;
+		case 0x990066:
+			newLevel.addEntity(new Turret(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2,Team.Neutral));
+			break;
+		case 0x990033:
+			newLevel.addEntity(new Turret(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2,Team.Team2));
 			break;
 		default:
 			newLevel.setTile(x, y, new FloorTile());
