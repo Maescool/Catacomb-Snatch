@@ -5,10 +5,6 @@ import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 
 public class Scarab extends HostileMob {
-	public int facing;
-	public int walkTime;
-	public int stepTime;
-
 	public Scarab(double x, double y, int localTeam) {
 		super(x, y, Team.Neutral, localTeam);
 		setPos(x, y);
@@ -19,40 +15,15 @@ public class Scarab extends HostileMob {
 		facing = TurnSynchronizer.synchedRandom.nextInt(4);
 		deathPoints = 4;
 		strength = 2;
+		speed = 0.7;
+		limp = 4;
 	}
 
 	public void tick() {
 		super.tick();
 		if (freezeTime > 0)
 			return;
-
-		double speed = 0.7;
-		if (facing == 0)
-			yd += speed;
-		if (facing == 1)
-			xd -= speed;
-		if (facing == 2)
-			yd -= speed;
-		if (facing == 3)
-			xd += speed;
-		walkTime++;
-
-		if (walkTime / 12 % 4 != 0) {
-            if (shouldBounceOffWall(xd, yd)) {
-                facing = (facing + 2) % 4;
-                xd = -xd;
-                yd = -yd;
-            }			
-            stepTime++;
-			if (!move(xd, yd)
-					|| (walkTime > 10 && TurnSynchronizer.synchedRandom
-							.nextInt(200) == 0)) {
-				facing = TurnSynchronizer.synchedRandom.nextInt(4);
-				walkTime = 0;
-			}
-		}
-		xd *= 0.2;
-		yd *= 0.2;
+		walk();
 	}
 
 	public void die() {
@@ -60,7 +31,7 @@ public class Scarab extends HostileMob {
 	}
 
 	public Bitmap getSprite() {
-		return Art.scarab[((stepTime / 6) & 3)][(facing + 3) & 3];
+		return Art.scarab[((stepTime / 6) & 3)][(facing + 1) & 3];
 	}
 
 	@Override
