@@ -5,9 +5,6 @@ import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 
 public class Snake extends HostileMob {
-	public int facing;
-	public int walkTime;
-	public int stepTime;
 
 	public Snake(double x, double y, int localTeam) {
 		super(x, y, Team.Neutral, localTeam);
@@ -19,41 +16,13 @@ public class Snake extends HostileMob {
 		facing = TurnSynchronizer.synchedRandom.nextInt(4);
 		deathPoints = 2;
 		strength = 1;
+		speed=1.5;
+		limp = 4;
 	}
 
 	public void tick() {
 		super.tick();
-		if (freezeTime > 0)
-			return;
-
-		double speed = 1.5;
-		if (facing == 0)
-			yd += speed;
-		if (facing == 1)
-			xd -= speed;
-		if (facing == 2)
-			yd -= speed;
-		if (facing == 3)
-			xd += speed;
-		walkTime++;
-
-		if (walkTime / 12 % 4 != 0) {
-			if (shouldBounceOffWall(xd, yd)){
-				facing = (facing+2) %4;
-				xd = -xd;
-				yd = -yd;
-			}
-			
-			stepTime++;
-			if (!move(xd, yd)
-					|| (walkTime > 10 && TurnSynchronizer.synchedRandom
-							.nextInt(200) == 0)) {
-				facing = TurnSynchronizer.synchedRandom.nextInt(4);
-				walkTime = 0;
-			}
-		}
-		xd *= 0.2;
-		yd *= 0.2;
+		walk();
 	}
 
 	public void die() {
@@ -61,7 +30,7 @@ public class Snake extends HostileMob {
 	}
 
 	public Bitmap getSprite() {
-		return Art.snake[((stepTime / 6) & 3)][(facing + 3) & 3];
+		return Art.snake[((stepTime / 6) & 3)][(facing + 1) & 3];
 	}
 
 	@Override
