@@ -36,7 +36,6 @@ public class Player extends Mob implements LootCollector {
     public static int COST_REMOVE_RAIL;
     public static final int REGEN_INTERVAL = 60 * 3;
     public int plevel;
-    public int pnextlevel;
     public double pexp;
     public double psprint;
     public boolean isSprint = false;
@@ -147,22 +146,38 @@ public class Player extends Mob implements LootCollector {
      * @return XP value
      */
     private double nextLevel() {
-        double next = (plevel * 7) * (plevel * 7);
-        pnextlevel = (int) next;
+        double next = summedUpXpNeededForLevel(plevel);
         return next;
     }
 
     /**
-     * Calculate how much XP is missing to reach the next level
      * 
-     * @return Missing XP value
+     * @param level to calculate summed up xp value for
+     *
+     * @return summed up xp value
      */
-    public double getNextLevel() {
-        double next = nextLevel() - pexp;
-        return next;
+    public double summedUpXpNeededForLevel(int level){
+        return (level * 7) * (level * 7);
     }
-
-
+    
+    /**
+     * 
+     * @param level to calculate netto xp value for
+     *
+     * @return netto xp value
+     */
+    public double nettoXpNeededForLevel(int level){
+        return summedUpXpNeededForLevel(level) - summedUpXpNeededForLevel(level-1);
+    }
+    
+    /**
+     * 
+     * @return xp gained since lase level up
+     */
+    public double xpSinceLastLevelUp(){
+        return pexp - summedUpXpNeededForLevel(plevel-1);
+    }
+    
     @Override
     public void tick() {
 

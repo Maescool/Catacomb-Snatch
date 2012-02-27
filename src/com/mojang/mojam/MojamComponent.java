@@ -48,6 +48,7 @@ import com.mojang.mojam.gui.HostingWaitMenu;
 import com.mojang.mojam.gui.HowToPlayMenu;
 import com.mojang.mojam.gui.JoinGameMenu;
 import com.mojang.mojam.gui.KeyBindingsMenu;
+import com.mojang.mojam.gui.LevelEditorMenu;
 import com.mojang.mojam.gui.LevelSelect;
 import com.mojang.mojam.gui.OptionsMenu;
 import com.mojang.mojam.gui.PauseMenu;
@@ -433,18 +434,15 @@ public class MojamComponent extends Canvas implements Runnable,
 			Font.defaultFont().draw(screen, texts.FPS(fps), 10, 10);
 		}
 
-		if (player != null && menuStack.size() == 0) {
+		if (player != null && menuStack.size() == 0) {		
+		    addHealthBar(screen);
+		    addXpBar(screen);
+		    addScore(screen);
+				
 			Font font = Font.defaultFont();
 		    if (isMultiplayer) {
 		    	font.draw(screen, texts.latency(latencyCacheReady()?""+avgLatency():"-"), 10, 20);
 		    }
-		    
-		    font.draw(screen, texts.health(player.health, player.maxHealth),
-					340, screen.h - 16);
-		    font.draw(screen, texts.money(player.score), 340, screen.h - 27);
-		    font.draw(screen, texts.nextLevel((int) player.getNextLevel()), 340, screen.h - 38);
-		    font.draw(screen, texts.playerExp((int) player.pexp), 340, screen.h - 49);
-		    font.draw(screen, texts.playerLevel(player.plevel), 340, screen.h - 60);
 		}
 
 		if (isMultiplayer && menuStack.isEmpty()) {
@@ -469,6 +467,33 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	}
 
+	private void addHealthBar(Screen screen){
+	  
+	    int index = 100 - (int) (player.health * 100 / player.maxHealth);
+	    screen.blit(Art.panel_healthBar[0][index], 311, screen.h - 17);
+	    screen.blit(Art.panel_heart, 314, screen.h - 24);
+	    Font font = Font.defaultFont();
+        font.draw(screen, texts.health(player.health, player.maxHealth), 335, screen.h - 21);
+	}
+	
+	private void addXpBar(Screen screen){
+	    
+	    int xpSinceLastLevelUp = (int)(player.xpSinceLastLevelUp());
+	    int xpNeededForNextLevel = (int)(player.nettoXpNeededForLevel(player.plevel));
+	    int index = 100 - (int) (xpSinceLastLevelUp * 100 / xpNeededForNextLevel);
+	    
+	    screen.blit(Art.panel_xpBar[0][index], 311, screen.h - 32);
+	    screen.blit(Art.panel_star, 314, screen.h - 40);
+	    Font font = Font.defaultFont();
+	    font.draw(screen, texts.playerLevel(player.plevel), 335, screen.h - 36);
+    }
+	
+	private void addScore(Screen screen){
+	    screen.blit(Art.panel_coin, 314, screen.h - 55);
+	    Font font = Font.defaultFont();
+        font.draw(screen, texts.money(player.score), 335, screen.h - 52);
+	}
+	
 	private void renderMouse(Screen screen, MouseButtons mouseButtons) {
 
 		if (mouseButtons.mouseHidden)
@@ -908,6 +933,8 @@ public class MojamComponent extends Canvas implements Runnable,
 			addMenu(new DifficultySelect(true));
 		} else if (id == TitleMenu.KEY_BINDINGS_ID) {
 			addMenu(new KeyBindingsMenu(keys, inputHandler, level != null));
+		} else if (id == TitleMenu.LEVEL_EDITOR_ID) {
+			addMenu(new LevelEditorMenu());
 		} else if (id == TitleMenu.EXIT_GAME_ID) {
 			System.exit(0);
 		} else if (id == TitleMenu.RETURN_ID) {
