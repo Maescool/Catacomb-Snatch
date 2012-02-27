@@ -248,7 +248,7 @@ public class Bitmap {
 	public static Bitmap rangeBitmap(int radius, int color) {
 		Bitmap circle = new Bitmap(radius*2+100,radius*2+100);	
 		
-		circle.circle(radius, radius, radius, color);	
+		circle.circleFill(radius, radius, radius, color);	
 		return circle;
 	}
 
@@ -275,5 +275,41 @@ public class Bitmap {
 		x++;
 		} while (x <= y);
 	}
+	
+
+	private void circleFill(int centerX, int centerY, int radius, int color) {
+		int d = 3 - (2 * radius);
+		int x = 0;
+		int y = radius;
+	
+		do {
+			horizonalLine(centerX + x, centerX - x, centerY + y, color);
+			horizonalLine(centerX + x, centerX - x, centerY - y, color);
+			horizonalLine(centerX + y, centerX - y, centerY + x, color);
+			horizonalLine(centerX + y, centerX - y, centerY - x, color);
+			
+			if (d < 0) {
+				d = d + (4 * x) + 6;
+			} 
+			else {
+				d = d + 4 * (x - y) + 10;
+				y--;
+			}
+			x++;
+		} while (x <= y);
+	}
+	
+	private void horizonalLine(int x1, int x2, int y, int color) {
+		if (x1 > x2) {
+			int xx = x1;
+			x1 = x2;
+			x2 = xx;
+		}		
+		
+		for (int xx = x1; xx <= x2; xx++) {
+			setPixel(xx, y, color);			
+		}
+	}
+
 
 }
