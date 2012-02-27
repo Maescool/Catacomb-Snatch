@@ -907,7 +907,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		} else if (id == TitleMenu.SELECT_DIFFICULTY_HOSTING_ID) {
 			addMenu(new DifficultySelect(true));
 		} else if (id == TitleMenu.KEY_BINDINGS_ID) {
-			addMenu(new KeyBindingsMenu(keys, inputHandler));
+			addMenu(new KeyBindingsMenu(keys, inputHandler, level != null));
 		} else if (id == TitleMenu.EXIT_GAME_ID) {
 			System.exit(0);
 		} else if (id == TitleMenu.RETURN_ID) {

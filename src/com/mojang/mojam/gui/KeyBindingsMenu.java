@@ -80,9 +80,11 @@ public class KeyBindingsMenu extends GuiMenu {
 
 	private Keys keys;
 	private InputHandler inputHandler;
+	private boolean inGame;
 
-	public KeyBindingsMenu(Keys keys, InputHandler inputHandler) {
+	public KeyBindingsMenu(Keys keys, InputHandler inputHandler, boolean inGame) {
 		super();
+		this.inGame = inGame;
 		this.keys = keys;
 		this.inputHandler = inputHandler;
 		addButtons();
@@ -134,7 +136,13 @@ public class KeyBindingsMenu extends GuiMenu {
 
 	@Override
 	public void render(Screen screen) {
-		screen.blit(Art.background, 0, 0);
+	    
+        if( ! inGame) {
+            screen.blit(Art.background, 0, 0);
+        } else {
+            screen.opacityFill(0, 0, MojamComponent.GAME_WIDTH, MojamComponent.GAME_HEIGHT, 0xff000000, 0x30);
+        }
+        
 		Texts txts = MojamComponent.texts;
 		String txt = txts.getStatic("options.keyBindings");
 		int stringWith = Font.defaultFont().calculateStringWidth(txt);
