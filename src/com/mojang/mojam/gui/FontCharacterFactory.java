@@ -28,14 +28,11 @@ public class FontCharacterFactory {
 		}
 		
 		int fontSize = systemFont.getSize();
-		BufferedImage image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D graphics = image.createGraphics();
-		
 		int width = 3*fontSize;
 		int height = 3*fontSize;
 
-		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		graphics = image.createGraphics();
+		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D graphics = image.createGraphics();
 		graphics.setFont(systemFont);
 
 		int positionX = fontSize;
