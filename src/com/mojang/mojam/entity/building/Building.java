@@ -96,8 +96,7 @@ public class Building extends Mob implements IUsable {
 	 *            Screen
 	 */
 	protected void renderInfo(Screen screen) {
-		// Draw iiAtlas' shop item info graphics
-		// Thanks whoever re-wrote this!
+		// Draw iiAtlas' shop item info graphics, thanks whoever re-wrote this!
 		if (highlight) {
 		    if (this instanceof ShopItem) {
 		        ShopItem s = (ShopItem)this;
