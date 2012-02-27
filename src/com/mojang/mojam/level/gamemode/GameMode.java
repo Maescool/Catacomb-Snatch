@@ -10,10 +10,12 @@ import javax.imageio.ImageIO;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.building.ShopItem;
 import com.mojang.mojam.entity.mob.Team;
+import com.mojang.mojam.entity.mob.SpikeTrap;
 import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.HoleTile;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
+import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.level.tile.DestroyableWallTile;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.SandTile;
@@ -110,6 +112,9 @@ public class GameMode {
 		case 0xff0000:
 			newLevel.setTile(x, y, new WallTile());
 			break;
+		case 0x0000ff:
+                    newLevel.addEntity(new SpikeTrap(x * Tile.WIDTH,y * Tile.HEIGHT));
+                    break;
 			
 		default:
 			newLevel.setTile(x, y, new FloorTile());
