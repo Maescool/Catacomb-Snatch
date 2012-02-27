@@ -24,7 +24,7 @@ public abstract class Mob extends Entity {
 	public final static int MoveControlFlag = 1;
 
 	// private double speed = 0.82;
-	public double speed = 1.0;
+	protected double speed = 1.0;
 	public int team;
 	protected boolean doShowHealthBar = true;
     protected int healthBarOffset = 10;
@@ -48,10 +48,10 @@ public abstract class Mob extends Entity {
 	public int healingInterval;
 	public int healingTime;
 	public boolean healthRegen = true;
-    public int facing;
-    public int walkTime;
-    public int stepTime;
-    public int limp;
+    protected int facing;
+    private int walkTime;
+    protected int stepTime;
+    protected int limp;
 	
 	public Mob(double x, double y, int team, int localTeam) {
 		super();
