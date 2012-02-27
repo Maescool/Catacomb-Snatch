@@ -265,6 +265,9 @@ public class RailTurret extends Building {
 		
 		if (health <= 0) {
 			die();
+			this.remove();
+			level.removeEntity(this);
+			level.removeFromEntityMap(this);
 		}
 		
 		// level.getTile(xt, yt)

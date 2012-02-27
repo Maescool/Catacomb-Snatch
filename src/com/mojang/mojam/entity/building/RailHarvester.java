@@ -307,6 +307,9 @@ public class RailHarvester extends Building implements LootCollector {
 		if (health <= 0) {
 			dropAllMoney();
 			die();
+			this.remove();
+			level.removeEntity(this);
+			level.removeFromEntityMap(this);
 		}
 		
 		// level.getTile(xt, yt)
