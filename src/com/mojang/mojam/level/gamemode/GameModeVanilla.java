@@ -24,7 +24,7 @@ public class GameModeVanilla extends GameMode {
 			final Tile tile = newLevel.getTile((int) (x / Tile.WIDTH),
 					(int) (y / Tile.HEIGHT));
 			if (tile instanceof FloorTile) {
-				newLevel.addEntity(new SpawnerEntity(x, y, Team.Neutral, 0));
+				newLevel.addEntity(new SpawnerEntity(x, y, 0));
 			}
 		}
 	}
@@ -34,8 +34,7 @@ public class GameModeVanilla extends GameMode {
 		super.loadColorTile(color, x, y);
 		
 		if (color == 0xffff00) {
-			TreasurePile t = new TreasurePile(x * Tile.WIDTH + 16, y
-					* Tile.HEIGHT, Team.Neutral);
+			TreasurePile t = new TreasurePile(x * Tile.WIDTH + 16, y * Tile.HEIGHT);
 			newLevel.setTile(x, y, new FloorTile());
 			newLevel.addEntity(t);
 		}
