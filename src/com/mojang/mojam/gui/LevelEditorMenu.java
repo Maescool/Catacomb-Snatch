@@ -138,6 +138,13 @@ public class LevelEditorMenu extends GuiMenu {
             updateSaveButtons();
             updateButtons = false;
         }
+        
+        // draw
+        if (drawing) {
+            int x = (((pencilX + TILE_WIDTH / 2) - mapX) / TILE_WIDTH);
+            int y = (((pencilY + TILE_HEIGHT / 2) - mapY) / TILE_HEIGHT);
+            draw(selectedButton.getId(), x, y);
+        }
     }
 
     @Override
@@ -274,6 +281,7 @@ public class LevelEditorMenu extends GuiMenu {
 
         if (x < 0 || x > LEVEL_WIDTH - 1) return;
         if (y < 0 || y > LEVEL_HEIGHT - 1) return;
+        if (mapTile[x][y] == id) return;
 
         switch (id) {
             case 0:
@@ -394,8 +402,8 @@ public class LevelEditorMenu extends GuiMenu {
             if (button == newButton) {
                 newLevel();
             } else if (button == openButton) {
-                openLevel(LevelList.getLevels().get(selectedLevel));
                 selectedLevel = (selectedLevel < levels.size() - 1 ? selectedLevel + 1 : 0);
+                openLevel(LevelList.getLevels().get(selectedLevel));
             } else if (button == saveButton) {
                 saveMenuVisible = true;
                 updateButtons = true;
@@ -433,9 +441,11 @@ public class LevelEditorMenu extends GuiMenu {
             return;
         }
 
-        // start drawing
+        // start/toggle drawing
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             drawing = true;
+        } else if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+            drawing = !drawing;
         }
 
         // move level with keys
@@ -448,26 +458,10 @@ public class LevelEditorMenu extends GuiMenu {
         } else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
             mapY -= 32;
         }
-
-        // tab to scroll trought the levels
+        
+        //tab to scroll through tiles
         if (e.getKeyCode() == KeyEvent.VK_TAB) {
-
-            openLevel(LevelList.getLevels().get(selectedLevel));
-
-            if (e.getModifiers() == 1) {
-                // forward
-                selectedLevel = (selectedLevel > 0 ? selectedLevel - 1 : levels.size() - 1);
-            } else {
-                // back ward
-                selectedLevel = (selectedLevel < levels.size() - 1 ? selectedLevel + 1 : 0);
-            }
-        }
-
-        // draw
-        if (drawing) {
-            int x = (((pencilX + TILE_WIDTH / 2) - mapX) / TILE_WIDTH);
-            int y = (((pencilY + TILE_HEIGHT / 2) - mapY) / TILE_HEIGHT);
-            draw(selectedButton.getId(), x, y);
+            tileButtons[selectedButton.getId() < tileButtons.length - 1 ? selectedButton.getId() + 1 : 0].postClick();
         }
     }
 
