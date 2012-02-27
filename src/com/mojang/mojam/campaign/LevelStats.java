@@ -12,15 +12,11 @@ import java.util.ArrayList;
 import com.mojang.mojam.MojamComponent;
 
 public class LevelStats {
-	/*
-	 * Local variables
-	 */
+	// Local variables
 	private ArrayList<LevelStatsEntity> allEntity = new ArrayList<LevelStatsEntity>();
 	private String levelStatsFile = MojamComponent.getMojamDir() + "/player_level.stats";
 	
-	/*
-	 * Return a LevelStatsEntity
-	 */
+	// Return a LevelStatsEntity
 	public LevelStatsEntity getEntityFromID(int id){
 		for(int i = 0; i < allEntity.size(); i++){
 			if(id == allEntity.get(i).id){
@@ -31,9 +27,8 @@ public class LevelStats {
 		return null;
 	}
 	
-	/*
-	 * Return an ArrayList of entities
-	 */
+	
+	// Return an ArrayList of entities
 	public ArrayList<LevelStatsEntity> getAllEntityFromType(int type){
 		ArrayList<LevelStatsEntity> back = new ArrayList<LevelStatsEntity>();
 		
@@ -49,14 +44,12 @@ public class LevelStats {
 			return null;
 	}
 	
-	/*
-	 * Check the sum of the entity
-	 */
+	// Check the sum of the entity
 	public boolean checkEntitySum(int[] info, int sum){
 		int num = 0;
 		
 		for(int i = 0; i < info.length; i++) 
-			num += info[i];
+			num = (num + info[i]) / 2;
 		
 		if(num == sum)
 			return true;
@@ -64,6 +57,12 @@ public class LevelStats {
 			return false;
 	}
 	
+	// Add an entity to the array
+	public void addEntity(int id, int type, int info[]){
+		
+	}
+	
+	// Load all entity information
 	public void loadAllEntity(){
 		BufferedInputStream stream;
 		try {
@@ -80,9 +79,7 @@ public class LevelStats {
 		}
 	}
 	
-	/*
-	 * Save all the stats!
-	 */
+	// Save all the stats!
 	public void saveAllEntity(){
 		String data = "";
 		
@@ -127,9 +124,7 @@ public class LevelStats {
 		}
 	}
 	
-	/*
-	 * LevelStats Entity
-	 */
+	// LevelStats Entity
 	public class LevelStatsEntity{
 		public int id;
 		public int type;
@@ -145,7 +140,7 @@ public class LevelStats {
 			int num = 0;
 			
 			for(int i = 0; i < info.length; i++) 
-				num += info[i];
+				num = (num + info[i]) / 2;
 			
 			return num;
 		}
