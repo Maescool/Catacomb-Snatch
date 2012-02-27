@@ -31,7 +31,8 @@ public class Font {
         	new Color(0x5c66ea),
         	new Color(0x8ab5f0)
         };
-        FONT_BLUE = new Font(Art.font_blue, letters, glyphHeight,spacing, systemFont, blueGradient, shadowColor);
+        FontCharacterFactory characterFactory = new FontCharacterFactory(systemFont, blueGradient, shadowColor);
+        FONT_BLUE = new Font(Art.font_blue, letters, glyphHeight,spacing, characterFactory);
         
     	Color[] goldGradient = {
     		new Color(241, 216, 145),
@@ -41,7 +42,8 @@ public class Font {
     		new Color(250, 250, 214),
     		new Color(234, 221, 91),
     		new Color(240, 195, 137)};
-		FONT_GOLD = new Font(Art.font_gold, letters, glyphHeight, spacing, systemFont, goldGradient, shadowColor);
+    	characterFactory = new FontCharacterFactory(systemFont, goldGradient, shadowColor);
+		FONT_GOLD = new Font(Art.font_gold, letters, glyphHeight, spacing, characterFactory);
 		
 		Color[] grayGradient = {
 	        	new Color(0xb2b2b2),
@@ -52,7 +54,8 @@ public class Font {
 	        	new Color(0x969696),
 	        	new Color(0xaeaeae)
 	        };
-		FONT_GRAY = new Font(Art.font_gray, letters, glyphHeight, spacing, systemFont, grayGradient, shadowColor);
+		characterFactory = new FontCharacterFactory(systemFont, grayGradient, shadowColor);
+		FONT_GRAY = new Font(Art.font_gray, letters, glyphHeight, spacing, characterFactory);
 		
 		Color[] redGradient = {
 	        	new Color(0xff657b),
@@ -63,16 +66,18 @@ public class Font {
 	        	new Color(0xff372d),
 	        	new Color(0xff5d8f)
 	        };
-		FONT_RED  = new Font(Art.font_red, letters, glyphHeight, spacing, systemFont, redGradient, shadowColor);
+		characterFactory = new FontCharacterFactory(systemFont, redGradient, shadowColor);
+		FONT_RED  = new Font(Art.font_red, letters, glyphHeight, spacing, characterFactory);
  
 		letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ    " + "abcdefghijklmnopqrstuvwxyz    " + "0123456789-.!?/%$\\=*+,;:()&#\"'";
         glyphHeight = 6;
         spacing = 1;
         systemFont = new java.awt.Font("SansSerif", java.awt.Font.PLAIN, 7);
-        shadowColor = new Color(0, 0, 0, 0);
+        shadowColor = null;
 	    
         Color[] smallBlackGradient = {new Color(0x000000)};
-        FONT_BLACK_SMALL = new Font(Art.font_small_black, letters, glyphHeight, spacing, systemFont, smallBlackGradient, null);
+        characterFactory = new FontCharacterFactory(systemFont, smallBlackGradient, shadowColor);
+        FONT_BLACK_SMALL = new Font(Art.font_small_black, letters, glyphHeight, spacing, characterFactory);
         
         Color[] smallGoldGradient = {
         		new Color(0xf0c389),
@@ -80,12 +85,14 @@ public class Font {
         		new Color(0xfbf5de),
         		new Color(0xfbf3df),
         		new Color(0xf1d891)};
-        FONT_GOLD_SMALL  = new Font(Art.font_small_gold,  letters, glyphHeight, spacing, systemFont, smallGoldGradient, null);
+        characterFactory = new FontCharacterFactory(systemFont, smallGoldGradient, shadowColor);
+        FONT_GOLD_SMALL  = new Font(Art.font_small_gold,  letters, glyphHeight, spacing, characterFactory);
         
         Color[] smallWhiteGradient = {new Color(0xffffff)};
-        FONT_WHITE_SMALL = new Font(Art.font_small_white, letters, glyphHeight, spacing, systemFont, smallWhiteGradient, null);
+        characterFactory = new FontCharacterFactory(systemFont, smallWhiteGradient, shadowColor);
+        FONT_WHITE_SMALL = new Font(Art.font_small_white, letters, glyphHeight, spacing, characterFactory);
 
-	    setDefaultFont(FONT_GOLD_SMALL);
+	    setDefaultFont(FONT_GOLD);
 	}
     
 	/**
@@ -113,13 +120,12 @@ public class Font {
     
     protected FontCharacterFactory fontCharacterFactory;
 
-    protected Font(Bitmap[][] bitmapData, String letters, int glyphHeight,
-    		int letterSpacing, java.awt.Font systemFont, Color[] gradient, Color shadowColor) {
+    protected Font(Bitmap[][] bitmapData, String letters, int glyphHeight, int letterSpacing, FontCharacterFactory characterFactory) {
         this.bitmapData = bitmapData;
         this.letters = letters;
         this.glyphHeight = glyphHeight;
         this.letterSpacing = letterSpacing;
-        this.fontCharacterFactory = new FontCharacterFactory(systemFont, gradient, shadowColor);
+        this.fontCharacterFactory = characterFactory;
     }
     
     /**
