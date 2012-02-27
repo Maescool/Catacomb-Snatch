@@ -24,11 +24,10 @@ public class SpawnerEntity extends Building {
 	 * 
 	 * @param x Initial X coordinate
 	 * @param y Initial Y coordinate
-	 * @param team Team number
 	 * @param type Mob type
 	 */
-	public SpawnerEntity(double x, double y, int team, int type) {
-		super(x, y, team);
+	public SpawnerEntity(double x, double y, int type) {
+		super(x, y, Team.Neutral);
 
 		this.type = type;
 		setStartHealth(20);
