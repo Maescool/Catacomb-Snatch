@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.Random;
 
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.animation.LargeBombExplodeAnimation;
@@ -12,6 +13,7 @@ import com.mojang.mojam.entity.animation.TileExplodeAnimation;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.loot.LootCollector;
 import com.mojang.mojam.entity.mob.Mob;
+import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.level.tile.UnbreakableRailTile;
 import com.mojang.mojam.network.TurnSynchronizer;
@@ -36,6 +38,8 @@ public class Harvester extends Building implements LootCollector {
 	private int[] upgradeRadius = new int[] { (int) (1.5 * Tile.WIDTH),
 			2 * Tile.WIDTH, (int) (2.5 * Tile.WIDTH) };
 	private int[] upgradeCapacities = new int[] { 1500, 2500, 3500 };
+	public static boolean creative = Options.getAsBoolean(Options.CREATIVE);
+	private boolean doWarn = true;
 	
 	public Bitmap areaBitmap;
 
@@ -81,9 +85,8 @@ public class Harvester extends Building implements LootCollector {
 
 	@Override
 	public void tick() {
-		if (carriedBy == null) {
-			railify();
-		}
+		if (carriedBy == null && level.getTile((int) pos.x/Tile.WIDTH, (int) pos.y/Tile.HEIGHT) 
+				instanceof RailTile) railify(); else doWarn = true;
 		super.tick();
 		if (--freezeTime > 0) {
 			return;
@@ -246,9 +249,16 @@ public class Harvester extends Building implements LootCollector {
 	
 	public void railify() {
 		System.out.println("Railify "+this.getClass().getName());
-		this.remove();
-		level.removeEntity(this);
-		level.removeFromEntityMap(this);
-		level.addEntity(new RailHarvester(pos.x, pos.y, team, upgradeLevel, ((Player)lastCarrying), money));
+		if (((Player)lastCarrying).getScore() > RailBomb.cost || creative) {
+			((Player)lastCarrying).payCost(RailHarvester.cost);
+		  this.remove();
+		  level.removeEntity(this);
+		  level.removeFromEntityMap(this);
+		  level.addEntity(new RailHarvester(pos.x, pos.y, team, upgradeLevel, ((Player)lastCarrying), money));
+		} else {
+		  if (doWarn) Notifications.getInstance().add(
+					MojamComponent.texts.upgradeNotEnoughMoney(RailBomb.cost));
+		  doWarn = false;
+		}
 	}
 }
