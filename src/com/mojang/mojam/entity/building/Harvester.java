@@ -6,14 +6,19 @@ import java.util.Random;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
+import com.mojang.mojam.entity.animation.LargeBombExplodeAnimation;
 import com.mojang.mojam.entity.animation.SmokeAnimation;
+import com.mojang.mojam.entity.animation.TileExplodeAnimation;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.loot.LootCollector;
+import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.level.tile.Tile;
+import com.mojang.mojam.level.tile.UnbreakableRailTile;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.level.tile.RailTile;
 
 /**
  * Harvester building. Automatically collects all coins within a given radius around itself
@@ -44,6 +49,19 @@ public class Harvester extends Building implements LootCollector {
 	public Harvester(double x, double y, int team) {
 		super(x, y, team);
 		setStartHealth(10);
+		freezeTime = 10;
+		yOffs = 20;
+		makeUpgradeableWithCosts(new int[] { 500, 1000, 5000 });
+		healthBarOffset = 13;
+		areaBitmap = Bitmap.rangeBitmap(radius,Color.YELLOW.getRGB());
+	}
+	
+	public Harvester(double x, double y, int team, int upgradeLevel, int money) {
+		super(x, y, team);
+		setStartHealth(10);
+		this.team = team;
+		this.upgradeLevel = upgradeLevel;
+		this.money = money;
 		freezeTime = 10;
 		yOffs = 20;
 		makeUpgradeableWithCosts(new int[] { 500, 1000, 5000 });
@@ -101,6 +119,12 @@ public class Harvester extends Building implements LootCollector {
 						Art.fxSteam12, 30));
 			}
 		}
+		
+		int xt = (int) (pos.x / Tile.WIDTH);
+		int yt = (int) (pos.y / Tile.HEIGHT);
+		
+		if (level.getTile(xt, yt) instanceof RailTile && carriedBy == null) railify();
+		
 		if (health == 0) {
 			dropAllMoney();
 		}
@@ -217,5 +241,25 @@ public class Harvester extends Building implements LootCollector {
 		} else {
 			super.use(user);
 		}
+	}
+	
+	protected boolean shouldBlock(Tile t) {
+		return (t instanceof RailTile);
+	}
+	
+	public void collide(Tile tile, double xa, double ya) {
+		if (tile instanceof RailTile) {
+			railify();
+		}
+	}
+	
+	public void railify() {
+		System.out.println("Railify "+this.getClass().getName());
+		MojamComponent.soundPlayer.playSound("/sound/Upgrade.wav",
+				(float) pos.x, (float) pos.y);
+		this.remove();
+		level.removeEntity(this);
+		level.removeFromEntityMap(this);
+		level.addEntity(new RailHarvester(pos.x, pos.y, team, upgradeLevel, ((Player)lastCarrying), money));
 	}
 }
