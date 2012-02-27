@@ -122,7 +122,7 @@ public class Bomb extends Building {
 	public void railify() {
 		System.out.println("Railify "+this.getClass().getName());
 		if (((Player)lastCarrying).getScore() > RailBomb.cost || creative) {
-			((Player)lastCarrying).payCost(RailBomb.cost);
+			if (!creative) ((Player)lastCarrying).payCost(RailBomb.cost);
 		  this.remove();
 		  level.removeEntity(this);
 		  level.removeFromEntityMap(this);

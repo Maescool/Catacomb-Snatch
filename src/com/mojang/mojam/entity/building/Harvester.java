@@ -249,15 +249,15 @@ public class Harvester extends Building implements LootCollector {
 	
 	public void railify() {
 		System.out.println("Railify "+this.getClass().getName());
-		if (((Player)lastCarrying).getScore() > RailBomb.cost || creative) {
-			((Player)lastCarrying).payCost(RailHarvester.cost);
+		if (((Player)lastCarrying).getScore() > RailHarvester.cost || creative) {
+			if (!creative) ((Player)lastCarrying).payCost(RailHarvester.cost);
 		  this.remove();
 		  level.removeEntity(this);
 		  level.removeFromEntityMap(this);
 		  level.addEntity(new RailHarvester(pos.x, pos.y, team, upgradeLevel, ((Player)lastCarrying), money));
 		} else {
 		  if (doWarn) Notifications.getInstance().add(
-					MojamComponent.texts.upgradeNotEnoughMoney(RailBomb.cost));
+					MojamComponent.texts.upgradeNotEnoughMoney(RailHarvester.cost));
 		  doWarn = false;
 		}
 	}

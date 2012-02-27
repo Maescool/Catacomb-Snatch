@@ -4,11 +4,15 @@ import java.awt.Color;
 import java.util.Set;
 
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.mob.RailDroid;
+import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.level.DifficultyInformation;
+import com.mojang.mojam.level.tile.RailTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
@@ -31,6 +35,9 @@ public class Turret extends Building {
 	private int[] upgradeDelay = new int[] { 24, 21, 18 };
 
 	private int facing = 0;
+	
+	public static boolean creative = Options.getAsBoolean(Options.CREATIVE);
+	private boolean doWarn = true;
 
 	public Bitmap areaBitmap;
 
@@ -48,6 +55,15 @@ public class Turret extends Building {
 		freezeTime = 10;
 		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
 	}
+	
+	public Turret(double x, double y, int team, int upgradeLevel) {
+		super(x, y, team);
+		this.team = team;
+		this.upgradeLevel = upgradeLevel;
+		setStartHealth(10);
+		freezeTime = 10;
+		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
+	}
 
 	@Override
 	public void init() {
@@ -58,6 +74,8 @@ public class Turret extends Building {
 
 	@Override
 	public void tick() {
+		if (carriedBy == null && level.getTile((int) pos.x/Tile.WIDTH, (int) pos.y/Tile.HEIGHT) 
+				instanceof RailTile) railify(); else doWarn = true;
 		super.tick();
 		if (--freezeTime > 0)
 			return;
@@ -138,5 +156,20 @@ public class Turret extends Building {
 		radiusSqr = radius * radius;
 		areaBitmap = Bitmap.rangeBitmap(radius,Color.YELLOW.getRGB());
 		if (upgradeLevel != 0) justDroppedTicks = 80; //show the radius for a brief time
+	}
+	
+	public void railify() {
+		System.out.println("Railify "+this.getClass().getName());
+		if (((Player)lastCarrying).getScore() > RailTurret.cost || creative) {
+			if (!creative) ((Player)lastCarrying).payCost(RailTurret.cost);
+		  this.remove();
+		  level.removeEntity(this);
+		  level.removeFromEntityMap(this);
+		  level.addEntity(new RailTurret(pos.x, pos.y, team, upgradeLevel, ((Player)lastCarrying)));
+		} else {
+		  if (doWarn) Notifications.getInstance().add(
+					MojamComponent.texts.upgradeNotEnoughMoney(RailTurret.cost));
+		  doWarn = false;
+		}
 	}
 }
