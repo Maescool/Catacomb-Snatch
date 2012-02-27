@@ -32,6 +32,7 @@ public class TitleMenu extends GuiMenu {
 	public static final int OPTIONS_ID = 1016;
     public static final int LEVELS_NEXT_PAGE_ID = 1017;
     public static final int LEVELS_PREVIOUS_PAGE_ID = 1018;
+        public static final int LEVEL_EDITOR_ID = 1019;
 
 	public static final int FULLSCREEN_ID = 2000;
 	public static final int FPS_ID = 2001;
@@ -84,8 +85,10 @@ public class TitleMenu extends GuiMenu {
 				(gameWidth - 128) / 2, (startY += 30)));
 		addButton(new Button(OPTIONS_ID, MojamComponent.texts.getStatic("titlemenu.options"),
 				(gameWidth - 128) / 2, (startY += 30)));
+                addButton(new Button(LEVEL_EDITOR_ID, MojamComponent.texts.getStatic("titlemenu.levelEditor"),
+                                (gameWidth - 128) / 2, (startY += 30)));
 		addButton(new Button(EXIT_GAME_ID, MojamComponent.texts.getStatic("titlemenu.exit"),
-				(gameWidth - 128) / 2, (startY += 30)));
+				(gameWidth - 128) / 2, (startY += 30)));               
 	}
 
 	@Override
