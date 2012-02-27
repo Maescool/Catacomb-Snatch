@@ -41,8 +41,8 @@ public class RailDroid extends Mob {
 	public int team;
 	public static boolean creative = Options.getAsBoolean(Options.CREATIVE);
 
-	public RailDroid(double x, double y, int team, int localTeam) {
-		super(x, y, team, localTeam);
+	public RailDroid(double x, double y, int team) {
+		super(x, y, team);
 		this.team = team;
 		this.setSize(10, 8);
 		deathPoints = 1;

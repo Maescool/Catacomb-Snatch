@@ -3,6 +3,7 @@ package com.mojang.mojam.entity.building;
 import java.awt.Color;
 import java.util.Set;
 
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.mob.Mob;
@@ -39,10 +40,9 @@ public class Turret extends Building {
 	 * @param x Initial X coordinate
 	 * @param y Initial Y coordinate
 	 * @param team Team number
-	 * @param localTeam Local team number
 	 */
-	public Turret(double x, double y, int team, int localTeam) {
-		super(x, y, team, localTeam);
+	public Turret(double x, double y, int team) {
+		super(x, y, team);
 		this.team = team;
 		setStartHealth(10);
 		freezeTime = 10;
@@ -110,7 +110,7 @@ public class Turret extends Building {
 	@Override
 	public void render(Screen screen) {
 		
-		if(justDroppedTicks-- > 0 && localTeam==team) {
+		if(justDroppedTicks-- > 0 && MojamComponent.localTeam==team) {
 				screen.blit(areaBitmap, pos.x-radius , pos.y-radius - yOffs);	
 		}
 		

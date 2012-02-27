@@ -38,10 +38,9 @@ public class ShopItem extends Building {
 	 * @param x Initial X coordinate
 	 * @param y Initial Y coordinate
 	 * @param team Team number
-	 * @param localTeam Local team number
 	 */
-    public ShopItem(double x, double y, int type, int team, int localTeam) {
-        super(x, y, team, localTeam);
+    public ShopItem(double x, double y, int type, int team) {
+        super(x, y, team);
         this.type = type;
         isImmortal = true;
         if (team == Team.Team1) {
@@ -69,7 +68,7 @@ public class ShopItem extends Building {
     @Override
     public void render(Screen screen) {
         super.render(screen);
-        if(team == localTeam) {
+        if(team == MojamComponent.localTeam) {
             Font.defaultFont().drawCentered(screen, MojamComponent.texts.cost(effectiveCost), (int) (pos.x), (int) (pos.y + 10));
         }
     }
@@ -115,19 +114,19 @@ public class ShopItem extends Building {
                 Building item = null;
                 switch (type) {
                     case SHOP_TURRET:
-                        item = new Turret(pos.x, pos.y, team,localTeam);
+                        item = new Turret(pos.x, pos.y, team);
                         break;
                     case SHOP_HARVESTER:
-                        item = new Harvester(pos.x, pos.y, team, localTeam);
+                        item = new Harvester(pos.x, pos.y, team);
                         break;
                     case SHOP_BOMB:
-                        item = new Bomb(pos.x, pos.y, localTeam);
+                        item = new Bomb(pos.x, pos.y);
                         break;
                 }
                 level.addEntity(item);
                 player.pickup(item);
             } else if (player.getScore() < effectiveCost) {
-            	if(this.team == this.localTeam) {
+            	if(this.team == MojamComponent.localTeam) {
             		 Notifications.getInstance().add(MojamComponent.texts.upgradeNotEnoughMoney(effectiveCost));
             	}
                

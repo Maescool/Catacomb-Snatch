@@ -43,7 +43,6 @@ public abstract class Mob extends Entity {
 	public int deathPoints = 0;
 	public boolean chasing=false;
 	public int justDroppedTicks = 0;
-	public int localTeam;
 	public int strength = 0;
 	public int healingInterval;
 	public int healingTime;
@@ -53,11 +52,10 @@ public abstract class Mob extends Entity {
     protected int stepTime;
     protected int limp;
 	
-	public Mob(double x, double y, int team, int localTeam) {
+	public Mob(double x, double y, int team) {
 		super();
 		setPos(x, y);
 		this.team = team;
-		this.localTeam = localTeam;
 		DifficultyInformation difficulty = TitleMenu.difficulty;
 		healingInterval = (difficulty != null && difficulty.difficultyID == 3) ? 15 : 25;
 		healingTime = healingInterval;

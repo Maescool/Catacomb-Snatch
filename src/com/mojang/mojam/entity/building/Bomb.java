@@ -24,10 +24,9 @@ public class Bomb extends Building {
 	 * 
 	 * @param x X coordinate
 	 * @param y Y Coordinate
-	 * @param localTeam Local team bumber
 	 */
-	public Bomb(double x, double y, int localTeam) {
-		super(x, y, Team.Neutral,localTeam);
+	public Bomb(double x, double y) {
+		super(x, y, Team.Neutral);
 		
 		setStartHealth(8);
 		yOffs = 2;

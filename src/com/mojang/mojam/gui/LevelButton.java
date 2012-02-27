@@ -52,32 +52,30 @@ public class LevelButton extends ClickableComponent {
 	 * @param levelInfo Level info
 	 * @param x X coordinate
 	 * @param y Y coordinate
-	 * @param localTeam local team number
 	 */
-	public LevelButton(int id, LevelInformation levelInfo, int x, int y, int localTeam) {
+	public LevelButton(int id, LevelInformation levelInfo, int x, int y) {
 		super(x, y, WIDTH, HEIGHT);
 
 		this.id = id;
 		this.levelName = levelInfo.levelName;
 
-		buildMinimap(levelInfo, localTeam);
+		buildMinimap(levelInfo);
 	}
 
 	/**
 	 * Builds the minimap
 	 * 
 	 * @param levelInfo Level information
-	 * @param localTeam Local team number
 	 * @return True on success, false on error
 	 */
-	private boolean buildMinimap(LevelInformation levelInfo, int localTeam) {
+	private boolean buildMinimap(LevelInformation levelInfo) {
 		Random backupRandom = TurnSynchronizer.synchedRandom;
 		TurnSynchronizer.synchedRandom = new Random();
 		
 		// Load level
 		Level l;
 		try {
-			l = new GameMode().generateLevel(levelInfo, localTeam, MojamComponent.instance.playerCharacter, MojamComponent.instance.opponentCharacter);
+			l = new GameMode().generateLevel(levelInfo, MojamComponent.instance.playerCharacter, MojamComponent.instance.opponentCharacter);
 		} catch (IOException e) {
 			return false;
 		}
