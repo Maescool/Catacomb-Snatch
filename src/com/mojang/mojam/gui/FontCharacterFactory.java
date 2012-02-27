@@ -30,31 +30,36 @@ public class FontCharacterFactory {
 		int fontSize = systemFont.getSize();
 		int width = 3*fontSize;
 		int height = 3*fontSize;
-
-		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D graphics = image.createGraphics();
-		graphics.setFont(systemFont);
-
 		int positionX = fontSize;
 		int positionY = 2*fontSize;
-		if(shadowColor != null) {
-			graphics.setColor(shadowColor);
-			graphics.drawString(Character.toString(character), positionX+1, positionY+1);
+		
+		BufferedImage mainImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D mainGraphics = mainImage.createGraphics();
+		mainGraphics.setFont(systemFont);
+		Color mainLetterColor = Color.MAGENTA;
+		mainGraphics.setColor(mainLetterColor);
+		mainGraphics.drawString(Character.toString(character), positionX, positionY);
+		
+		BufferedImage shadowImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		if (shadowColor != null) {
+			Graphics2D shadowGraphics = shadowImage.createGraphics();
+			shadowGraphics.setFont(systemFont);
+			shadowGraphics.setColor(shadowColor);
+			shadowGraphics.drawString(Character.toString(character), positionX+1, positionY+1);
 		}
 		
-		Color mainLetterColor;
-		if(shadowColor!=Color.MAGENTA) { // Any color will do, as long as it's different from the shadow color
-			mainLetterColor = Color.MAGENTA;
-		} else {
-			mainLetterColor = Color.YELLOW;
-		}
-		graphics.setColor(mainLetterColor);
-		graphics.drawString(Character.toString(character), positionX, positionY);
-
 		int[][] pixels = new int[width][height];
-		for (int y = 0; y < height; y++) {
+		int gradientRow = gradient.length - 1;
+		for (int y = height-1; y >= 0; y--) {
 			for (int x = 0; x < width; x++) {
-				pixels[x][y] = image.getRGB(x, y);
+				if (mainImage.getRGB(x, y) == 0) {
+					pixels[x][y] = shadowImage.getRGB(x, y);
+				} else {
+					pixels[x][y] = gradient[gradientRow].getRGB();
+				}
+			}
+			if (y < positionY) {
+				gradientRow = Math.max(gradientRow - 1, 0);
 			}
 		}
 
@@ -78,19 +83,9 @@ public class FontCharacterFactory {
 		}
 		height = pixels[0].length;
 
-		int row = 0;
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				if (pixels[x][y] != 0 && (shadowColor==null || pixels[x][y] != shadowColor.getRGB())) {
-					pixels[x][y] = gradient[row].getRGB();
-				}
-			}
-			row = Math.min(row + 1, gradient.length - 1);
-		}
-
 		Bitmap characterBitmap = new Bitmap(pixels);
 		characterCache.put(character, characterBitmap);
-
+		
 		return characterBitmap;
 	}
 
