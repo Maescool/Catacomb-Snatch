@@ -16,7 +16,7 @@ public class Loot extends Entity {
 	private int value = 0;
 	public boolean fake = false;
 	private boolean isTakeable;
-	public boolean disappears = true; 
+	private boolean disappears = true; 
 
 	public static Bitmap[][][] anims = { Art.pickupCoinBronzeSmall,
 			Art.pickupCoinSilverSmall, Art.pickupCoinGoldSmall,
