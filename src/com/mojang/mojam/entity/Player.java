@@ -645,10 +645,10 @@ public class Player extends Mob implements LootCollector {
     	if(carrying != null && carrying.team == MojamComponent.localTeam ) {
 			if(carrying instanceof Turret) {
 				Turret turret = (Turret)carrying;
-				screen.blit(turret.areaBitmap, turret.pos.x-turret.radius , turret.pos.y-turret.radius - yOffs);	
+				turret.drawRadius(screen);	
 			} else if(carrying instanceof Harvester) {
 				Harvester harvester = (Harvester)carrying;
-				screen.blit(harvester.areaBitmap, harvester.pos.x-harvester.radius , harvester.pos.y-harvester.radius - yOffs);	
+				harvester.drawRadius(screen);	
 			}//TODO make an interface to clean this up
        	}
 		
