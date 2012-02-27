@@ -203,6 +203,7 @@ public class LevelSelect extends GuiMenu {
 	    		activeButton.setActive(false);
 	    		activeButton = levelButtons[nextActiveButtonId];
 	    		activeButton.setActive(true);
+	    		activeButton.postClick();
 	    	}
 	    
 	    	// Start on Enter, Cancel on Escape
