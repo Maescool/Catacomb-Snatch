@@ -20,8 +20,8 @@ public class Tile implements BBOwner {
 	public int img = -1; // no image set yet
 	public int minimapColor;
 
-	public void init(Level level, int x, int y) {
-		this.level = level;
+	public void init(Level level2, int x, int y) {
+		this.level = level2;
 		this.x = x;
 		this.y = y;
 		if (img == -1) img = TurnSynchronizer.synchedRandom.nextInt(4);
