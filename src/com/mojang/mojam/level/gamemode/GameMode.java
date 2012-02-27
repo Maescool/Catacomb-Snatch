@@ -22,6 +22,7 @@ import com.mojang.mojam.level.tile.SandTile;
 import com.mojang.mojam.level.tile.UnbreakableRailTile;
 import com.mojang.mojam.level.tile.UnpassableSandTile;
 import com.mojang.mojam.level.tile.WallTile;
+import com.mojang.mojam.entity.building.SpawnerEntity;
 
 public class GameMode {
 
@@ -115,7 +116,18 @@ public class GameMode {
 		case 0x0000ff:
                     newLevel.addEntity(new SpikeTrap(x * Tile.WIDTH,y * Tile.HEIGHT));
                     break;
-			
+		case 0xAA0000:
+			newLevel.addEntity(new SpawnerEntity(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2, 0, 0));
+			break;
+		case 0x00AA00:
+			newLevel.addEntity(new SpawnerEntity(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2, 0, 1));
+			break;			
+		case 0x0000AA:
+			newLevel.addEntity(new SpawnerEntity(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2, 0, 2));
+			break;
+		case 0xAAAA00:
+			newLevel.addEntity(new SpawnerEntity(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2, 0, 3));
+			break;
 		default:
 			newLevel.setTile(x, y, new FloorTile());
 			break;
