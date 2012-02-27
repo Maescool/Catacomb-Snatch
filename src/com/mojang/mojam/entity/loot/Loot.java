@@ -16,15 +16,25 @@ public class Loot extends Entity {
 	private int value = 0;
 	public boolean fake = false;
 	private boolean isTakeable;
+	public boolean disappears = true; 
 
 	public static Bitmap[][][] anims = { Art.pickupCoinBronzeSmall,
 			Art.pickupCoinSilverSmall, Art.pickupCoinGoldSmall,
 			Art.pickupCoinBronze, Art.pickupCoinSilver, Art.pickupCoinGold,
-			Art.pickupGemEmerald, Art.pickupGemRuby, Art.pickupGemDiamond, };
+			Art.pickupGemEmerald, Art.pickupGemRuby, Art.pickupGemDiamond};
 
 	public static int[] values = { 1, 2, 5, 10, 20, 50, 100, 200, 500 };
 
+
+	public Loot(double x, double y, double xa, double ya, int val, boolean disappears) {
+		setup(x, y, xa, ya, val, disappears);
+	}
+
 	public Loot(double x, double y, double xa, double ya, int val) {
+		setup(x, y, xa, ya, val, true);
+	}
+	
+	public void setup(double x, double y, double xa, double ya, int val, boolean disappears){
 		pos.set(x, y);
 		isTakeable = true;
 
@@ -45,14 +55,13 @@ public class Loot extends Entity {
 		this.ya = ya * pow;
 		this.za = TurnSynchronizer.synchedRandom.nextDouble() * 2 + 1.0;
 		this.setSize(2, 2);
+		this.disappears=disappears;
 		physicsSlide = false;
 		life = TurnSynchronizer.synchedRandom.nextInt(100) + 600;
 
 		animTime = TurnSynchronizer.synchedRandom
 				.nextInt(anims[value].length * 3);
-
 	}
-
 	public void makeUntakeable() {
 		isTakeable = false;
 		life = 100 - TurnSynchronizer.synchedRandom.nextInt(40);
@@ -85,9 +94,11 @@ public class Loot extends Entity {
 
 		}
 		za -= 0.2;
-		if (--life < 0)
-			remove();
-
+		if (this.disappears){
+			if (--life < 0)
+				remove();
+		}
+		
 		if (isTakeable) {
 			double dist = 100;
 			for (Entity e : level.getEntities(getBB().grow(dist))) {

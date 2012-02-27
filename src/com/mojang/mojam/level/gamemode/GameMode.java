@@ -23,6 +23,7 @@ import com.mojang.mojam.level.tile.UnbreakableRailTile;
 import com.mojang.mojam.level.tile.UnpassableSandTile;
 import com.mojang.mojam.level.tile.WallTile;
 import com.mojang.mojam.entity.building.SpawnerEntity;
+import com.mojang.mojam.entity.loot.Loot;
 
 public class GameMode {
 
@@ -127,6 +128,12 @@ public class GameMode {
 			break;
 		case 0xAAAA00:
 			newLevel.addEntity(new SpawnerEntity(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2, 0, 3));
+			break;
+		case 0x100700:
+			for (int i = 0; i < 4; i++) {
+				double dir = i * Math.PI * 2 / 8;
+				newLevel.addEntity(new Loot(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2, Math.cos(dir), Math.sin(dir), 200, false));
+			}
 			break;
 		default:
 			newLevel.setTile(x, y, new FloorTile());
