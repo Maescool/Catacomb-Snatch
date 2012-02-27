@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Vector;
 
 import com.mojang.mojam.MojamComponent;
-import com.mojang.mojam.gui.Font.FontName;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
@@ -41,25 +40,23 @@ public class CreditsScreen extends GuiMenu {
 		// Mojang logo
 		screen.blit(Art.mojangLogo, (gameWidth - Art.mojangLogo.w) / 2, 30);
 		
-		Font.draw(screen, "* " + MojamComponent.texts.getStatic("credits.note"),
+		Font font = Font.defaultFont();
+		font.draw(screen, "* " + MojamComponent.texts.getStatic("credits.note"),
 				(gameWidth - 512) / 2 + 30, 80);
-
-		Font.draw(screen, MojamComponent.texts.getStatic("credits.leadDev"),
+		font.draw(screen, MojamComponent.texts.getStatic("credits.leadDev"),
 				(gameWidth - 512) / 2 + 30, 110);
-		Font.draw(screen, MojamComponent.texts.getStatic("credits.maintainers"),
+		font.draw(screen, MojamComponent.texts.getStatic("credits.maintainers"),
 				(gameWidth - 512) / 2 + 30, 140);
-		Font.draw(screen, MojamComponent.texts.getStatic("credits.communityMan"),
+		font.draw(screen, MojamComponent.texts.getStatic("credits.communityMan"),
 				(gameWidth - 512) / 2 + 30, 200);
-		Font.draw(screen, MojamComponent.texts.getStatic("credits.others"),
+		font.draw(screen, MojamComponent.texts.getStatic("credits.others"),
 				(gameWidth - 512) / 2 + 30, 230);
 
-		Font.setFont(FontName.GRAY);
+		font = Font.FONT_GRAY;
 		drawNames(leadDev, screen, 120);
 		drawNames(officialDev, screen, 150);
 		drawNames(communityMan, screen, 210);
 		drawNames(others, screen, 240);
-
-		Font.setFontToDefault();
 
 		// Back button character
 		screen.blit(Art.getPlayer(MojamComponent.instance.playerCharacter)[0][6], (gameWidth - 128) / 2 - 40,
@@ -92,7 +89,7 @@ public class CreditsScreen extends GuiMenu {
 		for (Vector<String> group: data) {
 			drawX += xOffset * groupId;
 			for (String name : group) {
-				Font.draw(screen, name, drawX, drawY);
+				Font.defaultFont().draw(screen, name, drawX, drawY);
 				if (drawY > highestY) {
 					highestY = drawY;
 				}

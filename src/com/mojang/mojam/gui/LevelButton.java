@@ -5,7 +5,6 @@ import java.util.Random;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
-import com.mojang.mojam.gui.Font.FontName;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.gamemode.GameMode;
@@ -53,32 +52,30 @@ public class LevelButton extends ClickableComponent {
 	 * @param levelInfo Level info
 	 * @param x X coordinate
 	 * @param y Y coordinate
-	 * @param localTeam local team number
 	 */
-	public LevelButton(int id, LevelInformation levelInfo, int x, int y, int localTeam) {
+	public LevelButton(int id, LevelInformation levelInfo, int x, int y) {
 		super(x, y, WIDTH, HEIGHT);
 
 		this.id = id;
 		this.levelName = levelInfo.levelName;
 
-		buildMinimap(levelInfo, localTeam);
+		buildMinimap(levelInfo);
 	}
 
 	/**
 	 * Builds the minimap
 	 * 
 	 * @param levelInfo Level information
-	 * @param localTeam Local team number
 	 * @return True on success, false on error
 	 */
-	private boolean buildMinimap(LevelInformation levelInfo, int localTeam) {
+	private boolean buildMinimap(LevelInformation levelInfo) {
 		Random backupRandom = TurnSynchronizer.synchedRandom;
 		TurnSynchronizer.synchedRandom = new Random();
 		
 		// Load level
 		Level l;
 		try {
-			l = new GameMode().generateLevel(levelInfo, localTeam, MojamComponent.instance.playerCharacter, MojamComponent.instance.opponentCharacter);
+			l = new GameMode().generateLevel(levelInfo, MojamComponent.instance.playerCharacter, MojamComponent.instance.opponentCharacter);
 		} catch (IOException e) {
 			return false;
 		}
@@ -115,11 +112,9 @@ public class LevelButton extends ClickableComponent {
 			screen.blit(minimap, getX() + (getWidth() - minimap.w) / 2, getY() + 4);
 
 			// map name
-			Font.drawCentered(screen, trimToFitButton(levelName), getX() + getWidth() / 2, getY() + 4 + minimap.h + 8);
+			Font.defaultFont().drawCentered(screen, trimToFitButton(levelName), getX() + getWidth() / 2, getY() + 4 + minimap.h + 8);
 		} else {
-			Font.setFont(FontName.RED);
-			Font.drawCentered(screen, trimToFitButton(levelName), getX() + getWidth() / 2, getY() + 4 + 32);
-			Font.setFontToDefault();
+			Font.FONT_RED.drawCentered(screen, trimToFitButton(levelName), getX() + getWidth() / 2, getY() + 4 + 32);
 		}
 	}
 

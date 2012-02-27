@@ -51,7 +51,7 @@ public class Button extends ClickableComponent {
 		} else {
 		    blitBackground(screen, 0);
 		}
-		Font.drawCentered(screen, label, getX() + getWidth() / 2, getY() + getHeight() / 2);
+		Font.defaultFont().drawCentered(screen, label, getX() + getWidth() / 2, getY() + getHeight() / 2);
 	}
 	
 	private void blitBackground(Screen screen, int bitmapId) {

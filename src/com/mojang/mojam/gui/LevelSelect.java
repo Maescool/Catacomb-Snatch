@@ -34,11 +34,9 @@ public class LevelSelect extends GuiMenu {
     private boolean outdatedLevelButtons = false;
 	
 	public boolean bHosting;
-	private int localTeam;
 	
-	public LevelSelect(boolean bHosting, int localTeam) {
+	public LevelSelect(boolean bHosting) {
 		super();		
-		this.localTeam = localTeam;
 		this.bHosting = bHosting;
 		
 		// Get all levels
@@ -98,7 +96,7 @@ public class LevelSelect extends GuiMenu {
     		int buttonIndex = i % LEVELS_PER_PAGE;
     		
     		levelButtons[buttonIndex] = (LevelButton) addButton(new LevelButton(i, levels.get(i), 
-    		        xStart + x * xSpacing, yStart + ySpacing * y, localTeam));
+    		        xStart + x * xSpacing, yStart + ySpacing * y));
     		if (buttonIndex == 0) {
     			activeButton = levelButtons[buttonIndex];
     			activeButton.setActive(true);
@@ -131,7 +129,7 @@ public class LevelSelect extends GuiMenu {
     public void render(Screen screen) {
     	screen.blit(Art.emptyBackground, 0, 0);
     	super.render(screen);
-    	Font.draw(screen, MojamComponent.texts.getStatic("levelselect.title"), 20, 20);
+    	Font.defaultFont().draw(screen, MojamComponent.texts.getStatic("levelselect.title"), 20, 20);
     	
     	// Draw disabled page buttons
     	if (levels.size() > LEVELS_PER_PAGE) {
@@ -205,6 +203,7 @@ public class LevelSelect extends GuiMenu {
 	    		activeButton.setActive(false);
 	    		activeButton = levelButtons[nextActiveButtonId];
 	    		activeButton.setActive(true);
+	    		activeButton.postClick();
 	    	}
 	    
 	    	// Start on Enter, Cancel on Escape

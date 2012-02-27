@@ -48,6 +48,7 @@ import com.mojang.mojam.gui.HostingWaitMenu;
 import com.mojang.mojam.gui.HowToPlayMenu;
 import com.mojang.mojam.gui.JoinGameMenu;
 import com.mojang.mojam.gui.KeyBindingsMenu;
+import com.mojang.mojam.gui.LevelEditorMenu;
 import com.mojang.mojam.gui.LevelSelect;
 import com.mojang.mojam.gui.OptionsMenu;
 import com.mojang.mojam.gui.PauseMenu;
@@ -131,7 +132,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	private boolean isMultiplayer;
 	private boolean isServer;
 	private int localId;
-	private int localTeam; //local team is the team of the client. This can be used to check if something should be only rendered on one person's screen
+	public static int localTeam; //local team is the team of the client. This can be used to check if something should be only rendered on one person's screen
 	
 	public int playerCharacter;
 	public int opponentCharacter;
@@ -279,7 +280,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	private synchronized void createLevel(LevelInformation li, GameMode mode) {
 		try {
 			//level = Level.fromFile(li);
-			level = mode.generateLevel(li, localTeam, playerCharacter, opponentCharacter);
+			level = mode.generateLevel(li, playerCharacter, opponentCharacter);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			showError("Unable to load map.");
@@ -295,17 +296,16 @@ public class MojamComponent extends Canvas implements Runnable,
 		//level.init();
 		players[0] = new Player(synchedKeys[0], synchedMouseButtons[0], level.width
 				* Tile.WIDTH / 2 - 16, (level.height - 5 - 1) * Tile.HEIGHT
-				- 16, Team.Team1, localTeam, playerCharacter);
+				- 16, Team.Team1, playerCharacter);
 		players[0].setFacing(4);
 		level.addEntity(players[0]);
-		level.addEntity(new Base(34 * Tile.WIDTH, 7 * Tile.WIDTH, Team.Team1,localTeam));
+		level.addEntity(new Base(34 * Tile.WIDTH, 7 * Tile.WIDTH, Team.Team1));
 		if (isMultiplayer) {
 			players[1] = new Player(synchedKeys[1], synchedMouseButtons[1], level.width
-					* Tile.WIDTH / 2 - 16, 7 * Tile.HEIGHT - 16, Team.Team2, localTeam, opponentCharacter);
-			players[1].setLocalTeam(localTeam);
+					* Tile.WIDTH / 2 - 16, 7 * Tile.HEIGHT - 16, Team.Team2, opponentCharacter);
 			level.addEntity(players[1]);
 			level.addEntity(new Base(32 * Tile.WIDTH - 20,
-					32 * Tile.WIDTH - 20, Team.Team2,localTeam));
+					32 * Tile.WIDTH - 20, Team.Team2));
 		}
 		player = players[localId];
 		player.setCanSee(true);
@@ -431,20 +431,18 @@ public class MojamComponent extends Canvas implements Runnable,
 		}
 
 		if (Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE)) {
-			Font.draw(screen, texts.FPS(fps), 10, 10);
+			Font.defaultFont().draw(screen, texts.FPS(fps), 10, 10);
 		}
 
-		if (player != null && menuStack.size() == 0) {
+		if (player != null && menuStack.size() == 0) {		
+		    addHealthBar(screen);
+		    addXpBar(screen);
+		    addScore(screen);
+				
+			Font font = Font.defaultFont();
 		    if (isMultiplayer) {
-		        Font.draw(screen, texts.latency(latencyCacheReady()?""+avgLatency():"-"), 10, 20);
+		    	font.draw(screen, texts.latency(latencyCacheReady()?""+avgLatency():"-"), 10, 20);
 		    }
-		    
-			Font.draw(screen, texts.health(player.health, player.maxHealth),
-					340, screen.h - 16);
-			Font.draw(screen, texts.money(player.score), 340, screen.h - 27);
-			Font.draw(screen, texts.nextLevel((int) player.getNextLevel()), 340, screen.h - 38);
-			Font.draw(screen, texts.playerExp((int) player.pexp), 340, screen.h - 49);
-			Font.draw(screen, texts.playerLevel(player.plevel), 340, screen.h - 60);
 		}
 
 		if (isMultiplayer && menuStack.isEmpty()) {
@@ -469,6 +467,33 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	}
 
+	private void addHealthBar(Screen screen){
+	  
+	    int index = 100 - (int) (player.health * 100 / player.maxHealth);
+	    screen.blit(Art.panel_healthBar[0][index], 311, screen.h - 17);
+	    screen.blit(Art.panel_heart, 314, screen.h - 24);
+	    Font font = Font.defaultFont();
+        font.draw(screen, texts.health(player.health, player.maxHealth), 335, screen.h - 21);
+	}
+	
+	private void addXpBar(Screen screen){
+	    
+	    int xpSinceLastLevelUp = (int)(player.xpSinceLastLevelUp());
+	    int xpNeededForNextLevel = (int)(player.nettoXpNeededForLevel(player.plevel));
+	    int index = 100 - (int) (xpSinceLastLevelUp * 100 / xpNeededForNextLevel);
+	    
+	    screen.blit(Art.panel_xpBar[0][index], 311, screen.h - 32);
+	    screen.blit(Art.panel_star, 314, screen.h - 40);
+	    Font font = Font.defaultFont();
+	    font.draw(screen, texts.playerLevel(player.plevel), 335, screen.h - 36);
+    }
+	
+	private void addScore(Screen screen){
+	    screen.blit(Art.panel_coin, 314, screen.h - 55);
+	    Font font = Font.defaultFont();
+        font.draw(screen, texts.money(player.score), 335, screen.h - 52);
+	}
+	
 	private void renderMouse(Screen screen, MouseButtons mouseButtons) {
 
 		if (mouseButtons.mouseHidden)
@@ -520,7 +545,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		if (level != null && level.victoryConditions != null) {
 			if(level.victoryConditions.isVictoryConditionAchieved()) {
 				int winner = level.victoryConditions.playerVictorious();
-				int characterID = winner == localTeam ? playerCharacter : opponentCharacter;
+				int characterID = winner == MojamComponent.localTeam ? playerCharacter : opponentCharacter;
 				addMenu(new WinMenu(GAME_WIDTH, GAME_HEIGHT, winner, characterID));
                 level = null;
                 return;
@@ -799,22 +824,22 @@ public class MojamComponent extends Canvas implements Runnable,
 			chat.clear();
 
 			localId = 0;
-			localTeam= Team.Team1;
+			MojamComponent.localTeam= Team.Team1;
 			synchronizer = new TurnSynchronizer(this, null, 0, 1);
 			synchronizer.setStarted(true);
 
 			createLevel(TitleMenu.level, TitleMenu.defaultGameMode);
 			soundPlayer.stopBackgroundMusic();
 		} else if (id == TitleMenu.SELECT_LEVEL_ID) {
-			addMenu(new LevelSelect(false,localTeam));
+			addMenu(new LevelSelect(false));
 		} else if (id == TitleMenu.SELECT_HOST_LEVEL_ID) {
-			addMenu(new LevelSelect(true,localTeam));
+			addMenu(new LevelSelect(true));
 		} /*else if (id == TitleMenu.UPDATE_LEVELS) {
 			GuiMenu menu = menuStack.pop();
 			if (menu instanceof LevelSelect) {
-				addMenu(new LevelSelect(((LevelSelect) menu).bHosting, localTeam));
+				addMenu(new LevelSelect(((LevelSelect) menu).bHosting));
 			} else {
-				addMenu(new LevelSelect(false,localTeam));
+				addMenu(new LevelSelect(false));
 			}
 		}*/ else if (id == TitleMenu.HOST_GAME_ID) {
 			addMenu(new HostingWaitMenu());
@@ -824,7 +849,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			try {
 				if (isServer) {
 					localId = 0;
-					localTeam= Team.Team1;
+					MojamComponent.localTeam= Team.Team1;
 					serverSocket = new ServerSocket(Options.getAsInteger(Options.MP_PORT, 3000));
 					serverSocket.setSoTimeout(1000);
 
@@ -889,7 +914,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			
 			try {
 				localId = 1;
-				localTeam= Team.Team2;
+				MojamComponent.localTeam = Team.Team2;
 				packetLink = new ClientSidePacketLink(ip, port);
 				synchronizer = new TurnSynchronizer(this, packetLink, localId,2);
 				packetLink.setPacketListener(this);
@@ -899,7 +924,7 @@ public class MojamComponent extends Canvas implements Runnable,
 				addMenu(new TitleMenu(GAME_WIDTH, GAME_HEIGHT));
 			}
 		} else if (id == TitleMenu.HOW_TO_PLAY) {
-			addMenu(new HowToPlayMenu());
+			addMenu(new HowToPlayMenu(level != null));
 		} else if (id == TitleMenu.OPTIONS_ID) {
 			addMenu(new OptionsMenu(level != null));
 		} else if (id == TitleMenu.SELECT_DIFFICULTY_ID) {
@@ -908,6 +933,8 @@ public class MojamComponent extends Canvas implements Runnable,
 			addMenu(new DifficultySelect(true));
 		} else if (id == TitleMenu.KEY_BINDINGS_ID) {
 			addMenu(new KeyBindingsMenu(keys, inputHandler));
+		} else if (id == TitleMenu.LEVEL_EDITOR_ID) {
+			addMenu(new LevelEditorMenu());
 		} else if (id == TitleMenu.EXIT_GAME_ID) {
 			System.exit(0);
 		} else if (id == TitleMenu.RETURN_ID) {

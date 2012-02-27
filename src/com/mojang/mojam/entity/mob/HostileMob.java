@@ -9,8 +9,8 @@ import com.mojang.mojam.level.tile.Tile;
 
 public abstract class HostileMob extends Mob {
 
-	public HostileMob(double x, double y, int team, int localTeam) {
-		super(x, y, team,localTeam);
+	public HostileMob(double x, double y, int team) {
+		super(x, y, team);
 	}
 
 	@Override

@@ -9,8 +9,8 @@ import com.mojang.mojam.screen.Screen;
 public class Bat extends HostileMob {
 	private int tick = 0;
 
-	public Bat(double x, double y, int localTeam) {
-		super(x, y, Team.Neutral, localTeam);
+	public Bat(double x, double y) {
+		super(x, y, Team.Neutral);
 		setPos(x, y);
 		setStartHealth(1);
 		dir = TurnSynchronizer.synchedRandom.nextDouble() * Math.PI * 2;
@@ -55,12 +55,9 @@ public class Bat extends HostileMob {
 
 	@Override
 	public void render(Screen screen) {
-		if (tick % 2 == 0) {
-			if(!(level.getTile(pos) instanceof HoleTile))
-			screen.blit(Art.batShadow, pos.x - Art.batShadow.w / 2, pos.y
-					- Art.batShadow.h / 2 - yOffs + 16);			
+		if(!(level.getTile(pos) instanceof HoleTile)) {
+			screen.opacityBlit(Art.batShadow, (int)(pos.x - Art.batShadow.w / 2), (int)(pos.y - Art.batShadow.h / 2 - yOffs + 16), 0x99);
 		}
 		super.render(screen);
-
 	}
 }

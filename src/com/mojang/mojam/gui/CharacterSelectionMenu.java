@@ -70,7 +70,7 @@ public class CharacterSelectionMenu extends GuiMenu {
 	public void render(Screen screen) {
 		screen.blit(Art.emptyBackground, 0, 0);
 		super.render(screen);
-		Font.drawCentered(screen, MojamComponent.texts.getStatic("character.text"),
+		Font.defaultFont().drawCentered(screen, MojamComponent.texts.getStatic("character.text"),
 				MojamComponent.GAME_WIDTH / 2, yOffset - 24);
 		if (focus == back || focus == select) {
 			screen.blit(Art.getPlayer(selected.getCharacterID())[0][6], focus.getX() - 64 - 40,

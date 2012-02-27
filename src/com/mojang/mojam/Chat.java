@@ -62,13 +62,13 @@ public class Chat implements KeyListener {
 		int xOffset = 5;
 		int yOffset = 312;
 		if (open) {
-			Font.draw(screen, currentMessage + "-", xOffset, yOffset);
+			Font.defaultFont().draw(screen, currentMessage + "-", xOffset, yOffset);
 			for (int i = 0; i < messages.size(); i++) {
-				Font.draw(screen, messages.get(i), xOffset, (yOffset -= 8));
+				Font.defaultFont().draw(screen, messages.get(i), xOffset, (yOffset -= 8));
 			}
 		} else {
 			for (int i = 0; i <= displayedMessage; i++) {
-				Font.draw(screen, messages.get(i), xOffset, (yOffset -= 8));
+				Font.defaultFont().draw(screen, messages.get(i), xOffset, (yOffset -= 8));
 			}
 		}
 	}

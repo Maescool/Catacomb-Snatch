@@ -58,6 +58,6 @@ public class CharacterButton extends Button {
 		screen.blit(backgrounds[isSelected() ? 2 : (isPressed() || hasFocus ? 1 : 0)], getX(),
 				getY());
 		screen.blit(characterArt, getX() + (WIDTH - characterArt.w) / 2, getY() + 8);
-		Font.drawCentered(screen, getLabel(), getX() + WIDTH / 2, getY() + HEIGHT - 12);
+		Font.defaultFont().drawCentered(screen, getLabel(), getX() + WIDTH / 2, getY() + HEIGHT - 12);
 	}
 }

@@ -75,7 +75,7 @@ public class Slider extends ClickableComponent {
 		else
 			view = (Math.round(value * 100.0f)) + "%";
 
-		Font.drawCentered(screen, label + ": " + view, getX() + getWidth() / 2, getY()
+		Font.defaultFont().drawCentered(screen, label + ": " + view, getX() + getWidth() / 2, getY()
 				+ getHeight() / 2);
 	}
 

@@ -9,7 +9,6 @@ import java.util.TreeSet;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
-import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.level.gamemode.ILevelTickItem;
@@ -472,8 +471,8 @@ public class Level {
 		screen.blit(minimap, 429, screen.h - 80 + 5);
 		
 		String player1score =  MojamComponent.texts.scoreCharacter(player1Character, player1Score * 100 / TARGET_SCORE);
-		Font.draw(screen, player1score, 280-player1score.length()*10, screen.h - 20); //adjust so it fits in the box
-		Font.draw(screen, MojamComponent.texts.scoreCharacter(player2Character, player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
+		Font.defaultFont().draw(screen, player1score, 280-player1score.length()*10, screen.h - 20); //adjust so it fits in the box
+		Font.defaultFont().draw(screen, MojamComponent.texts.scoreCharacter(player2Character, player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
 		
 		screen.blit(Art.getPlayer(player1Character)[0][2], 262, screen.h-42);
 		screen.blit(Art.getPlayer(player2Character)[0][6], 19, screen.h-42);
