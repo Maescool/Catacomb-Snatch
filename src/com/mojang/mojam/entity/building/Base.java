@@ -13,10 +13,9 @@ public class Base extends Building {
 	 * @param x Initial X coordinate
 	 * @param y Initial Y coordinate
 	 * @param team Team number
-	 * @param localTeam Local team number
 	 */
-	public Base(double x, double y, int team, int localTeam) {
-		super(x, y, team, localTeam);
+	public Base(double x, double y, int team) {
+		super(x, y, team);
 		
 		setStartHealth(20);
 		freezeTime = 10;

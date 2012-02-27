@@ -6,8 +6,8 @@ import com.mojang.mojam.screen.Bitmap;
 
 public class Snake extends HostileMob {
 
-	public Snake(double x, double y, int localTeam) {
-		super(x, y, Team.Neutral, localTeam);
+	public Snake(double x, double y) {
+		super(x, y, Team.Neutral);
 		setPos(x, y);
 		setStartHealth(3);
 		dir = TurnSynchronizer.synchedRandom.nextDouble() * Math.PI * 2;

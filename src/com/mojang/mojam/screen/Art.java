@@ -8,7 +8,6 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import com.mojang.mojam.MojamComponent;
-import com.mojang.mojam.Options;
 
 /**
  * Art management class
