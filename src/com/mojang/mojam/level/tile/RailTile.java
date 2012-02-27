@@ -19,11 +19,6 @@ public class RailTile extends Tile {
 	public RailTile(Tile parent) {
 		this.parent = parent;
 	}
-	
-	public boolean canPass(Entity e) {
-		if (e instanceof Harvester) return false;
-		return true;
-	}
 
 	public void init(Level level, int x, int y) {
 		parent.init(level, x, y);
@@ -105,17 +100,5 @@ public class RailTile extends Tile {
 		if ( connections[Facing.EAST] ) ( (RailTile) level.getTile(x + 1, y) ).neighbourChanged( null );
 		
 		return true;
-	}
-	
-	@Override
-	public void handleCollision(Entity entity, double xa, double ya) {
-		if (!this.canPass(entity)) {
-			this.collide(entity, xa, ya);
-			if (entity instanceof Harvester)
-			  ((Harvester)entity).collide(this, -xa, -ya);
-		}
-	}
-
-	public void collide(Entity entity, double xa, double ya) {
 	}
 }

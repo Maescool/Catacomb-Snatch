@@ -81,6 +81,9 @@ public class Harvester extends Building implements LootCollector {
 
 	@Override
 	public void tick() {
+		if (carriedBy == null) {
+			railify();
+		}
 		super.tick();
 		if (--freezeTime > 0) {
 			return;
@@ -122,8 +125,6 @@ public class Harvester extends Building implements LootCollector {
 		
 		int xt = (int) (pos.x / Tile.WIDTH);
 		int yt = (int) (pos.y / Tile.HEIGHT);
-		
-		if (level.getTile(xt, yt) instanceof RailTile && carriedBy == null) railify();
 		
 		if (health == 0) {
 			dropAllMoney();
@@ -243,20 +244,8 @@ public class Harvester extends Building implements LootCollector {
 		}
 	}
 	
-	protected boolean shouldBlock(Tile t) {
-		return (t instanceof RailTile);
-	}
-	
-	public void collide(Tile tile, double xa, double ya) {
-		if (tile instanceof RailTile) {
-			railify();
-		}
-	}
-	
 	public void railify() {
 		System.out.println("Railify "+this.getClass().getName());
-		MojamComponent.soundPlayer.playSound("/sound/Upgrade.wav",
-				(float) pos.x, (float) pos.y);
 		this.remove();
 		level.removeEntity(this);
 		level.removeFromEntityMap(this);

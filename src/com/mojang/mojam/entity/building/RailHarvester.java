@@ -572,8 +572,6 @@ public class RailHarvester extends Building implements LootCollector {
 	
 	public void derailify() {
 		System.out.println("Derailify "+this.getClass().getName());
-		MojamComponent.soundPlayer.playSound("/sound/Upgrade.wav",
-				(float) pos.x, (float) pos.y);
 		this.remove();
 		level.removeEntity(this);
 		level.removeFromEntityMap(this);
