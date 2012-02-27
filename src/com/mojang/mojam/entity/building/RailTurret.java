@@ -263,7 +263,7 @@ public class RailTurret extends Building {
 		int xt2 = (int) (pos.x / Tile.WIDTH);
 		int yt2 = (int) (pos.y / Tile.HEIGHT);
 		
-		if (health >= 0) {
+		if (health <= 0) {
 			die();
 		}
 		
