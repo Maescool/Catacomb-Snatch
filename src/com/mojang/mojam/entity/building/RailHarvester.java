@@ -70,6 +70,11 @@ public class RailHarvester extends Building implements LootCollector {
 		this.team = team;
 		this.setSize(10, 8);
 		this.upgradeLevel = upgradeLevel;
+		int l = 0;
+		while (l >= upgradeLevel) {
+			upgradeComplete();
+			l++;
+		}
 		this.money = money;
 		setStartHealth(10);
 		deathPoints = 1;
