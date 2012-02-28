@@ -14,7 +14,7 @@ public class WallTile extends Tile {
 
 	public void init(Level level, int x, int y) {
 		super.init(level, x, y);
-		img = TurnSynchronizer.synchedRandom.nextInt(7);
+		img = TurnSynchronizer.synchedRandom.nextInt(8);
 		minimapColor = Art.wallTileColors[img][0];
 	}
 
