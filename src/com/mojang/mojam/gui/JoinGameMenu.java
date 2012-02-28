@@ -3,8 +3,8 @@ package com.mojang.mojam.gui;
 import java.awt.event.KeyEvent;
 
 import com.mojang.mojam.MojamComponent;
-import com.mojang.mojam.screen.Screen;
 import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Screen;
 
 public class JoinGameMenu extends GuiMenu {
 
@@ -32,11 +32,14 @@ public class JoinGameMenu extends GuiMenu {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// Start on Enter, Cancel on Escape
-		if ((e.getKeyChar() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) && TitleMenu.ip.length() > 0) {
-			joinButton.postClick();
-		}
-		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			cancelButton.postClick();
+		if ((e.getKeyChar() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E)) {
+			if (TitleMenu.ip.length() > 0) {
+				joinButton.postClick();
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			cancelButton.postClick();	
+		} else {
+			super.keyPressed(e);
 		}
 	}
 
