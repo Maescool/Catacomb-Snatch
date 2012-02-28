@@ -126,7 +126,7 @@ public class Bomb extends Building {
 		  this.remove();
 		  level.removeEntity(this);
 		  level.removeFromEntityMap(this);
-		  level.addEntity(new RailBomb(pos.x, pos.y, team));
+		  level.addEntity(new RailBomb(pos.x, pos.y, team, ((Player)lastCarrying)));
 		} else {
 		  if (doWarn) Notifications.getInstance().add(
 					MojamComponent.texts.upgradeNotEnoughMoney(RailBomb.cost));

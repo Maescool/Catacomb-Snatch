@@ -13,6 +13,7 @@ import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.animation.SmokeAnimation;
 import com.mojang.mojam.entity.building.Turret;
+import com.mojang.mojam.entity.building.RailBomb;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.loot.LootCollector;
 import com.mojang.mojam.entity.mob.Mob;
@@ -112,7 +113,7 @@ public class RailTurret extends Building {
   		Entity closest = null;
   		double closestDist = 99999999.0f;
   		for (Entity e : entities) {
-  			if (!(e instanceof Mob) || (e instanceof RailDroid && e.team == this.team) || e instanceof Bomb)
+  			if (!(e instanceof Mob) || (e instanceof RailDroid && e.team == this.team) || ((e instanceof Bomb)?(((Bomb)e).lastCarrying == this.owner):false) || ((e instanceof RailBomb)?(((RailBomb)e).owner == this.owner):false))
   				continue;
   			if (!((Mob) e).isNotFriendOf(this))
   				continue;

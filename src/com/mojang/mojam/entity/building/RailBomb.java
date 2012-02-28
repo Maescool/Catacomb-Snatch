@@ -55,12 +55,15 @@ public class RailBomb extends Building {
 	
 	/** Affected destruction radius around the bomb in pixels*/
 	public static final double BOMB_DISTANCE = 50;
+	
+	public Player owner;
 
-	public RailBomb(double x, double y, int team) {
+	public RailBomb(double x, double y, int team, Player owner) {
 		super(x, y, team);
 		this.setSize(10, 8);
 		this.healthRegenB = false;
 		this.setStartHealth(8);
+		this.owner = owner;
 		deathPoints = 1;
 		
 		//freezeTime = 10;
