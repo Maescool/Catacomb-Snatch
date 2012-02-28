@@ -22,6 +22,7 @@ public class SoundPlayer {
 
 	public static final String BACKGROUND_TRACK = "background";
 	private static final int MAX_SOURCES_PER_SOUND = 5;
+	private int nextSong = 0;
 
 	public SoundPlayer() {
 		libraryType = LibraryJavaSound.class;
@@ -77,8 +78,8 @@ public class SoundPlayer {
 
 	public void startEndMusic() {
 		if (!isMuted() && hasOggPlaybackSupport()) {
-			if (isPlaying(BACKGROUND_TRACK))
-				stopBackgroundMusic();
+		    if (isPlaying(BACKGROUND_TRACK))
+                stopBackgroundMusic();
 
 			String backgroundTrack = "/sound/ThemeEnd.ogg";
             soundSystem.backgroundMusic(BACKGROUND_TRACK, SoundPlayer.class.getResource(backgroundTrack), backgroundTrack, false);
@@ -88,9 +89,17 @@ public class SoundPlayer {
 	}
 
 	public void startBackgroundMusic() {
-		if (!isMuted() && hasOggPlaybackSupport() && !isPlaying(BACKGROUND_TRACK)) {
-			String backgroundTrack = "/sound/Background " + (TurnSynchronizer.synchedRandom.nextInt(4) + 1) + ".ogg";
+	    System.out.println("*** startBackgroundMusic ***");
+        if (!isMuted() && hasOggPlaybackSupport()) {
+            if (isPlaying(BACKGROUND_TRACK))
+                stopBackgroundMusic();
 
+            nextSong++;
+            if (nextSong>4) nextSong = 1;
+            //nextSong = TurnSynchronizer.synchedRandom.nextInt(4)+1;
+            String backgroundTrack = "/sound/Background " + nextSong + ".ogg";
+            System.out.println("next song: " + backgroundTrack);
+            
             soundSystem.backgroundMusic(BACKGROUND_TRACK, SoundPlayer.class.getResource(backgroundTrack), backgroundTrack, false);
 		}
 
