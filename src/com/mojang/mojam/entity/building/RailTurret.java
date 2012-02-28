@@ -68,19 +68,16 @@ public class RailTurret extends Building {
 	public Bitmap areaBitmap;
 	
 	private Player owner;
+	
 
 	public RailTurret(double x, double y, int team, int upgradeLevel, Player owner) {
 		super(x, y, team);
 		this.team = team;
 		this.setSize(10, 8);
 		this.upgradeLevel = upgradeLevel;
-		int l = 0;
-		while (l >= upgradeLevel) {
-			upgradeComplete();
-			l++;
-		}
 		setStartHealth(10);
-		deathPoints = 1;
+		speed = 0.7;
+		upgradeComplete(upgradeLevel);
 		
 		//freezeTime = 10;
 		this.owner = owner;
@@ -104,9 +101,11 @@ public class RailTurret extends Building {
 		super.tick();
 		if (freezeTime > 0)
 			return;
-		if (--delayTicks > 0)
-			return;
-		if (!isCarried()) {
+		if (delayTicks > 0)
+			speed = 0.25;
+		if (delayTicks <= 0)
+			speed = 0.7;
+		if (!isCarried() && !(--delayTicks > 0)) {
 	    // find target
   		Set<Entity> entities = level.getEntities(pos.x - radius, pos.y - radius, pos.x + radius, pos.y + radius);
   
@@ -291,7 +290,7 @@ public class RailTurret extends Building {
 			// if (!(dir == 1 || dir == 3) && xcd >= -r && xcd <= r) xd = -xcd;
 			// if (!(dir == 2 || dir == 4) && ycd >= -r && ycd <= r) yd = -ycd;
 		}
-		double speed = 0.7;
+		//double speed = 0.7;
 		if (dir != Direction.UNKNOWN)
 			lDir = dir;
 		if (dir == Direction.LEFT)
@@ -331,6 +330,18 @@ public class RailTurret extends Building {
 	@Override
 	protected void upgradeComplete() {
 		maxHealth += 10;
+		health = maxHealth;
+		delay = upgradeDelay[upgradeLevel];
+		radius = upgradeRadius[upgradeLevel];
+		radiusSqr = radius * radius;
+		areaBitmap = Bitmap.rangeBitmap(radius,Color.YELLOW.getRGB());
+		if (upgradeLevel != 0) justDroppedTicks = 80; //show the radius for a brief time
+	}
+	
+	protected void upgradeComplete(int level) {
+		if (level==1)maxHealth += 10;
+		if (level==2)maxHealth += 20;
+		if (level==3)maxHealth += 30;
 		health = maxHealth;
 		delay = upgradeDelay[upgradeLevel];
 		radius = upgradeRadius[upgradeLevel];

@@ -70,13 +70,10 @@ public class RailHarvester extends Building implements LootCollector {
 		this.team = team;
 		this.setSize(10, 8);
 		this.upgradeLevel = upgradeLevel;
-		int l = 0;
-		while (l >= upgradeLevel) {
-			upgradeComplete();
-			l++;
-		}
+		int l = 1;
 		this.money = money;
 		setStartHealth(10);
+		upgradeComplete(upgradeLevel);
 		deathPoints = 1;
 		
 		//freezeTime = 10;
@@ -363,6 +360,17 @@ public class RailHarvester extends Building implements LootCollector {
 	protected void upgradeComplete() {
 	    maxHealth += 10;
 	    health += 10;
+	    radius = upgradeRadius[upgradeLevel];
+	    capacity = upgradeCapacities[upgradeLevel];
+	    areaBitmap = Bitmap.rangeBitmap(radius,Color.YELLOW.getRGB());
+	    if (upgradeLevel != 0) justDroppedTicks = 80; //show the radius for a brief time
+	}
+	
+	protected void upgradeComplete(int level) {
+		  if (level==1)maxHealth += 10;
+		  if (level==2)maxHealth += 20;
+	  	if (level==3)maxHealth += 30;
+	    health = maxHealth;
 	    radius = upgradeRadius[upgradeLevel];
 	    capacity = upgradeCapacities[upgradeLevel];
 	    areaBitmap = Bitmap.rangeBitmap(radius,Color.YELLOW.getRGB());
