@@ -127,8 +127,8 @@ public class KeyBindingsMenu extends GuiMenu {
 		addButton(new KeyBindingButton(TitleMenu.KEY_CHAT_ID, keys.chat, tab2, yOffset + 7
 				* BUTTON_SPACING));
 		back = addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"),
-				(gameWidth - Button.BUTTON_WIDTH) / 2, yOffset + numRows * BUTTON_SPACING
-						- Button.BUTTON_HEIGHT + 32));
+				(gameWidth - Button.BUTTON_WIDTH) / 3, yOffset + numRows * BUTTON_SPACING
+						- Button.BUTTON_HEIGHT + 56));
 	}
 
 	private String getMenuText(Key key) {
