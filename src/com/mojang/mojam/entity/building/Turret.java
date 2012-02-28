@@ -111,7 +111,7 @@ public class Turret extends Building {
 	@Override
 	public void render(Screen screen) {
 		
-		if(justDroppedTicks-- > 0 && MojamComponent.localTeam==team) {
+		if((justDroppedTicks-- > 0 || highlight) && MojamComponent.localTeam==team) {
 				drawRadius(screen);
 		}
 		
