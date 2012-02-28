@@ -301,6 +301,7 @@ public class RailBomb extends Building {
 
 	public void handleCollision(Entity entity, double xa, double ya) {
 		super.handleCollision(entity, xa, ya);
+		hurt(entity);
 		if (entity instanceof RailBomb) {
 			RailBomb other = (RailBomb) entity;
 			if (lDir == Direction.LEFT && other.pos.x > pos.x - 4)
@@ -451,9 +452,13 @@ public class RailBomb extends Building {
 	}
 	
 	public void hurt(Entity e) {
-		if (e instanceof Bullet) {
+		if (e instanceof Bullet || e instanceof Mob && !(e instanceof Player)) {
 		  hit();
 		}
+	}
+
+	@Override
+	public void collide(Entity entity, double xa, double ya) {
 	}
 	
 	public void derailify() {
