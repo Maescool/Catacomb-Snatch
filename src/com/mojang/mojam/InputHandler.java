@@ -24,6 +24,10 @@ public class InputHandler implements KeyListener {
 
 		// actions
 		initKey(keys.fire, KeyEvent.VK_SPACE);
+		initKey(keys.fireUp, KeyEvent.VK_UP);
+		initKey(keys.fireDown, KeyEvent.VK_DOWN);
+		initKey(keys.fireLeft, KeyEvent.VK_LEFT);
+		initKey(keys.fireRight, KeyEvent.VK_RIGHT);
 		initKey(keys.build, KeyEvent.VK_R);
 		initKey(keys.use, KeyEvent.VK_E);
 		initKey(keys.upgrade, KeyEvent.VK_F);
