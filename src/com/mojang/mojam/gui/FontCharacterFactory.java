@@ -53,29 +53,21 @@ public class FontCharacterFactory {
 		mainGraphics.setColor(mainLetterColor);
 		mainGraphics.drawString(Character.toString(character), positionX, positionY);
 		
-		BufferedImage shadowImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		if (shadowColor != null) {
-			Graphics2D shadowGraphics = shadowImage.createGraphics();
-			shadowGraphics.setFont(font);
-			mainGraphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
-			shadowGraphics.setColor(shadowColor);
-			shadowGraphics.drawString(Character.toString(character), positionX+1, positionY+1);
-		}
-		
 		int[][] pixels = new int[width][height];
 		int gradientRow = gradient.length - 1;
 		for (int y = height-1; y >= 0; y--) {
-			for (int x = 0; x < width; x++) {
-				if (mainImage.getRGB(x, y) == 0) {
-					pixels[x][y] = shadowImage.getRGB(x, y);
-				} else {
+			for (int x = width-1; x >= 0 ; x--) {
+				if (mainImage.getRGB(x, y)!=0) {
 					pixels[x][y] = gradient[gradientRow].getRGB();
+				} else if (x>0 && y>0 && mainImage.getRGB(x-1, y-1)!=0) {
+					pixels[x][y] = shadowColor.getRGB();
 				}
 			}
 			if (y < positionY) {
 				gradientRow = Math.max(gradientRow - 1, 0);
 			}
 		}
+
 
 		int emptyRowsTop = 0;
 		FindTop: for (int y = 0; y < height; y++) {
