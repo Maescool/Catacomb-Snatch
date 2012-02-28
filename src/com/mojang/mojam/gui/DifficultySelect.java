@@ -116,20 +116,18 @@ public class DifficultySelect extends GuiMenu {
 			nextActiveButtonId = bestExistingDifficultyId(activeButtonId - 3, activeButtonId + 6, activeButtonId + 3);
 		}else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
 			nextActiveButtonId = bestExistingDifficultyId(activeButtonId + 3, activeButtonId - 6, activeButtonId - 3);
+		} else if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
+			startGameButton.postClick();
+		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			cancelButton.postClick();
+		} else {
+			super.keyPressed(e);
 		}
 		
 		// Update active button
 		if (nextActiveButtonId >= 0 && nextActiveButtonId < DifficultyCheckboxes.length) {
             checkOnlyOne(DifficultyCheckboxes[nextActiveButtonId]);
-		}
-
-		// Start on Enter, Cancel on Escape
-		if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
-			startGameButton.postClick();
-		}
-		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			cancelButton.postClick();
-		}
+		}	
 	}
 	
 	public int bestExistingDifficultyId(int... options) {
