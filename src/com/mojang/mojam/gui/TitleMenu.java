@@ -53,6 +53,10 @@ public class TitleMenu extends GuiMenu {
 	public static final int KEY_BUILD_ID = 3008;
 	public static final int KEY_UPGRADE_ID = 3009;
 	public static final int KEY_CHAT_ID = 3010;
+	public static final int KEY_FIRE_UP_ID = 3011;
+	public static final int KEY_FIRE_DOWN_ID = 3012;
+	public static final int KEY_FIRE_LEFT_ID = 3013;
+	public static final int KEY_FIRE_RIGHT_ID = 3014;
 	
 	public static final int CREDITS_ID = 4000;
 	public static final int CREDITS_TITLE_ID = 4001;
@@ -67,7 +71,6 @@ public class TitleMenu extends GuiMenu {
 
 	public static String ip = "";
 
-	private int selectedItem = 0;
 	private final int gameWidth;
 
 	public TitleMenu(int gameWidth, int gameHeight) {
@@ -101,26 +104,6 @@ public class TitleMenu extends GuiMenu {
 		super.render(screen);
 
 		screen.blit(Art.getLocalPlayerArt()[0][6], (gameWidth - 128) / 2 - 40, 160 + selectedItem * 30);
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
-			selectedItem--;
-			if (selectedItem < 0) {
-				selectedItem = buttons.size() - 1;
-			}
-		} else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
-			selectedItem++;
-			if (selectedItem > buttons.size() - 1) {
-				selectedItem = 0;
-			}
-		} else if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
-			e.consume();
-			buttons.get(selectedItem).postClick();
-		} else if (e.getKeyCode() == KeyEvent.VK_F11) {
-			MojamComponent.toggleFullscreen();
-		}
 	}
 
 	@Override

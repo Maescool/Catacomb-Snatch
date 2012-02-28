@@ -1,5 +1,6 @@
 package com.mojang.mojam.screen;
 
+import java.awt.Color;
 import java.util.Arrays;
 
 public class Bitmap {
@@ -248,8 +249,23 @@ public class Bitmap {
 	public static Bitmap rangeBitmap(int radius, int color) {
 		Bitmap circle = new Bitmap(radius*2+100,radius*2+100);	
 		
-		circle.circle(radius, radius, radius, color);	
+		circle.circleFill(radius, radius, radius, color);	
 		return circle;
+	}
+	
+	public static Bitmap tooltipBitmap(int width, int height) {
+		int cRadius = 3;
+		int color = Color.black.getRGB();
+		Bitmap tooltip = new Bitmap(width+3, height+3);	
+		tooltip.fill(0, cRadius, width, height-2*cRadius, color);
+		tooltip.fill(cRadius, 0, width-2*cRadius, height, color);
+		// draw corner circles
+		tooltip.circleFill(cRadius, cRadius, cRadius, color);
+		tooltip.circleFill(width-cRadius, cRadius, cRadius, color);
+		tooltip.circleFill(width-cRadius, height-cRadius, cRadius, color);
+		tooltip.circleFill(cRadius, height-cRadius, cRadius, color);
+		
+		return tooltip;
 	}
 
 	private void circle(int centerX, int centerY, int radius, int color) {
@@ -258,22 +274,59 @@ public class Bitmap {
 		int y = radius;
 	
 		do {
-		setPixel(centerX + x, centerY + y, color);
-		setPixel(centerX + x, centerY - y, color);
-		setPixel(centerX - x, centerY + y, color);
-		setPixel(centerX - x, centerY - y, color);
-		setPixel(centerX + y, centerY + x, color);
-		setPixel(centerX + y, centerY - x, color);
-		setPixel(centerX - y, centerY + x, color);
-		setPixel(centerX - y, centerY - x, color);
-		if (d < 0) {
-		d = d + (4 * x) + 6;
-		} else {
-		d = d + 4 * (x - y) + 10;
-		y--;
-		}
-		x++;
+			setPixel(centerX + x, centerY + y, color);
+			setPixel(centerX + x, centerY - y, color);
+			setPixel(centerX - x, centerY + y, color);
+			setPixel(centerX - x, centerY - y, color);
+			setPixel(centerX + y, centerY + x, color);
+			setPixel(centerX + y, centerY - x, color);
+			setPixel(centerX - y, centerY + x, color);
+			setPixel(centerX - y, centerY - x, color);
+			
+			if (d < 0) {
+				d = d + (4 * x) + 6;
+			} else {
+				d = d + 4 * (x - y) + 10;
+				y--;
+			}
+			x++;
 		} while (x <= y);
 	}
+	
+
+	private void circleFill(int centerX, int centerY, int radius, int color) {
+		int d = 3 - (2 * radius);
+		int x = 0;
+		int y = radius;
+	
+		do {
+			horizonalLine(centerX + x, centerX - x, centerY + y, color);
+			horizonalLine(centerX + x, centerX - x, centerY - y, color);
+			horizonalLine(centerX + y, centerX - y, centerY + x, color);
+			horizonalLine(centerX + y, centerX - y, centerY - x, color);
+			
+			if (d < 0) {
+				d = d + (4 * x) + 6;
+			} 
+			else {
+				d = d + 4 * (x - y) + 10;
+				y--;
+			}
+			x++;
+		} while (x <= y);
+	}
+	
+	private void horizonalLine(int x1, int x2, int y, int color) {
+		if (x1 > x2) {
+			int xx = x1;
+			x1 = x2;
+			x2 = xx;
+		}		
+		
+		for (int xx = x1; xx <= x2; xx++) {
+			setPixel(xx, y, color);			
+		}
+	}
+
 
 }

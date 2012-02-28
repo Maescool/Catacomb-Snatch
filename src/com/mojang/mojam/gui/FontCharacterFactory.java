@@ -2,6 +2,7 @@ package com.mojang.mojam.gui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
@@ -9,17 +10,21 @@ import com.mojang.mojam.screen.Bitmap;
 
 public class FontCharacterFactory {
 
-	java.awt.Font systemFont;
+	private java.awt.Font systemFont;
+	private java.awt.Font fallbackFont;
 	private Color[] gradient;
 	private Color shadowColor;
+	private int heightOffset;
 	
 	private HashMap<Character, Bitmap> characterCache = new HashMap<Character, Bitmap>();
 	private HashMap<Character, Integer> characterHeightOffset = new HashMap<Character, Integer>();
 	
-	public FontCharacterFactory(java.awt.Font systemFont, Color[] gradient, Color shadowColor) {
+	public FontCharacterFactory(java.awt.Font systemFont, java.awt.Font fallbackFont, Color[] gradient, Color shadowColor, int heightOffset) {
 		this.systemFont = systemFont;
+		this.fallbackFont = fallbackFont;
 		this.gradient = gradient;
 		this.shadowColor = shadowColor;
+		this.heightOffset = heightOffset;
 	}
 
 	public Bitmap getFontCharacter(char character) {
@@ -27,39 +32,42 @@ public class FontCharacterFactory {
 			return characterCache.get(character);
 		}
 		
-		int fontSize = systemFont.getSize();
-		BufferedImage image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D graphics = image.createGraphics();
+		java.awt.Font font;
+		if (systemFont.canDisplay(character)) {
+			font = systemFont;
+		} else {
+			font = fallbackFont;
+		}
 		
+		int fontSize = font.getSize();
 		int width = 3*fontSize;
 		int height = 3*fontSize;
-
-		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		graphics = image.createGraphics();
-		graphics.setFont(systemFont);
-
 		int positionX = fontSize;
 		int positionY = 2*fontSize;
-		if(shadowColor != null) {
-			graphics.setColor(shadowColor);
-			graphics.drawString(Character.toString(character), positionX+1, positionY+1);
-		}
 		
-		Color mainLetterColor;
-		if(shadowColor!=Color.MAGENTA) { // Any color will do, as long as it's different from the shadow color
-			mainLetterColor = Color.MAGENTA;
-		} else {
-			mainLetterColor = Color.YELLOW;
-		}
-		graphics.setColor(mainLetterColor);
-		graphics.drawString(Character.toString(character), positionX, positionY);
-
+		BufferedImage mainImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D mainGraphics = mainImage.createGraphics();
+		mainGraphics.setFont(font);
+		mainGraphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+		Color mainLetterColor = Color.MAGENTA;
+		mainGraphics.setColor(mainLetterColor);
+		mainGraphics.drawString(Character.toString(character), positionX, positionY);
+		
 		int[][] pixels = new int[width][height];
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				pixels[x][y] = image.getRGB(x, y);
+		int gradientRow = gradient.length - 1;
+		for (int y = height-1; y >= 0; y--) {
+			for (int x = width-1; x >= 0 ; x--) {
+				if (mainImage.getRGB(x, y)!=0) {
+					pixels[x][y] = gradient[gradientRow].getRGB();
+				} else if (x>0 && y>0 && mainImage.getRGB(x-1, y-1)!=0) {
+					pixels[x][y] = shadowColor.getRGB();
+				}
+			}
+			if (y < positionY) {
+				gradientRow = Math.max(gradientRow - 1, 0);
 			}
 		}
+
 
 		int emptyRowsTop = 0;
 		FindTop: for (int y = 0; y < height; y++) {
@@ -70,8 +78,7 @@ public class FontCharacterFactory {
 			}
 			emptyRowsTop++;
 		}
-		int hardcodedOffset = (shadowColor!=null) ? 3 : 2;
-		characterHeightOffset.put(character, emptyRowsTop-fontSize-hardcodedOffset);
+		characterHeightOffset.put(character, emptyRowsTop-fontSize-heightOffset);
 		
 		pixels = automaticCrop(pixels);
 		
@@ -81,19 +88,9 @@ public class FontCharacterFactory {
 		}
 		height = pixels[0].length;
 
-		int row = 0;
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				if (pixels[x][y] != 0 && (shadowColor==null || pixels[x][y] != shadowColor.getRGB())) {
-					pixels[x][y] = gradient[row].getRGB();
-				}
-			}
-			row = Math.min(row + 1, gradient.length - 1);
-		}
-
 		Bitmap characterBitmap = new Bitmap(pixels);
 		characterCache.put(character, characterBitmap);
-
+		
 		return characterBitmap;
 	}
 
