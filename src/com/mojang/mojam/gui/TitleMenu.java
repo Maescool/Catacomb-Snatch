@@ -62,6 +62,8 @@ public class TitleMenu extends GuiMenu {
 	public static final int GAME_TYPE_ARCADE = 5002;
 	public static final int GAME_TYPE_CREATIVE = 5003;
 	
+	public static final int CAMPAIGN_SELECT_SCREEN = 7000;
+	
 	public static LevelInformation level = null;
 	public static GameMode defaultGameMode= new GameModeVanilla();
 	public static DifficultyInformation difficulty = null;

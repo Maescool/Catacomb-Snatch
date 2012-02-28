@@ -46,7 +46,7 @@ public abstract class ClickableComponent extends VisibleComponent {
 	 * Internal function, forcing the component to run its clicked() method and
 	 * iterate over listeners
 	 */
-	protected void postClick() {
+	public void postClick() {
 		performClick = true;
 	}
 
