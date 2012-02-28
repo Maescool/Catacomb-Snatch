@@ -63,7 +63,7 @@ public class Turret extends Building {
 		this.upgradeLevel = upgradeLevel;
 		setStartHealth(10);
 		freezeTime = 10;
-		areaBitmap = Bitmap.rectangleBitmap(0,0,radius*2,radius*2,Color.YELLOW.getRGB());
+		areaBitmap = Bitmap.rangeBitmap(radius,RADIUS_COLOR);
 	}
 
 	@Override

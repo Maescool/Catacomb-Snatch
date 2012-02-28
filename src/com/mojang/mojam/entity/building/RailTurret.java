@@ -67,6 +67,7 @@ public class RailTurret extends Building {
 	private int facing = 0;
 	
 	public Bitmap areaBitmap;
+	private static final int RADIUS_COLOR = new Color(240, 210, 190).getRGB();
 	
 	private Player owner;
 	
@@ -335,7 +336,7 @@ public class RailTurret extends Building {
 		delay = upgradeDelay[upgradeLevel];
 		radius = upgradeRadius[upgradeLevel];
 		radiusSqr = radius * radius;
-		areaBitmap = Bitmap.rangeBitmap(radius,Color.YELLOW.getRGB());
+		areaBitmap = Bitmap.rangeBitmap(radius,RADIUS_COLOR);
 		if (upgradeLevel != 0) justDroppedTicks = 80; //show the radius for a brief time
 	}
 	
@@ -347,7 +348,7 @@ public class RailTurret extends Building {
 		delay = upgradeDelay[upgradeLevel];
 		radius = upgradeRadius[upgradeLevel];
 		radiusSqr = radius * radius;
-		areaBitmap = Bitmap.rangeBitmap(radius,Color.YELLOW.getRGB());
+		areaBitmap = Bitmap.rangeBitmap(radius,RADIUS_COLOR);
 		if (upgradeLevel != 0) justDroppedTicks = 80; //show the radius for a brief time
 	}
 
@@ -407,9 +408,9 @@ public class RailTurret extends Building {
 	@Override
 	public void render(Screen screen) {
 		
-		if(justDroppedTicks-- > 0 && MojamComponent.localTeam==team) {
-			screen.blit(areaBitmap, pos.x-radius , pos.y-radius - yOffs);	
-	}
+		if((justDroppedTicks-- > 0 || highlight) && MojamComponent.localTeam==team) {
+			drawRadius(screen);
+	  }
 		
 		super.render(screen);
 		
@@ -518,6 +519,10 @@ public class RailTurret extends Building {
 		level.removeEntity(this);
 		level.removeFromEntityMap(this);
 		level.addEntity(new Turret(pos.x, pos.y, team, upgradeLevel));
+	}
+	
+	public void drawRadius(Screen screen) {
+		screen.opacityBlit(areaBitmap, (int) pos.x-radius, (int) pos.y-radius - yOffs, 0xDD);	
 	}
 
 }
