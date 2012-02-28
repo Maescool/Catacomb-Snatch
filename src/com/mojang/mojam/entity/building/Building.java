@@ -275,6 +275,7 @@ public class Building extends Mob implements IUsable {
 	@Override
 	public void setHighlighted(boolean hl) {
 		highlight = hl;
+		justDroppedTicks = 80;
 	}
 
 	@Override
