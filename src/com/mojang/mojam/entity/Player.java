@@ -36,7 +36,6 @@ public class Player extends Mob implements LootCollector {
     public static int COST_REMOVE_RAIL;
     public static final int REGEN_INTERVAL = 60 * 3;
     public int plevel;
-    public int pnextlevel;
     public double pexp;
     public double psprint;
     public boolean isSprint = false;
@@ -147,22 +146,38 @@ public class Player extends Mob implements LootCollector {
      * @return XP value
      */
     private double nextLevel() {
-        double next = (plevel * 7) * (plevel * 7);
-        pnextlevel = (int) next;
+        double next = summedUpXpNeededForLevel(plevel);
         return next;
     }
 
     /**
-     * Calculate how much XP is missing to reach the next level
      * 
-     * @return Missing XP value
+     * @param level to calculate summed up xp value for
+     *
+     * @return summed up xp value
      */
-    public double getNextLevel() {
-        double next = nextLevel() - pexp;
-        return next;
+    public double summedUpXpNeededForLevel(int level){
+        return (level * 7) * (level * 7);
     }
-
-
+    
+    /**
+     * 
+     * @param level to calculate netto xp value for
+     *
+     * @return netto xp value
+     */
+    public double nettoXpNeededForLevel(int level){
+        return summedUpXpNeededForLevel(level) - summedUpXpNeededForLevel(level-1);
+    }
+    
+    /**
+     * 
+     * @return xp gained since lase level up
+     */
+    public double xpSinceLastLevelUp(){
+        return pexp - summedUpXpNeededForLevel(plevel-1);
+    }
+    
     @Override
     public void tick() {
 
@@ -186,6 +201,8 @@ public class Player extends Mob implements LootCollector {
 
         double xa = 0;
         double ya = 0;
+        double xaShot = 0;
+        double yaShot = 0;
 
         // Handle keys
         if (!dead) {
@@ -197,10 +214,22 @@ public class Player extends Mob implements LootCollector {
             }
             if (keys.left.isDown) {
                 xa--;
-            }
-            if (keys.right.isDown) {
-                xa++;
-            }
+			}
+			if (keys.right.isDown) {
+				xa++;
+			}
+			if (keys.fireUp.isDown) {
+				yaShot--;
+			}
+			if (keys.fireDown.isDown) {
+				yaShot++;
+			}
+			if (keys.fireLeft.isDown) {
+				xaShot--;
+			}
+			if (keys.fireRight.isDown) {
+				xaShot++;
+			}
         }
 
         // Handle mouse aiming
@@ -208,6 +237,11 @@ public class Player extends Mob implements LootCollector {
             aimVector.set(xa, ya);
             aimVector.normalizeSelf();
             updateFacing();
+        }
+        if (!mouseAiming && fireKeyIsDown() && xaShot * xaShot + yaShot * yaShot != 0) {
+        	aimVector.set(xaShot, yaShot);
+        	aimVector.normalizeSelf();
+        	updateFacing();
         }
 
         // Move player if it is not standing still
@@ -409,7 +443,7 @@ public class Player extends Mob implements LootCollector {
         weapon.weapontick();
         
         if (!dead
-                && (carrying == null && keys.fire.isDown
+                && (carrying == null && fireKeyIsDown()
                 || carrying == null && mouseButtons.isDown(mouseFireButton))) {
             wasShooting = true;
             if (takeDelay > 0) {
@@ -630,10 +664,10 @@ public class Player extends Mob implements LootCollector {
     	if(carrying != null && carrying.team == MojamComponent.localTeam ) {
 			if(carrying instanceof Turret) {
 				Turret turret = (Turret)carrying;
-				screen.blit(turret.areaBitmap, turret.pos.x-turret.radius , turret.pos.y-turret.radius - yOffs);	
+				turret.drawRadius(screen);	
 			} else if(carrying instanceof Harvester) {
 				Harvester harvester = (Harvester)carrying;
-				screen.blit(harvester.areaBitmap, harvester.pos.x-harvester.radius , harvester.pos.y-harvester.radius - yOffs);	
+				harvester.drawRadius(screen);	
 			}//TODO make an interface to clean this up
        	}
 		
@@ -822,5 +856,14 @@ public class Player extends Mob implements LootCollector {
     public Vec2 getPosition() {
         return pos;
     }
+    
+    /**
+     * Returns true if one of the keyboard fire buttons is down
+     * @return
+     */
+    private boolean fireKeyIsDown() {
+    	return keys.fire.isDown || keys.fireUp.isDown || keys.fireDown.isDown || keys.fireRight.isDown || keys.fireLeft.isDown;
+    }
+
 
 }

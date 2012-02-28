@@ -108,19 +108,27 @@ public class KeyBindingsMenu extends GuiMenu {
 				* BUTTON_SPACING));
 		addButton(new KeyBindingButton(TitleMenu.KEY_SPRINT_ID, keys.sprint, tab1, yOffset + 4
 				* BUTTON_SPACING));
-		addButton(new KeyBindingButton(TitleMenu.KEY_FIRE_ID, keys.fire, tab2, yOffset + 0
+		addButton(new KeyBindingButton(TitleMenu.KEY_FIRE_ID, keys.fire, tab1, yOffset + 5
 				* BUTTON_SPACING));
-		addButton(new KeyBindingButton(TitleMenu.KEY_BUILD_ID, keys.build, tab2, yOffset + 1
+		addButton(new KeyBindingButton(TitleMenu.KEY_FIRE_UP_ID, keys.fireUp, tab2, yOffset + 0
 				* BUTTON_SPACING));
-		addButton(new KeyBindingButton(TitleMenu.KEY_USE_ID, keys.use, tab2, yOffset + 2
+		addButton(new KeyBindingButton(TitleMenu.KEY_FIRE_DOWN_ID, keys.fireDown, tab2, yOffset + 1
 				* BUTTON_SPACING));
-		addButton(new KeyBindingButton(TitleMenu.KEY_UPGRADE_ID, keys.upgrade, tab2, yOffset + 3
+		addButton(new KeyBindingButton(TitleMenu.KEY_FIRE_LEFT_ID, keys.fireLeft, tab2, yOffset + 2
 				* BUTTON_SPACING));
-		addButton(new KeyBindingButton(TitleMenu.KEY_CHAT_ID, keys.chat, tab2, yOffset + 4
+		addButton(new KeyBindingButton(TitleMenu.KEY_FIRE_RIGHT_ID, keys.fireRight, tab2, yOffset + 3
+				* BUTTON_SPACING));
+		addButton(new KeyBindingButton(TitleMenu.KEY_BUILD_ID, keys.build, tab2, yOffset + 4
+				* BUTTON_SPACING));
+		addButton(new KeyBindingButton(TitleMenu.KEY_USE_ID, keys.use, tab2, yOffset + 5
+				* BUTTON_SPACING));
+		addButton(new KeyBindingButton(TitleMenu.KEY_UPGRADE_ID, keys.upgrade, tab2, yOffset + 6
+				* BUTTON_SPACING));
+		addButton(new KeyBindingButton(TitleMenu.KEY_CHAT_ID, keys.chat, tab2, yOffset + 7
 				* BUTTON_SPACING));
 		back = addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"),
 				(gameWidth - Button.BUTTON_WIDTH) / 2, yOffset + numRows * BUTTON_SPACING
-						- Button.BUTTON_HEIGHT + 32));
+						- Button.BUTTON_HEIGHT + 88));
 	}
 
 	private String getMenuText(Key key) {
@@ -144,12 +152,16 @@ public class KeyBindingsMenu extends GuiMenu {
 		write(screen, txts.getStatic("keys.left"), 0, 2);
 		write(screen, txts.getStatic("keys.right"), 0, 3);
 		write(screen, txts.getStatic("keys.sprint"), 0, 4);
+		write(screen, txts.getStatic("keys.fire"), 0, 5);
 
-		write(screen, txts.getStatic("keys.fire"), 1, 0);
-		write(screen, txts.getStatic("keys.build"), 1, 1);
-		write(screen, txts.getStatic("keys.use"), 1, 2);
-		write(screen, txts.getStatic("keys.upgrade"), 1, 3);
-		write(screen, txts.getStatic("keys.chat"), 1, 4);
+		write(screen, txts.getStatic("keys.fireUp"), 1, 0);
+		write(screen, txts.getStatic("keys.fireDown"), 1, 1);
+		write(screen, txts.getStatic("keys.fireLeft"), 1, 2);
+		write(screen, txts.getStatic("keys.fireRight"), 1, 3);
+		write(screen, txts.getStatic("keys.build"), 1, 4);
+		write(screen, txts.getStatic("keys.use"), 1, 5);
+		write(screen, txts.getStatic("keys.upgrade"), 1, 6);
+		write(screen, txts.getStatic("keys.chat"), 1, 7);
 		super.render(screen);
 		ClickableComponent button = buttons.get(selectedItem);
 		if (button == back) {

@@ -32,8 +32,10 @@ public class Harvester extends Building implements LootCollector {
 			2 * Tile.WIDTH, (int) (2.5 * Tile.WIDTH) };
 	private int[] upgradeCapacities = new int[] { 1500, 2500, 3500 };
 	
-	public Bitmap areaBitmap;
-
+	
+	private Bitmap areaBitmap;
+	private static final int RADIUS_COLOR = new Color(240, 210, 190).getRGB();
+	
 	/**
 	 * Constructor
 	 * 
@@ -48,7 +50,7 @@ public class Harvester extends Building implements LootCollector {
 		yOffs = 20;
 		makeUpgradeableWithCosts(new int[] { 500, 1000, 5000 });
 		healthBarOffset = 13;
-		areaBitmap = Bitmap.rangeBitmap(radius,Color.YELLOW.getRGB());
+		areaBitmap = Bitmap.rangeBitmap(radius,RADIUS_COLOR);
 	}
 	
 	@Override
@@ -125,7 +127,7 @@ public class Harvester extends Building implements LootCollector {
 	    health += 10;
 	    radius = upgradeRadius[upgradeLevel];
 	    capacity = upgradeCapacities[upgradeLevel];
-	    areaBitmap = Bitmap.rangeBitmap(radius,Color.YELLOW.getRGB());
+	    areaBitmap = Bitmap.rangeBitmap(radius,RADIUS_COLOR);
 	    if (upgradeLevel != 0) justDroppedTicks = 80; //show the radius for a brief time
 	}
 
@@ -141,8 +143,8 @@ public class Harvester extends Building implements LootCollector {
 	@Override
 	public void render(Screen screen) {
 		
-		if(justDroppedTicks-- > 0 && MojamComponent.localTeam==team) {
-			screen.blit(areaBitmap, pos.x-radius , pos.y-radius - yOffs);	
+		if((justDroppedTicks-- > 0 || highlight) && MojamComponent.localTeam==team) {
+			drawRadius(screen);
 		}
 		
 		super.render(screen);
@@ -217,5 +219,9 @@ public class Harvester extends Building implements LootCollector {
 		} else {
 			super.use(user);
 		}
+	}
+	
+	public void drawRadius(Screen screen) {
+		screen.opacityBlit(areaBitmap, (int) pos.x-radius, (int) pos.y-radius - yOffs, 0xDD);	
 	}
 }
