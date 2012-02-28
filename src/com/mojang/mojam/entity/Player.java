@@ -57,7 +57,7 @@ public class Player extends Mob implements LootCollector {
     private int facing = 0;
     private int time = 0;
     private int walkTime = 0;
-    private Entity selected = null;
+    private Building selected = null;
     static final int RailDelayTicks = 15;
     private int lastRailTick = -999;
     private final static int INTERACT_DISTANCE = 20 * 20; // Sqr
@@ -544,36 +544,59 @@ public class Player extends Mob implements LootCollector {
      * Handle interaction with entities
      */
     private void handleEntityInteraction() {
-        Entity closest = null;
+        // Unhighlight previously selected building
+        if (selected != null) {
+            selected.setHighlighted(false);
+            selected = null;
+        }
+
+        // Find the closest Building within interation
+        // distance
+        Building closest = null;
         double closestDist = Double.MAX_VALUE;
         for (Entity e : level.getEntitiesSlower(pos.x - INTERACT_DISTANCE, pos.y - INTERACT_DISTANCE, pos.x + INTERACT_DISTANCE, pos.y + INTERACT_DISTANCE, Building.class)) {
+            Building b = (Building)e;
             double dist = e.pos.distSqr(getInteractPosition());
             if (dist <= INTERACT_DISTANCE && dist < closestDist) {
                 closestDist = dist;
-                closest = e;
+                closest = b;
             }
-        }
-        if (selected != null) {
-            ((IUsable) selected).setHighlighted(false);
-        }
-        if (closest != null && ((IUsable) closest).isHighlightable()) {
-            selected = closest;
-            ((IUsable) selected).setHighlighted(true);
         }
 
-        if (selected != null) {
-            if (selected.removed!=false){
-            	selected = null;
-            } else if (selected.pos.distSqr(getInteractPosition()) > INTERACT_DISTANCE) {
-                ((IUsable) selected).setHighlighted(false);
-                selected = null;
-            } else if (selected instanceof IUsable && (keys.use.wasPressed() || mouseButtons.isDown(mouseUseButton))) {
-                ((IUsable) selected).use(this);
-                mouseButtons.setNextState(mouseUseButton, false);
-            } else if (selected instanceof IUsable && keys.upgrade.wasPressed()) {
-                ((IUsable) selected).upgrade(this);
+        // If we found a building close enough to interact with...
+        if (closest != null) {
+            // ...and it is a building we are allowed to interact with,
+            // and the use or upgrade key was pressed, then use or upgrade
+            // this building
+            if (shouldInteractWithBuilding(closest)) {
+                if (keys.use.wasPressed() || mouseButtons.isDown(mouseUseButton)) {
+                    closest.use(this);
+                    mouseButtons.setNextState(mouseUseButton, false);
+                } else if (keys.upgrade.wasPressed()) {
+                    closest.upgrade(this);
+                }
+            }
+            
+            // ...and it is a building we should highlight on this game
+            // client, then highlight the building (also, remember the
+            // highlighted building, so we can unhighlight it again later)
+            if (shouldHighlightBuildingOnThisGameClient(closest)) {
+                selected = closest;
+                selected.setHighlighted(true);
             }
         }
+    }
+    
+    // If this Player owns the building (or the building is
+    // neutral), then they can interact with it
+    private boolean shouldInteractWithBuilding(Building building) {
+        return building.team == this.team || building.team == Team.Neutral;
+    }
+    
+    // If this Player owns the building, and this is the Player's
+    // game client, then we should highlight the building
+    private boolean shouldHighlightBuildingOnThisGameClient(Building building) {
+        return building.isHighlightable() && shouldInteractWithBuilding(building) && this.team == MojamComponent.localTeam; 
     }
 
     /**

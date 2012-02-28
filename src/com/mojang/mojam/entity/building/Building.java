@@ -55,10 +55,9 @@ public class Building extends Mob implements IUsable {
 
 	@Override
 	public void render(Screen screen) {
-		super.render(screen);
-		renderMarker(screen);
-		if(team == MojamComponent.localTeam)
-			renderInfo(screen);
+	    super.render(screen);
+	    renderMarker(screen);
+	    renderInfo(screen);
 	}
 
 	/**
@@ -97,27 +96,25 @@ public class Building extends Mob implements IUsable {
 	 */
 	protected void renderInfo(Screen screen) {
 		// Draw iiAtlas' shop item info graphics, thanks whoever re-wrote this!
-		if (highlight) {
-		    if (this instanceof ShopItem) {
-		        ShopItem s = (ShopItem)this;
-		        Bitmap image = getSprite();
-		        int teamYOffset = (team == 2) ? 90 : 0;
-		        
-		        String[] tooltip = s.getTooltip();
-		        int h = tooltip.length*(Font.FONT_GOLD_SMALL.getFontHeight()+3);
-		        int w = getLongestWidth(tooltip, Font.FONT_WHITE_SMALL)+4;
-		        
-		        Font f = Font.FONT_GOLD_SMALL;
-		        screen.blit(Bitmap.tooltipBitmap(w, h),
-                        (int)(pos.x - image.w / 2 - 10),
-                        (int)(pos.y + 20 - teamYOffset), w, h);
+	    if (highlight && this instanceof ShopItem) {
+	        ShopItem s = (ShopItem)this;
+	        Bitmap image = getSprite();
+	        int teamYOffset = (team == 2) ? 90 : 0;
 
-		        for (int i=0; i<tooltip.length; i++) {
-		            f.draw(screen, tooltip[i], (int)(pos.x - image.w + 8), (int)pos.y + 22 - teamYOffset + (i==0?0:1) + i*(f.getFontHeight()+2));
-		            f = Font.FONT_WHITE_SMALL;
-		        }
-		    }
-		}
+	        String[] tooltip = s.getTooltip();
+	        int h = tooltip.length*(Font.FONT_GOLD_SMALL.getFontHeight()+3);
+	        int w = getLongestWidth(tooltip, Font.FONT_WHITE_SMALL)+4;
+
+	        Font f = Font.FONT_GOLD_SMALL;
+	        screen.blit(Bitmap.tooltipBitmap(w, h),
+	                (int)(pos.x - image.w / 2 - 10),
+	                (int)(pos.y + 20 - teamYOffset), w, h);
+
+	        for (int i=0; i<tooltip.length; i++) {
+	            f.draw(screen, tooltip[i], (int)(pos.x - image.w + 8), (int)pos.y + 22 - teamYOffset + (i==0?0:1) + i*(f.getFontHeight()+2));
+	            f = Font.FONT_WHITE_SMALL;
+	        }
+	    }
 	}
 	
 	private int getLongestWidth(String[] string, Font font) {
