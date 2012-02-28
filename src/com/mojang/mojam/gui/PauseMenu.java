@@ -7,7 +7,6 @@ import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
 public class PauseMenu extends GuiMenu {
-	private int selectedItem = 0;
 	private final int gameWidth;
     private final int gameHeight;
 

@@ -7,7 +7,6 @@ import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
 public class WinMenu extends GuiMenu {
-	private int selectedItem = 0;
 	private final int gameWidth;
 	private int winningPlayer;
 	private int characterID;

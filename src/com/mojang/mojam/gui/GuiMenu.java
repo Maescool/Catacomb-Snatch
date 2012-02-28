@@ -13,7 +13,7 @@ public abstract class GuiMenu extends GuiComponent implements ButtonListener, Ke
 
 	protected List<ClickableComponent> buttons = new ArrayList<ClickableComponent>();
 	protected List<Text> texts = new ArrayList<Text>();
-	private int selectedItem = 0;
+	protected int selectedItem = 0;
 
 	protected ClickableComponent addButton(ClickableComponent button) {
 		buttons.add(button);
@@ -73,6 +73,8 @@ public abstract class GuiMenu extends GuiComponent implements ButtonListener, Ke
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		System.out.println("KEY: " + e.getKeyChar() + ", " + selectedItem);
+		
 		if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
 			selectedItem--;
 			if (selectedItem < 0) {

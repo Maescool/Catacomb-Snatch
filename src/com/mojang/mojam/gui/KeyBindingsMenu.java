@@ -73,8 +73,6 @@ public class KeyBindingsMenu extends GuiMenu {
 	private int textWidth;
 	private int yOffset;
 
-	private int selectedItem;
-
 	private ClickableComponent back;
 	private KeyBindingButton selectedKey = null;
 

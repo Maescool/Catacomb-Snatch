@@ -17,7 +17,6 @@ public class OptionsMenu extends GuiMenu {
 	private float volume;
 	private boolean creative;
     private boolean inGame;
-    private int selectedItem;
     private int gameWidth;
     private int gameHeight;
 

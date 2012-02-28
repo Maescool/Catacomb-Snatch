@@ -71,7 +71,6 @@ public class TitleMenu extends GuiMenu {
 
 	public static String ip = "";
 
-	private int selectedItem = 0;
 	private final int gameWidth;
 
 	public TitleMenu(int gameWidth, int gameHeight) {
