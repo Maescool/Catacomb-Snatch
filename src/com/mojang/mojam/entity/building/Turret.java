@@ -35,9 +35,6 @@ public class Turret extends Building {
 	private int[] upgradeDelay = new int[] { 24, 21, 18 };
 
 	private int facing = 0;
-	
-	public static boolean creative = Options.getAsBoolean(Options.CREATIVE);
-	private boolean doWarn = true;
 
 	private Bitmap areaBitmap;
 	private static final int RADIUS_COLOR = new Color(240, 210, 190).getRGB();
@@ -75,8 +72,6 @@ public class Turret extends Building {
 
 	@Override
 	public void tick() {
-		if (carriedBy == null && level.getTile((int) pos.x/Tile.WIDTH, (int) pos.y/Tile.HEIGHT) 
-				instanceof RailTile) railify(); else doWarn = true;
 		super.tick();
 		if (--freezeTime > 0)
 			return;
@@ -159,20 +154,6 @@ public class Turret extends Building {
 		if (upgradeLevel != 0) justDroppedTicks = 80; //show the radius for a brief time
 	}
 	
-	public void railify() {
-		System.out.println("Railify "+this.getClass().getName());
-		if (((Player)lastCarrying).getScore() > RailTurret.cost || creative) {
-			if (!creative) ((Player)lastCarrying).payCost(RailTurret.cost);
-		  this.remove();
-		  level.removeEntity(this);
-		  level.removeFromEntityMap(this);
-		  level.addEntity(new RailTurret(pos.x, pos.y, team, upgradeLevel, ((Player)lastCarrying)));
-		} else {
-		  if (doWarn) Notifications.getInstance().add(
-					MojamComponent.texts.upgradeNotEnoughMoney(RailTurret.cost));
-		  doWarn = false;
-		}
-		}
 	public void drawRadius(Screen screen) {
 		screen.opacityBlit(areaBitmap, (int) pos.x-radius, (int) pos.y-radius - yOffs, 0xDD);	
 	}

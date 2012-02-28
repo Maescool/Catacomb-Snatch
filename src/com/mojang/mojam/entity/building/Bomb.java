@@ -23,9 +23,6 @@ public class Bomb extends Building {
 	public static final double BOMB_DISTANCE = 50;
 	
 	private boolean hit = false;
-	
-	public static boolean creative = Options.getAsBoolean(Options.CREATIVE);
-	private boolean doWarn = true;
 
 	/**
 	 * Constructor
@@ -78,8 +75,6 @@ public class Bomb extends Building {
 	}
 
 	public void tick() {
-		if (!hit && carriedBy == null && level.getTile((int) pos.x/Tile.WIDTH, (int) pos.y/Tile.HEIGHT) 
-				instanceof RailTile) railify(); else doWarn = true;
 	    if (hit) {
 	        if (freezeTime <= 0) {
 	            hurtTime = 40;
@@ -119,18 +114,4 @@ public class Bomb extends Building {
 		hit = true;
 	}
 	
-	public void railify() {
-		System.out.println("Railify "+this.getClass().getName());
-		if (((Player)lastCarrying).getScore() > RailBomb.cost || creative) {
-			if (!creative) ((Player)lastCarrying).payCost(RailBomb.cost);
-		  this.remove();
-		  level.removeEntity(this);
-		  level.removeFromEntityMap(this);
-		  level.addEntity(new RailBomb(pos.x, pos.y, team, ((Player)lastCarrying)));
-		} else {
-		  if (doWarn) Notifications.getInstance().add(
-					MojamComponent.texts.upgradeNotEnoughMoney(RailBomb.cost));
-		  doWarn = false;
-		}
-	}
 }

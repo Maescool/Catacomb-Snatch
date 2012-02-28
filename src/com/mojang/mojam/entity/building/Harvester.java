@@ -38,9 +38,6 @@ public class Harvester extends Building implements LootCollector {
 	private int[] upgradeRadius = new int[] { (int) (1.5 * Tile.WIDTH),
 			2 * Tile.WIDTH, (int) (2.5 * Tile.WIDTH) };
 	private int[] upgradeCapacities = new int[] { 1500, 2500, 3500 };
-	public static boolean creative = Options.getAsBoolean(Options.CREATIVE);
-	private boolean doWarn = true;
-	
 	
 	private Bitmap areaBitmap;
 	private static final int RADIUS_COLOR = new Color(240, 210, 190).getRGB();
@@ -87,8 +84,6 @@ public class Harvester extends Building implements LootCollector {
 
 	@Override
 	public void tick() {
-		if (carriedBy == null && level.getTile((int) pos.x/Tile.WIDTH, (int) pos.y/Tile.HEIGHT) 
-				instanceof RailTile) railify(); else doWarn = true;
 		super.tick();
 		if (--freezeTime > 0) {
 			return;
@@ -249,20 +244,6 @@ public class Harvester extends Building implements LootCollector {
 		}
 	}
 	
-	public void railify() {
-		System.out.println("Railify "+this.getClass().getName());
-		if (((Player)lastCarrying).getScore() > RailHarvester.cost || creative) {
-			if (!creative) ((Player)lastCarrying).payCost(RailHarvester.cost);
-		  this.remove();
-		  level.removeEntity(this);
-		  level.removeFromEntityMap(this);
-		  level.addEntity(new RailHarvester(pos.x, pos.y, team, upgradeLevel, ((Player)lastCarrying), money));
-		} else {
-		  if (doWarn) Notifications.getInstance().add(
-					MojamComponent.texts.upgradeNotEnoughMoney(RailHarvester.cost));
-		  doWarn = false;
-		}
-		}
 	public void drawRadius(Screen screen) {
 		screen.opacityBlit(areaBitmap, (int) pos.x-radius, (int) pos.y-radius - yOffs, 0xDD);	
 	}
