@@ -25,7 +25,6 @@ public class Font {
         int heightOffset = systemFontHeight - glyphHeight + 1;
         int spacing = 0;
         
-        
         java.awt.Font fallbackFont = new java.awt.Font("SansSerif", java.awt.Font.BOLD, systemFontHeight);
         java.awt.Font systemFont = null;
 		try {
@@ -93,13 +92,13 @@ public class Font {
 		letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ    " + "abcdefghijklmnopqrstuvwxyz    " + "0123456789-.!?/%$\\=*+,;:()&#\"'";
        
 		glyphHeight = 6;
-		systemFontHeight = 9;
+		systemFontHeight = 8;
 	    heightOffset = systemFontHeight - glyphHeight + 1;
         spacing = 1;
         
         fallbackFont = new java.awt.Font("SansSerif", java.awt.Font.PLAIN, systemFontHeight);
 		try {
-			File fontFile = new File("res/art/fonts/ubuntu-font-family-0.80/Ubuntu-R.ttf");
+			File fontFile = new File("res/art/fonts/ubuntu-font-family-0.80/Ubuntu-L.ttf");
 	        fontFile.setReadOnly();
 	        systemFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, fontFile);
 			systemFont = systemFont.deriveFont((float)systemFontHeight);
@@ -129,7 +128,7 @@ public class Font {
         characterFactory = new FontCharacterFactory(systemFont, fallbackFont, smallWhiteGradient, shadowColor, heightOffset);
         FONT_WHITE_SMALL = new Font(Art.font_small_white, letters, glyphHeight, spacing, characterFactory);
 
-	    setDefaultFont(FONT_GOLD_SMALL);
+	    setDefaultFont(FONT_GOLD);
 	}
     
 	/**
