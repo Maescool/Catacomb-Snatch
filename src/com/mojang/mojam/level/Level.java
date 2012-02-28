@@ -472,10 +472,12 @@ public class Level {
 		
 		String player1score =  MojamComponent.texts.scoreCharacter(player1Character, player1Score * 100 / TARGET_SCORE);
 		Font.defaultFont().draw(screen, player1score, 280-player1score.length()*10, screen.h - 20); //adjust so it fits in the box
-		Font.defaultFont().draw(screen, MojamComponent.texts.scoreCharacter(player2Character, player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
-		
 		screen.blit(Art.getPlayer(player1Character)[0][2], 262, screen.h-42);
-		screen.blit(Art.getPlayer(player2Character)[0][6], 19, screen.h-42);
+
+		if (player2Character != Art.NO_OPPONENT) {
+			Font.defaultFont().draw(screen, MojamComponent.texts.scoreCharacter(player2Character, player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
+			screen.blit(Art.getPlayer(player2Character)[0][6], 19, screen.h-42);
+		}
 		
 		Notifications.getInstance().render(screen);
 	}
