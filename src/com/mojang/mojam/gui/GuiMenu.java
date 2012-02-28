@@ -73,8 +73,6 @@ public abstract class GuiMenu extends GuiComponent implements ButtonListener, Ke
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		System.out.println("KEY: " + e.getKeyChar() + ", " + selectedItem);
-		
 		if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
 			selectedItem--;
 			if (selectedItem < 0) {
