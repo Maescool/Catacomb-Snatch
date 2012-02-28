@@ -192,6 +192,8 @@ public class Player extends Mob implements LootCollector {
 
         double xa = 0;
         double ya = 0;
+        double xaShot = 0;
+        double yaShot = 0;
 
         // Handle keys
         if (!dead) {
@@ -207,11 +209,32 @@ public class Player extends Mob implements LootCollector {
             if (keys.right.isDown) {
                 xa++;
             }
+            if (keys.right.isDown) {
+                xa++;
+            }
+            if (keys.fireUp.isDown) {
+                yaShot--;
+            }
+            if (keys.fireDown.isDown) {
+                yaShot++;
+            }
+            if (keys.fireLeft.isDown) {
+                xaShot--;
+            }
+            if (keys.fireRight.isDown) {
+                xaShot++;
+            }
         }
 
         // Handle mouse aiming
         if (!mouseAiming && !keys.fire.isDown && !mouseButtons.isDown(mouseFireButton) && xa * xa + ya * ya != 0) {
             aimVector.set(xa, ya);
+            aimVector.normalizeSelf();
+            updateFacing();
+        }
+        
+        if (!mouseAiming && fireKeyIsDown() && xaShot * xaShot + yaShot * yaShot != 0) {
+            aimVector.set(xaShot, yaShot);
             aimVector.normalizeSelf();
             updateFacing();
         }
@@ -415,7 +438,7 @@ public class Player extends Mob implements LootCollector {
         weapon.weapontick();
         
         if (!dead
-                && (carrying == null && keys.fire.isDown
+                && (carrying == null && fireKeyIsDown()
                 || carrying == null && mouseButtons.isDown(mouseFireButton))) {
             wasShooting = true;
             if (takeDelay > 0) {
@@ -432,6 +455,14 @@ public class Player extends Mob implements LootCollector {
             }
             takeDelay = 15;
         }
+    }
+    
+    /**
+     * Returns true if one of the keyboard fire buttons is down
+     * @return
+     */
+    private boolean fireKeyIsDown() {
+        return keys.fire.isDown || keys.fireUp.isDown || keys.fireDown.isDown || keys.fireRight.isDown || keys.fireLeft.isDown;
     }
 
     /**
