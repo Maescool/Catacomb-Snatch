@@ -72,6 +72,7 @@ public class Turret extends Building {
 
 	@Override
 	public void tick() {
+		
 		super.tick();
 		if (--freezeTime > 0)
 			return;
