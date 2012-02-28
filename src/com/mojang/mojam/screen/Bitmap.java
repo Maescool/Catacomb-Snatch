@@ -1,5 +1,6 @@
 package com.mojang.mojam.screen;
 
+import java.awt.Color;
 import java.util.Arrays;
 
 public class Bitmap {
@@ -251,6 +252,21 @@ public class Bitmap {
 		circle.circleFill(radius, radius, radius, color);	
 		return circle;
 	}
+	
+	public static Bitmap tooltipBitmap(int width, int height) {
+		int cRadius = 3;
+		int color = Color.black.getRGB();
+		Bitmap tooltip = new Bitmap(width+3, height+3);	
+		tooltip.fill(0, cRadius, width, height-2*cRadius, color);
+		tooltip.fill(cRadius, 0, width-2*cRadius, height, color);
+		// draw corner circles
+		tooltip.circleFill(cRadius, cRadius, cRadius, color);
+		tooltip.circleFill(width-cRadius, cRadius, cRadius, color);
+		tooltip.circleFill(width-cRadius, height-cRadius, cRadius, color);
+		tooltip.circleFill(cRadius, height-cRadius, cRadius, color);
+		
+		return tooltip;
+	}
 
 	private void circle(int centerX, int centerY, int radius, int color) {
 		int d = 3 - (2 * radius);
@@ -258,21 +274,22 @@ public class Bitmap {
 		int y = radius;
 	
 		do {
-		setPixel(centerX + x, centerY + y, color);
-		setPixel(centerX + x, centerY - y, color);
-		setPixel(centerX - x, centerY + y, color);
-		setPixel(centerX - x, centerY - y, color);
-		setPixel(centerX + y, centerY + x, color);
-		setPixel(centerX + y, centerY - x, color);
-		setPixel(centerX - y, centerY + x, color);
-		setPixel(centerX - y, centerY - x, color);
-		if (d < 0) {
-		d = d + (4 * x) + 6;
-		} else {
-		d = d + 4 * (x - y) + 10;
-		y--;
-		}
-		x++;
+			setPixel(centerX + x, centerY + y, color);
+			setPixel(centerX + x, centerY - y, color);
+			setPixel(centerX - x, centerY + y, color);
+			setPixel(centerX - x, centerY - y, color);
+			setPixel(centerX + y, centerY + x, color);
+			setPixel(centerX + y, centerY - x, color);
+			setPixel(centerX - y, centerY + x, color);
+			setPixel(centerX - y, centerY - x, color);
+			
+			if (d < 0) {
+				d = d + (4 * x) + 6;
+			} else {
+				d = d + 4 * (x - y) + 10;
+				y--;
+			}
+			x++;
 		} while (x <= y);
 	}
 	
