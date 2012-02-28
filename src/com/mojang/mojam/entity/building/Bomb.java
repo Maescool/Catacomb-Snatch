@@ -3,12 +3,17 @@ package com.mojang.mojam.entity.building;
 import java.util.Set;
 
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.animation.LargeBombExplodeAnimation;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.mob.Team;
+import com.mojang.mojam.gui.Notifications;
+import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.level.tile.RailTile;
 
 /**
  * Bomb object. Triggered by bullets, destroys special wall tiles
@@ -108,4 +113,5 @@ public class Bomb extends Building {
 	public void hit() {
 		hit = true;
 	}
+	
 }
