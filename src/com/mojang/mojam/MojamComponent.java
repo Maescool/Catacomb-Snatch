@@ -468,8 +468,11 @@ public class MojamComponent extends Canvas implements Runnable,
 	}
 
 	private void addHealthBar(Screen screen){
-	  
-	    int index = 100 - (int) (player.health * 100 / player.maxHealth);
+	    int maxIndex = Art.panel_healthBar[0].length - 1;
+	    int index = maxIndex - Math.round(player.health * maxIndex / player.maxHealth);
+	    if (index < 0) index = 0;
+        else if (index > maxIndex) index = maxIndex;
+        
 	    screen.blit(Art.panel_healthBar[0][index], 311, screen.h - 17);
 	    screen.blit(Art.panel_heart, 314, screen.h - 24);
 	    Font font = Font.defaultFont();
@@ -479,13 +482,17 @@ public class MojamComponent extends Canvas implements Runnable,
 	private void addXpBar(Screen screen){
 	    
 	    int xpSinceLastLevelUp = (int)(player.xpSinceLastLevelUp());
-	    int xpNeededForNextLevel = (int)(player.nettoXpNeededForLevel(player.plevel));
-	    int index = 100 - (int) (xpSinceLastLevelUp * 100 / xpNeededForNextLevel);
+	    int xpNeededForNextLevel = (int)(player.nettoXpNeededForLevel(player.plevel+1));
+
+	    int maxIndex = Art.panel_xpBar[0].length - 1;
+	    int index = maxIndex - Math.round(xpSinceLastLevelUp * maxIndex / xpNeededForNextLevel);
+	    if (index < 0) index = 0;
+	    else if (index > maxIndex) index = maxIndex;
 	    
 	    screen.blit(Art.panel_xpBar[0][index], 311, screen.h - 32);
 	    screen.blit(Art.panel_star, 314, screen.h - 40);
 	    Font font = Font.defaultFont();
-	    font.draw(screen, texts.playerLevel(player.plevel), 335, screen.h - 36);
+	    font.draw(screen, texts.playerLevel(player.plevel+1), 335, screen.h - 36);
     }
 	
 	private void addScore(Screen screen){
