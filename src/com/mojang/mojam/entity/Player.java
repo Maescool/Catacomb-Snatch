@@ -462,6 +462,7 @@ public class Player extends Mob implements LootCollector {
                 lastRailTick = time;
                 level.placeTile(x, y, new RailTile(level.getTile(x, y)), this);
                 payCost(COST_RAIL);
+                MojamComponent.soundPlayer.playSound("/sound/Track Place.wav", (float) pos.x, (float) pos.y);
                 RAIL_MODE = 1;
             } else if (score < COST_RAIL) {
             	if(this.team == MojamComponent.localTeam) {
@@ -474,6 +475,7 @@ public class Player extends Mob implements LootCollector {
                 if (score >= COST_DROID) {
                     level.addEntity(new RailDroid(pos.x, pos.y, team));
                     payCost(COST_DROID);
+                    MojamComponent.soundPlayer.playSound("/sound/Track Place.wav", (float) pos.x, (float) pos.y);
                 } else {
                 	if(this.team == MojamComponent.localTeam) {
                 		Notifications.getInstance().add(MojamComponent.texts.buildDroid(COST_DROID));
@@ -485,6 +487,7 @@ public class Player extends Mob implements LootCollector {
                     lastRailTick = time;
                     if (((RailTile) level.getTile(x, y)).remove()) {
                         payCost(COST_REMOVE_RAIL);
+                        MojamComponent.soundPlayer.playSound("/sound/Track Place.wav", (float) pos.x, (float) pos.y);
                         RAIL_MODE = 2;
                     }
                 } else if (score < COST_REMOVE_RAIL) {
@@ -492,7 +495,6 @@ public class Player extends Mob implements LootCollector {
                 		Notifications.getInstance().add(MojamComponent.texts.removeRail(COST_REMOVE_RAIL));
                 	}
                 }
-                MojamComponent.soundPlayer.playSound("/sound/Track Place.wav", (float) pos.x, (float) pos.y);
             }
         }
     }
@@ -511,6 +513,7 @@ public class Player extends Mob implements LootCollector {
                 lastRailTick = time;
                 level.placeTile(x, y, new RailTile(level.getTile(x, y)), this);
                 payCost(COST_RAIL);
+                MojamComponent.soundPlayer.playSound("/sound/Track Place.wav", (float) pos.x, (float) pos.y);
             } else if (score < COST_RAIL) {
             	RAIL_MODE = 0;
             	if(this.team == MojamComponent.localTeam) {
@@ -522,8 +525,9 @@ public class Player extends Mob implements LootCollector {
             if (!(y < 9 && team == Team.Team2) || (y > level.height - 10 && team == Team.Team1) && mode == 2) {
                 if (score >= COST_REMOVE_RAIL && time - lastRailTick >= RailDelayTicks) {
                     if (((RailTile) level.getTile(x, y)).remove()) {
-                    	  lastRailTick = time;
+                      	lastRailTick = time;
                         payCost(COST_REMOVE_RAIL);
+                        MojamComponent.soundPlayer.playSound("/sound/Track Place.wav", (float) pos.x, (float) pos.y);
                     }
                 } else if (score < COST_REMOVE_RAIL) {
                 	RAIL_MODE = 0;
@@ -531,7 +535,6 @@ public class Player extends Mob implements LootCollector {
                 		Notifications.getInstance().add(MojamComponent.texts.removeRail(COST_REMOVE_RAIL));
                 	}
                 }
-                MojamComponent.soundPlayer.playSound("/sound/Track Place.wav", (float) pos.x, (float) pos.y);
             }
         }
     }
