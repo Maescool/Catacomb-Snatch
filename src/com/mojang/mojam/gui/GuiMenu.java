@@ -1,8 +1,11 @@
 package com.mojang.mojam.gui;
 
+import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.screen.Screen;
 
@@ -10,6 +13,7 @@ public abstract class GuiMenu extends GuiComponent implements ButtonListener, Ke
 
 	protected List<ClickableComponent> buttons = new ArrayList<ClickableComponent>();
 	protected List<Text> texts = new ArrayList<Text>();
+	private int selectedItem = 0;
 
 	protected ClickableComponent addButton(ClickableComponent button) {
 		buttons.add(button);
@@ -67,4 +71,54 @@ public abstract class GuiMenu extends GuiComponent implements ButtonListener, Ke
 		}
 	}
 
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
+			selectedItem--;
+			if (selectedItem < 0) {
+				selectedItem = buttons.size() - 1;
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
+			selectedItem++;
+			if (selectedItem > buttons.size() - 1) {
+				selectedItem = 0;
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
+			ClickableComponent button = buttons.get(selectedItem);
+			if (button instanceof Slider) {
+				Slider slider = (Slider) button;
+				float value = slider.value - 0.1f;
+				if (value < 0) {
+					value = 0;
+				}
+				slider.setValue(value);
+				slider.postClick();
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
+			ClickableComponent button = buttons.get(selectedItem);
+			if (button instanceof Slider) {
+				Slider slider = (Slider) button;
+				float value = slider.value + 0.1f;
+				if (value > 1) {
+					value = 1;
+				}
+				slider.setValue(value);
+				slider.postClick();
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
+			e.consume();
+			ClickableComponent button = buttons.get(selectedItem);
+			if (button instanceof Slider) {
+				Slider slider = (Slider) button;
+				if (slider.value == 1) {
+					slider.setValue(0);
+				} else {
+					slider.setValue(1);
+				}
+			}
+			button.postClick();
+		} else if (e.getKeyCode() == KeyEvent.VK_F11) {
+			MojamComponent.toggleFullscreen();
+		}
+	}
 }

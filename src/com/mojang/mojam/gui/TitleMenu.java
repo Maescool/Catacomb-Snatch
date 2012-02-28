@@ -104,26 +104,6 @@ public class TitleMenu extends GuiMenu {
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
-			selectedItem--;
-			if (selectedItem < 0) {
-				selectedItem = buttons.size() - 1;
-			}
-		} else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
-			selectedItem++;
-			if (selectedItem > buttons.size() - 1) {
-				selectedItem = 0;
-			}
-		} else if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
-			e.consume();
-			buttons.get(selectedItem).postClick();
-		} else if (e.getKeyCode() == KeyEvent.VK_F11) {
-			MojamComponent.toggleFullscreen();
-		}
-	}
-
-	@Override
 	public void keyReleased(KeyEvent arg0) {}
 
 	@Override

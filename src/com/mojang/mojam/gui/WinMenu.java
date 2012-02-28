@@ -33,13 +33,6 @@ public class WinMenu extends GuiMenu {
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
-			buttons.get(selectedItem).postClick();
-		}
-	}
-
-	@Override
 	public void keyReleased(KeyEvent arg0) {
 	}
 

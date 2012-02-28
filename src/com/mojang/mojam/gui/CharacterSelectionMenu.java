@@ -152,7 +152,9 @@ public class CharacterSelectionMenu extends GuiMenu {
 		} else if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
 			focus.postClick();
 		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			back.postClick();
+			back.postClick();		
+		} else {
+			super.keyPressed(e);
 		}
 	}
 
