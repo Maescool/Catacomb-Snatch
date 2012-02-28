@@ -1,0 +1,103 @@
+# Game texts encoded in UTF-8
+
+build.rail = POTREBUJES {0} ZA IZGRADNJO TIRA
+build.droid = POTREBUJES {0} ZA TIRNEGA ROBOTA
+build.removeRail = POTREBUJES {0} ZA UMIK TIRA
+
+back = NAZAJ
+cancel = PREKLIC
+
+diffselect.title = IZBERI TEZAVNOST
+diffselect.start = ZACETEK IGRE
+diffselect.easy = LAHKO
+diffselect.normal = NORMALNO
+diffselect.hard = TEZKO
+diffselect.nightmare = NOCNA MORA
+
+gameplay.player1Name = LORD LARD
+gameplay.player1NameAlt = DUCHESS DONUT
+gameplay.player1Win = {0} JE ZMAGAL WOOHOO
+gameplay.player2Name = HERR VON SPECK
+gameplay.player2Win = {0} JE ZMAGAL YAY
+gameplay.FPS = FPS: {0}
+gameplay.latency = LATENCY: {0}
+gameplay.cantPickup = TEGA NE MORES POBRATI!
+
+help.goal = CILJ
+help.help1 = ZBERI 50 SERIJ ZAKLADA
+help.help2 = IZ ZAKLADNICE, KI SE NAHAJA
+help.help3 = NA SREDINI ZEMLJEVIDA
+help.help4 = PRED SVOJIM(I) NASPROTNIKI
+help.turret = TOPOVI
+help.turret1 = STRELJAJO SOVRAZNIKE OKOLI SEBE.
+help.turret2 =
+help.turret3 =
+help.collector = ZBIRATELJ
+help.collector1 = SRKA KOVANCE OKOLI SEBE. POBERI GA
+help.collector2= DA POBERES POSRKANE KOVANCE.
+help.collector3= DA POBERES POSRKANE KOVANCE.
+help.bomb = BOMBA
+help.bomb1 = UPORABLJA SE ZA UNICEVANJE RAZPOKANIH ZIDOV.
+help.bomb2 = STRELJAJ ZA DETONACIJO.
+help.bomb3 =
+help.rails = TIRI
+help.rails1 = ZA TIRNE-ROBOTE, DA ZBEREJO ZAKLAD
+help.rails2 = PRITISNI 'GRADI' NA PRVEM TIRU
+help.rails3 = DA KUPIS TIRNEGA ROBOTA (50 ZLATNIKOV)
+
+keys.up = GOR
+keys.down = DOL
+keys.left = LEVO
+keys.right= DESNO
+keys.sprint = SPRINT
+keys.fire = STRELJAJ
+keys.use = UPORABI
+keys.build = GRADI
+keys.upgrade = NADGRADNJA
+
+levelselect.title = IZBERI NIVO
+levelselect.start = ZACETEK
+levelselect.update = NADGRADI NIVOJE
+
+mp.waitingForClient = CAKAM, DA SE KDO PRIDRUZI...
+mp.enterIP = VPISI IP ALI GOSTITELJA:
+mp.localIP = TVOJ LOKALNI IP:
+mp.externalIP = TVOJ ZUNANJI IP:
+mp.join = PRIDRUZI SE
+
+options.on = VKLOPLJENO
+options.off = IZKLOPLJENO
+options.keyBindings = BLIZNJICE DO TIPK
+options.fullscreen = CELOZASLONSKI NACIN
+options.showfps = PRIKAZI FPS
+options.music = GLASBA
+options.volume = JAKOST
+options.mute = UTISAJ
+options.creative = KRATIVNI NACIN
+options.alternative = ALTERNATIVNA IGRALCEVA PREOBLEKA
+
+pausemenu.help = POMOC
+pausemenu.backtomain = GLAVNI MENI
+pausemenu.resume = NADALJUJ
+pausemenu.exit = ZAPUSTI IGRO
+
+player.hasDied = {0} JE UMRL!
+player.score = {0}: {1}%
+player.cost = {0}
+player.health = {0}%
+player.money = {0}
+player.nextLevel = {0}
+player.exp = {0}
+player.level = {0}
+
+titlemenu.start = ZACETEK
+titlemenu.host = GOSTITELJ
+titlemenu.join = PRIDRUZI SE
+titlemenu.help = KAKO IGRATI
+titlemenu.options = MOZNOSTI
+titlemenu.exit = IZHOD
+
+upgrade.full = JE ZE POLNO NADGRAJEN!
+upgrade.notEnoughMoney = IMAS PREMALO DENARJA ({0})
+upgrade.to = NADGRAJENO NA NIVO {0}
+

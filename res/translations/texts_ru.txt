@@ -1,0 +1,130 @@
+# Game texts encoded in UTF-8
+
+build.rail = Вам нужно {0} для постройки рельс
+build.droid = Вам нужен {0} для железнодорожных дроид
+build.removeRail = Вам нужно {0} для вагонетки
+
+back = Вернуться
+cancel = Отмена
+
+credits.leadDev = Ведущий разработчик:
+credits.maintainers = Координаторы проекта:
+credits.communityMan = Координаторы сообщества:
+credits.others = И спасибо всем участникам, в том числе:
+credits.note = Этот проект функционирует как общественный
+
+diffselect.title = Выберите уровень сложности
+diffselect.start = Старт игры
+diffselect.easy = Легкий
+diffselect.normal = Нормальный
+diffselect.hard = Сложный
+diffselect.nightmare = Кошмарный
+
+gameplay.player1Win = {0} ПОБЕДИЛ ЕХУУУУУУУ!
+gameplay.player2Win = {0} ПОБЕДИЛ УЯЙЙЙЙЙ!
+gameplay.player1Name = Лорд Жиротрест
+gameplay.player2Name = Герр Ван Куроед
+gameplay.player3Name = Герцогиня Ватрушка
+gameplay.player4Name = Графиня Круассан
+gameplay.FPS = FPS:
+gameplay.latency = Задержка:
+gameplay.cantPickup = Вы не можете это поднять!
+
+help.goal = Цель
+help.help1 = Собрать 50 вагонов
+help.help2 = из сокровищ находящихся
+help.help3 = в центре карты
+help.help4 = быстрее вашего соперника
+help.turret = турель
+help.turret1 = уничтожает врагов.
+help.collector = cборщик
+help.collector1 = Собирает монетки.Забирайте их
+help.collector2 = Чтобы получить собранные монетки.
+help.bomb = бомба
+help.bomb1 = разрушает непрочные стены.
+help.bomb2 = взрывается от выстрела.
+help.rails = рельсы
+help.rails1 = для вагонеток-собирателей.
+help.rails2 = Нажмите 'Построить' в начале рельс
+help.rails3 = для постройки вагонетки (50 золотых)
+
+keys.up = вверх
+keys.down = вниз
+keys.left = влево
+keys.right = вправо
+keys.sprint = бег
+keys.fire = огонь
+keys.use = использовать
+keys.build = строить
+keys.upgrade = улучшить
+keys.chat = Чат
+
+leveleditor.title = Редактор Уровней
+leveleditor.new = Новый
+leveleditor.open = Открыть
+leveleditor.save = Сохранить
+leveleditor.enterLevelName = Введите название для уровня:
+
+levelselect.title = Выбрать уровень
+levelselect.start = Старт
+levelselect.update = обновить
+
+mp.waitingForClient = Ожидаем присоединения игроков...
+mp.enterIP = Введите IP-адрес хоста:
+mp.localIP = Ваш локальный IP:
+mp.externalIP = Ваш внешний IP:
+mp.join = Войти
+
+options.on = Вкл
+options.off = Выкл
+options.keyBindings = Управление
+options.characterSelect = Выбор перса
+options.fullscreen = Во весь экран
+options.showfps = Показать FPS
+options.music = Музыка
+options.sounds = Звуки
+options.volume = Громкость
+options.mute = Выкл.
+options.creative = Режим разработчика
+options.alternative = Альтернативный скин
+options.credits = Авторы
+
+character.text = Выберите своего персонажа!
+character.select = Выбрать
+
+pausemenu.help = Помощь
+pausemenu.backtomain = Главное Меню
+pausemenu.resume = Продолжить
+pausemenu.exit = Выход из игры
+
+player.hasDied = {0} умер!
+player.score = {0}:
+player.cost = {0}
+player.health = {0} %
+player.money = {0}
+player.nextLevel = {0}
+player.exp = {0}
+player.level = {0}
+
+shop.turretTooltipTitle = Турель
+shop.turretTooltipLine1 = Испльз. для защиты.
+shop.turretTooltipLine2 = Атакует ближайших врагов.
+shop.harvesterTooltipTitle = Cборщик
+shop.harvesterTooltipLine1 = Собирает сокровища.
+shop.harvesterTooltipLine2 = Используйте,чтоб освободить.
+shop.bombTooltipTitle = БОМБА
+shop.bombTooltipLine1 = Уничтожает тресканые стены.
+shop.bombTooltipLine2 = Использ. для создания точки.
+
+titlemenu.start = Старт
+titlemenu.host = Запуск сервера
+titlemenu.join = Войти
+titlemenu.help = Как играть
+titlemenu.options = Опции
+titlemenu.levelEditor = Редактор Уровней
+titlemenu.exit = Выход
+
+upgrade.full = Уже полностью усовершенствована!
+upgrade.notEnoughMoney = У вас недостаточно денег ({0})
+upgrade.to = Улучшен до уровня {0}
+
