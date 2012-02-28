@@ -440,14 +440,15 @@ public class Player extends Mob implements LootCollector {
         if (!dead
                 && (carrying == null && fireKeyIsDown()
                 || carrying == null && mouseButtons.isDown(mouseFireButton))) {
+        	suckRadius = 1;
             wasShooting = true;
-            if (takeDelay > 0) {
+            if (takeDelay > 1) {
                 takeDelay--;
             }
             weapon.primaryFire(xa, ya);
         } else {
             if (wasShooting) {
-                suckRadius = 0;
+                suckRadius = 5;
             }
             wasShooting = false;
             if (suckRadius < 60) {
