@@ -101,14 +101,13 @@ public class CreditsScreen extends GuiMenu {
 		return highestY;
 	}
 
+	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
-			e.consume();
-			buttons.get(0).postClick();
-			//Resume on Escape
-		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			back.postClick();
-		}
+		} else {
+			super.keyPressed(e);
+		}		
 	}
 
 	public void keyReleased(KeyEvent arg0) {

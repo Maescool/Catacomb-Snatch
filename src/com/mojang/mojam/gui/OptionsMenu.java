@@ -17,7 +17,6 @@ public class OptionsMenu extends GuiMenu {
 	private float volume;
 	private boolean creative;
     private boolean inGame;
-    private int selectedItem;
     private int gameWidth;
     private int gameHeight;
 
@@ -172,51 +171,9 @@ public class OptionsMenu extends GuiMenu {
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			back.postClick();
-		} else if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
-			selectedItem--;
-			if (selectedItem < 0) {
-				selectedItem = buttons.size() - 1;
-			}
-		} else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
-			selectedItem++;
-			if (selectedItem >= buttons.size()) {
-				selectedItem = 0;
-			}
-		} else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
-			ClickableComponent button = buttons.get(selectedItem);
-			if (button instanceof Slider) {
-				Slider slider = (Slider) button;
-				float value = slider.value - 0.1f;
-				if (value < 0) {
-					value = 0;
-				}
-				slider.setValue(value);
-				slider.postClick();
-			}
-		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
-			ClickableComponent button = buttons.get(selectedItem);
-			if (button instanceof Slider) {
-				Slider slider = (Slider) button;
-				float value = slider.value + 0.1f;
-				if (value > 1) {
-					value = 1;
-				}
-				slider.setValue(value);
-				slider.postClick();
-			}
-		} else if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
-			e.consume();
-			ClickableComponent button = buttons.get(selectedItem);
-			if (button instanceof Slider) {
-				Slider slider = (Slider) button;
-				if (slider.value == 1) {
-					slider.setValue(0);
-				} else {
-					slider.setValue(1);
-				}
-			}
-			button.postClick();
-		}
+		} else {
+			super.keyPressed(e);
+		}		
 	}
 
 	@Override

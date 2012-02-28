@@ -7,7 +7,6 @@ import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
 public class WinMenu extends GuiMenu {
-	private int selectedItem = 0;
 	private final int gameWidth;
 	private int winningPlayer;
 	private int characterID;
@@ -30,13 +29,6 @@ public class WinMenu extends GuiMenu {
 		super.render(screen);
 
 		screen.blit(Art.getPlayer(characterID)[0][6], (gameWidth - 128) / 2 - 40, 190 + selectedItem * 40);
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
-			buttons.get(selectedItem).postClick();
-		}
 	}
 
 	@Override
