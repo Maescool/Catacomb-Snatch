@@ -23,7 +23,7 @@ public class Loot extends Entity {
 			Art.pickupCoinBronze, Art.pickupCoinSilver, Art.pickupCoinGold,
 			Art.pickupGemEmerald, Art.pickupGemRuby, Art.pickupGemDiamond};
 
-	public static int[] values = { 1, 2, 5, 10, 20, 50, 100, 200, 500 };
+	public static int[] values = { 1, 2, 5, 10, 20, 50, 100, 200, 500};
 
 
 	public Loot(double x, double y, double xa, double ya, int val, boolean disappears) {
