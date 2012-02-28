@@ -2,6 +2,7 @@ package com.mojang.mojam.gui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
@@ -9,17 +10,21 @@ import com.mojang.mojam.screen.Bitmap;
 
 public class FontCharacterFactory {
 
-	java.awt.Font systemFont;
+	private java.awt.Font systemFont;
+	private java.awt.Font fallbackFont;
 	private Color[] gradient;
 	private Color shadowColor;
+	private int heightOffset;
 	
 	private HashMap<Character, Bitmap> characterCache = new HashMap<Character, Bitmap>();
 	private HashMap<Character, Integer> characterHeightOffset = new HashMap<Character, Integer>();
 	
-	public FontCharacterFactory(java.awt.Font systemFont, Color[] gradient, Color shadowColor) {
+	public FontCharacterFactory(java.awt.Font systemFont, java.awt.Font fallbackFont, Color[] gradient, Color shadowColor, int heightOffset) {
 		this.systemFont = systemFont;
+		this.fallbackFont = fallbackFont;
 		this.gradient = gradient;
 		this.shadowColor = shadowColor;
+		this.heightOffset = heightOffset;
 	}
 
 	public Bitmap getFontCharacter(char character) {
@@ -27,7 +32,14 @@ public class FontCharacterFactory {
 			return characterCache.get(character);
 		}
 		
-		int fontSize = systemFont.getSize();
+		java.awt.Font font;
+		if (systemFont.canDisplay(character)) {
+			font = systemFont;
+		} else {
+			font = fallbackFont;
+		}
+		
+		int fontSize = font.getSize();
 		int width = 3*fontSize;
 		int height = 3*fontSize;
 		int positionX = fontSize;
@@ -35,33 +47,27 @@ public class FontCharacterFactory {
 		
 		BufferedImage mainImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D mainGraphics = mainImage.createGraphics();
-		mainGraphics.setFont(systemFont);
+		mainGraphics.setFont(font);
+		mainGraphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
 		Color mainLetterColor = Color.MAGENTA;
 		mainGraphics.setColor(mainLetterColor);
 		mainGraphics.drawString(Character.toString(character), positionX, positionY);
 		
-		BufferedImage shadowImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		if (shadowColor != null) {
-			Graphics2D shadowGraphics = shadowImage.createGraphics();
-			shadowGraphics.setFont(systemFont);
-			shadowGraphics.setColor(shadowColor);
-			shadowGraphics.drawString(Character.toString(character), positionX+1, positionY+1);
-		}
-		
 		int[][] pixels = new int[width][height];
 		int gradientRow = gradient.length - 1;
 		for (int y = height-1; y >= 0; y--) {
-			for (int x = 0; x < width; x++) {
-				if (mainImage.getRGB(x, y) == 0) {
-					pixels[x][y] = shadowImage.getRGB(x, y);
-				} else {
+			for (int x = width-1; x >= 0 ; x--) {
+				if (mainImage.getRGB(x, y)!=0) {
 					pixels[x][y] = gradient[gradientRow].getRGB();
+				} else if (x>0 && y>0 && mainImage.getRGB(x-1, y-1)!=0) {
+					pixels[x][y] = shadowColor.getRGB();
 				}
 			}
 			if (y < positionY) {
 				gradientRow = Math.max(gradientRow - 1, 0);
 			}
 		}
+
 
 		int emptyRowsTop = 0;
 		FindTop: for (int y = 0; y < height; y++) {
@@ -72,8 +78,7 @@ public class FontCharacterFactory {
 			}
 			emptyRowsTop++;
 		}
-		int hardcodedOffset = (shadowColor!=null) ? 3 : 2;
-		characterHeightOffset.put(character, emptyRowsTop-fontSize-hardcodedOffset);
+		characterHeightOffset.put(character, emptyRowsTop-fontSize-heightOffset);
 		
 		pixels = automaticCrop(pixels);
 		
