@@ -2,6 +2,7 @@ package com.mojang.mojam.gui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
@@ -47,6 +48,7 @@ public class FontCharacterFactory {
 		BufferedImage mainImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D mainGraphics = mainImage.createGraphics();
 		mainGraphics.setFont(font);
+		mainGraphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
 		Color mainLetterColor = Color.MAGENTA;
 		mainGraphics.setColor(mainLetterColor);
 		mainGraphics.drawString(Character.toString(character), positionX, positionY);
@@ -55,6 +57,7 @@ public class FontCharacterFactory {
 		if (shadowColor != null) {
 			Graphics2D shadowGraphics = shadowImage.createGraphics();
 			shadowGraphics.setFont(font);
+			mainGraphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
 			shadowGraphics.setColor(shadowColor);
 			shadowGraphics.drawString(Character.toString(character), positionX+1, positionY+1);
 		}
