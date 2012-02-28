@@ -14,6 +14,7 @@ import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.level.gamemode.ILevelTickItem;
 import com.mojang.mojam.level.gamemode.IVictoryConditions;
+import com.mojang.mojam.level.gamemode.events.Event;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.level.tile.WallTile;
@@ -34,6 +35,8 @@ public class Level {
 	private Bitmap minimap;
 	private boolean seen[];
 	final int[] neighbourOffsets;
+	
+	public List<Event> events;
 
 	public List<ILevelTickItem> tickItems = new ArrayList<ILevelTickItem>();;
 	public int maxMonsters;
@@ -65,7 +68,7 @@ public class Level {
 		}
 
 		setSeen(new boolean[(width + 1) * (height + 1)]);
-
+		events = new ArrayList<Event>();
 		/*
 		 * for (int i = 0; i < 10; i++) { double x = random.nextInt(width) *
 		 * Tile.WIDTH + Tile.WIDTH / 2; double y = random.nextInt(height) *
@@ -257,7 +260,16 @@ public class Level {
 		}
 		if(victoryConditions != null)
 			victoryConditions.updateVictoryConditions(this);
+		updateEvents();
 		Notifications.getInstance().tick();
+	}
+	
+	private void updateEvents() {
+		//create seperate array, so that events can be changed while itterated
+		final List<Event> eventArray = events;
+		for (int i = 0; i < eventArray.size(); i++) {
+			eventArray.get(i).updateEvent();
+		}
 	}
 
 	private boolean hasSeen(int x, int y) {
@@ -588,5 +600,13 @@ public class Level {
 
 	public void setSeen(boolean seen[]) {
 		this.seen = seen;
+	}
+	
+	public void addEvent(Event event) {
+		events.add(event);
+	}
+	
+	public void removeEvent(Event event) {
+		events.remove(event);
 	}
 }
