@@ -24,6 +24,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Stack;
@@ -254,11 +256,27 @@ public class MojamComponent extends Canvas implements Runnable,
 	}
 	
 	private void initCharacters(){
-		opponentCharacter = Art.HERR_VON_SPECK;
+		
 		if(!Options.isCharacterIDset()){
 			addMenu(new CharacterSelectionMenu());
 		}
 		playerCharacter = Options.getCharacterID();
+
+		/*
+		 * Put all available characters in an array,
+		 * remove the player, shuffle the list and
+		 * chose the first element as opponent
+		 */
+		List<Integer> characters = new ArrayList<Integer>();
+		characters.add(Art.LORD_LARD);
+		characters.add(Art.HERR_VON_SPECK);
+		characters.add(Art.DUCHESS_DONUT);
+		characters.add(Art.COUNTESS_CRULLER);
+		
+		characters.remove(playerCharacter);
+		Collections.shuffle(characters);
+		
+		opponentCharacter = characters.get(0);
 	}
 
 	public void showError(String s) {
