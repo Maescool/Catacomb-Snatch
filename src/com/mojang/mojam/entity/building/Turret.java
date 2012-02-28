@@ -4,11 +4,15 @@ import java.awt.Color;
 import java.util.Set;
 
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.mob.RailDroid;
+import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.level.DifficultyInformation;
+import com.mojang.mojam.level.tile.RailTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
@@ -49,6 +53,15 @@ public class Turret extends Building {
 		freezeTime = 10;
 		areaBitmap = Bitmap.rangeBitmap(radius,RADIUS_COLOR);
 	}
+	
+	public Turret(double x, double y, int team, int upgradeLevel) {
+		super(x, y, team);
+		this.team = team;
+		this.upgradeLevel = upgradeLevel;
+		setStartHealth(10);
+		freezeTime = 10;
+		areaBitmap = Bitmap.rangeBitmap(radius,RADIUS_COLOR);
+	}
 
 	@Override
 	public void init() {
@@ -59,6 +72,7 @@ public class Turret extends Building {
 
 	@Override
 	public void tick() {
+		
 		super.tick();
 		if (--freezeTime > 0)
 			return;

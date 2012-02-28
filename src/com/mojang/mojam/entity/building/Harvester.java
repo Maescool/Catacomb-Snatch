@@ -4,16 +4,23 @@ import java.awt.Color;
 import java.util.Random;
 
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
+import com.mojang.mojam.entity.animation.LargeBombExplodeAnimation;
 import com.mojang.mojam.entity.animation.SmokeAnimation;
+import com.mojang.mojam.entity.animation.TileExplodeAnimation;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.loot.LootCollector;
+import com.mojang.mojam.entity.mob.Mob;
+import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.level.tile.Tile;
+import com.mojang.mojam.level.tile.UnbreakableRailTile;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.level.tile.RailTile;
 
 /**
  * Harvester building. Automatically collects all coins within a given radius around itself
@@ -32,7 +39,6 @@ public class Harvester extends Building implements LootCollector {
 			2 * Tile.WIDTH, (int) (2.5 * Tile.WIDTH) };
 	private int[] upgradeCapacities = new int[] { 1500, 2500, 3500 };
 	
-	
 	private Bitmap areaBitmap;
 	private static final int RADIUS_COLOR = new Color(240, 210, 190).getRGB();
 	
@@ -46,6 +52,19 @@ public class Harvester extends Building implements LootCollector {
 	public Harvester(double x, double y, int team) {
 		super(x, y, team);
 		setStartHealth(10);
+		freezeTime = 10;
+		yOffs = 20;
+		makeUpgradeableWithCosts(new int[] { 500, 1000, 5000 });
+		healthBarOffset = 13;
+		areaBitmap = Bitmap.rangeBitmap(radius,RADIUS_COLOR);
+	}
+	
+	public Harvester(double x, double y, int team, int upgradeLevel, int money) {
+		super(x, y, team);
+		setStartHealth(10);
+		this.team = team;
+		this.upgradeLevel = upgradeLevel;
+		this.money = money;
 		freezeTime = 10;
 		yOffs = 20;
 		makeUpgradeableWithCosts(new int[] { 500, 1000, 5000 });
@@ -103,6 +122,10 @@ public class Harvester extends Building implements LootCollector {
 						Art.fxSteam12, 30));
 			}
 		}
+		
+		int xt = (int) (pos.x / Tile.WIDTH);
+		int yt = (int) (pos.y / Tile.HEIGHT);
+		
 		if (health == 0) {
 			dropAllMoney();
 		}

@@ -1,10 +1,12 @@
 package com.mojang.mojam.level.tile;
 
+import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.math.Facing;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.entity.building.Harvester;
 
 public class RailTile extends Tile {
 	Tile parent;
