@@ -9,17 +9,21 @@ import com.mojang.mojam.screen.Bitmap;
 
 public class FontCharacterFactory {
 
-	java.awt.Font systemFont;
+	private java.awt.Font systemFont;
+	private java.awt.Font fallbackFont;
 	private Color[] gradient;
 	private Color shadowColor;
+	private int heightOffset;
 	
 	private HashMap<Character, Bitmap> characterCache = new HashMap<Character, Bitmap>();
 	private HashMap<Character, Integer> characterHeightOffset = new HashMap<Character, Integer>();
 	
-	public FontCharacterFactory(java.awt.Font systemFont, Color[] gradient, Color shadowColor) {
+	public FontCharacterFactory(java.awt.Font systemFont, java.awt.Font fallbackFont, Color[] gradient, Color shadowColor, int heightOffset) {
 		this.systemFont = systemFont;
+		this.fallbackFont = fallbackFont;
 		this.gradient = gradient;
 		this.shadowColor = shadowColor;
+		this.heightOffset = heightOffset;
 	}
 
 	public Bitmap getFontCharacter(char character) {
@@ -27,7 +31,14 @@ public class FontCharacterFactory {
 			return characterCache.get(character);
 		}
 		
-		int fontSize = systemFont.getSize();
+		java.awt.Font font;
+		if (systemFont.canDisplay(character)) {
+			font = systemFont;
+		} else {
+			font = fallbackFont;
+		}
+		
+		int fontSize = font.getSize();
 		int width = 3*fontSize;
 		int height = 3*fontSize;
 		int positionX = fontSize;
@@ -35,7 +46,7 @@ public class FontCharacterFactory {
 		
 		BufferedImage mainImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D mainGraphics = mainImage.createGraphics();
-		mainGraphics.setFont(systemFont);
+		mainGraphics.setFont(font);
 		Color mainLetterColor = Color.MAGENTA;
 		mainGraphics.setColor(mainLetterColor);
 		mainGraphics.drawString(Character.toString(character), positionX, positionY);
@@ -43,7 +54,7 @@ public class FontCharacterFactory {
 		BufferedImage shadowImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		if (shadowColor != null) {
 			Graphics2D shadowGraphics = shadowImage.createGraphics();
-			shadowGraphics.setFont(systemFont);
+			shadowGraphics.setFont(font);
 			shadowGraphics.setColor(shadowColor);
 			shadowGraphics.drawString(Character.toString(character), positionX+1, positionY+1);
 		}
@@ -72,8 +83,7 @@ public class FontCharacterFactory {
 			}
 			emptyRowsTop++;
 		}
-		int hardcodedOffset = (shadowColor!=null) ? 3 : 2;
-		characterHeightOffset.put(character, emptyRowsTop-fontSize-hardcodedOffset);
+		characterHeightOffset.put(character, emptyRowsTop-fontSize-heightOffset);
 		
 		pixels = automaticCrop(pixels);
 		
