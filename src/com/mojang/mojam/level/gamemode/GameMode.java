@@ -158,15 +158,19 @@ public class GameMode {
 				ShopItem.SHOP_TURRET, Team.Team2));
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 - .5), 4.5 * 32,
 				ShopItem.SHOP_HARVESTER, Team.Team2));
+		//newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 + .5), 4.5 * 32,
+		//		ShopItem.SHOP_BOMB, Team.Team2));
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 + .5), 4.5 * 32,
-				ShopItem.SHOP_BOMB, Team.Team2));
+				ShopItem.SHOP_RAILCART, Team.Team2));
 
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 - 1.5), (newLevel.height - 4.5) * 32,
 				ShopItem.SHOP_TURRET, Team.Team1));
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 - .5), (newLevel.height - 4.5) * 32,
 				ShopItem.SHOP_HARVESTER, Team.Team1));
+		//newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 + .5), (newLevel.height - 4.5) * 32,
+		//		ShopItem.SHOP_BOMB, Team.Team1));
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 + .5), (newLevel.height - 4.5) * 32,
-				ShopItem.SHOP_BOMB, Team.Team1));
+				ShopItem.SHOP_RAILCART, Team.Team1));
 		
 		newLevel.setTile(31, 7, new UnbreakableRailTile(new SandTile()));
 		newLevel.setTile(31, 63 - 7, new UnbreakableRailTile(new SandTile()));
