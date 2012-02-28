@@ -1,6 +1,9 @@
 package com.mojang.mojam.gui;
 
 import java.awt.Color;
+import java.awt.FontFormatException;
+import java.io.File;
+import java.io.IOException;
 
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
@@ -18,10 +21,27 @@ public class Font {
     static {
         String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ    " + "0123456789-.!?/%$\\=*+,;:()&#\"'";
         int glyphHeight = 8;
+        int systemFontHeight = 10;
+        int heightOffset = systemFontHeight - glyphHeight + 1;
         int spacing = 0;
-        java.awt.Font systemFont = new java.awt.Font("SansSerif", java.awt.Font.BOLD, 10);
-        Color shadowColor = Color.BLACK;
         
+        
+        java.awt.Font fallbackFont = new java.awt.Font("SansSerif", java.awt.Font.BOLD, systemFontHeight);
+        java.awt.Font systemFont = null;
+		try {
+			File fontFile = new File("res/art/fonts/ubuntu-font-family-0.80/Ubuntu-B.ttf");
+	        fontFile.setReadOnly();
+	        systemFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, fontFile);
+			systemFont = systemFont.deriveFont((float)systemFontHeight);
+		} catch (FontFormatException e) {
+			e.printStackTrace();
+			systemFont = fallbackFont;
+		} catch (IOException e) {
+			e.printStackTrace();
+			systemFont = fallbackFont;
+		}
+		
+        Color shadowColor = Color.BLACK;
         Color[] blueGradient = {
         	new Color(0x91aaf1),
         	new Color(0x9a9ef2),
@@ -31,7 +51,8 @@ public class Font {
         	new Color(0x5c66ea),
         	new Color(0x8ab5f0)
         };
-        FontCharacterFactory characterFactory = new FontCharacterFactory(systemFont, blueGradient, shadowColor);
+        FontCharacterFactory characterFactory;
+        characterFactory = new FontCharacterFactory(systemFont, fallbackFont, blueGradient, shadowColor, heightOffset);
         FONT_BLUE = new Font(Art.font_blue, letters, glyphHeight,spacing, characterFactory);
         
     	Color[] goldGradient = {
@@ -42,7 +63,7 @@ public class Font {
     		new Color(250, 250, 214),
     		new Color(234, 221, 91),
     		new Color(240, 195, 137)};
-    	characterFactory = new FontCharacterFactory(systemFont, goldGradient, shadowColor);
+    	characterFactory = new FontCharacterFactory(systemFont, fallbackFont, goldGradient, shadowColor, heightOffset);
 		FONT_GOLD = new Font(Art.font_gold, letters, glyphHeight, spacing, characterFactory);
 		
 		Color[] grayGradient = {
@@ -54,7 +75,7 @@ public class Font {
 	        	new Color(0x969696),
 	        	new Color(0xaeaeae)
 	        };
-		characterFactory = new FontCharacterFactory(systemFont, grayGradient, shadowColor);
+		characterFactory = new FontCharacterFactory(systemFont, fallbackFont, grayGradient, shadowColor, heightOffset);
 		FONT_GRAY = new Font(Art.font_gray, letters, glyphHeight, spacing, characterFactory);
 		
 		Color[] redGradient = {
@@ -66,17 +87,33 @@ public class Font {
 	        	new Color(0xff372d),
 	        	new Color(0xff5d8f)
 	        };
-		characterFactory = new FontCharacterFactory(systemFont, redGradient, shadowColor);
+		characterFactory = new FontCharacterFactory(systemFont, fallbackFont, redGradient, shadowColor, heightOffset);
 		FONT_RED  = new Font(Art.font_red, letters, glyphHeight, spacing, characterFactory);
  
 		letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ    " + "abcdefghijklmnopqrstuvwxyz    " + "0123456789-.!?/%$\\=*+,;:()&#\"'";
-        glyphHeight = 6;
+       
+		glyphHeight = 6;
+		systemFontHeight = 9;
+	    heightOffset = systemFontHeight - glyphHeight + 1;
         spacing = 1;
-        systemFont = new java.awt.Font("SansSerif", java.awt.Font.PLAIN, 7);
+        
+        fallbackFont = new java.awt.Font("SansSerif", java.awt.Font.PLAIN, systemFontHeight);
+		try {
+			File fontFile = new File("res/art/fonts/ubuntu-font-family-0.80/Ubuntu-R.ttf");
+	        fontFile.setReadOnly();
+	        systemFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, fontFile);
+			systemFont = systemFont.deriveFont((float)systemFontHeight);
+		} catch (FontFormatException e) {
+			e.printStackTrace();
+			systemFont = fallbackFont;
+		} catch (IOException e) {
+			e.printStackTrace();
+			systemFont = fallbackFont;
+		}
+        
         shadowColor = null;
-	    
         Color[] smallBlackGradient = {new Color(0x000000)};
-        characterFactory = new FontCharacterFactory(systemFont, smallBlackGradient, shadowColor);
+        characterFactory = new FontCharacterFactory(systemFont, fallbackFont, smallBlackGradient, shadowColor, heightOffset);
         FONT_BLACK_SMALL = new Font(Art.font_small_black, letters, glyphHeight, spacing, characterFactory);
         
         Color[] smallGoldGradient = {
@@ -85,14 +122,14 @@ public class Font {
         		new Color(0xfbf5de),
         		new Color(0xfbf3df),
         		new Color(0xf1d891)};
-        characterFactory = new FontCharacterFactory(systemFont, smallGoldGradient, shadowColor);
+        characterFactory = new FontCharacterFactory(systemFont, fallbackFont, smallGoldGradient, shadowColor, heightOffset);
         FONT_GOLD_SMALL  = new Font(Art.font_small_gold,  letters, glyphHeight, spacing, characterFactory);
         
         Color[] smallWhiteGradient = {new Color(0xffffff)};
-        characterFactory = new FontCharacterFactory(systemFont, smallWhiteGradient, shadowColor);
+        characterFactory = new FontCharacterFactory(systemFont, fallbackFont, smallWhiteGradient, shadowColor, heightOffset);
         FONT_WHITE_SMALL = new Font(Art.font_small_white, letters, glyphHeight, spacing, characterFactory);
 
-	    setDefaultFont(FONT_GOLD);
+	    setDefaultFont(FONT_GOLD_SMALL);
 	}
     
 	/**
