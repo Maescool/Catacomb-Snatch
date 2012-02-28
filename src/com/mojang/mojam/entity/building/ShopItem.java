@@ -21,15 +21,17 @@ public class ShopItem extends Building {
     public static final int SHOP_TURRET = 0;
     public static final int SHOP_HARVESTER = 1;
     public static final int SHOP_BOMB = 2;
-    public static final int[] YOFFS = { 10, 22, 7 };
-    public static final int[] COST = {150, 300, 500};
+    public static final int SHOP_RAILCART = 3;
+    public static final int[] YOFFS = { 10, 22, 7 , 0};
+    public static final int[] COST = {150, 300, 500, 300};
     private final int type;
     private int effectiveCost;
     
     private final String[][] TOOLTIPS = { 
             MojamComponent.texts.shopTooltipLines("turret"),
             MojamComponent.texts.shopTooltipLines("harvester"),
-            MojamComponent.texts.shopTooltipLines("bomb")
+            MojamComponent.texts.shopTooltipLines("bomb"),
+            MojamComponent.texts.shopTooltipLines("railcart")
     };
 
 	/**
@@ -58,10 +60,12 @@ public class ShopItem extends Building {
     		COST[0] = 0;
     		COST[1] = 0;
     		COST[2] = 0;
+    		COST[3] = 0;
     	}else{
     		COST[0] = 150;
     		COST[1] = 300;
     		COST[2] = 500;
+    		COST[3] = 300;
     	}
     }
 
@@ -92,6 +96,12 @@ public class ShopItem extends Building {
                 return Art.harvester[facing][0];
             case SHOP_BOMB:
                 return Art.bomb;
+            case SHOP_RAILCART: {
+              Bitmap b = new Bitmap(32, 32);
+        			b.blit(Art.railcart1[0][0], 0, 0);
+        			b.blit(Art.railcart2[0][0], 0, 0);
+        			return b;
+            }
         }
         return Art.turret[facing][0];
     }
@@ -122,6 +132,9 @@ public class ShopItem extends Building {
                     case SHOP_BOMB:
                         item = new Bomb(pos.x, pos.y);
                         break;
+                    case SHOP_RAILCART:
+                      item = new RailCart(pos.x, pos.y, team, player);
+                      break;
                 }
                 level.addEntity(item);
                 player.pickup(item);

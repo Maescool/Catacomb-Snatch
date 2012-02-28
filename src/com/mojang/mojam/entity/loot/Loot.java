@@ -7,39 +7,43 @@ import com.mojang.mojam.screen.*;
 import com.mojang.mojam.level.HoleTile;
 
 public class Loot extends Entity {
-	public double xa, ya, za;
-	public double z;
+	public double xMovement, yMovement, accelerationDirectionDelta;
+	public double accelerationDirection;
 	public Entity owner;
 	public int life;
-	public int takeTime = 0;
-	public int animTime = 0;
+	public int animationTime = 0;
 	private int value = 0;
 	public boolean fake = false;
 	private boolean isTakeable;
 	private boolean disappears = true; 
 
-	public static Bitmap[][][] anims = { Art.pickupCoinBronzeSmall,
-			Art.pickupCoinSilverSmall, Art.pickupCoinGoldSmall,
-			Art.pickupCoinBronze, Art.pickupCoinSilver, Art.pickupCoinGold,
-			Art.pickupGemEmerald, Art.pickupGemRuby, Art.pickupGemDiamond};
+	public static Bitmap[][][] animationArt = {
+		Art.pickupCoinBronzeSmall,
+		Art.pickupCoinSilverSmall,
+		Art.pickupCoinGoldSmall,
+		Art.pickupCoinBronze,
+		Art.pickupCoinSilver,
+		Art.pickupCoinGold,
+		Art.pickupGemEmerald,
+		Art.pickupGemRuby,
+		Art.pickupGemDiamond};
 
 	public static int[] values = { 1, 2, 5, 10, 20, 50, 100, 200, 500};
 
-
-	public Loot(double x, double y, double xa, double ya, int val, boolean disappears) {
-		setup(x, y, xa, ya, val, disappears);
+	public Loot(double x, double y, double xDirection, double yDirection, int lootValue, boolean disappears) {
+		setup(x, y, xDirection, yDirection, lootValue, disappears);
 	}
 
-	public Loot(double x, double y, double xa, double ya, int val) {
-		setup(x, y, xa, ya, val, true);
+	public Loot(double x, double y, double xDirection, double yDirection, int lootValue) {
+		setup(x, y, xDirection, yDirection, lootValue, true);
 	}
 	
-	public void setup(double x, double y, double xa, double ya, int val, boolean disappears){
+	public void setup(double x, double y, double xDirection, double yDirection, int lootValue, boolean disappears){
 		pos.set(x, y);
 		isTakeable = true;
 
 		value = 0;
-		while (value < 8 && values[value] < val)
+		while (value < 8 && values[value] < lootValue)
 			value++;
 
 		if (TurnSynchronizer.synchedRandom.nextInt(3) == 0)
@@ -49,99 +53,86 @@ public class Loot extends Entity {
 		if (value > 8)
 			value = 8;
 
-		// value = TurnSynchronizer.synchedRandom.nextInt(9);
-		double pow = TurnSynchronizer.synchedRandom.nextDouble() * 1 + 1;
-		this.xa = xa * pow;
-		this.ya = ya * pow;
-		this.za = TurnSynchronizer.synchedRandom.nextDouble() * 2 + 1.0;
+		double power = TurnSynchronizer.synchedRandom.nextDouble() * 1 + 1;
+		this.xMovement = xDirection * power;
+		this.yMovement = yDirection * power;
+		this.accelerationDirectionDelta = TurnSynchronizer.synchedRandom.nextDouble() * 2 + 1.0;
 		this.setSize(2, 2);
 		this.disappears=disappears;
 		physicsSlide = false;
 		life = TurnSynchronizer.synchedRandom.nextInt(100) + 600;
 
-		animTime = TurnSynchronizer.synchedRandom
-				.nextInt(anims[value].length * 3);
+		animationTime = TurnSynchronizer.synchedRandom.nextInt(animationArt[value].length * 3);
 	}
+	
 	public void makeUntakeable() {
 		isTakeable = false;
 		life = 100 - TurnSynchronizer.synchedRandom.nextInt(40);
 	}
 
 	public void tick() {
-		if(level.getTile(pos) instanceof HoleTile)
-		{
+		if (level.getTile(pos) instanceof HoleTile) {
 			remove();
 		}
-		animTime++;
-		if (takeTime > 0) {
-			takeTime--;
-			if (takeTime == 0) {
-				remove();
-			}
-			z += za;
-			za += 0.25;
-			return;
-		}
-		move(xa, ya);
-		z += za;
-		if (z < 0) {
-			z = 0;
-			xa *= 0.8;
-			ya *= 0.8;
+		
+		animationTime++;
+		move(xMovement, yMovement);
+		accelerationDirection += accelerationDirectionDelta;
+		if (accelerationDirection < 0) {
+			accelerationDirection = 0;
+			xMovement *= 0.8;
+			yMovement *= 0.8;
 		} else {
-			xa *= 0.98;
-			ya *= 0.98;
-
+			xMovement *= 0.98;
+			yMovement *= 0.98;
 		}
-		za -= 0.2;
+		
+		accelerationDirectionDelta -= 0.2;
 		if (this.disappears){
 			if (--life < 0)
 				remove();
 		}
 		
 		if (isTakeable) {
-			double dist = 100;
-			for (Entity e : level.getEntities(getBB().grow(dist))) {
-				if (!(e instanceof LootCollector))
+			double fixDistance = 100;
+			int absorbDistance = 16;
+			for (Entity entity : level.getEntities(getBB().grow(fixDistance))) {
+				if (!(entity instanceof LootCollector))
 					continue;
-				LootCollector p = (LootCollector) e;
-				if (!p.canTake()) {
-					double xd = e.pos.x - pos.x;
-					double yd = e.pos.y - pos.y;
-					double localDist = 80;
-					if (xd * xd + yd * yd < localDist * localDist) {
-						double dd = Math.sqrt(xd * xd + yd * yd);
-						if (dd < 16) {
-							onTake(p);
+				LootCollector collector = (LootCollector) entity;
+				double xDelta = entity.pos.x - pos.x;
+				double yDelta = entity.pos.y - pos.y;
+				double distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
+				if (!collector.canTake()) {
+					double localDistance = 80;
+					if (xDelta * xDelta + yDelta * yDelta < localDistance * localDistance) {
+						if (distance < absorbDistance) {
+							onTake(collector);
 							return;
 						}
-						xd /= dd;
-						yd /= dd;
-						double pow = (1 - (dd / localDist)) * 0.1;
-						if (z <= 0) {
-							this.xa -= xd * pow;
-							this.ya -= yd * pow;
+						xDelta /= distance;
+						yDelta /= distance;
+						double power = (1 - (distance / localDistance)) * 0.1;
+						if (accelerationDirection <= 0) {
+							xMovement -= xDelta * power;
+							yMovement -= yDelta * power;
 						}
 					}
 				} else {
-					double suckPow = p.getSuckPower();
-					double xd = e.pos.x - pos.x;
-					double yd = e.pos.y - pos.y;
-					double localDist = (dist - 40) * suckPow + 40;
-					if (xd * xd + yd * yd < localDist * localDist) {
-						p.notifySucking();
-						double dd = Math.sqrt(xd * xd + yd * yd);
-						if (dd < 16) {
-							onTake(p);
+					double suckPower = collector.getSuckPower();
+					double localDistance = (fixDistance - 40) * suckPower + 40;
+					if (xDelta * xDelta + yDelta * yDelta < localDistance * localDistance) {
+						collector.notifySucking();
+						if (distance < absorbDistance) {
+							onTake(collector);
 							return;
 						}
-						xd /= dd;
-						yd /= dd;
-						double pow = (1 - (dd / localDist)) * 1.6
-								* (suckPow * 0.5 + 0.5);
-						if (z <= 0) {
-							this.xa += xd * pow;
-							this.ya += yd * pow;
+						xDelta /= distance;
+						yDelta /= distance;
+						double power = (1 - (distance / localDistance)) * 1.6 * (suckPower * 0.5 + 0.5);
+						if (accelerationDirection <= 0) {
+							xMovement += xDelta * power;
+							yMovement += yDelta * power;
 						}
 					}
 				}
@@ -185,14 +176,14 @@ public class Loot extends Entity {
 	}
 
 	public void render(Screen screen) {
-		Bitmap[][] bm = anims[value];
+		Bitmap[][] lootAnimation = animationArt[value];
 		if (life > 60 * 3 || life / 2 % 2 == 0) {
-			int frame = animTime / 3 % bm.length;
-			Bitmap bmp = bm[frame][0];
-			if (z > 0) {
+			int frame = animationTime / 3 % lootAnimation.length;
+			Bitmap currentFrame = lootAnimation[frame][0];
+			if (accelerationDirection > 0) {
 				screen.blit(Art.shadow, pos.x - 2, pos.y);
 			}
-			screen.blit(bmp, pos.x - bmp.w / 2, pos.y - bmp.h / 2 - 2 - z);
+			screen.blit(currentFrame, pos.x - currentFrame.w / 2, pos.y - currentFrame.h / 2 - 2 - accelerationDirection);
 		}
 	}
 
