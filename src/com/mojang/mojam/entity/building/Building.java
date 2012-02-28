@@ -27,7 +27,6 @@ public class Building extends Mob implements IUsable {
 	public boolean highlight = false;
 	private int healingTime = HEALING_INTERVAL;
 	public Mob carriedBy = null;
-	public Mob lastCarrying = null;
 
 	protected int upgradeLevel = 0;
 	private int maxUpgradeLevel = 0;
@@ -155,7 +154,7 @@ public class Building extends Mob implements IUsable {
 	 * @param mob Reference to the mob object carrying this building
 	 */
 	public void onPickup(Mob mob) {
-	    lastCarrying = carriedBy = mob;
+	    carriedBy = mob;
 	}
 	
 	/**
