@@ -7,6 +7,7 @@ import com.mojang.mojam.level.gamemode.events.Event;
 import com.mojang.mojam.level.gamemode.events.EventEntitySpawner;
 import com.mojang.mojam.level.gamemode.events.EventTileSwitcher;
 import com.mojang.mojam.level.gamemode.events.EventTileTrigger;
+import com.mojang.mojam.level.gamemode.events.EventTriggerCreateNewTestEvent;
 import com.mojang.mojam.level.tile.DestroyableWallTile;
 import com.mojang.mojam.level.tile.SandTile;
 import com.mojang.mojam.level.tile.Tile;
@@ -45,10 +46,12 @@ public class GameModeEventsTest extends GameMode {
 		EventEntitySpawner effectspawn = new EventEntitySpawner();
 		effectspawn.addEntity(new SpawnerEntity(Tile.WIDTH * 25, Tile.HEIGHT * 53, Team.Neutral, 2));
 		effectspawn.addEntity(new SpawnerEntity(Tile.WIDTH * 36, Tile.HEIGHT * 53, Team.Neutral, 2));
-		effectspawn.addEntity(new ShopItem(Tile.WIDTH * 30, Tile.HEIGHT * 52, ShopItem.SHOP_BOMB, Team.Team1, Team.Team1));
+		effectspawn.addEntity(new ShopItem(Tile.WIDTH * 30, Tile.HEIGHT * 52, ShopItem.SHOP_BOMB, Team.Team1, Team.Team1));		
 		event.add(trigger);
 		event.add(effect);
 		event.add(effectspawn);
+		EventTriggerCreateNewTestEvent testevent = new EventTriggerCreateNewTestEvent();
+		event.add(testevent);
 
 		newLevel.addEvent(event);
 	}
