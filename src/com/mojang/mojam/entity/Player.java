@@ -21,6 +21,7 @@ import com.mojang.mojam.entity.weapon.Rifle;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.level.tile.RailTile;
 import com.mojang.mojam.level.tile.Tile;
+import com.mojang.mojam.level.tile.UnbreakableRailTile;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
@@ -34,6 +35,7 @@ public class Player extends Mob implements LootCollector {
     public static int COST_RAIL;
     public static int COST_DROID;
     public static int COST_REMOVE_RAIL;
+    public static int RAIL_MODE;
     public static final int REGEN_INTERVAL = 60 * 3;
     public int plevel;
     public double pexp;
@@ -259,7 +261,12 @@ public class Player extends Mob implements LootCollector {
             revive();
         }
 
+        if (keys.build.isDown && keys.build.wasDown) {
+            handleRailBuilding(x, y, RAIL_MODE);
+        }
+        
         if (keys.build.isDown && !keys.build.wasDown) {
+        	  RAIL_MODE = 0;
             handleRailBuilding(x, y);
         }
 
@@ -450,12 +457,12 @@ public class Player extends Mob implements LootCollector {
      * @param ya Position change on the y axis
      */
     private void handleRailBuilding(int x, int y) {
-
         if (level.getTile(x, y).isBuildable()) {
             if (score >= COST_RAIL && time - lastRailTick >= RailDelayTicks) {
                 lastRailTick = time;
                 level.placeTile(x, y, new RailTile(level.getTile(x, y)), this);
                 payCost(COST_RAIL);
+                RAIL_MODE = 1;
             } else if (score < COST_RAIL) {
             	if(this.team == MojamComponent.localTeam) {
             		  Notifications.getInstance().add(MojamComponent.texts.buildRail(COST_RAIL));
@@ -463,7 +470,7 @@ public class Player extends Mob implements LootCollector {
               
             }
         } else if (level.getTile(x, y) instanceof RailTile) {
-            if ((y < 8 && team == Team.Team2) || (y > level.height - 9 && team == Team.Team1)) {
+            if ((y < 9 && team == Team.Team2) || (y > level.height - 10 && team == Team.Team1)) {
                 if (score >= COST_DROID) {
                     level.addEntity(new RailDroid(pos.x, pos.y, team));
                     payCost(COST_DROID);
@@ -478,8 +485,48 @@ public class Player extends Mob implements LootCollector {
                     lastRailTick = time;
                     if (((RailTile) level.getTile(x, y)).remove()) {
                         payCost(COST_REMOVE_RAIL);
+                        RAIL_MODE = 2;
                     }
                 } else if (score < COST_REMOVE_RAIL) {
+                	if(this.team == MojamComponent.localTeam) {
+                		Notifications.getInstance().add(MojamComponent.texts.removeRail(COST_REMOVE_RAIL));
+                	}
+                }
+                MojamComponent.soundPlayer.playSound("/sound/Track Place.wav", (float) pos.x, (float) pos.y);
+            }
+        }
+    }
+    
+    /**
+     * Handle rail building while holding down key or externally with mode
+     * 
+     * @param xa Position change on the x axis
+     * @param ya Position change on the y axis
+     * @param mode Mode to change to , 1 is add , 2 is remove
+     */
+    private void handleRailBuilding(int x, int y, int mode) {
+
+        if (level.getTile(x, y).isBuildable() && !(level.getTile(x, y) instanceof RailTile) && mode == 1) {
+            if (score >= COST_RAIL && time - lastRailTick >= RailDelayTicks) {
+                lastRailTick = time;
+                level.placeTile(x, y, new RailTile(level.getTile(x, y)), this);
+                payCost(COST_RAIL);
+            } else if (score < COST_RAIL) {
+            	RAIL_MODE = 0;
+            	if(this.team == MojamComponent.localTeam) {
+            		  Notifications.getInstance().add(MojamComponent.texts.buildRail(COST_RAIL));
+            	}
+              
+            }
+        } else if (level.getTile(x, y) instanceof RailTile && !(level.getTile(x, y) instanceof UnbreakableRailTile) && mode == 2) {
+            if (!(y < 9 && team == Team.Team2) || (y > level.height - 10 && team == Team.Team1) && mode == 2) {
+                if (score >= COST_REMOVE_RAIL && time - lastRailTick >= RailDelayTicks) {
+                    if (((RailTile) level.getTile(x, y)).remove()) {
+                    	  lastRailTick = time;
+                        payCost(COST_REMOVE_RAIL);
+                    }
+                } else if (score < COST_REMOVE_RAIL) {
+                	RAIL_MODE = 0;
                 	if(this.team == MojamComponent.localTeam) {
                 		Notifications.getInstance().add(MojamComponent.texts.removeRail(COST_REMOVE_RAIL));
                 	}
