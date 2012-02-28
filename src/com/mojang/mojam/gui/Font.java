@@ -110,7 +110,7 @@ public class Font {
 			systemFont = fallbackFont;
 		}
         
-        shadowColor = null;
+        shadowColor = new Color(0, 0, 0, 0);
         Color[] smallBlackGradient = {new Color(0x000000)};
         characterFactory = new FontCharacterFactory(systemFont, fallbackFont, smallBlackGradient, shadowColor, heightOffset);
         FONT_BLACK_SMALL = new Font(Art.font_small_black, letters, glyphHeight, spacing, characterFactory);
