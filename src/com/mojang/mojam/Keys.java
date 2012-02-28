@@ -40,6 +40,10 @@ public class Keys {
 	public Key left = new Key("left");
 	public Key right = new Key("right");
 	public Key fire = new Key("fire");
+    public Key fireUp = new Key("fireUp");
+    public Key fireDown = new Key("fireDown");
+    public Key fireLeft = new Key("fireLeft");
+    public Key fireRight = new Key("fireRight");
 	public Key build = new Key("build");
 	public Key use = new Key("use");
 	public Key upgrade = new Key("upgrade");
