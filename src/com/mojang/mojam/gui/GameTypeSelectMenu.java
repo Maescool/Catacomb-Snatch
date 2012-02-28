@@ -19,12 +19,14 @@ public class GameTypeSelectMenu extends GuiMenu {
 		super();
 		this.gameWidth = gameWidth;
 		
-		ClickableComponent arcadeModeButton = addButton(new Button(TitleMenu.SELECT_LEVEL_ID, MojamComponent.texts.getStatic("gameTypeMenu.arcade"),
+		ClickableComponent campaignModeButton = addButton(new Button(TitleMenu.CAMPAIGN_SELECT_SCREEN, MojamComponent.texts.getStatic("gamemodemenu.campaign"),
 				(gameWidth - 128) / 2, 170)); 
-		ClickableComponent creativeModeButton = addButton(new Button(TitleMenu.SELECT_LEVEL_ID, MojamComponent.texts.getStatic("gameTypeMenu.creative"),
+		ClickableComponent arcadeModeButton = addButton(new Button(TitleMenu.SELECT_LEVEL_ID, MojamComponent.texts.getStatic("gamemodemenu.arcade"),
 				(gameWidth - 128) / 2, 200));
-		ExitButton = (Button) addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, MojamComponent.texts.getStatic("pausemenu.backtomain"),
+		ClickableComponent creativeModeButton = addButton(new Button(TitleMenu.SELECT_LEVEL_ID, MojamComponent.texts.getStatic("gamemodemenu.creative"),
 				(gameWidth - 128) / 2, 230));
+		ExitButton = (Button) addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, MojamComponent.texts.getStatic("back"),
+				(gameWidth - 128) / 2, 260));
 		
 		arcadeModeButton.addListener(new ButtonListener() {
 			@Override
@@ -44,9 +46,11 @@ public class GameTypeSelectMenu extends GuiMenu {
 	}
 
 	public void render(Screen screen) {
-		screen.blit(Art.background, 0, 0);
+		screen.blit(Art.titleScreen, 0, 0);
 		super.render(screen);
 
+		Font.drawCentered(screen, MojamComponent.texts.getStatic("gamemodemenu.title"), gameWidth/2, 155);
+		
 		screen.blit(Art.getLocalPlayerArt()[0][6], (gameWidth - 128) / 2 - 40,
 				160 + selectedItem * 30);
 	}
@@ -54,12 +58,12 @@ public class GameTypeSelectMenu extends GuiMenu {
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
 			selectedItem--;
-			if (selectedItem < 1) {
-				selectedItem = 0;
+			if (selectedItem < 0) {
+				selectedItem = buttons.size() -1;
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
 			selectedItem++;
-			if (selectedItem > 2) {
+			if (selectedItem > buttons.size() - 1) {
 				selectedItem = 0;
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {

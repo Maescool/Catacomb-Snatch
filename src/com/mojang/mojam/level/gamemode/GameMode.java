@@ -136,8 +136,8 @@ public class GameMode {
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 + .5), (newLevel.height - 4.5) * 32,
 				ShopItem.SHOP_BOMB, Team.Team1,localTeam));
 		
-		newLevel.setTile(31, 7, new UnbreakableRailTile(new SandTile()));
-		newLevel.setTile(31, 63 - 7, new UnbreakableRailTile(new SandTile()));
+		newLevel.setTile((newLevel.width / 2) - 1, 7, new UnbreakableRailTile(new SandTile()));
+		newLevel.setTile((newLevel.width / 2) - 1, newLevel.height - 8, new UnbreakableRailTile(new SandTile()));
 	}
 	
 	protected void setTickItems() {
