@@ -94,6 +94,11 @@ public class ShopItem extends Building {
         }
     }
     
+    @Override
+	public boolean isHighlightable() {
+		return team == MojamComponent.localTeam;
+	}
+    
 	private int getLongestWidth(String[] string, Font font) {
 		int res = 0;
 		for ( String s : string ) {
