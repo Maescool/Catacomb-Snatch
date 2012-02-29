@@ -529,20 +529,6 @@ public class Player extends Mob implements LootCollector {
     }
 
     /**
-     * Drop a carried entity onto the floor, making it a part of the level again
-     */
-    private void dropCarrying() {
-        carrying.removed = false;
-        carrying.xSlide = aimVector.x * 5;
-        carrying.ySlide = aimVector.y * 5;
-        carrying.freezeTime = 10;
-        carrying.justDroppedTicks=80;
-        carrying.setPos(pos);
-        level.addEntity(carrying);
-        carrying = null;
-    }
-
-    /**
      * Handle interaction with entities
      */
     private void handleEntityInteraction() {

@@ -2,12 +2,10 @@ package com.mojang.mojam.entity.building;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
-import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.IUsable;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
-import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.math.BB;
@@ -215,7 +213,7 @@ public class Building extends Mob implements IUsable {
 
 	@Override
 	public boolean isHighlightable() {
-		return this.team == MojamComponent.localTeam || this.team == Team.Neutral;
+		return true;
 	}
 
 	@Override
