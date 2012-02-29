@@ -57,7 +57,7 @@ public class SpawnerEntity extends Building {
 		if (type == 3)
 			te = new Scarab(x, y,localTeam);
 		if((Mob) Snatch.getEntityById(type,x,y)!=null)te = (Mob) Snatch.getEntityById(type,x,y);
-		if (level.countEntities(Mob.class) < level.maxMonsters && level.getEntities(te.getBB().grow(8), te.getClass()).size() == 0 && spawntile.canPass(te))
+		if (te!=null&&level.countEntities(Mob.class) < level.maxMonsters && level.getEntities(te.getBB().grow(8), te.getClass()).size() == 0 && spawntile.canPass(te))
 			level.addEntity(te);
 	}
 

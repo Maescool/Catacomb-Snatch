@@ -1,15 +1,38 @@
 function OnRender()
 {
-    //println('Hi there! Render!');
+    lastFrame = frame;
+    frame = Snatch.nanoTime;
+    fps = 1000000000/(frame-lastFrame);
+    Font.draw(Snatch.getMojam().screen, Snatch.getMojam.texts.FPS(fps), 10, 10);
 }
 
 function OnLevelTick(level)
 {
-    println('Level Tick!');
-    println(level.width);
 }
 
-function OnTick(){}
+var Font = new Font();
+var invulnTimer = 0;
+var Snatch;
+var fps = 0.0;
+var frame = 0;
+var lastFrame = 0;
+
+function OnTick(){
+var player = Snatch.getMojam().player;
+        if(invulnTimer > 0)
+        {
+            player.isImmortal = true;
+            invulnTimer--;
+        }
+        else if(player.useMoney(1))
+        {
+            invulnTimer = 100;
+        }
+        else
+        {
+            player.isImmortal = false;
+        }
+}
     
 function AfterTick(){}
     
@@ -24,13 +47,7 @@ function AfterTick(){}
 function OnStop()
 {
     println('Quitting...');
-    /*var manager =new javax.script.ScripEngineManager();
-    var factoryList = manager.getEngineFactories();
-    for(var i = 0; i < factoryList.size();i++)
-    {
-        println(factoryList.get(i).getLanguageName());
-    }
-    */  
+    
 }
     
     function OnVictory(team){}

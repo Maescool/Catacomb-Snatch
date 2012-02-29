@@ -3,8 +3,10 @@ package com.mojang.mojam;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
@@ -19,6 +21,7 @@ import java.util.zip.ZipInputStream;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
+import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
@@ -48,12 +51,21 @@ public final class Snatch
 		{
 			e1.printStackTrace();
 		}
+		/*try
+		{
+			System.setOut(new PrintStream(new FileOutputStream(new File(m.getMojamDir(), "log.txt"))));
+		}
+		catch (FileNotFoundException e1)
+		{
+			e1.printStackTrace();
+		}*/
+
 		System.out.println("init");
+		addMod(Snatch.class.getClassLoader(),"SnatchContent.class");
 		try
 		{
 			System.out.println(modDir.getAbsolutePath());
 			readFromClassPath(modDir);
-			//readFromModFolder(modDir);
 		}
 		catch (Exception e)
 		{
@@ -63,6 +75,7 @@ public final class Snatch
 		{
 			//System.out.println(mod.getClass());
 		}
+		System.out.println(spawnList.size());
 	}
 
 	private static void readFromModFolder(File file) throws IOException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException
@@ -144,7 +157,7 @@ public final class Snatch
 			}
 		}
 	}
-	
+
 	public static MojamComponent getMojam()
 	{
 		return mojam;
@@ -158,7 +171,7 @@ public final class Snatch
 			Package package1 = (com.mojang.mojam.Snatch.class).getPackage();
 			if(package1 != null)
 			{
-				s1 = (new StringBuilder(String.valueOf(package1.getName()))).append(".").append(s1.substring(s.lastIndexOf('/')+1)).toString();
+				s1 = (new StringBuilder(String.valueOf(package1.getName()))).append(".").append(s1.substring(s.lastIndexOf('/') + 1)).toString();
 			}
 			Class class1 = classloader.loadClass(s1);
 			if(!(Mod.class).isAssignableFrom(class1))
@@ -184,7 +197,7 @@ public final class Snatch
 		ClassLoader classloader = (Snatch.class).getClassLoader();
 		if(file.isFile() && (file.getName().endsWith(".jar") || file.getName().endsWith(".zip")))
 		{
-			System.out.println("Reading from classpath "+file.getAbsolutePath());
+			System.out.println("Reading from classpath " + file.getAbsolutePath());
 			FileInputStream fileinputstream = new FileInputStream(file);
 			ZipInputStream zipinputstream = new ZipInputStream(fileinputstream);
 			Object obj = null;
@@ -201,10 +214,10 @@ public final class Snatch
 					System.out.println(s1);
 					addMod(classloader, s1);
 				}
-				if(!zipentry.isDirectory() && s1.contains("mod_") && s1.endsWith(".js"))
+				else if(!zipentry.isDirectory() && s1.contains("mod_"))
 				{
 					System.out.println(s1);
-					addJSMod(classloader, s1);
+					addScript(s1);
 				}
 			}
 			while(true);
@@ -236,19 +249,50 @@ public final class Snatch
 					{
 						addMod(classloader, s2);
 					}
-					if(afile[i].isFile() && s2.contains("mod_") && s2.endsWith(".js"))
+					else if(afile[i].isFile() && s2.contains("mod_"))
 					{
 						System.out.println(s2);
-						addJSMod(classloader, afile[i].getAbsolutePath());
+						addScript(afile[i].getAbsolutePath());
 					}
 				}
 			}
 		}
 	}
 	
+	public static void addScript(String s)
+	{
+		ScriptEngine e = lang.getEngineByExtension(s.substring(s.indexOf('.')+1));
+		/*for(ScriptEngineFactory factory:lang.getEngineFactories())
+		{
+			System.out.println(factory.getLanguageName()+":"+factory.getEngineName());
+			for(String s1:factory.getExtensions())
+			{
+				System.out.println("|__> "+ s1);
+			}
+		}*/
+		try
+		{
+			FileReader fr = new FileReader(s);
+			e.eval(fr);
+			e.put("Snatch", new Snatch());
+			scriptList.add(e);
+		}
+		catch (FileNotFoundException e1)
+		{
+			e1.printStackTrace();
+		}
+		catch (NullPointerException e1)
+		{
+			System.out.println("Could not initialise mod "+s);
+		}
+		catch (ScriptException e1)
+		{
+			e1.printStackTrace();
+		}
+	}
+
 	public static void addJSMod(ClassLoader c, String s)
 	{
-		System.out.println(s);
 		ScriptEngine e = lang.getEngineByExtension("js");
 		try
 		{
@@ -276,7 +320,7 @@ public final class Snatch
 		}
 		return null;
 	}
-	
+
 	public static int numEntitiesLoaded()
 	{
 		return spawnList.size();
@@ -285,11 +329,11 @@ public final class Snatch
 	public static int addEntity(Entity entity)
 	{
 		spawnList.put(spawnList.size(), entity);
-		for(int i = 0; i<spawnList.size();i++)
+		for(int i = 0; i < spawnList.size(); i++)
 		{
-			System.out.println("Registered"+spawnList.get(i));
+			System.out.println("Registered" + spawnList.get(i));
 		}
-		return spawnList.size()-1;
+		return spawnList.size() - 1;
 	}
 
 	public static void afterRender()
@@ -352,7 +396,7 @@ public final class Snatch
 		{
 			m.OnVictory(i);
 		}
-		invoke("OnVictory",i);
+		invoke("OnVictory", i);
 	}
 
 	public static void levelTick(Level level)
@@ -361,7 +405,7 @@ public final class Snatch
 		{
 			m.OnLevelTick(level);
 		}
-		invoke("OnLevelTick",level);
+		invoke("OnLevelTick", level);
 	}
 
 	public static void updateTick()
@@ -379,7 +423,7 @@ public final class Snatch
 		{
 			m.OnSendPacket(packet);
 		}
-		invoke("OnSendPacket",packet);
+		invoke("OnSendPacket", packet);
 	}
 
 	public static void receivePacket(Packet packet)
@@ -388,7 +432,7 @@ public final class Snatch
 		{
 			m.OnReceivePacket(packet);
 		}
-		invoke("OnReceivePacket",packet);
+		invoke("OnReceivePacket", packet);
 	}
 
 	public static void handlePacket(Packet packet)
@@ -397,17 +441,17 @@ public final class Snatch
 		{
 			m.HandlePacket(packet);
 		}
-		invoke("HandlePacket",packet);
+		invoke("HandlePacket", packet);
 	}
-	
+
 	public static void invoke(String s, Object... args)
 	{
 		for(ScriptEngine sc : scriptList)
 		{
-			Invocable i = (Invocable)sc;
-			if(args.length>0)
+			Invocable i = (Invocable) sc;
+			if(args.length > 0)
 			{
-				for(Object o: args)
+				for(Object o : args)
 				{
 					sc.put(o.getClass().getSimpleName(), o);
 					System.out.println(o.getClass().getSimpleName());
@@ -419,13 +463,23 @@ public final class Snatch
 			}
 			catch (NoSuchMethodException e)
 			{
-				System.out.println("Bad method name: "+s);
+				System.out.println("Bad method name: " + s);
 			}
 			catch (ScriptException e)
 			{
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public static long currentTimeMillis()
+	{
+		return System.currentTimeMillis();
+	}
+	
+	public static long nanoTime()
+	{
+		return System.nanoTime();
 	}
 
 }

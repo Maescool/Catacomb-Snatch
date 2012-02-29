@@ -423,7 +423,7 @@ while (running) {
 			menuStack.peek().render(screen);
 		}
 
-		if (Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE)) {
+		if (Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_TRUE)) {
 			Font.draw(screen, texts.FPS(fps), 10, 10);
 		}
 

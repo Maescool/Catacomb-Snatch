@@ -14,6 +14,9 @@ public class mod_TestSpawners extends Mod
 	int id;
 	int turrentId;
 	long invulnTimer = 0;
+	long frame = 0;
+	long lastframe = 0;
+	double fps = 0;
 
 	public mod_TestSpawners()
 	{
@@ -33,7 +36,7 @@ public class mod_TestSpawners extends Mod
 	@Override
 	public void OnTick()
 	{
-		Player player = Snatch.getMojam().player;
+		/*Player player = Snatch.getMojam().player;
 		if(invulnTimer > 0)
 		{
 			player.isImmortal = true;
@@ -46,7 +49,16 @@ public class mod_TestSpawners extends Mod
 		else
 		{
 			player.isImmortal = false;
-		}
+		}*/
+		//System.out.println(fps);
+	}
+	
+	@Override
+	public void OnRender()
+	{
+		lastframe = frame;
+		frame = System.nanoTime();
+		fps = 1000000000/(frame - lastframe);
 	}
 
 	@Override
