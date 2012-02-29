@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.building.ShopItem;
+import com.mojang.mojam.entity.building.ShopItemWeapon;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.entity.mob.SpikeTrap;
 import com.mojang.mojam.level.DifficultyInformation;
@@ -167,6 +168,21 @@ public class GameMode {
 				ShopItem.SHOP_HARVESTER, Team.Team1));
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 + .5), (newLevel.height - 4.5) * 32,
 				ShopItem.SHOP_BOMB, Team.Team1));
+		//Weapons
+		newLevel.addEntity(new ShopItemWeapon(32 * (newLevel.width / 2 - 2.5), 6.5 * 32,
+				ShopItemWeapon.SHOP_RIFLE, Team.Team2));		
+		newLevel.addEntity(new ShopItemWeapon(32 * (newLevel.width / 2 - 2.5), 5.5 * 32,
+				ShopItemWeapon.SHOP_SHOTGUN, Team.Team2));	
+		newLevel.addEntity(new ShopItemWeapon(32 * (newLevel.width / 2 - 2.5), 4.5 * 32,
+				ShopItemWeapon.SHOP_RAYGUN, Team.Team2));
+		
+		newLevel.addEntity(new ShopItemWeapon(32 * (newLevel.width / 2 - 2.5), (newLevel.height - 7.5) * 32,
+				ShopItemWeapon.SHOP_RIFLE, Team.Team1));		
+		newLevel.addEntity(new ShopItemWeapon(32 * (newLevel.width / 2 - 2.5), (newLevel.height - 6.5) * 32,
+				ShopItemWeapon.SHOP_SHOTGUN, Team.Team1));	
+		newLevel.addEntity(new ShopItemWeapon(32 * (newLevel.width / 2 - 2.5), (newLevel.height - 5.5) * 32,
+				ShopItemWeapon.SHOP_RAYGUN, Team.Team1));	
+
 		
 		newLevel.setTile(31, 7, new UnbreakableRailTile(new SandTile()));
 		newLevel.setTile(31, 63 - 7, new UnbreakableRailTile(new SandTile()));

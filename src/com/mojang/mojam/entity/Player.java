@@ -18,6 +18,7 @@ import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.entity.particle.Sparkle;
 import com.mojang.mojam.entity.weapon.IWeapon;
 import com.mojang.mojam.entity.weapon.Rifle;
+import com.mojang.mojam.entity.weapon.Shotgun;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.level.tile.RailTile;
 import com.mojang.mojam.level.tile.Tile;
@@ -675,7 +676,8 @@ public class Player extends Mob implements LootCollector {
 		
     	super.renderCarrying(screen, yOffs);
     }
-
+    
+    
     @Override
     public void collide(Entity entity, double xa, double ya) {
         xd += xa * 0.4;
@@ -713,6 +715,10 @@ public class Player extends Mob implements LootCollector {
     @Override
     public Bitmap getSprite() {
         return null;
+    }
+    
+    public IWeapon getWeapon(int type) {
+    	return weapon;
     }
 
     public boolean useMoney(int cost) {
