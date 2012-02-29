@@ -3,6 +3,7 @@ package com.mojang.mojam.level.tile;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
 public class FloorTile extends Tile {
@@ -17,7 +18,13 @@ public class FloorTile extends Tile {
 			4, // 110
 			1, // 111
 	};
+	public static final int COLOR = 0xffffffff;
+	public static final String NAME = "FLOOR";
 
+	public FloorTile() {
+		img=3;
+		minimapColor = Art.floorTileColors[img & 7][img / 8];
+	}
 	public void init(Level level, int x, int y) {
 		super.init(level, x, y);
 		neighbourChanged(null);
@@ -46,10 +53,10 @@ public class FloorTile extends Tile {
 		if (e != null && e.castShadow()){
 		    this.isShadowed_east = true;
 		}
-		if (ne != null && ne.castShadow() && !this.isShadowed_north && !this.isShadowed_east){
+		if (ne != null && ne.castShadow() && e != null && !e.castShadow() && !this.isShadowed_north && !this.isShadowed_east){
 		    this.isShadowed_north_east = true;
 		}
-		if (nw != null && nw.castShadow() && !this.isShadowed_north && !this.isShadowed_west){
+		if (nw != null && nw.castShadow() && w != null && !w.castShadow() && !this.isShadowed_north && !this.isShadowed_west){
             this.isShadowed_north_west = true;
         }
 
@@ -59,10 +66,32 @@ public class FloorTile extends Tile {
 		if (s instanceof SandTile) {
 			img = 5 + 8;
 		}
+
 		minimapColor = Art.floorTileColors[img & 7][img / 8];
 	}
 
 	public boolean isBuildable() {
 		return true;
 	}
+	
+
+	public int getColor() {
+		return FloorTile.COLOR;
+	}
+
+
+	public String getName() {
+		return FloorTile.NAME;
+	}
+
+
+	public Bitmap getBitMapForEditor() {
+		return Art.floorTiles[0][0];
+	}
+
+	@Override
+	public int getMiniMapColor() {
+		return minimapColor;
+	}
+		
 }

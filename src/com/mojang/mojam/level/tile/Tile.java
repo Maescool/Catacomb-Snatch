@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.animation.LargeBombExplodeAnimation;
+import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.math.BBOwner;
@@ -13,7 +14,7 @@ import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
-public class Tile implements BBOwner {
+public abstract class Tile implements BBOwner, IEditable {
 	public static final int HEIGHT = 32;
 	public static final int WIDTH = 32;
 
@@ -21,19 +22,22 @@ public class Tile implements BBOwner {
 	public int x, y;
 	public int img = -1; // no image set yet
 	public int minimapColor;
+
 	public boolean isShadowed_north;
 	public boolean isShadowed_east;
 	public boolean isShadowed_west;
 	public boolean isShadowed_north_east;
 	public boolean isShadowed_north_west;
     
-	
+	public Tile() {
+		if (img == -1) img = TurnSynchronizer.synchedRandom.nextInt(4);
+		minimapColor = Art.floorTileColors[img & 7][img / 8];
+	}
+
 	public void init(Level level, int x, int y) {
 		this.level = level;
 		this.x = x;
 		this.y = y;
-		if (img == -1) img = TurnSynchronizer.synchedRandom.nextInt(4);
-		minimapColor = Art.floorTileColors[img & 7][img / 8];
 	}
 
 	public boolean canPass(Entity e) {
@@ -41,23 +45,25 @@ public class Tile implements BBOwner {
 	}
 
 	public void render(Screen screen) {
-	    Bitmap floorTile = Art.floorTiles[img & 7][img / 8];
+	    Bitmap floorTile = (Art.floorTiles[img & 7][img / 8]).copy();
 	    
 	    screen.blit(floorTile, x * Tile.WIDTH, y * Tile.HEIGHT);
+	    this.addShadow(screen);
+	}
+	
+	private void addShadow(Screen screen){
 	    if (isShadowed_north) {
-	        screen.blit(Art.shadow_north, x * Tile.WIDTH, y * Tile.HEIGHT);
-	    }
-	    if (isShadowed_east) {
-	        screen.blit(Art.shadow_east, (x+1) * Tile.WIDTH - Art.shadow_east.w , y * Tile.HEIGHT);
-        }
-	    if (isShadowed_west) {
-	        screen.blit(Art.shadow_west, x * Tile.WIDTH, y * Tile.HEIGHT);
-        }
-	    if (isShadowed_north_east) {
+            screen.blit(Art.shadow_north, x * Tile.WIDTH, y * Tile.HEIGHT);
+        } else if (isShadowed_north_east) {
             screen.blit(Art.shadow_north, (x+1) * Tile.WIDTH - Art.shadow_east.w, y * Tile.HEIGHT, Art.shadow_east.w , Art.shadow_north.h);
-        }
-	    if (isShadowed_north_west) {
+        } else if (isShadowed_north_west) {
             screen.blit(Art.shadow_north, x * Tile.WIDTH, y * Tile.HEIGHT, Art.shadow_west.w , Art.shadow_north.h);
+        }
+        if (isShadowed_east) {
+            screen.blit(Art.shadow_east, (x+1) * Tile.WIDTH - Art.shadow_east.w , y * Tile.HEIGHT);
+        }
+        if (isShadowed_west) {
+            screen.blit(Art.shadow_west, x * Tile.WIDTH, y * Tile.HEIGHT);
         }
 	}
 
