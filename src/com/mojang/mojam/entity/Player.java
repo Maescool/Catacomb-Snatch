@@ -9,6 +9,7 @@ import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.animation.SmokePuffAnimation;
 import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.building.Harvester;
+import com.mojang.mojam.entity.building.ShopItem;
 import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.loot.LootCollector;
@@ -565,19 +566,22 @@ public class Player extends Mob implements LootCollector {
 
         // If we found a building close enough to interact with...
         if (closest != null) {
-            // ...and it is a building we are allowed to interact with,
-            // and the use or upgrade key was pressed, then use or upgrade
-            // this building
-            if (shouldInteractWithBuilding(closest)) {
-                if (keys.use.wasPressed() || mouseButtons.isDown(mouseUseButton)) {
+            // Perform any allowed interactions if the correct
+            // keys have been pressed
+            if (keys.use.wasPressed() || mouseButtons.isDown(mouseUseButton)) {
+
+                if (canUseBuilding(closest)) {
                     closest.use(this);
                     mouseButtons.setNextState(mouseUseButton, false);
-                } else if (keys.upgrade.wasPressed()) {
+                }
+            } else if (keys.upgrade.wasPressed()) {
+                
+                if (canUpgradeBuilding(closest)) {
                     closest.upgrade(this);
                 }
             }
             
-            // ...and it is a building we should highlight on this game
+            // If it is a building we should highlight on this game
             // client, then highlight the building (also, remember the
             // highlighted building, so we can unhighlight it again later)
             if (shouldHighlightBuildingOnThisGameClient(closest)) {
@@ -587,16 +591,30 @@ public class Player extends Mob implements LootCollector {
         }
     }
     
-    // If this Player owns the building (or the building is
-    // neutral), then they can interact with it
-    private boolean shouldInteractWithBuilding(Building building) {
-        return building.team == this.team || building.team == Team.Neutral;
+    // Whether this Player should see the building in question
+    // highlighted on their game client - this indicates that
+    // they can interact with the building
+    private boolean shouldHighlightBuildingOnThisGameClient(Building building) {
+        return building.isHighlightable() && canInteractWithBuilding(building) && this.team == MojamComponent.localTeam; 
     }
     
-    // If this Player owns the building, and this is the Player's
-    // game client, then we should highlight the building
-    private boolean shouldHighlightBuildingOnThisGameClient(Building building) {
-        return building.isHighlightable() && shouldInteractWithBuilding(building) && this.team == MojamComponent.localTeam; 
+    // Whether this Player is allowed to use the building in 
+    // question
+    private boolean canUseBuilding(Building building) {
+        //return building.team == this.team || building.team == Team.Neutral; // Players can only use their own and neutral buildings
+        return !(building instanceof ShopItem && building.team != this.team); // Players can only use their own shops, but can use any other building regardless of ownership
+    }
+    
+    // Whether this Player is allowed to upgrade the building
+    // in question
+    private boolean canUpgradeBuilding(Building building) {
+        return building.team == this.team; // Players can only upgrade their own buildings
+    }
+    
+    // Whether this Player is allowed to interact with the building in 
+    // question
+    private boolean canInteractWithBuilding(Building building) {
+        return canUseBuilding(building) || canUpgradeBuilding(building);
     }
 
     /**
@@ -751,23 +769,6 @@ public class Player extends Mob implements LootCollector {
         return pos.add(new Vec2(Math.cos((facing) * (Math.PI) / 4 + Math.PI / 2), Math.sin((facing) * (Math.PI) / 4 + Math.PI / 2)).scale(30));
     }
 
-
-    /**
-     * Pickup a building and carry it around, removing it from the level
-     * 
-     * @param b Building
-     */
-    @Override
-    public void pickup(Building b) {
-        if(b.team != this.team && b.team != Team.Neutral) {
-
-            if(this.team == MojamComponent.localTeam) {
-                Notifications.getInstance().add(MojamComponent.texts.getStatic("gameplay.cantPickup"));
-            }
-            return;
-        }
-        super.pickup(b);
-    }
 
     public void drop() {
         carrying.xSlide = aimVector.x * 5;
