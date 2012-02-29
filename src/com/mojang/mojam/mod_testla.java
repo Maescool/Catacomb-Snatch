@@ -20,6 +20,11 @@ public class mod_testla extends Mod
 	{
 		System.out.println("\"Rawr\" - Charles Testla, 1898");
 	}
+	@Override
+	public void OnRender()
+	{
+		//System.out.println("Render");
+	}
 
 	@Override
 	public String getVersion()

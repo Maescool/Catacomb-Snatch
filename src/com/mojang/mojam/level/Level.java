@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.Snatch;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Team;
@@ -258,6 +259,7 @@ public class Level {
 		if(victoryConditions != null)
 			victoryConditions.updateVictoryConditions(this);
 		Notifications.getInstance().tick();
+		Snatch.levelTick(this);
 	}
 
 	private boolean hasSeen(int x, int y) {

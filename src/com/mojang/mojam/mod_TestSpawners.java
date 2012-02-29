@@ -12,6 +12,7 @@ public class mod_TestSpawners extends Mod
 {
 
 	int id;
+	int turrentId;
 	long invulnTimer = 0;
 
 	public mod_TestSpawners()

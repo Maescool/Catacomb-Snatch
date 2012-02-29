@@ -3,6 +3,7 @@ package com.mojang.mojam;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -16,12 +17,13 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
 import com.mojang.mojam.entity.Entity;
-import com.mojang.mojam.entity.mob.Bat;
-import com.mojang.mojam.entity.mob.Mummy;
-import com.mojang.mojam.entity.mob.Snake;
 import com.mojang.mojam.level.Level;
-import com.mojang.mojam.network.NetworkCommand;
 import com.mojang.mojam.network.Packet;
 
 public final class Snatch
@@ -29,8 +31,10 @@ public final class Snatch
 	private static boolean init = false;
 	public static File modDir;
 	public static List<Mod> modList = new ArrayList<Mod>();
+	public static List<ScriptEngine> scriptList = new ArrayList<ScriptEngine>();
 	private static MojamComponent mojam;
 	public static Map<Integer, Entity> spawnList = new HashMap<Integer, Entity>();
+	private static ScriptEngineManager lang = new ScriptEngineManager();
 
 	public static void init(MojamComponent m)
 	{
@@ -197,6 +201,11 @@ public final class Snatch
 					System.out.println(s1);
 					addMod(classloader, s1);
 				}
+				if(!zipentry.isDirectory() && s1.contains("mod_") && s1.endsWith(".js"))
+				{
+					System.out.println(s1);
+					addJSMod(classloader, s1);
+				}
 			}
 			while(true);
 			fileinputstream.close();
@@ -227,8 +236,33 @@ public final class Snatch
 					{
 						addMod(classloader, s2);
 					}
+					if(afile[i].isFile() && s2.contains("mod_") && s2.endsWith(".js"))
+					{
+						System.out.println(s2);
+						addJSMod(classloader, afile[i].getAbsolutePath());
+					}
 				}
 			}
+		}
+	}
+	
+	public static void addJSMod(ClassLoader c, String s)
+	{
+		System.out.println(s);
+		ScriptEngine e = lang.getEngineByExtension("js");
+		try
+		{
+			FileReader fr = new FileReader(s);
+			e.eval(fr);
+			scriptList.add(e);
+		}
+		catch (FileNotFoundException e1)
+		{
+			e1.printStackTrace();
+		}
+		catch (ScriptException e1)
+		{
+			e1.printStackTrace();
 		}
 	}
 
@@ -264,6 +298,7 @@ public final class Snatch
 		{
 			m.OnRender();
 		}
+		invoke("OnRender");
 	}
 
 	public static void startRender()
@@ -272,6 +307,7 @@ public final class Snatch
 		{
 			m.OnStartRender();
 		}
+		invoke("OnStartRender");
 	}
 
 	public static void afterTick()
@@ -280,6 +316,7 @@ public final class Snatch
 		{
 			m.AfterTick();
 		}
+		invoke("AfterTick");
 	}
 
 	public static void runOnce()
@@ -288,6 +325,7 @@ public final class Snatch
 		{
 			m.RunOnce();
 		}
+		invoke("RunOnce");
 	}
 
 	public static void createLevel(Level level)
@@ -296,6 +334,7 @@ public final class Snatch
 		{
 			m.CreateLevel(level);
 		}
+		invoke("CreateLevel");
 	}
 
 	public static void onStop()
@@ -304,6 +343,7 @@ public final class Snatch
 		{
 			m.OnClose();
 		}
+		invoke("OnStop");
 	}
 
 	public static void onWin(int i)
@@ -312,6 +352,7 @@ public final class Snatch
 		{
 			m.OnVictory(i);
 		}
+		invoke("OnVictory",i);
 	}
 
 	public static void levelTick(Level level)
@@ -320,6 +361,7 @@ public final class Snatch
 		{
 			m.OnLevelTick(level);
 		}
+		invoke("OnLevelTick",level);
 	}
 
 	public static void updateTick()
@@ -328,6 +370,7 @@ public final class Snatch
 		{
 			m.OnTick();
 		}
+		invoke("OnTick");
 	}
 
 	public static void sendPacket(Packet packet)
@@ -336,6 +379,7 @@ public final class Snatch
 		{
 			m.OnSendPacket(packet);
 		}
+		invoke("OnSendPacket",packet);
 	}
 
 	public static void receivePacket(Packet packet)
@@ -344,12 +388,44 @@ public final class Snatch
 		{
 			m.OnReceivePacket(packet);
 		}
+		invoke("OnReceivePacket",packet);
 	}
 
 	public static void handlePacket(Packet packet)
 	{
-		// TODO Auto-generated method stub
-		
+		for(Mod m : modList)
+		{
+			m.HandlePacket(packet);
+		}
+		invoke("HandlePacket",packet);
+	}
+	
+	public static void invoke(String s, Object... args)
+	{
+		for(ScriptEngine sc : scriptList)
+		{
+			Invocable i = (Invocable)sc;
+			if(args.length>0)
+			{
+				for(Object o: args)
+				{
+					sc.put(o.getClass().getSimpleName(), o);
+					System.out.println(o.getClass().getSimpleName());
+				}
+			}
+			try
+			{
+				i.invokeFunction(s, args);
+			}
+			catch (NoSuchMethodException e)
+			{
+				System.out.println("Bad method name: "+s);
+			}
+			catch (ScriptException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

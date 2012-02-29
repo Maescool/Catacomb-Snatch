@@ -217,7 +217,6 @@ public class MojamComponent extends Canvas implements Runnable,
 
 	public void stop() {
 		running = false;
-		Snatch.onStop();
 		soundPlayer.shutdown();
 	}
 
@@ -406,6 +405,7 @@ while (running) {
 				frames = 0;
 			}
 		}
+		Snatch.onStop();
 	}
 
 	private synchronized void render(Graphics g)
@@ -871,6 +871,7 @@ if(level.victoryConditions.isVictoryConditionAchieved()) {
 		} else if (id == TitleMenu.KEY_BINDINGS_ID) {
 			addMenu(new KeyBindingsMenu(keys, inputHandler));
 		} else if (id == TitleMenu.EXIT_GAME_ID) {
+			Snatch.onStop();
 			System.exit(0);
 		} else if (id == TitleMenu.RETURN_ID) {
 			synchronizer.addCommand(new PauseCommand(false));

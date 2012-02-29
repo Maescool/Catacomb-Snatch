@@ -20,14 +20,14 @@ public abstract class Mod
 	public void OnClose(){}
 	
 	public void OnSendPacket(Packet packet){}
-	
-	public void OnQuit(){}
-	
+		
 	public void OnVictory(int team){}
 	
 	public void OnLevelTick(Level level){}
 	
 	public void OnReceivePacket(Packet packet){}
+	
+	public void HandlePacket(Packet packet){}
 	
 	public void CreateLevel(Level level){}
 	
