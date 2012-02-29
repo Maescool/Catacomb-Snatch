@@ -7,6 +7,9 @@ build.removeRail = TI SERVONO {0} PER RIMUOVERE UNA ROTAIA
 back = INDIETRO
 cancel = ANNULLA
 
+character.text = SELECZIONA IL PERSONAGGIO!
+character.select = SELEZIONA
+
 credits.leadDev = LEAD DEVELOPER:
 credits.maintainers = PROJECT MAINTAINERS:
 credits.communityMan = COMMUNITY MAINTAINERS:
@@ -20,11 +23,12 @@ diffselect.normal = NORMALE
 diffselect.hard = DIFFICILE
 diffselect.nightmare = INCUBO
 
-gameplay.player1Name = LORD LARD
-gameplay.player1NameAlt = DUCHESS DONUT
-gameplay.player1Win = {0} VITTORA WOOHOO
-gameplay.player2Name = HERR VON SPECK
+gameplay.player1Win = {0} VITTORIA WOOHOO
 gameplay.player2Win = {0} VITTORIA EVVAI
+gameplay.player1Name = LORD LARD
+gameplay.player2Name = HERR VON SPECK
+gameplay.player3Name = DUCHESS DONUT
+gameplay.player4Name = COUNTESS CRULLER
 gameplay.FPS = FPS: {0}
 gameplay.latency = LATENZA: {0}
 gameplay.cantPickup = NON PUOI PRENDERLO!
@@ -53,6 +57,10 @@ keys.left = SINISTRA
 keys.right=  DESTRA
 keys.sprint = SCATTA
 keys.fire = SPARA
+keys.fireUp = SPARA IN ALTO
+keys.fireDown = SPARA IN BASSO
+keys.fireLeft = SPARA A SX
+keys.fireRight = SPARA A DX
 keys.use = USA
 keys.build = COSTRUISCI
 keys.upgrade = AGGIORNA
@@ -86,7 +94,7 @@ pausemenu.backtomain = MENU
 pausemenu.resume = RIPRENDI
 pausemenu.exit = ESCI
 
-player.hasDied = {0} Ã¨ MORTO!
+player.hasDied = {0} E' MORTO!
 player.score = {0}: {1}%
 player.cost = {0}
 player.health = {0}%
@@ -97,7 +105,7 @@ player.level = {0}
 
 shop.turretTooltipTitle = TORRETTA
 shop.turretTooltipLine1 = USATA PER DIFENDERSI.
-shop.turretTooltipLine2 = ATTACA I NEMICI.
+shop.turretTooltipLine2 = ATTACA I NEMICI NELLE VICINANZE.
 shop.harvesterTooltipTitle = HARVESTER
 shop.harvesterTooltipLine1 = RACCOGLIE IL TESORO
 shop.harvesterTooltipLine2 = RECUPERA IL BOTTINO.

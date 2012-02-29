@@ -7,6 +7,9 @@ build.removeRail = YOU NEED {0} TO REMOVE A RAIL
 back = BACK
 cancel = CANCEL
 
+character.text = SELECT YOUR CHARACTER!
+character.select = SELECT
+
 credits.leadDev = LEAD DEVELOPER:
 credits.maintainers = PROJECT MAINTAINERS:
 credits.communityMan = COMMUNITY MAINTAINERS:
@@ -96,9 +99,6 @@ options.mute = MUTE
 options.creative = CREATIVE MODE
 options.alternative = ALTERNATIVE PLAYER SKIN
 options.credits = CREDITS
-
-character.text = SELECT YOUR CHARACTER!
-character.select = SELECT
 
 pausemenu.help = HELP
 pausemenu.backtomain = MAIN
