@@ -5,8 +5,6 @@ archivesBaseName = "Catacomb-Snatch"
 project.group = "com.mojang.mojam"
 project.version = "1.0.0-SNAPSHOT"
 
-env = System.getenv()
-
 sourceSets {
   main {
     java {
@@ -29,7 +27,7 @@ jar {
     configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
   }
   manifest {
-    attributes "Main-Class" : "com.mojang.mojam.MojamComponent", "Build" : env.BUILD_NUMBER
+    attributes "Main-Class" : "com.mojang.mojam.MojamComponent"
   }
 }
 
@@ -47,7 +45,7 @@ apply plugin: 'macAppBundle'
 
 macAppBundle {
     mainClassName = "com.mojang.mojam.MojamComponent"
-    icon = "res/art/icon/cs_icons.icns"
+    icon = "cs_icons.icns"
 }
 
 buildscript {
