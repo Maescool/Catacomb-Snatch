@@ -1,0 +1,134 @@
+# Game texts encoded in UTF-8
+
+build.rail = NECESITAS {0} PARA CONSTRUIR UN RAIL.
+build.droid = NECESITAS {0} PARA CONSTRUIR UN ROBOT.
+build.removeRail = NECESITAS {0} PARA BORRAR UN RAIL.
+
+back = VOLVER
+cancel = CANCELAR
+
+credits.leadDev = DESAROLLADOR LIDER:
+credits.maintainers = SOPORTE DEL PROYECTO:
+credits.communityMan = SOPORTE DE LA COMUNIDAD:
+credits.others = Y GRACIAS A TODOS LOS COLABORADES, INCLUYENDO:
+credits.note = ESTE PROYECTO AHORA SE MANTIENE COMO UN PROYECTO COMUNITARIO
+
+diffselect.title = ELEGIR DIFICULTAD
+diffselect.start = COMENZAR JUEGO
+diffselect.easy = FÁCIL
+diffselect.normal = NORMAL
+diffselect.hard = DIFÍCIL
+diffselect.nightmare = MUY DIFÍCIL
+
+gameplay.player1Win = {0} HA GANADO WOOHOO!
+gameplay.player2Win = {0} HA GANADO YAY!
+gameplay.player1Name = SEÑOR LARD
+gameplay.player2Name = HERR VON SPECK
+gameplay.player3Name = DUQUESA DONUT
+gameplay.player4Name = CONDESA CRULLER
+gameplay.FPS = FPS: {0}
+gameplay.latency = LATENCIA: {0}
+gameplay.cantPickup = NO SE PUEDE ESCOGER!
+
+help.goal = OBJETIVO
+help.help1 = RECOLETA 50 TROZOS
+help.help2 = DEL TESORO LOCALIZADO
+help.help3 = EN EL CENTRO DEL MAPA
+help.help4 = ANTES QUE TUS OPONENTE(S).
+help.turret = TORRETA
+help.turret1 = DISPARA A LOS ENEMIGOS A SU ALREDEDOR.
+help.turret2 =
+help.turret3 =
+help.collector = RECOLECTOR
+help.collector1 = SUCCIONA EL DINERO DE SU ALREDEDOR.
+help.collector2= RECÓGELO PARA RECIBIR EL DINERO.
+help.collector3=
+help.bomb = BOMBA
+help.bomb1 = USADO PARA ROMPER LAS PAREDES AGRIETADAS
+help.bomb2 = DISPARALA PARA DETONARLA.
+help.bomb3 =
+help.rails = RAILES
+help.rails1 = LOS ROBOTS SE USAN PARA RECOLETAR EL TESORO
+help.rails2 = PRESIONA 'CONTRUIR' EN EL PRIMER RAIL
+help.rails3 = PARA COMPRAR LOS ROBOTS(50 ORO).
+
+keys.up = ARRIBA
+keys.down = ABAJO
+keys.left = IZQUIERDA
+keys.right= DERECHA
+keys.sprint = CORRER
+keys.fire = DISPARAR
+keys.use = USAR
+keys.build = CONSTRUIR
+keys.upgrade = MEJORAR
+keys.chat = CHAT
+
+leveleditor.title = EDITOR DE NIVEL
+leveleditor.new = NUEVO
+leveleditor.open = ABRIR
+leveleditor.save = GUARDAR
+leveleditor.enterLevelName = PONER NOMBRE DEL MAPA:
+
+levelselect.title = ELIGE UN NIVEL
+levelselect.start = COMENZAR
+levelselect.update = ACTUALIZAR NIVELES
+
+mp.waitingForClient = ESPERANDO AL JUGADOR PARA COMENZAR...
+mp.enterIP = INTRODUZCA IP DEL HOST:
+mp.localIP = TU IP LOCAL:
+mp.externalIP = TU IP EXTERNA:
+mp.join = ENTRAR
+
+options.on = ON
+options.off = OFF
+options.keyBindings = CONTROLES
+options.characterSelect = SELECCIÓN DE PERSONAJE
+options.fullscreen = PANTALLA COMPLETA
+options.showfps = MOSTRAR FPS
+options.music = MUSICA
+options.sounds = SOUNDS
+options.volume = VOLUMEN
+options.mute = SILENCIAR
+options.creative = MODO CREATIVO
+options.alternative = PERSONAJE ALTERNATIVO
+options.credits = CREDITOS
+
+character.text = SELECCIONA TU PERSONAJE!
+character.select = SELECCIONA
+
+pausemenu.help = AYUDA
+pausemenu.backtomain = MENU PRINCIPAL
+pausemenu.resume = REANUDAR
+pausemenu.exit = SALIR DEL JUEGO
+
+player.hasDied = {0} HA MUERTO!
+player.score = {0}: {1}%
+player.cost = {0}
+player.health = {0}%
+player.money = {0}
+player.nextLevel = {0}
+player.exp = {0}
+player.level = {0}
+
+shop.turretTooltipTitle = TORRETA
+shop.turretTooltipLine1 = UTILIZADO PARA DEFENDER.
+shop.turretTooltipLine2 = ATACA A LOS ENEMIGOS CERCANOS.
+shop.harvesterTooltipTitle = RECOLECTOR
+shop.harvesterTooltipLine1 = RECOLECTA EL DINERO.
+shop.harvesterTooltipLine2 = COGERLO PARA RECLAMAR EL DINERO.
+shop.bombTooltipTitle = BOMBA
+shop.bombTooltipLine1 = DESTRUYE LAS PARADAS FRACTURADAS.
+shop.bombTooltipLine2 = PARA ACCEDER AL TESORO.
+
+titlemenu.start = COMENZAR
+titlemenu.host = HOST
+titlemenu.join = ENTRAR
+titlemenu.help = COMO JUGAR
+titlemenu.options = OPCIONES
+titlemenu.levelEditor = EDITOR DE NIVELES
+titlemenu.exit = SALIR
+
+upgrade.full = ESTA TOTALMENTE ACTUALIZADO!
+upgrade.notEnoughMoney = NO TIENES DINERO SUFICIENTE ({0})
+upgrade.to = MEJORADO AL NIVEL {0}
+

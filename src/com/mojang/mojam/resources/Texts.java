@@ -1,23 +1,46 @@
 package com.mojang.mojam.resources;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.MessageFormat;
 import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.Properties;
 
 import com.mojang.mojam.entity.mob.Team;
 
 public class Texts {
-	protected final ResourceBundle texts;
+	protected final Properties texts;
+	protected final Properties fallbackTexts;
 
 	public Texts(Locale locale) {
-		texts = ResourceBundle.getBundle("translations/texts", locale);
+		InputStream stream;
+		fallbackTexts = new Properties();
+		
+		texts = new Properties();
+		try {
+			stream = new FileInputStream(new File("res/translations/texts_"+locale.getLanguage()+".txt"));
+			texts.load(new InputStreamReader(stream, "UTF8"));
+			stream.close();
+		} catch (Exception e) {
+		}
+		
+		try {
+			stream = new FileInputStream(new File("res/translations/texts.txt"));
+			fallbackTexts.load(new InputStreamReader(stream, "UTF8"));
+			stream.close();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	public String getStatic(String property) {
-		if (texts.containsKey(property)) {
-			return texts.getString(property);
+		if (texts != null && texts.containsKey(property)) {
+			return texts.getProperty(property);
+		} else if (fallbackTexts != null && fallbackTexts.containsKey(property)) {
+			return fallbackTexts.getProperty(property);
 		} else {
-			System.err.println("Missing text property {"+property+"}");
 			return "{"+property+"}";
 		}
 	}
