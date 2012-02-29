@@ -35,6 +35,10 @@ public class Turret extends Building {
 	private Bitmap areaBitmap;
 	private static final int RADIUS_COLOR = new Color(240, 210, 190).getRGB();
 
+	public static final int COLOR_NEUTRAL = 0x990066;
+	public static final int COLOR_TEAMONE = 0x990099;
+	public static final int COLOR_TEAMTWO = 0x990033;
+
 	/**
 	 * Constructor
 	 * 

@@ -3,6 +3,7 @@ package com.mojang.mojam.level.tile;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
 public class FloorTile extends Tile {
@@ -17,6 +18,8 @@ public class FloorTile extends Tile {
 			4, // 110
 			1, // 111
 	};
+	public static final int COLOR = 0xffffffff;
+	public static final String NAME = "FLOOR";
 
 	public void init(Level level, int x, int y) {
 		super.init(level, x, y);
@@ -87,4 +90,20 @@ public class FloorTile extends Tile {
 	public boolean isBuildable() {
 		return true;
 	}
+	
+
+	public int getColor() {
+		return FloorTile.COLOR;
+	}
+
+
+	public String getName() {
+		return FloorTile.NAME;
+	}
+
+
+	public Bitmap getBitMapForEditor() {
+		return Art.floorTiles[0][0];
+	}
+	
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.animation.LargeBombExplodeAnimation;
+import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.math.BBOwner;
@@ -11,7 +12,7 @@ import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
-public class Tile implements BBOwner {
+public abstract class Tile implements BBOwner, IEditable {
 	public static final int HEIGHT = 32;
 	public static final int WIDTH = 32;
 

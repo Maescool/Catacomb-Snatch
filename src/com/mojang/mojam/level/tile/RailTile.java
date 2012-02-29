@@ -4,9 +4,14 @@ import com.mojang.mojam.level.Level;
 import com.mojang.mojam.math.Facing;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
 public class RailTile extends Tile {
+	private static final String NAME = "RAIL";
+
+	private static final int COLOR = -1;
+
 	Tile parent;
 
 	public int numConnections = 0;
@@ -99,4 +104,18 @@ public class RailTile extends Tile {
 		
 		return true;
 	}
+
+	public int getColor() {
+		return RailTile.COLOR;
+	}
+
+	public String getName() {
+		return RailTile.NAME;
+	}
+
+	@Override
+	public Bitmap getBitMapForEditor() {
+		return Art.rails[1][0];
+	}
+
 }

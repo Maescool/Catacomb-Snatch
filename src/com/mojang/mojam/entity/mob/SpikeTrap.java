@@ -8,7 +8,8 @@ import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.level.DifficultyInformation;
 
 public class SpikeTrap extends Mob {
-    private int spike = 0;
+    public static final int COLOR = 0x0000ff;
+	private int spike = 0;
     private boolean spikeGoUp = true;
 
     public SpikeTrap(double x, double y) {

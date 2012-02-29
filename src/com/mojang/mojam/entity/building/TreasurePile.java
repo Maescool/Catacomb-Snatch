@@ -11,6 +11,7 @@ import com.mojang.mojam.screen.Bitmap;
  */
 public class TreasurePile extends Building {
 
+	public static final int COLOR = 0xffff00;
 	private int treasures = 40;
 
 	/**

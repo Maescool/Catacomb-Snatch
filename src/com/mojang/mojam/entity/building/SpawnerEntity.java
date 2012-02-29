@@ -1,21 +1,22 @@
 package com.mojang.mojam.entity.building;
 
-import com.mojang.mojam.entity.mob.*;
-import com.mojang.mojam.network.TurnSynchronizer;
+import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.mob.Mob;
+import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.tile.Tile;
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.network.TurnSynchronizer;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
 
 /**
  * Spawner entity. A sarcophage which spawns enemies of a given type onto the field.
  */
-public class SpawnerEntity extends Building {
+public abstract class SpawnerEntity extends Building {
 	/** Spawn interval in frames*/
 	public static final int SPAWN_INTERVAL = 60 * 4;
 
 	public int spawnTime = 0;
-
-	public int type;
 
 	private int lastIndex = 0;
 
@@ -26,16 +27,15 @@ public class SpawnerEntity extends Building {
 	 * @param y Initial Y coordinate
 	 * @param type Mob type
 	 */
-	public SpawnerEntity(double x, double y, int type) {
+	public SpawnerEntity(double x, double y) {
 		super(x, y, Team.Neutral);
 
-		this.type = type;
 		setStartHealth(20);
 		freezeTime = 10;
 		spawnTime = TurnSynchronizer.synchedRandom.nextInt(SPAWN_INTERVAL);
 		minimapIcon = 4;
 		healthBarOffset = 15;
-		deathPoints = type * 5 + 5;
+		deathPoints = 0 * 5 + 5;
 	}
 
 	@Override
@@ -63,18 +63,13 @@ public class SpawnerEntity extends Building {
 		int xin=(int)x/ Tile.WIDTH;
 		int yin=(int)y/ Tile.HEIGHT;
 		Tile spawntile = level.getTile(xin, yin);
-		Mob te = null;
-		if (type == 0)
-			te = new Bat(x, y);
-		if (type == 1)
-			te = new Snake(x, y);
-		if (type == 2)
-			te = new Mummy(x, y);
-		if (type == 3)
-			te = new Scarab(x, y);
+		Mob te = getMob(x,y);
+		
 		if (level.countEntities(Mob.class) < level.maxMonsters && level.getEntities(te.getBB().grow(8), te.getClass()).size() == 0 && spawntile.canPass(te))
 			level.addEntity(te);
 	}
+	
+	protected abstract Mob getMob(double x, double y);
 
 	@Override
 	public Bitmap getSprite() {
@@ -87,4 +82,21 @@ public class SpawnerEntity extends Building {
 		}
 		return Art.mobSpawner[newIndex][0];
 	}
+
+	public static Entity getRandomSpawner(double x, double y) {
+		
+		int nextInt =  TurnSynchronizer.synchedRandom.nextInt(4);
+		
+		if (nextInt == 0)
+			return new SpawnerForBat(x,y);
+		if (nextInt == 1)
+			return new SpawnerForSnake(x,y);
+		if (nextInt == 2)
+			return new SpawnerForMummy(x,y);
+		if (nextInt == 3)
+			return new SpawnerForScarab(x,y);
+		
+		return new SpawnerForBat(x,y); //should never reach this
+	}
+	
 }
