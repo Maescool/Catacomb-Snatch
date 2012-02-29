@@ -1,10 +1,16 @@
 package com.mojang.mojam.entity.building;
 
-import com.mojang.mojam.entity.mob.*;
-import com.mojang.mojam.network.TurnSynchronizer;
+import java.lang.reflect.Constructor;
+
+import com.mojang.mojam.entity.mob.HostileMob;
+import com.mojang.mojam.entity.mob.Mob;
+import com.mojang.mojam.entity.mob.SpawnableEnemy;
+import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.tile.Tile;
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.network.TurnSynchronizer;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
 
 /**
  * Spawner entity. A sarcophage which spawns enemies of a given type onto the field.
@@ -15,7 +21,7 @@ public class SpawnerEntity extends Building {
 
 	public int spawnTime = 0;
 
-	public int type;
+	private SpawnableEnemy type;
 
 	private int lastIndex = 0;
 
@@ -26,7 +32,7 @@ public class SpawnerEntity extends Building {
 	 * @param y Initial Y coordinate
 	 * @param type Mob type
 	 */
-	public SpawnerEntity(double x, double y, int type) {
+	public SpawnerEntity(double x, double y, SpawnableEnemy type) {
 		super(x, y, Team.Neutral);
 
 		this.type = type;
@@ -35,7 +41,7 @@ public class SpawnerEntity extends Building {
 		spawnTime = TurnSynchronizer.synchedRandom.nextInt(SPAWN_INTERVAL);
 		minimapIcon = 4;
 		healthBarOffset = 15;
-		deathPoints = type * 5 + 5;
+		deathPoints = type.getType() * 5 + 5;
 	}
 
 	@Override
@@ -63,17 +69,21 @@ public class SpawnerEntity extends Building {
 		int xin=(int)x/ Tile.WIDTH;
 		int yin=(int)y/ Tile.HEIGHT;
 		Tile spawntile = level.getTile(xin, yin);
-		Mob te = null;
-		if (type == 0)
-			te = new Bat(x, y);
-		if (type == 1)
-			te = new Snake(x, y);
-		if (type == 2)
-			te = new Mummy(x, y);
-		if (type == 3)
-			te = new Scarab(x, y);
-		if (level.countEntities(Mob.class) < level.maxMonsters && level.getEntities(te.getBB().grow(8), te.getClass()).size() == 0 && spawntile.canPass(te))
-			level.addEntity(te);
+
+		try {
+			//This whole try/catch block is to create the new enemy of the given type using reflection. This will allow new enemies to be added without touching this 
+			//code as long as they are defined in SpawnableEnemies enum and have a public constructor that takes (double, double)
+			Mob te = null;
+			Constructor<? extends HostileMob> con = this.type.getClazz().getConstructor(new Class[]{double.class, double.class});
+			te = con.newInstance(new Object[]{x,y});
+			if (level.countEntities(Mob.class) < level.maxMonsters && level.getEntities(te.getBB().grow(8), te.getClass()).size() == 0 && spawntile.canPass(te))
+				level.addEntity(te);
+		} catch (Exception e) {
+			//Something went wrong with the reflection creation of the Enemy. Here are a few things that could've gone wrong:
+			//The constructor with arguments double, double is not defined as Public
+			//There is no constructor with arguments double, double
+			e.printStackTrace();
+		} 		
 	}
 
 	@Override
