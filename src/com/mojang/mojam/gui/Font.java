@@ -2,8 +2,8 @@ package com.mojang.mojam.gui;
 
 import java.awt.Color;
 import java.awt.FontFormatException;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
@@ -28,9 +28,8 @@ public class Font {
         java.awt.Font fallbackFont = new java.awt.Font("SansSerif", java.awt.Font.BOLD, systemFontHeight);
         java.awt.Font systemFont = null;
 		try {
-			File fontFile = new File("res/art/fonts/ubuntu-font-family-0.80/Ubuntu-B.ttf");
-	        fontFile.setReadOnly();
-	        systemFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, fontFile);
+			InputStream fontStream = Font.class.getResourceAsStream("/art/fonts/ubuntu-font-family-0.80/Ubuntu-B.ttf");
+	        systemFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, fontStream);
 			systemFont = systemFont.deriveFont((float)systemFontHeight);
 		} catch (FontFormatException e) {
 			e.printStackTrace();
@@ -98,9 +97,8 @@ public class Font {
         
         fallbackFont = new java.awt.Font("SansSerif", java.awt.Font.PLAIN, systemFontHeight);
 		try {
-			File fontFile = new File("res/art/fonts/ubuntu-font-family-0.80/Ubuntu-L.ttf");
-	        fontFile.setReadOnly();
-	        systemFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, fontFile);
+			InputStream fontStream = Font.class.getResourceAsStream("/art/fonts/ubuntu-font-family-0.80/Ubuntu-L.ttf");
+	        systemFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, fontStream);
 			systemFont = systemFont.deriveFont((float)systemFontHeight);
 		} catch (FontFormatException e) {
 			e.printStackTrace();
