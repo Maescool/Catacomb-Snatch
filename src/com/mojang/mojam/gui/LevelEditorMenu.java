@@ -28,6 +28,7 @@ import com.mojang.mojam.level.LevelUtils;
 import com.mojang.mojam.level.tile.DestroyableWallTile;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.HoleTile;
+import com.mojang.mojam.level.tile.RailTile;
 import com.mojang.mojam.level.tile.UnbreakableRailTile;
 import com.mojang.mojam.level.tile.WallTile;
 import com.mojang.mojam.screen.Art;
@@ -198,8 +199,8 @@ public class LevelEditorMenu extends GuiMenu {
                 if (map[x][y] == null) continue;
 
                 if (map[x][y].h == TILE_HEIGHT) {
-                    if (mapTile[x][y] == 1) {
-                        if (y > 0 && !(mapTile[x][y - 1] == 1)) {
+                    if (mapTile[x][y] == HoleTile.COLOR) {
+                        if (y > 0 && !(mapTile[x][y - 1] == HoleTile.COLOR)) {
                             screen.blit(map[x][y], TILE_HEIGHT * x + mapX, TILE_HEIGHT * y + mapY);
                         } else {
                             screen.fill(TILE_HEIGHT * x + mapX, TILE_HEIGHT * y + mapY, TILE_WIDTH, TILE_HEIGHT, 0);
@@ -212,11 +213,11 @@ public class LevelEditorMenu extends GuiMenu {
                     int tileH = (int) (Math.ceil(map[x][y].h / (float) TILE_HEIGHT)) * TILE_WIDTH;
                     int tileY = TILE_HEIGHT - (tileH - map[x][y].h);
 
-                    if (mapTile[x][y] == 5) {
-                        boolean n = y > 0 && mapTile[x][y - 1] == 5;
-                        boolean s = y < 47 && mapTile[x][y + 1] == 5;
-                        boolean w = x > 0 && mapTile[x - 1][y] == 5;
-                        boolean e = x < 47 && mapTile[x + 1][y] == 5;
+                    if (mapTile[x][y] == UnbreakableRailTile.COLOR) {
+                        boolean n = y > 0 && mapTile[x][y - 1] == UnbreakableRailTile.COLOR;
+                        boolean s = y < 47 && mapTile[x][y + 1] == UnbreakableRailTile.COLOR;
+                        boolean w = x > 0 && mapTile[x - 1][y] == UnbreakableRailTile.COLOR;
+                        boolean e = x < 47 && mapTile[x + 1][y] == UnbreakableRailTile.COLOR;
 
                         int c = (n ? 1 : 0) + (s ? 1 : 0) + (w ? 1 : 0) + (e ? 1 : 0);
                         int img;
