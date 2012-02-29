@@ -88,7 +88,7 @@ public class LevelButton extends ClickableComponent {
 
 		for (int y = 0; y < h; y++) {
 			for (int x = 0; x < w; x++) {
-				minimap.pixels[x + y * w] = l.getTile(x, y).minimapColor;
+				minimap.pixels[x + (y * w)] = l.getTile(x, y).minimapColor;
 			}
 		}
 
