@@ -8,9 +8,9 @@ import com.mojang.mojam.entity.animation.EnemyDieAnimation;
 import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.loot.Loot;
-import com.mojang.mojam.level.DifficultyInformation;
-import com.mojang.mojam.level.HoleTile;
 import com.mojang.mojam.gui.TitleMenu;
+import com.mojang.mojam.level.DifficultyInformation;
+import com.mojang.mojam.level.tile.HoleTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.network.TurnSynchronizer;
@@ -44,9 +44,10 @@ public abstract class Mob extends Entity {
 	public boolean chasing=false;
 	public int justDroppedTicks = 0;
 	public int strength = 0;
-	public int healingInterval;
-	public int healingTime;
-	public boolean healthRegen = true;
+	public int REGEN_INTERVAL;
+	public float REGEN_AMOUNT = 1;
+	public boolean REGEN_HEALTH = true;
+	public int healingTime = REGEN_INTERVAL;
     protected int facing;
     private int walkTime;
     protected int stepTime;
@@ -57,8 +58,8 @@ public abstract class Mob extends Entity {
 		setPos(x, y);
 		this.team = team;
 		DifficultyInformation difficulty = TitleMenu.difficulty;
-		healingInterval = (difficulty != null && difficulty.difficultyID == 3) ? 15 : 25;
-		healingTime = healingInterval;
+		this.REGEN_INTERVAL = (difficulty != null && difficulty.difficultyID == 3) ? 15 : 25;
+		this.healingTime = this.REGEN_INTERVAL;
 	}
 
 	public void init() {
@@ -92,28 +93,23 @@ public abstract class Mob extends Entity {
 	}
 
 	public void tick() {
-		if (TitleMenu.difficulty.difficultyID >= 1 && healthRegen) {
-	  	if (hurtTime <= 0) {
-			  if (health < maxHealth) {
-			  	if (--healingTime <= 0) {
-			  		health++;
-			  		healingTime = healingInterval;
-			  	}
-			  }
-			}
+		if (TitleMenu.difficulty.difficultyID >= 1 ) {
+			this.doRegenTime();
 		}
+		
 		if (hurtTime > 0) {
 			hurtTime--;
 		}
+		
 		if (bounceWallTime > 0) {
 			bounceWallTime--;
 		}
-
+		
 		if (freezeTime > 0) {
 			slideMove(xSlide, ySlide);
 			xSlide *= 0.8;
 			ySlide *= 0.8;
-
+			
 			if (xBump != 0 || yBump != 0) {
 				move(xBump, yBump);
 			}
@@ -128,7 +124,23 @@ public abstract class Mob extends Entity {
 			}
 		}
 	}
-
+	
+	public void doRegenTime() {
+		if (!this.REGEN_HEALTH) {
+			// DO NOTHING
+		} else if (hurtTime <= 0 && health < maxHealth && --healingTime <= 0) {
+			this.healingTime = this.REGEN_INTERVAL;
+			this.onRegenTime();
+		}
+	}
+	
+	public void onRegenTime() {
+			this.regenHealthOf( this.REGEN_AMOUNT );
+			// Can add thing here like a custom regen action
+	}
+	
+	public void regenHealthOf(float a) { this.health += a ; }
+	
 	public void slideMove(double xa, double ya) {
 		move(xa, ya);
 	}
@@ -215,8 +227,8 @@ public abstract class Mob extends Entity {
 		if (isImmortal)
 			return;
 		
-		healingTime = healingInterval;
-
+		this.healingTime = this.REGEN_INTERVAL;
+		
 		if (freezeTime <= 0) {
 			
 			if (source instanceof Bullet && !(this instanceof SpawnerEntity) && !(this instanceof RailDroid)) {

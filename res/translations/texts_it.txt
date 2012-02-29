@@ -1,0 +1,126 @@
+# Game texts encoded in UTF-8
+
+build.rail = TI SERVONO {0} PER COSTRUIRE UNA ROTAIA
+build.droid = TI SERVONO {0} PER COSTRUIRE UN DROIDE
+build.removeRail = TI SERVONO {0} PER RIMUOVERE UNA ROTAIA
+
+back = INDIETRO
+cancel = ANNULLA
+
+character.text = SELECZIONA IL PERSONAGGIO!
+character.select = SELEZIONA
+
+credits.leadDev = LEAD DEVELOPER:
+credits.maintainers = PROJECT MAINTAINERS:
+credits.communityMan = COMMUNITY MAINTAINERS:
+credits.others = AND THANKS TO ALL CONTRIBUTORS, INCLUDING:
+credits.note = THIS PROJECT IS NOW MAINTAINED AS A COMMUNITY PROJECT
+
+diffselect.title = SCEGLI LA DIFFICOLTA
+diffselect.start = GIOCA
+diffselect.easy = FACILE
+diffselect.normal = NORMALE
+diffselect.hard = DIFFICILE
+diffselect.nightmare = INCUBO
+
+gameplay.player1Win = {0} VITTORIA WOOHOO
+gameplay.player2Win = {0} VITTORIA EVVAI
+gameplay.player1Name = LORD LARD
+gameplay.player2Name = HERR VON SPECK
+gameplay.player3Name = DUCHESS DONUT
+gameplay.player4Name = COUNTESS CRULLER
+gameplay.FPS = FPS: {0}
+gameplay.latency = LATENZA: {0}
+gameplay.cantPickup = NON PUOI PRENDERLO!
+
+help.goal = SCOPO
+help.help1 = RACCOGLI 50 LOTTI
+help.help2 = DEL TESORO CHE SI TROVA
+help.help3 = AL CENTRO DELLA MAPPA
+help.help4 = PRIMA DEL TUO AVVERSARIO(I)
+help.turret = TORRETTA
+help.turret1 = SPARA AI NEMICI CHE LA CIRCONDANO.
+help.collector = COLLECTOR
+help.collector1 = RACCOGLIE LE MONETE INTORNO AD ESSO.
+help.collector2 = RACCOGLIERLO PER RICEVERE LE MONETE.
+help.bomb = BOMBA
+help.bomb1 = UTILIZZATO PER DISTRUGGERE LE PARETI. 
+help.bomb2 = SPARA PER DETONARLA.
+help.rails = ROTAIE
+help.rails1 = USATE NEL TRASPORTO DI DROIDI 
+help.rails2 = PER RACCOGLIERE IL TESORO.
+help.rails3 = PER COMPRARE UN DROIDE (50 MONETE)
+
+keys.up = AVANTI
+keys.down = INDIETRO
+keys.left = SINISTRA
+keys.right=  DESTRA
+keys.sprint = SCATTA
+keys.fire = SPARA
+keys.fireUp = SPARA IN ALTO
+keys.fireDown = SPARA IN BASSO
+keys.fireLeft = SPARA A SX
+keys.fireRight = SPARA A DX
+keys.use = USA
+keys.build = COSTRUISCI
+keys.upgrade = AGGIORNA
+keys.chat = CHAT
+
+levelselect.title = SCEGLI UN LIVELLO
+levelselect.start = GIOCA
+levelselect.update = AGGIORNA
+
+mp.waitingForClient = ATTENDERE CHE UN CLIENT SI UNISCA...
+mp.enterIP = INSERISCI L'INDIRIZZO IP DELL'HOST:
+mp.localIP = IL TUO IP LOCALE:
+mp.externalIP = IL TUO IP ESTERNO:
+mp.join = UNISCITI
+
+options.on = ON
+options.off = OFF
+options.keyBindings = CONTROLLI
+options.fullscreen = SCHERMO INTERO
+options.showfps = MOSTRA FPS
+options.music = MUSICA
+options.sounds = SUONI
+options.volume = VOLUME
+options.mute = DISATTIVATA
+options.creative = CREATIVE MODE
+options.alternative = PERSONAGGIO ALTERNATIVO
+options.credits = CREDITI
+
+pausemenu.help = AIUTO
+pausemenu.backtomain = MENU
+pausemenu.resume = RIPRENDI
+pausemenu.exit = ESCI
+
+player.hasDied = {0} E' MORTO!
+player.score = {0}: {1}%
+player.cost = {0}
+player.health = {0}%
+player.money = {0}
+player.nextLevel = {0}
+player.exp = {0}
+player.level = {0}
+
+shop.turretTooltipTitle = TORRETTA
+shop.turretTooltipLine1 = USATA PER DIFENDERSI.
+shop.turretTooltipLine2 = ATTACA I NEMICI NELLE VICINANZE.
+shop.harvesterTooltipTitle = HARVESTER
+shop.harvesterTooltipLine1 = RACCOGLIE IL TESORO
+shop.harvesterTooltipLine2 = RECUPERA IL BOTTINO.
+shop.bombTooltipTitle = BOMBA
+shop.bombTooltipLine1 = DISTRUGGE I MURI.
+shop.bombTooltipLine2 = USATA PER CRARE SCORCIATOIE.
+
+titlemenu.start = GIOCA
+titlemenu.host = OSPITA
+titlemenu.join = UNISCITI
+titlemenu.help = COME GIOCARE
+titlemenu.options = OPZIONI
+titlemenu.exit = ESCI
+
+upgrade.full = AGGIORNATO AL MASSIMO!
+upgrade.notEnoughMoney = NON HAI ABBASTANZA MONETE ({0})
+upgrade.to = AGGIORNATO AL LIVELLO {0}
+

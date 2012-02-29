@@ -16,16 +16,19 @@ public class Rifle implements IWeapon {
 	private double accuracy;
 	private int shootDelay = 5;
 	
-	private boolean wasShooting;
-	private int curShootDelay = 0;	
+	private boolean readyToShoot = true;
+	private int currentShootDelay = 0;	
 	
 	public Rifle(Player owner) {
 		setOwner(owner);
 		
 		setWeaponMode();
 		
+		if(owner.isSprint)
+			shootDelay *= 3;
 		
 	}
+	
 	public void setWeaponMode(){
 		if(Options.getAsBoolean(Options.CREATIVE)){
 			BULLET_DAMAGE = 100f;
@@ -43,12 +46,7 @@ public class Rifle implements IWeapon {
 
 	@Override
 	public void primaryFire(double xDir, double yDir) {
-		wasShooting = true;
-		int delay = 0;
-		if(owner.isSprint)
-			delay -= shootDelay * 2;
-		
-		if (curShootDelay-- <= delay) {
+		if (readyToShoot) {
 			double dir;
 			if(owner.isSprint)
 				dir = getBulletDirection(accuracy * 2);
@@ -64,7 +62,8 @@ public class Rifle implements IWeapon {
 			owner.muzzleTicks = 3;
 			owner.muzzleX = bullet.pos.x + 7 * xDir - 8;
 			owner.muzzleY = bullet.pos.y + 5 * yDir - 8 + 1;
-			curShootDelay = shootDelay;
+			currentShootDelay = shootDelay;
+			readyToShoot= false;
 			MojamComponent.soundPlayer.playSound("/sound/Shot 1.wav",
 					(float) owner.getPosition().x, (float) owner.getPosition().y);
 		}		
@@ -72,10 +71,10 @@ public class Rifle implements IWeapon {
 
 	@Override
 	public void weapontick() {
-		if(!wasShooting) {
-			curShootDelay = 0;
+		if(!readyToShoot) {
+			if(currentShootDelay > 0) currentShootDelay--;
+			else readyToShoot = true;
 		}
-		wasShooting = false;
 	}
 	
 	private double getBulletDirection(double accuracy) {

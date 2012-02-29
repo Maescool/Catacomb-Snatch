@@ -28,6 +28,8 @@ public class Options {
     public static final String CHARACTER_ID = "character";
     
     public static final String MP_PORT = "mpPort";
+
+    public static final String LOCALE = "locale";
     
 	private static Properties properties = new Properties();
 	

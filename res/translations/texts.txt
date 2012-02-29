@@ -1,0 +1,138 @@
+# Game texts encoded in UTF-8
+
+build.rail = YOU NEED {0} TO BUILD A RAIL
+build.droid = YOU NEED {0} FOR A RAIL DROID
+build.removeRail = YOU NEED {0} TO REMOVE A RAIL
+
+back = BACK
+cancel = CANCEL
+
+character.text = SELECT YOUR CHARACTER!
+character.select = SELECT
+
+credits.leadDev = LEAD DEVELOPER:
+credits.maintainers = PROJECT MAINTAINERS:
+credits.communityMan = COMMUNITY MAINTAINERS:
+credits.others = AND THANKS TO ALL CONTRIBUTORS, INCLUDING:
+credits.note = THIS PROJECT IS NOW MAINTAINED AS A COMMUNITY PROJECT
+
+diffselect.title = CHOOSE A DIFFICULTY
+diffselect.start = START GAME
+diffselect.easy = EASY
+diffselect.normal = NORMAL
+diffselect.hard = HARD
+diffselect.nightmare = NIGHTMARE
+
+gameplay.player1Win = {0} WINS WOOHOO
+gameplay.player2Win = {0} WINS YAY
+gameplay.player1Name = LORD LARD
+gameplay.player2Name = HERR VON SPECK
+gameplay.player3Name = DUCHESS DONUT
+gameplay.player4Name = COUNTESS CRULLER
+gameplay.FPS = FPS: {0}
+gameplay.latency = LATENCY: {0}
+gameplay.cantPickup = YOU CAN NOT PICK THAT UP!
+
+help.goal = GOAL
+help.help1 = COLLECT 50 BATCHES OF TREASURE
+help.help2 = FROM TREASURE TROVE LOCATED
+help.help3 = AT THE CENTER OF THE MAP
+help.help4 = BEFORE YOUR OPPONENT(S)
+help.turret = TURRET
+help.turret1 = SHOOTS ENEMIES AROUND IT.
+help.turret2 =
+help.turret3 =
+help.collector = COLLECTOR
+help.collector1 = SUCK UP COINS AROUND IT. PICK IT UP
+help.collector2= TO RECEIVE THE COLLECTED COINS.
+help.collector3= 
+help.bomb = BOMB
+help.bomb1 = USED TO DESTROY CRACKED WALLS.
+help.bomb2 = SHOOT TO DETONATE.
+help.bomb3 =
+help.rails = RAILS
+help.rails1 = FOR RAIL-DROIDS TO COLLECT TREASURE.
+help.rails2 = PRESS 'BUILD' ON THE FIRST RAIL
+help.rails3 = TO BUY A RAIL-DROID (50 GOLD)
+
+keys.up = UP
+keys.down = DOWN
+keys.left = LEFT
+keys.right=  RIGHT
+keys.sprint = SPRINT
+keys.fire = FIRE
+keys.fireUp = FIRE UP
+keys.fireDown = FIRE DOWN
+keys.fireLeft = FIRE LEFT
+keys.fireRight = FIRE RIGHT
+keys.use = USE
+keys.build = BUILD
+keys.upgrade = UPGRADE
+keys.chat = CHAT
+
+leveleditor.title = LEVEL EDITOR
+leveleditor.new = NEW
+leveleditor.open = OPEN
+leveleditor.save = SAVE
+leveleditor.enterLevelName = ENTER LEVEL NAME:
+
+levelselect.title = CHOOSE A LEVEL
+levelselect.start = START
+levelselect.update = UPDATE LEVELS
+
+mp.waitingForClient = WAITING FOR CLIENT TO JOIN...
+mp.enterIP = ENTER IP OF HOST:
+mp.localIP = YOUR LOCAL IP:
+mp.externalIP = YOUR EXTERNAL IP:
+mp.join = JOIN
+
+options.on = ON
+options.off = OFF
+options.keyBindings = KEY BINDINGS
+options.characterSelect = SEL. CHARACTER
+options.fullscreen = FULLSCREEN
+options.showfps = SHOW FPS
+options.music = MUSIC
+options.sounds = SOUNDS
+options.volume = VOLUME
+options.mute = MUTE
+options.creative = CREATIVE MODE
+options.alternative = ALTERNATIVE PLAYER SKIN
+options.credits = CREDITS
+
+pausemenu.help = HELP
+pausemenu.backtomain = MAIN
+pausemenu.resume = RESUME 
+pausemenu.exit = EXIT GAME
+
+player.hasDied = {0} HAS DIED!
+player.score = {0}: {1}%
+player.cost = {0}
+player.health = {0}%
+player.money = {0}
+player.nextLevel = {0}
+player.exp = {0}
+player.level = {0}
+
+shop.turretTooltipTitle = TURRET
+shop.turretTooltipLine1 = Used for defense.
+shop.turretTooltipLine2 = Attacks nearby enemies.
+shop.harvesterTooltipTitle = HARVESTER
+shop.harvesterTooltipLine1 = Gathers treasure.
+shop.harvesterTooltipLine2 = Use to reclaim loot.
+shop.bombTooltipTitle = BOMB
+shop.bombTooltipLine1 = Destroys cracked walls.
+shop.bombTooltipLine2 = Use to create shortcuts.
+
+titlemenu.start = START
+titlemenu.host = HOST
+titlemenu.join = JOIN
+titlemenu.help = HOW TO PLAY
+titlemenu.options = OPTIONS
+titlemenu.levelEditor = LEVEL EDITOR
+titlemenu.exit = EXIT
+
+upgrade.full = ALREADY FULLY UPGRADED!
+upgrade.notEnoughMoney = YOU DONT HAVE ENOUGH MONEY ({0})
+upgrade.to = UPGRADED TO LEVEL {0}
+
