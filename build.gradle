@@ -5,6 +5,8 @@ archivesBaseName = "Catacomb-Snatch"
 project.group = "com.mojang.mojam"
 project.version = "1.0.0-SNAPSHOT"
 
+env = System.getenv()
+
 sourceSets {
   main {
     java {
