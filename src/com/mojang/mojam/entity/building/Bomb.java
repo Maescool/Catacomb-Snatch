@@ -16,6 +16,8 @@ import com.mojang.mojam.screen.Bitmap;
 public class Bomb extends Building {
 	/** Affected destruction radius around the bomb in pixels*/
 	public static final double BOMB_DISTANCE = 50;
+
+	public boolean REGEN_HEALTH = false;
 	
 	private boolean hit = false;
 
@@ -32,7 +34,6 @@ public class Bomb extends Building {
 		yOffs = 2;
 		setSize(7, 7);
 		doShowHealthBar = false;
-		buildingRegen(false);
 	}
 
 	@Override
