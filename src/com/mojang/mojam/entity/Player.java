@@ -94,7 +94,7 @@ public class Player extends Mob implements LootCollector {
         startX = x;
         startY = y;
 
-        plevel = 1;
+        plevel = 0; // will be displayed in GUI as lev 1
         pexp = 0;
         maxHealth = 5;
         health = 5;
@@ -129,7 +129,7 @@ public class Player extends Mob implements LootCollector {
      * Check if the player has reached enough XP for a levelup
      */
     private void handleLevelUp() {
-        if (pexp >= nextLevel()) {
+        if (xpSinceLastLevelUp() >= nettoXpNeededForLevel(plevel+1)) {
             this.maxHealth++;
             this.regenDelay = 2;
             plevel++;
@@ -138,16 +138,6 @@ public class Player extends Mob implements LootCollector {
 
             MojamComponent.soundPlayer.playSound("/sound/levelUp.wav", (float) pos.x, (float) pos.y, true);
         }
-    }
-
-    /**
-     * Calculate how much XP is needed to reach the next level
-     * 
-     * @return XP value
-     */
-    private double nextLevel() {
-        double next = summedUpXpNeededForLevel(plevel);
-        return next;
     }
 
     /**
@@ -167,15 +157,16 @@ public class Player extends Mob implements LootCollector {
      * @return netto xp value
      */
     public double nettoXpNeededForLevel(int level){
+        if (level == 0) return 0;
         return summedUpXpNeededForLevel(level) - summedUpXpNeededForLevel(level-1);
     }
     
     /**
      * 
-     * @return xp gained since lase level up
+     * @return xp gained since last level up
      */
     public double xpSinceLastLevelUp(){
-        return pexp - summedUpXpNeededForLevel(plevel-1);
+        return pexp - summedUpXpNeededForLevel(plevel);
     }
     
     @Override
@@ -214,22 +205,25 @@ public class Player extends Mob implements LootCollector {
             }
             if (keys.left.isDown) {
                 xa--;
-			}
-			if (keys.right.isDown) {
-				xa++;
-			}
-			if (keys.fireUp.isDown) {
-				yaShot--;
-			}
-			if (keys.fireDown.isDown) {
-				yaShot++;
-			}
-			if (keys.fireLeft.isDown) {
-				xaShot--;
-			}
-			if (keys.fireRight.isDown) {
-				xaShot++;
-			}
+            }
+            if (keys.right.isDown) {
+                xa++;
+            }
+            if (keys.right.isDown) {
+                xa++;
+            }
+            if (keys.fireUp.isDown) {
+                yaShot--;
+            }
+            if (keys.fireDown.isDown) {
+                yaShot++;
+            }
+            if (keys.fireLeft.isDown) {
+                xaShot--;
+            }
+            if (keys.fireRight.isDown) {
+                xaShot++;
+            }
         }
 
         // Handle mouse aiming
@@ -238,10 +232,11 @@ public class Player extends Mob implements LootCollector {
             aimVector.normalizeSelf();
             updateFacing();
         }
+        
         if (!mouseAiming && fireKeyIsDown() && xaShot * xaShot + yaShot * yaShot != 0) {
-        	aimVector.set(xaShot, yaShot);
-        	aimVector.normalizeSelf();
-        	updateFacing();
+            aimVector.set(xaShot, yaShot);
+            aimVector.normalizeSelf();
+            updateFacing();
         }
 
         // Move player if it is not standing still
@@ -453,13 +448,20 @@ public class Player extends Mob implements LootCollector {
         } else {
             if (wasShooting) {
                 suckRadius = 0;
+            } else {
+            	suckRadius = 60;
             }
             wasShooting = false;
-            if (suckRadius < 60) {
-                suckRadius++;
-            }
             takeDelay = 15;
         }
+    }
+    
+    /**
+     * Returns true if one of the keyboard fire buttons is down
+     * @return
+     */
+    private boolean fireKeyIsDown() {
+        return keys.fire.isDown || keys.fireUp.isDown || keys.fireDown.isDown || keys.fireRight.isDown || keys.fireLeft.isDown;
     }
 
     /**
@@ -856,14 +858,5 @@ public class Player extends Mob implements LootCollector {
     public Vec2 getPosition() {
         return pos;
     }
-    
-    /**
-     * Returns true if one of the keyboard fire buttons is down
-     * @return
-     */
-    private boolean fireKeyIsDown() {
-    	return keys.fire.isDown || keys.fireUp.isDown || keys.fireDown.isDown || keys.fireRight.isDown || keys.fireLeft.isDown;
-    }
-
 
 }

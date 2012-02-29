@@ -6,6 +6,6 @@
 	<classpathentry kind="lib" path="lib/CodecWav.jar"/>
 	<classpathentry kind="lib" path="lib/LibraryJavaSound.jar"/>
 	<classpathentry kind="lib" path="lib/SoundSystem.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.6.0_13"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
