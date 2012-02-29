@@ -1,10 +1,13 @@
 package com.mojang.mojam.entity.loot;
 
 import com.mojang.mojam.MojamComponent;
-import com.mojang.mojam.entity.*;
+import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.Player;
+import com.mojang.mojam.level.tile.HoleTile;
 import com.mojang.mojam.network.TurnSynchronizer;
-import com.mojang.mojam.screen.*;
-import com.mojang.mojam.level.HoleTile;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.Screen;
 
 public class Loot extends Entity {
 	public double xMovement, yMovement, accelerationDirectionDelta;
