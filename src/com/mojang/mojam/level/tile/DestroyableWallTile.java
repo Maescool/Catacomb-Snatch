@@ -13,7 +13,7 @@ import com.mojang.mojam.screen.Screen;
 
 public class DestroyableWallTile extends WallTile {
 	static final int WALLHEIGHT = 56;
-	public static final int COLOR = 0xff777777;
+	public static final int COLOR = 0xffff7777;
 
 	public void init(Level level, int x, int y) {
 		super.init(level, x, y);
