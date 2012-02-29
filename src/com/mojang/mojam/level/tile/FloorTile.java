@@ -22,7 +22,7 @@ public class FloorTile extends Tile {
 	public static final String NAME = "FLOOR";
 
 	public FloorTile() {
-		img=3;
+		img = TurnSynchronizer.synchedRandom.nextInt(4);
 		minimapColor = Art.floorTileColors[img & 7][img / 8];
 	}
 	public void init(Level level, int x, int y) {

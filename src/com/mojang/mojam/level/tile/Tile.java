@@ -55,9 +55,9 @@ public abstract class Tile implements BBOwner, IEditable {
 	    if (isShadowed_north) {
             screen.blit(Art.shadow_north, x * Tile.WIDTH, y * Tile.HEIGHT);
         } else if (isShadowed_north_east) {
-            screen.blit(Art.shadow_north, (x+1) * Tile.WIDTH - Art.shadow_east.w, y * Tile.HEIGHT, Art.shadow_east.w , Art.shadow_north.h);
+            screen.blit(Art.shadow_north_east, (x+1) * Tile.WIDTH - Art.shadow_east.w, y * Tile.HEIGHT);
         } else if (isShadowed_north_west) {
-            screen.blit(Art.shadow_north, x * Tile.WIDTH, y * Tile.HEIGHT, Art.shadow_west.w , Art.shadow_north.h);
+            screen.blit(Art.shadow_north_west, x * Tile.WIDTH, y * Tile.HEIGHT);
         }
         if (isShadowed_east) {
             screen.blit(Art.shadow_east, (x+1) * Tile.WIDTH - Art.shadow_east.w , y * Tile.HEIGHT);

@@ -37,7 +37,7 @@ public class Bitmap {
 
 	public Bitmap copy() {
 	    Bitmap rValue = new Bitmap(this.w, this.h);
-	    rValue.pixels = this.pixels;
+	    rValue.pixels = this.pixels.clone();
 	    return rValue;
 	}
 	

@@ -23,7 +23,9 @@ public class Art {
 	
 	public static Bitmap[][] floorTiles = cut("/art/map/floortiles.png", 32, 32);
 	public static Bitmap shadow_north = load("/art/shadows/shadow_north.png");
-	public static Bitmap shadow_east = load("/art/shadows/shadow_east.png");
+	public static Bitmap shadow_north_east = load("/art/shadows/shadow_north_east.png");
+	public static Bitmap shadow_north_west = load("/art/shadows/shadow_north_west.png");
+    public static Bitmap shadow_east = load("/art/shadows/shadow_east.png");
 	public static Bitmap shadow_west = load("/art/shadows/shadow_west.png");
 	public static int[][] floorTileColors = getColors(floorTiles);
 	public static Bitmap[][] wallTiles = cut("/art/map/walltiles.png", 32, 56, 0, 0);
