@@ -279,6 +279,8 @@ public class MojamComponent extends Canvas implements Runnable,
 	}
 
 	private synchronized void createLevel(LevelInformation li, GameMode mode) {
+		if (!isMultiplayer)
+			opponentCharacter = Art.NO_OPPONENT;
 		try {
 			//level = Level.fromFile(li);
 			level = mode.generateLevel(li, playerCharacter, opponentCharacter);
