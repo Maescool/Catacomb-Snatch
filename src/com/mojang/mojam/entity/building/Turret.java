@@ -9,6 +9,7 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.mob.RailDroid;
 import com.mojang.mojam.level.DifficultyInformation;
+import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
@@ -17,7 +18,7 @@ import com.mojang.mojam.screen.Screen;
 /**
  * Defense turret. Automatically aims and shoots at the nearest monster.
  */
-public class Turret extends Building {
+public class Turret extends Building implements IEditable {
 	
 	private static final float BULLET_DAMAGE = .75f;
 	
@@ -34,6 +35,8 @@ public class Turret extends Building {
 
 	private Bitmap areaBitmap;
 	private static final int RADIUS_COLOR = new Color(240, 210, 190).getRGB();
+
+	public static final int COLOR = 0xff990066;
 
 	/**
 	 * Constructor
@@ -143,5 +146,25 @@ public class Turret extends Building {
 	
 	public void drawRadius(Screen screen) {
 		screen.opacityBlit(areaBitmap, (int) pos.x-radius, (int) pos.y-radius - yOffs, 0xDD);	
+	}
+
+	@Override
+	public int getColor() {
+		return Turret.COLOR;
+	}
+
+	@Override
+	public int getMiniMapColor() {
+		return Turret.COLOR;
+	}
+
+	@Override
+	public String getName() {
+		return "TURRET";
+	}
+
+	@Override
+	public Bitmap getBitMapForEditor() {
+		return Art.turret[0][0];
 	}
 }

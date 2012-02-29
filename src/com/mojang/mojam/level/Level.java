@@ -56,8 +56,8 @@ public class Level {
 		minimap = new Bitmap(width, height);
 		displaymap = new Bitmap(64, 64);
 		
-		largeMap = height > 64 && height > 64;
-		smallMap = height < 64 && height < 64;
+		largeMap = height > 64 || width > 64;
+		smallMap = height < 64 && width < 64;
 		
 		tiles = new Tile[width * height];
 		for (int y = 0; y < height; y++) {
@@ -477,47 +477,49 @@ public class Level {
 		if(largeMap){
 			int locx = x0 + 8;
 			int locy = y0 + 8;
+			
 			int drawx = 0, drawy = 0;
-			int mapx = 0, mapy = 0;
-			int endx = 0, endy = 0;
+			int donex = 0, doney = 0;
+			int diffx = 0, diffy = 0;
 			
-			if(locx < 64){
+			if(width < 64) diffx = (64 - width) / 2;
+			if(height < 64) diffy = (64 - height) / 2;
+			
+			if(locx < 32 || width < 64){
 				drawx = 0;
-				endx = 64;
-			}
-			else if(locx > width - 64){
+			} else if(locx > (width - 32)){
 				drawx = width - 64;
-				endx = width;
-			}
-			else{
-				drawx = locx;
-				endx = locx + 64;
+			} else{
+				drawx = locx - 32;
 			}
 			
-			if(locy < 64){
+			if(locy < 32 || height < 64){
 				drawy = 0;
-				endy = 64;
-			}
-			else if(locy > height - 64){
+			} else if(locy > (height - 32)){
 				drawy = height - 64;
-				endy = height;
-			}
-			else{
-				drawy = locy;
-				endy = locy + 64;
+			} else {
+				drawy = locy - 32;
 			}
 			
-			for (int y = 0; y < height; y++) {
-				for (int x = 0; x < width; x++) {
-					if(x >= drawx && x <= endx && y >= drawy && y < endy - 1){
-						displaymap.pixels[mapx + mapy * 64] = minimap.pixels[x + y * width]; 
-						mapx++;
+			for (int y = 0; y < 64; y++) {
+				if(y < diffy || y >= (64 - diffy)) {
+					for (int x = 0; x < 64; x++) {
+						displaymap.pixels[x + (y * 64)] = Art.floorTileColors[5 & 7][5 / 8];
 					}
 				}
-				mapx = 0;
-				
-				if(y >= drawy && y < endy - 1)
-					mapy++;
+				else{
+					for (int x = 0; x < 64; x++) {
+						if(x < diffx || x > (64 - diffx)) 
+							displaymap.pixels[x + (y * 64)] = Art.floorTileColors[5 & 7][5 / 8];
+						else{
+							if(((drawx + donex) + (drawy + doney) * width) < minimap.pixels.length -1) 
+								displaymap.pixels[x + (y * 64)] = minimap.pixels[(drawx + donex) + (drawy + doney) * width];
+								donex++;
+						}
+					}
+					donex = 0;
+					doney++;
+				}
 			}
 		} else if(smallMap){
 			int smallx = 0, smally = 0;
@@ -529,7 +531,7 @@ public class Level {
 						smallx++;
 					}
 					else
-						displaymap.pixels[x + y * 64] = 0xff000000;
+						displaymap.pixels[x + y * 64] = Art.floorTileColors[5 & 7][5 / 8];
 				}
 				smallx = 0;
 				
@@ -545,10 +547,12 @@ public class Level {
 		
 		String player1score =  MojamComponent.texts.scoreCharacter(player1Character, player1Score * 100 / TARGET_SCORE);
 		Font.defaultFont().draw(screen, player1score, 280-player1score.length()*10, screen.h - 20); //adjust so it fits in the box
-		Font.defaultFont().draw(screen, MojamComponent.texts.scoreCharacter(player2Character, player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
-		
 		screen.blit(Art.getPlayer(player1Character)[0][2], 262, screen.h-42);
-		screen.blit(Art.getPlayer(player2Character)[0][6], 19, screen.h-42);
+
+		if (player2Character != Art.NO_OPPONENT) {
+			Font.defaultFont().draw(screen, MojamComponent.texts.scoreCharacter(player2Character, player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
+			screen.blit(Art.getPlayer(player2Character)[0][6], 19, screen.h-42);
+		}
 		
 		Notifications.getInstance().render(screen);
 	}

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.animation.LargeBombExplodeAnimation;
+import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.math.BBOwner;
@@ -11,7 +12,7 @@ import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
-public class Tile implements BBOwner {
+public abstract class Tile implements BBOwner, IEditable {
 	public static final int HEIGHT = 32;
 	public static final int WIDTH = 32;
 
@@ -19,13 +20,16 @@ public class Tile implements BBOwner {
 	public int x, y;
 	public int img = -1; // no image set yet
 	public int minimapColor;
+	
+	public Tile() {
+		if (img == -1) img = TurnSynchronizer.synchedRandom.nextInt(4);
+		minimapColor = Art.floorTileColors[img & 7][img / 8];
+	}
 
 	public void init(Level level, int x, int y) {
 		this.level = level;
 		this.x = x;
 		this.y = y;
-		if (img == -1) img = TurnSynchronizer.synchedRandom.nextInt(4);
-		minimapColor = Art.floorTileColors[img & 7][img / 8];
 	}
 
 	public boolean canPass(Entity e) {
@@ -68,4 +72,6 @@ public class Tile implements BBOwner {
 
 	public void bomb(LargeBombExplodeAnimation largeBombExplodeAnimation) {
 	}
+	
+
 }

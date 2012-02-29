@@ -1,6 +1,6 @@
 package com.mojang.mojam.entity.mob;
 
-import com.mojang.mojam.level.HoleTile;
+import com.mojang.mojam.level.tile.HoleTile;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;

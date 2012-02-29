@@ -6,9 +6,11 @@ import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.level.DifficultyInformation;
+import com.mojang.mojam.level.IEditable;
 
-public class SpikeTrap extends Mob {
-    private int spike = 0;
+public class SpikeTrap extends Mob implements IEditable {
+    public static final int COLOR = 0xff0000ff;
+	private int spike = 0;
     private boolean spikeGoUp = true;
 
     public SpikeTrap(double x, double y) {
@@ -82,5 +84,25 @@ public class SpikeTrap extends Mob {
     public boolean isHighlightable() {
 	return false;
     }
+
+	@Override
+	public int getColor() {
+		return SpikeTrap.COLOR;
+	}
+
+	@Override
+	public int getMiniMapColor() {
+		return SpikeTrap.COLOR;
+	}
+
+	@Override
+	public String getName() {
+		return "SPIKES";
+	}
+
+	@Override
+	public Bitmap getBitMapForEditor() {
+		return Art.spikes[1][0];
+	}
 
 }
