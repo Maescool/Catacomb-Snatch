@@ -7,6 +7,7 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.IUsable;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
+import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.math.BB;
@@ -21,17 +22,20 @@ import com.mojang.mojam.screen.Screen;
 public abstract class Building extends Mob implements IUsable {
 	public static final int SPAWN_INTERVAL = 60;
 	public static final int MIN_BUILDING_DISTANCE = 1700; // Sqr
-	public static final int HEALING_INTERVAL = 15;
+
+	public int REGEN_INTERVAL = 15;
+	public float REGEN_AMOUNT = 1;
+	public boolean REGEN_HEALTH = true;
+	public int healingTime = REGEN_INTERVAL;
+	
 
 	public int spawnTime = 0;
 	public boolean highlight = false;
-	private int healingTime = HEALING_INTERVAL;
 	public Mob carriedBy = null;
 
 	protected int upgradeLevel = 0;
 	private int maxUpgradeLevel = 0;
 	private int[] upgradeCosts = null;
-	protected boolean healthRegenB = false;
 
 	/**
 	 * Constructor
@@ -47,8 +51,6 @@ public abstract class Building extends Mob implements IUsable {
 		super(x, y, team);
 
 		setStartHealth(20);
-		healthRegen = false;
-		healthRegenB = true;
 		freezeTime = 10;
 		spawnTime = TurnSynchronizer.synchedRandom.nextInt(SPAWN_INTERVAL);
 	}
@@ -57,8 +59,6 @@ public abstract class Building extends Mob implements IUsable {
 	public void render(Screen screen) {
 		super.render(screen);
 		renderMarker(screen);
-		if(team == MojamComponent.localTeam)
-			renderInfo(screen);
 	}
 
 	/**
@@ -89,63 +89,20 @@ public abstract class Building extends Mob implements IUsable {
 		}
 	}
 
-	/**
-	 * Render the shop info onto the given screen
-	 * 
-	 * @param screen
-	 *            Screen
-	 */
-	protected void renderInfo(Screen screen) {
-		// Draw iiAtlas' shop item info graphics, thanks whoever re-wrote this!
-		if (highlight) {
-		    if (this instanceof ShopItem) {
-		        ShopItem s = (ShopItem)this;
-		        Bitmap image = getSprite();
-		        int teamYOffset = (team == 2) ? 90 : 0;
-		        
-		        String[] tooltip = s.getTooltip();
-		        int h = tooltip.length*(Font.FONT_GOLD_SMALL.getFontHeight()+3);
-		        int w = getLongestWidth(tooltip, Font.FONT_WHITE_SMALL)+4;
-		        
-		        Font f = Font.FONT_GOLD_SMALL;
-		        screen.blit(Bitmap.tooltipBitmap(w, h),
-                        (int)(pos.x - image.w / 2 - 10),
-                        (int)(pos.y + 20 - teamYOffset), w, h);
-
-		        for (int i=0; i<tooltip.length; i++) {
-		            f.draw(screen, tooltip[i], (int)(pos.x - image.w + 8), (int)pos.y + 22 - teamYOffset + (i==0?0:1) + i*(f.getFontHeight()+2));
-		            f = Font.FONT_WHITE_SMALL;
-		        }
-		    }
-		}
-	}
-	
-	private int getLongestWidth(String[] string, Font font) {
-		int res = 0;
-		for ( String s : string ) {
-			int w = font.calculateStringWidth(s.trim());
-			res = w > res ? w : res;
-		}
-		return res;
-	}
-
 	@Override
 	public void tick() {
 		super.tick();
-		if (freezeTime > 0) {
-			return;
-		}
-		if (hurtTime <= 0 && healthRegenB) {
-			if (health < maxHealth) {
-				if (--healingTime <= 0) {
-					++health;
-					healingTime = HEALING_INTERVAL;
-				}
-			}
-		}
 		
 		xd = 0.0;
 		yd = 0.0;
+	}
+	
+	public void doRegenTime() {
+		if (freezeTime <= 0) {
+			super.doRegenTime();
+		} else {
+			// DO NOTHING
+		}
 	}
 	
 	/**
@@ -173,17 +130,6 @@ public abstract class Building extends Mob implements IUsable {
 	    return carriedBy != null;
 	}
 
-	@Override
-	public void hurt(Bullet bullet) {
-		super.hurt(bullet);
-		healingTime = HEALING_INTERVAL;
-	}
-
-	@Override
-	public void hurt(Entity source, float damage) {
-		super.hurt(source, damage);
-		healingTime = HEALING_INTERVAL;
-	}
 
 	@Override
 	public Bitmap getSprite() {
@@ -269,7 +215,7 @@ public abstract class Building extends Mob implements IUsable {
 
 	@Override
 	public boolean isHighlightable() {
-		return true;
+		return this.team == MojamComponent.localTeam || this.team == Team.Neutral;
 	}
 
 	@Override
@@ -283,21 +229,4 @@ public abstract class Building extends Mob implements IUsable {
 		return true;
 	}
 	
-	/**
-	 * Set regeneration status for this building
-	 * 
-	 * @param regen True if building can regenerate, false if not
-	 */
-	public void buildingRegen(boolean regen) {
-		healthRegenB = regen;
-	}
-	
-	/**
-	 * Check if this building is able to regenerate
-	 * 
-	 * @return True if building can regenerate, false if not
-	 */
-	public boolean buildingRegenEnabled() {
-		return healthRegenB;
-	}
 }

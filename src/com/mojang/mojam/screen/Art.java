@@ -22,7 +22,7 @@ public class Art {
 	
 	public static Bitmap[][] floorTiles = cut("/art/map/floortiles.png", 32, 32);
 	public static int[][] floorTileColors = getColors(floorTiles);
-	public static Bitmap[][] wallTiles = cut("/art/map/floortiles.png", 32, 56, 0, 104);
+	public static Bitmap[][] wallTiles = cut("/art/map/walltiles.png", 32, 56, 0, 0);
 	public static int[][] wallTileColors = getColors(wallTiles);
 	public static Bitmap[][] treasureTiles = cut("/art/map/treasure.png", 32, 56);
 	public static int treasureTileColor = getColor(treasureTiles[0][0]);

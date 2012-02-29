@@ -9,6 +9,7 @@ import com.mojang.mojam.entity.building.TreasurePile;
 import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.entity.building.TurretTeamOne;
 import com.mojang.mojam.entity.building.TurretTeamTwo;
+import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.mob.SpikeTrap;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.level.tile.DestroyableWallTile;
@@ -85,6 +86,12 @@ public class LevelUtils {
 			break;
 		case TreasurePile.COLOR:
 			entity = new TreasurePile(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
+			break;
+		case 0xff100700: //TODO do this the same way as above
+			for (int i = 0; i < 4; i++) {
+				double dir = i * Math.PI * 2 / 8;
+				entity = new Loot(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2, Math.cos(dir), Math.sin(dir), 200, false);
+			}
 			break;
 		default:
 			entity = null;
