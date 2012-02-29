@@ -56,8 +56,9 @@ public class HowToPlayMenu extends GuiMenu {
 		screen.blit(Art.turret2[7][0], imgTab-30, line);
 		screen.blit(Art.turret3[7][0], imgTab, line);
 		font.draw(screen, MojamComponent.texts.getStatic("help.turret"), tab1, line);
-		screen.blit(Art.pickupCoinGold[0][0], tab1, line+10);
-		font.draw(screen, "150", tab1+20, line+15);
+		screen.blit(Art.pickupGemEmerald[0][0], tab1, line+10);
+		screen.blit(Art.pickupCoinGold[0][0], tab1+15, line+10);
+		font.draw(screen, "150", tab1+35, line+15);
 		font.draw(screen, MojamComponent.texts.getStatic("help.turret1"), tab2, line);
 		font.draw(screen, MojamComponent.texts.getStatic("help.turret2"), tab2, line+10);
 		font.draw(screen, MojamComponent.texts.getStatic("help.turret3"), tab2, line+20);
@@ -68,8 +69,9 @@ public class HowToPlayMenu extends GuiMenu {
 		screen.blit(Art.harvester2[7][0], imgTab-30, line-10);
 		screen.blit(Art.harvester3[7][0], imgTab, line-10);
 		font.draw(screen, MojamComponent.texts.getStatic("help.collector"), tab1, line);
-		screen.blit(Art.pickupCoinGold[0][0], tab1, line+10);
-		font.draw(screen, "300", tab1+20, line+15);
+		screen.blit(Art.pickupGemEmerald[0][0], tab1, line+10);
+		screen.blit(Art.pickupGemRuby[0][0], tab1+15, line+10);
+		font.draw(screen, "300", tab1+35, line+15);
 		font.draw(screen, MojamComponent.texts.getStatic("help.collector1"), tab2, line);
 		font.draw(screen, MojamComponent.texts.getStatic("help.collector2"), tab2, line+10);
 		font.draw(screen, MojamComponent.texts.getStatic("help.collector3"), tab2, line+20);
@@ -78,18 +80,18 @@ public class HowToPlayMenu extends GuiMenu {
 		line += vspace;
 		screen.blit(Art.bomb, imgTab, line);
 		font.draw(screen, MojamComponent.texts.getStatic("help.bomb"), tab1, line);
-		screen.blit(Art.pickupCoinGold[0][0], tab1, line+10);
-		font.draw(screen, "500", tab1+20, line+15);
+		screen.blit(Art.pickupGemDiamond[3][0], tab1, line+10);
+		font.draw(screen, "500", tab1+30, line+15);
 		font.draw(screen, MojamComponent.texts.getStatic("help.bomb1"), tab2, line);
 		font.draw(screen, MojamComponent.texts.getStatic("help.bomb2"), tab2, line+10);
 		font.draw(screen, MojamComponent.texts.getStatic("help.bomb3"), tab2, line+20);
-
+		
+		// Rail
 		line += vspace;
 		screen.blit(Art.rails[1][0], imgTab, line);
 		font.draw(screen, MojamComponent.texts.getStatic("help.rails"), tab1, line);
-		screen.blit(Art.pickupCoinGold[0][0], tab1, line+10);
-		font.draw(screen, "10 (+)", tab1+20, line+15);
-		font.draw(screen, "15 (-)", tab1+20, line+25);
+		screen.blit(Art.pickupCoinBronze[0][0], tab1+10, line+15);
+		font.draw(screen, "10", tab1+30, line+20);
 		font.draw(screen, MojamComponent.texts.getStatic("help.rails1"), tab2, line);
 		font.draw(screen, MojamComponent.texts.getStatic("help.rails2"), tab2, line+10);
 		font.draw(screen, MojamComponent.texts.getStatic("help.rails3"), tab2, line+20);
@@ -107,9 +109,11 @@ public class HowToPlayMenu extends GuiMenu {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+		if (e.getKeyCode() == KeyEvent.VK_ESCAPE || e.getKeyCode() == KeyEvent.VK_ENTER) {
 			buttons.get(0).postClick();
-		}
+		} else {
+			super.keyPressed(e);
+		}		
 	}
 
 	@Override

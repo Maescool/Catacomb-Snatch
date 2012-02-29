@@ -6,12 +6,20 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
+
 import javax.imageio.ImageIO;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
+import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.LevelList;
+import com.mojang.mojam.level.LevelUtils;
+import com.mojang.mojam.level.tile.DestroyableWallTile;
+import com.mojang.mojam.level.tile.FloorTile;
+import com.mojang.mojam.level.tile.HoleTile;
+import com.mojang.mojam.level.tile.Tile;
+import com.mojang.mojam.level.tile.WallTile;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
@@ -39,21 +47,23 @@ public class LevelEditorMenu extends GuiMenu {
     private int pencilY;
     private boolean drawing;
     
-    private final String[] tileNames = new String[]{
-        "FLOOR", "HOLE", "WALL", "B.WALL", "TREASURE", "RAIL"};
-    private final int[] tileColors = new int[]{
-        0xffffffff, 0xff000000, 0xffff0000, 0xffFF7777, 0xffffff00, 0xff969696};
-    private final Bitmap[] tiles = new Bitmap[]{
-        Art.floorTiles[0][0], Art.floorTiles[4][0], Art.wallTiles[0][0],
-        Art.treasureTiles[4][0], Art.treasureTiles[0][0], Art.rails[1][0]
-    };
+  //  private final String[] tileNames = new String[]{
+  //      "FLOOR", "HOLE", "WALL", "B.WALL", "TREASURE", "RAIL"};
+  //  private final int[] tileColors = new int[]{
+  //      FloorTile.COLOR, HoleTile.COLOR, WallTile.COLOR, DestroyableWallTile.COLOR, TreasurePile.COLOR, UnbreakableRailTile.COLOR};
+  //private final Bitmap[] tiles = new Bitmap[]{
+  //      Art.floorTiles[0][0], Art.floorTiles[4][0], Art.wallTiles[0][0],
+  //      Art.treasureTiles[4][0], Art.treasureTiles[0][0], Art.rails[1][0]
+   // };
+    
+    private final IEditable[] editableTiles = {new FloorTile(),new HoleTile(), new WallTile(), new DestroyableWallTile() };
     
     private final int buttonsCols = 2;
     private final int buttonMargin = 2;
     private final int buttonsX = 7;
     private final int buttonsY = 7;
     
-    private LevelEditorButton[] tileButtons = new LevelEditorButton[tiles.length];
+    private LevelEditorButton[] tileButtons = new LevelEditorButton[editableTiles.length];
     private LevelEditorButton selectedButton;
     
     private Button newButton;
@@ -141,7 +151,7 @@ public class LevelEditorMenu extends GuiMenu {
         if (drawing || editorComponent.isPressed()) {
             int x = (((pencilX + TILE_WIDTH / 2) - mapX) / TILE_WIDTH);
             int y = (((pencilY + TILE_HEIGHT / 2) - mapY) / TILE_HEIGHT);
-            draw(selectedButton.getId(), x, y);
+            draw(selectedButton.getTile(), x, y);
         }
     }
 
@@ -230,7 +240,8 @@ public class LevelEditorMenu extends GuiMenu {
         for (int i = 0; i < tileButtons.length; i++) {
             int x = i % buttonsCols;
 
-            tileButtons[i] = (LevelEditorButton) addButton(new LevelEditorButton(i, tiles[i], tileNames[i],
+            
+			tileButtons[i] = (LevelEditorButton) addButton(new LevelEditorButton(i,editableTiles[i],
                     buttonsX + x * (i > 0 ? tileButtons[i - 1].getWidth() + buttonMargin : 0), buttonsY + y));
 
             if (i == 0) {
@@ -261,38 +272,16 @@ public class LevelEditorMenu extends GuiMenu {
         levels = LevelList.getLevels();
     }
 
-    private void setTile(int id, Bitmap tile, int x, int y) {
-        mapTile[x][y] = id;
-        map[x][y] = tile;
-        minimap.fill(x, y, 1, 1, (tile == null ? 0 : tileColors[id]));
-    }
-
-    private void draw(int id, int x, int y) {
+    private void draw(IEditable tile, int x, int y) {
 
         if (x < 0 || x > LEVEL_WIDTH - 1) return;
         if (y < 0 || y > LEVEL_HEIGHT - 1) return;
-        if (mapTile[x][y] == id) return;
+        
+        if (mapTile[x][y] == tile.getColor()) return;
 
-        switch (id) {
-            case 0:
-                setTile(id, null, x, y);
-                break;
-            case 1:
-                setTile(id, Art.floorTiles[4][0], x, y);
-                break;
-            case 2:
-                setTile(id, Art.wallTiles[random.nextInt(4)][0], x, y);
-                break;
-            case 3:
-                setTile(id, Art.treasureTiles[4][0], x, y);
-                break;
-            case 4:
-                setTile(id, Art.treasureTiles[0][0], x, y);
-                break;
-            case 5:
-                setTile(id, Art.rails[0][0], x, y);
-                break;
-        }
+        mapTile[x][y] = tile.getColor();
+        map[x][y] = tile.getBitMapForEditor();
+        minimap.fill(x, y, 1, 1, ( tile.getBitMapForEditor() == null ? 0 : tile.getColor()));
     }
 
     private void newLevel() {
@@ -324,20 +313,32 @@ public class LevelEditorMenu extends GuiMenu {
 
         bufferedImage.getRGB(0, 0, w, h, rgbs, 0, w);
 
+        
         newLevel();
+		
+		for (int y = 0; y < h; y++) {
+			for (int x = 0; x < w; x++) {
+				int col = rgbs[x + y * w] & 0xffffff;
+				//loadColorTile(col, x, y);
+				
 
-        for (int y = 0; y < h; y++) {
-            for (int x = 0; x < w; x++) {
-                int col = rgbs[x + y * w] & 0xffffffff;
-                for (int i = 0; i < tileColors.length; i++) {
-                    if (col == (tileColors[i])) {
-                        draw(i, x, y);
-                        break;
-                    }
-                }
-            }
-        }
+				Tile tile = LevelUtils.getNewTileFromColor(col);
+				draw(tile,x,y);
+				
+				//if(tile instanceof FloorTile) {
+				//	Entity entity = LevelUtils.getNewEntityFromColor(col,x,y);
+				//	if(entity != null) {
+				//		newLevel.addEntity(entity);
+				//	}
+				//}
+
+			}
+		}
+		
+
     }
+    
+    
 
     private void saveLevel(String name) {
         File newLevel = new File(LevelList.getBaseDir(), name + ".bmp");
@@ -345,7 +346,7 @@ public class LevelEditorMenu extends GuiMenu {
         BufferedImage image = new BufferedImage(LEVEL_WIDTH, LEVEL_HEIGHT, BufferedImage.TYPE_INT_RGB);
         for (int x = 0; x < LEVEL_HEIGHT; x++) {
             for (int y = 0; y < LEVEL_WIDTH; y++) {
-                image.setRGB(x, y, tileColors[mapTile[x][y]]);
+                image.setRGB(x, y, mapTile[x][y]);
             }
         }
 

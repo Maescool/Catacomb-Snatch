@@ -1,0 +1,138 @@
+# Game texts encoded in UTF-8
+
+build.rail = VOCÊ PRECISA DE {0} PARA CONSTRUIR UM TRILHO.
+build.droid = VOCÊ PRECISA DE {0} PARA UM DROID COLETOR.
+build.removeRail = VOCÊ PRECISA DE {0} PARA REMOVER UM TRILHO.
+
+back = VOLTAR
+cancel = CANCELAR
+
+credits.leadDev = PRINCIPAIS DESENVOLVEDORES:
+credits.maintainers = MANTENEDORES DO PROJETO:
+credits.communityMan = MANTENEDORES DA COMUNIDADE:
+credits.others = E OBRIGADO A TODOS OS CONTRIBUINTES,INCLUINDO:
+credits.note = ESSE PROJETO É AGORA MANTIDO COMO UM PROJETO DE COMUNIDADE
+
+diffselect.title = ESCOLHER DIFICULDADE
+diffselect.start = COMEÇAR
+diffselect.easy = FÁCIL
+diffselect.normal = NORMAL
+diffselect.hard = DIFÍCIL
+diffselect.nightmare = PESADELO
+
+gameplay.player1Win = {0} GANHOU!
+gameplay.player2Win = {0} GANHOU
+gameplay.player1Name = LORD LARD
+gameplay.player2Name = HERR VON SPECK
+gameplay.player3Name = DUCHESS DONUT
+gameplay.player4Name = COUNTESS CRULLER
+gameplay.FPS = FPS: {0}
+gameplay.latency = LATENCY: {0}
+gameplay.cantPickup = VOCÊ NÃO PODE PEGAR ISSO!
+
+help.goal = OBJETIVO
+help.help1 = COLETE 50 FRAGMENTOS DE TESOURO
+help.help2 = DO TESOURO LOCALIZADO
+help.help3 = NO CENTRO DO MAPA
+help.help4 = ANTES DE SEU OPONENTE(S).
+help.turret = TURRET
+help.turret1 = ATIRA NOS INIMIGOS AO SEU REDOR.
+help.turret2 =
+help.turret3 =
+help.collector = COLETOR
+help.collector1 = SUGA AO MOEDAS AO SEU REDOR.PEGUE-O
+help.collector2= PARA RECEBER AS MOEDAS COLETADAS.
+help.collector3=
+help.bomb = BOMBA
+help.bomb1 = USADA PARA DESTRUIR PAREDES RACHADAS.
+help.bomb2 = ATIRE NELA PARA A DETONAR
+help.bomb3 =
+help.rails = TRILHOS
+help.rails1 = O TRANSPORTE DOS DROIDS COLETORES.
+help.rails2 = PRESSIONE 'CONSTRUIR' NO PRIMEIRO TRILHO
+help.rails3 = PARA CONSTRUIR UM DROID COLETOR(50 GOLD).
+
+keys.up = CIMA
+keys.down = BAIXO
+keys.left = ESQUERDA
+keys.right= DIREITA
+keys.sprint = CORRER
+keys.fire = ATIRAR
+keys.fireUp = ATIRAR PRA CIMA
+keys.fireDown = ATIRAR PRA BAIXO
+keys.fireLeft = ATIRAR PRA ESQUERDA
+keys.fireRight = ATIRAR PRA DIREITA
+keys.use = USAR
+keys.build = CONSTRUIR
+keys.upgrade = MELHORAR
+keys.chat = CONVERSAR
+
+leveleditor.title = EDITOR DE FASES
+leveleditor.new = NOVA
+leveleditor.open = ABRIR
+leveleditor.save = SALVAR
+leveleditor.enterLevelName = NOME DA NOVA FASE:
+
+levelselect.title = ESCOLHA UMA FASE
+levelselect.start = JOGAR
+levelselect.update = ATUALIZAR FASES
+
+mp.waitingForClient = ESPERANDO JOGADOR...
+mp.enterIP = COLOCAR IP DO HOSPEDEIRO:
+mp.localIP = SEU IP LOCAL:
+mp.externalIP = SEU IP EXTERNO:
+mp.join = ENTRAR
+
+options.on = LIGADO
+options.off = DESLIGADO
+options.keyBindings = CONTROLES
+options.characterSelect = MUDAR PERSONAGEM
+options.fullscreen = TELA-CHEIA
+options.showfps = MOSTRAR FPS
+options.music = MÚSICA
+options.sounds = SOM
+options.volume = VOLUME
+options.mute = SEM SOM
+options.creative = MODO CRIATIVO
+options.alternative = SKIN ALTERNATIVA
+options.credits = CRÉDITOS
+
+character.text = ESCOLHA SEU PERSONAGEM!
+character.select = ESCOLHER
+
+pausemenu.help = AJUDA
+pausemenu.backtomain = MENU
+pausemenu.resume = RETORNAR
+pausemenu.exit = SAIR DO JOGO
+
+player.hasDied = {0} MORREU!
+player.score = {0}: {1}%
+player.cost = {0}
+player.health = {0}%
+player.money = {0}
+player.nextLevel = {0}
+player.exp = {0}
+player.level = {0}
+
+shop.turretTooltipTitle = TURRET
+shop.turretTooltipLine1 = USADA PARA DEFESA.
+shop.turretTooltipLine2 = ATACA INIMIGOS PRÓXIMOS.
+shop.harvesterTooltipTitle = COLETOR
+shop.harvesterTooltipLine1 = PEGA TESOUROS.
+shop.harvesterTooltipLine2 = USE-O PARA PEGAR DINHEIRO.
+shop.bombTooltipTitle = BOMB
+shop.bombTooltipLine1 = DESTRÓI PAREDES RACHADAS.
+shop.bombTooltipLine2 = USE PARA CRIAR ATALHOS.
+
+titlemenu.start = JOGAR
+titlemenu.host = HOST
+titlemenu.join = ENTRAR
+titlemenu.help = COMO JOGAR
+titlemenu.options = PREFERÊNCIAS
+titlemenu.levelEditor = EDITOR DE FASES
+titlemenu.exit = SAIR
+
+upgrade.full = JÁ FOI MELHORADA AO MAXIMO.
+upgrade.notEnoughMoney = VOCÊ NÃO TEM DINHEIRO O BASTANTE ({0})
+upgrade.to = MELHORADA PARA O NÍVEL {0}
+

@@ -73,8 +73,6 @@ public class KeyBindingsMenu extends GuiMenu {
 	private int textWidth;
 	private int yOffset;
 
-	private int selectedItem;
-
 	private ClickableComponent back;
 	private KeyBindingButton selectedKey = null;
 
@@ -201,18 +199,8 @@ public class KeyBindingsMenu extends GuiMenu {
 			selectedKey.setLabel(KeyEvent.getKeyText(e.getKeyCode()));
 			selectedKey.setSelected(false);
 			selectedKey = null;
-		} else {
-			if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
-				selectedItem--;
-				if (selectedItem < 0) {
-					selectedItem = buttons.size() - 1;
-				}
-			} else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
-				selectedItem++;
-				if (selectedItem >= buttons.size()) {
-					selectedItem = 0;
-				}
-			} else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
+		} else {			
+			if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
 				if (buttons.get(selectedItem) == back) {
 					selectedItem -= 6;
 				} else if (selectedItem >= 5) {
@@ -224,11 +212,10 @@ public class KeyBindingsMenu extends GuiMenu {
 				} else if (buttons.get(selectedItem) == back) {
 					selectedItem--;
 				}
-			} else if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
-				e.consume();
-				buttons.get(selectedItem).postClick();
 			} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				back.postClick();
+			} else {
+				super.keyPressed(e);
 			}
 		}
 	}
