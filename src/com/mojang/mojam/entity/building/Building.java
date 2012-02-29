@@ -7,6 +7,7 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.IUsable;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
+import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.math.BB;
@@ -58,8 +59,6 @@ public class Building extends Mob implements IUsable {
 	public void render(Screen screen) {
 		super.render(screen);
 		renderMarker(screen);
-		if(team == MojamComponent.localTeam)
-			renderInfo(screen);
 	}
 
 	/**
@@ -88,46 +87,6 @@ public class Building extends Mob implements IUsable {
 			}
 			screen.blit(marker, bb.x0, bb.y0 - 4);
 		}
-	}
-
-	/**
-	 * Render the shop info onto the given screen
-	 * 
-	 * @param screen
-	 *            Screen
-	 */
-	protected void renderInfo(Screen screen) {
-		// Draw iiAtlas' shop item info graphics, thanks whoever re-wrote this!
-		if (highlight) {
-		    if (this instanceof ShopItem) {
-		        ShopItem s = (ShopItem)this;
-		        Bitmap image = getSprite();
-		        int teamYOffset = (team == 2) ? 90 : 0;
-		        
-		        String[] tooltip = s.getTooltip();
-		        int h = tooltip.length*(Font.FONT_GOLD_SMALL.getFontHeight()+3);
-		        int w = getLongestWidth(tooltip, Font.FONT_WHITE_SMALL)+4;
-		        
-		        Font f = Font.FONT_GOLD_SMALL;
-		        screen.blit(Bitmap.tooltipBitmap(w, h),
-                        (int)(pos.x - image.w / 2 - 10),
-                        (int)(pos.y + 20 - teamYOffset), w, h);
-
-		        for (int i=0; i<tooltip.length; i++) {
-		            f.draw(screen, tooltip[i], (int)(pos.x - image.w + 8), (int)pos.y + 22 - teamYOffset + (i==0?0:1) + i*(f.getFontHeight()+2));
-		            f = Font.FONT_WHITE_SMALL;
-		        }
-		    }
-		}
-	}
-	
-	private int getLongestWidth(String[] string, Font font) {
-		int res = 0;
-		for ( String s : string ) {
-			int w = font.calculateStringWidth(s.trim());
-			res = w > res ? w : res;
-		}
-		return res;
 	}
 
 	@Override
@@ -256,7 +215,7 @@ public class Building extends Mob implements IUsable {
 
 	@Override
 	public boolean isHighlightable() {
-		return true;
+		return this.team == MojamComponent.localTeam || this.team == Team.Neutral;
 	}
 
 	@Override
