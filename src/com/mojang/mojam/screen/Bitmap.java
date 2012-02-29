@@ -328,5 +328,24 @@ public class Bitmap {
 		}
 	}
 
+	public static Bitmap shrink(Bitmap bitmap) {
+		Bitmap newbmp = new Bitmap(bitmap.w/2, bitmap.h/2);
+		int[] pix = bitmap.pixels;
+		int blarg = 0;
+		for (int i = 0; i < pix.length; i++) {
+			if(blarg>=newbmp.pixels.length) 
+				break;
+			if(i%2==0){
+				newbmp.pixels[blarg]=pix[i];
+				blarg++;
+			}
+			if(i%bitmap.w==0) {
+				i+=bitmap.w;
+			}
+		}
+		
+		return newbmp;
+	}
+
 
 }
