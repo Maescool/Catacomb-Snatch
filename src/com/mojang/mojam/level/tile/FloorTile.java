@@ -21,6 +21,10 @@ public class FloorTile extends Tile {
 	public static final int COLOR = 0xffffffff;
 	public static final String NAME = "FLOOR";
 
+	public FloorTile() {
+		img=3;
+		minimapColor = Art.floorTileColors[img & 7][img / 8];
+	}
 	public void init(Level level, int x, int y) {
 		super.init(level, x, y);
 		neighbourChanged(null);
@@ -105,5 +109,10 @@ public class FloorTile extends Tile {
 	public Bitmap getBitMapForEditor() {
 		return Art.floorTiles[0][0];
 	}
-	
+
+	@Override
+	public int getMiniMapColor() {
+		return minimapColor;
+	}
+		
 }

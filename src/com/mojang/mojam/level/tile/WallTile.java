@@ -11,12 +11,16 @@ import com.mojang.mojam.screen.Screen;
 
 public class WallTile extends Tile {
 	static final int WALLHEIGHT = 56;
-	public static final int COLOR = 0xff0000;
+	public static final int COLOR = 0xffff0000;
 	private static final String NAME = "WALL";
 
+	public WallTile() {
+		img=4;
+		minimapColor = Art.wallTileColors[img % 4][0];
+	}
+	
 	public void init(Level level, int x, int y) {
 		super.init(level, x, y);
-		minimapColor = Art.wallTileColors[img % 3][0];
 	}
 
 	public boolean canPass(Entity e) {
@@ -61,5 +65,10 @@ public class WallTile extends Tile {
 	@Override
 	public Bitmap getBitMapForEditor() {
 		return Art.wallTiles[0][0];
+	}
+	
+	@Override
+	public int getMiniMapColor() {
+		return  minimapColor;
 	}
 }

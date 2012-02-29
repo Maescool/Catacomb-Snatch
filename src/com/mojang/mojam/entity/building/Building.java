@@ -18,7 +18,7 @@ import com.mojang.mojam.screen.Screen;
 /**
  * Generic building class
  */
-public class Building extends Mob implements IUsable {
+public abstract class Building extends Mob implements IUsable {
 	public static final int SPAWN_INTERVAL = 60;
 	public static final int MIN_BUILDING_DISTANCE = 1700; // Sqr
 	public static final int HEALING_INTERVAL = 15;

@@ -6,7 +6,7 @@ import com.mojang.mojam.entity.mob.Scarab;
 public class SpawnerForScarab extends SpawnerEntity {
 
 
-	public static final int COLOR = 0x00FF00;
+	public static final int COLOR = 0xff00ff00;
 
 	public SpawnerForScarab(double x, double y) {
 		super(x, y);
@@ -18,5 +18,19 @@ public class SpawnerForScarab extends SpawnerEntity {
 		return new Scarab(x,y);
 	}
 	
+	@Override
+	public int getColor() {
+		return SpawnerForScarab.COLOR;
+	}
 
+	@Override
+	public int getMiniMapColor() {
+		return SpawnerForScarab.COLOR;
+	}
+
+	@Override
+	public String getName() {
+		return "SCARABS";
+	}
+	
 }

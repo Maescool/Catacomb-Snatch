@@ -7,13 +7,17 @@ import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
 public class UnpassableSandTile extends Tile {
-	public static final int COLOR = 0x888800;
+	public static final int COLOR = 0xff888800;
 	private static final String NAME = "UNPASSABLE SAND";
 
-	public void init(Level level, int x, int y) {
-		super.init(level, x, y);
+	public UnpassableSandTile() {
 		img = 6;
 		minimapColor = Art.floorTileColors[img & 7][img / 8];
+	}
+	
+	public void init(Level level, int x, int y) {
+		super.init(level, x, y);
+
 	}
 
 	public void render(Screen screen) {
@@ -37,4 +41,8 @@ public class UnpassableSandTile extends Tile {
 		return Art.floorTiles[5][0];
 	}
 	
+	@Override
+	public int getMiniMapColor() {
+		return minimapColor;
+	}
 }

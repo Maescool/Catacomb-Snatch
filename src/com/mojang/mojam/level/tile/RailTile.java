@@ -8,7 +8,7 @@ import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
 public class RailTile extends Tile {
-	private static final String NAME = "RAIL";
+	protected static final String NAME = "RAIL";
 
 	private static final int COLOR = -1;
 
@@ -21,6 +21,7 @@ public class RailTile extends Tile {
 
 	public RailTile(Tile parent) {
 		this.parent = parent;
+		minimapColor = Art.floorTileColors[4][1];
 	}
 
 	public void init(Level level, int x, int y) {
@@ -28,8 +29,6 @@ public class RailTile extends Tile {
 		super.init(level, x, y);
 		neighbourChanged(null);
 		parent.neighbourChanged(null);
-		// minimapColor = Art.tilesColors[tx][ty];
-		minimapColor = Art.floorTileColors[4][1];
 	}
 
 	public void render(Screen screen) {
@@ -116,6 +115,11 @@ public class RailTile extends Tile {
 	@Override
 	public Bitmap getBitMapForEditor() {
 		return Art.rails[1][0];
+	}
+	
+	@Override
+	public int getMiniMapColor() {
+		return minimapColor;
 	}
 
 }

@@ -11,6 +11,16 @@ import javax.imageio.ImageIO;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
+import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.building.SpawnerForBat;
+import com.mojang.mojam.entity.building.SpawnerForMummy;
+import com.mojang.mojam.entity.building.SpawnerForScarab;
+import com.mojang.mojam.entity.building.SpawnerForSnake;
+import com.mojang.mojam.entity.building.TreasurePile;
+import com.mojang.mojam.entity.building.Turret;
+import com.mojang.mojam.entity.building.TurretTeamOne;
+import com.mojang.mojam.entity.building.TurretTeamTwo;
+import com.mojang.mojam.entity.mob.SpikeTrap;
 import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.LevelList;
@@ -18,7 +28,7 @@ import com.mojang.mojam.level.LevelUtils;
 import com.mojang.mojam.level.tile.DestroyableWallTile;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.HoleTile;
-import com.mojang.mojam.level.tile.Tile;
+import com.mojang.mojam.level.tile.UnbreakableRailTile;
 import com.mojang.mojam.level.tile.WallTile;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
@@ -56,7 +66,24 @@ public class LevelEditorMenu extends GuiMenu {
   //      Art.treasureTiles[4][0], Art.treasureTiles[0][0], Art.rails[1][0]
    // };
     
-    private final IEditable[] editableTiles = {new FloorTile(),new HoleTile(), new WallTile(), new DestroyableWallTile() };
+    private final IEditable[] editableTiles = {
+    		new FloorTile(),
+    		new HoleTile(), 
+    		new WallTile(),
+    		new DestroyableWallTile(), 
+    		new TreasurePile(0, 0),
+    		new UnbreakableRailTile(new FloorTile()),
+    		new Turret(0, 0, 0),
+    		
+    		//UNCOMMENT THESE ONCE PAGING/SMALLER ICONS ARE DONE!
+    		new TurretTeamOne(0, 0),
+    		new TurretTeamTwo(0, 0),
+    		new SpikeTrap(0, 0),
+    		new SpawnerForBat(0, 0),
+    		new SpawnerForSnake(0, 0),
+    		new SpawnerForMummy(0, 0),
+    		new SpawnerForScarab(0, 0)
+    		};
     
     private final int buttonsCols = 2;
     private final int buttonMargin = 2;
@@ -85,10 +112,12 @@ public class LevelEditorMenu extends GuiMenu {
     
     private String saveLevelName = "";
     private Random random = new Random();
+	private Text levelName;
 
     public LevelEditorMenu() {
         super();
-
+    	
+    	levelName = new Text(1,"", 120, 5);
         createGUI();
         updateTileButtons();
         
@@ -272,31 +301,34 @@ public class LevelEditorMenu extends GuiMenu {
         levels = LevelList.getLevels();
     }
 
-    private void draw(IEditable tile, int x, int y) {
+    private void draw(IEditable tileOrEntity, int x, int y) {
 
         if (x < 0 || x > LEVEL_WIDTH - 1) return;
         if (y < 0 || y > LEVEL_HEIGHT - 1) return;
         
-        if (mapTile[x][y] == tile.getColor()) return;
-
-        mapTile[x][y] = tile.getColor();
-        map[x][y] = tile.getBitMapForEditor();
-        minimap.fill(x, y, 1, 1, ( tile.getBitMapForEditor() == null ? 0 : tile.getColor()));
+        mapTile[x][y] = tileOrEntity.getColor();
+        
+        map[x][y] = tileOrEntity.getBitMapForEditor();
+        minimap.fill(x, y, 1, 1, tileOrEntity.getMiniMapColor() );
     }
 
     private void newLevel() {
         for (int x = 0; x < LEVEL_HEIGHT; x++) {
             for (int y = 0; y < LEVEL_WIDTH; y++) {
-                mapTile[x][y] = 0;
+                mapTile[x][y] = FloorTile.COLOR;
                 map[x][y] = null;
             }
         }
        minimap.fill(0, 0, minimap.w, minimap.h, 0);
+       removeText(levelName);
+       levelName = new Text(1, "<New Level>", 120, 5);
+       addText(levelName);
     }
 
     private void openLevel(LevelInformation li) {
         BufferedImage bufferedImage = null;
 
+    
         try {
             if (li.vanilla) {
                 bufferedImage = ImageIO.read(MojamComponent.class.getResource(li.getPath()));
@@ -315,23 +347,27 @@ public class LevelEditorMenu extends GuiMenu {
 
         
         newLevel();
-		
+        
+		removeText(levelName);
+        levelName = new Text(1, li.levelName, 120, 5);
+        addText(levelName);
+        
 		for (int y = 0; y < h; y++) {
 			for (int x = 0; x < w; x++) {
-				int col = rgbs[x + y * w] & 0xffffff;
+				int col = rgbs[x + y * w] & 0xffffffff;
 				//loadColorTile(col, x, y);
 				
-
-				Tile tile = LevelUtils.getNewTileFromColor(col);
+				IEditable tile = LevelUtils.getNewTileFromColor(col);
 				draw(tile,x,y);
 				
-				//if(tile instanceof FloorTile) {
-				//	Entity entity = LevelUtils.getNewEntityFromColor(col,x,y);
-				//	if(entity != null) {
-				//		newLevel.addEntity(entity);
-				//	}
-				//}
-
+				if(tile instanceof FloorTile) {
+					
+					Entity entity = LevelUtils.getNewEntityFromColor(col,x,y);
+					if(entity instanceof IEditable) {
+						draw((IEditable)entity,x,y);
+					}
+				
+				} 
 			}
 		}
 		
@@ -355,6 +391,9 @@ public class LevelEditorMenu extends GuiMenu {
         } catch (IOException ioe) {
             System.out.println("Error saving new level: " + ioe);
         }
+        removeText(levelName);
+        levelName = new Text(1,"+ " + name, 120, 5);
+        addText(levelName);
     }
     
     private void createGUI() {
@@ -372,8 +411,7 @@ public class LevelEditorMenu extends GuiMenu {
         addButton(new Panel(0, 0, MENU_WIDTH, MojamComponent.GAME_HEIGHT));
         
         // minimap panel
-        addButton(new Panel(MojamComponent.GAME_WIDTH - minimap.w - 11, 1, minimap.w + 10, minimap.h + 10));
-
+        addButton(new Panel(MojamComponent.GAME_WIDTH - minimap.w - 11, 1, minimap.w + 10, minimap.w + 10));
         // save menu panel
         savePanel = new Panel(180, 120, 298, 105) {
 
@@ -441,6 +479,7 @@ public class LevelEditorMenu extends GuiMenu {
             } else if (button == openButton) {
                 selectedLevel = (selectedLevel < levels.size() - 1 ? selectedLevel + 1 : 0);
                 openLevel(LevelList.getLevels().get(selectedLevel));
+                
             } else if (button == saveButton) {
                 saveMenuVisible = true;
                 updateButtons = true;

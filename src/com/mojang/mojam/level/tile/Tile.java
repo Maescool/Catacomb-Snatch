@@ -20,13 +20,16 @@ public abstract class Tile implements BBOwner, IEditable {
 	public int x, y;
 	public int img = -1; // no image set yet
 	public int minimapColor;
+	
+	public Tile() {
+		if (img == -1) img = TurnSynchronizer.synchedRandom.nextInt(4);
+		minimapColor = Art.floorTileColors[img & 7][img / 8];
+	}
 
 	public void init(Level level, int x, int y) {
 		this.level = level;
 		this.x = x;
 		this.y = y;
-		if (img == -1) img = TurnSynchronizer.synchedRandom.nextInt(4);
-		minimapColor = Art.floorTileColors[img & 7][img / 8];
 	}
 
 	public boolean canPass(Entity e) {
@@ -69,4 +72,6 @@ public abstract class Tile implements BBOwner, IEditable {
 
 	public void bomb(LargeBombExplodeAnimation largeBombExplodeAnimation) {
 	}
+	
+
 }

@@ -8,7 +8,7 @@ import com.mojang.mojam.screen.Screen;
 public class LevelEditorButton extends ClickableComponent {
 
     public static final int WIDTH = 63;
-    public static final int HEIGHT = 87;
+    public static final int HEIGHT = 35;
 
     private boolean isActive = false;
 	private IEditable tile;
@@ -61,11 +61,13 @@ public class LevelEditorButton extends ClickableComponent {
         screen.blit(background[isPressed() ? 1 : (isActive ? 2 : 0)], getX(), getY());
 
         // render icon        
-        int height = tile.getBitMapForEditor().h + 17;
-        screen.blit(tile.getBitMapForEditor(), getX() + (getWidth() - tile.getBitMapForEditor().w) / 2, getY() + (getHeight() - height) / 2);
+        Bitmap smallBitmap = Bitmap.shrink(tile.getBitMapForEditor());
+        
+        int height = smallBitmap.h ;
+        screen.blit(smallBitmap, getX() + (getWidth() - smallBitmap.w) / 2, getY() + (getHeight() - height) / 2);
 
         // render label
-        Font.defaultFont().drawCentered(screen, tile.getName(), getX() + getWidth() / 2, (getY() + (getHeight() - height) / 2) + tile.getBitMapForEditor().h + 10);
+        Font.defaultFont().drawCentered(screen, tile.getName(), getX() + getWidth() / 2, (getY() + (getHeight() - height) / 2) + smallBitmap.h);
     }
 
     @Override

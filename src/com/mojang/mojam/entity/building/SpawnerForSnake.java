@@ -16,8 +16,21 @@ public class SpawnerForSnake extends SpawnerEntity {
 	protected Mob getMob(double x, double y) {
 		return new Snake(x, y);
 	}
+
 	
-	
-	
+	@Override
+	public int getColor() {
+		return SpawnerForSnake.COLOR;
+	}
+
+	@Override
+	public int getMiniMapColor() {
+		return SpawnerForSnake.COLOR;
+	}
+
+	@Override
+	public String getName() {
+		return "SNAKES";
+	}
 
 }

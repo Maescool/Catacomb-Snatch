@@ -4,6 +4,7 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.level.DifficultyInformation;
+import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
@@ -12,7 +13,7 @@ import com.mojang.mojam.screen.Bitmap;
 /**
  * Spawner entity. A sarcophage which spawns enemies of a given type onto the field.
  */
-public abstract class SpawnerEntity extends Building {
+public abstract class SpawnerEntity extends Building implements IEditable {
 	/** Spawn interval in frames*/
 	public static final int SPAWN_INTERVAL = 60 * 4;
 
@@ -97,6 +98,11 @@ public abstract class SpawnerEntity extends Building {
 			return new SpawnerForScarab(x,y);
 		
 		return new SpawnerForBat(x,y); //should never reach this
+	}
+	
+	@Override
+	public Bitmap getBitMapForEditor() {
+		return Art.mobSpawner[0][0];
 	}
 	
 }

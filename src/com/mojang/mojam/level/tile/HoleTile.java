@@ -11,13 +11,16 @@ import com.mojang.mojam.screen.Screen;
 
 public class HoleTile extends Tile {
 
-	public static final int COLOR = 0x000000;
-	public static final String NAME = "Hole";
+	public static final int COLOR = 0xff000000;
+	public static final String NAME = "HOLE";
+	
+	public HoleTile() {
+		img = 4;
+		minimapColor = Art.floorTileColors[img & 7][img / 8];
+	}
 
 	public void init(Level level, int x, int y) {
 		super.init(level, x, y);
-		img = 4;
-		minimapColor = Art.floorTileColors[img & 7][img / 8];
 	}
 
 	public void render(Screen screen) {
@@ -49,6 +52,11 @@ public class HoleTile extends Tile {
 	
 	public Bitmap getBitMapForEditor() {
 		return Art.floorTiles[4][0];
+	}
+
+	@Override
+	public int getMiniMapColor() {
+		return minimapColor;
 	}
 	
 }

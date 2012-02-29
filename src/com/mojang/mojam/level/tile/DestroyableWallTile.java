@@ -13,7 +13,7 @@ import com.mojang.mojam.screen.Screen;
 
 public class DestroyableWallTile extends WallTile {
 	static final int WALLHEIGHT = 56;
-	public static final int COLOR = 0xFF7777;
+	public static final int COLOR = 0xff777777;
 
 	public void init(Level level, int x, int y) {
 		super.init(level, x, y);
@@ -67,6 +67,21 @@ public class DestroyableWallTile extends WallTile {
 	@Override
 	public Bitmap getBitMapForEditor() {
 		return  Art.treasureTiles[4][0];
+	}
+	
+	@Override
+	public String getName() {
+		return "B.WALL";
+	}
+	
+	public int getColor() {
+		return DestroyableWallTile.COLOR;
+	}
+
+	
+	@Override
+	public int getMiniMapColor() {
+		return  minimapColor;
 	}
 	
 }

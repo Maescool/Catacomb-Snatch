@@ -25,6 +25,7 @@ public class Art {
 	public static Bitmap[][] wallTiles = cut("/art/map/floortiles.png", 32, 56, 0, 104);
 	public static int[][] wallTileColors = getColors(wallTiles);
 	public static Bitmap[][] treasureTiles = cut("/art/map/treasure.png", 32, 56);
+	public static int treasureTileColor = getColor(treasureTiles[0][0]);
 	public static Bitmap[][] mobSpawner = cut("/art/map/spawner.png", 32, 40);
 	public static Bitmap[][] darkness = cut("/art/map/dark.png", 32, 32);
 	public static Bitmap[][] mapIcons = cut("/art/map/mapicons.png", 5, 5);

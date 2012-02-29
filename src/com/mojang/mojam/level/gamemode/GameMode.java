@@ -56,7 +56,7 @@ public class GameMode {
 		
 		for (int y = 0; y < h; y++) {
 			for (int x = 0; x < w; x++) {
-				int col = rgbs[x + y * w] & 0xffffff;
+				int col = rgbs[x + y * w] & 0xffffffff;
 				loadColorTile(col, x, y);
 			}
 		}
