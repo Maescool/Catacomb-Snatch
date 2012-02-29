@@ -34,7 +34,7 @@ public class Player extends Mob implements LootCollector {
     public static int COST_RAIL;
     public static int COST_DROID;
     public static int COST_REMOVE_RAIL;
-    public static final int REGEN_INTERVAL = 60 * 3;
+    public int REGEN_INTERVAL = 60 * 3;
     public int plevel;
     public double pexp;
     public double psprint;
@@ -183,10 +183,11 @@ public class Player extends Mob implements LootCollector {
         }
 
         time++;
-
+		
+		this.doRegenTime();
+			
         handleLevelUp();
         flashMiniMapIcon();
-        regeneratePlayer();
         countdownTimers();
         playStepSound();
 
