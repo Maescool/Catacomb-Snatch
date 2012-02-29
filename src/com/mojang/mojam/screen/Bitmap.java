@@ -6,7 +6,7 @@ import java.util.Arrays;
 public class Bitmap {
 	public int w, h;
 	public int[] pixels;
-
+	
 	public Bitmap(int w, int h) {
 		this.w = w;
 		this.h = h;
@@ -35,46 +35,81 @@ public class Bitmap {
 		}
 	}
 
+	public Bitmap copy() {
+	    Bitmap rValue = new Bitmap(this.w, this.h);
+	    rValue.pixels = this.pixels;
+	    return rValue;
+	}
+	
 	public void clear(int color) {
 		Arrays.fill(pixels, color);
 	}
 
-	public void blit(Bitmap bitmap, int x, int y) {
-	
+	public void blit(Bitmap bitmap, int x, int y) {    
+	    
 	    Rect blitArea = new Rect(x, y, bitmap.w, bitmap.h);
-		adjustBlitArea(blitArea);	
-		
-		int blitWidth = blitArea.bottomRightX - blitArea.topLeftX;
+	    adjustBlitArea(blitArea);	
+	    int blitWidth = blitArea.bottomRightX - blitArea.topLeftX;
 
 		for (int yy = blitArea.topLeftY; yy < blitArea.bottomRightY; yy++) {
 			int tp = yy * w + blitArea.topLeftX;
 			int sp = (yy - y) * bitmap.w + (blitArea.topLeftX - x);
 			tp -= sp;
 			for (int xx = sp; xx < sp + blitWidth; xx++) {
-				int col = bitmap.pixels[xx];
-				if (col < 0)
-					pixels[tp + xx] = col;
+			    int col = bitmap.pixels[xx];
+			    int alpha = (col >> 24) & 0xff;
+			    
+			    if (alpha == 255) 
+			        pixels[tp + xx] = col;
+			    else
+			        pixels[tp + xx] = blendPixels(pixels[tp + xx], col);
 			}
 		}
 	}
 
+	public int blendPixels(int backgroundColor, int pixelToBlendColor){
+
+	    int alpha_blend = 255 - (pixelToBlendColor >> 24) & 0xff;
+
+	    int alpha_background = 255 - alpha_blend;
+
+	    int rr = backgroundColor & 0xff0000;
+	    int gg = backgroundColor & 0xff00;
+	    int bb = backgroundColor & 0xff;
+
+	    int r = (pixelToBlendColor & 0xff0000);
+	    int g = (pixelToBlendColor & 0xff00);
+	    int b = (pixelToBlendColor & 0xff);
+
+	    r = ((r * alpha_background + rr * alpha_blend) >> 8) & 0xff0000;
+	    g = ((g * alpha_background + gg * alpha_blend) >> 8) & 0xff00;
+	    b = ((b * alpha_background + bb * alpha_blend) >> 8) & 0xff;
+
+	    return 0xff000000 | r | g | b;
+	}
+
+
+
 	public void blit(Bitmap bitmap, int x, int y, int width, int height) {
-		
+
 	    Rect blitArea = new Rect(x, y, width, height);
-        adjustBlitArea(blitArea);
-        		
-        int blitWidth = blitArea.bottomRightX - blitArea.topLeftX;
-        
-        for (int yy = blitArea.topLeftY; yy < blitArea.bottomRightY; yy++) {
-            int tp = yy * w + blitArea.topLeftX;
-            int sp = (yy - y) * bitmap.w + (blitArea.topLeftX - x);
-            tp -= sp;
-            for (int xx = sp; xx < sp + blitWidth; xx++) {
-                int col = bitmap.pixels[xx];
-                if (col < 0)
-                    pixels[tp + xx] = col;
-            }
-        }
+	    adjustBlitArea(blitArea);
+	    int blitWidth = blitArea.bottomRightX - blitArea.topLeftX;
+
+	    for (int yy = blitArea.topLeftY; yy < blitArea.bottomRightY; yy++) {
+	        int tp = yy * w + blitArea.topLeftX;
+	        int sp = (yy - y) * bitmap.w + (blitArea.topLeftX - x);
+	        tp -= sp;
+	        for (int xx = sp; xx < sp + blitWidth; xx++) {
+	            int col = bitmap.pixels[xx];
+	            int alpha = (col >> 24) & 0xff;
+	            
+	            if (alpha == 255) 
+	                pixels[tp + xx] = col;
+	            else 
+	                pixels[tp + xx] = blendPixels(pixels[tp + xx], col);
+	        }
+	    }
 	}
 
 	/**

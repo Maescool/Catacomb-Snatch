@@ -14,4 +14,28 @@ public class SandTile extends Tile {
 	public void render(Screen screen) {
 		super.render(screen);
 	}
+	
+	public void neighbourChanged(Tile tile) {
+        final Tile w = level.getTile(x - 1, y);
+        final Tile n = level.getTile(x, y - 1);
+        final Tile e = level.getTile(x + 1, y);
+        final Tile nw = level.getTile(x - 1, y - 1);
+        final Tile ne = level.getTile(x + 1, y - 1);
+        
+        if (w != null && w.castShadow()){
+            this.isShadowed_west = true;
+        }
+        if (n != null && n.castShadow()){
+            this.isShadowed_north = true;
+        }
+        if (e != null && e.castShadow()){
+            this.isShadowed_east = true;
+        }
+        if (ne != null && ne.castShadow() && !this.isShadowed_north && !this.isShadowed_east){
+            this.isShadowed_north_east = true;
+        }
+        if (nw != null && nw.castShadow() && !this.isShadowed_north && !this.isShadowed_west){
+            this.isShadowed_north_west = true;
+        }
+	}
 }
