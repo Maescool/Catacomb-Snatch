@@ -1,0 +1,90 @@
+# Game texts encoded in UTF-8
+
+build.rail = JE HEBT {0} NODIG VOOR EEN RAIL TE PLAATSEN.
+build.droid = JE HEBT {0} NODIG VOOR EEN ROBOT.
+build.removeRail = JE HEBT {0} NODIG OM EEN RAIL TE VERWIJDEREN.
+
+back = TERUG
+cancel = ANNULEER
+
+diffselect.title = KIES EEN MOEILIJKHEIDSGRAAD
+diffselect.start = BEGIN HET SPEL
+diffselect.easy = MAKKELIJK
+diffselect.normal = NORMAAL
+diffselect.hard = MOEILIJK
+diffselect.nightmare = HARDCORE
+
+gameplay.player1Name = LORD LARD
+gameplay.player1NameAlt = DUCHESS DONUT
+gameplay.player1Win = {0} HEEFT GEWONNEN!
+gameplay.player2Name = HERR VON SPECK
+gameplay.player2Win = {0} HEEFT GEWONNEN
+gameplay.FPS = FPS: {0}
+gameplay.latency = WACHTTIJD: {0}
+gameplay.cantPickup = DAT KUN JE NIET OPRAPEN!
+
+help.goal1 = OBJECTIEF
+help.help1 = VERZAMEL 50 STUKKEN SHAT
+help.help2 = VAN DE SCHAT
+help.help3 = IN HET MIDDEN VAN DE KAART
+help.help4 = VOOR JE TEGENSTANDER
+help.turret = SCHIETKANON
+help.turret1 = SCHIET OP DE VIJANDEN RONDOM ZICH
+help.collector = COLLECTER
+help.collector1 = ZUIGT GELD ROND ZICH OP, NEEM HEM OP
+help.collector2= OM HET GELD ERUIT TE HALEN
+help.bomb = BOM
+help.bomb1 = VERNIETIGT BREEKBARE MUREN, SCHIET
+help.bomb2 = EROP OM DE BOM TOT ONTPLOFFING TE BRENGEN
+help.rails = RAILS
+help.rails1 = WAAROP ROBOTS RIJDEN
+help.rails2 = DRUK DE BOUW KNOP OP HET EERSTE STUK RAIL
+help.rails3 = OM EEN ROBOT TE KOPEN (50 GOUD)
+
+keys.up = OMHOOG
+keys.down = BENEDEN
+keys.left = LINKS
+keys.right=  RECHTS
+keys.sprint = SPRINT
+keys.fire = SCHIETEN
+keys.use = GEBRUIKEN
+keys.build = BOUWEN
+keys.upgrade = UPGRADEN
+
+levelselect.title = KIES EEN LEVEL
+levelselect.start = BEGIN
+levelselect.update = UPDATE DE LEVELS
+
+mp.waitingForClient = WACHTEN OP MEDESPELER
+mp.enterIP = GEEF HET IP VAN DE HOST
+mp.localIP = UW LOCAAL IP : 
+mp.externalIP = UW EXTERN IP:
+mp.join = JOINEN
+
+options.on = AAN
+options.off = AF
+options.keyBindings = KEY BINDINGS
+options.fullscreen = VOLLEDIG SCHERM
+options.showfps = TOON FPS
+options.volume = VOLUME
+options.mute = MUTE
+options.creative = CREATIEVE MODUS
+options.alternative = ALTERNATIVE MODUS
+
+pausemenu.help = HELP
+pausemenu.main = HOOFDMENU
+pausemenu.resume = VERDER SPELEN
+pausemenu.exit = SPEL VERLATEN
+
+titlemenu.start = SPELEN
+titlemenu.host = HOSTEN
+titlemenu.join = JOINEN
+titlemenu.help = HELP
+titlemenu.exit = EXIT
+
+upgrade.full = AL OP HET MAXIMALE LEVEL
+upgrade.notEnoughMoney = U HEBT NIET GENOEG GELD ({0})
+upgrade.to = UPGRADDE NAAR LEVEL {0}
+
+player.hasDied = {0} IS GESTORVEN
+
