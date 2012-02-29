@@ -21,17 +21,20 @@ import com.mojang.mojam.screen.Screen;
 public class Building extends Mob implements IUsable {
 	public static final int SPAWN_INTERVAL = 60;
 	public static final int MIN_BUILDING_DISTANCE = 1700; // Sqr
-	public static final int HEALING_INTERVAL = 15;
+
+	public int REGEN_INTERVAL = 15;
+	public float REGEN_AMOUNT = 1;
+	public boolean REGEN_HEALTH = true;
+	public int healingTime = REGEN_INTERVAL;
+	
 
 	public int spawnTime = 0;
 	public boolean highlight = false;
-	private int healingTime = HEALING_INTERVAL;
 	public Mob carriedBy = null;
 
 	protected int upgradeLevel = 0;
 	private int maxUpgradeLevel = 0;
 	private int[] upgradeCosts = null;
-	protected boolean healthRegenB = false;
 
 	/**
 	 * Constructor
@@ -47,8 +50,6 @@ public class Building extends Mob implements IUsable {
 		super(x, y, team);
 
 		setStartHealth(20);
-		healthRegen = false;
-		healthRegenB = true;
 		freezeTime = 10;
 		spawnTime = TurnSynchronizer.synchedRandom.nextInt(SPAWN_INTERVAL);
 	}
@@ -132,20 +133,17 @@ public class Building extends Mob implements IUsable {
 	@Override
 	public void tick() {
 		super.tick();
-		if (freezeTime > 0) {
-			return;
-		}
-		if (hurtTime <= 0 && healthRegenB) {
-			if (health < maxHealth) {
-				if (--healingTime <= 0) {
-					++health;
-					healingTime = HEALING_INTERVAL;
-				}
-			}
-		}
 		
 		xd = 0.0;
 		yd = 0.0;
+	}
+	
+	public void doRegenTime() {
+		if (freezeTime <= 0) {
+			super.doRegenTime();
+		} else {
+			// DO NOTHING
+		}
 	}
 	
 	/**
@@ -173,17 +171,6 @@ public class Building extends Mob implements IUsable {
 	    return carriedBy != null;
 	}
 
-	@Override
-	public void hurt(Bullet bullet) {
-		super.hurt(bullet);
-		healingTime = HEALING_INTERVAL;
-	}
-
-	@Override
-	public void hurt(Entity source, float damage) {
-		super.hurt(source, damage);
-		healingTime = HEALING_INTERVAL;
-	}
 
 	@Override
 	public Bitmap getSprite() {
@@ -283,21 +270,4 @@ public class Building extends Mob implements IUsable {
 		return true;
 	}
 	
-	/**
-	 * Set regeneration status for this building
-	 * 
-	 * @param regen True if building can regenerate, false if not
-	 */
-	public void buildingRegen(boolean regen) {
-		healthRegenB = regen;
-	}
-	
-	/**
-	 * Check if this building is able to regenerate
-	 * 
-	 * @return True if building can regenerate, false if not
-	 */
-	public boolean buildingRegenEnabled() {
-		return healthRegenB;
-	}
 }
