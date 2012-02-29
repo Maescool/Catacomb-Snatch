@@ -74,12 +74,12 @@ public class GameMode {
 		Arrays.fill(rgbs, 0xffA8A800);
 
 		for (int y = 0 + 4; y < height - 4; y++) {
-			for (int x = 31 - 3; x < 32 + 3; x++) {
+			for (int x = (width / 2) - 4; x < (width / 2) + 3; x++) {
 				rgbs[x + y * width] = 0xff888800;
 			}
 		}
 		for (int y = 0 + 5; y < height - 5; y++) {
-			for (int x = 31 - 1; x < 32 + 1; x++) {
+			for (int x = (width / 2) - 2; x < (width / 2) + 1; x++) {
 				rgbs[x + y * width] = 0xffA8A800;
 			}
 		}
@@ -184,8 +184,8 @@ public class GameMode {
 				ShopItemWeapon.SHOP_RAYGUN, Team.Team1));	
 
 		
-		newLevel.setTile(31, 7, new UnbreakableRailTile(new SandTile()));
-		newLevel.setTile(31, 63 - 7, new UnbreakableRailTile(new SandTile()));
+		newLevel.setTile((newLevel.width / 2) - 1, 7, new UnbreakableRailTile(new SandTile()));	
+	    newLevel.setTile((newLevel.width / 2) - 1, newLevel.height - 8, new UnbreakableRailTile(new SandTile()));
 	}
 	
 	protected void setTickItems() {
