@@ -11,7 +11,7 @@ credits.leadDev = HOOF ONTWIKKELAAR:
 credits.maintainers = PROJEK ONDERHOUERS:
 credits.communityMan = GEMEENSKAP ONDERHOUERS:
 credits.others = DANKIE VIR AL DIE BYDRAERS, INSLUITEND:
-credits.note = HIERDIE PROJEK WORD NOU IN STAND GEHOU AS 'N GEMEENSKAPSPROJEK
+credits.note = HIERDIE PROJEK WORD NOU ONDERHOU DEUR DIE GEMEENSKAP
 
 diffselect.title = KIES MOEILIJKHEIDSVLAK
 diffselect.start = BEGIN
@@ -63,7 +63,7 @@ keys.build = BOU
 keys.upgrade = OPGRADEER
 keys.chat = GESêLS
 
-leveleditor.title = KAMER ONTWERPER
+leveleditor.title = KAMER ONTWERP
 leveleditor.new = NUWE
 leveleditor.open = OPEN
 leveleditor.save = STOOR
@@ -81,8 +81,8 @@ mp.join = SLUIT AAN
 
 options.on = AAN
 options.off = AF
-options.keyBindings = SLEUTELBORD KORTPAAIE
-options.characterSelect = KIES JOU KARAKTER
+options.keyBindings = SLEUTELBORD
+options.characterSelect = KARAKTER KEUSE
 options.fullscreen = VOLSKERM
 options.showfps = WYS FPS
 options.music = MUSIEK
@@ -121,11 +121,11 @@ shop.bombTooltipLine1 = VERNIETIG GEKRAAKTE MURE.
 shop.bombTooltipLine2 = KAN KORTPAAIE SKEP.
 
 titlemenu.start = BEGIN
-titlemenu.host = ONTHAAL 'N SPEL
+titlemenu.host = ONTHAAL SPEL
 titlemenu.join = SLUIT AAN
 titlemenu.help = HULP
 titlemenu.options = OPSIES
-titlemenu.levelEditor = KAMER ONTWERPER
+titlemenu.levelEditor = ONTWERP KAMER
 titlemenu.exit = VERLAAT
 
 upgrade.full = REEDS TEN VOLLE OPGEGRADEER!
