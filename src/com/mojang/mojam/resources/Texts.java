@@ -20,14 +20,14 @@ public class Texts {
 		
 		texts = new Properties();
 		try {
-			stream = new FileInputStream(new File("res/translations/texts_"+locale.getLanguage()+".txt"));
+			stream = this.getClass().getResourceAsStream("/translations/texts_"+locale.getLanguage()+".txt");
 			texts.load(new InputStreamReader(stream, "UTF8"));
 			stream.close();
 		} catch (Exception e) {
 		}
 		
 		try {
-			stream = new FileInputStream(new File("res/translations/texts.txt"));
+			stream = this.getClass().getResourceAsStream("/translations/texts.txt");
 			fallbackTexts.load(new InputStreamReader(stream, "UTF8"));
 			stream.close();
 		} catch (Exception e){
