@@ -4,7 +4,7 @@ import java.util.Random;
 
 import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.building.TreasurePile;
-import com.mojang.mojam.entity.mob.Team;
+import com.mojang.mojam.entity.mob.SpawnableEnemy;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.network.TurnSynchronizer;
@@ -24,7 +24,7 @@ public class GameModeVanilla extends GameMode {
 			final Tile tile = newLevel.getTile((int) (x / Tile.WIDTH),
 					(int) (y / Tile.HEIGHT));
 			if (tile instanceof FloorTile) {
-				newLevel.addEntity(new SpawnerEntity(x, y, 0));
+				newLevel.addEntity(new SpawnerEntity(x, y, SpawnableEnemy.BAT));
 			}
 		}
 	}
