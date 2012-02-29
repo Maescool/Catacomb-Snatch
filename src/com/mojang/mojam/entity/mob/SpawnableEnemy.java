@@ -1,5 +1,9 @@
 package com.mojang.mojam.entity.mob;
 
+import java.lang.reflect.Constructor;
+
+import com.mojang.mojam.network.TurnSynchronizer;
+
 
 /**
  * @author andy36
@@ -42,6 +46,26 @@ public enum SpawnableEnemy {
 			}
 		}
 		return found;
+	}
+	
+	public static Mob spawnRandomHostileMob(int x, int y) {
+		Mob te = null;
+		try {
+			SpawnableEnemy randomEnemyClass = SpawnableEnemy.getByType(TurnSynchronizer.synchedRandom.nextInt(SpawnableEnemy.values().length))  ;
+			
+			//This whole try/catch block is to create the new enemy of the given type using reflection. This will allow new enemies to be added without touching this 
+			//code as long as they are defined in SpawnableEnemies enum and have a public constructor that takes (double, double)
+			
+			Constructor<? extends HostileMob> con = randomEnemyClass.getClazz().getConstructor(new Class[]{double.class, double.class});
+			te = con.newInstance(new Object[]{x,y});
+		
+		} catch (Exception e) {
+			//Something went wrong with the reflection creation of the Enemy. Here are a few things that could've gone wrong:
+			//The constructor with arguments double, double is not defined as Public
+			//There is no constructor with arguments double, double
+			e.printStackTrace();
+		} 		
+		return te;
 	}
 	
 }
