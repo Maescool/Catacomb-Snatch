@@ -29,8 +29,7 @@ jar {
     configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
   }
   manifest {
-    attributes "Main-Class" : "com.mojang.mojam.MojamComponent"
-    attributes "Build" : env.BUILD_NUMBER
+    attributes "Main-Class" : "com.mojang.mojam.MojamComponent", "Build" : env.BUILD_NUMBER
   }
 }
 
