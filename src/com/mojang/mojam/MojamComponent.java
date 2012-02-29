@@ -24,8 +24,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Stack;
@@ -256,7 +254,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	}
 	
 	private void initCharacters(){
-		opponentCharacter = Art.NO_OPPONENT;
+		opponentCharacter = Art.HERR_VON_SPECK;
 		if(!Options.isCharacterIDset()){
 			addMenu(new CharacterSelectionMenu());
 		}
@@ -280,6 +278,8 @@ public class MojamComponent extends Canvas implements Runnable,
 	}
 
 	private synchronized void createLevel(LevelInformation li, GameMode mode) {
+		if (!isMultiplayer)
+			opponentCharacter = Art.NO_OPPONENT;
 		try {
 			//level = Level.fromFile(li);
 			level = mode.generateLevel(li, playerCharacter, opponentCharacter);
