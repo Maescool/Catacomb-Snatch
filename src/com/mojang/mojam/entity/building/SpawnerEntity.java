@@ -36,7 +36,7 @@ public abstract class SpawnerEntity extends Building implements IEditable {
 		freezeTime = 10;
 		spawnTime = TurnSynchronizer.synchedRandom.nextInt(SPAWN_INTERVAL);
 		minimapIcon = 4;
-		healthBarOffset = 15;
+		healthBarOffset = 22;
 		deathPoints = 0 * 5 + 5;
 		yOffs = 0;
 	}
@@ -110,6 +110,6 @@ public abstract class SpawnerEntity extends Building implements IEditable {
 	@Override
     public void render(Screen screen) {
 	    super.render(screen);
-	    screen.blit(Art.mobSpawnerShadow, pos.x - Art.mobSpawnerShadow.w / 2 - 1, pos.y - Art.mobSpawnerShadow.h / 2 - 1);
+	    screen.blit(Art.mobSpawnerShadow, pos.x - Art.mobSpawnerShadow.w / 2 - 1, pos.y - Art.mobSpawnerShadow.h / 2 + 7);
     }
 }
