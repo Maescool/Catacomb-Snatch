@@ -2,6 +2,8 @@ package com.mojang.mojam.entity.building;
 
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.mob.Mummy;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
 
 public class SpawnerForMummy extends SpawnerEntity {
 
@@ -32,4 +34,8 @@ public class SpawnerForMummy extends SpawnerEntity {
 		return "MUMMYS";
 	}
 	
+	@Override
+	public Bitmap getBitMapForEditor() {
+		return Art.mummy[0][0];
+	}
 }
