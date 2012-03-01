@@ -222,6 +222,6 @@ public class Harvester extends Building implements LootCollector {
 	}
 	
 	public void drawRadius(Screen screen) {
-		screen.opacityBlit(areaBitmap, (int) pos.x-radius, (int) pos.y-radius - yOffs, 0xDD);	
+		screen.alphaBlit(areaBitmap, (int) pos.x-radius, (int) pos.y-radius - yOffs, 0x22);	
 	}
 }

@@ -30,8 +30,8 @@ public class Screen extends Bitmap {
 		super.blit(bitmap, x + xOffset, y + yOffset, w, h);
 	}
 	
-	public void opacityBlit(Bitmap bitmap, int x, int y, int opacity) {
-		super.opacityBlit(bitmap, x + xOffset, y + yOffset, opacity);
+	public void alphaBlit(Bitmap bitmap, int x, int y, int alpha) {
+		super.alphaBlit(bitmap, x + xOffset, y + yOffset, alpha);
 	}
 
 	public void colorBlit(Bitmap bitmap, double x, double y, int color) {

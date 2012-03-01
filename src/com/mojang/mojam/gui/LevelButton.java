@@ -112,9 +112,11 @@ public class LevelButton extends ClickableComponent {
 			screen.blit(minimap, getX() + (getWidth() - minimap.w) / 2, getY() + 4);
 
 			// map name
-			Font.defaultFont().drawCentered(screen, trimToFitButton(levelName), getX() + getWidth() / 2, getY() + 4 + minimap.h + 8);
+			Font.defaultFont().draw(screen, trimToFitButton(levelName), getX() + getWidth() / 2,
+					getY() + 4 + minimap.h + 8, Font.Align.CENTERED);
 		} else {
-			Font.FONT_RED.drawCentered(screen, trimToFitButton(levelName), getX() + getWidth() / 2, getY() + 4 + 32);
+			Font.FONT_RED.draw(screen, trimToFitButton(levelName), getX() + getWidth() / 2,
+					getY() + 4 + 32, Font.Align.CENTERED);
 		}
 	}
 

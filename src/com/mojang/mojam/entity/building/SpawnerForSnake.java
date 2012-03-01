@@ -2,10 +2,12 @@ package com.mojang.mojam.entity.building;
 
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.mob.Snake;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
 
 public class SpawnerForSnake extends SpawnerEntity {
 
-	public static final int COLOR = 0x009900;
+	public static final int COLOR = 0xff009900;
 
 	public SpawnerForSnake(double x, double y) {
 		super(x, y);
@@ -33,4 +35,8 @@ public class SpawnerForSnake extends SpawnerEntity {
 		return "SNAKES";
 	}
 
+	@Override
+	public Bitmap getBitMapForEditor() {
+		return Art.snake[0][0];
+	}
 }

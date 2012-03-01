@@ -8,8 +8,10 @@ import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.math.BBOwner;
+import com.mojang.mojam.math.Facing;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
 public abstract class Tile implements BBOwner, IEditable {
@@ -20,7 +22,13 @@ public abstract class Tile implements BBOwner, IEditable {
 	public int x, y;
 	public int img = -1; // no image set yet
 	public int minimapColor;
-	
+
+	public boolean isShadowed_north;
+	public boolean isShadowed_east;
+	public boolean isShadowed_west;
+	public boolean isShadowed_north_east;
+	public boolean isShadowed_north_west;
+    
 	public Tile() {
 		if (img == -1) img = TurnSynchronizer.synchedRandom.nextInt(4);
 		minimapColor = Art.floorTileColors[img & 7][img / 8];
@@ -37,8 +45,32 @@ public abstract class Tile implements BBOwner, IEditable {
 	}
 
 	public void render(Screen screen) {
-		screen.blit(Art.floorTiles[img & 7][img / 8], x * Tile.WIDTH, y
-				* Tile.HEIGHT);
+	    
+	    Bitmap floorTile = (Art.floorTiles[img & 7][img / 8]).copy();
+	    addShadows(floorTile);
+	    screen.blit(floorTile, x * Tile.WIDTH, y * Tile.HEIGHT);
+	    
+	    
+	}
+	
+	private void addShadows(Bitmap tile){
+	    
+	    if (isShadowed_north) {
+	        tile.blit(Art.shadow_north, 0, 0);
+	    } else {
+	        if (isShadowed_north_east) {
+	            tile.blit(Art.shadow_north_east, Tile.WIDTH - Art.shadow_east.w, 0);
+	        } 
+	        if (isShadowed_north_west) {
+	            tile.blit(Art.shadow_north_west, 0, 0);
+	        }
+	    }
+	    if (isShadowed_east) {
+            tile.blit(Art.shadow_east, Tile.WIDTH - Art.shadow_east.w , 0);
+        }
+        if (isShadowed_west) {
+            tile.blit(Art.shadow_west, 0, 0);
+        }
 	}
 
 	public void addClipBBs(List<BB> list, Entity e) {
@@ -73,5 +105,6 @@ public abstract class Tile implements BBOwner, IEditable {
 	public void bomb(LargeBombExplodeAnimation largeBombExplodeAnimation) {
 	}
 	
-
+	public void updateShadows(){
+	}
 }

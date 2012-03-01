@@ -2,6 +2,8 @@ package com.mojang.mojam.entity.building;
 
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.mob.Scarab;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
 
 public class SpawnerForScarab extends SpawnerEntity {
 
@@ -33,4 +35,8 @@ public class SpawnerForScarab extends SpawnerEntity {
 		return "SCARABS";
 	}
 	
+	@Override
+	public Bitmap getBitMapForEditor() {
+		return Art.scarab[0][1];
+	}
 }
