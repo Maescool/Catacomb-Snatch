@@ -13,7 +13,7 @@ import com.mojang.mojam.screen.Screen;
 
 public class DestroyableWallTile extends WallTile {
 	static final int WALLHEIGHT = 56;
-	public static final int COLOR = 0xff777777;
+	public static final int COLOR = 0xffff7777;
 
 	public void init(Level level, int x, int y) {
 		super.init(level, x, y);
@@ -52,17 +52,9 @@ public class DestroyableWallTile extends WallTile {
 
 	public void bomb(LargeBombExplodeAnimation largeBombExplodeAnimation) {
 		level.setTile(x, y, new FloorTile());
-
-		level.getTile(x, y).neighbourChanged(this);
-		level.getTile(x - 1, y).neighbourChanged(this);
-		level.getTile(x + 1, y).neighbourChanged(this);
-		level.getTile(x, y - 1).neighbourChanged(this);
-		level.getTile(x, y + 1).neighbourChanged(this);
-
 		level.addEntity(new TileExplodeAnimation((x + 0.5) * Tile.WIDTH,
 				(y + 0.5) * Tile.HEIGHT));
 	}
-	
 	
 	@Override
 	public Bitmap getBitMapForEditor() {

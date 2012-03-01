@@ -41,12 +41,13 @@ public class ShopItem extends Building {
     public void render(Screen screen) {
         super.render(screen);
         if(team == MojamComponent.localTeam) {
-            Font.defaultFont().drawCentered(screen, MojamComponent.texts.cost(effectiveCost), (int) (pos.x), (int) (pos.y + 10));           
+        	//Render the Cost text
+            Font.defaultFont().draw(screen, MojamComponent.texts.cost(effectiveCost),
+            		(int) (pos.x), (int) (pos.y + 10), Font.Align.CENTERED);
         }
         renderInfo(screen);
     }
     
-
 	/**
 	 * Render the shop info text onto the given screen
 	 * 

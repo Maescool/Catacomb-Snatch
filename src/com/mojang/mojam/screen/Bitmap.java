@@ -6,7 +6,7 @@ import java.util.Arrays;
 public class Bitmap {
 	public int w, h;
 	public int[] pixels;
-
+	
 	public Bitmap(int w, int h) {
 		this.w = w;
 		this.h = h;
@@ -35,46 +35,81 @@ public class Bitmap {
 		}
 	}
 
+	public Bitmap copy() {
+	    Bitmap rValue = new Bitmap(this.w, this.h);
+	    rValue.pixels = this.pixels.clone();
+	    return rValue;
+	}
+	
 	public void clear(int color) {
 		Arrays.fill(pixels, color);
 	}
 
-	public void blit(Bitmap bitmap, int x, int y) {
-	
+	public void blit(Bitmap bitmap, int x, int y) {    
+	    
 	    Rect blitArea = new Rect(x, y, bitmap.w, bitmap.h);
-		adjustBlitArea(blitArea);	
-		
-		int blitWidth = blitArea.bottomRightX - blitArea.topLeftX;
+	    adjustBlitArea(blitArea);	
+	    int blitWidth = blitArea.bottomRightX - blitArea.topLeftX;
 
 		for (int yy = blitArea.topLeftY; yy < blitArea.bottomRightY; yy++) {
 			int tp = yy * w + blitArea.topLeftX;
 			int sp = (yy - y) * bitmap.w + (blitArea.topLeftX - x);
 			tp -= sp;
 			for (int xx = sp; xx < sp + blitWidth; xx++) {
-				int col = bitmap.pixels[xx];
-				if (col < 0)
-					pixels[tp + xx] = col;
+			    int col = bitmap.pixels[xx];
+			    int alpha = (col >> 24) & 0xff;
+			    
+			    if (alpha == 255) 
+			        pixels[tp + xx] = col;
+			    else
+			        pixels[tp + xx] = blendPixels(pixels[tp + xx], col);
 			}
 		}
 	}
 
+	public int blendPixels(int backgroundColor, int pixelToBlendColor){
+
+	    int alpha_blend = 255 - (pixelToBlendColor >> 24) & 0xff;
+
+	    int alpha_background = 255 - alpha_blend;
+
+	    int rr = backgroundColor & 0xff0000;
+	    int gg = backgroundColor & 0xff00;
+	    int bb = backgroundColor & 0xff;
+
+	    int r = (pixelToBlendColor & 0xff0000);
+	    int g = (pixelToBlendColor & 0xff00);
+	    int b = (pixelToBlendColor & 0xff);
+
+	    r = ((r * alpha_background + rr * alpha_blend) >> 8) & 0xff0000;
+	    g = ((g * alpha_background + gg * alpha_blend) >> 8) & 0xff00;
+	    b = ((b * alpha_background + bb * alpha_blend) >> 8) & 0xff;
+
+	    return 0xff000000 | r | g | b;
+	}
+
+
+
 	public void blit(Bitmap bitmap, int x, int y, int width, int height) {
-		
+
 	    Rect blitArea = new Rect(x, y, width, height);
-        adjustBlitArea(blitArea);
-        		
-        int blitWidth = blitArea.bottomRightX - blitArea.topLeftX;
-        
-        for (int yy = blitArea.topLeftY; yy < blitArea.bottomRightY; yy++) {
-            int tp = yy * w + blitArea.topLeftX;
-            int sp = (yy - y) * bitmap.w + (blitArea.topLeftX - x);
-            tp -= sp;
-            for (int xx = sp; xx < sp + blitWidth; xx++) {
-                int col = bitmap.pixels[xx];
-                if (col < 0)
-                    pixels[tp + xx] = col;
-            }
-        }
+	    adjustBlitArea(blitArea);
+	    int blitWidth = blitArea.bottomRightX - blitArea.topLeftX;
+
+	    for (int yy = blitArea.topLeftY; yy < blitArea.bottomRightY; yy++) {
+	        int tp = yy * w + blitArea.topLeftX;
+	        int sp = (yy - y) * bitmap.w + (blitArea.topLeftX - x);
+	        tp -= sp;
+	        for (int xx = sp; xx < sp + blitWidth; xx++) {
+	            int col = bitmap.pixels[xx];
+	            int alpha = (col >> 24) & 0xff;
+	            
+	            if (alpha == 255) 
+	                pixels[tp + xx] = col;
+	            else 
+	                pixels[tp + xx] = blendPixels(pixels[tp + xx], col);
+	        }
+	    }
 	}
 
 	/**
@@ -82,17 +117,15 @@ public class Bitmap {
 	 * @param bitmap image to draw
 	 * @param x position on screen
 	 * @param y position on screen
-	 * @param opacity range from 0x00 to 0xff
+	 * @param alpha range from 0x00 (transparent) to 0xff (opaque)
 	 */
-    public void opacityBlit(Bitmap bitmap, int x, int y, int opacity) {
+    public void alphaBlit(Bitmap bitmap, int x, int y, int alpha) {
 
-        if(opacity == 0)
+        if(alpha == 255)
         {
             this.blit(bitmap, x, y);
             return;
         }
-        
-        opacity *= (int)Math.pow(16, 6);
         
         Rect blitArea = new Rect(x, y, bitmap.w, bitmap.h);
         adjustBlitArea(blitArea);
@@ -105,24 +138,13 @@ public class Bitmap {
             for (int xx = 0; xx < blitWidth; xx++) {
                 int col = bitmap.pixels[sp + xx];
                 if (col < 0) {
-                    int color = pixels[tp + xx];
-                    color += opacity;
-                    
-                    int a2 = (color >> 24) & 0xff;
-                    int a1 = 256 - a2;
-
-                    int rr = color & 0xff0000;
-                    int gg = color & 0xff00;
-                    int bb = color & 0xff;
                     
                     int r = (col & 0xff0000);
                     int g = (col & 0xff00);
                     int b = (col & 0xff);
-
-                    r = ((r * a1 + rr * a2) >> 8) & 0xff0000;
-                    g = ((g * a1 + gg * a2) >> 8) & 0xff00;
-                    b = ((b * a1 + bb * a2) >> 8) & 0xff;
-                    pixels[tp + xx] = 0xff000000 | r | g | b;
+                    col = (alpha << 24) | r | g | b;
+                    int color = pixels[tp + xx];
+                    pixels[tp + xx] = this.blendPixels(color, col);
                 }
             }
         }
@@ -169,11 +191,11 @@ public class Bitmap {
      * @param width of the region
      * @param height of the region
      * @param color to fill the region
-     * @param opacity range from 0x00 to 0xff
+     * @param alpha range from 0x00 (transparent) to 0xff (opaque)
      */
-    public void opacityFill(int x, int y, int width, int height, int color, int opacity) {
+    public void alphaFill(int x, int y, int width, int height, int color, int alpha) {
 
-        if(opacity == 0)
+        if(alpha == 255)
         {
             this.fill(x, y, width, height, color);
             return;
@@ -182,7 +204,7 @@ public class Bitmap {
         Bitmap bmp = new Bitmap(width, height);
         bmp.fill(0, 0, width, height, color);
         
-        this.opacityBlit(bmp, x, y, opacity);
+        this.alphaBlit(bmp, x, y, alpha);
     }
     
 
@@ -346,6 +368,20 @@ public class Bitmap {
 		
 		return newbmp;
 	}
+          
+    public static Bitmap scaleBitmap(Bitmap bitmap, int width, int height) {
+        Bitmap scaledBitmap = new Bitmap(width, height);
 
+        int scaleRatioWidth = ((bitmap.w << 16) / width);
+        int scaleRatioHeight = ((bitmap.h << 16) / height);
 
+        int i = 0;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                scaledBitmap.pixels[i++] = bitmap.pixels[(bitmap.w * ((y * scaleRatioHeight) >> 16)) + ((x * scaleRatioWidth) >> 16)];
+            }
+        }
+
+        return scaledBitmap;
+    }
 }

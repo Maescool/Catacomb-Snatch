@@ -150,13 +150,13 @@ public class OptionsMenu extends GuiMenu {
 	    if( ! inGame) {
 	        screen.blit(Art.background, 0, 0);
 	    } else {
-	        screen.opacityFill(0, 0, gameWidth, gameHeight, 0xff000000, 0x30);
+	        screen.alphaFill(0, 0, gameWidth, gameHeight, 0xff000000, 0x30);
 	    }
 		
 		
 		super.render(screen);
-		Font.defaultFont().drawCentered(screen, MojamComponent.texts.getStatic("titlemenu.options"),
-				MojamComponent.GAME_WIDTH / 2, textY);
+		Font.defaultFont().draw(screen, MojamComponent.texts.getStatic("titlemenu.options"),
+				MojamComponent.GAME_WIDTH / 2, textY, Font.Align.CENTERED);
 		screen.blit(Art.getLocalPlayerArt()[0][6], buttons.get(selectedItem).getX() - 40, buttons
 				.get(selectedItem).getY() - 8);
 	}
