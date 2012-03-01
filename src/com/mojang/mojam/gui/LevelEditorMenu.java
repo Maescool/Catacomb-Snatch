@@ -260,10 +260,12 @@ public class LevelEditorMenu extends GuiMenu {
         screen.blit(minimap, screen.w - minimap.w - 6, 6);
         
         // selected tile name
-        Font.defaultFont().drawCentered(screen, selectedButton != null ? selectedButton.getTile().getName() : "", MENU_WIDTH / 2, 13);
+        Font.defaultFont().draw(screen, selectedButton != null ? selectedButton.getTile().getName() : "",
+        		MENU_WIDTH / 2, 13, Font.Align.CENTERED);
         
         // current page and total pages
-        Font.defaultFont().drawCentered(screen, (currentPage + 1) + "/" + totalPages , MENU_WIDTH / 2, 261);
+        Font.defaultFont().draw(screen, (currentPage + 1) + "/" + totalPages,
+        		MENU_WIDTH / 2, 261, Font.Align.CENTERED);
     }
        
     private void updateTileButtons() {
@@ -446,10 +448,10 @@ public class LevelEditorMenu extends GuiMenu {
             @Override
             public void render(Screen screen) {
                 super.render(screen);
-                Font.defaultFont().drawCentered(screen, MojamComponent.texts.getStatic("leveleditor.enterLevelName"),
-                        getX() + getWidth() / 2, getY() + 20);
-                Font.defaultFont().drawCentered(screen, saveLevelName + "_",
-                        getX() + getWidth() / 2, getY() + 40);
+                Font.defaultFont().draw(screen, MojamComponent.texts.getStatic("leveleditor.enterLevelName"),
+                        getX() + getWidth() / 2, getY() + 20, Font.Align.CENTERED);
+                Font.defaultFont().draw(screen, saveLevelName + "_",
+                        getX() + getWidth() / 2, getY() + 40, Font.Align.CENTERED);
             }
         };
 

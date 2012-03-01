@@ -245,11 +245,14 @@ public class Font {
 	 * 
 	 * Will never be split into several lines of text
 	 * 
+	 * @Deprecated use draw(Screen screen, String msg, int x, int y, Font.Align align) instead
+	 * 
 	 * @param screen 
 	 * @param msg 
 	 * @param x 
 	 * @param y 
 	 */
+	@Deprecated
 	public void drawCentered(Screen screen, String msg, int x, int y) {
 		int width = calculateStringWidth(msg);
 		draw(screen, msg, x - width / 2, y - 4);
