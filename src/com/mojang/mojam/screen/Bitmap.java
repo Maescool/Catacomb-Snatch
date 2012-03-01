@@ -346,6 +346,20 @@ public class Bitmap {
 		
 		return newbmp;
 	}
+          
+    public static Bitmap scaleBitmap(Bitmap bitmap, int width, int height) {
+        Bitmap scaledBitmap = new Bitmap(width, height);
 
+        int scaleRatioWidth = ((bitmap.w << 16) / width);
+        int scaleRatioHeight = ((bitmap.h << 16) / height);
 
+        int i = 0;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                scaledBitmap.pixels[i++] = bitmap.pixels[(bitmap.w * ((y * scaleRatioHeight) >> 16)) + ((x * scaleRatioWidth) >> 16)];
+            }
+        }
+
+        return scaledBitmap;
+    }
 }
