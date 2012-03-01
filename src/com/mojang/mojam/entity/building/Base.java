@@ -2,6 +2,7 @@ package com.mojang.mojam.entity.building;
 
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.Screen;
 
 /**
  * Player base
@@ -26,6 +27,10 @@ public class Base extends Building {
 		super.tick();
 		if (freezeTime > 0)
 			return;
+	}
+
+	@Override
+	public void render(Screen screen) {
 	}
 
 	@Override

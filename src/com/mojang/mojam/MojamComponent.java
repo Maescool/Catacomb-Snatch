@@ -100,6 +100,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	private static JFrame guiFrame;
 	private boolean running = true;
 	private boolean paused;
+	private boolean paused2;
 	private Cursor emptyCursor;
 	private double framerate = 60;
 	private int fps;
@@ -531,15 +532,15 @@ public class MojamComponent extends Canvas implements Runnable,
 		if (!isMultiplayer) {
 			//Not-In-Focus-Pause
 			if (this.isFocusOwner() && level != null) {
-				paused = false;
+				paused2 = false;
 			}
 			if (!this.isFocusOwner() && level != null) {
 				keys.release();
 				mouseButtons.releaseAll();
-				if (!paused) { 
+				if (!paused && !paused2) { 
 					PauseCommand pauseCommand = new PauseCommand(true);
 					synchronizer.addCommand(pauseCommand);
-					paused = true;
+					paused2 = true;
 				}
 			}			
 		}
