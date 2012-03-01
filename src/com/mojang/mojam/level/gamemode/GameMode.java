@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.building.EnumShopItem;
 import com.mojang.mojam.entity.building.ShopItem;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.level.DifficultyInformation;
@@ -111,18 +112,18 @@ public class GameMode {
 		newLevel.maxMonsters = 1500 + (int)DifficultyInformation.calculateStrength(500);	
 		
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 - 1.5), 4.5 * 32,
-				ShopItem.SHOP_TURRET, Team.Team2));
+				EnumShopItem.TURRET, Team.Team2));
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 - .5), 4.5 * 32,
-				ShopItem.SHOP_HARVESTER, Team.Team2));
+				EnumShopItem.HARVESTER, Team.Team2));
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 + .5), 4.5 * 32,
-				ShopItem.SHOP_BOMB, Team.Team2));
+				EnumShopItem.BOMB, Team.Team2));
 
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 - 1.5), (newLevel.height - 4.5) * 32,
-				ShopItem.SHOP_TURRET, Team.Team1));
+				EnumShopItem.TURRET, Team.Team1));
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 - .5), (newLevel.height - 4.5) * 32,
-				ShopItem.SHOP_HARVESTER, Team.Team1));
+				EnumShopItem.HARVESTER, Team.Team1));
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 + .5), (newLevel.height - 4.5) * 32,
-				ShopItem.SHOP_BOMB, Team.Team1));
+				EnumShopItem.BOMB, Team.Team1));
 		
 		newLevel.setTile((newLevel.width / 2) - 1, 7, new UnbreakableRailTile(new SandTile()));	
 	    newLevel.setTile((newLevel.width / 2) - 1, newLevel.height - 8, new UnbreakableRailTile(new SandTile()));
