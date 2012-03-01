@@ -16,11 +16,11 @@ public class DifficultySelect extends GuiMenu {
 	private ArrayList<DifficultyInformation> difficulties = DifficultyList.getDifficulties();
 	
 	private Checkbox[] DifficultyCheckboxes;
-	private final int xButtons = 3;
-	private final int xSpacing = Checkbox.WIDTH + 8;
-	private final int ySpacing = Checkbox.HEIGHT + 8;
+	private final int xButtons = 1;
+	private final int xSpacing = Checkbox.WIDTH + 20;
+	private final int ySpacing = Checkbox.HEIGHT + 20;
 	private final int xStart = (MojamComponent.GAME_WIDTH - (xSpacing * xButtons)) / 2;
-	private final int yStart = 75;
+	private final int yStart = 100;
 	
 	private Button startGameButton;
 	private Button cancelButton;
