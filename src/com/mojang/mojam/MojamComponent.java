@@ -100,7 +100,6 @@ public class MojamComponent extends Canvas implements Runnable,
 	private static JFrame guiFrame;
 	private boolean running = true;
 	private boolean paused;
-	private boolean paused2;
 	private Cursor emptyCursor;
 	private double framerate = 60;
 	private int fps;
@@ -529,20 +528,22 @@ public class MojamComponent extends Canvas implements Runnable,
 	}
 
 	private void tick() {
-		//Not-In-Focus-Pause
-		if (this.isFocusOwner() && level != null) {
-			paused2 = false;
-		}
-		
-		if (!this.isFocusOwner() && level != null) {
-			keys.release();
-			mouseButtons.releaseAll();
-			if (!paused && !paused2) { 
-			  PauseCommand pauseCommand = new PauseCommand(true);
-			  synchronizer.addCommand(pauseCommand);
-			  paused2 = true;
+		if (!isMultiplayer) {
+			//Not-In-Focus-Pause
+			if (this.isFocusOwner() && level != null) {
+				paused = false;
 			}
+			if (!this.isFocusOwner() && level != null) {
+				keys.release();
+				mouseButtons.releaseAll();
+				if (!paused) { 
+					PauseCommand pauseCommand = new PauseCommand(true);
+					synchronizer.addCommand(pauseCommand);
+					paused = true;
+				}
+			}			
 		}
+
 		if (isMultiplayer) {
 			tickChat();
 		}
