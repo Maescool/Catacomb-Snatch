@@ -33,9 +33,10 @@ public class Art {
 	public static Bitmap[][] treasureTiles = cut("/art/map/treasure.png", 32, 56);
 	public static int treasureTileColor = getColor(treasureTiles[0][0]);
 	public static Bitmap[][] mobSpawner = cut("/art/map/spawner.png", 32, 40);
+	public static Bitmap mobSpawnerShadow = load("/art/shadows/shadow_spawner.png");
 	public static Bitmap[][] darkness = cut("/art/map/dark.png", 32, 32);
 	public static Bitmap[][] mapIcons = cut("/art/map/mapicons.png", 5, 5);
-	public static Bitmap shadow = load("/art/map/shadow.png");
+	public static Bitmap shadow = load("/art/shadows/shadow_coin.png");
 	public static Bitmap[][] rails = cut("/art/map/rails.png", 32, 38);
     public static Bitmap[][] spikes = cut("/art/map/spike_trap_eglerion_32.png", 32, 32);
 
@@ -142,7 +143,7 @@ public class Art {
 	public static Bitmap[][] snake = cut("/art/mob/enemy_snake_anim_48.png", 48, 48);
 	public static Bitmap[][] scarab = cut("/art/mob/enemy_scarab_anim_48.png", 48, 48);
 	public static Bitmap[][] bat = cut("/art/mob/enemy_bat_32.png", 32, 32);
-	public static Bitmap batShadow = load("/art/mob/shadow.png");
+	public static Bitmap batShadow = load("/art/shadows/shadow_bat.png");
 
 	// Coins
 	public static Bitmap[][] pickupCoinBronzeSmall = cut("/art/pickup/pickup_coin_bronze_small_8.png", 8, 8);
