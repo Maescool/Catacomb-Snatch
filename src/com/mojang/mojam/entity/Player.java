@@ -171,6 +171,21 @@ public class Player extends Mob implements LootCollector {
     
     @Override
     public void tick() {
+    	
+    	 // If the player is at 0, 0 just kill the entities at the base and then teleport to base .
+    	if (pos.x == 0 && pos.y == 0) { 
+    		if (team == 0) for (Entity e : level.getEntities(0, level.height - 10, level.width, level.height)) {
+    			e.remove();
+    			level.removeEntity(e);
+    			level.removeFromEntityMap(e);
+    		}
+    		if (team == 1) for (Entity e : level.getEntities(0, 0, level.width, 9)) {
+    			e.remove();
+    			level.removeEntity(e);
+    			level.removeFromEntityMap(e);
+    		}
+    		this.basePosition();
+    	}
 
         // If the mouse is used, update player orientation before level tick
         if (!mouseButtons.mouseHidden) {
@@ -812,6 +827,13 @@ public class Player extends Mob implements LootCollector {
         dropAllMoney();
         pos.set(startX, startY);
         health = maxHealth;
+    }
+    
+    /**
+     * Teleports the player to his / her base. Made for the 0, 0 fix.
+     */
+    private void basePosition() {
+        pos.set(startX, startY);
     }
 
     @Override
