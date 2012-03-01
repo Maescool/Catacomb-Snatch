@@ -67,7 +67,7 @@ public final class Snatch
 			e1.printStackTrace();
 		}*/
 
-		System.out.println("init");
+		System.out.println("Snatch starting up...");
 		addMod(Snatch.class.getClassLoader(),"SnatchContent.class");
 		try
 		{
@@ -85,7 +85,6 @@ public final class Snatch
 		{
 			//System.out.println(mod.getClass());
 		}
-		System.out.println(spawnList.size());
 	}
 
 	private static void readFromModFolder(File file) throws IOException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException
@@ -192,7 +191,7 @@ public final class Snatch
 			if(mod != null)
 			{
 				modList.add(mod);
-				System.out.println((new StringBuilder("Mod Initialized: ")).append(mod.toString()).toString());
+				System.out.println("Mod Initialized: "+mod.getClass().getSimpleName());
 			}
 		}
 		catch (Exception throwable)
@@ -221,12 +220,12 @@ public final class Snatch
 				String s1 = zipentry.getName();
 				if(!zipentry.isDirectory() && s1.contains("mod_") && s1.endsWith(".class"))
 				{
-					System.out.println(s1);
+					//System.out.println(s1);//TODO
 					addMod(classloader, s1);
 				}
 				else if(!zipentry.isDirectory() && s1.contains("mod_"))
 				{
-					System.out.println(s1);
+					//System.out.println(s1);//TODO
 					addScript(s1);
 				}
 			}
@@ -261,7 +260,7 @@ public final class Snatch
 					}
 					else if(afile[i].isFile() && s2.contains("mod_"))
 					{
-						System.out.println(s2);
+						//System.out.println(s2);//TODO
 						addScript(afile[i].getAbsolutePath());
 					}
 				}
@@ -286,7 +285,7 @@ public final class Snatch
 			e.eval(fr);
 			e.put("Snatch", new Snatch());
 			scriptList.add(e);
-			System.out.println(e.getFactory().getLanguageName() + " Script initialised: "+s);
+			System.out.println(e.getFactory().getExtensions().get(0).toUpperCase() + " Script initialised: "+s);
 		}
 		catch (FileNotFoundException e1)
 		{
@@ -328,7 +327,6 @@ public final class Snatch
 		for(Mod m : modList)
 		{
 			Entity e = m.getEntityInstanceById(i, x, y);
-			//System.out.println("Entity Id: "+i+" in class "+m.getClass()+" created "+e);
 			if(e != null) return e;
 		}
 		return null;
@@ -342,11 +340,9 @@ public final class Snatch
 	public static int addEntity(Entity entity)
 	{
 		spawnList.put(spawnList.size(), entity);
-		for(int i = 0; i < spawnList.size(); i++)
-		{
-			System.out.println("Registered" + spawnList.get(i));
-		}
-		return spawnList.size() - 1;
+		int i = spawnList.size()-1;
+		System.out.println("Registered " + spawnList.get(i).getClass().getSimpleName()+" with id "+i);
+		return i;
 	}
 
 	public static void afterRender()
@@ -526,7 +522,7 @@ public final class Snatch
 	    for(String s:links)
 	    {
 	    	File f1 = new File(mojam.getMojamDir(),"/mods/"+s.substring(s.lastIndexOf('/')+1));
-	    	System.out.print(s);
+	    	System.out.print("Debug: "+s);//TODO
 	    	if(upToDate(s))
 	    	{
 	    		File f2 = downloadFile(s,f1.getAbsolutePath());
