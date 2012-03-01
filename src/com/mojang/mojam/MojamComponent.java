@@ -1,4 +1,4 @@
-package com.mojang.mojam;
+ package com.mojang.mojam;
 
 import java.awt.AWTException;
 import java.awt.BorderLayout;

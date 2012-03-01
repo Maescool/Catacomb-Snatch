@@ -5,6 +5,7 @@ import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.animation.EnemyDieAnimation;
+import com.mojang.mojam.entity.animation.PlayerFallingAnimation;
 import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.loot.Loot;
@@ -353,10 +354,10 @@ public abstract class Mob extends Entity {
     }
     
     public boolean fallDownHole() {
-    	int x=(int) pos.x/Tile.WIDTH;
-    	int y=(int) pos.y/Tile.HEIGHT;
+    	int x=(int)(pos.x/Tile.WIDTH);
+    	int y=(int)(pos.y/Tile.HEIGHT);
         if (level.getTile(x, y) instanceof HoleTile) {
-        	level.addEntity(new EnemyDieAnimation(pos.x, pos.y));
+        	level.addEntity(new PlayerFallingAnimation(x*Tile.WIDTH, y*Tile.HEIGHT));
         	MojamComponent.soundPlayer.playSound("/sound/Fall.wav", (float) pos.x, (float) pos.y);
         	if (!(this instanceof Player)){
         		remove();

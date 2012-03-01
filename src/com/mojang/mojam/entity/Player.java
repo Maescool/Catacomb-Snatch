@@ -266,7 +266,7 @@ public class Player extends Mob implements LootCollector {
         if (!dead && fallDownHole()) {
         	dead = true;
         	carrying = null;
-        	deadDelay = 50;
+        	deadDelay = 60;
         }
 
         if (dead && deadDelay <= 0) {
