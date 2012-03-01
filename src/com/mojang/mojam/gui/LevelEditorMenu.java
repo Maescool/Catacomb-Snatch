@@ -3,6 +3,7 @@ package com.mojang.mojam.gui;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
@@ -403,8 +404,7 @@ public class LevelEditorMenu extends GuiMenu {
         }
     }
     
-    private void saveLevel(String name) {
-        File newLevel = new File(LevelList.getBaseDir(), name + ".bmp");
+    private boolean saveLevel(String name) {
 
         BufferedImage image = new BufferedImage(LEVEL_WIDTH, LEVEL_HEIGHT, BufferedImage.TYPE_INT_RGB);
         for (int x = 0; x < LEVEL_HEIGHT; x++) {
@@ -414,13 +414,18 @@ public class LevelEditorMenu extends GuiMenu {
         }
 
         try {
+            File newLevel = new File(LevelList.getBaseDir(), name + ".bmp");
+            newLevel.createNewFile();
             ImageIO.write(image, "BMP", newLevel);
+        } catch (FileNotFoundException ex) {
+            System.out.println("FileNotFoundException : " + ex);
+            return true;
         } catch (IOException ioe) {
-            System.out.println("Error saving new level: " + ioe);
+            System.out.println("IOException : " + ioe);
+            return false;
         }
-        removeText(levelName);
-        levelName = new Text(1,"+ " + name, 120, 5);
-        addText(levelName);
+
+        return true;
     }
     
     private void createGUI() {
@@ -481,8 +486,13 @@ public class LevelEditorMenu extends GuiMenu {
         // save menu buttons
         if (saveMenuVisible) {
             if (button == confirmeSaveButton) {
-                saveLevel(saveLevelName);
-                updateLevels();
+                if (saveLevel(saveLevelName)) {
+                    removeText(levelName);
+                    levelName = new Text(1, "+ " + saveLevelName, 120, 5);
+                    addText(levelName);
+                    
+                    updateLevels();
+                }
             }
             
             if (button == confirmeSaveButton || button == cancelSaveButton) {
@@ -602,7 +612,9 @@ public class LevelEditorMenu extends GuiMenu {
             if (e.getKeyChar() == KeyEvent.VK_BACK_SPACE && saveLevelName.length() > 0) {
                 saveLevelName = saveLevelName.substring(0, saveLevelName.length() - 1);
             } else {
-                saveLevelName += e.getKeyChar();
+                if (e.getKeyChar() == KeyEvent.VK_ENTER) return;
+                
+                saveLevelName += e.getKeyChar();;
             }
         }
     }
