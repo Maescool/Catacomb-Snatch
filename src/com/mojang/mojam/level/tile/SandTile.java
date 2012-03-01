@@ -58,7 +58,6 @@ public class SandTile extends Tile {
 		return true;
 	}
 	
-	@Override
 	public Bitmap getBitMapForEditor() {
 		return Art.floorTiles[5][0];
 	}
