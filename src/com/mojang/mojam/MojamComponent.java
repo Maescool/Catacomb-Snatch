@@ -423,7 +423,7 @@ while (running) {
 			menuStack.peek().render(screen);
 		}
 
-		if (Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_TRUE)) {
+		if (Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE)) {
 			Font.draw(screen, texts.FPS(fps), 10, 10);
 		}
 
@@ -450,6 +450,8 @@ while (running) {
 				(getHeight() - GAME_HEIGHT * SCALE) / 2);
 		g.clipRect(0, 0, GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE);
 
+		Snatch.afterRender();
+		
 		if (!menuStack.isEmpty() || level != null) {
 
 			// render mouse
@@ -459,7 +461,6 @@ while (running) {
 					* SCALE, null);
 		}
 
-		Snatch.afterRender();
 	}
 
 	private void renderMouse(Screen screen, MouseButtons mouseButtons) {
@@ -508,7 +509,7 @@ while (running) {
 		}
 		
 		if (level != null && level.victoryConditions != null) {
-	Snatch.updateTick();			
+			Snatch.updateTick();
 if(level.victoryConditions.isVictoryConditionAchieved()) {
 				addMenu(new WinMenu(GAME_WIDTH, GAME_HEIGHT, level.victoryConditions.playerVictorious()));
 				Snatch.onWin(level.victoryConditions.playerVictorious());

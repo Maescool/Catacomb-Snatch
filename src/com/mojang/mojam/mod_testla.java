@@ -23,7 +23,6 @@ public class mod_testla extends Mod
 	@Override
 	public void OnRender()
 	{
-		//System.out.println("Render");
 	}
 
 	@Override

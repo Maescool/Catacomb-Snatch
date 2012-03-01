@@ -1,24 +1,26 @@
 function OnRender()
 {
-    lastFrame = frame;
-    frame = Snatch.nanoTime;
-    fps = 1000000000/(frame-lastFrame);
-    Font.draw(Snatch.getMojam().screen, Snatch.getMojam.texts.FPS(fps), 10, 10);
+    //if((frame % 500) < (lastFrame % 500))
+    {
+        lastFrame = frame;
+    }
+    frame = Snatch.currentTimeMillis();
+    if((frame % 500) < (lastFrame % 500))fps = 1000/(frame-lastFrame);
+    Snatch.getFont().draw(Snatch.getMojam().screen, Snatch.getMojam().texts.FPS(fps), 10, 10);
 }
 
 function OnLevelTick(level)
 {
 }
 
-var Font = new Font();
-var invulnTimer = 0;
+var invulnTimer = 5;
 var Snatch;
-var fps = 0.0;
-var frame = 0;
-var lastFrame = 0;
+var fps = 1;
+var frame = 1;
+var lastFrame = 1;
 
 function OnTick(){
-var player = Snatch.getMojam().player;
+        var player = Snatch.getMojam().player;
         if(invulnTimer > 0)
         {
             player.isImmortal = true;
@@ -38,7 +40,7 @@ function AfterTick(){}
     
     function OnStartRender(){}
     
-    function RunOnce(){}
+    function RunOnce(){Snatch.setGamemode(new com.mojang.mojam.level.gamemode.GameModeGoldRush());}
     
     function OnClose(){}
     

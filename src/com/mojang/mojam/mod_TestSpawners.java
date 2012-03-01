@@ -7,6 +7,7 @@ import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.mob.Mummy;
 import com.mojang.mojam.entity.mob.Snake;
 import com.mojang.mojam.entity.mob.TestEntity;
+import com.mojang.mojam.gui.Font;
 
 public class mod_TestSpawners extends Mod
 {
@@ -15,8 +16,8 @@ public class mod_TestSpawners extends Mod
 	int turrentId;
 	long invulnTimer = 0;
 	long frame = 0;
-	long lastframe = 0;
-	double fps = 0;
+	long lastFrame = 0;
+	int fps = 0;
 
 	public mod_TestSpawners()
 	{
@@ -56,9 +57,11 @@ public class mod_TestSpawners extends Mod
 	@Override
 	public void OnRender()
 	{
-		lastframe = frame;
-		frame = System.nanoTime();
-		fps = 1000000000/(frame - lastframe);
+		/*if((frame % 500) < (lastFrame % 500))lastFrame = frame;
+	    frame = Snatch.currentTimeMillis();
+	    System.out.println(1000/(lastFrame));
+	    fps = (int) (1000/(frame-lastFrame));
+	    Snatch.getFont().draw(Snatch.getMojam().screen, Snatch.getMojam().texts.FPS(fps), 10, 10);*/
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.mojang.mojam;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,7 +11,10 @@ import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -26,7 +30,10 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.gui.Font;
+import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.Level;
+import com.mojang.mojam.level.gamemode.GameMode;
 import com.mojang.mojam.network.Packet;
 
 public final class Snatch
@@ -65,7 +72,10 @@ public final class Snatch
 		try
 		{
 			System.out.println(modDir.getAbsolutePath());
+			readFromClassPath(new File(mojam.getMojamDir(),"/mods"));
 			readFromClassPath(modDir);
+			readLinksFromFile(new File(mojam.getMojamDir(),"mods.txt"));
+			System.out.println(modDir.getAbsolutePath());
 		}
 		catch (Exception e)
 		{
@@ -276,6 +286,7 @@ public final class Snatch
 			e.eval(fr);
 			e.put("Snatch", new Snatch());
 			scriptList.add(e);
+			System.out.println(e.getFactory().getLanguageName() + " Script initialised: "+s);
 		}
 		catch (FileNotFoundException e1)
 		{
@@ -284,6 +295,7 @@ public final class Snatch
 		catch (NullPointerException e1)
 		{
 			System.out.println("Could not initialise mod "+s);
+			//e1.printStackTrace();
 		}
 		catch (ScriptException e1)
 		{
@@ -291,6 +303,7 @@ public final class Snatch
 		}
 	}
 
+	@Deprecated
 	public static void addJSMod(ClassLoader c, String s)
 	{
 		ScriptEngine e = lang.getEngineByExtension("js");
@@ -454,7 +467,6 @@ public final class Snatch
 				for(Object o : args)
 				{
 					sc.put(o.getClass().getSimpleName(), o);
-					System.out.println(o.getClass().getSimpleName());
 				}
 			}
 			try
@@ -480,6 +492,71 @@ public final class Snatch
 	public static long nanoTime()
 	{
 		return System.nanoTime();
+	}
+	
+	public static Font getFont()
+	{
+		return Font.getFont();
+	}
+	
+	public static void setGamemode(GameMode gamemode)
+	{
+		TitleMenu.defaultGameMode = gamemode;
+	}
+	
+	public static void readLinksFromFile(File f) throws IOException
+	{
+		if(!f.exists())
+		{
+			System.out.println("Creating Mod Subscriptions File");
+			f.createNewFile();
+		}
+		
+		BufferedReader reader = new BufferedReader( new FileReader (f));
+	    String line  = null;
+	    StringBuilder stringBuilder = new StringBuilder();
+	    String ls = System.getProperty("line.separator");
+	    while( ( line = reader.readLine() ) != null ) {
+	        stringBuilder.append( line );
+	        stringBuilder.append( ls );
+	    }
+	    line = stringBuilder.toString();
+	    
+	    String[] links = line.split("\n|\r");
+	    for(String s:links)
+	    {
+	    	File f1 = new File(mojam.getMojamDir(),"/mods/"+s.substring(s.lastIndexOf('/')+1));
+	    	System.out.print(s);
+	    	if(upToDate(s))
+	    	{
+	    		File f2 = downloadFile(s,f1.getAbsolutePath());
+	    		if(f2.exists())	addScript(f1.getAbsolutePath());
+	    	}
+	    }
+	}
+	
+	public static boolean upToDate(String s) throws IOException
+	{
+		File f = new File(s);
+		File f1 = new File(mojam.getMojamDir(),"mods/"+s.substring(s.lastIndexOf('/')+1));
+		if(!f1.exists())f1.mkdirs();f1.createNewFile();
+		System.out.print(f.hashCode()+":"+f1.hashCode()+" - "+f.lastModified()+":"+f1.lastModified());
+		if(f.hashCode()!=f1.hashCode()&&f.lastModified()>f1.lastModified())
+		{
+			System.out.print(f.hashCode()+":"+f1.hashCode()+" - "+f.lastModified()+":"+f1.lastModified());
+			return false;
+		}
+		//return true;
+		return false;
+	}
+	
+	public static File downloadFile(String path, String dest) throws IOException
+	{
+		URL url = new URL(path);
+		ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+		FileOutputStream fos = new FileOutputStream(dest);
+		fos.getChannel().transferFrom(rbc, 0, 1 << 24);
+		return new File(dest);
 	}
 
 }
