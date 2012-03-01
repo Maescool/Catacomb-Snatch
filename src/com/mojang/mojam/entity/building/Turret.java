@@ -145,7 +145,7 @@ public class Turret extends Building implements IEditable {
 	}
 	
 	public void drawRadius(Screen screen) {
-		screen.opacityBlit(areaBitmap, (int) pos.x-radius, (int) pos.y-radius - yOffs, 0xDD);	
+		screen.alphaBlit(areaBitmap, (int) pos.x-radius, (int) pos.y-radius - yOffs, 0x22);	
 	}
 
 	@Override

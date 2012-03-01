@@ -117,17 +117,15 @@ public class Bitmap {
 	 * @param bitmap image to draw
 	 * @param x position on screen
 	 * @param y position on screen
-	 * @param opacity range from 0x00 to 0xff
+	 * @param alpha range from 0x00 (transparent) to 0xff (opaque)
 	 */
-    public void opacityBlit(Bitmap bitmap, int x, int y, int opacity) {
+    public void alphaBlit(Bitmap bitmap, int x, int y, int alpha) {
 
-        if(opacity == 0)
+        if(alpha == 255)
         {
             this.blit(bitmap, x, y);
             return;
         }
-        
-        opacity *= (int)Math.pow(16, 6);
         
         Rect blitArea = new Rect(x, y, bitmap.w, bitmap.h);
         adjustBlitArea(blitArea);
@@ -140,24 +138,13 @@ public class Bitmap {
             for (int xx = 0; xx < blitWidth; xx++) {
                 int col = bitmap.pixels[sp + xx];
                 if (col < 0) {
-                    int color = pixels[tp + xx];
-                    color += opacity;
-                    
-                    int a2 = (color >> 24) & 0xff;
-                    int a1 = 256 - a2;
-
-                    int rr = color & 0xff0000;
-                    int gg = color & 0xff00;
-                    int bb = color & 0xff;
                     
                     int r = (col & 0xff0000);
                     int g = (col & 0xff00);
                     int b = (col & 0xff);
-
-                    r = ((r * a1 + rr * a2) >> 8) & 0xff0000;
-                    g = ((g * a1 + gg * a2) >> 8) & 0xff00;
-                    b = ((b * a1 + bb * a2) >> 8) & 0xff;
-                    pixels[tp + xx] = 0xff000000 | r | g | b;
+                    col = (alpha << 24) | r | g | b;
+                    int color = pixels[tp + xx];
+                    pixels[tp + xx] = this.blendPixels(color, col);
                 }
             }
         }
@@ -204,11 +191,11 @@ public class Bitmap {
      * @param width of the region
      * @param height of the region
      * @param color to fill the region
-     * @param opacity range from 0x00 to 0xff
+     * @param alpha range from 0x00 (transparent) to 0xff (opaque)
      */
-    public void opacityFill(int x, int y, int width, int height, int color, int opacity) {
+    public void alphaFill(int x, int y, int width, int height, int color, int alpha) {
 
-        if(opacity == 0)
+        if(alpha == 255)
         {
             this.fill(x, y, width, height, color);
             return;
@@ -217,7 +204,7 @@ public class Bitmap {
         Bitmap bmp = new Bitmap(width, height);
         bmp.fill(0, 0, width, height, color);
         
-        this.opacityBlit(bmp, x, y, opacity);
+        this.alphaBlit(bmp, x, y, alpha);
     }
     
 
