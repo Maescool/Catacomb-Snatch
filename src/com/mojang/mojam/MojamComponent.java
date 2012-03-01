@@ -89,17 +89,21 @@ public class MojamComponent extends Canvas implements Runnable,
 		MouseMotionListener, CommandListener, PacketListener, MouseListener,
 		ButtonListener, KeyListener {
 
+	public static final String GAME_TITLE = "Catacomb Snatch";
+	public static final String GAME_VERSION = "1.0.0-SNAPSHOT";
+	
+	
 	public static MojamComponent instance;
 	public static Locale locale;
 	public static Texts texts;
 	private static final long serialVersionUID = 1L;
-	public static final String GAME_TITLE = "Catacomb Snatch";
 	public static final int GAME_WIDTH = 512;
 	public static final int GAME_HEIGHT = GAME_WIDTH * 3 / 4;
 	public static final int SCALE = 2;
 	private static JFrame guiFrame;
 	private boolean running = true;
 	private boolean paused;
+	private boolean paused2;
 	private Cursor emptyCursor;
 	private double framerate = 60;
 	private int fps;
@@ -531,15 +535,15 @@ public class MojamComponent extends Canvas implements Runnable,
 		if (!isMultiplayer) {
 			//Not-In-Focus-Pause
 			if (this.isFocusOwner() && level != null) {
-				paused = false;
+				paused2 = false;
 			}
 			if (!this.isFocusOwner() && level != null) {
 				keys.release();
 				mouseButtons.releaseAll();
-				if (!paused) { 
+				if (!paused && !paused2) { 
 					PauseCommand pauseCommand = new PauseCommand(true);
 					synchronizer.addCommand(pauseCommand);
-					paused = true;
+					paused2 = true;
 				}
 			}			
 		}

@@ -85,7 +85,7 @@ public class LevelUtils {
 			entity = new Turret(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2,Team.Team2);
 			break;
 		case TreasurePile.COLOR:
-			entity = new TreasurePile(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
+			entity = new TreasurePile(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT + 12);
 			break;
 		case 0xff100700: //TODO do this the same way as above
 			for (int i = 0; i < 4; i++) {
