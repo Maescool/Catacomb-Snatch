@@ -29,16 +29,9 @@ public class Buffs extends LinkedList<Buff> {
 		}
 	}
 	
-	/* First -- to duration, second remove all effect who is terminated */ // <- Sorry for bad english
+	/* Remove all effect who is terminated */ // <- Sorry for bad english
 	public void tick() {
-		this.tickTime();
 		this.removeOver();
-	}
-	
-	protected void tickTime() {
-		for (Buff b : this) {
-			b.tick();
-		}
 	}
 	
 	protected void removeOver() {

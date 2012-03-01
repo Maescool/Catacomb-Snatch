@@ -12,16 +12,17 @@ abstract public class Buff {
 	
 	protected boolean dispell  = true;
 	protected boolean infinite = false;
-	protected int duration;
+	protected int charge;
 	protected float param;
 	
-	public Buff(int duration, float how) {
-		this.duration = duration;
+	public Buff(int charge, float how) {
+		this.charge = charge;
 		this.param = how;
 	}
 	
 	public float value() {
-		if (this.infinite || this.duration > 0) {
+		if (this.infinite || this.charge > 0) {
+			this.charge-- ;
 			return this.param;
 		} else {
 			return 0;
@@ -32,9 +33,7 @@ abstract public class Buff {
 		return this.param + b ;
 	}
 	
-	public void tick() { this.duration-- ; }
-	
 	public boolean is(BuffType type) { return type == BuffType.ALL || this.buffType == type ; }
-	public boolean over() { return !this.infinite || this.duration <= 0 ;}
+	public boolean over() { return !this.infinite || this.charge <= 0 ;}
 	public boolean canDispell() { return this.dispell ; }
 }
