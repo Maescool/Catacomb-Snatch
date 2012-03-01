@@ -7,12 +7,13 @@ import com.mojang.mojam.screen.Screen;
 
 public class LevelEditorButton extends ClickableComponent {
 
-    public static final int WIDTH = 63;
-    public static final int HEIGHT = 35;
+    public static final int WIDTH = 42;
+    public static final int HEIGHT = 56;
+    private static final double scale = 1.2;
 
     private boolean isActive = false;
-	private IEditable tile;
-	private int id;
+    private IEditable tile;
+    private int id;
     
     // Background bitmaps for pressed/unpressed/inactive state
     private static final Bitmap background[] = new Bitmap[3];
@@ -60,14 +61,12 @@ public class LevelEditorButton extends ClickableComponent {
         // render background
         screen.blit(background[isPressed() ? 1 : (isActive ? 2 : 0)], getX(), getY());
 
-        // render icon        
-        Bitmap smallBitmap = Bitmap.shrink(tile.getBitMapForEditor());
-        
-        int height = smallBitmap.h ;
-        screen.blit(smallBitmap, getX() + (getWidth() - smallBitmap.w) / 2, getY() + (getHeight() - height) / 2);
+        // scale bitmap
+        Bitmap smallBitmap = Bitmap.scaleBitmap(tile.getBitMapForEditor(),
+                (int) (tile.getBitMapForEditor().w / scale), (int) (tile.getBitMapForEditor().h / scale));
 
-        // render label
-        Font.defaultFont().drawCentered(screen, tile.getName(), getX() + getWidth() / 2, (getY() + (getHeight() - height) / 2) + smallBitmap.h);
+        // render icon 
+        screen.blit(smallBitmap, getX() + (getWidth() - smallBitmap.w) / 2, getY() + (getHeight() - smallBitmap.h) / 2);
     }
 
     @Override
