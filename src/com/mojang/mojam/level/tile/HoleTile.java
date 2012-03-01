@@ -13,16 +13,21 @@ public class HoleTile extends Tile {
 
 	public static final int COLOR = 0xff000000;
 	public static final String NAME = "HOLE";
-	
+
 	public HoleTile() {
 		img = 4;
 		minimapColor = Art.floorTileColors[img & 7][img / 8];
 	}
 
+	@Override
 	public void init(Level level, int x, int y) {
 		super.init(level, x, y);
+		if ((level.getTile(x, y - 1) instanceof SandTile)) {
+			img = 7;
+		}
 	}
 
+	@Override
 	public void render(Screen screen) {
 		if (y > 0 && !(level.getTile(x, y - 1) instanceof HoleTile)) {
 			super.render(screen);
@@ -32,12 +37,14 @@ public class HoleTile extends Tile {
 		}
 	}
 
+	@Override
 	public boolean isBuildable() {
 		return false;
 	}
 
+	@Override
 	public boolean canPass(Entity e) {
-		return ((e instanceof Bullet) || (e instanceof Bat) || (e instanceof Player));	
+		return ((e instanceof Bullet) || (e instanceof Bat) || (e instanceof Player));
 	}
 
 	@Override
@@ -49,7 +56,8 @@ public class HoleTile extends Tile {
 	public String getName() {
 		return HoleTile.NAME;
 	}
-	
+
+	@Override
 	public Bitmap getBitMapForEditor() {
 		return Art.floorTiles[4][0];
 	}
@@ -58,5 +66,4 @@ public class HoleTile extends Tile {
 	public int getMiniMapColor() {
 		return minimapColor;
 	}
-	
 }
