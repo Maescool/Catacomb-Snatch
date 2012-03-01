@@ -147,7 +147,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	private static File mojamDir = null;
 
 	public MojamComponent() {
-		String localeString = Options.get(Options.LOCALE, "en");
+		String localeString = Options.get(Options.LOCALE, "de");
 		setLocale(new Locale(localeString));
 
 		this.setPreferredSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT
@@ -819,6 +819,10 @@ public class MojamComponent extends Canvas implements Runnable,
 			final Button button = (Button) component;
 			handleAction(button.getId());
 		}
+	}
+	
+	@Override
+	public void buttonHovered(ClickableComponent clickableComponent) {		
 	}
 
 	public void handleAction(int id) {
