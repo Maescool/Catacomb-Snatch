@@ -96,6 +96,9 @@ public abstract class Mob extends Entity {
 	}
 
 	public void tick() {
+		
+		this.buffs.tick();
+		
 		if (TitleMenu.difficulty.difficultyID >= 1 ) {
 			this.doRegenTime();
 		}
@@ -126,6 +129,10 @@ public abstract class Mob extends Entity {
 				return;
 			}
 		}
+	}
+	
+	public void addBuff( Buff buff ) {
+		this.buffs.add(buff);
 	}
 	
 	public void doRegenTime() {
