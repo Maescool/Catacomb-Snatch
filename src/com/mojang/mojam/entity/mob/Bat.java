@@ -56,7 +56,7 @@ public class Bat extends HostileMob {
 	@Override
 	public void render(Screen screen) {
 		if(!(level.getTile(pos) instanceof HoleTile)) {
-			screen.opacityBlit(Art.batShadow, (int)(pos.x - Art.batShadow.w / 2), (int)(pos.y - Art.batShadow.h / 2 - yOffs + 16), 0x99);
+			screen.alphaBlit(Art.batShadow, (int)(pos.x - Art.batShadow.w / 2), (int)(pos.y - Art.batShadow.h / 2 - yOffs + 16), 0x55);
 		}
 		super.render(screen);
 	}
