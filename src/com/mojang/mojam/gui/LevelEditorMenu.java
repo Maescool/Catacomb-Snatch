@@ -28,7 +28,6 @@ import com.mojang.mojam.level.LevelUtils;
 import com.mojang.mojam.level.tile.DestroyableWallTile;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.HoleTile;
-import com.mojang.mojam.level.tile.RailTile;
 import com.mojang.mojam.level.tile.UnbreakableRailTile;
 import com.mojang.mojam.level.tile.WallTile;
 import com.mojang.mojam.screen.Art;
@@ -58,42 +57,36 @@ public class LevelEditorMenu extends GuiMenu {
     private int pencilY;
     private boolean drawing;
     
-  //  private final String[] tileNames = new String[]{
-  //      "FLOOR", "HOLE", "WALL", "B.WALL", "TREASURE", "RAIL"};
-  //  private final int[] tileColors = new int[]{
-  //      FloorTile.COLOR, HoleTile.COLOR, WallTile.COLOR, DestroyableWallTile.COLOR, TreasurePile.COLOR, UnbreakableRailTile.COLOR};
-  //private final Bitmap[] tiles = new Bitmap[]{
-  //      Art.floorTiles[0][0], Art.floorTiles[4][0], Art.wallTiles[0][0],
-  //      Art.treasureTiles[4][0], Art.treasureTiles[0][0], Art.rails[1][0]
-   // };
-    
     private final IEditable[] editableTiles = {
-    		new FloorTile(),
-    		new HoleTile(), 
-    		new WallTile(),
-    		new DestroyableWallTile(), 
-    		new TreasurePile(0, 0),
-    		new UnbreakableRailTile(new FloorTile()),
-    		new Turret(0, 0, 0),
-    		
-    		//UNCOMMENT THESE ONCE PAGING/SMALLER ICONS ARE DONE!
-    		new TurretTeamOne(0, 0),
-    		new TurretTeamTwo(0, 0),
-    		new SpikeTrap(0, 0),
-    		new SpawnerForBat(0, 0),
-    		new SpawnerForSnake(0, 0),
-    		new SpawnerForMummy(0, 0),
-    		new SpawnerForScarab(0, 0)
-    		};
+        new FloorTile(),
+        new HoleTile(),
+        new WallTile(),
+        new DestroyableWallTile(),
+        new TreasurePile(0, 0),
+        new UnbreakableRailTile(new FloorTile()),
+        new Turret(0, 0, 0),
+        new TurretTeamOne(0, 0),
+        new TurretTeamTwo(0, 0),
+        new SpikeTrap(0, 0),
+        new SpawnerForBat(0, 0),
+        new SpawnerForSnake(0, 0),
+        new SpawnerForMummy(0, 0),
+        new SpawnerForScarab(0, 0)
+    };
     
-    private final int buttonsCols = 2;
-    private final int buttonMargin = 2;
+    private final int buttonsPerPage = 12;
+    private final int totalPages = (int) Math.ceil(editableTiles.length / (float) buttonsPerPage);
+    private int currentPage = 0;
+    private final int buttonsCols = 3;
+    private final int buttonMargin = 1;
     private final int buttonsX = 7;
-    private final int buttonsY = 7;
+    private final int buttonsY = 20;
     
-    private LevelEditorButton[] tileButtons = new LevelEditorButton[editableTiles.length];
+    private LevelEditorButton[] tileButtons;
     private LevelEditorButton selectedButton;
     
+    private Button prevPageButton;
+    private Button nextPageButton;
     private Button newButton;
     private Button openButton;
     private Button saveButton;
@@ -103,9 +96,11 @@ public class LevelEditorMenu extends GuiMenu {
     
     private Panel savePanel;
     private ClickableComponent editorComponent;
+    private Text levelName;
     
     private boolean clicked;
     private boolean updateButtons;
+    private boolean updateTileButtons;
     private boolean saveMenuVisible;
     
     private List<LevelInformation> levels;
@@ -113,14 +108,12 @@ public class LevelEditorMenu extends GuiMenu {
     
     private String saveLevelName = "";
     private Random random = new Random();
-	private Text levelName;
-
+    
     public LevelEditorMenu() {
         super();
     	
-    	levelName = new Text(1,"", 120, 5);
         createGUI();
-        updateTileButtons();
+        setCurrentPage(0);
         
         // setup pencil
         pencil.fill(0, 0, pencil.w, pencil.h, 0xffcfac02);
@@ -150,6 +143,12 @@ public class LevelEditorMenu extends GuiMenu {
         if (updateButtons) {
             updateSaveButtons();
             updateButtons = false;
+        }
+        
+        // update tile buttons
+        if (updateTileButtons){
+            updateTileButtons();
+            updateTileButtons = false;
         }
         
         // lock buttons when save menu is visible
@@ -260,22 +259,38 @@ public class LevelEditorMenu extends GuiMenu {
         // minimap
         screen.blit(minimap, screen.w - minimap.w - 6, 6);
         
-        // title
-        //Font.defaultFont().drawCentered(screen, MojamComponent.texts.getStatic("leveleditor.title"), MENU_WIDTH / 2, 10);
+        // selected tile name
+        Font.defaultFont().drawCentered(screen, selectedButton != null ? selectedButton.getTile().getName() : "", MENU_WIDTH / 2, 13);
+        
+        // current page and total pages
+        Font.defaultFont().drawCentered(screen, (currentPage + 1) + "/" + totalPages , MENU_WIDTH / 2, 261);
     }
-    
+       
     private void updateTileButtons() {
         int y = 0;
 
-        for (int i = 0; i < tileButtons.length; i++) {
+        // Remove previous buttons
+        if (tileButtons != null) {
+            for (int i = 0; i < tileButtons.length; i++) {
+                if (tileButtons[i] != null) {
+                    removeButton(tileButtons[i]);
+                }
+            }
+        }
+
+        tileButtons = new LevelEditorButton[Math.min(buttonsPerPage,
+                editableTiles.length - currentPage * buttonsPerPage)];
+
+        for (int i = currentPage * buttonsPerPage;
+                i < Math.min((currentPage + 1) * buttonsPerPage, editableTiles.length); i++) {
             int x = i % buttonsCols;
+            int id = i % buttonsPerPage;
 
-            
-			tileButtons[i] = (LevelEditorButton) addButton(new LevelEditorButton(i,editableTiles[i],
-                    buttonsX + x * (i > 0 ? tileButtons[i - 1].getWidth() + buttonMargin : 0), buttonsY + y));
+            tileButtons[id] = (LevelEditorButton) addButton(new LevelEditorButton(i, editableTiles[i],
+                    buttonsX + x * (LevelEditorButton.WIDTH + buttonMargin), buttonsY + y));
 
-            if (i == 0) {
-                selectedButton = tileButtons[i];
+            if (id == 0) {
+                selectedButton = tileButtons[id];
                 selectedButton.setActive(true);
             }
 
@@ -283,6 +298,19 @@ public class LevelEditorMenu extends GuiMenu {
                 y += LevelEditorButton.HEIGHT + buttonMargin;
             }
         }
+    }
+    
+    private boolean hasPreviousPage() {
+	    return currentPage > 0;
+	}
+	
+    private boolean hasNextPage() {
+        return (currentPage + 1) * buttonsPerPage < editableTiles.length;
+    }
+    
+    private void setCurrentPage(int page) {
+        currentPage = page;
+        updateTileButtons = true;
     }
     
     private void updateSaveButtons() {
@@ -306,10 +334,15 @@ public class LevelEditorMenu extends GuiMenu {
 
         if (x < 0 || x > LEVEL_WIDTH - 1) return;
         if (y < 0 || y > LEVEL_HEIGHT - 1) return;
+        if (mapTile[x][y] == tileOrEntity.getColor()) return;
+        
+        if (tileOrEntity.getColor() != FloorTile.COLOR) {
+            map[x][y] = tileOrEntity.getBitMapForEditor();
+        } else {
+            map[x][y] = null;
+        }
         
         mapTile[x][y] = tileOrEntity.getColor();
-        
-        map[x][y] = tileOrEntity.getBitMapForEditor();
         minimap.fill(x, y, 1, 1, tileOrEntity.getMiniMapColor() );
     }
 
@@ -320,7 +353,7 @@ public class LevelEditorMenu extends GuiMenu {
                 map[x][y] = null;
             }
         }
-       minimap.fill(0, 0, minimap.w, minimap.h, 0);
+       minimap.fill(0, 0, minimap.w, minimap.h, editableTiles[0].getMiniMapColor());
        removeText(levelName);
        levelName = new Text(1, "<New Level>", 120, 5);
        addText(levelName);
@@ -328,8 +361,7 @@ public class LevelEditorMenu extends GuiMenu {
 
     private void openLevel(LevelInformation li) {
         BufferedImage bufferedImage = null;
-
-    
+        
         try {
             if (li.vanilla) {
                 bufferedImage = ImageIO.read(MojamComponent.class.getResource(li.getPath()));
@@ -346,37 +378,29 @@ public class LevelEditorMenu extends GuiMenu {
 
         bufferedImage.getRGB(0, 0, w, h, rgbs, 0, w);
 
-        
         newLevel();
         
-		removeText(levelName);
+	removeText(levelName);
         levelName = new Text(1, li.levelName, 120, 5);
         addText(levelName);
         
-		for (int y = 0; y < h; y++) {
-			for (int x = 0; x < w; x++) {
-				int col = rgbs[x + y * w] & 0xffffffff;
-				//loadColorTile(col, x, y);
-				
-				IEditable tile = LevelUtils.getNewTileFromColor(col);
-				draw(tile,x,y);
-				
-				if(tile instanceof FloorTile) {
-					
-					Entity entity = LevelUtils.getNewEntityFromColor(col,x,y);
-					if(entity instanceof IEditable) {
-						draw((IEditable)entity,x,y);
-					}
-				
-				} 
-			}
-		}
-		
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                int col = rgbs[x + y * w] & 0xffffffff;
 
+                IEditable tile = LevelUtils.getNewTileFromColor(col);
+                draw(tile, x, y);
+
+                if (tile instanceof FloorTile) {
+                    Entity entity = LevelUtils.getNewEntityFromColor(col, x, y);
+                    if (entity instanceof IEditable) {
+                        draw((IEditable) entity, x, y);
+                    }
+                }
+            }
+        }
     }
     
-    
-
     private void saveLevel(String name) {
         File newLevel = new File(LevelList.getBaseDir(), name + ".bmp");
 
@@ -399,6 +423,8 @@ public class LevelEditorMenu extends GuiMenu {
     
     private void createGUI() {
         
+        levelName = new Text(1,"", 120, 5);
+        
         // map clickable component
         editorComponent = addButton(new ClickableComponent(MENU_WIDTH, 0, MojamComponent.GAME_WIDTH - MENU_WIDTH, MojamComponent.GAME_HEIGHT) {
 
@@ -413,6 +439,7 @@ public class LevelEditorMenu extends GuiMenu {
         
         // minimap panel
         addButton(new Panel(MojamComponent.GAME_WIDTH - minimap.w - 11, 1, minimap.w + 10, minimap.w + 10));
+        
         // save menu panel
         savePanel = new Panel(180, 120, 298, 105) {
 
@@ -431,9 +458,13 @@ public class LevelEditorMenu extends GuiMenu {
         cancelSaveButton = new Button(-1, MojamComponent.texts.getStatic("cancel"), 335, 190);
 
         // actions buttons
-        int startY = (MojamComponent.GAME_HEIGHT - 5) - 26 * 4;
+        int startY = (MojamComponent.GAME_HEIGHT - 5) - 26 * 5;
+        prevPageButton = (Button) addButton(new Button(-1, "(",
+                7, startY, 30, Button.BUTTON_HEIGHT));
+        nextPageButton = (Button) addButton(new Button(-1, ")",
+                MENU_WIDTH - 37, startY, 30, Button.BUTTON_HEIGHT));
         newButton = (Button) addButton(new Button(-1, MojamComponent.texts.getStatic("leveleditor.new"),
-                7, startY));
+                7, startY += 26));
         openButton = (Button) addButton(new Button(-1, MojamComponent.texts.getStatic("leveleditor.open"),
                 7, startY += 26));
         saveButton = (Button) addButton(new Button(-1, MojamComponent.texts.getStatic("leveleditor.save"),
@@ -484,6 +515,10 @@ public class LevelEditorMenu extends GuiMenu {
             } else if (button == saveButton) {
                 saveMenuVisible = true;
                 updateButtons = true;
+            } else if (button == prevPageButton && hasPreviousPage()) {
+                setCurrentPage(currentPage - 1);
+            } else if (button == nextPageButton && hasNextPage()) {
+                setCurrentPage(currentPage + 1);
             }
 
             clicked = true;
@@ -538,7 +573,15 @@ public class LevelEditorMenu extends GuiMenu {
         
         //tab to scroll through tiles
         if (e.getKeyCode() == KeyEvent.VK_TAB) {
-            tileButtons[selectedButton.getId() < tileButtons.length - 1 ? selectedButton.getId() + 1 : 0].postClick();
+            int id = (selectedButton.getId() - (buttonsPerPage * currentPage));
+            
+            if (selectedButton.getId() + 1 == editableTiles.length) {
+                setCurrentPage(0);
+            } else if (id == buttonsPerPage - 1 && hasNextPage()) {
+                setCurrentPage(currentPage + 1);
+            } else if (selectedButton.getId() + 1 < editableTiles.length) {
+                tileButtons[id + 1].postClick();
+            }
         }
     }
 
