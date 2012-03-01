@@ -20,17 +20,23 @@ abstract public class Buff {
 		this.param = how;
 	}
 	
-	public float value() {
+	public float effect() {
+		float r = this.value();
+		this.tick();
+		return r;
+	}
+	
+	protected float value() {
 		if (this.infinite || this.charge > 0) {
-			this.charge-- ;
 			return this.param;
 		} else {
 			return 0;
 		}
 	}
+	protected void tick() { this.charge -- ; }
 	
 	public float combine( float b ) {
-		return this.param + b ;
+		return this.effect() + b ;
 	}
 	
 	public boolean is(BuffType type) { return type == BuffType.ALL || this.buffType == type ; }
