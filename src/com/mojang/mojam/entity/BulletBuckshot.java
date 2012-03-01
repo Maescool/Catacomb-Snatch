@@ -21,9 +21,7 @@ public class BulletBuckshot extends Bullet {
 		this.ya = ya * 18;
 		this.setSize(2, 2);
 		physicsSlide = false;
-		life = 10;
-		double angle = (Math.atan2(ya, xa) + Math.PI * 1.625);
-		facing = (8 + (int) (angle / Math.PI * 4)) & 7;
+		life = 20;
 		this.damage = damage;
 	}
 
@@ -40,7 +38,7 @@ public class BulletBuckshot extends Bullet {
 			remove();
 		}
 		if(damage > 0.5)
-		damage -= 0.5;
+		damage -= 0.25;
 	}
 
 	@Override
@@ -54,7 +52,7 @@ public class BulletBuckshot extends Bullet {
 
 	@Override
 	public void render(Screen screen) {
-		screen.blit(Art.bullet[facing][0], pos.x - 8, pos.y - 10);
+		screen.blit(Art.buckShot, pos.x - 8, pos.y - 8);
 	}
 
 	@Override

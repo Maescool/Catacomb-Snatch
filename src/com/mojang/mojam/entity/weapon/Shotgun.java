@@ -34,10 +34,10 @@ public class Shotgun implements IWeapon {
 	public void setWeaponMode(){
 		if(Options.getAsBoolean(Options.CREATIVE)){
 			BULLET_DAMAGE = 100.0f;
-			accuracy = 0.12;
+			accuracy = 0.06;
 		}else{
 			BULLET_DAMAGE = 4.5f;
-			accuracy = 0.12;
+			accuracy = 0.06;
 		}
 	}
 	
@@ -78,10 +78,10 @@ public class Shotgun implements IWeapon {
 			applyImpuls(xDirection, yDirection, knockBack);
 			
 			currentShootDelay = shootDelay;
-			//Just fired so we are no longer ready to shoot
-			readyToShoot = false;
 			MojamComponent.soundPlayer.playSound("/sound/Shot 1.wav",
 					(float) owner.getPosition().x, (float) owner.getPosition().y);
+			//Just fired so we are no longer ready to shoot
+			readyToShoot = false;
 		}		
 	}
 

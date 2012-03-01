@@ -174,6 +174,8 @@ public class Art {
 	public static Bitmap[][] fxDust24 = cut("/art/effects/fx_dust1_24.png", 24, 24);
 	public static Bitmap[][] moneyBar = cut("/art/effects/bar_blue.png", 32, 4);
 	public static Bitmap[][] healthBar = cut("/art/effects/bar_green.png", 32, 4);
+	public static Bitmap buckShot = load("/art/effects/bullet_buckshot.png");
+	public static Bitmap[][] bulletRay = cut("/art/effects/bullet_ray.png", 16, 16);
 		
 	// Icons
 	public static BufferedImage icon32 = loadBufferedImage("/art/icon/icon32.png");

@@ -71,7 +71,7 @@ public class BulletRay extends Bullet {
 
 	@Override
 	public void render(Screen screen) {
-		screen.blit(Art.bullet[facing][0], pos.x - 8, pos.y - 10);
+		screen.blit(Art.bulletRay[facing][0], pos.x - 8, pos.y - 10);
 	}
 
 	@Override
