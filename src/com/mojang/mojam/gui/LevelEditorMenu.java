@@ -347,10 +347,15 @@ public class LevelEditorMenu extends GuiMenu {
 
         if (x < 0 || x > LEVEL_WIDTH - 1) return;
         if (y < 0 || y > LEVEL_HEIGHT - 1) return;
+        if (mapTile[x][y] == tileOrEntity.getColor()) return;
+        
+        if (tileOrEntity.getColor() != FloorTile.COLOR) {
+            map[x][y] = tileOrEntity.getBitMapForEditor();
+        } else {
+            map[x][y] = null;
+        }
         
         mapTile[x][y] = tileOrEntity.getColor();
-        
-        map[x][y] = tileOrEntity.getBitMapForEditor();
         minimap.fill(x, y, 1, 1, tileOrEntity.getMiniMapColor() );
     }
 
@@ -361,7 +366,7 @@ public class LevelEditorMenu extends GuiMenu {
                 map[x][y] = null;
             }
         }
-       minimap.fill(0, 0, minimap.w, minimap.h, 0);
+       minimap.fill(0, 0, minimap.w, minimap.h, editableTiles[0].getMiniMapColor());
        removeText(levelName);
        levelName = new Text(1, "<New Level>", 120, 5);
        addText(levelName);
