@@ -4,6 +4,7 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
+import com.mojang.mojam.entity.weapon.*;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.level.DifficultyInformation;
@@ -115,20 +116,32 @@ public class ShopItem extends Building {
             Player player = (Player) user;
             if (!player.isCarrying() && player.getScore() >= effectiveCost) {
                 player.payCost(effectiveCost);
-                Building item = null;
+                Building itemBuilding = null;
                 switch (type) {
                     case TURRET:
-                        item = new Turret(pos.x, pos.y, team);
+                        itemBuilding = new Turret(pos.x, pos.y, team);
                         break;
                     case HARVESTER:
-                        item = new Harvester(pos.x, pos.y, team);
+                        itemBuilding = new Harvester(pos.x, pos.y, team);
                         break;
                     case BOMB:
-                        item = new Bomb(pos.x, pos.y);
+                        itemBuilding = new Bomb(pos.x, pos.y);
                         break;
+                    case RIFLE:
+                    	player.weapon = new Rifle(player);
+                    	break;
+                    case SHOTGUN:
+                    	player.weapon = new Shotgun(player);
+                    	break;
+                    case RAYGUN:
+                    	player.weapon = new Raygun(player);
+                    	break;
                 }
-                level.addEntity(item);
-                player.pickup(item);
+                
+                if(itemBuilding != null) {
+	                level.addEntity(itemBuilding);
+	                player.pickup(itemBuilding);
+                }
             }
             else if (player.getScore() < effectiveCost) {
             	if(this.team == MojamComponent.localTeam) {

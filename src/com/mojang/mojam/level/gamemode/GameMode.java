@@ -117,13 +117,27 @@ public class GameMode {
 				EnumShopItem.HARVESTER, Team.Team2));
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 + .5), 4.5 * 32,
 				EnumShopItem.BOMB, Team.Team2));
-
+		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 - 2.0), 7.5 * 32,
+				EnumShopItem.RIFLE, Team.Team2));
+		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 - 2.0), 6.5 * 32,
+				EnumShopItem.SHOTGUN, Team.Team2));
+		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 - 2.0), 5.5 * 32,
+				EnumShopItem.RAYGUN, Team.Team2));
+		
+		
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 - 1.5), (newLevel.height - 4.5) * 32,
 				EnumShopItem.TURRET, Team.Team1));
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 - .5), (newLevel.height - 4.5) * 32,
 				EnumShopItem.HARVESTER, Team.Team1));
 		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 + .5), (newLevel.height - 4.5) * 32,
 				EnumShopItem.BOMB, Team.Team1));
+		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 - 2.0), (newLevel.height - 7.5) * 32,
+				EnumShopItem.RIFLE, Team.Team1));
+		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 - 2.0), (newLevel.height - 6.5) * 32,
+				EnumShopItem.SHOTGUN, Team.Team1));
+		newLevel.addEntity(new ShopItem(32 * (newLevel.width / 2 - 2.0), (newLevel.height - 5.5) * 32,
+				EnumShopItem.RAYGUN, Team.Team1));
+		
 		
 		newLevel.setTile((newLevel.width / 2) - 1, 7, new UnbreakableRailTile(new SandTile()));	
 	    newLevel.setTile((newLevel.width / 2) - 1, newLevel.height - 8, new UnbreakableRailTile(new SandTile()));

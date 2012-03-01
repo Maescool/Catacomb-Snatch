@@ -11,9 +11,9 @@ public enum EnumShopItem {
 	BOMB("bomb", 500, 7, Art.bomb),
 	
 	//Weapons
-	RIFLE("rifle", 0, 7, Art.turret[0][0]), 
-	SHOTGUN("shotgun", 500, 7, Art.turret[0][0]), 
-	RAYGUN("raygun", 800, 7, Art.turret[0][0]);
+	RIFLE("rifle", 0, 7, Art.rifle[0][0]), 
+	SHOTGUN("shotgun", 500, 7, Art.rifle[0][0]), 
+	RAYGUN("raygun", 800, 7, Art.rifle[0][0]);
 	
 	
 	private final int cost;
