@@ -7,7 +7,8 @@ public class Buffs extends LinkedList<Buff> {
 	
 	/* The order is FILO */
 	public boolean add(Buff buff) {
-		return super.addFirst(buff);
+		super.addFirst(buff);
+		return true;
 	}
 	
 	/* Return combined value of all buff of "buffType" type */

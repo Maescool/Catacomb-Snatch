@@ -17,6 +17,7 @@ import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.buff.*;
 
 public abstract class Mob extends Entity {
 
@@ -52,6 +53,8 @@ public abstract class Mob extends Entity {
     private int walkTime;
     protected int stepTime;
     protected int limp;
+	protected Buffs buffs = new Buffs();
+	
 	
 	public Mob(double x, double y, int team) {
 		super();
@@ -127,7 +130,7 @@ public abstract class Mob extends Entity {
 	
 	public void doRegenTime() {
 		if (!this.REGEN_HEALTH) {
-			// DO NOTHING
+			// DO NOTHING -> REGEN_HEALTH Apply to all health based buff, so prefer REGEN_AMOUNT = 0 for entity that can apply Poison, and Healing potion.
 		} else if (hurtTime <= 0 && health < maxHealth && --healingTime <= 0) {
 			this.healingTime = this.REGEN_INTERVAL;
 			this.onRegenTime();
@@ -135,8 +138,11 @@ public abstract class Mob extends Entity {
 	}
 	
 	public void onRegenTime() {
-			this.regenHealthOf( this.REGEN_AMOUNT );
-			// Can add thing here like a custom regen action
+		float regen = this.REGEN_AMOUNT ;
+		// Can add thing here like a custom regen action
+		// Like apply buffs based to Health effects
+		regen = this.buffs.effectsOf(Buff.BuffType.HEALTH_MODIF, regen);
+		regen = this.buffs.effectsOf(Buff.BuffType.REGEN_RATE  , regen);
 	}
 	
 	public void regenHealthOf(float a) { this.health += a ; }
