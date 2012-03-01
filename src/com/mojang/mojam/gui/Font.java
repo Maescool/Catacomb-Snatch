@@ -11,6 +11,10 @@ import com.mojang.mojam.screen.Screen;
 
 public class Font {
 
+	public enum Align {
+		LEFT, CENTERED, RIGHT
+	}
+
 	public static final Font FONT_BLUE, FONT_GOLD, FONT_GRAY, FONT_RED, FONT_BLACK_SMALL, FONT_GOLD_SMALL, FONT_WHITE_SMALL;
 
 	private static Font defaultFont;
@@ -249,5 +253,25 @@ public class Font {
 	public void drawCentered(Screen screen, String msg, int x, int y) {
 		int width = calculateStringWidth(msg);
 		draw(screen, msg, x - width / 2, y - 4);
+	}
+	
+	/**
+	 * Draw the given text onto the given screen, aligned to the right.
+	 * 
+	 * Will never be split into several lines of text
+	 * 
+	 * @param screen 
+	 * @param msg 
+	 * @param x 
+	 * @param y 
+	 */
+	public void draw(Screen screen, String msg, int x, int y, Font.Align align) {
+		if (Font.Align.LEFT.equals(align)) {
+			draw(screen, msg, x, y, Integer.MAX_VALUE);
+		}
+		else {
+			int width = calculateStringWidth(msg);
+			draw(screen, msg, x - ((Font.Align.CENTERED.equals(align)) ? width / 2 : width), y - 4);
+		}
 	}
 }

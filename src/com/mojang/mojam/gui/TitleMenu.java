@@ -11,7 +11,7 @@ import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
 public class TitleMenu extends GuiMenu {
-
+	
 	public static final int START_GAME_ID = 1000;
 	public static final int HOST_GAME_ID = 1002;
 	public static final int JOIN_GAME_ID = 1003;
@@ -72,10 +72,12 @@ public class TitleMenu extends GuiMenu {
 	public static String ip = "";
 
 	private final int gameWidth;
+	private final int gameHeight;
 
 	public TitleMenu(int gameWidth, int gameHeight) {
 		super();
 		this.gameWidth = gameWidth;
+		this.gameHeight = gameHeight;
 		int startY = 130;
 		addButton(new Button(SELECT_LEVEL_ID, MojamComponent.texts.getStatic("titlemenu.start"),
 				(gameWidth - 128) / 2, (startY += 30)));
@@ -104,6 +106,9 @@ public class TitleMenu extends GuiMenu {
 		super.render(screen);
 
 		screen.blit(Art.getLocalPlayerArt()[0][6], (gameWidth - 128) / 2 - 40, 150 + selectedItem * 30);
+		
+		// Display version number
+		Font.FONT_GOLD_SMALL.draw(screen, MojamComponent.GAME_VERSION, gameWidth - 10, gameHeight - 10, Font.Align.RIGHT);
 	}
 
 	@Override
