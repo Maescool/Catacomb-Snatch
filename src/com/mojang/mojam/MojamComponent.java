@@ -535,6 +535,8 @@ public class MojamComponent extends Canvas implements Runnable,
 		if (level != null && !isMultiplayer && !paused && !this.isFocusOwner()) {
 			keys.release();
 			mouseButtons.releaseAll();
+			PauseCommand pauseCommand = new PauseCommand(true);
+			synchronizer.addCommand(pauseCommand);
 			paused = true;
 		}
 
