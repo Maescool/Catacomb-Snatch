@@ -76,7 +76,7 @@ public class TitleMenu extends GuiMenu {
 	public TitleMenu(int gameWidth, int gameHeight) {
 		super();
 		this.gameWidth = gameWidth;
-		int startY = 140;
+		int startY = 130;
 		addButton(new Button(SELECT_LEVEL_ID, MojamComponent.texts.getStatic("titlemenu.start"),
 				(gameWidth - 128) / 2, (startY += 30)));
 		addButton(new Button(SELECT_HOST_LEVEL_ID,
@@ -103,7 +103,7 @@ public class TitleMenu extends GuiMenu {
 
 		super.render(screen);
 
-		screen.blit(Art.getLocalPlayerArt()[0][6], (gameWidth - 128) / 2 - 40, 160 + selectedItem * 30);
+		screen.blit(Art.getLocalPlayerArt()[0][6], (gameWidth - 128) / 2 - 40, 150 + selectedItem * 30);
 	}
 
 	@Override
