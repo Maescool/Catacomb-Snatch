@@ -545,6 +545,8 @@ public class MojamComponent extends Canvas implements Runnable,
 		}
 		if (isMultiplayer) {
 			tickChat();
+		} else {
+			tickConsole();
 		}
 
 		if (requestToggleFullscreen || keys.fullscreen.wasPressed()) {
