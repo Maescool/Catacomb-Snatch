@@ -28,7 +28,6 @@ import com.mojang.mojam.level.LevelUtils;
 import com.mojang.mojam.level.tile.DestroyableWallTile;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.HoleTile;
-import com.mojang.mojam.level.tile.RailTile;
 import com.mojang.mojam.level.tile.UnbreakableRailTile;
 import com.mojang.mojam.level.tile.WallTile;
 import com.mojang.mojam.screen.Art;
@@ -57,34 +56,23 @@ public class LevelEditorMenu extends GuiMenu {
     private int pencilX;
     private int pencilY;
     private boolean drawing;
-        
-  //  private final String[] tileNames = new String[]{
-  //      "FLOOR", "HOLE", "WALL", "B.WALL", "TREASURE", "RAIL"};
-  //  private final int[] tileColors = new int[]{
-  //      FloorTile.COLOR, HoleTile.COLOR, WallTile.COLOR, DestroyableWallTile.COLOR, TreasurePile.COLOR, UnbreakableRailTile.COLOR};
-  //private final Bitmap[] tiles = new Bitmap[]{
-  //      Art.floorTiles[0][0], Art.floorTiles[4][0], Art.wallTiles[0][0],
-  //      Art.treasureTiles[4][0], Art.treasureTiles[0][0], Art.rails[1][0]
-   // };
     
     private final IEditable[] editableTiles = {
-    		new FloorTile(),
-    		new HoleTile(), 
-    		new WallTile(),
-    		new DestroyableWallTile(), 
-    		new TreasurePile(0, 0),
-    		new UnbreakableRailTile(new FloorTile()),
-    		new Turret(0, 0, 0),
-    		
-    		//UNCOMMENT THESE ONCE PAGING/SMALLER ICONS ARE DONE!
-    		new TurretTeamOne(0, 0),
-    		new TurretTeamTwo(0, 0),
-    		new SpikeTrap(0, 0),
-    		new SpawnerForBat(0, 0),
-    		new SpawnerForSnake(0, 0),
-    		new SpawnerForMummy(0, 0),
-    		new SpawnerForScarab(0, 0)
-    		};
+        new FloorTile(),
+        new HoleTile(),
+        new WallTile(),
+        new DestroyableWallTile(),
+        new TreasurePile(0, 0),
+        new UnbreakableRailTile(new FloorTile()),
+        new Turret(0, 0, 0),
+        new TurretTeamOne(0, 0),
+        new TurretTeamTwo(0, 0),
+        new SpikeTrap(0, 0),
+        new SpawnerForBat(0, 0),
+        new SpawnerForSnake(0, 0),
+        new SpawnerForMummy(0, 0),
+        new SpawnerForScarab(0, 0)
+    };
     
     private final int buttonsPerPage = 12;
     private final int totalPages = (int) Math.ceil(editableTiles.length / (float) buttonsPerPage);
@@ -108,6 +96,7 @@ public class LevelEditorMenu extends GuiMenu {
     
     private Panel savePanel;
     private ClickableComponent editorComponent;
+    private Text levelName;
     
     private boolean clicked;
     private boolean updateButtons;
@@ -119,12 +108,10 @@ public class LevelEditorMenu extends GuiMenu {
     
     private String saveLevelName = "";
     private Random random = new Random();
-	private Text levelName;
-
+    
     public LevelEditorMenu() {
         super();
     	
-    	levelName = new Text(1,"", 120, 5);
         createGUI();
         setCurrentPage(0);
         
@@ -374,8 +361,7 @@ public class LevelEditorMenu extends GuiMenu {
 
     private void openLevel(LevelInformation li) {
         BufferedImage bufferedImage = null;
-
-    
+        
         try {
             if (li.vanilla) {
                 bufferedImage = ImageIO.read(MojamComponent.class.getResource(li.getPath()));
@@ -392,37 +378,29 @@ public class LevelEditorMenu extends GuiMenu {
 
         bufferedImage.getRGB(0, 0, w, h, rgbs, 0, w);
 
-        
         newLevel();
         
-		removeText(levelName);
+	removeText(levelName);
         levelName = new Text(1, li.levelName, 120, 5);
         addText(levelName);
         
-		for (int y = 0; y < h; y++) {
-			for (int x = 0; x < w; x++) {
-				int col = rgbs[x + y * w] & 0xffffffff;
-				//loadColorTile(col, x, y);
-				
-				IEditable tile = LevelUtils.getNewTileFromColor(col);
-				draw(tile,x,y);
-				
-				if(tile instanceof FloorTile) {
-					
-					Entity entity = LevelUtils.getNewEntityFromColor(col,x,y);
-					if(entity instanceof IEditable) {
-						draw((IEditable)entity,x,y);
-					}
-				
-				} 
-			}
-		}
-		
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                int col = rgbs[x + y * w] & 0xffffffff;
 
+                IEditable tile = LevelUtils.getNewTileFromColor(col);
+                draw(tile, x, y);
+
+                if (tile instanceof FloorTile) {
+                    Entity entity = LevelUtils.getNewEntityFromColor(col, x, y);
+                    if (entity instanceof IEditable) {
+                        draw((IEditable) entity, x, y);
+                    }
+                }
+            }
+        }
     }
     
-    
-
     private void saveLevel(String name) {
         File newLevel = new File(LevelList.getBaseDir(), name + ".bmp");
 
@@ -445,6 +423,8 @@ public class LevelEditorMenu extends GuiMenu {
     
     private void createGUI() {
         
+        levelName = new Text(1,"", 120, 5);
+        
         // map clickable component
         editorComponent = addButton(new ClickableComponent(MENU_WIDTH, 0, MojamComponent.GAME_WIDTH - MENU_WIDTH, MojamComponent.GAME_HEIGHT) {
 
@@ -459,6 +439,7 @@ public class LevelEditorMenu extends GuiMenu {
         
         // minimap panel
         addButton(new Panel(MojamComponent.GAME_WIDTH - minimap.w - 11, 1, minimap.w + 10, minimap.w + 10));
+        
         // save menu panel
         savePanel = new Panel(180, 120, 298, 105) {
 

@@ -18,19 +18,6 @@ public class LevelEditorButton extends ClickableComponent {
     // Background bitmaps for pressed/unpressed/inactive state
     private static final Bitmap background[] = new Bitmap[3];
 
-    // Initialize background bitmaps
-    static {
-        background[0] = new Bitmap(WIDTH, HEIGHT);
-        background[0].fill(0, 0, WIDTH, HEIGHT, 0xff522d16);
-        background[0].fill(1, 1, WIDTH - 2, HEIGHT - 2, 0);
-        background[1] = new Bitmap(WIDTH, HEIGHT);
-        background[1].fill(0, 0, WIDTH, HEIGHT, 0xff26150a);
-        background[1].fill(1, 1, WIDTH - 2, HEIGHT - 2, 0);
-        background[2] = new Bitmap(WIDTH, HEIGHT);
-        background[2].fill(0, 0, WIDTH, HEIGHT, 0xff26150a);
-        background[2].fill(1, 1, WIDTH - 2, HEIGHT - 2, 0xff3a210f);
-    }
-
     public LevelEditorButton(int id, IEditable tile, int x, int y) {
         super(x, y, WIDTH, HEIGHT);
         this.id = id;
@@ -78,7 +65,7 @@ public class LevelEditorButton extends ClickableComponent {
         isActive = active;
     }
 
-	public int getId() {
-		return this.id;
-	}
+    public int getId() {
+        return this.id;
+    }
 }
