@@ -45,25 +45,29 @@ public abstract class Tile implements BBOwner, IEditable {
 	}
 
 	public void render(Screen screen) {
-	    Bitmap floorTile = (Art.floorTiles[img & 7][img / 8]).copy();
 	    
+	    Bitmap floorTile = (Art.floorTiles[img & 7][img / 8]).copy();
+	    addShadows(floorTile);
 	    screen.blit(floorTile, x * Tile.WIDTH, y * Tile.HEIGHT);
-	    this.addShadow(screen);
+	    
+	    
 	}
 	
-	private void addShadow(Screen screen){
+	private void addShadows(Bitmap tile){
+	    
 	    if (isShadowed_north) {
-            screen.blit(Art.shadow_north, x * Tile.WIDTH, y * Tile.HEIGHT);
+	        tile.blit(Art.shadow_north, 0, 0);
         } else if (isShadowed_north_east) {
-            screen.blit(Art.shadow_north_east, (x+1) * Tile.WIDTH - Art.shadow_east.w, y * Tile.HEIGHT);
+            tile.blit(Art.shadow_north_east, Tile.WIDTH - Art.shadow_east.w, 0);
         } else if (isShadowed_north_west) {
-            screen.blit(Art.shadow_north_west, x * Tile.WIDTH, y * Tile.HEIGHT);
+            tile.blit(Art.shadow_north_west, 0, 0);
         }
-        if (isShadowed_east) {
-            screen.blit(Art.shadow_east, (x+1) * Tile.WIDTH - Art.shadow_east.w , y * Tile.HEIGHT);
+        
+	    if (isShadowed_east) {
+            tile.blit(Art.shadow_east, Tile.WIDTH - Art.shadow_east.w , 0);
         }
         if (isShadowed_west) {
-            screen.blit(Art.shadow_west, x * Tile.WIDTH, y * Tile.HEIGHT);
+            tile.blit(Art.shadow_west, 0, 0);
         }
 	}
 
@@ -97,5 +101,8 @@ public abstract class Tile implements BBOwner, IEditable {
 	}
 
 	public void bomb(LargeBombExplodeAnimation largeBombExplodeAnimation) {
+	}
+	
+	public void updateShadows(){
 	}
 }

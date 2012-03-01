@@ -35,6 +35,7 @@ public class FloorTile extends Tile {
 	}
 
 	public void neighbourChanged(Tile tile) {
+	    
 		final Tile w = level.getTile(x - 1, y);
 		final Tile n = level.getTile(x, y - 1);
 		final Tile s = level.getTile(x, y + 1);
@@ -42,23 +43,21 @@ public class FloorTile extends Tile {
 		final Tile nw = level.getTile(x - 1, y - 1);
 		final Tile ne = level.getTile(x + 1, y - 1);
         
-		
-		
         if (w != null && w.castShadow()){
             this.isShadowed_west = true;
-        }
+        } else this.isShadowed_west = false;
 		if (n != null && n.castShadow()){
 		    this.isShadowed_north = true;
-		}
+		} else this.isShadowed_north = false;
 		if (e != null && e.castShadow()){
 		    this.isShadowed_east = true;
-		}
+		} else this.isShadowed_east = false;
 		if (ne != null && ne.castShadow() && e != null && !e.castShadow() && !this.isShadowed_north && !this.isShadowed_east){
 		    this.isShadowed_north_east = true;
-		}
+		} else this.isShadowed_north_east = false;
 		if (nw != null && nw.castShadow() && w != null && !w.castShadow() && !this.isShadowed_north && !this.isShadowed_west){
             this.isShadowed_north_west = true;
-        }
+        } else this.isShadowed_north_west = false;
 
 		if (n instanceof SandTile) {
 			img = 4 + 8;
@@ -93,5 +92,8 @@ public class FloorTile extends Tile {
 	public int getMiniMapColor() {
 		return minimapColor;
 	}
-		
+	
+	public void updateShadows(){
+        neighbourChanged(null);
+    }	
 }
