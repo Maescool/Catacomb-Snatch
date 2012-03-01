@@ -38,6 +38,7 @@ public abstract class SpawnerEntity extends Building implements IEditable {
 		minimapIcon = 4;
 		healthBarOffset = 15;
 		deathPoints = 0 * 5 + 5;
+		yOffs = 0;
 	}
 
 	@Override
