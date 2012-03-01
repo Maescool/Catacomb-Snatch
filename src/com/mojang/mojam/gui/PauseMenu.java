@@ -34,7 +34,7 @@ public class PauseMenu extends GuiMenu {
 
 		//screen.clear(0);
 		//screen.blit(Art.emptyBackground, 0, 0);
-	    screen.opacityFill(0, 0, gameWidth, gameHeight, 0xff000000, 0x30);
+	    screen.alphaFill(0, 0, gameWidth, gameHeight, 0xff000000, 0x30);
 		screen.blit(Art.pauseScreen, 0, 0);
 
 		super.render(screen);
