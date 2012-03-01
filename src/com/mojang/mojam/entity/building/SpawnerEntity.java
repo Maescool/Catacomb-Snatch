@@ -9,6 +9,7 @@ import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.Screen;
 
 /**
  * Spawner entity. A sarcophage which spawns enemies of a given type onto the field.
@@ -104,5 +105,10 @@ public abstract class SpawnerEntity extends Building implements IEditable {
 	public Bitmap getBitMapForEditor() {
 		return Art.mobSpawner[0][0];
 	}
-	
+
+	@Override
+    public void render(Screen screen) {
+	    super.render(screen);
+	    screen.blit(Art.mobSpawnerShadow, pos.x - Art.mobSpawnerShadow.w / 2 - 1, pos.y - Art.mobSpawnerShadow.h / 2 - 1);
+    }
 }
