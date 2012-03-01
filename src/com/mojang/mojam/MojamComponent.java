@@ -83,6 +83,8 @@ import com.mojang.mojam.resources.Texts;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.sound.ISoundPlayer;
+import com.mojang.mojam.sound.NoSoundPlayer;
 import com.mojang.mojam.sound.SoundPlayer;
 
 public class MojamComponent extends Canvas implements Runnable,
@@ -139,7 +141,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	
 	private Thread hostThread;
 	private static boolean fullscreen = false;
-	public static SoundPlayer soundPlayer;
+	public static ISoundPlayer soundPlayer;
 	private long nextMusicInterval = 0;
 	private byte sShotCounter = 0;
 
@@ -232,7 +234,10 @@ public class MojamComponent extends Canvas implements Runnable,
 		initInput();
 		initCharacters();
 		
-		soundPlayer = new SoundPlayer();		
+		soundPlayer = new SoundPlayer();
+		if (soundPlayer.getSoundSystem() == null)
+			soundPlayer = new NoSoundPlayer();
+		
 		soundPlayer.startTitleMusic();
 
 		try {

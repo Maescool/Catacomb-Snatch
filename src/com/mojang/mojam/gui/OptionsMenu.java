@@ -2,11 +2,13 @@ package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
 
+import paulscode.sound.SoundSystem;
+
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
-import com.mojang.mojam.sound.SoundPlayer;
+import com.mojang.mojam.sound.ISoundPlayer;
 
 public class OptionsMenu extends GuiMenu {
 
@@ -97,7 +99,9 @@ public class OptionsMenu extends GuiMenu {
 				volume = slider.value;
 
 				Options.set(Options.VOLUME, volume + "");
-				MojamComponent.soundPlayer.soundSystem.setMasterVolume(slider.value);
+				SoundSystem soundSystem = MojamComponent.soundPlayer.getSoundSystem();
+				if (soundSystem != null)
+					soundSystem.setMasterVolume(slider.value);
 			}
 		});
 		musicVol.addListener(new ButtonListener() {
@@ -107,8 +111,9 @@ public class OptionsMenu extends GuiMenu {
 				musicVolume = slider.value;
 
 				Options.set(Options.MUSIC, musicVolume + "");
-				MojamComponent.soundPlayer.soundSystem.setVolume(SoundPlayer.BACKGROUND_TRACK,
-						slider.value);
+				SoundSystem soundSystem = MojamComponent.soundPlayer.getSoundSystem();
+				if (soundSystem != null)
+					soundSystem.setVolume(ISoundPlayer.BACKGROUND_TRACK, slider.value);
 			}
 		});
 		soundsVol.addListener(new ButtonListener() {
