@@ -5,11 +5,12 @@ abstract public class Buff {
 	 * Type of buff
 	 */
 	public enum BuffType { 
-		NONE, HEALTH_MODIF, REGEN_RATE, EXP_MODIF , EXP_RATE
+		ALL, HEALTH_MODIF, REGEN_RATE, EXP_MODIF , EXP_RATE
 	}
 	
 	public BuffType buffType;
 	
+	protected boolean dispell  = true;
 	protected boolean infinite = false;
 	protected int duration;
 	protected float param;
@@ -33,7 +34,7 @@ abstract public class Buff {
 	
 	public void tick() { this.duration-- ; }
 	
-	public boolean is(BuffType type) { return this.buffType == type ; }
+	public boolean is(BuffType type) { return type == BuffType.ALL || this.buffType == type ; }
 	public boolean over() { return !this.infinite || this.duration <= 0 ;}
-	
+	public boolean canDispell() { return this.dispell ; }
 }

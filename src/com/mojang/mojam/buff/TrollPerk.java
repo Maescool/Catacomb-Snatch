@@ -4,7 +4,8 @@ import com.mojang.mojam.buff.Buff;
 
 class TrollPerk extends Buff {
 	public BuffType buffType = BuffType.REGEN_RATE;
-	private boolean infinite = false;
+	protected boolean dispell  = false;
+	protected boolean infinite = false;
 	
 	public TrollPerk(float how) {
 		super(0,how);
