@@ -277,4 +277,46 @@ public class Font {
 			draw(screen, msg, x - ((Font.Align.CENTERED.equals(align)) ? width / 2 : width), y - 4);
 		}
 	}
+
+    /**
+     * Draw the given text onto the given screen at the given position
+     * 
+     * @param screen Screen
+     * @param msg Message
+     * @param x X coordinate
+     * @param y Y coordinate
+     * @param opaque Opacity of the images. 0=Opaque, 256=invisible
+     */
+    public void drawAlpha(Screen screen, String msg, int x, int y, int opaque) {
+        drawAlpha(screen, msg, x, y, Integer.MAX_VALUE, opaque);
+    }
+
+    /**
+     * Draw the given text onto the given screen at the given position
+     * 
+     * @param screen Screen
+     * @param msg Message
+     * @param x X coordinate
+     * @param y Y coordinate
+     * @param width Maximum line width in pixels
+     * @param opaque Opacity of the images. 0=Opaque, 256=invisible
+     */
+    public void drawAlpha(Screen screen, String msg, int x, int y, int width, int opaque) {
+        int startX = x;
+        int length = msg.length();
+        for (int i = 0; i < length; i++) {
+            char character = msg.charAt(i);
+            Bitmap bitmap = getCharacterBitmap(character);
+            int heightOffset = 0;
+            if (letters.indexOf(character) < 0) {
+                heightOffset = fontCharacterFactory.getHeightOffset(character);
+            }
+            screen.opacityBlit(bitmap, x, y + heightOffset, opaque);
+            x += bitmap.w + letterSpacing;
+            if (x > width - bitmap.w) {
+                x = startX;
+                y += glyphHeight + 2;
+            }
+        }
+    }
 }
