@@ -3,6 +3,7 @@ package com.mojang.mojam.level.gamemode;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 import javax.imageio.ImageIO;
@@ -147,5 +148,11 @@ public class GameMode {
 	}
 	
 	protected void setTargetScore() {
+	}
+	
+	public static GameMode createNewInstance(Class<? extends GameMode> cmode) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		GameMode mode;		
+		mode = cmode.newInstance();
+		return mode;
 	}
 }

@@ -3,6 +3,8 @@ package com.mojang.mojam.level;
 import java.util.HashMap;
 
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.level.gamemode.GameMode;
+import com.mojang.mojam.level.gamemode.GameModeVanilla;
 import com.mojang.mojam.mc.EnumOS2;
 
 public class LevelInformation {
@@ -17,6 +19,7 @@ public class LevelInformation {
 	private String levelFile;
 	public String levelAuthor;
 	public String levelDescription;
+	public Class<? extends GameMode> gameMode;
 	public boolean vanilla;
 
 //	public LevelInformation(String levelName_, String levelFile_) {
@@ -33,6 +36,18 @@ public class LevelInformation {
 		this.levelName = levelName;
 		this.levelFile = sanitizePath(levelFile);
 		this.vanilla = vanilla;
+		this.gameMode = GameModeVanilla.class;
+		
+		localID = localIDcounter++;
+		fileToInfo.put(levelFile, this);
+		System.out.println("Map info added: "+levelFile+"("+(vanilla?"vanilla":"external")+")");
+	}
+	
+	public LevelInformation(String levelName, String levelFile, Class<? extends GameMode> mode) {
+		this.levelName = levelName;
+		this.levelFile = sanitizePath(levelFile);
+		this.vanilla = true;
+		this.gameMode = mode;
 		
 		localID = localIDcounter++;
 		fileToInfo.put(levelFile, this);
