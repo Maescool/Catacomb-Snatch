@@ -69,12 +69,12 @@ public final class Snatch
 		}*/
 
 		System.out.println("Snatch starting up...");
-		addMod(Snatch.class.getClassLoader(),"SnatchContent.class");
+		addMod(Snatch.class.getClassLoader(), "SnatchContent.class");
 		try
 		{
 			System.out.println(modDir.getAbsolutePath());
-			readLinksFromFile(new File(mojam.getMojamDir(),"mods.txt"));
-			readFromClassPath(new File(mojam.getMojamDir(),"/mods"));
+			readLinksFromFile(new File(mojam.getMojamDir(), "mods.txt"));
+			readFromClassPath(new File(mojam.getMojamDir(), "/mods"));
 			readFromClassPath(modDir);
 			//readLinksFromFile(new File(mojam.getMojamDir(),"mods.txt"));
 			System.out.println(modDir.getAbsolutePath());
@@ -193,7 +193,7 @@ public final class Snatch
 			if(mod != null)
 			{
 				modList.add(mod);
-				System.out.println("Mod Initialized: "+mod.getClass().getSimpleName());
+				System.out.println("Mod Initialized: " + mod.getClass().getSimpleName());
 				return mod;
 			}
 		}
@@ -271,10 +271,10 @@ public final class Snatch
 			}
 		}
 	}
-	
+
 	public static ScriptEngine addScript(String s)
 	{
-		ScriptEngine e = lang.getEngineByExtension(s.substring(s.lastIndexOf('.')+1));
+		ScriptEngine e = lang.getEngineByExtension(s.substring(s.lastIndexOf('.') + 1));
 		/*for(ScriptEngineFactory factory:lang.getEngineFactories())
 		{
 			System.out.println(factory.getLanguageName()+":"+factory.getEngineName());
@@ -289,7 +289,7 @@ public final class Snatch
 			e.eval(fr);
 			e.put("Snatch", new Snatch());
 			scriptList.add(e);
-			System.out.println(e.getFactory().getExtensions().get(0).toUpperCase() + " Script initialised: "+s);
+			System.out.println(e.getFactory().getExtensions().get(0).toUpperCase() + " Script initialised: " + s);
 		}
 		catch (FileNotFoundException e1)
 		{
@@ -297,7 +297,7 @@ public final class Snatch
 		}
 		catch (NullPointerException e1)
 		{
-			System.out.println("Could not initialise mod "+s);
+			System.out.println("Could not initialise mod " + s);
 		}
 		catch (ScriptException e1)
 		{
@@ -344,8 +344,8 @@ public final class Snatch
 	public static int addEntity(Entity entity)
 	{
 		spawnList.put(spawnList.size(), entity);
-		int i = spawnList.size()-1;
-		System.out.println("Registered " + spawnList.get(i).getClass().getSimpleName()+" with id "+i);
+		int i = spawnList.size() - 1;
+		System.out.println("Registered " + spawnList.get(i).getClass().getSimpleName() + " with id " + i);
 		return i;
 	}
 
@@ -483,27 +483,27 @@ public final class Snatch
 			}
 		}
 	}
-	
+
 	public static long currentTimeMillis()
 	{
 		return System.currentTimeMillis();
 	}
-	
+
 	public static long nanoTime()
 	{
 		return System.nanoTime();
 	}
-	
+
 	public static Font getFont()
 	{
 		return Font.getFont();
 	}
-	
+
 	public static void setGamemode(GameMode gamemode)
 	{
 		TitleMenu.defaultGameMode = gamemode;
 	}
-	
+
 	public static void readLinksFromFile(File f) throws IOException
 	{
 		if(!f.exists())
@@ -511,54 +511,75 @@ public final class Snatch
 			System.out.println("Creating Mod Subscriptions File");
 			f.createNewFile();
 		}
-		
-		BufferedReader reader = new BufferedReader( new FileReader (f));
-	    String line  = null;
-	    StringBuilder stringBuilder = new StringBuilder();
-	    String ls = System.getProperty("line.separator");
-	    while( ( line = reader.readLine() ) != null ) {
-	        stringBuilder.append( line );
-	        stringBuilder.append( ls );
-	    }
-	    line = stringBuilder.toString();
-	    
-	    String[] links = line.split("\n|\r");
-	    List<String> stringList = new LinkedList();
-	    for(String s:links)
-	    {
-	    	File f1 = new File(mojam.getMojamDir(),"/mods/"+s.substring(s.lastIndexOf('/')+1));
-	    	if(!upToDate(s))
-	    	{
-	    		File f2 = downloadFile(s,f1.getAbsolutePath());
-	    		stringList.add(f2.getAbsolutePath());
-	    	}
-	    }
-	    for(String s:stringList)
-	    {
-	    	System.out.println(addScript(s));
-	    }
+
+		BufferedReader reader = new BufferedReader(new FileReader(f));
+		String line = null;
+		StringBuilder stringBuilder = new StringBuilder();
+		String ls = System.getProperty("line.separator");
+		while((line = reader.readLine()) != null)
+		{
+			stringBuilder.append(line);
+			stringBuilder.append(ls);
+		}
+		line = stringBuilder.toString();
+
+		String[] links = line.split("\n|\r");
+		List<String> stringList = new LinkedList();
+		for(String s : links)
+		{
+			File f1 = new File(mojam.getMojamDir(), "/mods/" + s.substring(s.lastIndexOf('/') + 1));
+			if(!f1.exists())f1.createNewFile();
+			try
+			{
+				if(!upToDate(s))
+				{
+					System.out.println("Debug: " + s);//TODO
+					File f2 = downloadFile(s, f1.getAbsolutePath());
+					stringList.add(f2.getAbsolutePath());
+					System.out.println(f2.getAbsolutePath());
+				}
+			}
+			catch (Exception e)
+			{
+
+			}
+		}
+		for(String s : stringList)
+		{
+			System.out.println(addScript(s));
+		}
 	}
-	
+
 	public static boolean upToDate(String s) throws IOException
 	{
 		File f = new File(s);
-		File f1 = new File(mojam.getMojamDir(),"mods/"+s.substring(s.lastIndexOf('/')+1));
-		if(!f1.exists())f1.mkdirs();f1.createNewFile();
-		System.out.print(f.hashCode()+":"+f1.hashCode()+" - "+f.lastModified()+":"+f1.lastModified());
-		if(f.hashCode()!=f1.hashCode()&&f.lastModified()>f1.lastModified())
+		File f1 = new File(mojam.getMojamDir(), "mods/" + s.substring(s.lastIndexOf('/') + 1));
+		if(!f1.exists()) f1.mkdirs();
+		f1.createNewFile();
+		System.out.println(f.hashCode() + ":" + f1.hashCode() + " - " + f.lastModified() + ":" + f1.lastModified());
+		if(f.hashCode() != f1.hashCode() && f.lastModified() > f1.lastModified())
 		{
-			System.out.print(f.hashCode()+":"+f1.hashCode()+" - "+f.lastModified()+":"+f1.lastModified());
+			System.out.println(f.hashCode() + ":" + f1.hashCode() + " - " + f.lastModified() + ":" + f1.lastModified());
 			return false;
 		}
 		//return true;
 		return false;
 	}
-	
+
 	public static File downloadFile(String path, String dest) throws IOException
 	{
 		URL url = new URL(path);
 		ReadableByteChannel rbc = Channels.newChannel(url.openStream());
-		FileOutputStream fos = new FileOutputStream(dest);
+		FileOutputStream fos = new FileOutputStream(new File(dest));
+		fos.getChannel().transferFrom(rbc, 0, 1 << 24);
+		return new File(dest);
+	}
+
+	@Deprecated
+	public static File downloadFile(URL url, String dest) throws IOException
+	{
+		ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+		FileOutputStream fos = new FileOutputStream(new File(dest));
 		fos.getChannel().transferFrom(rbc, 0, 1 << 24);
 		return new File(dest);
 	}
