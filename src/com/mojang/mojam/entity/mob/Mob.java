@@ -27,7 +27,7 @@ public abstract class Mob extends Entity {
 	protected double speed = 1.0;
 	public int team;
 	protected boolean doShowHealthBar = true;
-    protected int healthBarOffset = 10;
+	protected int healthBarOffset = 10;
 	double dir = 0;
 	public int hurtTime = 0;
 	public int freezeTime = 0;
@@ -41,18 +41,18 @@ public abstract class Mob extends Entity {
 	public double xSlide;
 	public double ySlide;
 	public int deathPoints = 0;
-	public boolean chasing=false;
+	public boolean chasing = false;
 	public int justDroppedTicks = 0;
 	public int strength = 0;
 	public int REGEN_INTERVAL;
 	public float REGEN_AMOUNT = 1;
 	public boolean REGEN_HEALTH = true;
 	public int healingTime = REGEN_INTERVAL;
-    protected int facing;
-    private int walkTime;
-    protected int stepTime;
-    protected int limp;
-	
+	protected int facing;
+	private int walkTime;
+	protected int stepTime;
+	protected int limp;
+
 	public Mob(double x, double y, int team) {
 		super();
 		setPos(x, y);
@@ -93,23 +93,23 @@ public abstract class Mob extends Entity {
 	}
 
 	public void tick() {
-		if (TitleMenu.difficulty.difficultyID >= 1 ) {
+		if (TitleMenu.difficulty.difficultyID >= 1) {
 			this.doRegenTime();
 		}
-		
+
 		if (hurtTime > 0) {
 			hurtTime--;
 		}
-		
+
 		if (bounceWallTime > 0) {
 			bounceWallTime--;
 		}
-		
+
 		if (freezeTime > 0) {
 			slideMove(xSlide, ySlide);
 			xSlide *= 0.8;
 			ySlide *= 0.8;
-			
+
 			if (xBump != 0 || yBump != 0) {
 				move(xBump, yBump);
 			}
@@ -124,7 +124,7 @@ public abstract class Mob extends Entity {
 			}
 		}
 	}
-	
+
 	public void doRegenTime() {
 		if (!this.REGEN_HEALTH) {
 			// DO NOTHING
@@ -133,14 +133,16 @@ public abstract class Mob extends Entity {
 			this.onRegenTime();
 		}
 	}
-	
+
 	public void onRegenTime() {
-			this.regenHealthOf( this.REGEN_AMOUNT );
-			// Can add thing here like a custom regen action
+		this.regenHealthOf(this.REGEN_AMOUNT);
+		// Can add thing here like a custom regen action
 	}
-	
-	public void regenHealthOf(float a) { this.health += a ; }
-	
+
+	public void regenHealthOf(float a) {
+		this.health += a;
+	}
+
 	public void slideMove(double xa, double ya) {
 		move(xa, ya);
 	}
@@ -196,21 +198,40 @@ public abstract class Mob extends Entity {
 				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h / 2 - yOffs, (col << 24) + 255 * 65536);
 			}
 		} else {
-					
+
 			screen.blit(image, pos.x - image.w / 2, pos.y - image.h / 2 - yOffs);
 		}
 
 		if (doShowHealthBar && health < maxHealth) {
-            addHealthBar(screen);
-        }
+			addHealthBar(screen);
+		}
 	}
 
 	protected void addHealthBar(Screen screen) {
-        
-        int start = (int) (health * 21 / maxHealth);
-        
-        screen.blit(Art.healthBar[start][0], pos.x - 16, pos.y + healthBarOffset);
-    }
+
+		int start = (int) (health * 21 / maxHealth);
+
+		float one_tenth_hp = (float) (maxHealth / 10f);
+		float three_tenths_hp = one_tenth_hp * 3;
+		float size_tenths_hp = one_tenth_hp * 6;
+		float eigth_tenths_hp = one_tenth_hp * 8;
+		
+		int color = 0;
+		
+		if(health < three_tenths_hp){
+			color = 0xf62800;
+		}else if (health < size_tenths_hp){
+			color = 0xfe7700;
+		}else if (health < eigth_tenths_hp){
+			color = 0xfef115;
+		}else {
+			color = 0x8af116;
+		}
+
+		screen.blit(Art.healthBar_Underlay[start][0], pos.x - 16, pos.y + healthBarOffset);
+		screen.colorBlit(Art.healthBar[start][0], pos.x - 16, pos.y + healthBarOffset, (0xa8 << 24) + color);
+		screen.blit(Art.healthBar_Outline[0][0], pos.x - 16, pos.y + healthBarOffset);
+	}
 
 	protected void renderCarrying(Screen screen, int yOffs) {
 		if (carrying == null)
@@ -226,11 +247,11 @@ public abstract class Mob extends Entity {
 	public void hurt(Entity source, float damage) {
 		if (isImmortal)
 			return;
-		
+
 		this.healingTime = this.REGEN_INTERVAL;
-		
+
 		if (freezeTime <= 0) {
-			
+
 			if (source instanceof Bullet && !(this instanceof SpawnerEntity) && !(this instanceof RailDroid)) {
 				Bullet bullet = (Bullet) source;
 				if (bullet.owner instanceof Player) {
@@ -238,7 +259,7 @@ public abstract class Mob extends Entity {
 					pl.pexp++;
 				}
 			}
-			
+
 			hurtTime = 40;
 			freezeTime = 5;
 			health -= damage;
@@ -263,140 +284,140 @@ public abstract class Mob extends Entity {
 	}
 
 	public void pickup(Building b) {
-        if (b.health > 0) {
-            level.removeEntity(b);
-            carrying = b;
-            carrying.onPickup(this);
-        }
+		if (b.health > 0) {
+			level.removeEntity(b);
+			carrying = b;
+			carrying.onPickup(this);
+		}
 	}
-	
+
 	public void drop() {
-        carrying.removed = false;
-        carrying.freezeTime = 10;
-        carrying.justDroppedTicks=80;
-        carrying.setPos(pos);
-        level.addEntity(carrying);
-        carrying.onDrop();
-        carrying = null;
+		carrying.removed = false;
+		carrying.freezeTime = 10;
+		carrying.justDroppedTicks = 80;
+		carrying.setPos(pos);
+		level.addEntity(carrying);
+		carrying.onDrop();
+		carrying = null;
 	}
 
 	public boolean isCarrying() {
 		return (this.carrying != null);
 	}
-    
-    public boolean isTargetBehindWall(double dx2, double dy2, Entity e) {
-        int x1 = (int) pos.x / Tile.WIDTH;
-        int y1 = (int) pos.y / Tile.HEIGHT;
-        int x2 = (int) dx2 / Tile.WIDTH;
-        int y2 = (int) dy2 / Tile.HEIGHT;
 
-        int dx, dy, inx, iny, a;
-        Tile temp;
-        Tile dTile1;
-        Tile dTile2;
-        dx = x2 - x1;
-        dy = y2 - y1;
-        inx = dx > 0 ? 1 : -1;
-        iny = dy > 0 ? 1 : -1;
+	public boolean isTargetBehindWall(double dx2, double dy2, Entity e) {
+		int x1 = (int) pos.x / Tile.WIDTH;
+		int y1 = (int) pos.y / Tile.HEIGHT;
+		int x2 = (int) dx2 / Tile.WIDTH;
+		int y2 = (int) dy2 / Tile.HEIGHT;
 
-        dx = java.lang.Math.abs(dx);
-        dy = java.lang.Math.abs(dy);
+		int dx, dy, inx, iny, a;
+		Tile temp;
+		Tile dTile1;
+		Tile dTile2;
+		dx = x2 - x1;
+		dy = y2 - y1;
+		inx = dx > 0 ? 1 : -1;
+		iny = dy > 0 ? 1 : -1;
 
-        if (dx >= dy) {
-            dy <<= 1;
-            a = dy - dx;
-            dx <<= 1;
-            while (x1 != x2) {
-                temp = level.getTile(x1, y1);
-                if (!temp.canPass(e)) {
-                    return true;
-                }
-                if (a >= 0) {
-                	dTile1=level.getTile(x1+inx,y1);
-                	dTile2=level.getTile(x1,y1+iny);
-                	if (!(dTile1.canPass(e)||dTile2.canPass(e))){
-                		return true;
-                	}
-                    y1 += iny;
-                    a -= dx;
-                }
-                a += dy;
-                x1 += inx;
-            }
-        } else {
-            dx <<= 1;
-            a = dx - dy;
-            dy <<= 1;
-            while (y1 != y2) {
-                temp = level.getTile(x1, y1);
-                if (!temp.canPass(e)) {
-                    return true;
-                }
-                if (a >= 0) {
-                	dTile1=level.getTile(x1+inx,y1);
-                	dTile2=level.getTile(x1,y1+iny);
-                	if (!(dTile1.canPass(e)||dTile2.canPass(e))){
-                		return true;
-                	}
-                	x1 += inx;
-                    a -= dy;
-                }
-                a += dx;
-                y1 += iny;
-            }
-        }
-        temp = level.getTile(x1, y1);
-        if (!temp.canPass(e)) {
-            return true;
-        }
-        return false;
-    }
-    
-    public boolean fallDownHole() {
-    	int x=(int) pos.x/Tile.WIDTH;
-    	int y=(int) pos.y/Tile.HEIGHT;
-        if (level.getTile(x, y) instanceof HoleTile) {
-        	level.addEntity(new EnemyDieAnimation(pos.x, pos.y));
-        	MojamComponent.soundPlayer.playSound("/sound/Fall.wav", (float) pos.x, (float) pos.y);
-        	if (!(this instanceof Player)){
-        		remove();
-        	}
-        	return true;
-        }
-        return false;
-    }
-    
-    public void walk(){
-    	switch (facing) {
-        case 0:
-            yd -= speed;
-            break;
-        case 1:
-            xd += speed;
-            break;
-        case 2:
-            yd += speed;
-            break;
-        case 3:
-            xd -= speed;
-            break;
-    	}
-    	walkTime++;
+		dx = java.lang.Math.abs(dx);
+		dy = java.lang.Math.abs(dy);
 
-    	if (walkTime / 12 % limp != 0) {
-    		if (shouldBounceOffWall(xd, yd)) {
-    			facing = (facing + 2) % 4;
-    			xd = -xd;
-    			yd = -yd;
-    		}
+		if (dx >= dy) {
+			dy <<= 1;
+			a = dy - dx;
+			dx <<= 1;
+			while (x1 != x2) {
+				temp = level.getTile(x1, y1);
+				if (!temp.canPass(e)) {
+					return true;
+				}
+				if (a >= 0) {
+					dTile1 = level.getTile(x1 + inx, y1);
+					dTile2 = level.getTile(x1, y1 + iny);
+					if (!(dTile1.canPass(e) || dTile2.canPass(e))) {
+						return true;
+					}
+					y1 += iny;
+					a -= dx;
+				}
+				a += dy;
+				x1 += inx;
+			}
+		} else {
+			dx <<= 1;
+			a = dx - dy;
+			dy <<= 1;
+			while (y1 != y2) {
+				temp = level.getTile(x1, y1);
+				if (!temp.canPass(e)) {
+					return true;
+				}
+				if (a >= 0) {
+					dTile1 = level.getTile(x1 + inx, y1);
+					dTile2 = level.getTile(x1, y1 + iny);
+					if (!(dTile1.canPass(e) || dTile2.canPass(e))) {
+						return true;
+					}
+					x1 += inx;
+					a -= dy;
+				}
+				a += dx;
+				y1 += iny;
+			}
+		}
+		temp = level.getTile(x1, y1);
+		if (!temp.canPass(e)) {
+			return true;
+		}
+		return false;
+	}
 
-    		stepTime++;
-    		if ((!move(xd, yd) || (walkTime > 10 && TurnSynchronizer.synchedRandom.nextInt(200) == 0) && chasing==false)) {
-    			facing = TurnSynchronizer.synchedRandom.nextInt(4);
-    			walkTime = 0;
-    		}
-    	}
-    	xd *= 0.2;
-    	yd *= 0.2;
-    }
+	public boolean fallDownHole() {
+		int x = (int) pos.x / Tile.WIDTH;
+		int y = (int) pos.y / Tile.HEIGHT;
+		if (level.getTile(x, y) instanceof HoleTile) {
+			level.addEntity(new EnemyDieAnimation(pos.x, pos.y));
+			MojamComponent.soundPlayer.playSound("/sound/Fall.wav", (float) pos.x, (float) pos.y);
+			if (!(this instanceof Player)) {
+				remove();
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public void walk() {
+		switch (facing) {
+		case 0:
+			yd -= speed;
+			break;
+		case 1:
+			xd += speed;
+			break;
+		case 2:
+			yd += speed;
+			break;
+		case 3:
+			xd -= speed;
+			break;
+		}
+		walkTime++;
+
+		if (walkTime / 12 % limp != 0) {
+			if (shouldBounceOffWall(xd, yd)) {
+				facing = (facing + 2) % 4;
+				xd = -xd;
+				yd = -yd;
+			}
+
+			stepTime++;
+			if ((!move(xd, yd) || (walkTime > 10 && TurnSynchronizer.synchedRandom.nextInt(200) == 0) && chasing == false)) {
+				facing = TurnSynchronizer.synchedRandom.nextInt(4);
+				walkTime = 0;
+			}
+		}
+		xd *= 0.2;
+		yd *= 0.2;
+	}
 }
