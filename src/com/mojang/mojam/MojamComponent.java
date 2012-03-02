@@ -829,6 +829,9 @@ public class MojamComponent extends Canvas implements Runnable,
 				level = null;
 				TitleMenu menu = new TitleMenu(GAME_WIDTH, GAME_HEIGHT);
 				addMenu(menu);
+				this.nextMusicInterval = 0;
+                soundPlayer.stopBackgroundMusic();
+                soundPlayer.startTitleMusic();
 				break;
 				
 			case TitleMenu.START_GAME_ID:
