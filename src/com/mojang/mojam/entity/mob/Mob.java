@@ -5,7 +5,10 @@ import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.animation.EnemyDieAnimation;
+import com.mojang.mojam.entity.animation.ItemFallAnimation;
+import com.mojang.mojam.entity.animation.PlayerFallingAnimation;
 import com.mojang.mojam.entity.building.Building;
+import com.mojang.mojam.entity.building.Harvester;
 import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.gui.TitleMenu;
@@ -375,15 +378,25 @@ public abstract class Mob extends Entity {
     }
     
     public boolean fallDownHole() {
-    	int x=(int) pos.x/Tile.WIDTH;
-    	int y=(int) pos.y/Tile.HEIGHT;
+        int x=(int)(pos.x/Tile.WIDTH);
+        int y=(int)(pos.y/Tile.HEIGHT);
         if (level.getTile(x, y) instanceof HoleTile) {
-        	level.addEntity(new EnemyDieAnimation(pos.x, pos.y));
-        	MojamComponent.soundPlayer.playSound("/sound/Fall.wav", (float) pos.x, (float) pos.y);
-        	if (!(this instanceof Player)){
-        		remove();
-        	}
-        	return true;
+            if (!(this instanceof Player)){
+                ItemFallAnimation animation = new ItemFallAnimation(x*Tile.WIDTH, y*Tile.HEIGHT, this.getSprite());
+                if(this instanceof Harvester){
+                    animation.setHarvester();
+                }
+                level.addEntity(animation);
+                remove();
+            } else {
+                int characterID = ((Player)this).getCharacterID();
+                level.addEntity(new PlayerFallingAnimation(x*Tile.WIDTH, y*Tile.HEIGHT, characterID));
+                if (characterID < 2)
+                    MojamComponent.soundPlayer.playSound("/sound/falling_male.wav", (float) pos.x, (float) pos.y);
+                else
+                    MojamComponent.soundPlayer.playSound("/sound/falling_female.wav", (float) pos.x, (float) pos.y);
+            }
+            return true;
         }
         return false;
     }
