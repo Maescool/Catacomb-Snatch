@@ -1,5 +1,7 @@
 package com.mojang.mojam;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,7 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintStream;
+import java.io.PipedOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
@@ -17,18 +19,20 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
-import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import javax.swing.JTextArea;
 
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.gui.Font;
@@ -46,6 +50,9 @@ public final class Snatch
 	private static MojamComponent mojam;
 	public static Map<Integer, Entity> spawnList = new HashMap<Integer, Entity>();
 	private static ScriptEngineManager lang = new ScriptEngineManager();
+	public static PipedOutputStream sysOut = new PipedOutputStream();
+	public static JTextArea textArea;
+	public static boolean isJar;
 
 	public static void init(MojamComponent m)
 	{
@@ -54,38 +61,31 @@ public final class Snatch
 		try
 		{
 			modDir = new File(Snatch.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+			isJar = modDir.getAbsolutePath().endsWith(".jar");
 		}
 		catch (URISyntaxException e1)
 		{
 			e1.printStackTrace();
 		}
-		/*try
+		if(isJar)
 		{
-			System.setOut(new PrintStream(new FileOutputStream(new File(m.getMojamDir(), "log.txt"))));
+			displayConsoleWindow();
 		}
-		catch (FileNotFoundException e1)
-		{
-			e1.printStackTrace();
-		}*/
+		//System.setOut(new PrintStream(new FileOutputStream(new File(m.getMojamDir(), "log.txt"))));
 
 		System.out.println("Snatch starting up...");
+		System.out.println(modDir.getAbsolutePath());
 		addMod(Snatch.class.getClassLoader(), "SnatchContent.class");
 		try
 		{
-			System.out.println(modDir.getAbsolutePath());
 			readLinksFromFile(new File(mojam.getMojamDir(), "mods.txt"));
 			readFromClassPath(new File(mojam.getMojamDir(), "/mods"));
 			readFromClassPath(modDir);
 			//readLinksFromFile(new File(mojam.getMojamDir(),"mods.txt"));
-			System.out.println(modDir.getAbsolutePath());
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-		}
-		for(Mod mod : modList)
-		{
-			//System.out.println(mod.getClass());
 		}
 	}
 
@@ -227,10 +227,10 @@ public final class Snatch
 					//System.out.println(s1);//TODO
 					addMod(classloader, s1);
 				}
-				else if(!zipentry.isDirectory() && s1.contains("mod_"))
+				else if(!zipentry.isDirectory() && s1.contains("mod_")&&!s1.toLowerCase().endsWith(".mf"))
 				{
 					//System.out.println(s1);//TODO
-					addScript(s1);
+					addScript(zipentry);
 				}
 			}
 			while(true);
@@ -262,7 +262,7 @@ public final class Snatch
 					{
 						addMod(classloader, s2);
 					}
-					else if(afile[i].isFile() && s2.contains("mod_"))
+					else if(afile[i].isFile() && s2.contains("mod_") && !s2.toLowerCase().endsWith(".mf"))
 					{
 						//System.out.println(s2);//TODO
 						addScript(afile[i].getAbsolutePath());
@@ -304,6 +304,71 @@ public final class Snatch
 			e1.printStackTrace();
 		}
 		return e;
+	}
+
+	public static ScriptEngine addScript(ZipEntry entry)
+	{
+		String s = entry.getName();
+		ScriptEngine engine = lang.getEngineByExtension(s.substring(s.lastIndexOf('.') + 1));
+		/*for(ScriptEngineFactory factory:lang.getEngineFactories())
+		{
+			System.out.println(factory.getLanguageName()+":"+factory.getEngineName());
+			for(String s1:factory.getExtensions())
+			{
+				System.out.println("|__> "+ s1);
+			}
+		}*/
+		if(engine==null||entry.getName().contains("MANIFEST"))return null;
+		try
+		{
+			int BUFFER = 8192;
+			BufferedOutputStream dest = null;
+			BufferedInputStream is = null;
+			ZipFile zipfile = new ZipFile(modDir.getAbsolutePath());
+			Enumeration e = zipfile.entries();
+			while(e.hasMoreElements())
+			{
+				entry = (ZipEntry) e.nextElement();
+				System.out.println("Extracting: " + entry);
+				is = new BufferedInputStream(zipfile.getInputStream(entry));
+				int count;
+				byte data[] = new byte[BUFFER];
+				FileOutputStream fos = new FileOutputStream(entry.getName());
+				dest = new BufferedOutputStream(fos, BUFFER);
+				while((count = is.read(data, 0, BUFFER)) != -1)
+				{
+					dest.write(data, 0, count);
+				}
+				dest.flush();
+				dest.close();
+				is.close();
+				FileReader fr = new FileReader(entry.getName());
+
+				engine.eval(fr);
+				engine.put("Snatch", new Snatch());
+				scriptList.add(engine);
+				System.out.println(engine.getFactory().getExtensions().get(0).toUpperCase() + " Script initialised: " + s);
+			}
+		}
+		catch (FileNotFoundException e1)
+		{
+			if(!isJar)e1.printStackTrace();
+		}
+		catch (NullPointerException e1)
+		{
+			System.out.println("Could not initialise mod " + s);
+		}
+		catch (ScriptException e1)
+		{
+			System.out.println("Bad Script file: "+entry.getName());
+			e1.printStackTrace();
+		}
+		catch (IOException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return engine;
 	}
 
 	@Deprecated
@@ -475,25 +540,38 @@ public final class Snatch
 			}
 			catch (NoSuchMethodException e)
 			{
-				System.out.println("Bad method name: " + s);
+				//System.out.println("Bad method name: " + s);
 			}
 			catch (ScriptException e)
 			{
+				System.out.println("Bad method in file: " + s);
 				e.printStackTrace();
 			}
 		}
 	}
 
+	/**Gets the current system time
+	 *
+	 * @return current system time in milliseconds
+	 */
 	public static long currentTimeMillis()
 	{
 		return System.currentTimeMillis();
 	}
 
+	/**
+	 * Gets the current system time
+	 * @return current system time in nanoseconds
+	 */
 	public static long nanoTime()
 	{
 		return System.nanoTime();
 	}
 
+	/**
+	 * Gets an instance of Font to avoid static method semantics in scripts
+	 * @return an instance of the class @see Font for non-statically calling static code
+	 */
 	public static Font getFont()
 	{
 		return Font.getFont();
@@ -528,15 +606,13 @@ public final class Snatch
 		for(String s : links)
 		{
 			File f1 = new File(mojam.getMojamDir(), "/mods/" + s.substring(s.lastIndexOf('/') + 1));
-			if(!f1.exists())f1.createNewFile();
+			if(!f1.exists()) f1.createNewFile();
 			try
 			{
 				if(!upToDate(s))
 				{
-					System.out.println("Debug: " + s);//TODO
 					File f2 = downloadFile(s, f1.getAbsolutePath());
 					stringList.add(f2.getAbsolutePath());
-					System.out.println(f2.getAbsolutePath());
 				}
 			}
 			catch (Exception e)
@@ -546,7 +622,7 @@ public final class Snatch
 		}
 		for(String s : stringList)
 		{
-			System.out.println(addScript(s));
+			System.out.println(addScript(s));//TODO
 		}
 	}
 
@@ -556,13 +632,12 @@ public final class Snatch
 		File f1 = new File(mojam.getMojamDir(), "mods/" + s.substring(s.lastIndexOf('/') + 1));
 		if(!f1.exists()) f1.mkdirs();
 		f1.createNewFile();
-		System.out.println(f.hashCode() + ":" + f1.hashCode() + " - " + f.lastModified() + ":" + f1.lastModified());
-		if(f.hashCode() != f1.hashCode() && f.lastModified() > f1.lastModified())
+		//System.out.println(f.hashCode() + ":" + f1.hashCode() + " - " + f.lastModified() + ":" + f1.lastModified());//TODO
+		if(f.hashCode() == f1.hashCode() && f.lastModified() == f1.lastModified())
 		{
-			System.out.println(f.hashCode() + ":" + f1.hashCode() + " - " + f.lastModified() + ":" + f1.lastModified());
-			return false;
+			//System.out.println(f.hashCode() + ":" + f1.hashCode() + " - " + f.lastModified() + ":" + f1.lastModified());
+			return true;
 		}
-		//return true;
 		return false;
 	}
 
@@ -582,6 +657,11 @@ public final class Snatch
 		FileOutputStream fos = new FileOutputStream(new File(dest));
 		fos.getChannel().transferFrom(rbc, 0, 1 << 24);
 		return new File(dest);
+	}
+
+	public static void displayConsoleWindow()
+	{
+		Console.main(null);
 	}
 
 }
