@@ -66,7 +66,6 @@ public class TitleMenu extends GuiMenu {
 	public static final int CAMPAIGN_SELECT_SCREEN = 7000;
 	
 	public static LevelInformation level = null;
-	public static GameMode defaultGameMode= new GameModeEventsTest();
 	public static DifficultyInformation difficulty = null;
 
 	public static String ip = "";

@@ -253,10 +253,10 @@ public class MojamComponent extends Canvas implements Runnable,
 		addMenu(new GuiError(s));
 	}
 
-	private synchronized void createLevel(String levelPath, GameMode mode) {
+	private synchronized void createLevel(String levelPath) {
 		LevelInformation li = LevelInformation.getInfoForPath(levelPath);
 		if (li != null) {
-			createLevel(li, mode);
+			createLevel(li);
 			return;
 		} else if (!isMultiplayer) {
 			showError("Missing map.");
@@ -264,10 +264,10 @@ public class MojamComponent extends Canvas implements Runnable,
 		showError("Missing map - Multiplayer");
 	}
 
-	private synchronized void createLevel(LevelInformation li, GameMode mode) {
+	private synchronized void createLevel(LevelInformation li) {
 		try {
-			//level = Level.fromFile(li);
-			level = mode.generateLevel(li,localTeam);
+			//level = Level.fromFile(li);			
+			level = GameMode.createNewInstance(li.gameMode).generateLevel(li, localTeam);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			showError("Unable to load map.");
@@ -601,7 +601,7 @@ public class MojamComponent extends Canvas implements Runnable,
 					packetLink, localId, 2);
 
 			clearMenus();
-			createLevel(TitleMenu.level, TitleMenu.defaultGameMode);
+			createLevel(TitleMenu.level);
 
 			synchronizer.setStarted(true);
 			if (TitleMenu.level.vanilla) {
@@ -726,7 +726,7 @@ public class MojamComponent extends Canvas implements Runnable,
 				StartGamePacket sgPacker = (StartGamePacket) packet;
 				synchronizer.onStartGamePacket(sgPacker);
 				TitleMenu.difficulty = DifficultyList.getDifficulties().get(sgPacker.getDifficulty());
-				createLevel(sgPacker.getLevelFile(), TitleMenu.defaultGameMode);
+				createLevel(sgPacker.getLevelFile());
 			}
 		} else if (packet instanceof TurnPacket) {
 			synchronizer.onTurnPacket((TurnPacket) packet);
@@ -788,7 +788,7 @@ public class MojamComponent extends Canvas implements Runnable,
 			synchronizer = new TurnSynchronizer(this, null, 0, 1);
 			synchronizer.setStarted(true);
 
-			createLevel(TitleMenu.level, TitleMenu.defaultGameMode);
+			createLevel(TitleMenu.level);
 			soundPlayer.stopBackgroundMusic();
 		} else if (id == TitleMenu.SELECT_LEVEL_ID) {
 			addMenu(new LevelSelect(false,localTeam));
