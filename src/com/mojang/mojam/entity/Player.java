@@ -266,7 +266,7 @@ public class Player extends Mob implements LootCollector {
         if (!dead && fallDownHole()) {
         	dead = true;
         	carrying = null;
-        	deadDelay = 50;
+        	deadDelay = 60;
         }
 
         if (dead && deadDelay <= 0) {
@@ -859,5 +859,13 @@ public class Player extends Mob implements LootCollector {
     public Vec2 getPosition() {
         return pos;
     }
-
+    
+    /**
+     * Get current player's characterID
+     * 
+     * @return charakterID
+     */
+    public int getCharacterID() {
+        return this.characterID;
+    }
 }

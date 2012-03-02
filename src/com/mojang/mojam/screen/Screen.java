@@ -33,6 +33,10 @@ public class Screen extends Bitmap {
 	public void alphaBlit(Bitmap bitmap, int x, int y, int alpha) {
 		super.alphaBlit(bitmap, x + xOffset, y + yOffset, alpha);
 	}
+	
+	public void alphaFill(int x, int y, int width, int height, int color, int alpha) {
+	    super.alphaFill(x + xOffset, y + yOffset, width, height, color, alpha);
+	}
 
 	public void colorBlit(Bitmap bitmap, double x, double y, int color) {
 		colorBlit(bitmap, (int) x, (int) y, color);

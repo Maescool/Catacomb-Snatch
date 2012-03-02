@@ -133,13 +133,13 @@ public class LevelSelect extends GuiMenu {
     	if (levels.size() > LEVELS_PER_PAGE) {
 	    	if (!hasPreviousPage()) {
 	    	    previousPageButton.render(screen);
-	    	    screen.fill(previousPageButton.getX() + 4, previousPageButton.getY() + 4,
-	    	            previousPageButton.getWidth() - 8, previousPageButton.getHeight() - 8, 0x75401f);
+	    	    screen.alphaFill(previousPageButton.getX() + 4, previousPageButton.getY() + 4,
+	    	            previousPageButton.getWidth() - 8, previousPageButton.getHeight() - 8, 0xff404040, 0xd0);
 	    	}
 	        if (!hasNextPage()) {
 	            nextPageButton.render(screen);
-	            screen.fill(nextPageButton.getX() + 4, nextPageButton.getY() + 4,
-	                    nextPageButton.getWidth() - 8, nextPageButton.getHeight() - 8, 0x75401f);
+	            screen.alphaFill(nextPageButton.getX() + 4, nextPageButton.getY() + 4,
+	                    nextPageButton.getWidth() - 8, nextPageButton.getHeight() - 8, 0xff404040, 0xd0);
 	        }
     	}
     	

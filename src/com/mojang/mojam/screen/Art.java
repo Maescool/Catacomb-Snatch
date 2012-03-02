@@ -42,7 +42,8 @@ public class Art {
 
     // Player sheets
 	private static Bitmap[][] lordLard = cut("/art/player/lord_lard_sheet.png", 32, 32);
-	private static Bitmap[][] herrSpeck = cut("/art/player/herr_von_speck_sheet.png", 32, 32);
+	public static Bitmap[][] lordLard_falling = cut("/art/player/lord_lard_falling.png", 32, 32);
+    private static Bitmap[][] herrSpeck = cut("/art/player/herr_von_speck_sheet.png", 32, 32);
 	private static Bitmap[][] duchessDonut = cut("/art/player/duchess_donut_sheet.png", 32, 32);
 	private static Bitmap[][] countessCruller = cut("/art/player/countess_cruller_sheet.png", 32, 32);
 	
