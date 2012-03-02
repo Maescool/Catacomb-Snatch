@@ -19,6 +19,7 @@ public class Loot extends Entity {
 	public boolean fake = false;
 	private boolean isTakeable;
 	private boolean disappears = true; 
+	private int time_to_fall = 0;
 
 	public static Bitmap[][][] animationArt = {
 		Art.pickupCoinBronzeSmall,
@@ -44,6 +45,8 @@ public class Loot extends Entity {
 	public void setup(double x, double y, double xDirection, double yDirection, int lootValue, boolean disappears){
 		pos.set(x, y);
 		isTakeable = true;
+		
+		time_to_fall = 15;
 
 		value = 0;
 		while (value < 8 && values[value] < lootValue)
@@ -74,10 +77,12 @@ public class Loot extends Entity {
 	}
 
 	public void tick() {
-		if (level.getTile(pos) instanceof HoleTile) {
+		if (time_to_fall > 0) {
+			time_to_fall--;
+		} else if (level.getTile(pos) instanceof HoleTile) {
 			remove();
 		}
-		
+
 		animationTime++;
 		move(xMovement, yMovement);
 		accelerationDirection += accelerationDirectionDelta;

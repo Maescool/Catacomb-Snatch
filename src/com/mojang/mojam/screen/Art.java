@@ -128,7 +128,9 @@ public class Art {
 	
 	//Weapons
 	public static Bitmap[][] rifle = cut("/art/weapons/weapon_list.png", 32, 32);
-
+	public static Bitmap buckShot = load("/art/effects/bullet_buckshot.png");
+	public static Bitmap[][] bulletRay = cut("/art/effects/bullet_ray.png", 16, 16);
+	
 	// Fonts
 	public static Bitmap[][] font_default = cut("/art/fonts/font_default.png", 8, 8);
 	public static Bitmap[][] font_blue = cut("/art/fonts/font_blue.png", 8, 8);
@@ -174,8 +176,8 @@ public class Art {
 	public static Bitmap[][] fxDust24 = cut("/art/effects/fx_dust1_24.png", 24, 24);
 	public static Bitmap[][] moneyBar = cut("/art/effects/bar_blue.png", 32, 4);
 	public static Bitmap[][] healthBar = cut("/art/effects/bar_green.png", 32, 4);
-	public static Bitmap buckShot = load("/art/effects/bullet_buckshot.png");
-	public static Bitmap[][] bulletRay = cut("/art/effects/bullet_ray.png", 16, 16);
+	public static Bitmap[][] healthBar_Outline = cut("/art/effects/bar_outline.png", 32, 4);
+	public static Bitmap[][] healthBar_Underlay = cut("/art/effects/bar_green_underlay.png", 32, 4);
 		
 	// Icons
 	public static BufferedImage icon32 = loadBufferedImage("/art/icon/icon32.png");

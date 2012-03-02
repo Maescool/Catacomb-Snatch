@@ -15,6 +15,7 @@ import com.mojang.mojam.level.gamemode.ILevelTickItem;
 import com.mojang.mojam.level.gamemode.IVictoryConditions;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.Tile;
+import com.mojang.mojam.level.tile.AnimatedTile;
 import com.mojang.mojam.level.tile.WallTile;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.math.Vec2;
@@ -95,6 +96,9 @@ public class Level {
 				if (neighbour != null)
 					neighbour.neighbourChanged(tile);
 			}
+		}
+		if(tile instanceof AnimatedTile) { 
+			tickItems.add((ILevelTickItem) tile);
 		}
 	}
 

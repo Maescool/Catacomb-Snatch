@@ -10,3 +10,7 @@ build
 *.sw?
 lib/.tmp/
 doc/
+.metadata
+/.classpath
+/.gitignore
+/.project

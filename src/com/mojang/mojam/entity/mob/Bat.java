@@ -1,6 +1,5 @@
 package com.mojang.mojam.entity.mob;
 
-import com.mojang.mojam.level.tile.HoleTile;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
@@ -55,9 +54,7 @@ public class Bat extends HostileMob {
 
 	@Override
 	public void render(Screen screen) {
-		if(!(level.getTile(pos) instanceof HoleTile)) {
-			screen.alphaBlit(Art.batShadow, (int)(pos.x - Art.batShadow.w / 2), (int)(pos.y - Art.batShadow.h / 2 - yOffs + 16), 0x55);
-		}
+		screen.alphaBlit(Art.batShadow, (int)(pos.x - Art.batShadow.w / 2), (int)(pos.y - Art.batShadow.h / 2 - yOffs + 16), 0x45);
 		super.render(screen);
 	}
 }

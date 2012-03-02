@@ -4,7 +4,6 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
-import com.mojang.mojam.entity.weapon.*;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.level.DifficultyInformation;
@@ -14,32 +13,26 @@ import com.mojang.mojam.screen.Screen;
 /**
  * Generic shop item, available from the players base
  */
-public class ShopItem extends Building {
+abstract class ShopItem extends Building {
 	
-    private EnumShopItem type;
+	private final String name;
+	private Bitmap image;
     private final int cost;
     private int effectiveCost;
+   
 
-	/**
-	 * Constructor
-	 * 
-	 * @param x Initial X coordinate
-	 * @param y Initial Y coordinate
-	 * @param type The type of item to buy
-	 * @param team Team number
-	 */
-    public ShopItem(double x, double y, EnumShopItem type, int team) {
+    public ShopItem(String name, double x, double y, int team, int cost, int yOffset) {
         super(x, y, team);
-        this.type = type;
+        this.name = name;
         //Set building cost depending if creative mode is on or not
-    	cost = (Options.getAsBoolean(Options.CREATIVE)) ? 0:type.getCost();
-        yOffs = type.getYOffset();
+    	this.cost = (Options.getAsBoolean(Options.CREATIVE)) ? 0:cost;
+    	yOffs = yOffset;
         isImmortal = true;
     }
 
 
     @Override
-    public void render(Screen screen) {
+    public final void render(Screen screen) {
         super.render(screen);
         if(team == MojamComponent.localTeam) {
         	//Render the Cost text
@@ -76,6 +69,10 @@ public class ShopItem extends Building {
 		        }
 		}
 	}
+    
+    private String[] getTooltip() {
+        return MojamComponent.texts.shopTooltipLines(name);
+    }
 	
 	private int getLongestWidth(String[] string, Font font) {
 		int res = 0;
@@ -98,50 +95,24 @@ public class ShopItem extends Building {
 
     @Override
     public Bitmap getSprite() {
-    	return type.getSprite();
+    	return image;
     }
     
-    /**
-     * Get tool tip
-     * 
-     * @return Tool tip
-     */
-    public String[] getTooltip() {
-        return MojamComponent.texts.shopTooltipLines(type.getItemName());
+    public void setSprite(Bitmap shopItemImage) {
+    	image = shopItemImage;
     }
 
+    /**
+     * Action to take when when item is used. 
+     * For most cases use useAction instead.
+     */
     @Override
     public void use(Entity user) {
         if (user instanceof Player && ((Player) user).getTeam() == team) {
             Player player = (Player) user;
             if (!player.isCarrying() && player.getScore() >= effectiveCost) {
-                player.payCost(effectiveCost);
-                Building itemBuilding = null;
-                switch (type) {
-                    case TURRET:
-                        itemBuilding = new Turret(pos.x, pos.y, team);
-                        break;
-                    case HARVESTER:
-                        itemBuilding = new Harvester(pos.x, pos.y, team);
-                        break;
-                    case BOMB:
-                        itemBuilding = new Bomb(pos.x, pos.y);
-                        break;
-                    case RIFLE:
-                    	player.weapon = new Rifle(player);
-                    	break;
-                    case SHOTGUN:
-                    	player.weapon = new Shotgun(player);
-                    	break;
-                    case RAYGUN:
-                    	player.weapon = new Raygun(player);
-                    	break;
-                }
-                
-                if(itemBuilding != null) {
-	                level.addEntity(itemBuilding);
-	                player.pickup(itemBuilding);
-                }
+            	player.payCost(effectiveCost);
+            	useAction(player);
             }
             else if (player.getScore() < effectiveCost) {
             	if(this.team == MojamComponent.localTeam) {
@@ -151,4 +122,11 @@ public class ShopItem extends Building {
             }
         }
     }
+    
+    /**
+     * Action to take when the user uses the ShopItem after 
+     * cost has been deducted. Should be used in most cases Override 
+     * use() if greater flexibility is needed
+     */
+    abstract void useAction(Player player);
 }
