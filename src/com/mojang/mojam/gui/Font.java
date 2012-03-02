@@ -143,7 +143,7 @@ public class Font {
 	/**
 	 * Set the default font
 	 * 
-	 * @param name Font name
+	 * @param defaultFont Font name
 	 */
 	public static void setDefaultFont(Font defaultFont) {
 		Font.defaultFont = defaultFont;

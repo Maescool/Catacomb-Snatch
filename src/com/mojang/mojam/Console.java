@@ -5,11 +5,19 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.screen.Screen;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Console implements KeyListener {
 
+    private static class KeyStatus {
+
+        boolean status = true;
+    }
     private static final byte max = 4;
-    private boolean keys[] = new boolean[65536];
+    private static final int xLoc = 5;
+    private static final int yLoc = 312;
+    private Map<Integer, KeyStatus> keyssss = new HashMap<Integer, KeyStatus>();
     private boolean active;
     private boolean closing;
     private ArrayList<String> memory;
@@ -23,7 +31,6 @@ public class Console implements KeyListener {
         listeners = new ArrayList<ConsoleListener>();
         active = false;
         closing = false;
-        set(false);
     }
 
     /**
@@ -87,19 +94,8 @@ public class Console implements KeyListener {
     }
 
     /**
-     * Set the status for all keys
-     * 
-     * @param name Font name
-     */
-    private void set(boolean b) {
-        for (int i = 0; i < 65536; i++) {
-            keys[i] = b;
-        }
-    }
-
-    /**
      * Set Active status to true
-     * 
+     * Closing proccess will be stoped.
      */
     public void active() {
         active = true;
@@ -109,19 +105,30 @@ public class Console implements KeyListener {
     }
 
     /**
-     * Ask for Active status.
+     * Console start the closing proccess. It will take 100 ticks to fully close.
      * 
      */
-    public boolean getActive() {
+    void close() {
+        if (!closing) {
+            closing = true;
+            ticks = 0;
+        }
+    }
+
+    /**
+     * Ask for Active status.
+     * Return true while closing.
+     */
+    public boolean isActive() {
         return active;
     }
 
     /**
-     * Ask for Full-Active status.
-     * Console is not Full-Active while closing
+     * Ask for closing status.
+     * Console is active, but closing. It takes 100 ticks to auto-desactivate.
      */
-    public boolean getFullActive() {
-        return active && !closing;
+    public boolean isClosing() {
+        return closing;
     }
 
     public void tick() {
@@ -141,8 +148,8 @@ public class Console implements KeyListener {
 
     public void render(Screen screen) {
         if (active) {
-            int xOffset = 5;
-            int yOffset = 312;
+            int xOffset = xLoc;
+            int yOffset = yLoc;
             if (!closing) {
                 Font.defaultFont().drawAlpha(screen, now, xOffset, yOffset, alpha);
             }
@@ -162,11 +169,18 @@ public class Console implements KeyListener {
         if (closing || !active) {
             return;
         }
+
         int key = e.getKeyCode();
-        if (keys[key]) {
-            return;
+        KeyStatus k = keyssss.get(key);
+        if (k != null) {
+            if (k.status) {
+                return;
+            }
+        } else {
+            k = new KeyStatus();
+            keyssss.put(key, k);
         }
-        keys[key] = true;
+        k.status = true;
 
         if (key == KeyEvent.VK_BACK_SPACE) {
             if (now.length() > 0) {
@@ -186,6 +200,10 @@ public class Console implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        keys[e.getKeyCode()] = false;
+        int key = e.getKeyCode();
+        KeyStatus k = keyssss.get(key);
+        if (k != null) {
+            k.status = false;
+        }
     }
 }
