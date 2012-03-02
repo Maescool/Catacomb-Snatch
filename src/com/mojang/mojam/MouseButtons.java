@@ -13,6 +13,7 @@ public class MouseButtons {
 	private int y;
 
 	public void setNextState(int button, boolean value) {
+		if (button > 3) return;
 		nextState[button] = value;
 	}
 
