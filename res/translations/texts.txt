@@ -124,6 +124,16 @@ shop.bombTooltipTitle = BOMB
 shop.bombTooltipLine1 = Destroys cracked walls.
 shop.bombTooltipLine2 = Use to create shortcuts.
 
+shop.rifleTooltipTitle = RIFLE
+shop.rifleTooltipLine1 = Default starting weapon.
+shop.rifleTooltipLine2 = Good all-round.
+shop.shotgunTooltipTitle = SHOTGUN
+shop.shotgunTooltipLine1 = Shots cover a large area.
+shop.shotgunTooltipLine2 = High damage, short range.
+shop.raygunTooltipTitle = RAYGUN
+shop.raygunTooltipLine1 = Shots bounce off walls.
+shop.raygunTooltipLine2 = Each bounce increases damage.
+
 titlemenu.start = START
 titlemenu.host = HOST
 titlemenu.join = JOIN
