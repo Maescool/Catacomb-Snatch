@@ -72,7 +72,6 @@ public class Player extends Mob implements LootCollector {
     private boolean dead = false;
     private int deadDelay = 0;
     private int nextWalkSmokeTick = 0;
-    private int regenDelay = 0;
     boolean isImmortal;
     private int characterID;
 
@@ -131,7 +130,6 @@ public class Player extends Mob implements LootCollector {
     private void handleLevelUp() {
         if (xpSinceLastLevelUp() >= nettoXpNeededForLevel(plevel+1)) {
             this.maxHealth++;
-            this.regenDelay = 2;
             plevel++;
             psprint += 0.1;
             maxTimeSprint += 20;
@@ -296,23 +294,6 @@ public class Player extends Mob implements LootCollector {
         minimapIcon = time / 3 % 4;
         if (minimapIcon == 3) {
             minimapIcon = 1;
-        }
-    }
-
-    /**
-     * Handle player health regeneration
-     */    
-    private void regeneratePlayer() {
-        if (regenDelay > 0) {
-            regenDelay--;
-            if (regenDelay == 0) {
-                if (health + 1 < maxHealth) {
-                    health++;
-                } else if (health != maxHealth) {
-                    health = maxHealth;
-                }
-                regenDelay = REGEN_INTERVAL;
-            }
         }
     }
 
@@ -788,8 +769,7 @@ public class Player extends Mob implements LootCollector {
             hurtTime = 25;
             freezeTime = 15;
             health -= damage;
-            regenDelay = REGEN_INTERVAL;
-
+            
             if (health <= 0) {
                 revive();
             } else {
