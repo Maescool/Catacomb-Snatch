@@ -167,4 +167,8 @@ public class Turret extends Building implements IEditable {
 	public Bitmap getBitMapForEditor() {
 		return Art.turret[0][0];
 	}
+	
+	public int getUpgradeLevel() {
+        return upgradeLevel;
+    }
 }

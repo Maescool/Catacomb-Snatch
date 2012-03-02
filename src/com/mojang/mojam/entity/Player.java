@@ -859,5 +859,13 @@ public class Player extends Mob implements LootCollector {
     public Vec2 getPosition() {
         return pos;
     }
-
+    
+    /**
+     * Get current player's characterID
+     * 
+     * @return charakterID
+     */
+    public int getCharacterID() {
+        return this.characterID;
+    }
 }

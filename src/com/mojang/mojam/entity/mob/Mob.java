@@ -6,7 +6,10 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.animation.EnemyDieAnimation;
 import com.mojang.mojam.entity.animation.PlayerFallingAnimation;
+import com.mojang.mojam.entity.animation.ItemFallAnimation;
 import com.mojang.mojam.entity.building.Building;
+import com.mojang.mojam.entity.building.Harvester;
+import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.gui.TitleMenu;
@@ -140,7 +143,10 @@ public abstract class Mob extends Entity {
 			// Can add thing here like a custom regen action
 	}
 	
-	public void regenHealthOf(float a) { this.health += a ; }
+	public void regenHealthOf(float a) { 
+	    this.health += a ;
+	    if (health > maxHealth) health = maxHealth;
+	}
 	
 	public void slideMove(double xa, double ya) {
 		move(xa, ya);
@@ -357,10 +363,19 @@ public abstract class Mob extends Entity {
     	int x=(int)(pos.x/Tile.WIDTH);
     	int y=(int)(pos.y/Tile.HEIGHT);
         if (level.getTile(x, y) instanceof HoleTile) {
-        	level.addEntity(new PlayerFallingAnimation(x*Tile.WIDTH, y*Tile.HEIGHT));
-        	MojamComponent.soundPlayer.playSound("/sound/Fall.wav", (float) pos.x, (float) pos.y);
         	if (!(this instanceof Player)){
-        		remove();
+        	    ItemFallAnimation animation = new ItemFallAnimation(x*Tile.WIDTH, y*Tile.HEIGHT, this.getSprite());
+        	    if(this instanceof Harvester){
+        	        animation.setHarvester();
+        	    }
+        	    level.addEntity(animation);
+        	    remove();
+        	} else {
+        	    level.addEntity(new PlayerFallingAnimation(x*Tile.WIDTH, y*Tile.HEIGHT));
+        	    if (((Player)this).getCharacterID() < 2)
+        	        MojamComponent.soundPlayer.playSound("/sound/falling_male.wav", (float) pos.x, (float) pos.y);
+        	    else
+        	        MojamComponent.soundPlayer.playSound("/sound/falling_female.wav", (float) pos.x, (float) pos.y);
         	}
         	return true;
         }
