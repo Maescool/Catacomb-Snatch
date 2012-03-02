@@ -8,6 +8,7 @@ import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.mob.RailDroid;
+import com.mojang.mojam.entity.mob.SpikeTrap;
 import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.tile.Tile;
