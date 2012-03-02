@@ -11,6 +11,9 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.building.ShopItemBomb;
 import com.mojang.mojam.entity.building.ShopItemHarvester;
+import com.mojang.mojam.entity.building.ShopItemRaygun;
+import com.mojang.mojam.entity.building.ShopItemRifle;
+import com.mojang.mojam.entity.building.ShopItemShotgun;
 import com.mojang.mojam.entity.building.ShopItemTurret;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.level.DifficultyInformation;
@@ -115,10 +118,18 @@ public class GameMode {
 		newLevel.addEntity(new ShopItemTurret(32 * (newLevel.width / 2 - 1.5), 4.5 * 32, Team.Team2));
 		newLevel.addEntity(new ShopItemHarvester(32 * (newLevel.width / 2 - .5), 4.5 * 32, Team.Team2));
 		newLevel.addEntity(new ShopItemBomb(32 * (newLevel.width / 2 + .5), 4.5 * 32, Team.Team2));
-			
+		newLevel.addEntity(new ShopItemRifle(32 * (newLevel.width / 2 - 2.0), 7.5 * 32, Team.Team2));
+		newLevel.addEntity(new ShopItemShotgun(32 * (newLevel.width / 2 - 2.0), 6.5 * 32, Team.Team2));
+		newLevel.addEntity(new ShopItemRaygun(32 * (newLevel.width / 2 - 2.0), 5.5 * 32, Team.Team2));
+		
+		
 		newLevel.addEntity(new ShopItemTurret(32 * (newLevel.width / 2 - 1.5), (newLevel.height - 4.5) * 32, Team.Team1));
 		newLevel.addEntity(new ShopItemHarvester(32 * (newLevel.width / 2 - .5), (newLevel.height - 4.5) * 32, Team.Team1));
 		newLevel.addEntity(new ShopItemBomb(32 * (newLevel.width / 2 + .5), (newLevel.height - 4.5) * 32, Team.Team1));
+		newLevel.addEntity(new ShopItemRifle(32 * (newLevel.width / 2 - 2.0), (newLevel.height - 7.5) * 32, Team.Team1));
+		newLevel.addEntity(new ShopItemShotgun(32 * (newLevel.width / 2 - 2.0), (newLevel.height - 6.5) * 32, Team.Team1));
+		newLevel.addEntity(new ShopItemRaygun(32 * (newLevel.width / 2 - 2.0), (newLevel.height - 5.5) * 32, Team.Team1));
+		
 		
 		newLevel.setTile((newLevel.width / 2) - 1, 7, new UnbreakableRailTile(new SandTile()));	
 	    newLevel.setTile((newLevel.width / 2) - 1, newLevel.height - 8, new UnbreakableRailTile(new SandTile()));

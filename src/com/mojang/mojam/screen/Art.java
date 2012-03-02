@@ -126,6 +126,9 @@ public class Art {
 	public static Bitmap[][] turret3 = cut("/art/building/turret3.png", 32, 32);
 	public static Bitmap bomb = load("/art/building/bomb.png");
 
+	//Weapons
+	public static Bitmap[][] rifle = cut("/art/weapons/weapon_list.png", 32, 32);
+	
 	// Fonts
 	public static Bitmap[][] font_default = cut("/art/fonts/font_default.png", 8, 8);
 	public static Bitmap[][] font_blue = cut("/art/fonts/font_blue.png", 8, 8);
@@ -161,6 +164,8 @@ public class Art {
 	// Bullets and special effects
 	public static Bitmap[][] bullets = cut("/art/effects/bullets.png", 16, 16);
 	public static Bitmap[][] bullet = cut("/art/effects/bullet.png", 16, 16);
+	public static Bitmap buckShot = load("/art/effects/bullet_buckshot.png");
+	public static Bitmap[][] bulletRay = cut("/art/effects/bullet_ray.png", 16, 16);
 	public static Bitmap[][] muzzle = cut("/art/effects/muzzle.png", 16, 16);
 	public static Bitmap[][] fxEnemyDie = cut("/art/effects/fx_enemydie_64.png", 64, 64);
 	public static Bitmap[][] fxSteam24 = cut("/art/effects/fx_steam1_24.png", 24, 24);
