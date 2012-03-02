@@ -175,7 +175,7 @@ public class SoundPlayer implements ISoundPlayer {
 				// effect.
 				return playSound(sourceName, x, y, false, index + 1);
 			}
-			getSoundSystem().stop(indexedSourceName);
+			getSoundSystem().cull(indexedSourceName);
 			getSoundSystem().setPriority(indexedSourceName, false);
 			getSoundSystem().setPosition(indexedSourceName, x, y, 0);
 			getSoundSystem().setAttenuation(indexedSourceName, SoundSystemConfig.ATTENUATION_ROLLOFF);
@@ -183,6 +183,7 @@ public class SoundPlayer implements ISoundPlayer {
 			getSoundSystem().setPitch(indexedSourceName, 1.0f);
 			soundVolume = Options.getAsFloat(Options.SOUND, "1.0f");
 			getSoundSystem().setVolume(indexedSourceName, soundVolume);
+			getSoundSystem().activate(indexedSourceName);
 			getSoundSystem().play(indexedSourceName);
 			return true;
 		}
