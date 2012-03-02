@@ -70,7 +70,8 @@ public class Art {
 	// Player falling
 	private static Bitmap[][] lordLard_falling = cut("/art/player/lord_lard_falling.png", 32, 32);
 	// TODO add other player falling animations
-    
+    public static Bitmap exclamation_mark = load ("/art/effects/exclamation_mark.png");
+	
 	public static Bitmap[][] getPlayerFalling(int characterID) {
         switch (characterID) {
         case LORD_LARD:
