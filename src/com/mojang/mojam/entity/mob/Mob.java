@@ -216,7 +216,26 @@ public abstract class Mob extends Entity {
         
         int start = (int) (health * 21 / maxHealth);
         
-        screen.blit(Art.healthBar[start][0], pos.x - 16, pos.y + healthBarOffset);
+        float one_tenth_hp = (float) (maxHealth / 10f);
+		float three_tenths_hp = one_tenth_hp * 3;
+		float size_tenths_hp = one_tenth_hp * 6;
+		float eigth_tenths_hp = one_tenth_hp * 8;
+		
+		int color = 0;
+		
+		if(health < three_tenths_hp){
+			color = 0xf62800;
+		}else if (health < size_tenths_hp){
+			color = 0xfe7700;
+		}else if (health < eigth_tenths_hp){
+			color = 0xfef115;
+		}else {
+			color = 0x8af116;
+		}
+
+		screen.blit(Art.healthBar_Underlay[start][0], pos.x - 16, pos.y + healthBarOffset);
+		screen.colorBlit(Art.healthBar[start][0], pos.x - 16, pos.y + healthBarOffset, (0xa8 << 24) + color);
+		screen.blit(Art.healthBar_Outline[0][0], pos.x - 16, pos.y + healthBarOffset);
     }
 
 	protected void renderCarrying(Screen screen, int yOffs) {

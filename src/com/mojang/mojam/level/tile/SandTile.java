@@ -54,6 +54,10 @@ public class SandTile extends Tile {
 	}
 
 	@Override
+	public boolean isBuildable() {
+		return true;
+	}
+	
 	public Bitmap getBitMapForEditor() {
 		return Art.floorTiles[5][0];
 	}

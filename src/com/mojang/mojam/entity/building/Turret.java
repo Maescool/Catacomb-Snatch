@@ -8,6 +8,7 @@ import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.mob.RailDroid;
+import com.mojang.mojam.entity.mob.SpikeTrap;
 import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.tile.Tile;
@@ -75,7 +76,7 @@ public class Turret extends Building implements IEditable {
     		Entity closest = null;
     		double closestDist = 99999999.0f;
     		for (Entity e : entities) {
-    			if (!(e instanceof Mob) || (e instanceof RailDroid && e.team == this.team) || e instanceof Bomb)
+    			if (!(e instanceof Mob) || (e instanceof RailDroid && e.team == this.team) || e instanceof Bomb || e instanceof SpikeTrap)
     				continue;
     			if (!((Mob) e).isNotFriendOf(this))
     				continue;

@@ -38,7 +38,7 @@ public class Art {
 	public static Bitmap[][] mapIcons = cut("/art/map/mapicons.png", 5, 5);
 	public static Bitmap shadow = load("/art/shadows/shadow_coin.png");
 	public static Bitmap[][] rails = cut("/art/map/rails.png", 32, 38);
-    public static Bitmap[][] spikes = cut("/art/map/spike_trap_eglerion_32.png", 32, 32);
+    public static Bitmap[][] spikes = cut("/art/map/spiketrap.png", 32, 32);
 
     // Player sheets
 	private static Bitmap[][] lordLard = cut("/art/player/lord_lard_sheet.png", 32, 32);
@@ -172,6 +172,8 @@ public class Art {
 	public static Bitmap[][] fxDust24 = cut("/art/effects/fx_dust1_24.png", 24, 24);
 	public static Bitmap[][] moneyBar = cut("/art/effects/bar_blue.png", 32, 4);
 	public static Bitmap[][] healthBar = cut("/art/effects/bar_green.png", 32, 4);
+	public static Bitmap[][] healthBar_Outline = cut("/art/effects/bar_outline.png", 32, 4);
+	public static Bitmap[][] healthBar_Underlay = cut("/art/effects/bar_green_underlay.png", 32, 4);
 		
 	// Icons
 	public static BufferedImage icon32 = loadBufferedImage("/art/icon/icon32.png");
