@@ -97,7 +97,7 @@ public class Console implements KeyListener {
      * Set Active status to true
      * Closing proccess will be stoped.
      */
-    public void active() {
+    public void activate() {
         active = true;
         closing = false;
         ticks = 0;

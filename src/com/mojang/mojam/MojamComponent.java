@@ -541,7 +541,7 @@ public class MojamComponent extends Canvas implements Runnable,
         if (!isMultiplayer && this.isFocusOwner() && level != null) {
             if (keys.console.wasReleased()) {
                 if (!console.isActive() || console.isClosing()) {
-                    console.active();
+                    console.activate();
                 } else if (console.isActive() && !console.isClosing()) {
                     console.close();
                 }
