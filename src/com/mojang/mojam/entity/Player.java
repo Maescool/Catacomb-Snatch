@@ -823,9 +823,11 @@ public class Player extends Mob implements LootCollector {
         	System.out.println(entitySet.size());
             while (entityIterator.hasNext()) { 
             	Entity e = entityIterator.next();
-            	e.remove();
-            	level.removeEntity(e);
-            	level.removeFromEntityMap(e);
+            	if (!(e instanceof Player) && (!(e instanceof Building) || (e instanceof SpawnerEntity))) { 
+            		e.remove();
+            		level.removeEntity(e);
+            		level.removeFromEntityMap(e);
+            	}
             }
         	this.basePosition();
         }
