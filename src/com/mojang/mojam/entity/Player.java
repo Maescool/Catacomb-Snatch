@@ -814,8 +814,7 @@ public class Player extends Mob implements LootCollector {
         Notifications.getInstance().add(MojamComponent.texts.hasDiedCharacter(characterID));
         carrying = null;
         dropAllMoney();
-        //pos.set(startX, startY);
-        pos.set(1, 1);
+        pos.set(startX, startY);
    	 // If the player is around 0, 0 just kill the entities at the base and then teleport to base .
         if (pos.x >= -10 && pos.x <= 10 && pos.y >= -10 && pos.y <= 10) { 
         	Set<Entity> entitySet = this.level.getEntities(startX - 128, startY - 64, startX + 128, startY + 64);
