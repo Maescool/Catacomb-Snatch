@@ -15,11 +15,10 @@ public class PlayerFallingAnimation extends Animation {
 
     public void render(Screen screen) {
         
-        int anim = life * Art.getPlayerFalling(characterID).length * 3 / duration;
+        int anim = life * 8 * 2 / duration;
         
-        screen.blit(Art.getPlayerFalling(characterID)[anim%4][0], pos.x, pos.y + Tile.HEIGHT - anim*3);
+        screen.blit(Art.getPlayer(characterID)[0][anim%8 + 8], pos.x, pos.y + Tile.HEIGHT - anim*3);
         screen.blit(Art.exclamation_mark, pos.x + 20, pos.y + Tile.HEIGHT - anim*3 - 5);
-        
         Tile tileBelow = level.getTile((int)pos.x/Tile.WIDTH, (int)pos.y/Tile.WIDTH+1);
         if (tileBelow.getName() != HoleTile.NAME) tileBelow.render(screen);
     }

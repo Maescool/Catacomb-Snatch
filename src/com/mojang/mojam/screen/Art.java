@@ -67,26 +67,8 @@ public class Art {
 		return getPlayer(MojamComponent.instance.playerCharacter);
 	}
 	
-	// Player falling
-	private static Bitmap[][] lordLard_falling = cut("/art/player/lord_lard_falling.png", 32, 32);
-	// TODO add other player falling animations
     public static Bitmap exclamation_mark = load ("/art/effects/exclamation_mark.png");
 	
-	public static Bitmap[][] getPlayerFalling(int characterID) {
-        switch (characterID) {
-        case LORD_LARD:
-            return lordLard_falling;
-        case HERR_VON_SPECK:
-            return herrSpeck;
-        case DUCHESS_DONUT:
-            return duchessDonut;
-        case COUNTESS_CRULLER:
-            return countessCruller;
-        default:
-            return lordLard_falling;
-        }
-    }
-
 	// Player starting points
 	private static Bitmap[][] startLordLard = cut("/art/player/start_lordlard.png", 32, 32);
 	private static Bitmap[][] startHerrSpeck = cut("/art/player/start_herrspeck.png", 32, 32);
