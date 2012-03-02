@@ -77,18 +77,16 @@ public class Bitmap {
 	    int gg = backgroundColor & 0xff00;
 	    int bb = backgroundColor & 0xff;
 
-	    int r = (pixelToBlendColor & 0xff0000);
-	    int g = (pixelToBlendColor & 0xff00);
-	    int b = (pixelToBlendColor & 0xff);
+		int r = (pixelToBlendColor & 0xff0000);
+		int g = (pixelToBlendColor & 0xff00);
+		int b = (pixelToBlendColor & 0xff);
 
-	    r = ((r * alpha_background + rr * alpha_blend) >> 8) & 0xff0000;
-	    g = ((g * alpha_background + gg * alpha_blend) >> 8) & 0xff00;
-	    b = ((b * alpha_background + bb * alpha_blend) >> 8) & 0xff;
+		r = ((r * (alpha_background + 1) + rr * (alpha_blend + 1)) >> 8) & 0xff0000;
+		g = ((g * (alpha_background + 1) + gg * (alpha_blend + 1)) >> 8) & 0xff00;
+		b = ((b * (alpha_background + 1) + bb * (alpha_blend + 1)) >> 8) & 0xff;
 
-	    return 0xff000000 | r | g | b;
+		return 0xff000000 | r | g | b;
 	}
-
-
 
 	public void blit(Bitmap bitmap, int x, int y, int width, int height) {
 
