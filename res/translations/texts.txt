@@ -133,6 +133,7 @@ titlemenu.levelEditor = LEVEL EDITOR
 titlemenu.exit = EXIT
 
 upgrade.full = ALREADY FULLY UPGRADED!
+upgrade.shopItem = YOU CAN'T UPGRADE SHOP ITEMS!
 upgrade.notEnoughMoney = YOU DONT HAVE ENOUGH MONEY ({0})
 upgrade.to = UPGRADED TO LEVEL {0}
 
