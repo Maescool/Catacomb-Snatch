@@ -77,11 +77,11 @@ public class Art {
         case LORD_LARD:
             return lordLard_falling;
         case HERR_VON_SPECK:
-            return lordLard_falling;
+            return herrSpeck;
         case DUCHESS_DONUT:
-            return lordLard_falling;
+            return duchessDonut;
         case COUNTESS_CRULLER:
-            return lordLard_falling;
+            return countessCruller;
         default:
             return lordLard_falling;
         }
