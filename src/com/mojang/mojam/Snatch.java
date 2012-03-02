@@ -18,6 +18,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -72,9 +73,10 @@ public final class Snatch
 		try
 		{
 			System.out.println(modDir.getAbsolutePath());
+			readLinksFromFile(new File(mojam.getMojamDir(),"mods.txt"));
 			readFromClassPath(new File(mojam.getMojamDir(),"/mods"));
 			readFromClassPath(modDir);
-			readLinksFromFile(new File(mojam.getMojamDir(),"mods.txt"));
+			//readLinksFromFile(new File(mojam.getMojamDir(),"mods.txt"));
 			System.out.println(modDir.getAbsolutePath());
 		}
 		catch (Exception e)
@@ -172,7 +174,7 @@ public final class Snatch
 		return mojam;
 	}
 
-	private static void addMod(ClassLoader classloader, String s)
+	private static Mod addMod(ClassLoader classloader, String s)
 	{
 		try
 		{
@@ -185,13 +187,14 @@ public final class Snatch
 			Class class1 = classloader.loadClass(s1);
 			if(!(Mod.class).isAssignableFrom(class1))
 			{
-				return;
+				return null;
 			}
 			Mod mod = (Mod) class1.newInstance();
 			if(mod != null)
 			{
 				modList.add(mod);
 				System.out.println("Mod Initialized: "+mod.getClass().getSimpleName());
+				return mod;
 			}
 		}
 		catch (Exception throwable)
@@ -199,6 +202,7 @@ public final class Snatch
 			throwable.printStackTrace();
 			System.out.println((new StringBuilder("Failed to load mod from \"")).append(s).append("\"").toString());
 		}
+		return null;
 	}
 
 	private static void readFromClassPath(File file) throws FileNotFoundException, IOException
@@ -268,9 +272,9 @@ public final class Snatch
 		}
 	}
 	
-	public static void addScript(String s)
+	public static ScriptEngine addScript(String s)
 	{
-		ScriptEngine e = lang.getEngineByExtension(s.substring(s.indexOf('.')+1));
+		ScriptEngine e = lang.getEngineByExtension(s.substring(s.lastIndexOf('.')+1));
 		/*for(ScriptEngineFactory factory:lang.getEngineFactories())
 		{
 			System.out.println(factory.getLanguageName()+":"+factory.getEngineName());
@@ -294,12 +298,12 @@ public final class Snatch
 		catch (NullPointerException e1)
 		{
 			System.out.println("Could not initialise mod "+s);
-			//e1.printStackTrace();
 		}
 		catch (ScriptException e1)
 		{
 			e1.printStackTrace();
 		}
+		return e;
 	}
 
 	@Deprecated
@@ -519,15 +523,19 @@ public final class Snatch
 	    line = stringBuilder.toString();
 	    
 	    String[] links = line.split("\n|\r");
+	    List<String> stringList = new LinkedList();
 	    for(String s:links)
 	    {
 	    	File f1 = new File(mojam.getMojamDir(),"/mods/"+s.substring(s.lastIndexOf('/')+1));
-	    	System.out.print("Debug: "+s);//TODO
-	    	if(upToDate(s))
+	    	if(!upToDate(s))
 	    	{
 	    		File f2 = downloadFile(s,f1.getAbsolutePath());
-	    		if(f2.exists())	addScript(f1.getAbsolutePath());
+	    		stringList.add(f2.getAbsolutePath());
 	    	}
+	    }
+	    for(String s:stringList)
+	    {
+	    	System.out.println(addScript(s));
 	    }
 	}
 	
