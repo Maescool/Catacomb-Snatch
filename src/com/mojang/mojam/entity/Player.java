@@ -1,6 +1,9 @@
 package com.mojang.mojam.entity;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
+import java.util.Set;
 
 import com.mojang.mojam.Keys;
 import com.mojang.mojam.MojamComponent;
@@ -9,6 +12,7 @@ import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.animation.SmokePuffAnimation;
 import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.building.Harvester;
+import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.loot.LootCollector;
@@ -171,21 +175,6 @@ public class Player extends Mob implements LootCollector {
     
     @Override
     public void tick() {
-    	
-    	 // If the player is at 0, 0 just kill the entities at the base and then teleport to base .
-    	if (pos.x == 0 && pos.y == 0) { 
-    		if (team == 0) for (Entity e : level.getEntities(0, level.height - 10, level.width, level.height)) {
-    			e.remove();
-    			level.removeEntity(e);
-    			level.removeFromEntityMap(e);
-    		}
-    		if (team == 1) for (Entity e : level.getEntities(0, 0, level.width, 9)) {
-    			e.remove();
-    			level.removeEntity(e);
-    			level.removeFromEntityMap(e);
-    		}
-    		this.basePosition();
-    	}
 
         // If the mouse is used, update player orientation before level tick
         if (!mouseButtons.mouseHidden) {
@@ -825,7 +814,21 @@ public class Player extends Mob implements LootCollector {
         Notifications.getInstance().add(MojamComponent.texts.hasDiedCharacter(characterID));
         carrying = null;
         dropAllMoney();
-        pos.set(startX, startY);
+        //pos.set(startX, startY);
+        pos.set(1, 1);
+   	 // If the player is around 0, 0 just kill the entities at the base and then teleport to base .
+        if (pos.x >= -10 && pos.x <= 10 && pos.y >= -10 && pos.y <= 10) { 
+        	Set<Entity> entitySet = this.level.getEntities(startX - 128, startY - 64, startX + 128, startY + 64);
+        	Iterator<Entity> entityIterator = entitySet.iterator();
+        	System.out.println(entitySet.size());
+            while (entityIterator.hasNext()) { 
+            	Entity e = entityIterator.next();
+            	e.remove();
+            	level.removeEntity(e);
+            	level.removeFromEntityMap(e);
+            }
+        	this.basePosition();
+        }
         health = maxHealth;
     }
     

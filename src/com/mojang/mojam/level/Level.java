@@ -176,7 +176,7 @@ public class Level {
 
 		return result;
 	}
-
+	
 	public Set<Entity> getEntities(BB bb, Class<? extends Entity> c) {
 		return getEntities(bb.x0, bb.y0, bb.x1, bb.y1, c);
 	}
