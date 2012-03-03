@@ -151,11 +151,11 @@ public class Console implements KeyListener {
             int xOffset = xLoc;
             int yOffset = yLoc;
             if (!closing) {
-                Font.defaultFont().drawAlpha(screen, now, xOffset, yOffset, alpha);
+                Font.defaultFont().drawOpaque(screen, "> "+now, xOffset, yOffset, alpha);
             }
             yOffset -= 8 * memory.size() + 8;
             for (int i = 0; i < memory.size(); i++) {
-                Font.defaultFont().drawAlpha(screen, memory.get(i), xOffset, (yOffset += 8), alpha);
+                Font.defaultFont().drawOpaque(screen, "> "+memory.get(i), xOffset, (yOffset += 8), alpha);
             }
         }
     }
