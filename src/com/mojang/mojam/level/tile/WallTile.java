@@ -16,7 +16,7 @@ public class WallTile extends Tile {
 	private static final String NAME = "WALL";
 
 	public WallTile() {
-		img = TurnSynchronizer.synchedRandom.nextInt(20);
+		img = TurnSynchronizer.synchedRandom.nextInt(Art.wallTileColors.length);
 		minimapColor = Art.wallTileColors[img][0];
 	}
 	
