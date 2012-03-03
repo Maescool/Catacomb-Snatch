@@ -118,8 +118,6 @@ public class CreditsScreen extends GuiMenu {
 
 	@Override
 	public void buttonPressed(ClickableComponent button) {
-		// TODO Auto-generated method stub
-
 	}
 
 }
