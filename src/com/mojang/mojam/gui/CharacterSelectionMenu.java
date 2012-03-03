@@ -5,7 +5,6 @@ import java.awt.event.KeyEvent;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.Options;
-import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
@@ -34,7 +33,7 @@ public class CharacterSelectionMenu extends GuiMenu {
 		int gameWidth = MojamComponent.GAME_WIDTH;
 		int gameHeight = MojamComponent.GAME_HEIGHT;
 		xOffset = (gameWidth - (CharacterButton.WIDTH * 2 + 20)) / 2;
-		yOffset = (gameHeight - (CharacterButton.HEIGHT * 2 + 20)) / 2;
+		yOffset = (gameHeight - (CharacterButton.HEIGHT * 2 + 20)) / 2 - 20;
 		selected = lordLard = (CharacterButton) addButton(new CharacterButton(
 				TitleMenu.CHARACTER_BUTTON_ID, Art.LORD_LARD, Art.getPlayer(Art.LORD_LARD)[0][6],
 				xOffset, yOffset));
@@ -83,9 +82,8 @@ public class CharacterSelectionMenu extends GuiMenu {
 				MojamComponent.GAME_WIDTH / 2, yOffset - 24, Font.Align.CENTERED);
 		if (focus == back || focus == select) {
 			int frame = (walkTime / 4 % 6 + 6) % 6;
-			
-			screen.blit(Art.getPlayer(selected.getCharacterID())[frame][(walkTime / 32) % 8], focus.getX() - 64 - 40,
-					focus.getY() - 8);
+			screen.blit(Art.getPlayer(selected.getCharacterID())[frame][(walkTime / 32) % 8],
+					MojamComponent.GAME_WIDTH / 2 - 16, MojamComponent.GAME_HEIGHT / 2 - 35);
 		}
 	}
 
