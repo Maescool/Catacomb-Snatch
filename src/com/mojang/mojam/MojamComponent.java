@@ -176,6 +176,13 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		LevelList.createLevelList();
 	}
 
+	public void setLocale(String locale) {
+		setLocale(new Locale(locale));
+		Options.set(Options.LOCALE, locale);
+		Options.saveProperties();
+		notifyLocaleChange();
+	}
+
 	public void setLocale(Locale locale) {
 		MojamComponent.locale = locale;
 		MojamComponent.texts = new Texts(locale);
@@ -187,19 +194,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public void notifyLocaleChange(){
 		Stack<GuiMenu> menuClone = (Stack<GuiMenu>) menuStack.clone();
 		
-		GuiMenu menu = null;
-		
-		while(!menuClone.isEmpty()){
-			menu = menuClone.pop();
-			if (menu instanceof OptionsMenu) {
-				((OptionsMenu) menu).change_locale();
-			}
-			if (menu instanceof TitleMenu) {
-				((TitleMenu) menu).change_locale();
-			}
-			if (menu instanceof PauseMenu) {
-				((PauseMenu) menu).change_locale();
-			}
+		while (!menuClone.isEmpty()) {
+			menuClone.pop().change_locale();
 		}
 	}
 
@@ -846,70 +842,37 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public void handleAction(int id) {
 		switch (id) {
 		case TitleMenu.LOCALE_EN_ID:
-			setLocale(new Locale("en"));
-			Options.set(Options.LOCALE, "en");
-			Options.saveProperties();
-			notifyLocaleChange();
+			setLocale("en");
 			break;
 		case TitleMenu.LOCALE_DE_ID:
-			setLocale(new Locale("de"));
-			Options.set(Options.LOCALE, "de");
-			Options.saveProperties();
-			notifyLocaleChange();
+			setLocale("de");
 			break;
 		case TitleMenu.LOCALE_ES_ID:
-			setLocale(new Locale("es"));
-			Options.set(Options.LOCALE, "es");
-			Options.saveProperties();
-			notifyLocaleChange();
+			setLocale("es");
 			break;
 		case TitleMenu.LOCALE_FR_ID:
-			setLocale(new Locale("fr"));
-			Options.set(Options.LOCALE, "fr");
-			Options.saveProperties();
-			notifyLocaleChange();
+			setLocale("fr");
 			break;
 		case TitleMenu.LOCALE_IN_ID:
-			setLocale(new Locale("in"));
-			Options.set(Options.LOCALE, "in");
-			Options.saveProperties();
-			notifyLocaleChange();
+			setLocale("in");
 			break;
 		case TitleMenu.LOCALE_IT_ID:
-			setLocale(new Locale("it"));
-			Options.set(Options.LOCALE, "it");
-			Options.saveProperties();
-			notifyLocaleChange();
+			setLocale("it");
 			break;
 		case TitleMenu.LOCALE_NL_ID:
-			setLocale(new Locale("it"));
-			Options.set(Options.LOCALE, "nl");
-			Options.saveProperties();
-			notifyLocaleChange();
+			setLocale("nl");
 			break;
 		case TitleMenu.LOCALE_PT_BR_ID:
-			setLocale(new Locale("it"));
-			Options.set(Options.LOCALE, "pt_br");
-			Options.saveProperties();
-			notifyLocaleChange();
+			setLocale("pt_br");
 			break;
 		case TitleMenu.LOCALE_RU_ID:
-			setLocale(new Locale("it"));
-			Options.set(Options.LOCALE, "ru");
-			Options.saveProperties();
-			notifyLocaleChange();
+			setLocale("ru");
 			break;
 		case TitleMenu.LOCALE_SI_ID:
-			setLocale(new Locale("it"));
-			Options.set(Options.LOCALE, "si");
-			Options.saveProperties();
-			notifyLocaleChange();
+			setLocale("si");
 			break;
 		case TitleMenu.LOCALE_SV_ID:
-			setLocale(new Locale("it"));
-			Options.set(Options.LOCALE, "sv");
-			Options.saveProperties();
-			notifyLocaleChange();
+			setLocale("sv");
 			break;
 		case TitleMenu.RETURN_TO_TITLESCREEN:
 			clearMenus();
