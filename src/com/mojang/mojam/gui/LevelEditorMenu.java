@@ -538,6 +538,7 @@ public class LevelEditorMenu extends GuiMenu {
             clicked = false;
         }
     }
+    
 
     @Override
     public void keyPressed(KeyEvent e) {

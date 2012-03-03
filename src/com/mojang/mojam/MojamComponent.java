@@ -821,6 +821,10 @@ public class MojamComponent extends Canvas implements Runnable,
 			handleAction(button.getId());
 		}
 	}
+	
+	@Override
+	public void buttonHovered(ClickableComponent clickableComponent) {		
+	}
 
 	public void handleAction(int id) {
 		switch (id) {
