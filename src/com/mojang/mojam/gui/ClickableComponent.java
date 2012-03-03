@@ -9,6 +9,7 @@ public abstract class ClickableComponent extends VisibleComponent {
 
 	private List<ButtonListener> listeners;
 
+	public boolean enabled = true;
 	private boolean isPressed;
 	protected boolean performClick = false;
 
@@ -23,7 +24,7 @@ public abstract class ClickableComponent extends VisibleComponent {
 		int mx = mouseButtons.getX() / 2;
 		int my = mouseButtons.getY() / 2;
 		isPressed = false;
-		if (mx >= getX() && my >= getY() && mx < (getX() + getWidth()) && my < (getY() + getHeight())) {
+		if (enabled && mx >= getX() && my >= getY() && mx < (getX() + getWidth()) && my < (getY() + getHeight())) {
 			if (mouseButtons.isRelased(1)) {
 				postClick();
 			} else if (mouseButtons.isDown(1)) {

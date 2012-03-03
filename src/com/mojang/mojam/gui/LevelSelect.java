@@ -70,6 +70,12 @@ public class LevelSelect extends GuiMenu {
 	private void goToPage(int page) {
         currentPage = page;
         outdatedLevelButtons = true;
+
+    	// Disable page buttons
+    	if (levels.size() > LEVELS_PER_PAGE) {
+    		previousPageButton.enabled = hasPreviousPage();
+    		nextPageButton.enabled = hasNextPage();
+    	}
     }
 
     private void updateLevelButtons() {
@@ -128,21 +134,6 @@ public class LevelSelect extends GuiMenu {
     	screen.blit(Art.emptyBackground, 0, 0);
     	super.render(screen);
     	Font.defaultFont().draw(screen, MojamComponent.texts.getStatic("levelselect.title"), 20, 20);
-    	
-    	// Draw disabled page buttons
-    	if (levels.size() > LEVELS_PER_PAGE) {
-	    	if (!hasPreviousPage()) {
-	    	    previousPageButton.render(screen);
-	    	    screen.fill(previousPageButton.getX() + 4, previousPageButton.getY() + 4,
-	    	            previousPageButton.getWidth() - 8, previousPageButton.getHeight() - 8, 0x75401f);
-	    	}
-	        if (!hasNextPage()) {
-	            nextPageButton.render(screen);
-	            screen.fill(nextPageButton.getX() + 4, nextPageButton.getY() + 4,
-	                    nextPageButton.getWidth() - 8, nextPageButton.getHeight() - 8, 0x75401f);
-	        }
-    	}
-    	
     }
 
     @Override

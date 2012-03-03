@@ -1124,4 +1124,8 @@ public class MojamComponent extends Canvas implements Runnable,
 			e.printStackTrace();
 		}
 	}
+	
+	public static int clampi(int val, int min, int max){
+		return (val < min) ? min : (val > max) ? max : val;
+	}
 }
