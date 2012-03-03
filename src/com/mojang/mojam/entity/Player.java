@@ -450,22 +450,20 @@ public class Player extends Mob implements LootCollector {
     /**
      * Handle rail building
      * 
-     * @param xa Position change on the x axis
-     * @param ya Position change on the y axis
+     * @param x current position's X coordinate
+     * @param y current position's Y coordinate
      */
     private void handleRailBuilding(int x, int y) {
-
+    	boolean outsideLevel = y < 8 || y > level.height - 9;
         if (level.getTile(x, y).isBuildable()) {
-            if (score >= COST_RAIL && time - lastRailTick >= RailDelayTicks) {
+        	
+            if (score >= COST_RAIL && time - lastRailTick >= RailDelayTicks && !outsideLevel) {
                 lastRailTick = time;
                 level.placeTile(x, y, new RailTile(level.getTile(x, y)), this);
                 payCost(COST_RAIL);
-            } else if (score < COST_RAIL) {
-            	if(this.team == MojamComponent.localTeam) {
-            		  Notifications.getInstance().add(MojamComponent.texts.buildRail(COST_RAIL));
-            	}
-              
-            }
+            } else if (score < COST_RAIL && this.team == MojamComponent.localTeam) {
+            	Notifications.getInstance().add(MojamComponent.texts.buildRail(COST_RAIL));
+            }            
         } else if (level.getTile(x, y) instanceof RailTile) {
             if ((y < 8 && team == Team.Team2) || (y > level.height - 9 && team == Team.Team1)) {
                 if (score >= COST_DROID) {
