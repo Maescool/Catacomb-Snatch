@@ -65,8 +65,6 @@ public class LevelSelect extends GuiMenu {
         
         // Create level
 		goToPage(0);
-		
-		addButtonListener(this);
 	}
 
 	private void goToPage(int page) {
@@ -170,6 +168,7 @@ public class LevelSelect extends GuiMenu {
             goToPage(currentPage + 1);
         }
     }
+    
 
     @Override
     public void keyPressed(KeyEvent e) {

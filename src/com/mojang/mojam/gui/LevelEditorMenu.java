@@ -3,6 +3,7 @@ package com.mojang.mojam.gui;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
@@ -260,10 +261,12 @@ public class LevelEditorMenu extends GuiMenu {
         screen.blit(minimap, screen.w - minimap.w - 6, 6);
         
         // selected tile name
-        Font.defaultFont().drawCentered(screen, selectedButton != null ? selectedButton.getTile().getName() : "", MENU_WIDTH / 2, 13);
+        Font.defaultFont().draw(screen, selectedButton != null ? selectedButton.getTile().getName() : "",
+        		MENU_WIDTH / 2, 13, Font.Align.CENTERED);
         
         // current page and total pages
-        Font.defaultFont().drawCentered(screen, (currentPage + 1) + "/" + totalPages , MENU_WIDTH / 2, 261);
+        Font.defaultFont().draw(screen, (currentPage + 1) + "/" + totalPages,
+        		MENU_WIDTH / 2, 261, Font.Align.CENTERED);
     }
        
     private void updateTileButtons() {
@@ -401,8 +404,7 @@ public class LevelEditorMenu extends GuiMenu {
         }
     }
     
-    private void saveLevel(String name) {
-        File newLevel = new File(LevelList.getBaseDir(), name + ".bmp");
+    private boolean saveLevel(String name) {
 
         BufferedImage image = new BufferedImage(LEVEL_WIDTH, LEVEL_HEIGHT, BufferedImage.TYPE_INT_RGB);
         for (int x = 0; x < LEVEL_HEIGHT; x++) {
@@ -412,13 +414,18 @@ public class LevelEditorMenu extends GuiMenu {
         }
 
         try {
+            File newLevel = new File(LevelList.getBaseDir(), name + ".bmp");
+            newLevel.createNewFile();
             ImageIO.write(image, "BMP", newLevel);
+        } catch (FileNotFoundException ex) {
+            System.out.println("FileNotFoundException : " + ex);
+            return true;
         } catch (IOException ioe) {
-            System.out.println("Error saving new level: " + ioe);
+            System.out.println("IOException : " + ioe);
+            return false;
         }
-        removeText(levelName);
-        levelName = new Text(1,"+ " + name, 120, 5);
-        addText(levelName);
+
+        return true;
     }
     
     private void createGUI() {
@@ -446,10 +453,10 @@ public class LevelEditorMenu extends GuiMenu {
             @Override
             public void render(Screen screen) {
                 super.render(screen);
-                Font.defaultFont().drawCentered(screen, MojamComponent.texts.getStatic("leveleditor.enterLevelName"),
-                        getX() + getWidth() / 2, getY() + 20);
-                Font.defaultFont().drawCentered(screen, saveLevelName + "_",
-                        getX() + getWidth() / 2, getY() + 40);
+                Font.defaultFont().draw(screen, MojamComponent.texts.getStatic("leveleditor.enterLevelName"),
+                        getX() + getWidth() / 2, getY() + 20, Font.Align.CENTERED);
+                Font.defaultFont().draw(screen, saveLevelName + "_",
+                        getX() + getWidth() / 2, getY() + 40, Font.Align.CENTERED);
             }
         };
 
@@ -479,8 +486,13 @@ public class LevelEditorMenu extends GuiMenu {
         // save menu buttons
         if (saveMenuVisible) {
             if (button == confirmeSaveButton) {
-                saveLevel(saveLevelName);
-                updateLevels();
+                if (saveLevel(saveLevelName)) {
+                    removeText(levelName);
+                    levelName = new Text(1, "+ " + saveLevelName, 120, 5);
+                    addText(levelName);
+                    
+                    updateLevels();
+                }
             }
             
             if (button == confirmeSaveButton || button == cancelSaveButton) {
@@ -526,6 +538,7 @@ public class LevelEditorMenu extends GuiMenu {
             clicked = false;
         }
     }
+    
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -600,7 +613,9 @@ public class LevelEditorMenu extends GuiMenu {
             if (e.getKeyChar() == KeyEvent.VK_BACK_SPACE && saveLevelName.length() > 0) {
                 saveLevelName = saveLevelName.substring(0, saveLevelName.length() - 1);
             } else {
-                saveLevelName += e.getKeyChar();
+                if (e.getKeyChar() == KeyEvent.VK_ENTER) return;
+                
+                saveLevelName += e.getKeyChar();;
             }
         }
     }

@@ -15,6 +15,7 @@ import com.mojang.mojam.level.gamemode.ILevelTickItem;
 import com.mojang.mojam.level.gamemode.IVictoryConditions;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.Tile;
+import com.mojang.mojam.level.tile.AnimatedTile;
 import com.mojang.mojam.level.tile.WallTile;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.math.Vec2;
@@ -95,6 +96,9 @@ public class Level {
 				if (neighbour != null)
 					neighbour.neighbourChanged(tile);
 			}
+		}
+		if(tile instanceof AnimatedTile) { 
+			tickItems.add((ILevelTickItem) tile);
 		}
 	}
 
@@ -320,10 +324,17 @@ public class Level {
 				}
 
 				yt = y - (height - 8);
-				if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4
-						&& (xt != 3 || yt > 0)) {
-					screen.blit(Art.getPlayerBase(player1Character)[xt][yt], x * Tile.WIDTH, y
-							* Tile.HEIGHT);
+				if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (xt != 3 || yt > 0)) {
+					screen.blit(Art.getPlayerBase(player1Character)[xt][yt], x * Tile.WIDTH, y * Tile.HEIGHT);
+					if ((xt == 0 || xt == 1 || xt == 5 || xt == 6) && yt == 0) {
+						screen.blit(Art.shadow_north, x * Tile.WIDTH, y * Tile.HEIGHT);
+					}
+					if ((xt == 2) && yt == 0) {
+						screen.blit(Art.shadow_north_west, x * Tile.WIDTH, y * Tile.HEIGHT);
+					}
+					if ((xt == 4) && yt == 0) {
+						screen.blit(Art.shadow_north_east, x * Tile.WIDTH + Tile.WIDTH - Art.shadow_east.w, y * Tile.HEIGHT);
+					}
 					continue;
 				}
 				if (canSee(x, y)) {

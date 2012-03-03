@@ -7,7 +7,7 @@ import com.mojang.mojam.screen.Bitmap;
 
 public class SpawnerForSnake extends SpawnerEntity {
 
-	public static final int COLOR = 0x009900;
+	public static final int COLOR = 0xff009900;
 
 	public SpawnerForSnake(double x, double y) {
 		super(x, y);

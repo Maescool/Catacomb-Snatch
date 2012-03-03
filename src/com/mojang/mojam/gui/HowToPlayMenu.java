@@ -44,11 +44,11 @@ public class HowToPlayMenu extends GuiMenu {
 
 		// Game goal
 		Font font = Font.defaultFont();
-		font.drawCentered(screen, MojamComponent.texts.getStatic("help.goal") + ":", goalX, goalTopMargin);
-		font.drawCentered(screen, MojamComponent.texts.getStatic("help.help1"), goalX, goalTopMargin+10);
-		font.drawCentered(screen, MojamComponent.texts.getStatic("help.help2"), goalX, goalTopMargin+20);
-		font.drawCentered(screen, MojamComponent.texts.getStatic("help.help3"), goalX, goalTopMargin+30);
-		font.drawCentered(screen, MojamComponent.texts.getStatic("help.help4"), goalX, goalTopMargin+40);
+		font.draw(screen, MojamComponent.texts.getStatic("help.goal") + ":", goalX, goalTopMargin, Font.Align.CENTERED);
+		font.draw(screen, MojamComponent.texts.getStatic("help.help1"), goalX, goalTopMargin+10, Font.Align.CENTERED);
+		font.draw(screen, MojamComponent.texts.getStatic("help.help2"), goalX, goalTopMargin+20, Font.Align.CENTERED);
+		font.draw(screen, MojamComponent.texts.getStatic("help.help3"), goalX, goalTopMargin+30, Font.Align.CENTERED);
+		font.draw(screen, MojamComponent.texts.getStatic("help.help4"), goalX, goalTopMargin+40, Font.Align.CENTERED);
 		
 		// Turret
 		int line = 102;
@@ -121,8 +121,7 @@ public class HowToPlayMenu extends GuiMenu {
 	}
 
 	@Override
-	public void buttonPressed(ClickableComponent button) {
-		
+	public void buttonPressed(ClickableComponent button) {	
 	}
 
 }
