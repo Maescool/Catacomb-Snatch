@@ -38,7 +38,7 @@ public class UnpassableSandTile extends Tile {
 	
 	@Override
 	public Bitmap getBitMapForEditor() {
-		return Art.floorTiles[5][0];
+		return Art.floorTiles[6][0];
 	}
 	
 	@Override
