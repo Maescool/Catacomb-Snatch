@@ -9,6 +9,7 @@ public class ShopItemShotgun extends ShopItem {
     public ShopItemShotgun(double x, double y, int team) {
         super("shotgun",x, y, team, 300, 5);
         setSprite(Art.rifle[0][0]);
+        teamTooltipYOffset = (team == 2) ? 153 : -63; 
     }
 
     public void useAction(Player player) {

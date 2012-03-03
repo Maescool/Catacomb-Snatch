@@ -19,7 +19,7 @@ abstract class ShopItem extends Building {
 	private Bitmap image;
     private final int cost;
     private int effectiveCost;
-   
+    public int teamTooltipYOffset;
 
     public ShopItem(String name, double x, double y, int team, int cost, int yOffset) {
         super(x, y, team);
@@ -28,6 +28,7 @@ abstract class ShopItem extends Building {
     	this.cost = (Options.getAsBoolean(Options.CREATIVE)) ? 0:cost;
     	yOffs = yOffset;
     	image = null;
+    	teamTooltipYOffset = (team == 2) ? 90 : 0;
         isImmortal = true;
     }
 
@@ -53,7 +54,6 @@ abstract class ShopItem extends Building {
 		// Draw iiAtlas' shop item info graphics, thanks whoever re-wrote this!
 		if (highlight) {
 		        Bitmap image = getSprite();
-		        int teamYOffset = (team == 2) ? 90 : 0;
 		        
 		        String[] tooltip = this.getTooltip();
 		        int width = getLongestWidth(tooltip, Font.FONT_WHITE_SMALL)+4;
@@ -62,10 +62,10 @@ abstract class ShopItem extends Building {
 		        Font font = Font.FONT_GOLD_SMALL;
 		        screen.blit(Bitmap.tooltipBitmap(width, height),
                         (int)(pos.x - image.w / 2 - 10),
-                        (int)(pos.y + 20 - teamYOffset), width, height);
+                        (int)(pos.y + 20 - teamTooltipYOffset), width, height);
 
 		        for (int i=0; i<tooltip.length; i++) {
-		            font.draw(screen, tooltip[i], (int)(pos.x - image.w + 8), (int)pos.y + 22 - teamYOffset + (i==0?0:1) + i*(font.getFontHeight()+2));
+		            font.draw(screen, tooltip[i], (int)(pos.x - image.w + 8), (int)pos.y + 22 - teamTooltipYOffset + (i==0?0:1) + i*(font.getFontHeight()+2));
 		            font = Font.FONT_WHITE_SMALL;
 		        }
 		}
