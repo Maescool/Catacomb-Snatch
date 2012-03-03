@@ -392,6 +392,14 @@ public abstract class Mob extends Entity {
             } else {
                 int characterID = ((Player)this).getCharacterID();
                 level.addEntity(new PlayerFallingAnimation(x*Tile.WIDTH, y*Tile.HEIGHT, characterID));
+                if (((Player)this).isCarrying()){
+                    ItemFallAnimation animation = new ItemFallAnimation(x*Tile.WIDTH, (y-1)*Tile.HEIGHT, ((Player)this).carrying.getSprite());
+                    if(((Player)this).carrying instanceof Harvester){
+                        animation.setHarvester();
+                    }
+                    level.addEntity(animation);
+                    ((Player)this).carrying.remove();
+                }
                 if (characterID < 2)
                     MojamComponent.soundPlayer.playSound("/sound/falling_male.wav", (float) pos.x, (float) pos.y);
                 else
