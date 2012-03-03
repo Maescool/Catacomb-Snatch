@@ -1,9 +1,7 @@
 package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
-
 import paulscode.sound.SoundSystem;
-
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
 import com.mojang.mojam.screen.Art;
@@ -61,10 +59,11 @@ public class OptionsMenu extends GuiMenu {
 				volume));
 
 		ClickableComponent musicVol = addButton(new Slider(TitleMenu.MUSIC,
-				MojamComponent.texts.getStatic("options.music"), xOffset - xOffset / 3 - 6,
-				yOffset += offset, musicVolume));
+				MojamComponent.texts.getStatic("options.music"), xOffset - xOffset / 3 - 20,
+				yOffset += offset + 2, musicVolume));
+		
 		ClickableComponent soundsVol = addButton(new Slider(TitleMenu.SOUND,
-				MojamComponent.texts.getStatic("options.sounds"), xOffset + xOffset / 3 + 6,
+				MojamComponent.texts.getStatic("options.sounds"), xOffset + xOffset / 3 + 20,
 				yOffset, soundsVolume));
 
 		ClickableComponent creativeModeBtn = addButton(new Checkbox(TitleMenu.CREATIVE_ID,
