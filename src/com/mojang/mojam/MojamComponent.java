@@ -33,7 +33,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import com.mojang.mojam.entity.Player;
-import com.mojang.mojam.entity.building.Base;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.Button;
 import com.mojang.mojam.gui.ButtonListener;
@@ -306,12 +305,10 @@ public class MojamComponent extends Canvas implements Runnable,
 				/ 2 - 16, (level.height - 5 - 1) * Tile.HEIGHT - 16, Team.Team1, characterID);
 		players[0].setFacing(4);
 		level.addEntity(players[0]);
-		level.addEntity(new Base(34 * Tile.WIDTH, 7 * Tile.WIDTH, Team.Team1));
 		if (isMultiplayer) {
 			players[1] = new Player(synchedKeys[1], synchedMouseButtons[1], level.width
 					* Tile.WIDTH / 2 - 16, 7 * Tile.HEIGHT - 16, Team.Team2, characterID);
 			level.addEntity(players[1]);
-			level.addEntity(new Base(32 * Tile.WIDTH - 20, 32 * Tile.WIDTH - 20, Team.Team2));
 		} else {
 			players[1] = null;
 		}

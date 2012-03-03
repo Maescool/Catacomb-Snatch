@@ -305,13 +305,18 @@ public class Level {
 	}
 	
 	private void renderTilesAndBases(Screen screen, int x0, int y0, int x1, int y1){
+		// go through each currently visible cell
 	    for (int y = y0; y <= y1; y++) {
             for (int x = x0; x <= x1; x++) {
+            	
+				// draw sand outside the level
                 if (x < 0 || x >= width || y < 0 || y >= height) {
                     screen.blit(Art.floorTiles[5][0], x * Tile.WIDTH, y
                             * Tile.HEIGHT);
                     continue;
                 }
+
+				// if we are in the center area (4*7 Tiles): draw player bases
                 int xt = x - (width / 2) + 4;
                 int yt = y - 4;
                 if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (xt != 3 || yt < 3)) {
@@ -334,6 +339,7 @@ public class Level {
                     }
                     continue;
                 }
+                
                 if (canSee(x, y)) {
                     tiles[x + y * width].render(screen);
                 }
@@ -657,7 +663,7 @@ public class Level {
 		}
 	}
 	
-	// counts how many of a certain entitiy class are in play
+	// counts how many of a certain entity class are in play
 	public <T> int countEntities(Class<T> entityType) {
 		int count = 0;
 		for (Iterator<Entity> it = entities.iterator(); it.hasNext();) {
