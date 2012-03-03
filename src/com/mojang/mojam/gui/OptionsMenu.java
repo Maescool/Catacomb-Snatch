@@ -61,10 +61,10 @@ public class OptionsMenu extends GuiMenu {
 				volume));
 
 		ClickableComponent musicVol = addButton(new Slider(TitleMenu.MUSIC,
-				MojamComponent.texts.getStatic("options.music"), xOffset - xOffset / 3 - 6,
-				yOffset += offset, musicVolume));
+				MojamComponent.texts.getStatic("options.music"), xOffset - xOffset / 3 - 20,
+				yOffset += offset + 1, musicVolume));
 		ClickableComponent soundsVol = addButton(new Slider(TitleMenu.SOUND,
-				MojamComponent.texts.getStatic("options.sounds"), xOffset + xOffset / 3 + 6,
+				MojamComponent.texts.getStatic("options.sounds"), xOffset + xOffset / 3 + 20,
 				yOffset, soundsVolume));
 
 		ClickableComponent creativeModeBtn = addButton(new Checkbox(TitleMenu.CREATIVE_ID,
