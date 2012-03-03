@@ -130,7 +130,7 @@ shop.rifleTooltipLine2 = Good all-round.
 shop.shotgunTooltipTitle = SHOTGUN
 shop.shotgunTooltipLine1 = Shots cover a large area.
 shop.shotgunTooltipLine2 = High damage, short range.
-shop.raygunTooltipTitle = RAYGUN
+shop.raygunTooltipTitle = ENERGY GUN
 shop.raygunTooltipLine1 = Shots bounce off walls.
 shop.raygunTooltipLine2 = Each bounce increases damage.
 

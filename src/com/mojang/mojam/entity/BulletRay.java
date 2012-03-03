@@ -3,6 +3,7 @@ package com.mojang.mojam.entity;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.building.Bomb;
 import com.mojang.mojam.entity.mob.*;
+import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.*;
 
 public class BulletRay extends Bullet {
@@ -12,7 +13,7 @@ public class BulletRay extends Bullet {
 	public int duration;
 	private int maxBounceNumber;
 	private double previuosPositionX, previuosPositionY;
-	private int facing;
+	private int frame;
 	private float damage;
 
 	public BulletRay(Mob e, double xa, double ya, float damage) {
@@ -23,10 +24,9 @@ public class BulletRay extends Bullet {
 		this.ya = ya * 6;
 		this.setSize(4, 4);
 		physicsSlide = false;
-		duration = 40;
+		duration = 50;
 		maxBounceNumber = 5;
-		double angle = (Math.atan2(ya, xa) + Math.PI * 1.625);
-		facing = (8 + (int) (angle / Math.PI * 4)) & 7;
+		frame = 0;
 		this.damage = damage;
 	}
 
@@ -57,10 +57,7 @@ public class BulletRay extends Bullet {
 				ya *= 1.2;
 				duration += 5;
 				damage *= 1.5;
-				
-				//Face the bullet in the correct direction after bounce
-				double angle = (Math.atan2(ya, xa) + Math.PI * 1.625);
-				facing = (8 + (int) (angle / Math.PI * 4)) & 7;
+
 				maxBounceNumber--;
 			}
 			else hit = true;
@@ -68,6 +65,7 @@ public class BulletRay extends Bullet {
 		if (hit && !removed) {
 			remove();
 		}
+		frame = (frame + 1) & 7;
 	}
 
 	@Override
@@ -81,7 +79,7 @@ public class BulletRay extends Bullet {
 
 	@Override
 	public void render(Screen screen) {
-		screen.blit(Art.bulletRay[facing][0], pos.x - 8, pos.y - 10);
+		screen.blit(Art.plasmaBall[frame][0], (int)pos.x - 8, (int)pos.y - 10);
 	}
 
 	@Override
