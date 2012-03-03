@@ -101,6 +101,7 @@ public class CharacterSelectionMenu extends GuiMenu {
 			MojamComponent.instance.playerCharacter = selected.getCharacterID();
 		}
 	}
+	
 
 	@Override
 	public void keyTyped(KeyEvent e) {}

@@ -121,4 +121,9 @@ public abstract class GuiMenu extends GuiComponent implements ButtonListener, Ke
 			MojamComponent.toggleFullscreen();
 		}
 	}
+	
+	@Override
+	public void buttonHovered(ClickableComponent clickableComponent) {
+		selectedItem = buttons.indexOf(clickableComponent);
+	}
 }

@@ -66,7 +66,9 @@ public class Art {
 	public static Bitmap[][] getLocalPlayerArt() {
 		return getPlayer(MojamComponent.instance.playerCharacter);
 	}
-
+	
+    public static Bitmap exclamation_mark = load ("/art/effects/exclamation_mark.png");
+	
 	// Player starting points
 	private static Bitmap[][] startLordLard = cut("/art/player/start_lordlard.png", 32, 32);
 	private static Bitmap[][] startHerrSpeck = cut("/art/player/start_herrspeck.png", 32, 32);
