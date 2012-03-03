@@ -42,17 +42,12 @@ public class Level {
 	public IVictoryConditions victoryConditions;
 	public int player1Score = 0;
 	public int player2Score = 0;
-	
-	public int player1Character;
-	public int player2Character;
 
 	@SuppressWarnings("unchecked")
-	public Level(int width, int height, int player1Character, int player2Character) {
+	public Level(int width, int height) {
 		neighbourOffsets = new int[] { -1, 1, -width, width };
 		this.width = width;
 		this.height = height;
-		this.player1Character = player1Character;
-		this.player2Character = player2Character;
 
 		minimap = new Bitmap(width, height);
 		
@@ -320,14 +315,14 @@ public class Level {
                 int xt = x - (width / 2) + 4;
                 int yt = y - 4;
                 if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (xt != 3 || yt < 3)) {
-                    screen.blit(Art.getPlayerBase(player2Character)[xt][yt], x * Tile.WIDTH, y
+                    screen.blit(Art.getPlayerBase(getPlayerCharacterID(1))[xt][yt], x * Tile.WIDTH, y
                             * Tile.HEIGHT);
                     continue;
                 }
 
                 yt = y - (height - 8);
                 if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (xt != 3 || yt > 0)) {
-                    screen.blit(Art.getPlayerBase(player1Character)[xt][yt], x * Tile.WIDTH, y * Tile.HEIGHT);
+                    screen.blit(Art.getPlayerBase(getPlayerCharacterID(0))[xt][yt], x * Tile.WIDTH, y * Tile.HEIGHT);
                     if ((xt == 0 || xt == 1 || xt == 5 || xt == 6) && yt == 0) {
                         screen.blit(Art.shadow_north, x * Tile.WIDTH, y * Tile.HEIGHT);
                     }
@@ -344,6 +339,10 @@ public class Level {
                 }
             }
         }
+	}
+	
+	private int getPlayerCharacterID(int playerID){
+		return MojamComponent.instance.players[playerID].getCharacterID();
 	}
 
 	private void renderTopOfWalls(Screen screen, int x0, int y0, int x1, int y1){
@@ -563,13 +562,13 @@ public class Level {
 	
 	private void renderPlayerScores(Screen screen){
 	    
-	    String player1score =  MojamComponent.texts.scoreCharacter(player1Character, player1Score * 100 / TARGET_SCORE);
+	    String player1score =  MojamComponent.texts.scoreCharacter(getPlayerCharacterID(0), player1Score * 100 / TARGET_SCORE);
         Font.defaultFont().draw(screen, player1score, 280-player1score.length()*10, screen.h - 20); //adjust so it fits in the box
-        screen.blit(Art.getPlayer(player1Character)[0][2], 262, screen.h-42);
+        screen.blit(Art.getPlayer(getPlayerCharacterID(0))[0][2], 262, screen.h-42);
 
-        if (player2Character != Art.NO_OPPONENT) {
-            Font.defaultFont().draw(screen, MojamComponent.texts.scoreCharacter(player2Character, player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
-            screen.blit(Art.getPlayer(player2Character)[0][6], 19, screen.h-42);
+        if (MojamComponent.instance.players[1] != null && getPlayerCharacterID(1) != Art.NO_OPPONENT) {
+            Font.defaultFont().draw(screen, MojamComponent.texts.scoreCharacter(getPlayerCharacterID(1), player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
+            screen.blit(Art.getPlayer(getPlayerCharacterID(1))[0][6], 19, screen.h-42);
         }
 	}
 	
