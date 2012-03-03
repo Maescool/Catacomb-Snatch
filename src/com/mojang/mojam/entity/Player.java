@@ -2,8 +2,6 @@ package com.mojang.mojam.entity;
 
 import java.util.Random;
 
-import javax.print.attribute.standard.SheetCollate;
-
 import com.mojang.mojam.Keys;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
