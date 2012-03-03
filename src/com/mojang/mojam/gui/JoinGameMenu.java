@@ -59,7 +59,6 @@ public class JoinGameMenu extends GuiMenu {
 
 	@Override
 	public void buttonPressed(ClickableComponent button) {
-		// nothing
 	}
 
 }

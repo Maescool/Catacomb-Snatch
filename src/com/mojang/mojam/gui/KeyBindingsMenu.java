@@ -190,7 +190,7 @@ public class KeyBindingsMenu extends GuiMenu {
 		selectedKey = (KeyBindingButton) button;
 		selectedKey.setSelected(true);
 	}
-
+	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (selectedKey != null) {
