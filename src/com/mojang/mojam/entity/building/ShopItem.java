@@ -130,4 +130,14 @@ abstract class ShopItem extends Building {
      * use() if greater flexibility is needed
      */
     abstract void useAction(Player player);
+
+    @Override
+    public boolean upgrade(Player p) {
+        if (this.team == MojamComponent.localTeam) {
+            Notifications.getInstance().add(
+                    MojamComponent.texts.getStatic("upgrade.shopItem"));
+        }
+        return false;
+    }   
+    
 }

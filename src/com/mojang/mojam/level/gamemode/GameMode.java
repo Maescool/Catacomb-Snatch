@@ -122,14 +122,12 @@ public class GameMode {
 		newLevel.addEntity(new ShopItemShotgun(32 * (newLevel.width / 2 - 2.0), 6.5 * 32, Team.Team2));
 		newLevel.addEntity(new ShopItemRaygun(32 * (newLevel.width / 2 - 2.0), 5.5 * 32, Team.Team2));
 		
-		
 		newLevel.addEntity(new ShopItemTurret(32 * (newLevel.width / 2 - 1.5), (newLevel.height - 4.5) * 32, Team.Team1));
 		newLevel.addEntity(new ShopItemHarvester(32 * (newLevel.width / 2 - .5), (newLevel.height - 4.5) * 32, Team.Team1));
 		newLevel.addEntity(new ShopItemBomb(32 * (newLevel.width / 2 + .5), (newLevel.height - 4.5) * 32, Team.Team1));
 		newLevel.addEntity(new ShopItemRifle(32 * (newLevel.width / 2 - 2.0), (newLevel.height - 7.5) * 32, Team.Team1));
 		newLevel.addEntity(new ShopItemShotgun(32 * (newLevel.width / 2 - 2.0), (newLevel.height - 6.5) * 32, Team.Team1));
 		newLevel.addEntity(new ShopItemRaygun(32 * (newLevel.width / 2 - 2.0), (newLevel.height - 5.5) * 32, Team.Team1));
-		
 		
 		newLevel.setTile((newLevel.width / 2) - 1, 7, new UnbreakableRailTile(new SandTile()));	
 	    newLevel.setTile((newLevel.width / 2) - 1, newLevel.height - 8, new UnbreakableRailTile(new SandTile()));
