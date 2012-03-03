@@ -201,25 +201,19 @@ public class LevelEditorMenu extends GuiMenu {
             for (int y = 0; y < LEVEL_WIDTH; y++) {
 
                 if (map[x][y] == null) continue;
+                
+                Bitmap tile = map[x][y];
 
-                if (map[x][y].h == TILE_HEIGHT) {
-                    if (mapTile[x][y] == HoleTile.COLOR) {
-                        if (y > 0 && (mapTile[x][y - 1] == SandTile.COLOR || mapTile[x][y - 1] == UnpassableSandTile.COLOR)) {
-                            screen.blit(Art.floorTiles[7][0], TILE_HEIGHT * x + mapX, TILE_HEIGHT * y + mapY);
-                        }else if (y > 0 && !(mapTile[x][y - 1] == HoleTile.COLOR)) {
-                            screen.blit(map[x][y], TILE_HEIGHT * x + mapX, TILE_HEIGHT * y + mapY);
-                        } else {
-                            screen.fill(TILE_HEIGHT * x + mapX, TILE_HEIGHT * y + mapY, TILE_WIDTH, TILE_HEIGHT, 0);
+                // change tiles that requires some sort of drawing modification
+                switch (mapTile[x][y]) {
+                    case HoleTile.COLOR:
+                        if (y > 0 && (mapTile[x][y - 1] == HoleTile.COLOR)) {
+                            tile = null;
+                        } else if (y > 0 && (mapTile[x][y - 1] == SandTile.COLOR || mapTile[x][y - 1] == UnpassableSandTile.COLOR)) {
+                            tile = Art.floorTiles[7][0];
                         }
-                    } else {
-                        screen.blit(map[x][y], TILE_HEIGHT * x + mapX, TILE_HEIGHT * y + mapY);
-                    }
-                } else {
-                    //tile real height
-                    int tileH = (int) (Math.ceil(map[x][y].h / (float) TILE_HEIGHT)) * TILE_WIDTH;
-                    int tileY = TILE_HEIGHT - (tileH - map[x][y].h);
-
-                    if (mapTile[x][y] == UnbreakableRailTile.COLOR) {
+                        break;
+                    case UnbreakableRailTile.COLOR:
                         boolean n = y > 0 && mapTile[x][y - 1] == UnbreakableRailTile.COLOR;
                         boolean s = y < 47 && mapTile[x][y + 1] == UnbreakableRailTile.COLOR;
                         boolean w = x > 0 && mapTile[x - 1][y] == UnbreakableRailTile.COLOR;
@@ -242,12 +236,19 @@ public class LevelEditorMenu extends GuiMenu {
                         } else {                        // 3 or more turning disk
                             img = 6;
                         }
-                        screen.blit(Art.rails[img][0], mapX + TILE_HEIGHT * x, mapY + TILE_HEIGHT * y - tileY);
-                    } else {
-                        screen.blit(map[x][y], mapX + TILE_HEIGHT * x, mapY + TILE_HEIGHT * y - tileY);
-                    }
+
+                        map[x][y] = Art.rails[img][0];
+                        break;
                 }
-  
+                  
+                // draw the tile or fill with black if it's null
+                if (tile != null) {
+                    screen.blit(tile,
+                            x * TILE_WIDTH - (tile.w - TILE_WIDTH) / 2 + mapX,
+                            y * TILE_HEIGHT - (tile.h - TILE_HEIGHT) + mapY);
+                } else {
+                    screen.fill(x * TILE_WIDTH + mapX, y * TILE_HEIGHT + mapY, TILE_WIDTH, TILE_HEIGHT, 0);
+                }
             }
         }
         
