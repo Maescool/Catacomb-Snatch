@@ -59,7 +59,7 @@ public class CreditsScreen extends GuiMenu {
 		drawNames(others, screen, 240);
 
 		// Back button character
-		screen.blit(Art.getPlayer(MojamComponent.instance.playerCharacter)[0][6], (gameWidth - 128) / 2 - 40,
+		screen.blit(Art.getLocalPlayerArt()[0][6], (gameWidth - 128) / 2 - 40,
 				gameHeight - 50 - 20);
 	
 	}

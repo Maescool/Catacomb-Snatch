@@ -15,6 +15,7 @@ public class WinMenu extends GuiMenu {
 		super();
 		this.winningPlayer = winningPlayer;
 		this.gameWidth = gameWidth;
+		this.characterID = characterID;
 
 		addButton(new Button(TitleMenu.RETURN_TO_TITLESCREEN, "Ok", (gameWidth - 128) / 2, 200));
 	}

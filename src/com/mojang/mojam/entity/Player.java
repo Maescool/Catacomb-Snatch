@@ -85,7 +85,7 @@ public class Player extends Mob implements LootCollector {
      * @param y Initial y coordinate
      * @param team Team number
      */
-    public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team,  int characterID) {
+    public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team, int characterID) {
         super(x, y, team);
         this.keys = keys;
         this.mouseButtons = mouseButtons;
@@ -632,8 +632,12 @@ public class Player extends Mob implements LootCollector {
 
     @Override
     public void render(Screen screen) {
-        Bitmap[][] sheet = Art.getPlayer(characterID);
-        
+		Bitmap[][] sheet = Art.getPlayer(getCharacterID());
+    	
+		if(sheet == null){
+			return;
+		}
+		
         if (dead) {
             // don't draw anything if we are dead (in a hole)
             return;
@@ -663,6 +667,14 @@ public class Player extends Mob implements LootCollector {
             screen.blit(Art.muzzle[muzzleImage][0], xmuzzle, ymuzzle);
         }
 	}
+    
+    public void setCharacterID(int characterID) {
+		this.characterID = characterID;
+	}
+    
+    public int getCharacterID(){
+    	return characterID;
+    }
 
 	@Override
 	public void renderTop(Screen screen) {
@@ -797,7 +809,7 @@ public class Player extends Mob implements LootCollector {
      * Revive the player. Carried items are lost, as is all the money.
      */
     private void revive() {
-        Notifications.getInstance().add(MojamComponent.texts.hasDiedCharacter(characterID));
+        Notifications.getInstance().add(MojamComponent.texts.hasDiedCharacter(getCharacterID()));
         carrying = null;
         dropAllMoney();
         pos.set(startX, startY);
@@ -850,12 +862,4 @@ public class Player extends Mob implements LootCollector {
         return pos;
     }
 
-    /**
-     * Get current player's characterID
-     * 
-     * @return charakterID
-     */
-    public int getCharacterID() {
-        return this.characterID;
-    }
 }
