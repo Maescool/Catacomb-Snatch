@@ -1,7 +1,6 @@
 package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
-import java.util.List;
 
 import com.mojang.mojam.InputHandler;
 import com.mojang.mojam.Keys;
@@ -90,7 +89,6 @@ public class KeyBindingsMenu extends GuiMenu {
 		int gameWidth = MojamComponent.GAME_WIDTH;
 		int gameHeight = MojamComponent.GAME_HEIGHT;
 		textWidth = (gameWidth - 2 * BORDER - 2 * 32 - 2 * Button.BUTTON_WIDTH) / 2;
-		System.out.println(textWidth);
 		int numRows = 6;
 		int tab1 = BORDER + 32 + textWidth;
 		int tab2 = gameWidth - BORDER - Button.BUTTON_WIDTH;
@@ -130,12 +128,12 @@ public class KeyBindingsMenu extends GuiMenu {
 	}
 
 	private String getMenuText(Key key) {
-		List<Integer> mappings = inputHandler.getMappings(key);
-		if (mappings.size() > 0) {
-			return KeyEvent.getKeyText(mappings.get(0));
-		} else {
-			return "NONE";
+		Integer keyEvent = inputHandler.getKeyEvent(key);
+		if (keyEvent != null && keyEvent != KeyEvent.VK_UNDEFINED) {
+			return KeyEvent.getKeyText(keyEvent);
 		}
+		// TODO put text in translation file
+		return "NONE";
 	}
 
 	@Override
@@ -194,7 +192,6 @@ public class KeyBindingsMenu extends GuiMenu {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (selectedKey != null) {
-			inputHandler.clearMappings(selectedKey.getKey());
 			inputHandler.addMapping(selectedKey.getKey(), e.getKeyCode());
 			selectedKey.setLabel(KeyEvent.getKeyText(e.getKeyCode()));
 			selectedKey.setSelected(false);
