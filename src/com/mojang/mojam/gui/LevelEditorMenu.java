@@ -7,32 +7,18 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
-
 import javax.imageio.ImageIO;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.entity.Entity;
-import com.mojang.mojam.entity.building.SpawnerForBat;
-import com.mojang.mojam.entity.building.SpawnerForMummy;
-import com.mojang.mojam.entity.building.SpawnerForScarab;
-import com.mojang.mojam.entity.building.SpawnerForSnake;
-import com.mojang.mojam.entity.building.TreasurePile;
-import com.mojang.mojam.entity.building.Turret;
-import com.mojang.mojam.entity.building.TurretTeamOne;
-import com.mojang.mojam.entity.building.TurretTeamTwo;
+import com.mojang.mojam.entity.building.*;
 import com.mojang.mojam.entity.mob.SpikeTrap;
 import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.LevelList;
 import com.mojang.mojam.level.LevelUtils;
-import com.mojang.mojam.level.tile.DestroyableWallTile;
-import com.mojang.mojam.level.tile.FloorTile;
-import com.mojang.mojam.level.tile.HoleTile;
-import com.mojang.mojam.level.tile.SandTile;
-import com.mojang.mojam.level.tile.UnbreakableRailTile;
-import com.mojang.mojam.level.tile.UnpassableSandTile;
-import com.mojang.mojam.level.tile.WallTile;
+import com.mojang.mojam.level.tile.*;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
@@ -622,7 +608,7 @@ public class LevelEditorMenu extends GuiMenu {
             } else {
                 if (e.getKeyChar() == KeyEvent.VK_ENTER) return;
                 
-                saveLevelName += e.getKeyChar();;
+                saveLevelName += e.getKeyChar();
             }
         }
     }
