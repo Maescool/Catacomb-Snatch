@@ -1,5 +1,6 @@
 package com.mojang.mojam;
 
+import com.mojang.mojam.Keys.Key;
 import com.mojang.mojam.network.Packet;
 
 public class mod_testla extends Mod

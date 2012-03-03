@@ -34,8 +34,8 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.swing.JTextArea;
 
+import com.mojang.mojam.Keys.Key;
 import com.mojang.mojam.entity.Entity;
-import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.Level;
@@ -46,6 +46,7 @@ public final class Snatch
 {
 	private static boolean init = false;
 	public static File modDir;
+	public static File modsFolder;
 	public static List<Mod> modList = new ArrayList<Mod>();
 	public static List<ScriptEngine> scriptList = new ArrayList<ScriptEngine>();
 	private static MojamComponent mojam;
@@ -57,12 +58,13 @@ public final class Snatch
 
 	public static void init(MojamComponent m)
 	{
-		if(init)return;
+		if(init) return;
 		init = true;
 		mojam = m;
 		try
 		{
 			modDir = new File(Snatch.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+			modsFolder = new File(mojam.getMojamDir(),"/mods/");
 			isJar = modDir.getAbsolutePath().endsWith(".jar");
 		}
 		catch (URISyntaxException e1)
@@ -81,13 +83,23 @@ public final class Snatch
 		try
 		{
 			readLinksFromFile(new File(mojam.getMojamDir(), "mods.txt"));
-			readFromClassPath(new File(mojam.getMojamDir(), "/mods"));
+			//readFromModFolder(new File(mojam.getMojamDir(), "/mods/"));
+			readFromModsFolder();
 			readFromClassPath(modDir);
 			//readLinksFromFile(new File(mojam.getMojamDir(),"mods.txt"));
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
+		}
+	}
+	
+	private static void readFromModsFolder()
+	{
+		File[] files = modsFolder.listFiles();
+		for(File f:files)
+		{
+			addScript(f.getAbsolutePath());
 		}
 	}
 
@@ -141,6 +153,10 @@ public final class Snatch
 						{
 							addMod(classloader, s1);
 						}
+						else if(!zipentry.isDirectory() && s1.startsWith("mod_") && !s1.contains(".MF"))
+						{
+							addScript(zipentry);
+						}
 					}
 					while(true);
 					zipinputstream.close();
@@ -159,10 +175,15 @@ public final class Snatch
 					{
 						for(int k = 0; k < afile1.length; k++)
 						{
+							System.out.println(afile1[k].getAbsolutePath());
 							String s2 = afile1[k].getName();
 							if(afile1[k].isFile() && s2.startsWith("mod_") && s2.endsWith(".class"))
 							{
 								addMod(classloader, s2);
+							}
+							else if(afile1[k].isFile() && s2.startsWith("mod_") && !s2.contains(".MF"))
+							{
+								addScript(s2);
 							}
 						}
 					}
@@ -200,7 +221,7 @@ public final class Snatch
 			if(mod != null)
 			{
 				modList.add(mod);
-				System.out.println("Mod Initialized: " + mod.getClass().getSimpleName());
+				System.out.println("Java Mod Initialized: " + mod.getClass().getSimpleName());
 				return mod;
 			}
 		}
@@ -234,7 +255,7 @@ public final class Snatch
 					//System.out.println(s1);//TODO
 					addMod(classloader, s1);
 				}
-				else if(!zipentry.isDirectory() && s1.contains("mod_")&&!s1.toLowerCase().endsWith(".mf"))
+				else if(!zipentry.isDirectory() && s1.contains("mod_") && !s1.toLowerCase().endsWith(".mf"))
 				{
 					//System.out.println(s1);//TODO
 					addScript(zipentry);
@@ -325,7 +346,7 @@ public final class Snatch
 				System.out.println("|__> "+ s1);
 			}
 		}*/
-		if(engine==null||entry.getName().contains("MANIFEST"))return null;
+		if(engine == null || entry.getName().contains("MANIFEST")) return null;
 		try
 		{
 			int BUFFER = 8192;
@@ -359,7 +380,7 @@ public final class Snatch
 		}
 		catch (FileNotFoundException e1)
 		{
-			if(!isJar)e1.printStackTrace();
+			if(!isJar) e1.printStackTrace();
 		}
 		catch (NullPointerException e1)
 		{
@@ -367,7 +388,7 @@ public final class Snatch
 		}
 		catch (ScriptException e1)
 		{
-			System.out.println("Bad Script file: "+entry.getName());
+			System.out.println("Bad Script file: " + entry.getName());
 			e1.printStackTrace();
 		}
 		catch (IOException e1)
@@ -418,6 +439,7 @@ public final class Snatch
 	 * a List and then returns its id, so that
 	 * it can later be used for spawning custom
 	 * entities.
+	 * 
 	 * @param entity
 	 * @return The id of the registered entity
 	 * @see Entity
@@ -428,6 +450,14 @@ public final class Snatch
 		int i = spawnList.size() - 1;
 		System.out.println("Registered " + spawnList.get(i).getClass().getSimpleName() + " with id " + i);
 		return i;
+	}
+
+	public static Key addKey(Key key)
+	{
+		mojam.keys.getAll().add(key);
+		if(mojam.keys.getAll().contains(key)) System.out.println("Success!");
+		else System.out.println("Failure!");
+		return key;
 	}
 
 	public static void afterRender()
@@ -566,8 +596,9 @@ public final class Snatch
 		}
 	}
 
-	/**Gets the current system time
-	 *
+	/**
+	 * Gets the current system time
+	 * 
 	 * @return current system time in milliseconds
 	 */
 	public static long currentTimeMillis()
@@ -577,6 +608,7 @@ public final class Snatch
 
 	/**
 	 * Gets the current system time
+	 * 
 	 * @return current system time in nanoseconds
 	 */
 	public static long nanoTime()
@@ -586,7 +618,9 @@ public final class Snatch
 
 	/**
 	 * Gets an instance of Font to avoid static method semantics in scripts
-	 * @return an instance of the class @see Font for non-statically calling static code
+	 * 
+	 * @return an instance of the class @see Font for non-statically calling
+	 *         static code
 	 */
 	public static Font getFont()
 	{
@@ -594,19 +628,23 @@ public final class Snatch
 	}
 
 	/**
-	 * Returns a new instance of an Empty Entity for JS or others to manipulate; i.e: <br>
-	 * {@code newEntity(x,y).getSpeed = new function { return 1.5; }}
-	 * @param x x position to spawn
-	 * @param y y position to spawn
+	 * Returns a new instance of an Empty Entity for JS or others to manipulate;
+	 * i.e: <br>
+	 * {@code newEntity(x,y).getSpeed = new function return 1.5; }}
+	 * 
+	 * @param x
+	 *            x position to spawn
+	 * @param y
+	 *            y position to spawn
 	 * @return new instance to modify
 	 * @see Entity
 	 * @see EmptyEntity
 	 */
 	public static Entity newEntity(double x, double y)
 	{
-		return new EmptyEntity(x,y);
+		return new EmptyEntity(x, y);
 	}
-	
+
 	public static void setGamemode(GameMode gamemode)
 	{
 		TitleMenu.defaultGameMode = gamemode;
