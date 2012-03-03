@@ -233,8 +233,8 @@ public abstract class Mob extends Entity {
 			color = 0x8af116;
 		}
 
-		screen.blit(Art.healthBar_Underlay[start][0], pos.x - 16, pos.y + healthBarOffset);
-		screen.colorBlit(Art.healthBar[start][0], pos.x - 16, pos.y + healthBarOffset, (0xa8 << 24) + color);
+		screen.blit(Art.healthBar_Underlay[0][0], pos.x - 16, pos.y + healthBarOffset);
+		screen.colorBlit(Art.healthBar[start][0], pos.x - 16, pos.y + healthBarOffset, (0xff << 24) + color);
 		screen.blit(Art.healthBar_Outline[0][0], pos.x - 16, pos.y + healthBarOffset);
     }
 
