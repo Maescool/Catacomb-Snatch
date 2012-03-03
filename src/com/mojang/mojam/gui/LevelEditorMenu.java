@@ -29,7 +29,9 @@ import com.mojang.mojam.level.LevelUtils;
 import com.mojang.mojam.level.tile.DestroyableWallTile;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.HoleTile;
+import com.mojang.mojam.level.tile.SandTile;
 import com.mojang.mojam.level.tile.UnbreakableRailTile;
+import com.mojang.mojam.level.tile.UnpassableSandTile;
 import com.mojang.mojam.level.tile.WallTile;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
@@ -61,6 +63,8 @@ public class LevelEditorMenu extends GuiMenu {
     private final IEditable[] editableTiles = {
         new FloorTile(),
         new HoleTile(),
+        new SandTile(),
+        new UnpassableSandTile(),
         new WallTile(),
         new DestroyableWallTile(),
         new TreasurePile(0, 0),
@@ -200,7 +204,9 @@ public class LevelEditorMenu extends GuiMenu {
 
                 if (map[x][y].h == TILE_HEIGHT) {
                     if (mapTile[x][y] == HoleTile.COLOR) {
-                        if (y > 0 && !(mapTile[x][y - 1] == HoleTile.COLOR)) {
+                        if (y > 0 && (mapTile[x][y - 1] == SandTile.COLOR || mapTile[x][y - 1] == UnpassableSandTile.COLOR)) {
+                            screen.blit(Art.floorTiles[7][0], TILE_HEIGHT * x + mapX, TILE_HEIGHT * y + mapY);
+                        }else if (y > 0 && !(mapTile[x][y - 1] == HoleTile.COLOR)) {
                             screen.blit(map[x][y], TILE_HEIGHT * x + mapX, TILE_HEIGHT * y + mapY);
                         } else {
                             screen.fill(TILE_HEIGHT * x + mapX, TILE_HEIGHT * y + mapY, TILE_WIDTH, TILE_HEIGHT, 0);
