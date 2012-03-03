@@ -135,13 +135,14 @@ public abstract class Mob extends Entity {
 	}
 	
 	public void onRegenTime() {
-			this.regenerateHealthForAmount( this.REGEN_AMOUNT );
+			this.regenerateHealthBy( this.REGEN_AMOUNT );
 			// Can add thing here like a custom regen action
 	}
 	
-	public void regenerateHealthForAmount(float a) { 
-	    this.health += a ;
-	    if (health > maxHealth) health = maxHealth;
+	public void regenerateHealthBy(float a) { 
+	    health += a ;
+	    if (health > maxHealth)
+	    	health = maxHealth;
 	}
 	
 	public void slideMove(double xa, double ya) {
