@@ -2,6 +2,8 @@ package com.mojang.mojam.entity;
 
 import java.util.Random;
 
+import javax.print.attribute.standard.SheetCollate;
+
 import com.mojang.mojam.Keys;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
@@ -74,7 +76,6 @@ public class Player extends Mob implements LootCollector {
     private int deadDelay = 0;
     private int nextWalkSmokeTick = 0;
     boolean isImmortal;
-    private int characterID;
 
     /**
      * Constructor
@@ -85,11 +86,10 @@ public class Player extends Mob implements LootCollector {
      * @param y Initial y coordinate
      * @param team Team number
      */
-    public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team,  int characterID) {
+    public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team) {
         super(x, y, team);
         this.keys = keys;
         this.mouseButtons = mouseButtons;
-        this.characterID = characterID;
 
         startX = x;
         startY = y;
@@ -632,8 +632,12 @@ public class Player extends Mob implements LootCollector {
 
     @Override
     public void render(Screen screen) {
-        Bitmap[][] sheet = Art.getPlayer(characterID);
-        
+		Bitmap[][] sheet = Art.getPlayer(getCharacterID());
+    	
+		if(sheet == null){
+			return;
+		}
+		
         if (dead) {
             // don't draw anything if we are dead (in a hole)
             return;
@@ -663,6 +667,14 @@ public class Player extends Mob implements LootCollector {
             screen.blit(Art.muzzle[muzzleImage][0], xmuzzle, ymuzzle);
         }
 	}
+    
+    public int getCharacterID(){
+    	if (team == Team.Team2) {
+			return MojamComponent.player2Character;
+		} else {
+			return MojamComponent.player1Character;
+		}
+    }
 
 	@Override
 	public void renderTop(Screen screen) {
@@ -797,7 +809,7 @@ public class Player extends Mob implements LootCollector {
      * Revive the player. Carried items are lost, as is all the money.
      */
     private void revive() {
-        Notifications.getInstance().add(MojamComponent.texts.hasDiedCharacter(characterID));
+        Notifications.getInstance().add(MojamComponent.texts.hasDiedCharacter(getCharacterID()));
         carrying = null;
         dropAllMoney();
         pos.set(startX, startY);
@@ -850,12 +862,4 @@ public class Player extends Mob implements LootCollector {
         return pos;
     }
 
-    /**
-     * Get current player's characterID
-     * 
-     * @return charakterID
-     */
-    public int getCharacterID() {
-        return this.characterID;
-    }
 }

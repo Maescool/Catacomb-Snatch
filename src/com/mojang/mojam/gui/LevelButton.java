@@ -75,7 +75,7 @@ public class LevelButton extends ClickableComponent {
 		// Load level
 		Level l;
 		try {
-			l = new GameMode().generateLevel(levelInfo, MojamComponent.instance.playerCharacter, MojamComponent.instance.opponentCharacter);
+			l = new GameMode().generateLevel(levelInfo);
 		} catch (IOException e) {
 			return false;
 		}

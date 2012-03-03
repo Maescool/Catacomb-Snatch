@@ -137,9 +137,11 @@ public class MojamComponent extends Canvas implements Runnable,
 	private boolean isServer;
 	private int localId;
 	public static int localTeam; //local team is the team of the client. This can be used to check if something should be only rendered on one person's screen
-	
+
 	public int playerCharacter;
-	public int opponentCharacter;
+	
+	public static int player1Character;
+	public static int player2Character;
 	
 	private Thread hostThread;
 	private static boolean fullscreen = false;
@@ -262,7 +264,6 @@ public class MojamComponent extends Canvas implements Runnable,
 	}
 	
 	private void initCharacters(){
-		opponentCharacter = Art.HERR_VON_SPECK;
 		if(!Options.isCharacterIDset()){
 			addMenu(new CharacterSelectionMenu());
 		}
@@ -286,11 +287,11 @@ public class MojamComponent extends Canvas implements Runnable,
 	}
 
 	private synchronized void createLevel(LevelInformation li, GameMode mode) {
-		if (!isMultiplayer)
-			opponentCharacter = Art.NO_OPPONENT;
+		player1Character = instance.playerCharacter;
+		player2Character = Art.NO_OPPONENT;
 		try {
 			//level = Level.fromFile(li);
-			level = mode.generateLevel(li, playerCharacter, opponentCharacter);
+			level = mode.generateLevel(li);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			showError("Unable to load map.");
@@ -306,13 +307,13 @@ public class MojamComponent extends Canvas implements Runnable,
 		//level.init();
 		players[0] = new Player(synchedKeys[0], synchedMouseButtons[0], level.width
 				* Tile.WIDTH / 2 - 16, (level.height - 5 - 1) * Tile.HEIGHT
-				- 16, Team.Team1, playerCharacter);
+				- 16, Team.Team1);
 		players[0].setFacing(4);
 		level.addEntity(players[0]);
 		level.addEntity(new Base(34 * Tile.WIDTH, 7 * Tile.WIDTH, Team.Team1));
 		if (isMultiplayer) {
 			players[1] = new Player(synchedKeys[1], synchedMouseButtons[1], level.width
-					* Tile.WIDTH / 2 - 16, 7 * Tile.HEIGHT - 16, Team.Team2, opponentCharacter);
+					* Tile.WIDTH / 2 - 16, 7 * Tile.HEIGHT - 16, Team.Team2);
 			level.addEntity(players[1]);
 			level.addEntity(new Base(32 * Tile.WIDTH - 20,
 					32 * Tile.WIDTH - 20, Team.Team2));
@@ -553,7 +554,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		if (level != null && level.victoryConditions != null) {
 			if(level.victoryConditions.isVictoryConditionAchieved()) {
 				int winner = level.victoryConditions.playerVictorious();
-				int characterID = winner == MojamComponent.localTeam ? playerCharacter : opponentCharacter;
+				int characterID = winner == Team.Team2 ? player2Character : player1Character;
 				addMenu(new WinMenu(GAME_WIDTH, GAME_HEIGHT, winner, characterID));
                 level = null;
                 return;
@@ -659,7 +660,7 @@ public class MojamComponent extends Canvas implements Runnable,
 						TurnSynchronizer.synchedSeed, TitleMenu.level.getUniversalPath(),DifficultyList.getDifficultyID(TitleMenu.difficulty)));
 			} else {
 				packetLink.sendPacket(new StartGamePacketCustom(
-						TurnSynchronizer.synchedSeed, level, DifficultyList.getDifficultyID(TitleMenu.difficulty), playerCharacter, opponentCharacter));
+						TurnSynchronizer.synchedSeed, level, DifficultyList.getDifficultyID(TitleMenu.difficulty)));
 			}
 			packetLink.setPacketListener(MojamComponent.this);
 
