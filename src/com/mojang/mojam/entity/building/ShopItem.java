@@ -13,7 +13,7 @@ import com.mojang.mojam.screen.Screen;
 /**
  * Generic shop item, available from the players base
  */
-abstract class ShopItem extends Building {
+public abstract class ShopItem extends Building {
 	
 	private final String name;
 	private Bitmap image;

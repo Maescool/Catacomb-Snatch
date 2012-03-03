@@ -266,7 +266,8 @@ public class Font {
 	 * @param screen 
 	 * @param msg 
 	 * @param x 
-	 * @param y 
+	 * @param y
+	 * @param align
 	 */
 	public void draw(Screen screen, String msg, int x, int y, Font.Align align) {
 		if (Font.Align.LEFT.equals(align)) {
@@ -274,7 +275,11 @@ public class Font {
 		}
 		else {
 			int width = calculateStringWidth(msg);
-			draw(screen, msg, x - ((Font.Align.CENTERED.equals(align)) ? width / 2 : width), y - 4);
+			if (Font.Align.CENTERED.equals(align)) {
+				draw(screen, msg, x - width / 2, y - 4);
+			} else {
+				draw(screen, msg, x - width, y);
+			}	
 		}
 	}
 }
