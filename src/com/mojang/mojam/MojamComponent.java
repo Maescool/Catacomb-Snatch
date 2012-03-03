@@ -111,7 +111,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	public static Screen screen = new Screen(GAME_WIDTH, GAME_HEIGHT);
 	private Level level;
 	private Chat chat = new Chat();
-
+	private Console console = new Console();
 	// Latency counter
 	private static final int CACHE_EMPTY=0, CACHE_PRIMING=1, CACHE_PRIMED=2;
 	private static final int CACHE_SIZE = 5;
@@ -319,6 +319,10 @@ public class MojamComponent extends Canvas implements Runnable,
 		}
 		player = players[localId];
 		player.setCanSee(true);
+
+		if (!isMultiplayer) {
+			addKeyListener(console);
+		}
 	}
 
 	@Override
@@ -436,6 +440,9 @@ public class MojamComponent extends Canvas implements Runnable,
 					(float) player.pos.y);
 			level.render(screen, xScroll, yScroll);
 		}
+		if (console.isActive()) {
+			console.render(screen);
+		}
 		if (!menuStack.isEmpty()) {
 			menuStack.peek().render(screen);
 		}
@@ -536,6 +543,20 @@ public class MojamComponent extends Canvas implements Runnable,
 	}
 
 	private void tick() {
+		//console open/close
+		if (this.isFocusOwner() && level != null) {
+			if (keys.console.wasReleased()) {
+				if (!console.isActive() || console.isClosing()) {
+					console.active();
+				} else if (console.isActive() && !console.isClosing()) {
+					console.close();
+				}
+			}
+			console.tick();
+			if (menuStack.isEmpty() && console.isActive() && !console.isClosing()) {
+				keys.release();
+			}
+		}
 		//Not-In-Focus-Pause
 		if (level != null && !isMultiplayer && !paused && !this.isFocusOwner()) {
 			keys.release();
