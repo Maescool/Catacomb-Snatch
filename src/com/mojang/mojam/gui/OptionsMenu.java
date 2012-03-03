@@ -2,11 +2,13 @@ package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
 
+import paulscode.sound.SoundSystem;
+
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
-import com.mojang.mojam.sound.SoundPlayer;
+import com.mojang.mojam.sound.ISoundPlayer;
 
 public class OptionsMenu extends GuiMenu {
 
@@ -82,12 +84,18 @@ public class OptionsMenu extends GuiMenu {
 				Options.set(Options.FULLSCREEN, fullscreen);
 				MojamComponent.toggleFullscreen();
 			}
+			@Override
+			public void buttonHovered(ClickableComponent clickableComponent) {
+			}
 		});
 		fpsBtn.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
 				fps = !fps;
 				Options.set(Options.DRAW_FPS, fps);
+			}
+			@Override
+			public void buttonHovered(ClickableComponent clickableComponent) {
 			}
 		});
 		soundVol.addListener(new ButtonListener() {
@@ -97,7 +105,12 @@ public class OptionsMenu extends GuiMenu {
 				volume = slider.value;
 
 				Options.set(Options.VOLUME, volume + "");
-				MojamComponent.soundPlayer.soundSystem.setMasterVolume(slider.value);
+				SoundSystem soundSystem = MojamComponent.soundPlayer.getSoundSystem();
+				if (soundSystem != null)
+					soundSystem.setMasterVolume(slider.value);
+			}
+			@Override
+			public void buttonHovered(ClickableComponent clickableComponent) {
 			}
 		});
 		musicVol.addListener(new ButtonListener() {
@@ -107,8 +120,12 @@ public class OptionsMenu extends GuiMenu {
 				musicVolume = slider.value;
 
 				Options.set(Options.MUSIC, musicVolume + "");
-				MojamComponent.soundPlayer.soundSystem.setVolume(SoundPlayer.BACKGROUND_TRACK,
-						slider.value);
+				SoundSystem soundSystem = MojamComponent.soundPlayer.getSoundSystem();
+				if (soundSystem != null)
+					soundSystem.setVolume(ISoundPlayer.BACKGROUND_TRACK, slider.value);
+			}
+			@Override
+			public void buttonHovered(ClickableComponent clickableComponent) {
 			}
 		});
 		soundsVol.addListener(new ButtonListener() {
@@ -117,7 +134,10 @@ public class OptionsMenu extends GuiMenu {
 				Slider slider = (Slider) button;
 				soundsVolume = slider.value;
 
-				Options.set(Options.SOUND, soundsVolume + "");
+				Options.set(Options.SOUND, soundsVolume + "");	
+			}
+			@Override
+			public void buttonHovered(ClickableComponent clickableComponent) {
 			}
 		});
 		creativeModeBtn.addListener(new ButtonListener() {
@@ -126,11 +146,17 @@ public class OptionsMenu extends GuiMenu {
 				creative = !creative;
 				Options.set(Options.CREATIVE, creative);
 			}
+			@Override
+			public void buttonHovered(ClickableComponent clickableComponent) {
+			}
 		});
 		back.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
 				Options.saveProperties();
+			}
+			@Override
+			public void buttonHovered(ClickableComponent clickableComponent) {
 			}
 		});
 	}
@@ -163,7 +189,7 @@ public class OptionsMenu extends GuiMenu {
 
 	@Override
 	public void buttonPressed(ClickableComponent button) {}
-
+	
 	@Override
 	public void keyTyped(KeyEvent e) {}
 

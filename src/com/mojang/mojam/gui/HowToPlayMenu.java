@@ -121,8 +121,7 @@ public class HowToPlayMenu extends GuiMenu {
 	}
 
 	@Override
-	public void buttonPressed(ClickableComponent button) {
-		
+	public void buttonPressed(ClickableComponent button) {	
 	}
 
 }

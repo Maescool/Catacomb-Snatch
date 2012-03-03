@@ -83,6 +83,8 @@ import com.mojang.mojam.resources.Texts;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.sound.ISoundPlayer;
+import com.mojang.mojam.sound.NoSoundPlayer;
 import com.mojang.mojam.sound.SoundPlayer;
 
 public class MojamComponent extends Canvas implements Runnable,
@@ -90,7 +92,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		ButtonListener, KeyListener {
 
 	public static final String GAME_TITLE = "Catacomb Snatch";
-	public static final String GAME_VERSION = "1.0.0-SNAPSHOT";
+	public static final String GAME_VERSION = "1.0.0-BETA";
 	
 	
 	public static MojamComponent instance;
@@ -142,7 +144,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	
 	private Thread hostThread;
 	private static boolean fullscreen = false;
-	public static SoundPlayer soundPlayer;
+	public static ISoundPlayer soundPlayer;
 	private long nextMusicInterval = 0;
 	private byte sShotCounter = 0;
 
@@ -235,7 +237,10 @@ public class MojamComponent extends Canvas implements Runnable,
 		initInput();
 		initCharacters();
 		
-		soundPlayer = new SoundPlayer();		
+		soundPlayer = new SoundPlayer();
+		if (soundPlayer.getSoundSystem() == null)
+			soundPlayer = new NoSoundPlayer();
+		
 		soundPlayer.startTitleMusic();
 
 		try {
@@ -836,6 +841,10 @@ public class MojamComponent extends Canvas implements Runnable,
 			handleAction(button.getId());
 		}
 	}
+	
+	@Override
+	public void buttonHovered(ClickableComponent clickableComponent) {		
+	}
 
 	public void handleAction(int id) {
 		switch (id) {
@@ -844,6 +853,9 @@ public class MojamComponent extends Canvas implements Runnable,
 				level = null;
 				TitleMenu menu = new TitleMenu(GAME_WIDTH, GAME_HEIGHT);
 				addMenu(menu);
+				this.nextMusicInterval = 0;
+                soundPlayer.stopBackgroundMusic();
+                soundPlayer.startTitleMusic();
 				break;
 				
 			case TitleMenu.START_GAME_ID:

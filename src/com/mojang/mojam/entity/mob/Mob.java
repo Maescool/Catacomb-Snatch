@@ -5,7 +5,10 @@ import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.animation.EnemyDieAnimation;
+import com.mojang.mojam.entity.animation.ItemFallAnimation;
+import com.mojang.mojam.entity.animation.PlayerFallingAnimation;
 import com.mojang.mojam.entity.building.Building;
+import com.mojang.mojam.entity.building.Harvester;
 import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.gui.TitleMenu;
@@ -135,11 +138,15 @@ public abstract class Mob extends Entity {
 	}
 	
 	public void onRegenTime() {
-			this.regenHealthOf( this.REGEN_AMOUNT );
+			this.regenerateHealthBy( this.REGEN_AMOUNT );
 			// Can add thing here like a custom regen action
 	}
 	
-	public void regenHealthOf(float a) { this.health += a ; }
+	public void regenerateHealthBy(float a) { 
+	    health += a ;
+	    if (health > maxHealth)
+	    	health = maxHealth;
+	}
 	
 	public void slideMove(double xa, double ya) {
 		move(xa, ya);
@@ -209,7 +216,26 @@ public abstract class Mob extends Entity {
         
         int start = (int) (health * 21 / maxHealth);
         
-        screen.blit(Art.healthBar[start][0], pos.x - 16, pos.y + healthBarOffset);
+        float one_tenth_hp = (float) (maxHealth / 10f);
+		float three_tenths_hp = one_tenth_hp * 3;
+		float size_tenths_hp = one_tenth_hp * 6;
+		float eigth_tenths_hp = one_tenth_hp * 8;
+		
+		int color = 0;
+		
+		if(health < three_tenths_hp){
+			color = 0xf62800;
+		}else if (health < size_tenths_hp){
+			color = 0xfe7700;
+		}else if (health < eigth_tenths_hp){
+			color = 0xfef115;
+		}else {
+			color = 0x8af116;
+		}
+
+		screen.blit(Art.healthBar_Underlay[start][0], pos.x - 16, pos.y + healthBarOffset);
+		screen.colorBlit(Art.healthBar[start][0], pos.x - 16, pos.y + healthBarOffset, (0xa8 << 24) + color);
+		screen.blit(Art.healthBar_Outline[0][0], pos.x - 16, pos.y + healthBarOffset);
     }
 
 	protected void renderCarrying(Screen screen, int yOffs) {
@@ -353,15 +379,25 @@ public abstract class Mob extends Entity {
     }
     
     public boolean fallDownHole() {
-    	int x=(int) pos.x/Tile.WIDTH;
-    	int y=(int) pos.y/Tile.HEIGHT;
+        int x=(int)(pos.x/Tile.WIDTH);
+        int y=(int)(pos.y/Tile.HEIGHT);
         if (level.getTile(x, y) instanceof HoleTile) {
-        	level.addEntity(new EnemyDieAnimation(pos.x, pos.y));
-        	MojamComponent.soundPlayer.playSound("/sound/Fall.wav", (float) pos.x, (float) pos.y);
-        	if (!(this instanceof Player)){
-        		remove();
-        	}
-        	return true;
+            if (!(this instanceof Player)){
+                ItemFallAnimation animation = new ItemFallAnimation(x*Tile.WIDTH, y*Tile.HEIGHT, this.getSprite());
+                if(this instanceof Harvester){
+                    animation.setHarvester();
+                }
+                level.addEntity(animation);
+                remove();
+            } else {
+                int characterID = ((Player)this).getCharacterID();
+                level.addEntity(new PlayerFallingAnimation(x*Tile.WIDTH, y*Tile.HEIGHT, characterID));
+                if (characterID < 2)
+                    MojamComponent.soundPlayer.playSound("/sound/falling_male.wav", (float) pos.x, (float) pos.y);
+                else
+                    MojamComponent.soundPlayer.playSound("/sound/falling_female.wav", (float) pos.x, (float) pos.y);
+            }
+            return true;
         }
         return false;
     }

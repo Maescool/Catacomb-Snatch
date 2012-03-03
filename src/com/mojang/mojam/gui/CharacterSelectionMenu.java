@@ -3,7 +3,9 @@ package com.mojang.mojam.gui;
 import java.awt.event.KeyEvent;
 
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.Options;
+import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
@@ -22,6 +24,7 @@ public class CharacterSelectionMenu extends GuiMenu {
 	private Button back;
 
 	private int xOffset, yOffset;
+	private int walkTime;
 
 	public CharacterSelectionMenu() {
 		addButtons();
@@ -67,13 +70,21 @@ public class CharacterSelectionMenu extends GuiMenu {
 	}
 
 	@Override
+	public void tick(MouseButtons mouseButtons) {
+		walkTime++;
+		super.tick(mouseButtons);
+	}
+	
+	@Override
 	public void render(Screen screen) {
 		screen.blit(Art.emptyBackground, 0, 0);
 		super.render(screen);
 		Font.defaultFont().draw(screen, MojamComponent.texts.getStatic("character.text"),
 				MojamComponent.GAME_WIDTH / 2, yOffset - 24, Font.Align.CENTERED);
 		if (focus == back || focus == select) {
-			screen.blit(Art.getPlayer(selected.getCharacterID())[0][6], focus.getX() - 64 - 40,
+			int frame = (walkTime / 4 % 6 + 6) % 6;
+			
+			screen.blit(Art.getPlayer(selected.getCharacterID())[frame][(walkTime / 32) % 8], focus.getX() - 64 - 40,
 					focus.getY() - 8);
 		}
 	}
@@ -90,6 +101,7 @@ public class CharacterSelectionMenu extends GuiMenu {
 			MojamComponent.instance.playerCharacter = selected.getCharacterID();
 		}
 	}
+	
 
 	@Override
 	public void keyTyped(KeyEvent e) {}

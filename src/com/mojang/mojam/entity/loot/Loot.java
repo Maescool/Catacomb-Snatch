@@ -74,11 +74,10 @@ public class Loot extends Entity {
 	}
 
 	public void tick() {
-		if (level.getTile(pos) instanceof HoleTile) {
+		animationTime++;
+		if((Math.abs(xMovement) + Math.abs(yMovement)) < 0.1 && level.getTile(pos) instanceof HoleTile) {
 			remove();
 		}
-		
-		animationTime++;
 		move(xMovement, yMovement);
 		accelerationDirection += accelerationDirectionDelta;
 		if (accelerationDirection < 0) {
