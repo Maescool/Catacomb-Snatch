@@ -92,7 +92,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		ButtonListener, KeyListener {
 
 	public static final String GAME_TITLE = "Catacomb Snatch";
-	public static final String GAME_VERSION = "1.0.0-SNAPSHOT";
+	public static final String GAME_VERSION = "1.1.0-SNAPSHOT";
 	
 	
 	public static MojamComponent instance;
