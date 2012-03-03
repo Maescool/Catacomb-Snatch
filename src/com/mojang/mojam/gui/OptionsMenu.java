@@ -2,13 +2,10 @@ package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
 
-import paulscode.sound.SoundSystem;
-
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
-import com.mojang.mojam.sound.ISoundPlayer;
 
 public class OptionsMenu extends GuiMenu {
 
@@ -19,9 +16,24 @@ public class OptionsMenu extends GuiMenu {
 
 	private int textY;
 
-	private ClickableComponent back;
+	private Button key_bindings;
+	private Button character_select;
+	private Button sound_and_video;
+	private Button locale;
+	private Checkbox creativeModeBtn;
+	private Button credits;
+	private Button back;
 
 	public void change_locale() {
+		key_bindings.setLabel(MojamComponent.texts.getStatic("options.keyBindings"));
+		if (!inGame) {
+			character_select.setLabel(MojamComponent.texts.getStatic("options.characterSelect"));
+		}
+		sound_and_video.setLabel(MojamComponent.texts.getStatic("options.sound_and_video"));
+		locale.setLabel(MojamComponent.texts.getStatic("options.locale_selection"));
+		creativeModeBtn.setLabel(MojamComponent.texts.getStatic("options.creative"));
+		credits.setLabel(MojamComponent.texts.getStatic("options.credits"));
+		back.setLabel(MojamComponent.texts.getStatic("back"));
 	}
 
 	public OptionsMenu(boolean inGame) {
@@ -37,21 +49,15 @@ public class OptionsMenu extends GuiMenu {
 		textY = yOffset;
 		yOffset += offset;
 
-		addButton(new Button(TitleMenu.KEY_BINDINGS_ID, MojamComponent.texts.getStatic("options.keyBindings"), xOffset, yOffset));
-
+		key_bindings = (Button) addButton(new Button(TitleMenu.KEY_BINDINGS_ID, MojamComponent.texts.getStatic("options.keyBindings"), xOffset, yOffset));
 		if (!inGame) {
-			addButton(new Button(TitleMenu.CHARACTER_ID, MojamComponent.texts.getStatic("options.characterSelect"), xOffset, yOffset += offset));
+			character_select = (Button) addButton(new Button(TitleMenu.CHARACTER_ID, MojamComponent.texts.getStatic("options.characterSelect"), xOffset, yOffset += offset));
 		}
-
-		addButton(new Button(TitleMenu.AUDIO_VIDEO_ID, MojamComponent.texts.getStatic("options.sound_and_video"), xOffset, yOffset += offset));
-
-		addButton(new Button(TitleMenu.LOCALE_ID, MojamComponent.texts.getStatic("options.locale_selection"), xOffset, yOffset += offset));
-
-		ClickableComponent creativeModeBtn = addButton(new Checkbox(TitleMenu.CREATIVE_ID, MojamComponent.texts.getStatic("options.creative"), xOffset, yOffset += offset, Options.getAsBoolean(Options.CREATIVE, Options.VALUE_FALSE)));
-
-		addButton(new Button(TitleMenu.CREDITS_ID, MojamComponent.texts.getStatic("options.credits"), xOffset, yOffset += offset));
-
-		back = addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"), xOffset, (yOffset += offset) + 20));
+		sound_and_video = (Button) addButton(new Button(TitleMenu.AUDIO_VIDEO_ID, MojamComponent.texts.getStatic("options.sound_and_video"), xOffset, yOffset += offset));
+		locale = (Button) addButton(new Button(TitleMenu.LOCALE_ID, MojamComponent.texts.getStatic("options.locale_selection"), xOffset, yOffset += offset));
+		creativeModeBtn = (Checkbox) addButton(new Checkbox(TitleMenu.CREATIVE_ID, MojamComponent.texts.getStatic("options.creative"), xOffset, yOffset += offset, Options.getAsBoolean(Options.CREATIVE, Options.VALUE_FALSE)));
+		credits = (Button) addButton(new Button(TitleMenu.CREDITS_ID, MojamComponent.texts.getStatic("options.credits"), xOffset, yOffset += offset));
+		back = (Button) addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"), xOffset, (yOffset += offset) + 20));
 
 		creativeModeBtn.addListener(new ButtonListener() {
 			@Override
