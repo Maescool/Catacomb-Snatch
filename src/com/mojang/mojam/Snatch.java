@@ -35,6 +35,7 @@ import javax.script.ScriptException;
 import javax.swing.JTextArea;
 
 import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.Level;
@@ -56,6 +57,7 @@ public final class Snatch
 
 	public static void init(MojamComponent m)
 	{
+		if(init)return;
 		init = true;
 		mojam = m;
 		try
@@ -169,6 +171,11 @@ public final class Snatch
 		}
 	}
 
+	/**
+	 * 
+	 * @return The MojamComponent instance, containing everything.
+	 * @see MojamComponent
+	 */
 	public static MojamComponent getMojam()
 	{
 		return mojam;
@@ -272,7 +279,7 @@ public final class Snatch
 		}
 	}
 
-	public static ScriptEngine addScript(String s)
+	private static ScriptEngine addScript(String s)
 	{
 		ScriptEngine e = lang.getEngineByExtension(s.substring(s.lastIndexOf('.') + 1));
 		/*for(ScriptEngineFactory factory:lang.getEngineFactories())
@@ -306,7 +313,7 @@ public final class Snatch
 		return e;
 	}
 
-	public static ScriptEngine addScript(ZipEntry entry)
+	private static ScriptEngine addScript(ZipEntry entry)
 	{
 		String s = entry.getName();
 		ScriptEngine engine = lang.getEngineByExtension(s.substring(s.lastIndexOf('.') + 1));
@@ -372,7 +379,7 @@ public final class Snatch
 	}
 
 	@Deprecated
-	public static void addJSMod(ClassLoader c, String s)
+	private static void addJSMod(ClassLoader c, String s)
 	{
 		ScriptEngine e = lang.getEngineByExtension("js");
 		try
@@ -406,6 +413,15 @@ public final class Snatch
 		return spawnList.size();
 	}
 
+	/**
+	 * Registers an instance of the entity into
+	 * a List and then returns its id, so that
+	 * it can later be used for spawning custom
+	 * entities.
+	 * @param entity
+	 * @return The id of the registered entity
+	 * @see Entity
+	 */
 	public static int addEntity(Entity entity)
 	{
 		spawnList.put(spawnList.size(), entity);
@@ -577,12 +593,26 @@ public final class Snatch
 		return Font.getFont();
 	}
 
+	/**
+	 * Returns a new instance of an Empty Entity for JS or others to manipulate; i.e: <br>
+	 * {@code newEntity(x,y).getSpeed = new function { return 1.5; }}
+	 * @param x x position to spawn
+	 * @param y y position to spawn
+	 * @return new instance to modify
+	 * @see Entity
+	 * @see EmptyEntity
+	 */
+	public static Entity newEntity(double x, double y)
+	{
+		return new EmptyEntity(x,y);
+	}
+	
 	public static void setGamemode(GameMode gamemode)
 	{
 		TitleMenu.defaultGameMode = gamemode;
 	}
 
-	public static void readLinksFromFile(File f) throws IOException
+	private static void readLinksFromFile(File f) throws IOException
 	{
 		if(!f.exists())
 		{
@@ -626,7 +656,7 @@ public final class Snatch
 		}
 	}
 
-	public static boolean upToDate(String s) throws IOException
+	private static boolean upToDate(String s) throws IOException
 	{
 		File f = new File(s);
 		File f1 = new File(mojam.getMojamDir(), "mods/" + s.substring(s.lastIndexOf('/') + 1));
@@ -641,7 +671,7 @@ public final class Snatch
 		return false;
 	}
 
-	public static File downloadFile(String path, String dest) throws IOException
+	private static File downloadFile(String path, String dest) throws IOException
 	{
 		URL url = new URL(path);
 		ReadableByteChannel rbc = Channels.newChannel(url.openStream());
@@ -650,16 +680,7 @@ public final class Snatch
 		return new File(dest);
 	}
 
-	@Deprecated
-	public static File downloadFile(URL url, String dest) throws IOException
-	{
-		ReadableByteChannel rbc = Channels.newChannel(url.openStream());
-		FileOutputStream fos = new FileOutputStream(new File(dest));
-		fos.getChannel().transferFrom(rbc, 0, 1 << 24);
-		return new File(dest);
-	}
-
-	public static void displayConsoleWindow()
+	private static void displayConsoleWindow()
 	{
 		Console.main(null);
 	}

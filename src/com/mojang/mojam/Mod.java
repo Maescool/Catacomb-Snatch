@@ -41,7 +41,7 @@ public abstract class Mod
 	public void OnRender(){}
 	
 	/**
-	 * Called once before the main @see MojamComponent game loop. Used 
+	 * Called once before the main {@link MojamComponent} game loop. Used 
 	 * for initialising scripts, since mods can use their constructors.
 	 */
 	public void RunOnce(){}
@@ -55,7 +55,8 @@ public abstract class Mod
 	/**
 	 * Called whenever a packet is sent to another player. Can not be 
 	 * intercepted, but can be recorded.
-	 * @param packet The @see Packet being sent over the network
+	 * @param packet The {@link Packet} being sent over the network
+	 * @see Packet
 	 */
 	public void OnSendPacket(Packet packet){}
 		
@@ -63,7 +64,9 @@ public abstract class Mod
 	 * Called upon the victory of one player or team, so that fanfare 
 	 * can be given.
 	 * 
-	 * @param team The winning @see Team
+	 * @param team The winning {@link Team}
+	 * @see Team
+	 * @see com.mojang.mojam.level.gamemode.IVictoryConditions
 	 */
 	public void OnVictory(int team){}
 	
@@ -72,21 +75,24 @@ public abstract class Mod
 	 * spawners or spawning mobs. This can be used to manipulate
 	 * the world in all sorts of ways.
 	 * 
-	 * @param level The @see Level being ticked 
+	 * @param level The {@link Level} being ticked
+	 * @see Level 
 	 */
 	public void OnLevelTick(Level level){}
 	
 	/**
 	 * Called whenever a packet is received from another player. 
 	 * Can (possibly) be intercepted.
-	 * @param packet The @see Packet being received over the network
+	 * @param packet The {@link Packet} being received over the network
+	 * @see Packet
 	 */
 	public void OnReceivePacket(Packet packet){}
 	
 	/**
 	 * Called whenever a packet is sent or received. Can not be 
 	 * intercepted, but can be recorded.
-	 * @param packet The @see Packet being sent over the network
+	 * @param packet The {@link Packet} being sent over the network
+	 * @see Packet
 	 */
 	public void HandlePacket(Packet packet){}
 	
@@ -94,7 +100,8 @@ public abstract class Mod
 	 * Called upon the level being created. This can change fields
 	 * such as gametype, map size and layout.
 	 * 
-	 * @param level The @see Level being created 
+	 * @param level The {@link Level} being created
+	 * @see Level 
 	 */
 	public void CreateLevel(Level level){}
 	
@@ -102,14 +109,17 @@ public abstract class Mod
 	 * Called whenever an entity is spawned. It cycles through
 	 * loaded mods, and until it is returned an entity. Use it
 	 * in conjunction with the i value and registering entities
-	 * so that @code{
-	 * if(i==myEntityId)return new MyEntity(i,x,y);
-	 * }
+	 * so that <br> {@code
+	 * if(i==myEntityId)return new MyEntity(i,x,y);}
+	 * 
 	 * 
 	 * @param i The id of the Entity to spawn
 	 * @param x The x location of the new Entity to Spawn
 	 * @param y the y location of the new Entity to Spawn
 	 * @return A new instance of your registered entity
+	 * @see SpawnerEntity
+	 * @see RandomSpawner
+	 * @see Entity
 	 */
 	public Entity getEntityInstanceById(int i, double x, double y)
 	{
@@ -117,7 +127,10 @@ public abstract class Mod
 	}
 	
 	/**
+	 * To be called when displaying an error
+	 * 
 	 * @return The mod version
+	 * @see Snatch
 	 */
 	public abstract String getVersion(); 
 }
