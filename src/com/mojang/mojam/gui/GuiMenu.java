@@ -29,6 +29,8 @@ public abstract class GuiMenu extends GuiComponent implements ButtonListener, Ke
             return null;
         }
     }
+    
+//    public abstract void change_locale();
 
     protected Text addText(Text text) {
 		texts.add(text);

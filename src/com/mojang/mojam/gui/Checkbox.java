@@ -53,4 +53,8 @@ public class Checkbox extends ClickableComponent
     {
         return id;
     }
+    
+    public void setLabel(String label){
+    	this.label = label;
+    }
 }
