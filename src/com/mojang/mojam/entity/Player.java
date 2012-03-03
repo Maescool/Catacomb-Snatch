@@ -76,6 +76,7 @@ public class Player extends Mob implements LootCollector {
     private int deadDelay = 0;
     private int nextWalkSmokeTick = 0;
     boolean isImmortal;
+    private int characterID;
 
     /**
      * Constructor
@@ -86,10 +87,11 @@ public class Player extends Mob implements LootCollector {
      * @param y Initial y coordinate
      * @param team Team number
      */
-    public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team) {
+    public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team, int characterID) {
         super(x, y, team);
         this.keys = keys;
         this.mouseButtons = mouseButtons;
+        this.characterID = characterID;
 
         startX = x;
         startY = y;
@@ -668,12 +670,12 @@ public class Player extends Mob implements LootCollector {
         }
 	}
     
+    public void setCharacterID(int characterID) {
+		this.characterID = characterID;
+	}
+    
     public int getCharacterID(){
-    	if (team == Team.Team2) {
-			return MojamComponent.player2Character;
-		} else {
-			return MojamComponent.player1Character;
-		}
+    	return characterID;
     }
 
 	@Override

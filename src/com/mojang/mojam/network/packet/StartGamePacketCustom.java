@@ -10,17 +10,19 @@ import com.mojang.mojam.level.TileID;
 public class StartGamePacketCustom extends StartGamePacket {
 
 	private long gameSeed;
-	public Level level;
-	public int levelWidth, levelHeight;
-	public Short[] shorts;
-	public int difficulty;
+	private Level level;
+	private int levelWidth, levelHeight;
+	private Short[] shorts;
+	private int difficulty;
+	private int opponentCharacterID;
 
 	public StartGamePacketCustom() {}
 
-	public StartGamePacketCustom(long gameSeed, Level level, int difficulty) {
+	public StartGamePacketCustom(long gameSeed, Level level, int difficulty, int opponentCharacterID) {
 		this.gameSeed = gameSeed;
 		this.level = level;
 		this.difficulty = difficulty;
+		this.opponentCharacterID = opponentCharacterID;
 	}
 
 	@Override
@@ -28,6 +30,7 @@ public class StartGamePacketCustom extends StartGamePacket {
 		gameSeed = dis.readLong();
 		levelWidth = dis.readInt();
 		levelHeight = dis.readInt();
+		opponentCharacterID = dis.readInt();
 
 		shorts = new Short[levelWidth * levelHeight];
 		for (int i = 0; i < shorts.length; i++) {
@@ -41,6 +44,7 @@ public class StartGamePacketCustom extends StartGamePacket {
 		dos.writeLong(gameSeed);
 		dos.writeInt(level.width);
 		dos.writeInt(level.height);
+		dos.writeInt(opponentCharacterID);
 		for (int i = 0; i < level.tiles.length; i++) {
 			dos.writeShort(TileID.tileToShort(level.tiles[i]));
 		}
@@ -66,6 +70,11 @@ public class StartGamePacketCustom extends StartGamePacket {
 	@Override
 	public int getDifficulty() {
 		return difficulty;
+	}
+
+	@Override
+	public int getOpponentCharacterID() {
+		return opponentCharacterID;
 	}
 
 }
