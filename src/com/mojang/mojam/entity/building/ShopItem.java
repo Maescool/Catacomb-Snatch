@@ -174,4 +174,13 @@ public class ShopItem extends Building {
             }
         }
     }
+    
+    @Override
+    public boolean upgrade(Player p) {
+        if (this.team == MojamComponent.localTeam) {
+            Notifications.getInstance().add(
+                    MojamComponent.texts.getStatic("upgrade.shopItem"));
+        }
+        return false;
+    }
 }
