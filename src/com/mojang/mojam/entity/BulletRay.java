@@ -21,7 +21,7 @@ public class BulletRay extends Bullet {
 		pos.set(e.pos.x + xa * 4, e.pos.y + ya * 4);
 		this.xa = xa * 6;
 		this.ya = ya * 6;
-		this.setSize(40, 40);
+		this.setSize(4, 4);
 		physicsSlide = false;
 		duration = 40;
 		maxBounceNumber = 5;
@@ -40,13 +40,23 @@ public class BulletRay extends Bullet {
 		}
 		if (!move(xa, ya)) {
 			if(maxBounceNumber > 0) {
-				//This makes the bullet bounce and increase speed
-				if(previuosPositionX != pos.x) ya = -ya * 1.2;
-				if(previuosPositionY != pos.y) xa = -xa * 1.2;
+				//Bounce
+				if(previuosPositionX != pos.x) {
+					ya = -ya;
+				} 
+				if(previuosPositionY != pos.y) {
+					xa = -xa;
+				} 
+				if(previuosPositionY == pos.y && previuosPositionX == pos.x) {
+					xa = -xa;
+					ya = -ya;
+				}
 				
-				//Increase the duration and damage with each bounce
+				//Increase the speed, duration and damage with each bounce
+				xa *= 1.2;
+				ya *= 1.2;
 				duration += 5;
-				damage *= 2;
+				damage *= 1.5;
 				
 				//Face the bullet in the correct direction after bounce
 				double angle = (Math.atan2(ya, xa) + Math.PI * 1.625);
