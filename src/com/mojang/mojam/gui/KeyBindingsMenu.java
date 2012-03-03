@@ -21,7 +21,7 @@ public class KeyBindingsMenu extends GuiMenu {
 
 		public KeyBindingButton(int id, Key key, int x, int y) {
 			super(id, null, x, y);
-			this.setLabel(trimToFitButton(getMenuText(key)));
+			this.setLabel(getMenuText(key));
 			this.key = key;
 		}
 
@@ -63,6 +63,10 @@ public class KeyBindingsMenu extends GuiMenu {
 			String label = getLabel();
 			this.selected = selected;
 			setLabel(label);
+		}
+		
+		public void refresh() {
+			this.setLabel(getMenuText(key));
 		}
 	}
 
@@ -140,9 +144,7 @@ public class KeyBindingsMenu extends GuiMenu {
 	public void render(Screen screen) {
 		screen.blit(Art.background, 0, 0);
 		Texts txts = MojamComponent.texts;
-		String txt = txts.getStatic("options.keyBindings");
-		int stringWith = Font.defaultFont().calculateStringWidth(txt);
-		Font.defaultFont().draw(screen, txt, (MojamComponent.GAME_WIDTH - stringWith) / 2, yOffset - 40);
+		Font.defaultFont().draw(screen, txts.getStatic("options.keyBindings"), MojamComponent.GAME_WIDTH / 2, yOffset - 40, Font.Align.CENTERED);
 		write(screen, txts.getStatic("keys.up"), 0, 0);
 		write(screen, txts.getStatic("keys.down"), 0, 1);
 		write(screen, txts.getStatic("keys.left"), 0, 2);
@@ -169,10 +171,9 @@ public class KeyBindingsMenu extends GuiMenu {
 	}
 
 	private void write(Screen screen, String txt, int column, int row) {
-		int stringWidth = Font.defaultFont().calculateStringWidth(txt + ": ");
 		Font.defaultFont().draw(screen, txt + ": ", BORDER + 32 + textWidth + column
-				* (Button.BUTTON_WIDTH + 32 + textWidth) - stringWidth, yOffset
-				+ 8 + row * BUTTON_SPACING);
+				* (Button.BUTTON_WIDTH + 32 + textWidth), yOffset
+				+ 8 + row * BUTTON_SPACING, Font.Align.RIGHT);
 	}
 
 	@Override
@@ -196,6 +197,7 @@ public class KeyBindingsMenu extends GuiMenu {
 			selectedKey.setLabel(KeyEvent.getKeyText(e.getKeyCode()));
 			selectedKey.setSelected(false);
 			selectedKey = null;
+			refreshKeys();	
 		} else {			
 			if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
 				if (buttons.get(selectedItem) == back) {
@@ -216,7 +218,14 @@ public class KeyBindingsMenu extends GuiMenu {
 			}
 		}
 	}
-
+	
+	public void refreshKeys() {
+		for(ClickableComponent button : super.buttons) {
+			if(button instanceof KeyBindingButton)
+				((KeyBindingButton)button).refresh();
+		}
+	}
+	
 	@Override
 	public void keyTyped(KeyEvent e) {}
 
