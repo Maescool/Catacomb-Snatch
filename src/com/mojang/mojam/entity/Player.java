@@ -1,6 +1,9 @@
 package com.mojang.mojam.entity;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
+import java.util.Set;
 
 import com.mojang.mojam.Keys;
 import com.mojang.mojam.MojamComponent;
@@ -9,6 +12,7 @@ import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.animation.SmokePuffAnimation;
 import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.building.Harvester;
+import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.loot.LootCollector;
@@ -791,7 +795,29 @@ public class Player extends Mob implements LootCollector {
         carrying = null;
         dropAllMoney();
         pos.set(startX, startY);
+   	 // If the player is around 0, 0 just kill the entities at the base and then teleport to base .
+        if (pos.x >= -10 && pos.x <= 10 && pos.y >= -10 && pos.y <= 10) { 
+        	Set<Entity> entitySet = this.level.getEntities(startX - 128, startY - 64, startX + 128, startY + 64);
+        	Iterator<Entity> entityIterator = entitySet.iterator();
+        	System.out.println(entitySet.size());
+            while (entityIterator.hasNext()) { 
+            	Entity e = entityIterator.next();
+            	if (!(e instanceof Player) && (!(e instanceof Building) || (e instanceof SpawnerEntity))) { 
+            		e.remove();
+            		level.removeEntity(e);
+            		level.removeFromEntityMap(e);
+            	}
+            }
+        	this.basePosition();
+        }
         health = maxHealth;
+    }
+    
+    /**
+     * Teleports the player to his / her base. Made for the 0, 0 fix.
+     */
+    private void basePosition() {
+        pos.set(startX, startY);
     }
 
     @Override
