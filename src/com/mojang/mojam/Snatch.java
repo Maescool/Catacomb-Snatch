@@ -1,5 +1,6 @@
 package com.mojang.mojam;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -10,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PipedOutputStream;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
@@ -28,6 +30,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
+import javax.imageio.ImageIO;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -41,6 +44,8 @@ import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.gamemode.GameMode;
 import com.mojang.mojam.network.Packet;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
 
 public final class Snatch
 {
@@ -64,7 +69,7 @@ public final class Snatch
 		try
 		{
 			modDir = new File(Snatch.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-			modsFolder = new File(mojam.getMojamDir(),"/mods/");
+			modsFolder = new File(mojam.getMojamDir(), "/mods/");
 			isJar = modDir.getAbsolutePath().endsWith(".jar");
 		}
 		catch (URISyntaxException e1)
@@ -93,13 +98,15 @@ public final class Snatch
 			e.printStackTrace();
 		}
 	}
-	
+
 	private static void readFromModsFolder()
 	{
 		File[] files = modsFolder.listFiles();
-		for(File f:files)
+		boolean valid;
+		for(File f : files)
 		{
-			addScript(f.getAbsolutePath());
+			valid = true;
+			if(valid) addScript(f.getAbsolutePath());
 		}
 	}
 
@@ -460,6 +467,85 @@ public final class Snatch
 		return key;
 	}
 
+	public static Bitmap[][] addAnimation(String src)
+	{
+		return Art.cut(src, 32, 32);
+	}
+
+	public static Bitmap addArt(String src)
+	{
+		return load(src);
+	}
+
+	public static Object reflectMethod(Object o, String s, Object params[])
+	{
+		// Go and find the private method... 
+		final Method methods[] = o.getClass().getDeclaredMethods();
+		for(int i = 0; i < methods.length; ++i)
+		{
+			if(s.equals(methods[i].getName()))
+			{
+				try
+				{
+					methods[i].setAccessible(true);
+					return methods[i].invoke(o, params);
+				}
+				catch (IllegalAccessException ex)
+				{
+
+				}
+				catch (InvocationTargetException ite)
+				{
+
+				}
+			}
+		}
+		return null;
+	}
+	
+	public static Object reflectField(Object o, String s, Object value) 
+	{
+		// Go and find the private method... 
+		final Field fields[] = o.getClass().getDeclaredFields();
+		for(int i = 0; i < fields.length;++i) 
+		{ 
+			if(s.equals(fields[i].getName())) 
+			{ 
+				try {					
+					fields[i].setAccessible(true); 
+					fields[i].set(o, value);
+					return fields[i].get(o);
+				} catch (IllegalAccessException ex) 
+				{
+
+				} 
+			}
+		}
+		return null; 
+	}
+
+	private static Bitmap load(String string)
+	{
+		try
+		{
+			BufferedImage bi = ImageIO.read(MojamComponent.class.getResource(string));
+
+			int w = bi.getWidth();
+			int h = bi.getHeight();
+
+			Bitmap result = new Bitmap(w, h);
+			bi.getRGB(0, 0, w, h, result.pixels, 0, w);
+
+			return result;
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
 	public static void afterRender()
 	{
 		for(Mod m : modList)
@@ -630,7 +716,7 @@ public final class Snatch
 	/**
 	 * Returns a new instance of an Empty Entity for JS or others to manipulate;
 	 * i.e: <br>
-	 * {@code newEntity(x,y).getSpeed = new function return 1.5; }}
+	 * {@code newEntity(x,y).getSpeed = new function return 1.5; }
 	 * 
 	 * @param x
 	 *            x position to spawn
