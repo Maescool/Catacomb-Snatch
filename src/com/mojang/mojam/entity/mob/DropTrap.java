@@ -72,7 +72,11 @@ public class DropTrap extends Mob implements IEditable {
 	
 	@Override
 	public void render(Screen screen) {
-		screen.blit(Art.dropFloor[crumble][0], pos.x, pos.y);
+		if (level.getTile((int)(pos.x/32), (int)(pos.y/32)-1) instanceof HoleTile) {
+			screen.blit(Art.dropFloor[crumble][0], pos.x, pos.y);
+		} else {
+			screen.blit(Art.dropFloor[crumble][1], pos.x, pos.y);
+		}
 	}
     
 	@Override
