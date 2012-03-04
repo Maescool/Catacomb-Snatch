@@ -75,6 +75,7 @@ public class SoundPlayer implements ISoundPlayer {
 	 */
 	@Override
 	public void startTitleMusic() {
+		musicVolume = Options.getAsFloat(Options.MUSIC, "1.0f");
 		if (!isMuted() && hasOggPlaybackSupport()) {
 			if (isPlaying(BACKGROUND_TRACK))
 				stopBackgroundMusic();
@@ -91,6 +92,7 @@ public class SoundPlayer implements ISoundPlayer {
 	 */
 	@Override
 	public void startEndMusic() {
+		musicVolume = Options.getAsFloat(Options.MUSIC, "1.0f");
 		if (!isMuted() && hasOggPlaybackSupport()) {
 		    if (isPlaying(BACKGROUND_TRACK))
                 stopBackgroundMusic();
@@ -102,15 +104,18 @@ public class SoundPlayer implements ISoundPlayer {
         getSoundSystem().setVolume(BACKGROUND_TRACK, musicVolume);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mojang.mojam.sound.ISoundPlayer#startBackgroundMusic()
 	 */
 	@Override
 	public void startBackgroundMusic() {
-	    System.out.println("*** startBackgroundMusic ***");
-        if (!isMuted() && hasOggPlaybackSupport()) {
-            if (isPlaying(BACKGROUND_TRACK))
-                stopBackgroundMusic();
+		System.out.println("*** startBackgroundMusic ***");
+		musicVolume = Options.getAsFloat(Options.MUSIC, "1.0f");
+		if (!isMuted() && hasOggPlaybackSupport()) {
+			if (isPlaying(BACKGROUND_TRACK))
+				stopBackgroundMusic();
 
             nextSong++;
             if (nextSong>4) nextSong = 1;
@@ -183,6 +188,7 @@ public class SoundPlayer implements ISoundPlayer {
 			getSoundSystem().setPitch(indexedSourceName, 1.0f);
 			soundVolume = Options.getAsFloat(Options.SOUND, "1.0f");
 			getSoundSystem().setVolume(indexedSourceName, soundVolume);
+			getSoundSystem().activate(indexedSourceName);
 			getSoundSystem().play(indexedSourceName);
 			return true;
 		}

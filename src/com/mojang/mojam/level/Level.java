@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.mojang.mojam.GameCharacter;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
@@ -31,7 +32,7 @@ public class Level {
 	public Tile[] tiles;
 	public List<Entity>[] entityMap;
 	public List<Entity> entities = new ArrayList<Entity>();
-	private Bitmap minimap, displaymap;
+	private Bitmap minimap;
 	private boolean largeMap = false, smallMap = false;
 	private boolean seen[];
 	final int[] neighbourOffsets;
@@ -42,32 +43,19 @@ public class Level {
 	public IVictoryConditions victoryConditions;
 	public int player1Score = 0;
 	public int player2Score = 0;
-	
-	public int player1Character;
-	public int player2Character;
 
 	@SuppressWarnings("unchecked")
-	public Level(int width, int height, int player1Character, int player2Character) {
+	public Level(int width, int height) {
 		neighbourOffsets = new int[] { -1, 1, -width, width };
 		this.width = width;
 		this.height = height;
-		this.player1Character = player1Character;
-		this.player2Character = player2Character;
 
 		minimap = new Bitmap(width, height);
-		displaymap = new Bitmap(64, 64);
 		
 		largeMap = height > 64 || width > 64;
 		smallMap = height < 64 && width < 64;
 		
-		tiles = new Tile[width * height];
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				Tile tile = new FloorTile();
-
-				setTile(x, y, tile);
-			}
-		}
+		initializeTiles();
 
 		entityMap = new List[width * height];
 		for (int i = 0; i < width * height; i++) {
@@ -75,15 +63,17 @@ public class Level {
 		}
 
 		setSeen(new boolean[(width + 1) * (height + 1)]);
-
-		/*
-		 * for (int i = 0; i < 10; i++) { double x = random.nextInt(width) *
-		 * Tile.WIDTH + Tile.WIDTH / 2; double y = random.nextInt(height) *
-		 * Tile.HEIGHT + Tile.HEIGHT / 2; addEntity(new SpawnerEntity(x, y,
-		 * random.nextInt(Team.MaxTeams))); }
-		 */
 	}
 
+	private void initializeTiles(){
+	    tiles = new Tile[width * height];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                Tile tile = new FloorTile();
+                setTile(x, y, tile);
+            }
+        }
+	}
 
 	public void setTile(int x, int y, Tile tile) {
 		final int index = x + (y * width);
@@ -292,275 +282,311 @@ public class Level {
 		Set<Entity> visibleEntities = getEntities(xScroll - Tile.WIDTH, yScroll
 				- Tile.HEIGHT, xScroll + screen.w + Tile.WIDTH, yScroll
 				+ screen.h + Tile.HEIGHT);
-		// Sort the entities
-		/*
-		 * final int EntityBlitPixelRowOffset = -12; Set<Entity> visibleEntities
-		 * = getEntities(xScroll - Tile.WIDTH, yScroll - Tile.HEIGHT, xScroll +
-		 * screen.w + Tile.WIDTH, yScroll + screen.h + Tile.HEIGHT);
-		 * ArrayList<Entity>[] rowEntities = new ArrayList[8 + y1 - y0]; // fuck
-		 * // me... // And how to remove this warning (without supressing)? ^
-		 * for (Entity e : visibleEntities) { int y = (int) ((e.pos.y -
-		 * EntityBlitPixelRowOffset) / Tile.WIDTH) - y0 + 2; if (rowEntities[y]
-		 * == null) rowEntities[y] = new ArrayList<Entity>();
-		 * rowEntities[y].add(e); }
-		 */
 
 		screen.setOffset(-xScroll, -yScroll);
 
-		for (int y = y0; y <= y1; y++) {
-			for (int x = x0; x <= x1; x++) {
-				if (x < 0 || x >= width || y < 0 || y >= height) {
-					screen.blit(Art.floorTiles[5][0], x * Tile.WIDTH, y
-							* Tile.HEIGHT);
-					continue;
-				}
-				int xt = x - (width / 2) + 4;
-				int yt = y - 4;
-				if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4
-						&& (xt != 3 || yt < 3)) {
-					screen.blit(Art.getPlayerBase(player2Character)[xt][yt], x * Tile.WIDTH, y
-							* Tile.HEIGHT);
-					continue;
-				}
-
-				yt = y - (height - 8);
-				if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4
-						&& (xt != 3 || yt > 0)) {
-					screen.blit(Art.getPlayerBase(player1Character)[xt][yt], x * Tile.WIDTH, y
-							* Tile.HEIGHT);
-					continue;
-				}
-				if (canSee(x, y)) {
-					tiles[x + y * width].render(screen);
-				}
-			}
-		}
+		renderTilesAndBases(screen, x0, y0, x1, y1);
 
 		for (Entity e : visibleEntities) {
 			e.render(screen);
+			// this renders players carrying something
+	        e.renderTop(screen);
 		}
 
-		for (int y = y0; y <= y1; y++) {
-			for (int x = x0; x <= x1; x++) {
-				if (x < 0 || x >= width || y < 0 || y >= height) {
-					continue;
-				}
-				if (canSee(x, y)) {
-					tiles[x + y * width].renderTop(screen);
-				}
-			}
-		}
-		for (Entity e : visibleEntities) {
-			e.renderTop(screen);
-		}
-		/*
-		 * for (int y = y0; y <= y1 + 2; y++) { for (int x = x0; x <= x1; x++) {
-		 * if (x < 0 || x >= width || y < 0 || y >= height) {
-		 * screen.blit(Art.floorTiles[5][0], x * Tile.WIDTH, y * Tile.HEIGHT);
-		 * continue; } int xt = x - 28; int yt = y - 4; if (xt >= 0 && yt >= 0
-		 * && xt < 7 && yt < 4) { screen.blit(Art.startLordLard[xt][yt], x *
-		 * Tile.WIDTH, y * Tile.HEIGHT); continue; } yt = y - (64 - 8); if (xt
-		 * >= 0 && yt >= 0 && xt < 7 && yt < 4) {
-		 * screen.blit(Art.startLordLard[xt][yt], x * Tile.WIDTH, y *
-		 * Tile.HEIGHT); continue; } if (canSee(x, y)) { tiles[x + y *
-		 * width].render(screen); } } //
-		 * 
-		 * @todo: actually go through the correct rows int row = 2 + y - y0; if
-		 * (rowEntities[row] != null) { for (Entity e : rowEntities[row]) {
-		 * e.render(screen); } } }
-		 */
-
-		for (int y = y0; y <= y1; y++) {
-			if (y < 0 || y >= height)
-				continue;
-			for (int x = x0; x <= x1; x++) {
-				if (x < 0 || x >= width)
-					continue;
-				boolean c0 = !getSeen()[x + y * (width + 1)];
-				boolean c1 = !getSeen()[(x + 1) + y * (width + 1)];
-				boolean c2 = !getSeen()[x + (y + 1) * (width + 1)];
-				boolean c3 = !getSeen()[(x + 1) + (y + 1) * (width + 1)];
-
-				if (!(c0 || c1 || c2 || c3))
-					continue;
-
-				int count = 0;
-				if (c0)
-					count++;
-				if (c1)
-					count++;
-				if (c2)
-					count++;
-				if (c3)
-					count++;
-				int yo = -16;
-
-				if (count == 4) {
-					screen.blit(Art.darkness[1][1], x * Tile.WIDTH, y
-							* Tile.WIDTH + yo);
-				} else if (count == 3) {
-					if (!c0)
-						screen.blit(Art.darkness[1][4], x * Tile.WIDTH, y
-								* Tile.WIDTH + yo);
-					if (!c1)
-						screen.blit(Art.darkness[0][4], x * Tile.WIDTH, y
-								* Tile.WIDTH + yo);
-					if (!c2)
-						screen.blit(Art.darkness[1][3], x * Tile.WIDTH, y
-								* Tile.WIDTH + yo);
-					if (!c3)
-						screen.blit(Art.darkness[0][3], x * Tile.WIDTH, y
-								* Tile.WIDTH + yo);
-				} else if (count == 1) {
-					if (c0)
-						screen.blit(Art.darkness[2][2], x * Tile.WIDTH, y
-								* Tile.WIDTH + yo);
-					if (c1)
-						screen.blit(Art.darkness[0][2], x * Tile.WIDTH, y
-								* Tile.WIDTH + yo);
-					if (c2)
-						screen.blit(Art.darkness[2][0], x * Tile.WIDTH, y
-								* Tile.WIDTH + yo);
-					if (c3)
-						screen.blit(Art.darkness[0][0], x * Tile.WIDTH, y
-								* Tile.WIDTH + yo);
-				} else {
-					if (c0 && c3)
-						screen.blit(Art.darkness[2][4], x * Tile.WIDTH, y
-								* Tile.WIDTH + yo);
-					if (c1 && c2)
-						screen.blit(Art.darkness[2][3], x * Tile.WIDTH, y
-								* Tile.WIDTH + yo);
-					if (c0 && c1)
-						screen.blit(Art.darkness[1][2], x * Tile.WIDTH, y
-								* Tile.WIDTH + yo);
-					if (c2 && c3)
-						screen.blit(Art.darkness[1][0], x * Tile.WIDTH, y
-								* Tile.WIDTH + yo);
-					if (c0 && c2)
-						screen.blit(Art.darkness[2][1], x * Tile.WIDTH, y
-								* Tile.WIDTH + yo);
-					if (c1 && c3)
-						screen.blit(Art.darkness[0][1], x * Tile.WIDTH, y
-								* Tile.WIDTH + yo);
-				}
-			}
-		}
-
+		renderTopOfWalls(screen, x0, y0, x1, y1);
+		renderDarkness(screen, x0, y0, x1, y1);
+		
 		screen.setOffset(0, 0);
-
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				int i = x + y * width;
-				if (hasSeen(x, y)) {
-					minimap.pixels[i] = tiles[i].minimapColor;
-				} else {
-					minimap.pixels[i] = 0xff000000;
-				}
-			}
-		}
-
-		for (int i = 0; i < entities.size(); i++) {
-			Entity e = entities.get(i);
-			if (!e.removed) {
-				if (e.minimapIcon >= 0) {
-					int x = (int) (e.pos.x / Tile.WIDTH);
-					int y = (int) (e.pos.y / Tile.WIDTH);
-					if (x >= 0 && y >= 0 && x < width && y < height) {
-						if (hasSeen(x, y)) {
-							minimap.blit(
-									Art.mapIcons[e.minimapIcon % 4][e.minimapIcon / 4],
-									x - 2, y - 2);
-						}
-					}
-				}
-			}
-		}
 		
-		// Display the real map!
-		if(largeMap){
-			int locx = x0 + 8;
-			int locy = y0 + 8;
-			
-			int drawx = 0, drawy = 0;
-			int donex = 0, doney = 0;
-			int diffx = 0, diffy = 0;
-			
-			if(width < 64) diffx = (64 - width) / 2;
-			if(height < 64) diffy = (64 - height) / 2;
-			
-			if(locx < 32 || width < 64){
-				drawx = 0;
-			} else if(locx > (width - 32)){
-				drawx = width - 64;
-			} else{
-				drawx = locx - 32;
-			}
-			
-			if(locy < 32 || height < 64){
-				drawy = 0;
-			} else if(locy > (height - 32)){
-				drawy = height - 64;
-			} else {
-				drawy = locy - 32;
-			}
-			
-			for (int y = 0; y < 64; y++) {
-				if(y < diffy || y >= (64 - diffy)) {
-					for (int x = 0; x < 64; x++) {
-						displaymap.pixels[x + (y * 64)] = Art.floorTileColors[5 & 7][5 / 8];
-					}
-				}
-				else{
-					for (int x = 0; x < 64; x++) {
-						if(x < diffx || x > (64 - diffx)) 
-							displaymap.pixels[x + (y * 64)] = Art.floorTileColors[5 & 7][5 / 8];
-						else{
-							if(((drawx + donex) + (drawy + doney) * width) < minimap.pixels.length -1) 
-								displaymap.pixels[x + (y * 64)] = minimap.pixels[(drawx + donex) + (drawy + doney) * width];
-								donex++;
-						}
-					}
-					donex = 0;
-					doney++;
-				}
-			}
-		} else if(smallMap){
-			int smallx = 0, smally = 0;
-			
-			for (int y = 0; y < 64; y++) {
-				for (int x = 0; x < 64; x++) {
-					if(x >= (32 - width/2) && x <= (32 + width/2) && y >= (32 - height/2) && y < (32 + height/2) - 1){
-						displaymap.pixels[x + y * 64] = minimap.pixels[smallx + smally * width];
-						smallx++;
-					}
-					else
-						displaymap.pixels[x + y * 64] = Art.floorTileColors[5 & 7][5 / 8];
-				}
-				smallx = 0;
-				
-				if(y >= (32 - height/2) && y < (32 + height/2) - 1)
-					smally++;
-			}
-		} else {
-			displaymap = minimap;
-		}
-		
-		screen.blit(Art.panel, 0, screen.h - 80);
-		screen.blit(displaymap, 429, screen.h - 80 + 5);
-		
-		String player1score =  MojamComponent.texts.scoreCharacter(player1Character, player1Score * 100 / TARGET_SCORE);
-		Font.defaultFont().draw(screen, player1score, 280-player1score.length()*10, screen.h - 20); //adjust so it fits in the box
-		screen.blit(Art.getPlayer(player1Character)[0][2], 262, screen.h-42);
-
-		if (player2Character != Art.NO_OPPONENT) {
-			Font.defaultFont().draw(screen, MojamComponent.texts.scoreCharacter(player2Character, player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
-			screen.blit(Art.getPlayer(player2Character)[0][6], 19, screen.h-42);
-		}
+		updateMinimap();
+		renderPanelAndMinimap(screen, x0, y0);
+		renderPlayerScores(screen);
 		
 		Notifications.getInstance().render(screen);
 	}
 
+	private void renderTilesAndBases(Screen screen, int x0, int y0, int x1, int y1){
+	    // go through each currently visible cell
+	    for (int y = y0; y <= y1; y++) {
+	        for (int x = x0; x <= x1; x++) {
+
+	            // draw sand outside the level
+	            if (x < 0 || x >= width || y < 0 || y >= height) {
+	                screen.blit(Art.floorTiles[5][0], x * Tile.WIDTH, y
+	                        * Tile.HEIGHT);
+	                continue;
+	            }
+
+	            // if we are in the center area (4*7 Tiles): draw player bases
+	            int xt = x - (width / 2) + 4;
+	            int yt = y - 4;
+
+	            if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (isNotBaseRailTile(xt) || yt < 3)) {
+	                screen.blit(Art.getPlayerBase(getPlayerCharacter(1))[xt][yt], x * Tile.WIDTH, y
+	                        * Tile.HEIGHT);
+	                continue;
+	            }
+
+	            yt = y - (height - 8);
+	            if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (isNotBaseRailTile(xt) || yt > 0)) {
+	                screen.blit(Art.getPlayerBase(getPlayerCharacter(0))[xt][yt], x * Tile.WIDTH, y * Tile.HEIGHT);
+	                if ((xt == 0 || xt == 1 || xt == 5 || xt == 6) && yt == 0) {
+	                    screen.blit(Art.shadow_north, x * Tile.WIDTH, y * Tile.HEIGHT);
+	                }
+	                if ((xt == 2) && yt == 0) {
+	                    screen.blit(Art.shadow_north_west, x * Tile.WIDTH, y * Tile.HEIGHT);
+	                }
+	                if ((xt == 4) && yt == 0) {
+	                    screen.blit(Art.shadow_north_east, x * Tile.WIDTH + Tile.WIDTH - Art.shadow_east.w, y * Tile.HEIGHT);
+	                }
+	                continue;
+	            }
+
+	            if (canSee(x, y)) {
+	                tiles[x + y * width].render(screen);
+	            }
+	        }
+	    }
+	}
+
+	private GameCharacter getPlayerCharacter(int playerID){
+	    Player player = MojamComponent.instance.players[playerID];
+	    if (player == null) return GameCharacter.None;
+	    else return player.getCharacter();
+	}
+	
+	private boolean isNotBaseRailTile(int xt){
+	    return (xt != 2 && xt != 3 && xt != 4);
+	}
+	
+
+	private void renderTopOfWalls(Screen screen, int x0, int y0, int x1, int y1){
+	    for (int y = y0; y <= y1; y++) {
+            for (int x = x0; x <= x1; x++) {
+                if (x < 0 || x >= width || y < 0 || y >= height) {
+                    continue;
+                }
+                if (canSee(x, y)) {
+                    tiles[x + y * width].renderTop(screen);
+                }
+            }
+        }
+	}
+	
+	private void renderDarkness(Screen screen, int x0, int y0, int x1, int y1){
+	    for (int y = y0; y <= y1; y++) {
+            if (y < 0 || y >= height)
+                continue;
+            for (int x = x0; x <= x1; x++) {
+                if (x < 0 || x >= width)
+                    continue;
+                boolean c0 = !getSeen()[x + y * (width + 1)];
+                boolean c1 = !getSeen()[(x + 1) + y * (width + 1)];
+                boolean c2 = !getSeen()[x + (y + 1) * (width + 1)];
+                boolean c3 = !getSeen()[(x + 1) + (y + 1) * (width + 1)];
+
+                if (!(c0 || c1 || c2 || c3))
+                    continue;
+
+                int count = 0;
+                if (c0)
+                    count++;
+                if (c1)
+                    count++;
+                if (c2)
+                    count++;
+                if (c3)
+                    count++;
+                int yo = -16;
+
+                if (count == 4) {
+                    screen.blit(Art.darkness[1][1], x * Tile.WIDTH, y
+                            * Tile.WIDTH + yo);
+                } else if (count == 3) {
+                    if (!c0)
+                        screen.blit(Art.darkness[1][4], x * Tile.WIDTH, y
+                                * Tile.WIDTH + yo);
+                    if (!c1)
+                        screen.blit(Art.darkness[0][4], x * Tile.WIDTH, y
+                                * Tile.WIDTH + yo);
+                    if (!c2)
+                        screen.blit(Art.darkness[1][3], x * Tile.WIDTH, y
+                                * Tile.WIDTH + yo);
+                    if (!c3)
+                        screen.blit(Art.darkness[0][3], x * Tile.WIDTH, y
+                                * Tile.WIDTH + yo);
+                } else if (count == 1) {
+                    if (c0)
+                        screen.blit(Art.darkness[2][2], x * Tile.WIDTH, y
+                                * Tile.WIDTH + yo);
+                    if (c1)
+                        screen.blit(Art.darkness[0][2], x * Tile.WIDTH, y
+                                * Tile.WIDTH + yo);
+                    if (c2)
+                        screen.blit(Art.darkness[2][0], x * Tile.WIDTH, y
+                                * Tile.WIDTH + yo);
+                    if (c3)
+                        screen.blit(Art.darkness[0][0], x * Tile.WIDTH, y
+                                * Tile.WIDTH + yo);
+                } else {
+                    if (c0 && c3)
+                        screen.blit(Art.darkness[2][4], x * Tile.WIDTH, y
+                                * Tile.WIDTH + yo);
+                    if (c1 && c2)
+                        screen.blit(Art.darkness[2][3], x * Tile.WIDTH, y
+                                * Tile.WIDTH + yo);
+                    if (c0 && c1)
+                        screen.blit(Art.darkness[1][2], x * Tile.WIDTH, y
+                                * Tile.WIDTH + yo);
+                    if (c2 && c3)
+                        screen.blit(Art.darkness[1][0], x * Tile.WIDTH, y
+                                * Tile.WIDTH + yo);
+                    if (c0 && c2)
+                        screen.blit(Art.darkness[2][1], x * Tile.WIDTH, y
+                                * Tile.WIDTH + yo);
+                    if (c1 && c3)
+                        screen.blit(Art.darkness[0][1], x * Tile.WIDTH, y
+                                * Tile.WIDTH + yo);
+                }
+            }
+        }
+	}
+	
+	private void updateMinimap(){
+	    for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int i = x + y * width;
+                if (hasSeen(x, y)) {
+                    minimap.pixels[i] = tiles[i].minimapColor;
+                } else {
+                    minimap.pixels[i] = 0xff000000;
+                }
+            }
+        }
+
+        addIconsToMinimap();
+	}
+	
+	private void addIconsToMinimap() {
+        for (int i = 0; i < entities.size(); i++) {
+            Entity e = entities.get(i);
+            if (!e.removed) {
+                if (e.minimapIcon >= 0) {
+                    int x = (int) (e.pos.x / Tile.WIDTH);
+                    int y = (int) (e.pos.y / Tile.WIDTH);
+                    if (x >= 0 && y >= 0 && x < width && y < height) {
+                        if (hasSeen(x, y)) {
+                            minimap.blit(
+                                    Art.mapIcons[e.minimapIcon % 4][e.minimapIcon / 4],
+                                    x - 2, y - 2);
+                        }
+                    }
+                }
+            }
+        }
+    }
+	
+	private void renderPanelAndMinimap(Screen screen, int x0, int y0){
+	    Bitmap displaymap = new Bitmap(64, 64);
+	    
+	    if(largeMap){
+            displaymap = calculateLargeMapDisplay(x0, y0);
+        } else if(smallMap){
+            displaymap = calculateSmallMapDisplay();
+        } else {
+            displaymap = minimap;
+        }
+        
+        screen.blit(Art.panel, 0, screen.h - 80);
+        screen.blit(displaymap, 429, screen.h - 80 + 5);
+	}
+	
+	private Bitmap calculateLargeMapDisplay(int x0, int y0) {
+	    
+	    Bitmap largeMap = new Bitmap(64, 64);
+	    int locx = x0 + 8;
+        int locy = y0 + 8;
+        
+        int drawx = 0, drawy = 0;
+        int donex = 0, doney = 0;
+        int diffx = 0, diffy = 0;
+        
+        if(width < 64) diffx = (64 - width) / 2;
+        if(height < 64) diffy = (64 - height) / 2;
+        
+        if(locx < 32 || width < 64){
+            drawx = 0;
+        } else if(locx > (width - 32)){
+            drawx = width - 64;
+        } else{
+            drawx = locx - 32;
+        }
+        
+        if(locy < 32 || height < 64){
+            drawy = 0;
+        } else if(locy > (height - 32)){
+            drawy = height - 64;
+        } else {
+            drawy = locy - 32;
+        }
+        
+        for (int y = 0; y < 64; y++) {
+            if(y < diffy || y >= (64 - diffy)) {
+                for (int x = 0; x < 64; x++) {
+                    largeMap.pixels[x + (y * 64)] = Art.floorTileColors[5 & 7][5 / 8];
+                }
+            }
+            else{
+                for (int x = 0; x < 64; x++) {
+                    if(x < diffx || x > (64 - diffx)) 
+                        largeMap.pixels[x + (y * 64)] = Art.floorTileColors[5 & 7][5 / 8];
+                    else{
+                        if(((drawx + donex) + (drawy + doney) * width) < minimap.pixels.length -1) 
+                            largeMap.pixels[x + (y * 64)] = minimap.pixels[(drawx + donex) + (drawy + doney) * width];
+                            donex++;
+                    }
+                }
+                donex = 0;
+                doney++;
+            }
+        }
+        
+        return largeMap;
+	}
+	
+	private Bitmap calculateSmallMapDisplay() {
+	    
+	    Bitmap smallMap = new Bitmap(64, 64);
+        int smallx = 0, smally = 0;
+        for (int y = 0; y < 64; y++) {
+            for (int x = 0; x < 64; x++) {
+                if(x >= (32 - width/2) && x <= (32 + width/2) && y >= (32 - height/2) && y < (32 + height/2) - 1){
+                    smallMap.pixels[x + y * 64] = minimap.pixels[smallx + smally * width];
+                    smallx++;
+                }
+                else
+                    smallMap.pixels[x + y * 64] = Art.floorTileColors[5 & 7][5 / 8];
+            }
+            smallx = 0;
+            
+            if(y >= (32 - height/2) && y < (32 + height/2) - 1)
+                smally++;
+        }
+        return smallMap;
+	}
+	
+	private void renderPlayerScores(Screen screen){
+	    
+	    String player1score =  MojamComponent.texts.scoreCharacter(getPlayerCharacter(0), player1Score * 100 / TARGET_SCORE);
+        Font.defaultFont().draw(screen, player1score, 280-player1score.length()*10, screen.h - 20); //adjust so it fits in the box
+        screen.blit(Art.getPlayer(getPlayerCharacter(0))[0][2], 262, screen.h-42);
+
+        if (MojamComponent.instance.players[1] != null && getPlayerCharacter(1) != GameCharacter.None) {
+            Font.defaultFont().draw(screen, MojamComponent.texts.scoreCharacter(getPlayerCharacter(1), player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
+            screen.blit(Art.getPlayer(getPlayerCharacter(1))[0][6], 19, screen.h-42);
+        }
+	}
+	
 	private boolean canSee(int x, int y) {
 		if (x < 0 || y < 1 || x >= width || y >= height)
 			return true;
@@ -615,15 +641,6 @@ public class Level {
 			revealLine(x, y, x - radius, y - radius + i, radius);
 			revealLine(x, y, x + radius, y - radius + i, radius);
 		}
-		/*
-		 * int x0 = x - radius; int x1 = x + radius; int y0 = y - radius; int y1
-		 * = y + radius; double radiusSqr = radius * radius; if (x0 < 0) x0 = 0;
-		 * if (y0 < 0) y0 = 0; if (x1 > width) x1 = width; if (y1 > height) y1 =
-		 * height; for (int yy = y0; yy <= y1; yy++) { double yd = yy - (y +
-		 * 0.5); for (int xx = x0; xx <= x1; xx++) { double xd = xx - (x + 0.5);
-		 * double dist = xd * xd + yd * yd; if (dist < radiusSqr) seen[xx + yy *
-		 * (width + 1)] = true; } }
-		 */
 	}
 
 	private void revealLine(int x0, int y0, int x1, int y1, int radius) {
@@ -650,13 +667,12 @@ public class Level {
 		if (!getTile(x, y).isBuildable())
 			return;
 
-		// if (player != null && player.useMoney(tile.getCost())) {
 		if (player != null) {
 			setTile(x, y, tile);
 		}
 	}
 	
-	// counts how many of a certain entitiy class are in play
+	// counts how many of a certain entity class are in play
 	public <T> int countEntities(Class<T> entityType) {
 		int count = 0;
 		for (Iterator<Entity> it = entities.iterator(); it.hasNext();) {

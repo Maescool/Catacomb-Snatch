@@ -4,10 +4,11 @@ import java.util.Set;
 
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.level.DifficultyInformation;
+import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.tile.Tile;
 
 
-public abstract class HostileMob extends Mob {
+public abstract class HostileMob extends Mob  implements IEditable {
 
 	public HostileMob(double x, double y, int team) {
 		super(x, y, team);

@@ -67,28 +67,26 @@ public class Bitmap {
 		}
 	}
 
-	public int blendPixels(int backgroundColor, int pixelToBlendColor){
+	public int blendPixels(int backgroundColor, int pixelToBlendColor) {
 
-	    int alpha_blend = 255 - (pixelToBlendColor >> 24) & 0xff;
+		int alpha_blend = (pixelToBlendColor >> 24) & 0xff;
 
-	    int alpha_background = 255 - alpha_blend;
+		int alpha_background = 256 - alpha_blend;
 
-	    int rr = backgroundColor & 0xff0000;
-	    int gg = backgroundColor & 0xff00;
-	    int bb = backgroundColor & 0xff;
+		int rr = backgroundColor & 0xff0000;
+		int gg = backgroundColor & 0xff00;
+		int bb = backgroundColor & 0xff;
 
-	    int r = (pixelToBlendColor & 0xff0000);
-	    int g = (pixelToBlendColor & 0xff00);
-	    int b = (pixelToBlendColor & 0xff);
+		int r = (pixelToBlendColor & 0xff0000);
+		int g = (pixelToBlendColor & 0xff00);
+		int b = (pixelToBlendColor & 0xff);
 
-	    r = ((r * alpha_background + rr * alpha_blend) >> 8) & 0xff0000;
-	    g = ((g * alpha_background + gg * alpha_blend) >> 8) & 0xff00;
-	    b = ((b * alpha_background + bb * alpha_blend) >> 8) & 0xff;
+		r = ((r * alpha_blend + rr * alpha_background) >> 8) & 0xff0000;
+		g = ((g * alpha_blend + gg * alpha_background) >> 8) & 0xff00;
+		b = ((b * alpha_blend + bb * alpha_background) >> 8) & 0xff;
 
-	    return 0xff000000 | r | g | b;
+		return 0xff000000 | r | g | b;
 	}
-
-
 
 	public void blit(Bitmap bitmap, int x, int y, int width, int height) {
 

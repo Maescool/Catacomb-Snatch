@@ -1,12 +1,12 @@
 package com.mojang.mojam.entity.mob;
 
-import com.mojang.mojam.level.tile.HoleTile;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
-public class Bat extends HostileMob {
+public class Bat extends HostileMob  {
+	public static final int COLOR = 0xffff6600;
 	private int tick = 0;
 
 	public Bat(double x, double y) {
@@ -55,9 +55,27 @@ public class Bat extends HostileMob {
 
 	@Override
 	public void render(Screen screen) {
-		if(!(level.getTile(pos) instanceof HoleTile)) {
-			screen.alphaBlit(Art.batShadow, (int)(pos.x - Art.batShadow.w / 2), (int)(pos.y - Art.batShadow.h / 2 - yOffs + 16), 0x55);
-		}
+		screen.alphaBlit(Art.batShadow, (int)(pos.x - Art.batShadow.w / 2), (int)(pos.y - Art.batShadow.h / 2 - yOffs + 16), 0x45);
 		super.render(screen);
+	}
+
+	@Override
+	public int getColor() {
+		return Bat.COLOR;
+	}
+
+	@Override
+	public int getMiniMapColor() {
+		return Bat.COLOR;
+	}
+
+	@Override
+	public String getName() {
+		return "BAT";
+	}
+
+	@Override
+	public Bitmap getBitMapForEditor() {
+		return Art.bat[0][0];
 	}
 }

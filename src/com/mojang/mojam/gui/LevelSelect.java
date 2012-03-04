@@ -168,6 +168,7 @@ public class LevelSelect extends GuiMenu {
             goToPage(currentPage + 1);
         }
     }
+    
 
     @Override
     public void keyPressed(KeyEvent e) {

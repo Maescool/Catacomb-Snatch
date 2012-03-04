@@ -61,10 +61,10 @@ public class OptionsMenu extends GuiMenu {
 				volume));
 
 		ClickableComponent musicVol = addButton(new Slider(TitleMenu.MUSIC,
-				MojamComponent.texts.getStatic("options.music"), xOffset - xOffset / 3 - 6,
-				yOffset += offset, musicVolume));
+				MojamComponent.texts.getStatic("options.music"), xOffset - xOffset / 3 - 20,
+				yOffset += offset + 1, musicVolume));
 		ClickableComponent soundsVol = addButton(new Slider(TitleMenu.SOUND,
-				MojamComponent.texts.getStatic("options.sounds"), xOffset + xOffset / 3 + 6,
+				MojamComponent.texts.getStatic("options.sounds"), xOffset + xOffset / 3 + 20,
 				yOffset, soundsVolume));
 
 		ClickableComponent creativeModeBtn = addButton(new Checkbox(TitleMenu.CREATIVE_ID,
@@ -84,12 +84,18 @@ public class OptionsMenu extends GuiMenu {
 				Options.set(Options.FULLSCREEN, fullscreen);
 				MojamComponent.toggleFullscreen();
 			}
+			@Override
+			public void buttonHovered(ClickableComponent clickableComponent) {
+			}
 		});
 		fpsBtn.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
 				fps = !fps;
 				Options.set(Options.DRAW_FPS, fps);
+			}
+			@Override
+			public void buttonHovered(ClickableComponent clickableComponent) {
 			}
 		});
 		soundVol.addListener(new ButtonListener() {
@@ -103,6 +109,9 @@ public class OptionsMenu extends GuiMenu {
 				if (soundSystem != null)
 					soundSystem.setMasterVolume(slider.value);
 			}
+			@Override
+			public void buttonHovered(ClickableComponent clickableComponent) {
+			}
 		});
 		musicVol.addListener(new ButtonListener() {
 			@Override
@@ -115,6 +124,9 @@ public class OptionsMenu extends GuiMenu {
 				if (soundSystem != null)
 					soundSystem.setVolume(ISoundPlayer.BACKGROUND_TRACK, slider.value);
 			}
+			@Override
+			public void buttonHovered(ClickableComponent clickableComponent) {
+			}
 		});
 		soundsVol.addListener(new ButtonListener() {
 			@Override
@@ -122,7 +134,10 @@ public class OptionsMenu extends GuiMenu {
 				Slider slider = (Slider) button;
 				soundsVolume = slider.value;
 
-				Options.set(Options.SOUND, soundsVolume + "");
+				Options.set(Options.SOUND, soundsVolume + "");	
+			}
+			@Override
+			public void buttonHovered(ClickableComponent clickableComponent) {
 			}
 		});
 		creativeModeBtn.addListener(new ButtonListener() {
@@ -131,11 +146,17 @@ public class OptionsMenu extends GuiMenu {
 				creative = !creative;
 				Options.set(Options.CREATIVE, creative);
 			}
+			@Override
+			public void buttonHovered(ClickableComponent clickableComponent) {
+			}
 		});
 		back.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
 				Options.saveProperties();
+			}
+			@Override
+			public void buttonHovered(ClickableComponent clickableComponent) {
 			}
 		});
 	}
@@ -168,7 +189,7 @@ public class OptionsMenu extends GuiMenu {
 
 	@Override
 	public void buttonPressed(ClickableComponent button) {}
-
+	
 	@Override
 	public void keyTyped(KeyEvent e) {}
 

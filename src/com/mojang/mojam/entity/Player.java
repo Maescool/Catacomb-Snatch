@@ -2,6 +2,7 @@ package com.mojang.mojam.entity;
 
 import java.util.Random;
 
+import com.mojang.mojam.GameCharacter;
 import com.mojang.mojam.Keys;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
@@ -9,6 +10,7 @@ import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.animation.SmokePuffAnimation;
 import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.building.Harvester;
+import com.mojang.mojam.entity.building.ShopItem;
 import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.loot.LootCollector;
@@ -57,7 +59,7 @@ public class Player extends Mob implements LootCollector {
     private int facing = 0;
     private int time = 0;
     private int walkTime = 0;
-    private Entity selected = null;
+    private Building selected = null;
     static final int RailDelayTicks = 15;
     private int lastRailTick = -999;
     private final static int INTERACT_DISTANCE = 20 * 20; // Sqr
@@ -72,9 +74,8 @@ public class Player extends Mob implements LootCollector {
     private boolean dead = false;
     private int deadDelay = 0;
     private int nextWalkSmokeTick = 0;
-    private int regenDelay = 0;
     boolean isImmortal;
-    private int characterID;
+    private GameCharacter character;
 
     /**
      * Constructor
@@ -85,11 +86,11 @@ public class Player extends Mob implements LootCollector {
      * @param y Initial y coordinate
      * @param team Team number
      */
-    public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team,  int characterID) {
+    public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team, GameCharacter character) {
         super(x, y, team);
         this.keys = keys;
         this.mouseButtons = mouseButtons;
-        this.characterID = characterID;
+        this.character = character;
 
         startX = x;
         startY = y;
@@ -131,7 +132,6 @@ public class Player extends Mob implements LootCollector {
     private void handleLevelUp() {
         if (xpSinceLastLevelUp() >= nettoXpNeededForLevel(plevel+1)) {
             this.maxHealth++;
-            this.regenDelay = 2;
             plevel++;
             psprint += 0.1;
             maxTimeSprint += 20;
@@ -266,7 +266,7 @@ public class Player extends Mob implements LootCollector {
         if (!dead && fallDownHole()) {
         	dead = true;
         	carrying = null;
-        	deadDelay = 50;
+        	deadDelay = 60;
         }
 
         if (dead && deadDelay <= 0) {
@@ -296,23 +296,6 @@ public class Player extends Mob implements LootCollector {
         minimapIcon = time / 3 % 4;
         if (minimapIcon == 3) {
             minimapIcon = 1;
-        }
-    }
-
-    /**
-     * Handle player health regeneration
-     */    
-    private void regeneratePlayer() {
-        if (regenDelay > 0) {
-            regenDelay--;
-            if (regenDelay == 0) {
-                if (health + 1 < maxHealth) {
-                    health++;
-                } else if (health != maxHealth) {
-                    health = maxHealth;
-                }
-                regenDelay = REGEN_INTERVAL;
-            }
         }
     }
 
@@ -468,22 +451,20 @@ public class Player extends Mob implements LootCollector {
     /**
      * Handle rail building
      * 
-     * @param xa Position change on the x axis
-     * @param ya Position change on the y axis
+     * @param x current position's X coordinate
+     * @param y current position's Y coordinate
      */
     private void handleRailBuilding(int x, int y) {
-
+    	boolean outsideLevel = y < 8 || y > level.height - 9;
         if (level.getTile(x, y).isBuildable()) {
-            if (score >= COST_RAIL && time - lastRailTick >= RailDelayTicks) {
+        	
+            if (score >= COST_RAIL && time - lastRailTick >= RailDelayTicks && !outsideLevel) {
                 lastRailTick = time;
                 level.placeTile(x, y, new RailTile(level.getTile(x, y)), this);
                 payCost(COST_RAIL);
-            } else if (score < COST_RAIL) {
-            	if(this.team == MojamComponent.localTeam) {
-            		  Notifications.getInstance().add(MojamComponent.texts.buildRail(COST_RAIL));
-            	}
-              
-            }
+            } else if (score < COST_RAIL && this.team == MojamComponent.localTeam) {
+            	Notifications.getInstance().add(MojamComponent.texts.buildRail(COST_RAIL));
+            }            
         } else if (level.getTile(x, y) instanceof RailTile) {
             if ((y < 8 && team == Team.Team2) || (y > level.height - 9 && team == Team.Team1)) {
                 if (score >= COST_DROID) {
@@ -528,53 +509,79 @@ public class Player extends Mob implements LootCollector {
     }
 
     /**
-     * Drop a carried entity onto the floor, making it a part of the level again
-     */
-    private void dropCarrying() {
-        carrying.removed = false;
-        carrying.xSlide = aimVector.x * 5;
-        carrying.ySlide = aimVector.y * 5;
-        carrying.freezeTime = 10;
-        carrying.justDroppedTicks=80;
-        carrying.setPos(pos);
-        level.addEntity(carrying);
-        carrying = null;
-    }
-
-    /**
      * Handle interaction with entities
      */
     private void handleEntityInteraction() {
-        Entity closest = null;
+        // Unhighlight previously selected building
+        if (selected != null) {
+            selected.setHighlighted(false);
+            selected = null;
+        }
+
+        // Find the closest Building within interation
+        // distance
+        Building closest = null;
         double closestDist = Double.MAX_VALUE;
         for (Entity e : level.getEntitiesSlower(pos.x - INTERACT_DISTANCE, pos.y - INTERACT_DISTANCE, pos.x + INTERACT_DISTANCE, pos.y + INTERACT_DISTANCE, Building.class)) {
+            Building b = (Building)e;
             double dist = e.pos.distSqr(getInteractPosition());
             if (dist <= INTERACT_DISTANCE && dist < closestDist) {
                 closestDist = dist;
-                closest = e;
+                closest = b;
             }
-        }
-        if (selected != null) {
-            ((IUsable) selected).setHighlighted(false);
-        }
-        if (closest != null && ((IUsable) closest).isHighlightable()) {
-            selected = closest;
-            ((IUsable) selected).setHighlighted(true);
         }
 
-        if (selected != null) {
-            if (selected.removed!=false){
-            	selected = null;
-            } else if (selected.pos.distSqr(getInteractPosition()) > INTERACT_DISTANCE) {
-                ((IUsable) selected).setHighlighted(false);
-                selected = null;
-            } else if (selected instanceof IUsable && (keys.use.wasPressed() || mouseButtons.isDown(mouseUseButton))) {
-                ((IUsable) selected).use(this);
-                mouseButtons.setNextState(mouseUseButton, false);
-            } else if (selected instanceof IUsable && keys.upgrade.wasPressed()) {
-                ((IUsable) selected).upgrade(this);
+        // If we found a building close enough to interact with...
+        if (closest != null) {
+            // Perform any allowed interactions if the correct
+            // keys have been pressed
+            if (keys.use.wasPressed() || mouseButtons.isDown(mouseUseButton)) {
+
+                if (canUseBuilding(closest)) {
+                    closest.use(this);
+                    mouseButtons.setNextState(mouseUseButton, false);
+                }
+            } else if (keys.upgrade.wasPressed()) {
+                
+                if (canUpgradeBuilding(closest)) {
+                    closest.upgrade(this);
+                }
+            }
+            
+            // If it is a building we should highlight on this game
+            // client, then highlight the building (also, remember the
+            // highlighted building, so we can unhighlight it again later)
+            if (shouldHighlightBuildingOnThisGameClient(closest)) {
+                selected = closest;
+                selected.setHighlighted(true);
             }
         }
+    }
+    
+    // Whether this Player should see the building in question
+    // highlighted on their game client - this indicates that
+    // they can interact with the building
+    private boolean shouldHighlightBuildingOnThisGameClient(Building building) {
+        return building.isHighlightable() && canInteractWithBuilding(building) && this.team == MojamComponent.localTeam; 
+    }
+    
+    // Whether this Player is allowed to use the building in 
+    // question
+    private boolean canUseBuilding(Building building) {
+        //return building.team == this.team || building.team == Team.Neutral; // Players can only use their own and neutral buildings
+        return !(building instanceof ShopItem && building.team != this.team); // Players can only use their own shops, but can use any other building regardless of ownership
+    }
+    
+    // Whether this Player is allowed to upgrade the building
+    // in question
+    private boolean canUpgradeBuilding(Building building) {
+        return building.team == this.team; // Players can only upgrade their own buildings
+    }
+    
+    // Whether this Player is allowed to interact with the building in 
+    // question
+    private boolean canInteractWithBuilding(Building building) {
+        return canUseBuilding(building) || canUpgradeBuilding(building);
     }
 
     /**
@@ -624,8 +631,12 @@ public class Player extends Mob implements LootCollector {
 
     @Override
     public void render(Screen screen) {
-        Bitmap[][] sheet = Art.getPlayer(characterID);
-        
+		Bitmap[][] sheet = Art.getPlayer(getCharacter());
+    	
+		if(sheet == null){
+			return;
+		}
+		
         if (dead) {
             // don't draw anything if we are dead (in a hole)
             return;
@@ -655,6 +666,14 @@ public class Player extends Mob implements LootCollector {
             screen.blit(Art.muzzle[muzzleImage][0], xmuzzle, ymuzzle);
         }
 	}
+    
+    public void setCharacter(GameCharacter character) {
+		this.character = character;
+	}
+    
+    public GameCharacter getCharacter(){
+    	return character;
+    }
 
 	@Override
 	public void renderTop(Screen screen) {
@@ -730,23 +749,6 @@ public class Player extends Mob implements LootCollector {
     }
 
 
-    /**
-     * Pickup a building and carry it around, removing it from the level
-     * 
-     * @param b Building
-     */
-    @Override
-    public void pickup(Building b) {
-        if(b.team != this.team && b.team != Team.Neutral) {
-
-            if(this.team == MojamComponent.localTeam) {
-                Notifications.getInstance().add(MojamComponent.texts.getStatic("gameplay.cantPickup"));
-            }
-            return;
-        }
-        super.pickup(b);
-    }
-
     public void drop() {
         carrying.xSlide = aimVector.x * 5;
         carrying.ySlide = aimVector.y * 5;
@@ -788,8 +790,7 @@ public class Player extends Mob implements LootCollector {
             hurtTime = 25;
             freezeTime = 15;
             health -= damage;
-            regenDelay = REGEN_INTERVAL;
-
+            
             if (health <= 0) {
                 revive();
             } else {
@@ -807,7 +808,7 @@ public class Player extends Mob implements LootCollector {
      * Revive the player. Carried items are lost, as is all the money.
      */
     private void revive() {
-        Notifications.getInstance().add(MojamComponent.texts.hasDiedCharacter(characterID));
+        Notifications.getInstance().add(MojamComponent.texts.hasDiedCharacter(getCharacter()));
         carrying = null;
         dropAllMoney();
         pos.set(startX, startY);
