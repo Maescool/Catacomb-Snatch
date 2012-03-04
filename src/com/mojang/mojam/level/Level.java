@@ -304,7 +304,7 @@ public class Level {
 		
 		Notifications.getInstance().render(screen);
 	}
-	
+
 	private void renderTilesAndBases(Screen screen, int x0, int y0, int x1, int y1){
 	    // go through each currently visible cell
 	    for (int y = y0; y <= y1; y++) {
@@ -328,30 +328,27 @@ public class Level {
 	            }
 
 	            yt = y - (height - 8);
-	            if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (xt != 3 || yt > 0)) {
+	            if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (isNotBaseRailTile(xt) || yt > 0)) {
 	                screen.blit(Art.getPlayerBase(getPlayerCharacter(0))[xt][yt], x * Tile.WIDTH, y * Tile.HEIGHT);
-	                if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (isNotBaseRailTile(xt) || yt > 0)) {
-	                    screen.blit(Art.getPlayerBase(getPlayerCharacter(0))[xt][yt], x * Tile.WIDTH, y * Tile.HEIGHT);
-	                    if ((xt == 0 || xt == 1 || xt == 5 || xt == 6) && yt == 0) {
-	                        screen.blit(Art.shadow_north, x * Tile.WIDTH, y * Tile.HEIGHT);
-	                    }
-	                    if ((xt == 2) && yt == 0) {
-	                        screen.blit(Art.shadow_north_west, x * Tile.WIDTH, y * Tile.HEIGHT);
-	                    }
-	                    if ((xt == 4) && yt == 0) {
-	                        screen.blit(Art.shadow_north_east, x * Tile.WIDTH + Tile.WIDTH - Art.shadow_east.w, y * Tile.HEIGHT);
-	                    }
-	                    continue;
+	                if ((xt == 0 || xt == 1 || xt == 5 || xt == 6) && yt == 0) {
+	                    screen.blit(Art.shadow_north, x * Tile.WIDTH, y * Tile.HEIGHT);
 	                }
+	                if ((xt == 2) && yt == 0) {
+	                    screen.blit(Art.shadow_north_west, x * Tile.WIDTH, y * Tile.HEIGHT);
+	                }
+	                if ((xt == 4) && yt == 0) {
+	                    screen.blit(Art.shadow_north_east, x * Tile.WIDTH + Tile.WIDTH - Art.shadow_east.w, y * Tile.HEIGHT);
+	                }
+	                continue;
+	            }
 
-	                if (canSee(x, y)) {
-	                    tiles[x + y * width].render(screen);
-	                }
+	            if (canSee(x, y)) {
+	                tiles[x + y * width].render(screen);
 	            }
 	        }
 	    }
 	}
-	
+
 	private GameCharacter getPlayerCharacter(int playerID){
 	    Player player = MojamComponent.instance.players[playerID];
 	    if (player == null) return GameCharacter.None;
