@@ -12,6 +12,7 @@ import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.building.Harvester;
 import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.loot.Loot;
+import com.mojang.mojam.entity.weapon.IWeapon;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.tile.HoleTile;
@@ -56,7 +57,10 @@ public abstract class Mob extends Entity {
     private int walkTime;
     protected int stepTime;
     protected int limp;
-	
+	public boolean isSprint = false;
+    public Vec2 aimVector;
+    public IWeapon weapon;
+    
 	public Mob(double x, double y, int team) {
 		super();
 		setPos(x, y);
@@ -64,6 +68,7 @@ public abstract class Mob extends Entity {
 		DifficultyInformation difficulty = TitleMenu.difficulty;
 		this.REGEN_INTERVAL = (difficulty != null && difficulty.difficultyID == 3) ? 15 : 25;
 		this.healingTime = this.REGEN_INTERVAL;
+		aimVector = new Vec2(0, 1);
 	}
 
 	public void init() {
@@ -127,6 +132,8 @@ public abstract class Mob extends Entity {
 				return;
 			}
 		}
+		
+		handleWeaponFire(xd, yd);
 	}
 	
 	public void doRegenTime() {
@@ -454,5 +461,25 @@ public abstract class Mob extends Entity {
     	}
     	xd *= 0.2;
     	yd *= 0.2;
+    }
+    
+    /**
+     * Get current player position
+     * 
+     * @return Position
+     */
+    public Vec2 getPosition() {
+        return pos;
+    }
+    
+    /**
+     * Handle weapon fire
+     * 
+     * @param xa Position change on the x axis
+     * @param ya Position change on the y axis
+     */
+    private void handleWeaponFire(double xa, double ya) {
+    	if(weapon != null)
+        weapon.weapontick();
     }
 }
