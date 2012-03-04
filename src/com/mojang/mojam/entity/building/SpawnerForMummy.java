@@ -36,6 +36,8 @@ public class SpawnerForMummy extends SpawnerEntity {
 	
 	@Override
 	public Bitmap getBitMapForEditor() {
-		return Art.mummy[0][0];
+		Bitmap shrink = Bitmap.shrink(Art.mummy[0][3].copy());
+		Bitmap bitmap = blitMobOnTop(shrink);
+		return bitmap;
 	}
 }
