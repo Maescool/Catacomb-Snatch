@@ -6,6 +6,11 @@
 	<classpathentry kind="lib" path="lib/CodecWav.jar"/>
 	<classpathentry kind="lib" path="lib/LibraryJavaSound.jar"/>
 	<classpathentry kind="lib" path="lib/SoundSystem.jar"/>
+	<classpathentry kind="lib" path="lib/kryonet-1.04-all.jar" sourcepath="C:/dev/libs/kryonet-1.04/kryonet/src">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/C:/dev/libs/kryonet-1.04/api/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
