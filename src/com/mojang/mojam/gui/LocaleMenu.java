@@ -43,9 +43,7 @@ public class LocaleMenu extends GuiMenu {
 		deBtn = (Button) addButton(new Button(TitleMenu.LOCALE_DE_ID, MojamComponent.texts.getStatic("options.locale_de"), left_xOffset, (yOffset += offset)));
 		esBtn = (Button) addButton(new Button(TitleMenu.LOCALE_ES_ID, MojamComponent.texts.getStatic("options.locale_es"), left_xOffset, (yOffset += offset)));
 		frBtn = (Button) addButton(new Button(TitleMenu.LOCALE_FR_ID, MojamComponent.texts.getStatic("options.locale_fr"), left_xOffset, (yOffset += offset)));
-		idBtn = (Button) addButton(new Button(TitleMenu.LOCALE_ID_ID, MojamComponent.texts.getStatic("options.locale_ind"), left_xOffset, (yOffset += offset)));
-		svBtn = (Button) addButton(new Button(TitleMenu.LOCALE_SV_ID, MojamComponent.texts.getStatic("options.locale_sv"), xOffset, (yOffset += offset)));
-		idBtn = (Button) addButton(new Button(TitleMenu.LOCALE_ID_ID, MojamComponent.texts.getStatic("options.locale_ind"), left_xOffset, (yOffset += offset)));
+		idBtn = (Button) addButton(new Button(TitleMenu.LOCALE_IND_ID, MojamComponent.texts.getStatic("options.locale_ind"), left_xOffset, (yOffset += offset)));
 		svBtn = (Button) addButton(new Button(TitleMenu.LOCALE_SV_ID, MojamComponent.texts.getStatic("options.locale_sv"), left_xOffset, (yOffset += offset)));
 		yOffset = TopYOffset;
 		itBtn = (Button) addButton(new Button(TitleMenu.LOCALE_IT_ID, MojamComponent.texts.getStatic("options.locale_it"), right_xOffset, (yOffset += offset)));
