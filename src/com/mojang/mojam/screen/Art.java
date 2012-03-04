@@ -162,6 +162,7 @@ public class Art {
 	public static Bitmap[][] bullet = cut("/art/effects/bullet.png", 16, 16);
 	public static Bitmap buckShot = load("/art/effects/bullet_buckshot.png");
 	public static Bitmap[][] plasmaBall = cut("/art/effects/plasmaball.png", 16, 16);
+	public static Bitmap[][] bulletpoison = cut("/art/effects/bullet_poison.png", 16, 16);
 	public static Bitmap[][] muzzle = cut("/art/effects/muzzle.png", 16, 16);
 	public static Bitmap[][] fxEnemyDie = cut("/art/effects/fx_enemydie_64.png", 64, 64);
 	public static Bitmap[][] fxSteam24 = cut("/art/effects/fx_steam1_24.png", 24, 24);

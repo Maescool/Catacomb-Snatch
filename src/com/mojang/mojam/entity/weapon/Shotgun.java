@@ -1,15 +1,17 @@
+
 package com.mojang.mojam.entity.weapon;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
+import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.BulletBuckshot;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
+import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.network.TurnSynchronizer;
 
-public class Shotgun implements IWeapon {
+public class Shotgun extends Rifle {
 
-	private Player owner;
 	private static float BULLET_DAMAGE;
 	
 	private int upgradeIndex = 1;
@@ -21,14 +23,8 @@ public class Shotgun implements IWeapon {
 	private boolean readyToShoot = true;
 	private int currentShootDelay = 0;	
 	
-	public Shotgun(Player owner) {
-		setOwner(owner);
-		
-		setWeaponMode();
-		
-		if(owner.isSprint)
-			shootDelay *= 2;
-		
+	public Shotgun(Mob owner) {
+		super(owner);
 	}
 	
 	public void setWeaponMode(){
@@ -62,13 +58,16 @@ public class Shotgun implements IWeapon {
 			xDirection = Math.cos(direction);
 			yDirection = Math.sin(direction);
 			
-			Entity bullet = new BulletBuckshot(owner, xDirection, yDirection, BULLET_DAMAGE);
+			Entity bullet = getAmmo(xDirection, yDirection);
+			
 			owner.level.addEntity(bullet);
 			
-			//Muzzle flash
-			owner.muzzleTicks = 3;
-			owner.muzzleX = bullet.pos.x + 7 * xDirection - 8;
-			owner.muzzleY = bullet.pos.y + 5 * yDirection - 8 + 1;
+			if(owner instanceof Player) {
+				Player player = (Player)owner;
+				player.muzzleTicks = 3;
+				player.muzzleX = bullet.pos.x + 7 * xDirection - 8;
+				player.muzzleY = bullet.pos.y + 5 * yDirection - 8 + 1;
+			}
 			
 			}
 			
@@ -106,9 +105,14 @@ public class Shotgun implements IWeapon {
 		owner.yd -= yDir * strength;
 	}
 
+	public Bullet getAmmo(double xDir, double yDir) {
+		Bullet bullet = new BulletBuckshot(owner, xDir, yDir, BULLET_DAMAGE);
+		return bullet;
+	}
+	
 	@Override
-	public void setOwner(Player player) {
-		this.owner = player;
+	public void setOwner(Mob mob) {
+		this.owner = mob;
 	}
 
 }

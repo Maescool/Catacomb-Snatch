@@ -34,7 +34,7 @@ public class Mummy extends HostileMob {
         tick++;
         if (tick >= 20) {
             tick = 0;
-            facing = FaceEntity(pos.x, pos.y, ATTACK_RADIUS, Player.class, facing);
+            facing = faceEntity(pos.x, pos.y, ATTACK_RADIUS, Player.class, facing);
         }
         walk();
     }

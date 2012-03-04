@@ -110,13 +110,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public static Screen screen = new Screen(GAME_WIDTH, GAME_HEIGHT);
 	private Level level;
 	private Chat chat = new Chat();
-
-	// Latency counter
-	private static final int CACHE_EMPTY = 0, CACHE_PRIMING = 1, CACHE_PRIMED = 2;
-	private static final int CACHE_SIZE = 5;
-	private int latencyCacheState = CACHE_EMPTY;
-	private int nextLatencyCacheIdx = 0;
-	private int[] latencyCache = new int[CACHE_SIZE];
+	
+	private LatencyCache latencyCache = new LatencyCache();
 
 	private Stack<GuiMenu> menuStack = new Stack<GuiMenu>();
 
@@ -461,7 +456,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 			Font font = Font.defaultFont();
 			if (isMultiplayer) {
-				font.draw(screen, texts.latency(latencyCacheReady() ? "" + avgLatency() : "-"), 10, 20);
+				font.draw(screen, texts.latency(latencyCache.latencyCacheReady() ? "" + latencyCache.avgLatency() : "-"), 10, 20);
 			}
 		}
 
@@ -815,34 +810,10 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			PingPacket pp = (PingPacket) packet;
 			synchronizer.onPingPacket(pp);
 			if (pp.getType() == PingPacket.TYPE_ACK) {
-				addToLatencyCache(pp.getLatency());
+				latencyCache.addToLatencyCache(pp.getLatency());
 			}
 		}
-	}
-
-	private void addToLatencyCache(int latency) {
-		if (nextLatencyCacheIdx >= latencyCache.length)
-			nextLatencyCacheIdx = 0;
-		if (latencyCacheState != CACHE_PRIMED) {
-			if (nextLatencyCacheIdx == 0 && latencyCacheState == CACHE_PRIMING)
-				latencyCacheState = CACHE_PRIMED;
-			if (latencyCacheState == CACHE_EMPTY)
-				latencyCacheState = CACHE_PRIMING;
-		}
-		latencyCache[nextLatencyCacheIdx++] = latency;
-	}
-
-	private boolean latencyCacheReady() {
-		return latencyCacheState == CACHE_PRIMED;
-	}
-
-	private int avgLatency() {
-		int total = 0;
-		for (int latency : latencyCache) {
-			total += latency;
-		}
-		return total / latencyCache.length; // rounds down
-	}
+	}	
 
 	@Override
 	public void buttonPressed(ClickableComponent component) {
@@ -870,8 +841,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		case TitleMenu.LOCALE_FR_ID:
 			setLocale("fr");
 			break;
-		case TitleMenu.LOCALE_IN_ID:
-			setLocale("in");
+		case TitleMenu.LOCALE_IND_ID:
+			setLocale("ind");
 			break;
 		case TitleMenu.LOCALE_IT_ID:
 			setLocale("it");
@@ -885,11 +856,14 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		case TitleMenu.LOCALE_RU_ID:
 			setLocale("ru");
 			break;
-		case TitleMenu.LOCALE_SI_ID:
-			setLocale("si");
+		case TitleMenu.LOCALE_SL_ID:
+			setLocale("sl");
 			break;
 		case TitleMenu.LOCALE_SV_ID:
 			setLocale("sv");
+			break;
+		case TitleMenu.LOCALE_AF_ID:
+			setLocale("af");
 			break;
 		case TitleMenu.RETURN_TO_TITLESCREEN:
 			clearMenus();

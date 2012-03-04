@@ -105,13 +105,14 @@ options.locale_en = ENGLISH
 options.locale_de = GERMAN
 options.locale_es = SPANISH
 options.locale_fr = FRENCH
-options.locale_in = INDONESIAN
+options.locale_ind = INDONESIAN
 options.locale_it = ITALIAN
 options.locale_nl = DUTCH
-options.locale_pt_br = BRAZILIAN PORTUGESE
+options.locale_pt_br = PORTUGESE (BRA)
 options.locale_ru = RUSSIAN
-options.locale_si = SLOVENIAN
+options.locale_sl = SLOVENIAN
 options.locale_sv = SWEDISH
+options.locale_af = AFRIKAANS
 
 pausemenu.help = HELP
 pausemenu.backtomain = MAIN
