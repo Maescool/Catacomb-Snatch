@@ -55,22 +55,27 @@ public final class Snatch
 	public static List<Mod> modList = new ArrayList<Mod>();
 	public static List<ScriptEngine> scriptList = new ArrayList<ScriptEngine>();
 	private static MojamComponent mojam;
+	private static InputHandler inputHandler;
+	private static Keys keys = new Keys();
 	public static Map<Integer, Entity> spawnList = new HashMap<Integer, Entity>();
 	private static ScriptEngineManager lang = new ScriptEngineManager();
 	public static PipedOutputStream sysOut = new PipedOutputStream();
 	public static JTextArea textArea;
 	public static boolean isJar;
+	public static boolean isDebug;
 
 	public static void init(MojamComponent m)
 	{
 		if(init) return;
 		init = true;
 		mojam = m;
+		keys.getAll().removeAll(keys.getAll());
 		try
 		{
 			modDir = new File(Snatch.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 			modsFolder = new File(mojam.getMojamDir(), "/mods/");
 			isJar = modDir.getAbsolutePath().endsWith(".jar");
+			isDebug = modDir.getAbsolutePath().contains("/bin") && !isJar;
 		}
 		catch (URISyntaxException e1)
 		{
@@ -85,6 +90,7 @@ public final class Snatch
 		System.out.println("Snatch starting up...");
 		System.out.println(modDir.getAbsolutePath());
 		addMod(Snatch.class.getClassLoader(), "SnatchContent.class");
+		inputHandler = (InputHandler) reflectField(mojam, "inputHandler");
 		try
 		{
 			readLinksFromFile(new File(mojam.getMojamDir(), "mods.txt"));
@@ -259,12 +265,10 @@ public final class Snatch
 				String s1 = zipentry.getName();
 				if(!zipentry.isDirectory() && s1.contains("mod_") && s1.endsWith(".class"))
 				{
-					//System.out.println(s1);//TODO
 					addMod(classloader, s1);
 				}
 				else if(!zipentry.isDirectory() && s1.contains("mod_") && !s1.toLowerCase().endsWith(".mf"))
 				{
-					//System.out.println(s1);//TODO
 					addScript(zipentry);
 				}
 			}
@@ -299,7 +303,6 @@ public final class Snatch
 					}
 					else if(afile[i].isFile() && s2.contains("mod_") && !s2.toLowerCase().endsWith(".mf"))
 					{
-						//System.out.println(s2);//TODO
 						addScript(afile[i].getAbsolutePath());
 					}
 				}
@@ -400,7 +403,6 @@ public final class Snatch
 		}
 		catch (IOException e1)
 		{
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		return engine;
@@ -459,11 +461,15 @@ public final class Snatch
 		return i;
 	}
 
-	public static Key addKey(Key key)
+	public static Key addKey(Key key, int code)
 	{
+		//inputHandler = (InputHandler)reflectField(mojam,"inputHandler");
 		mojam.keys.getAll().add(key);
-		if(mojam.keys.getAll().contains(key)) System.out.println("Success!");
-		else System.out.println("Failure!");
+		//System.out.println(inputHandler+":"+key+":"+code);
+		//inputHandler.addMapping(key, code);
+		reflectField(mojam, "inputHandler", new InputHandler(mojam.keys));
+		inputHandler = new InputHandler(keys);
+		mojam.addKeyListener(inputHandler);
 		return key;
 	}
 
@@ -477,6 +483,14 @@ public final class Snatch
 		return load(src);
 	}
 
+	/**
+	 * Invokes a reflected method
+	 * 
+	 * @param o The instance that contains the method to be reflected
+	 * @param s The name of the method
+	 * @param params The parameters of the method
+	 * @return The value that the method being reflected returns
+	 */
 	public static Object reflectMethod(Object o, String s, Object params[])
 	{
 		// Go and find the private method... 
@@ -502,26 +516,64 @@ public final class Snatch
 		}
 		return null;
 	}
-	
-	public static Object reflectField(Object o, String s, Object value) 
+
+	/**
+	 * Sets a reflected field that would otherwise be hidden
+	 * @param o The instance that holds the field to be reflected
+	 * @param s The name of the field to be set
+	 * @param value The new value for the field
+	 * @return The field's new value. It is successful if it returns 'value'. 
+	 */
+	public static Object reflectField(Object o, String s, Object value)
 	{
-		// Go and find the private method... 
+		// Go and find the private field... 
 		final Field fields[] = o.getClass().getDeclaredFields();
-		for(int i = 0; i < fields.length;++i) 
-		{ 
-			if(s.equals(fields[i].getName())) 
-			{ 
-				try {					
-					fields[i].setAccessible(true); 
+		for(int i = 0; i < fields.length; ++i)
+		{
+			if(s.equals(fields[i].getName()))
+			{
+				try
+				{
+					fields[i].setAccessible(true);
 					fields[i].set(o, value);
 					return fields[i].get(o);
-				} catch (IllegalAccessException ex) 
+				}
+				catch (IllegalAccessException ex)
 				{
 
-				} 
+				}
 			}
 		}
-		return null; 
+		return null;
+	}
+
+	/**
+	 * Gets a reflected value that would otherwise be hidden
+	 * 
+	 * @param o The instance that holds the field to be reflected
+	 * @param s The name of the field to be reflected
+	 * @return the reflected value of the field
+	 */
+	public static Object reflectField(Object o, String s)
+	{
+		// Go and find the private fields... 
+		final Field fields[] = o.getClass().getDeclaredFields();
+		for(int i = 0; i < fields.length; ++i)
+		{
+			if(s.equals(fields[i].getName()))
+			{
+				try
+				{
+					fields[i].setAccessible(true);
+					return fields[i].get(o);
+				}
+				catch (IllegalAccessException ex)
+				{
+
+				}
+			}
+		}
+		return null;
 	}
 
 	private static Bitmap load(String string)
@@ -623,6 +675,14 @@ public final class Snatch
 		for(Mod m : modList)
 		{
 			m.OnTick();
+
+			for(Key k : mojam.keys.getAll())
+			{
+				if(k.isDown) m.IfKeyDown(k);
+				if(!k.isDown) m.IfKeyUp(k);
+				if(k.wasPressed()) m.OnKeyPressed(k);
+				if(k.wasReleased()) m.OnKeyUp(k);
+			}
 		}
 		invoke("OnTick");
 	}
@@ -654,7 +714,7 @@ public final class Snatch
 		invoke("HandlePacket", packet);
 	}
 
-	public static void invoke(String s, Object... args)
+	private static void invoke(String s, Object... args)
 	{
 		for(ScriptEngine sc : scriptList)
 		{
@@ -676,7 +736,7 @@ public final class Snatch
 			}
 			catch (ScriptException e)
 			{
-				System.out.println("Bad method in file: " + s);
+				System.out.println("Bad method in file: " + e.getFileName() + " at method " + s);
 				e.printStackTrace();
 			}
 		}
@@ -807,6 +867,18 @@ public final class Snatch
 	private static void displayConsoleWindow()
 	{
 		Console.main(null);
+	}
+
+	/**
+	 * Used for impromptu class casting in dynamic languages
+	 * 
+	 * @param d
+	 *            var to pass
+	 * @return d as long
+	 */
+	public static long asLong(double d)
+	{
+		return (long) d;
 	}
 
 }

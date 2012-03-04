@@ -1,8 +1,11 @@
 package com.mojang.mojam;
 
+import com.mojang.mojam.Keys.Key;
 import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.level.Level;
+import com.mojang.mojam.level.gamemode.RandomSpawner;
 import com.mojang.mojam.network.Packet;
 
 /**@author Edmund Smith
@@ -125,6 +128,14 @@ public abstract class Mod
 	{
 		return null;
 	}
+	
+	public void IfKeyDown(Key key){}
+	
+	public void IfKeyUp(Key key){}
+	
+	public void OnKeyPressed(Key key){}
+	
+	public void OnKeyUp(Key key){}
 	
 	/**
 	 * To be called when displaying an error

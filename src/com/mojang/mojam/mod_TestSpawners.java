@@ -1,13 +1,11 @@
 package com.mojang.mojam;
 
+import java.awt.event.KeyEvent;
+
+import com.mojang.mojam.Keys.Key;
 import com.mojang.mojam.entity.Entity;
-import com.mojang.mojam.entity.Player;
-import com.mojang.mojam.entity.mob.Bat;
 import com.mojang.mojam.entity.mob.Mob;
-import com.mojang.mojam.entity.mob.Mummy;
-import com.mojang.mojam.entity.mob.Snake;
 import com.mojang.mojam.entity.mob.TestEntity;
-import com.mojang.mojam.gui.Font;
 
 public class mod_TestSpawners extends Mod
 {
@@ -18,11 +16,13 @@ public class mod_TestSpawners extends Mod
 	long frame = 0;
 	long lastFrame = 0;
 	int fps = 0;
+	Key placeBomb = Snatch.getMojam().keys.new Key("bomb");
 
 	public mod_TestSpawners()
 	{
 		id = Snatch.addEntity(new TestEntity(0, 0, 0));
 		System.out.println("TestEntity Id: " + id);
+		Snatch.addKey(placeBomb, KeyEvent.VK_B);
 	}
 
 	@Override
@@ -31,6 +31,13 @@ public class mod_TestSpawners extends Mod
 		Mob te = null;
 		if(i == id) te = new TestEntity(x, y, 0);
 		return te;
+	}
+	
+	@Override
+	public void OnKeyPressed(Key k)
+	{
+		System.out.println(k.name);
+		if(k.name==placeBomb.name)System.out.println("Pressed!");
 	}
 
 	//Demonstration, TODO
