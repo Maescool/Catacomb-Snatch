@@ -1,5 +1,6 @@
 package com.mojang.mojam.entity;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import com.mojang.mojam.GameCharacter;
@@ -18,7 +19,7 @@ import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.mob.RailDroid;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.entity.particle.Sparkle;
-import com.mojang.mojam.entity.weapon.Rifle;
+import com.mojang.mojam.entity.weapon.*;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.level.tile.RailTile;
 import com.mojang.mojam.level.tile.Tile;
@@ -75,6 +76,8 @@ public class Player extends Mob implements LootCollector {
     private int nextWalkSmokeTick = 0;
     boolean isImmortal;
     private GameCharacter character;
+    
+    private ArrayList<IWeapon> weapons = new ArrayList<IWeapon>();
 
     /**
      * Constructor
@@ -102,20 +105,49 @@ public class Player extends Mob implements LootCollector {
         maxTimeSprint = 100;
         aimVector = new Vec2(0, 1);
         score = 0;
-        weapon = new Rifle(this);
         setRailPricesAndImmortality();
+        // Weapon
+        initializeWeapons();
+    }
+    
+    /**
+     * Set default weapon
+     */
+    private void initializeWeapons() {
+        IWeapon currentWeapon = new Rifle(this);
+        weapons.add(currentWeapon);
+        weapons.add(new VenomRifle(this));
+        setWeapon(currentWeapon);
+    }
+    
+    /**
+     * @param keyNumber Key number of keyboard
+     */
+    private void changeWeapon(int keyNumber) {
+    	if (keyNumber > weapons.size()) { 
+    		return;
+    	}
+    	if (keyNumber <= 0) {
+    		return;
+    	}
+    	IWeapon weapon = weapons.get(keyNumber - 1);
+    	setWeapon(weapon);
+    }
+    
+    private void setWeapon(IWeapon weapon) {
+    	this.weapon = weapon;
     }
     
     /**
      * Handle creative mode
      */
-    private void setRailPricesAndImmortality(){
-    	if (Options.getAsBoolean(Options.CREATIVE)){
+    private void setRailPricesAndImmortality() {
+    	if (Options.getAsBoolean(Options.CREATIVE)) {
     		COST_RAIL = 0;
     		COST_DROID = 0;
     		COST_REMOVE_RAIL = 0;
     		isImmortal = true;
-    	}else{
+    	} else {
      		COST_RAIL = 10;
     		COST_DROID = 50;
     		COST_REMOVE_RAIL = 0;
@@ -221,6 +253,13 @@ public class Player extends Mob implements LootCollector {
             }
             if (keys.fireRight.isDown) {
                 xaShot++;
+            }
+            // Weapon
+            if (keys.firstWeapon.wasReleased()) {
+            	changeWeapon(1);
+            }
+            if (keys.secondWeapon.wasReleased()) {
+            	changeWeapon(2);
             }
         }
 
@@ -681,7 +720,7 @@ public class Player extends Mob implements LootCollector {
     @Override
     protected void renderCarrying(Screen screen, int yOffs) {
     	if(carrying != null && carrying.team == MojamComponent.localTeam ) {
-			if(carrying instanceof Turret) {
+			if (carrying instanceof Turret) {
 				Turret turret = (Turret)carrying;
 				turret.drawRadius(screen);	
 			} else if(carrying instanceof Harvester) {

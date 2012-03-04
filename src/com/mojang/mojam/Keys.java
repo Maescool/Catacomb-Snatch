@@ -52,6 +52,8 @@ public class Keys {
 	public Key sprint = new Key("sprint");
 	public Key screenShot = new Key("screenShot");
 	public Key chat = new Key("chat");
+	public Key firstWeapon = new Key("firstWeapon");
+	public Key secondWeapon = new Key("secondWeapon");
 
 	public void tick() {
 		for (Key key : all)
