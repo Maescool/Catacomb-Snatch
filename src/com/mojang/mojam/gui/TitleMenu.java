@@ -1,7 +1,6 @@
 package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
-import java.util.Locale;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.level.DifficultyInformation;

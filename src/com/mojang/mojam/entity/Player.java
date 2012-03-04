@@ -18,7 +18,6 @@ import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.mob.RailDroid;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.entity.particle.Sparkle;
-import com.mojang.mojam.entity.weapon.IWeapon;
 import com.mojang.mojam.entity.weapon.Rifle;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.level.tile.RailTile;
