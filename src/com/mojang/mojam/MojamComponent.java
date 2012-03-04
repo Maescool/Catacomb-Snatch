@@ -161,7 +161,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		this.addMouseMotionListener(this);
 		this.addMouseListener(this);
 
-		String localeString = Options.get(Options.LOCALE, "en");
+		String localeString = Options.get(Options.LOCALE, "it");
 		System.out.println(localeString);
 		setLocale(new Locale(localeString));
 

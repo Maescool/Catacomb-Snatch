@@ -68,7 +68,7 @@ public class LocaleMenu extends GuiMenu {
 		}
 
 		super.render(screen);
-		Font.defaultFont().draw(screen, MojamComponent.texts.getStatic("titlemenu.sound_and_video"), MojamComponent.GAME_WIDTH / 2, textY, Font.Align.CENTERED);
+		Font.defaultFont().draw(screen, MojamComponent.texts.getStatic("options.locale_selection"), MojamComponent.GAME_WIDTH / 2, textY, Font.Align.CENTERED);
 		screen.blit(Art.getLocalPlayerArt()[0][6], buttons.get(selectedItem).getX() - 40, buttons.get(selectedItem).getY() - 8);
 	}
 
