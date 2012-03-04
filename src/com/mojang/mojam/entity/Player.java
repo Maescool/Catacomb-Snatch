@@ -47,10 +47,10 @@ public class Player extends Mob implements LootCollector {
     public MouseButtons mouseButtons;
     public int mouseFireButton = 1;
     public int mouseUseButton = 3;
-    public Vec2 aimVector;
-    public IWeapon weapon;
+
+    
     private boolean mouseAiming;
-    public double xd, yd;
+   
     public int takeDelay = 0;
     public int flashTime = 0;
     public int suckRadius = 0;
@@ -101,9 +101,7 @@ public class Player extends Mob implements LootCollector {
         health = 5;
         psprint = 1.5;
         maxTimeSprint = 100;
-
         aimVector = new Vec2(0, 1);
-
         score = 0;
         weapon = new Rifle(this);
         setRailPricesAndImmortality();
@@ -852,13 +850,6 @@ public class Player extends Mob implements LootCollector {
         facing = (int) ((Math.atan2(-aimVector.x, aimVector.y) * 8 / (Math.PI * 2) + 8.5)) & 7;
     }
 
-    /**
-     * Get current player position
-     * 
-     * @return Position
-     */
-    public Vec2 getPosition() {
-        return pos;
-    }
+
 
 }
