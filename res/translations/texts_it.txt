@@ -66,6 +66,12 @@ keys.build = COSTRUISCI
 keys.upgrade = AGGIORNA
 keys.chat = CHAT
 
+leveleditor.title = LEVEL EDITOR
+leveleditor.new = NUOVO
+leveleditor.open = APRI
+leveleditor.save = SALVA
+leveleditor.enterLevelName = NOME LIVELLO:
+
 levelselect.title = SCEGLI UN LIVELLO
 levelselect.start = GIOCA
 levelselect.update = AGGIORNA
@@ -118,6 +124,7 @@ titlemenu.host = OSPITA
 titlemenu.join = UNISCITI
 titlemenu.help = COME GIOCARE
 titlemenu.options = OPZIONI
+titlemenu.levelEditor = LEVEL EDITOR
 titlemenu.exit = ESCI
 
 upgrade.full = AGGIORNATO AL MASSIMO!

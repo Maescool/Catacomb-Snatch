@@ -2,6 +2,7 @@ package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
 
+import com.mojang.mojam.GameCharacter;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.Options;
@@ -35,25 +36,25 @@ public class CharacterSelectionMenu extends GuiMenu {
 		xOffset = (gameWidth - (CharacterButton.WIDTH * 2 + 20)) / 2;
 		yOffset = (gameHeight - (CharacterButton.HEIGHT * 2 + 20)) / 2 - 20;
 		selected = lordLard = (CharacterButton) addButton(new CharacterButton(
-				TitleMenu.CHARACTER_BUTTON_ID, Art.LORD_LARD, Art.getPlayer(Art.LORD_LARD)[0][6],
+				TitleMenu.CHARACTER_BUTTON_ID, GameCharacter.LordLard, Art.getPlayer(GameCharacter.LordLard)[0][6],
 				xOffset, yOffset));
 		selected.setSelected(true);
 		herrSpeck = (CharacterButton) addButton(new CharacterButton(TitleMenu.CHARACTER_BUTTON_ID,
-				Art.HERR_VON_SPECK, Art.getPlayer(Art.HERR_VON_SPECK)[0][2], xOffset + 20
+				GameCharacter.HerrVonSpeck, Art.getPlayer(GameCharacter.HerrVonSpeck)[0][2], xOffset + 20
 						+ CharacterButton.WIDTH, yOffset));
 		duchessDonut = (CharacterButton) addButton(new CharacterButton(
-				TitleMenu.CHARACTER_BUTTON_ID, Art.DUCHESS_DONUT,
-				Art.getPlayer(Art.DUCHESS_DONUT)[0][6], xOffset, yOffset + 20
+				TitleMenu.CHARACTER_BUTTON_ID, GameCharacter.DuchessDonut,
+				Art.getPlayer(GameCharacter.DuchessDonut)[0][6], xOffset, yOffset + 20
 						+ CharacterButton.HEIGHT));
 		countessCruller = (CharacterButton) addButton(new CharacterButton(
-				TitleMenu.CHARACTER_BUTTON_ID, Art.COUNTESS_CRULLER,
-				Art.getPlayer(Art.COUNTESS_CRULLER)[0][2], xOffset + 20 + CharacterButton.WIDTH,
+				TitleMenu.CHARACTER_BUTTON_ID, GameCharacter.CountessCruller,
+				Art.getPlayer(GameCharacter.CountessCruller)[0][2], xOffset + 20 + CharacterButton.WIDTH,
 				yOffset + 20 + CharacterButton.HEIGHT));
 		if (Options.isCharacterIDset()) {
 			selected.setSelected(false);
 			for (ClickableComponent button : buttons) {
 				CharacterButton charButton = (CharacterButton) button;
-				if (charButton.getCharacterID() == Options.getCharacterID()) {
+				if (charButton.getCharacter().ordinal() == Options.getCharacterID()) {
 					selected = charButton;
 					break;
 				}
@@ -82,7 +83,7 @@ public class CharacterSelectionMenu extends GuiMenu {
 				MojamComponent.GAME_WIDTH / 2, yOffset - 24, Font.Align.CENTERED);
 		if (focus == back || focus == select) {
 			int frame = (walkTime / 4 % 6 + 6) % 6;
-			screen.blit(Art.getPlayer(selected.getCharacterID())[frame][(walkTime / 32) % 8],
+			screen.blit(Art.getPlayer(selected.getCharacter())[frame][(walkTime / 32) % 8],
 					MojamComponent.GAME_WIDTH / 2 - 16, MojamComponent.GAME_HEIGHT / 2 - 35);
 		}
 	}
@@ -94,9 +95,9 @@ public class CharacterSelectionMenu extends GuiMenu {
 			selected = (CharacterButton) button;
 			selected.setSelected(true);
 		} else if (button == select) {
-			Options.set(Options.CHARACTER_ID, selected.getCharacterID());
+			Options.set(Options.CHARACTER_ID, selected.getCharacter().ordinal());
 			Options.saveProperties();
-			MojamComponent.instance.playerCharacter = selected.getCharacterID();
+			MojamComponent.instance.playerCharacter = selected.getCharacter();
 		}
 	}
 	

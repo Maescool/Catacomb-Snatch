@@ -6,6 +6,8 @@ import com.mojang.mojam.screen.Bitmap;
 
 public class Snake extends HostileMob {
 
+	public static final int COLOR = 0xffff9900;
+	
 	public Snake(double x, double y) {
 		super(x, y, Team.Neutral);
 		setPos(x, y);
@@ -36,5 +38,25 @@ public class Snake extends HostileMob {
 	@Override
 	public String getDeathSound() {
 		return "/sound/Enemy Death 2.wav";
+	}
+
+	@Override
+	public int getColor() {
+		return COLOR;
+	}
+
+	@Override
+	public int getMiniMapColor() {
+		return COLOR;
+	}
+
+	@Override
+	public String getName() {
+		return "SNAKE";
+	}
+
+	@Override
+	public Bitmap getBitMapForEditor() {
+		return Art.snake[0][0];
 	}
 }

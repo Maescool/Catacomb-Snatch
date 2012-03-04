@@ -12,10 +12,13 @@ public class Chat implements KeyListener {
 	private static final int MAX_MESSAGES = 10;
 	private static final int MAX_MESSAGE_LENGTH = 35;
 	private static final int TICKS_PER_MESSAGE = 60 * 4;
+	private static final int FADE_TICKS = 60 / 2;
 
 	private ArrayList<String> messages = new ArrayList<String>();
 	private int displayedMessage = -1;
 	private int displayTicks = 0;
+	private int fadingTicks = 0;
+	private boolean fading;
 	private boolean open = false;
 	private String currentMessage = "";
 	private String waitingMessage = null;
@@ -50,10 +53,19 @@ public class Chat implements KeyListener {
 
 	public void tick() {
 		if (displayedMessage > -1) {
-			displayTicks++;
-			if (displayTicks == TICKS_PER_MESSAGE) {
-				displayTicks = 0;
-				displayedMessage -= 1;
+			if (!fading) {
+				displayTicks++;
+				if (displayTicks == TICKS_PER_MESSAGE) {
+					displayTicks = 0;
+					fading = true;
+				}
+			} else {
+				fadingTicks++;
+				if (fadingTicks == FADE_TICKS) {
+					fadingTicks = 0;
+					fading = false;
+					displayedMessage--;
+				}
 			}
 		}
 	}
@@ -68,6 +80,14 @@ public class Chat implements KeyListener {
 			}
 		} else {
 			for (int i = 0; i <= displayedMessage; i++) {
+				if (i == displayedMessage) {
+					if (fading) {
+						int alpha = 255 - (fadingTicks * 255 / FADE_TICKS);
+						Font.defaultFont().drawOpaque(screen, messages.get(i), xOffset,
+								(yOffset -= 8), alpha);
+						continue;
+					}
+				}
 				Font.defaultFont().draw(screen, messages.get(i), xOffset, (yOffset -= 8));
 			}
 		}
