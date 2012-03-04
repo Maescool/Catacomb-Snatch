@@ -18,7 +18,7 @@ public class LocaleMenu extends GuiMenu {
 	private Button deBtn = null;
 	private Button esBtn = null;
 	private Button frBtn = null;
-	private Button inBtn = null;
+	private Button idBtn = null;
 	private Button itBtn = null;
 	private Button nlBtn = null;
 	private Button pt_brBtn = null;
@@ -43,7 +43,7 @@ public class LocaleMenu extends GuiMenu {
 		deBtn = (Button) addButton(new Button(TitleMenu.LOCALE_DE_ID, MojamComponent.texts.getStatic("options.locale_de"), left_xOffset, (yOffset += offset)));
 		esBtn = (Button) addButton(new Button(TitleMenu.LOCALE_ES_ID, MojamComponent.texts.getStatic("options.locale_es"), left_xOffset, (yOffset += offset)));
 		frBtn = (Button) addButton(new Button(TitleMenu.LOCALE_FR_ID, MojamComponent.texts.getStatic("options.locale_fr"), left_xOffset, (yOffset += offset)));
-		inBtn = (Button) addButton(new Button(TitleMenu.LOCALE_IN_ID, MojamComponent.texts.getStatic("options.locale_in"), left_xOffset, (yOffset += offset)));
+		idBtn = (Button) addButton(new Button(TitleMenu.LOCALE_IND_ID, MojamComponent.texts.getStatic("options.locale_ind"), left_xOffset, (yOffset += offset)));
 		svBtn = (Button) addButton(new Button(TitleMenu.LOCALE_SV_ID, MojamComponent.texts.getStatic("options.locale_sv"), left_xOffset, (yOffset += offset)));
 		yOffset = TopYOffset;
 		itBtn = (Button) addButton(new Button(TitleMenu.LOCALE_IT_ID, MojamComponent.texts.getStatic("options.locale_it"), right_xOffset, (yOffset += offset)));
@@ -92,7 +92,7 @@ public class LocaleMenu extends GuiMenu {
 		deBtn.setLabel(MojamComponent.texts.getStatic("options.locale_de"));
 		esBtn.setLabel(MojamComponent.texts.getStatic("options.locale_es"));
 		frBtn.setLabel(MojamComponent.texts.getStatic("options.locale_fr"));
-		inBtn.setLabel(MojamComponent.texts.getStatic("options.locale_in"));
+		idBtn.setLabel(MojamComponent.texts.getStatic("options.locale_ind"));
 		itBtn.setLabel(MojamComponent.texts.getStatic("options.locale_it"));
 		nlBtn.setLabel(MojamComponent.texts.getStatic("options.locale_nl"));
 		pt_brBtn.setLabel(MojamComponent.texts.getStatic("options.locale_pt_br"));
