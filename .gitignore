@@ -10,4 +10,4 @@ build
 *.sw?
 lib/.tmp/
 doc/
-./.idea
+.idea
