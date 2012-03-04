@@ -33,7 +33,8 @@ public class Art {
 	public static Bitmap shadow = load("/art/shadows/shadow_coin.png");
 	public static Bitmap[][] rails = cut("/art/map/rails.png", 32, 38);
     public static Bitmap[][] spikes = cut("/art/map/spiketrap.png", 32, 32);
-
+    public static Bitmap[][] dropFloor = cut("/art/map/droptrap.png", 32, 32);
+    
     // Player sheets
 	private static Bitmap[][] lordLard = cut("/art/player/lord_lard_sheet.png", 32, 32);
 	private static Bitmap[][] herrSpeck = cut("/art/player/herr_von_speck_sheet.png", 32, 32);
