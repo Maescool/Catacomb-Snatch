@@ -11,6 +11,7 @@ import com.mojang.mojam.entity.building.TurretTeamOne;
 import com.mojang.mojam.entity.building.TurretTeamTwo;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.mob.Bat;
+import com.mojang.mojam.entity.mob.DropTrap;
 import com.mojang.mojam.entity.mob.Mummy;
 import com.mojang.mojam.entity.mob.Scarab;
 import com.mojang.mojam.entity.mob.Snake;
@@ -63,7 +64,10 @@ public class LevelUtils {
 		
 		Entity entity = null;
 		
-		switch (color) {			
+		switch (color) {
+		case DropTrap.COLOR:
+			entity = new DropTrap(x * Tile.WIDTH,y * Tile.HEIGHT);
+			break;
 		case SpikeTrap.COLOR:
 			entity = new SpikeTrap(x * Tile.WIDTH,y * Tile.HEIGHT);
 			break;
