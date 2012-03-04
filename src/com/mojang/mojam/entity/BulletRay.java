@@ -20,8 +20,8 @@ public class BulletRay extends Bullet {
 		super(e, ya, ya, damage);
 		this.owner = e;
 		pos.set(e.pos.x + xa * 4, e.pos.y + ya * 4);
-		this.xa = xa * 6;
-		this.ya = ya * 6;
+		this.xa = xa * 5;
+		this.ya = ya * 5;
 		this.setSize(4, 4);
 		physicsSlide = false;
 		duration = 50;
@@ -65,7 +65,7 @@ public class BulletRay extends Bullet {
 		if (hit && !removed) {
 			remove();
 		}
-		frame = (frame + 1) & 7;
+		frame = TurnSynchronizer.synchedRandom.nextInt(8);
 	}
 
 	@Override
