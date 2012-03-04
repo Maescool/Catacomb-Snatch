@@ -110,7 +110,7 @@ options.locale_it = ITALIAN
 options.locale_nl = DUTCH
 options.locale_pt_br = BRAZILIAN PORTUGESE
 options.locale_ru = RUSSIAN
-options.locale_si = SLOVENIAN
+options.locale_sl = SLOVENIAN
 options.locale_sv = SWEDISH
 
 pausemenu.help = HELP

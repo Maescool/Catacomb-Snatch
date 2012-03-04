@@ -49,7 +49,7 @@ public class LocaleMenu extends GuiMenu {
 		nlBtn = (Button) addButton(new Button(TitleMenu.LOCALE_NL_ID, MojamComponent.texts.getStatic("options.locale_nl"), right_xOffset, (yOffset += offset)));
 		pt_brBtn = (Button) addButton(new Button(TitleMenu.LOCALE_PT_BR_ID, MojamComponent.texts.getStatic("options.locale_pt_br"), right_xOffset, (yOffset += offset)));
 		ruBtn = (Button) addButton(new Button(TitleMenu.LOCALE_RU_ID, MojamComponent.texts.getStatic("options.locale_ru"), right_xOffset, (yOffset += offset)));
-		siBtn = (Button) addButton(new Button(TitleMenu.LOCALE_SI_ID, MojamComponent.texts.getStatic("options.locale_si"), right_xOffset, (yOffset += offset)));
+		siBtn = (Button) addButton(new Button(TitleMenu.LOCALE_SL_ID, MojamComponent.texts.getStatic("options.locale_sl"), right_xOffset, (yOffset += offset)));
 		yOffset += offset;
 		back = (Button) addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"), xOffset, (yOffset += offset) + 20));
 	}
@@ -68,7 +68,7 @@ public class LocaleMenu extends GuiMenu {
 		}
 
 		super.render(screen);
-		Font.defaultFont().draw(screen, MojamComponent.texts.getStatic("titlemenu.sound_and_video"), MojamComponent.GAME_WIDTH / 2, textY, Font.Align.CENTERED);
+		Font.defaultFont().draw(screen, MojamComponent.texts.getStatic("options.locale_selection"), MojamComponent.GAME_WIDTH / 2, textY, Font.Align.CENTERED);
 		screen.blit(Art.getLocalPlayerArt()[0][6], buttons.get(selectedItem).getX() - 40, buttons.get(selectedItem).getY() - 8);
 	}
 

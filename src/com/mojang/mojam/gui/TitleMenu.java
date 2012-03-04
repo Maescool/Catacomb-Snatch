@@ -77,7 +77,7 @@ public class TitleMenu extends GuiMenu {
 	public static final int LOCALE_NL_ID = 6007;
 	public static final int LOCALE_PT_BR_ID = 6008;
 	public static final int LOCALE_RU_ID = 6009;
-	public static final int LOCALE_SI_ID = 6010;
+	public static final int LOCALE_SL_ID = 6010;
 	public static final int LOCALE_SV_ID = 6011;
 
 	public static LevelInformation level = null;
