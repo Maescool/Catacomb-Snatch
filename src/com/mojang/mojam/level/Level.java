@@ -38,6 +38,11 @@ public class Level {
 
 	public List<ILevelTickItem> tickItems = new ArrayList<ILevelTickItem>();;
 	public int maxMonsters;
+	
+	public int[][] monsterDensity;
+	public int densityTileWidth = 5;
+	public int densityTileHeight = 5;
+	public int[] allowedDensities = {3/*EASY*/,7/*NORMAL*/,12/*HARD*/,100000/*NIGHTMARE*/};
 
 	public IVictoryConditions victoryConditions;
 	public int player1Score = 0;
@@ -48,6 +53,20 @@ public class Level {
 		neighbourOffsets = new int[] { -1, 1, -width, width };
 		this.width = width;
 		this.height = height;
+		
+		int denseTileArrayWidth;
+		int denseTileArrayHeight;
+		if(width % 3 == 0)
+			denseTileArrayWidth = width/densityTileWidth;
+		else
+			denseTileArrayWidth = width/densityTileWidth+1;
+		
+		if(height % 3 == 0)
+			denseTileArrayHeight = height/densityTileHeight;
+		else
+			denseTileArrayHeight = height/densityTileHeight+1;
+		
+		monsterDensity = new int[denseTileArrayWidth][denseTileArrayHeight];
 
 		minimap = new Bitmap(width, height);
 		
@@ -230,6 +249,15 @@ public class Level {
 		entities.add(e);
 		insertToEntityMap(e);
 	}
+	
+	public void addMob(Mob m, int xTile, int yTile)
+	{
+		if(monsterDensity[(int)(xTile/densityTileWidth)][(int)(yTile/densityTileHeight)] <allowedDensities[TitleMenu.difficulty.difficultyID])
+		{
+			addEntity(m);
+		} //else
+			//System.out.println("Denied mob placement from density tile ("+xTile/densityTileWidth+","+yTile/densityTileHeight+") on difficulty "+ TitleMenu.difficulty.difficultyName+"(ID "+TitleMenu.difficulty.difficultyID+", Max Mobs per tile:"+allowedDensities[TitleMenu.difficulty.difficultyID]+")");
+	}
 
 	public void removeEntity(Entity e) {
 		e.removed = true;
@@ -238,6 +266,15 @@ public class Level {
 	public void tick() {		
 		for(int i = 0; i < tickItems.size(); i++) {
 			tickItems.get(i).tick(this);
+		}
+		
+		for(int x=0;x < monsterDensity.length;x++)
+		{
+			for(int y=0;y < monsterDensity[x].length;y++)
+			{
+				int entityNumb = getEntities(x*densityTileWidth*Tile.WIDTH,y*densityTileHeight*Tile.HEIGHT,x*(densityTileWidth+1)*Tile.WIDTH,y*(densityTileHeight+1)*Tile.HEIGHT).size();
+				monsterDensity[x][y] = entityNumb;
+			}
 		}
 
 		for (int i = 0; i < entities.size(); i++) {
