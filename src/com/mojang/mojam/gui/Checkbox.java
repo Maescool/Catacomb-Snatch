@@ -17,6 +17,14 @@ public class Checkbox extends ClickableComponent {
 		this(id, label, x, y, false);
 	}
 
+    public int getId()
+    {
+        return id;
+    }
+    
+    public void setLabel(String label){
+    	this.label = label;
+    }
 	public Checkbox(int id, String label, int x, int y, boolean checked) {
 		super(x, y, 128, 24);
 		this.id = id;
@@ -43,9 +51,5 @@ public class Checkbox extends ClickableComponent {
 
 		Font.defaultFont().draw(screen, label, getX() + 24 + 4,
 				getY() + getHeight() / 2 - 4);
-	}
-
-	public int getId() {
-		return id;
 	}
 }

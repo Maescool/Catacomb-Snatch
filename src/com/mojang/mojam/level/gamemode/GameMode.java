@@ -129,8 +129,10 @@ public class GameMode {
 		newLevel.addEntity(new ShopItemShotgun(32 * (newLevel.width / 2 - 2.0), (newLevel.height - 6.5) * 32, Team.Team1));
 		newLevel.addEntity(new ShopItemRaygun(32 * (newLevel.width / 2 - 2.0), (newLevel.height - 5.5) * 32, Team.Team1));
 		
-		newLevel.setTile((newLevel.width / 2) - 1, 7, new UnbreakableRailTile(new SandTile()));	
-	    newLevel.setTile((newLevel.width / 2) - 1, newLevel.height - 8, new UnbreakableRailTile(new SandTile()));
+		for (int i=0; i<3; i++){
+		    newLevel.setTile((newLevel.width / 2) - i, 7, new UnbreakableRailTile(new SandTile()));	
+		    newLevel.setTile((newLevel.width / 2) - i, newLevel.height - 8, new UnbreakableRailTile(new SandTile()));
+		}
 	}
 	
 	protected void setTickItems() {

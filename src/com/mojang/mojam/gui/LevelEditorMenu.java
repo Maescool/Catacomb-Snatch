@@ -7,12 +7,24 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
+
 import javax.imageio.ImageIO;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.entity.Entity;
-import com.mojang.mojam.entity.building.*;
+import com.mojang.mojam.entity.building.SpawnerForBat;
+import com.mojang.mojam.entity.building.SpawnerForMummy;
+import com.mojang.mojam.entity.building.SpawnerForScarab;
+import com.mojang.mojam.entity.building.SpawnerForSnake;
+import com.mojang.mojam.entity.building.TreasurePile;
+import com.mojang.mojam.entity.building.Turret;
+import com.mojang.mojam.entity.building.TurretTeamOne;
+import com.mojang.mojam.entity.building.TurretTeamTwo;
+import com.mojang.mojam.entity.mob.Bat;
+import com.mojang.mojam.entity.mob.Mummy;
+import com.mojang.mojam.entity.mob.Scarab;
+import com.mojang.mojam.entity.mob.Snake;
 import com.mojang.mojam.entity.mob.SpikeTrap;
 import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.LevelInformation;
@@ -68,7 +80,12 @@ public class LevelEditorMenu extends GuiMenu {
         new SpawnerForBat(0, 0),
         new SpawnerForSnake(0, 0),
         new SpawnerForMummy(0, 0),
-        new SpawnerForScarab(0, 0)
+        new SpawnerForScarab(0, 0),
+        new Bat(0,0),
+        new Snake(0,0),
+        new Mummy(0,0),
+        new Scarab(0,0)
+        
     };
     
     private final int buttonsPerPage = 12;
