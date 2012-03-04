@@ -46,8 +46,8 @@ public class AudioVideoMenu extends GuiMenu {
 		fullscreenBtn = (ClickableComponent) addButton(new Checkbox(TitleMenu.FULLSCREEN_ID, MojamComponent.texts.getStatic("options.fullscreen"), xOffset, yOffset += offset, Options.getAsBoolean(Options.FULLSCREEN, Options.VALUE_FALSE)));
 		fpsBtn = (ClickableComponent) addButton(new Checkbox(TitleMenu.FPS_ID, MojamComponent.texts.getStatic("options.showfps"), xOffset, yOffset += offset, Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE)));
 		soundVol = (ClickableComponent) addButton(new Slider(TitleMenu.VOLUME, MojamComponent.texts.getStatic("options.volume"), xOffset, yOffset += offset, volume));
-		musicVol = (ClickableComponent) addButton(new Slider(TitleMenu.MUSIC, MojamComponent.texts.getStatic("options.music"), xOffset - xOffset / 3 - 6, yOffset += offset, musicVolume));
-		soundsVol = (ClickableComponent) addButton(new Slider(TitleMenu.SOUND, MojamComponent.texts.getStatic("options.sounds"), xOffset + xOffset / 3 + 6, yOffset, soundsVolume));
+		musicVol = (ClickableComponent) addButton(new Slider(TitleMenu.MUSIC, MojamComponent.texts.getStatic("options.music"), xOffset - xOffset / 3 - 20, yOffset += offset, musicVolume));
+		soundsVol = (ClickableComponent) addButton(new Slider(TitleMenu.SOUND, MojamComponent.texts.getStatic("options.sounds"), xOffset + xOffset / 3 + 20, yOffset, soundsVolume));
 
 		back = (Button) addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"), xOffset, (yOffset += offset) + 20));
 
