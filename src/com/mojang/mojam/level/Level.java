@@ -349,7 +349,9 @@ public class Level {
 	}
 	
 	private GameCharacter getPlayerCharacter(int playerID){
-		return MojamComponent.instance.players[playerID].getCharacter();
+	    Player player = MojamComponent.instance.players[playerID];
+	    if (player == null) return GameCharacter.None;
+	    else return player.getCharacter();
 	}
 
 	private void renderTopOfWalls(Screen screen, int x0, int y0, int x1, int y1){
