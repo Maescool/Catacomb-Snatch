@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.mojang.mojam.GameCharacter;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
@@ -320,14 +321,14 @@ public class Level {
                 int xt = x - (width / 2) + 4;
                 int yt = y - 4;
                 if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (xt != 3 || yt < 3)) {
-                    screen.blit(Art.getPlayerBase(getPlayerCharacterID(1))[xt][yt], x * Tile.WIDTH, y
+                    screen.blit(Art.getPlayerBase(getPlayerCharacter(1))[xt][yt], x * Tile.WIDTH, y
                             * Tile.HEIGHT);
                     continue;
                 }
 
                 yt = y - (height - 8);
                 if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (xt != 3 || yt > 0)) {
-                    screen.blit(Art.getPlayerBase(getPlayerCharacterID(0))[xt][yt], x * Tile.WIDTH, y * Tile.HEIGHT);
+                    screen.blit(Art.getPlayerBase(getPlayerCharacter(0))[xt][yt], x * Tile.WIDTH, y * Tile.HEIGHT);
                     if ((xt == 0 || xt == 1 || xt == 5 || xt == 6) && yt == 0) {
                         screen.blit(Art.shadow_north, x * Tile.WIDTH, y * Tile.HEIGHT);
                     }
@@ -347,8 +348,8 @@ public class Level {
         }
 	}
 	
-	private int getPlayerCharacterID(int playerID){
-		return MojamComponent.instance.players[playerID].getCharacterID();
+	private GameCharacter getPlayerCharacter(int playerID){
+		return MojamComponent.instance.players[playerID].getCharacter();
 	}
 
 	private void renderTopOfWalls(Screen screen, int x0, int y0, int x1, int y1){
@@ -568,13 +569,13 @@ public class Level {
 	
 	private void renderPlayerScores(Screen screen){
 	    
-	    String player1score =  MojamComponent.texts.scoreCharacter(getPlayerCharacterID(0), player1Score * 100 / TARGET_SCORE);
+	    String player1score =  MojamComponent.texts.scoreCharacter(getPlayerCharacter(0), player1Score * 100 / TARGET_SCORE);
         Font.defaultFont().draw(screen, player1score, 280-player1score.length()*10, screen.h - 20); //adjust so it fits in the box
-        screen.blit(Art.getPlayer(getPlayerCharacterID(0))[0][2], 262, screen.h-42);
+        screen.blit(Art.getPlayer(getPlayerCharacter(0))[0][2], 262, screen.h-42);
 
-        if (MojamComponent.instance.players[1] != null && getPlayerCharacterID(1) != Art.NO_OPPONENT) {
-            Font.defaultFont().draw(screen, MojamComponent.texts.scoreCharacter(getPlayerCharacterID(1), player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
-            screen.blit(Art.getPlayer(getPlayerCharacterID(1))[0][6], 19, screen.h-42);
+        if (MojamComponent.instance.players[1] != null && getPlayerCharacter(1) != GameCharacter.None) {
+            Font.defaultFont().draw(screen, MojamComponent.texts.scoreCharacter(getPlayerCharacter(1), player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
+            screen.blit(Art.getPlayer(getPlayerCharacter(1))[0][6], 19, screen.h-42);
         }
 	}
 	
