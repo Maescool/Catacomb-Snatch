@@ -21,8 +21,6 @@ public class mod_TestSpawners extends Mod
 	public mod_TestSpawners()
 	{
 		id = Snatch.addEntity(new TestEntity(0, 0, 0));
-		System.out.println("TestEntity Id: " + id);
-		Snatch.addKey(placeBomb, KeyEvent.VK_B);
 	}
 
 	@Override
@@ -36,8 +34,15 @@ public class mod_TestSpawners extends Mod
 	@Override
 	public void OnKeyPressed(Key k)
 	{
-		System.out.println(k.name);
-		if(k.name==placeBomb.name)System.out.println("Pressed!");
+		System.out.println("Pressed: "+k.name);
+		if(k.equals(placeBomb))System.out.println("Bomb Pressed!");
+	}
+	
+	@Override
+	public void IfKeyDown(Key k)
+	{
+		System.out.println("Down: "+k.name);
+		if(k.equals(placeBomb))System.out.println("Bomb Down!");
 	}
 
 	//Demonstration, TODO
@@ -69,6 +74,13 @@ public class mod_TestSpawners extends Mod
 	    System.out.println(1000/(lastFrame));
 	    fps = (int) (1000/(frame-lastFrame));
 	    Snatch.getFont().draw(Snatch.getMojam().screen, Snatch.getMojam().texts.FPS(fps), 10, 10);*/
+	}
+	
+	@Override
+	public void RunOnce()
+	{
+		Snatch.addKey(placeBomb, Snatch.keycode("b"));
+		//Snatch.addKey(placeBomb, );
 	}
 
 	@Override

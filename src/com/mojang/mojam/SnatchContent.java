@@ -28,7 +28,6 @@ public class SnatchContent extends Mod
 		if(type == ids[1]) te = new Snake(x, y, 0);
 		if(type == ids[2]) te = new Mummy(x, y, 0);
 		if(type == ids[3]) te = new Scarab(x, y, 0);
-		System.out.println(ids[3]);
 		return te;
 	}
 

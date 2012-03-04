@@ -43,7 +43,9 @@ import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.gamemode.GameMode;
+import com.mojang.mojam.network.NetworkCommand;
 import com.mojang.mojam.network.Packet;
+import com.mojang.mojam.network.packet.ChangeKeyCommand;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 
@@ -461,23 +463,99 @@ public final class Snatch
 		return i;
 	}
 
+	/**
+	 * Registers a new key <br>
+	 * {@code Key mykey = Snatch.addKey("aKey","a");}
+	 * @param name The name of the key
+	 * @param code The keyboard code of the key to be registered
+	 * @return The registered key
+	 */
+	public static Key addkey(String name, String code)
+	{
+		return addKey(name, keycode(code));
+	}
+	
+	/**
+	 * Registers a new key <br>
+	 * {@code Key mykey = Snatch.addKey("aKey",32);}
+	 * @param name The name of the key
+	 * @param code The keyboard code of the key to be registered
+	 * @return The registered key
+	 */
+	public static Key addKey(String name, int code)
+	{
+		return addKey(keys.new Key(name),code);
+	}
+	
+	/**
+	 * Registers a given key
+	 * @param key The key being registered
+	 * @param code The keyboard code of the key being registered
+	 * @return The key once registered
+	 */
 	public static Key addKey(Key key, int code)
 	{
-		//inputHandler = (InputHandler)reflectField(mojam,"inputHandler");
-		mojam.keys.getAll().add(key);
-		//System.out.println(inputHandler+":"+key+":"+code);
-		//inputHandler.addMapping(key, code);
-		reflectField(mojam, "inputHandler", new InputHandler(mojam.keys));
-		inputHandler = new InputHandler(keys);
-		mojam.addKeyListener(inputHandler);
+		inputHandler = (InputHandler) reflectField(mojam, "inputHandler");
+		for(Keys k : mojam.synchedKeys)
+		{
+			k.getAll().add(key);
+		}
+		reflectMethod(InputHandler.class, inputHandler, "initKey", new Object[]
+		{
+			key,
+			code
+		});
+		System.out.println("Added key: " + key.name + " with keycode: " + code);
 		return key;
 	}
 
+	/**
+	 * Gets the integer keycode for the name s
+	 * @param s The name of the key
+	 * @return The intcode of the key
+	 */
+	public static int keycode(String s)
+	{
+		Field f = (Field) reflectField(java.awt.event.KeyEvent.class, "VK_" + s.toUpperCase());
+		try
+		{
+			return (Integer) f.get(null);
+		}
+		catch (IllegalArgumentException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IllegalAccessException e)
+		{
+			e.printStackTrace();
+		}
+		return -1;
+	}
+
+	/**
+	 * Used to add an animated bitmap
+	 * 
+	 * @param src
+	 *            The location of the bitmap file
+	 * @return A bitmap used for rendering. The Bitmap[] holds Bitmap[]s for
+	 *         each animation, e.g. <br>
+	 *         {@code
+	 * Bitmap[][] myBitmap = addAnimation(srcString);
+	 * return myBitmap[animationId][frameId];
+	 * }
+	 */
 	public static Bitmap[][] addAnimation(String src)
 	{
 		return Art.cut(src, 32, 32);
 	}
 
+	/**
+	 * Used to add a still-image bitmap
+	 * 
+	 * @param src
+	 *            The location of the bitmap file
+	 * @return A bitmap used for rendering
+	 */
 	public static Bitmap addArt(String src)
 	{
 		return load(src);
@@ -486,9 +564,12 @@ public final class Snatch
 	/**
 	 * Invokes a reflected method
 	 * 
-	 * @param o The instance that contains the method to be reflected
-	 * @param s The name of the method
-	 * @param params The parameters of the method
+	 * @param o
+	 *            The instance that contains the method to be reflected
+	 * @param s
+	 *            The name of the method
+	 * @param params
+	 *            The parameters of the method
 	 * @return The value that the method being reflected returns
 	 */
 	public static Object reflectMethod(Object o, String s, Object params[])
@@ -518,11 +599,54 @@ public final class Snatch
 	}
 
 	/**
+	 * Invokes a method in a declared class
+	 * 
+	 * @param c
+	 *            The class the instance is of
+	 * @param o
+	 *            The instance of the class
+	 * @param s
+	 *            The name of the method
+	 * @param params
+	 *            The parameters of the method
+	 * @return The returned value of the method
+	 */
+	public static Object reflectMethod(Class c, Object o, String s, Object params[])
+	{
+		// Go and find the private method... 
+		final Method methods[] = c.getDeclaredMethods();
+		for(int i = 0; i < methods.length; ++i)
+		{
+			if(s.equals(methods[i].getName()))
+			{
+				try
+				{
+					methods[i].setAccessible(true);
+					return methods[i].invoke(o, params);
+				}
+				catch (IllegalAccessException ex)
+				{
+
+				}
+				catch (InvocationTargetException ite)
+				{
+
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Sets a reflected field that would otherwise be hidden
-	 * @param o The instance that holds the field to be reflected
-	 * @param s The name of the field to be set
-	 * @param value The new value for the field
-	 * @return The field's new value. It is successful if it returns 'value'. 
+	 * 
+	 * @param o
+	 *            The instance that holds the field to be reflected
+	 * @param s
+	 *            The name of the field to be set
+	 * @param value
+	 *            The new value for the field
+	 * @return The field's new value. It is successful if it returns 'value'.
 	 */
 	public static Object reflectField(Object o, String s, Object value)
 	{
@@ -550,8 +674,10 @@ public final class Snatch
 	/**
 	 * Gets a reflected value that would otherwise be hidden
 	 * 
-	 * @param o The instance that holds the field to be reflected
-	 * @param s The name of the field to be reflected
+	 * @param o
+	 *            The instance that holds the field to be reflected
+	 * @param s
+	 *            The name of the field to be reflected
 	 * @return the reflected value of the field
 	 */
 	public static Object reflectField(Object o, String s)
@@ -571,6 +697,30 @@ public final class Snatch
 				{
 
 				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Reflects a static field from a {@link Class}
+	 * 
+	 * @param c
+	 *            The class to reflect the variable from
+	 * @param s
+	 *            The name of the variable
+	 * @return The field reflected
+	 */
+	public static Object reflectField(Class c, String s)
+	{
+		// Go and find the private fields... 
+		final Field fields[] = c.getDeclaredFields();
+		for(int i = 0; i < fields.length; ++i)
+		{
+			if(s.equals(fields[i].getName()))
+			{
+				fields[i].setAccessible(true);
+				return fields[i];
 			}
 		}
 		return null;
@@ -675,14 +825,6 @@ public final class Snatch
 		for(Mod m : modList)
 		{
 			m.OnTick();
-
-			for(Key k : mojam.keys.getAll())
-			{
-				if(k.isDown) m.IfKeyDown(k);
-				if(!k.isDown) m.IfKeyUp(k);
-				if(k.wasPressed()) m.OnKeyPressed(k);
-				if(k.wasReleased()) m.OnKeyUp(k);
-			}
 		}
 		invoke("OnTick");
 	}
@@ -879,6 +1021,45 @@ public final class Snatch
 	public static long asLong(double d)
 	{
 		return (long) d;
+	}
+
+	public static void handleNetworkCommand(int playerId, NetworkCommand packet)
+	{
+		if(packet instanceof ChangeKeyCommand)
+		{
+			ChangeKeyCommand ckc = (ChangeKeyCommand) packet;
+			Key key = mojam.synchedKeys[playerId].getAll().get(ckc.getKey());
+			System.out.println("" + key.wasDown + key.isDown + key.nextState + key.name);
+			if(key.isDown)
+			{
+				if(!key.nextState)
+				{
+					for(Mod m : modList)
+					{
+						m.OnKeyReleased(key);
+					}
+				}
+				for(Mod m : modList)
+				{
+					m.IfKeyDown(key);
+				}
+			}
+			else
+			{
+				if(key.nextState)
+				{
+					for(Mod m : modList)
+					{
+						m.OnKeyPressed(key);
+					}
+				}
+				for(Mod m : modList)
+				{
+					m.IfKeyUp(key);
+				}
+			}
+		}
+
 	}
 
 }

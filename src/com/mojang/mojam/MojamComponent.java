@@ -673,6 +673,7 @@ if(level.victoryConditions.isVictoryConditionAchieved()) {
 	@Override
 	public void handle(int playerId, NetworkCommand packet) {
 
+		Snatch.handleNetworkCommand(playerId,packet);
 		if (packet instanceof ChangeKeyCommand) {
 			ChangeKeyCommand ckc = (ChangeKeyCommand) packet;
 			synchedKeys[playerId].getAll().get(ckc.getKey()).nextState = ckc
