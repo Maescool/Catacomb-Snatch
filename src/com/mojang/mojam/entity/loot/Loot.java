@@ -3,6 +3,7 @@ package com.mojang.mojam.entity.loot;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
+import com.mojang.mojam.entity.building.Harvester;
 import com.mojang.mojam.level.tile.HoleTile;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
@@ -63,7 +64,7 @@ public class Loot extends Entity {
 		this.setSize(2, 2);
 		this.disappears=disappears;
 		physicsSlide = false;
-		life = TurnSynchronizer.synchedRandom.nextInt(100) + 600;
+		life = 99999999;//TurnSynchronizer.synchedRandom.nextInt(100) + 600;
 
 		animationTime = TurnSynchronizer.synchedRandom.nextInt(animationArt[value].length * 3);
 	}
@@ -75,7 +76,7 @@ public class Loot extends Entity {
 
 	public void tick() {
 		animationTime++;
-		if((Math.abs(xMovement) + Math.abs(yMovement)) < 0.1 && level.getTile(pos) instanceof HoleTile) {
+		if(coinHasFallenInHole()) {
 			remove();
 		}
 		move(xMovement, yMovement);
@@ -122,8 +123,13 @@ public class Loot extends Entity {
 					}
 				} else {
 					double suckPower = collector.getSuckPower();
-					double localDistance = (fixDistance - 40) * suckPower + 40;
-					if (xDelta * xDelta + yDelta * yDelta < localDistance * localDistance) {
+					double suckDistance = 0;
+					// quick fix for issue #734
+					if(collector instanceof Harvester){
+					    suckDistance = suckPower * 60;
+					} else suckDistance = (fixDistance - 40) * suckPower + 40;
+					
+					if (distance < suckDistance) {
 						collector.notifySucking();
 						if (distance < absorbDistance) {
 							onTake(collector);
@@ -131,7 +137,7 @@ public class Loot extends Entity {
 						}
 						xDelta /= distance;
 						yDelta /= distance;
-						double power = (1 - (distance / localDistance)) * 1.6 * (suckPower * 0.5 + 0.5);
+						double power = (1 - (distance / suckDistance)) * 1.6 * (suckPower * 0.5 + 0.5);
 						if (accelerationDirection <= 0) {
 							xMovement += xDelta * power;
 							yMovement += yDelta * power;
@@ -142,6 +148,10 @@ public class Loot extends Entity {
 		}
 	}
 
+	private boolean coinHasFallenInHole(){
+	    return (Math.abs(xMovement) + Math.abs(yMovement)) < 0.1 && level.getTile(pos) instanceof HoleTile;
+	}
+	
 	public void forceTake(LootCollector taker) {
 		onTake(taker);
 	}
