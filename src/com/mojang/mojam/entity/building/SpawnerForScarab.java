@@ -37,6 +37,6 @@ public class SpawnerForScarab extends SpawnerEntity {
 	
 	@Override
 	public Bitmap getBitMapForEditor() {
-		return Art.scarab[0][1];
+		return Art.mobSpawner[0][0];
 	}
 }

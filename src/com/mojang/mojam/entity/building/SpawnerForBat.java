@@ -39,7 +39,7 @@ public class SpawnerForBat extends SpawnerEntity {
 
 	@Override
 	public Bitmap getBitMapForEditor() {
-		return Art.bat[0][0];
+		return Art.mobSpawner[0][0];
 	}
 
 }

@@ -37,6 +37,6 @@ public class SpawnerForSnake extends SpawnerEntity {
 
 	@Override
 	public Bitmap getBitMapForEditor() {
-		return Art.snake[0][0];
+		return Art.mobSpawner[0][0];
 	}
 }
