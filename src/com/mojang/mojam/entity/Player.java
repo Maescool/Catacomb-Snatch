@@ -2,6 +2,7 @@ package com.mojang.mojam.entity;
 
 import java.util.Random;
 
+import com.mojang.mojam.GameCharacter;
 import com.mojang.mojam.Keys;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
@@ -74,7 +75,7 @@ public class Player extends Mob implements LootCollector {
     private int deadDelay = 0;
     private int nextWalkSmokeTick = 0;
     boolean isImmortal;
-    private int characterID;
+    private GameCharacter character;
 
     /**
      * Constructor
@@ -85,11 +86,11 @@ public class Player extends Mob implements LootCollector {
      * @param y Initial y coordinate
      * @param team Team number
      */
-    public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team, int characterID) {
+    public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team, GameCharacter character) {
         super(x, y, team);
         this.keys = keys;
         this.mouseButtons = mouseButtons;
-        this.characterID = characterID;
+        this.character = character;
 
         startX = x;
         startY = y;
@@ -630,7 +631,7 @@ public class Player extends Mob implements LootCollector {
 
     @Override
     public void render(Screen screen) {
-		Bitmap[][] sheet = Art.getPlayer(getCharacterID());
+		Bitmap[][] sheet = Art.getPlayer(getCharacter());
     	
 		if(sheet == null){
 			return;
@@ -666,12 +667,12 @@ public class Player extends Mob implements LootCollector {
         }
 	}
     
-    public void setCharacterID(int characterID) {
-		this.characterID = characterID;
+    public void setCharacter(GameCharacter character) {
+		this.character = character;
 	}
     
-    public int getCharacterID(){
-    	return characterID;
+    public GameCharacter getCharacter(){
+    	return character;
     }
 
 	@Override
@@ -807,7 +808,7 @@ public class Player extends Mob implements LootCollector {
      * Revive the player. Carried items are lost, as is all the money.
      */
     private void revive() {
-        Notifications.getInstance().add(MojamComponent.texts.hasDiedCharacter(getCharacterID()));
+        Notifications.getInstance().add(MojamComponent.texts.hasDiedCharacter(getCharacter()));
         carrying = null;
         dropAllMoney();
         pos.set(startX, startY);

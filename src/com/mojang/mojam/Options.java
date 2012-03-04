@@ -36,14 +36,14 @@ public class Options {
 	public static int getCharacterID() {
 		String value = properties.getProperty(CHARACTER_ID);
 		if (value == null) {
-			return Art.LORD_LARD;
+			return GameCharacter.LordLard.ordinal();
 		}
-		int id = Art.LORD_LARD;
+		int id = GameCharacter.LordLard.ordinal();
 		try {
 			id = Integer.parseInt(value);
 		} catch (NumberFormatException e) {}
-		if (id < 0 || id >= Art.NUM_CHARACTERS) {
-			return Art.LORD_LARD;
+		if (id < 0 || id >= GameCharacter.values().length-1) {
+			return GameCharacter.LordLard.ordinal();
 		}
 		return id;
 	}

@@ -7,19 +7,13 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import com.mojang.mojam.GameCharacter;
 import com.mojang.mojam.MojamComponent;
 
 /**
  * Art management class
  */
 public class Art {
-	
-	public static final int NO_OPPONENT = -1;
-	public static final int LORD_LARD = 0;
-	public static final int HERR_VON_SPECK = 1;
-	public static final int DUCHESS_DONUT = 2;
-	public static final int COUNTESS_CRULLER = 3;
-	public static final int NUM_CHARACTERS = 4;
 	
 	public static Bitmap[][] floorTiles = cut("/art/map/floortiles.png", 32, 32);
 	public static Bitmap shadow_north = load("/art/shadows/shadow_north.png");
@@ -46,17 +40,17 @@ public class Art {
 	private static Bitmap[][] duchessDonut = cut("/art/player/duchess_donut_sheet.png", 32, 32);
 	private static Bitmap[][] countessCruller = cut("/art/player/countess_cruller_sheet.png", 32, 32);
 	
-	public static Bitmap[][] getPlayer(int characterID) {
-		switch (characterID) {
-		case NO_OPPONENT:
+	public static Bitmap[][] getPlayer(GameCharacter character) {
+		switch (character) {
+		case None:
 			return null;
-		case LORD_LARD:
+		case LordLard:
 			return lordLard;
-		case HERR_VON_SPECK:
+		case HerrVonSpeck:
 			return herrSpeck;
-		case DUCHESS_DONUT:
+		case DuchessDonut:
 			return duchessDonut;
-		case COUNTESS_CRULLER:
+		case CountessCruller:
 			return countessCruller;
 		default:
 			return lordLard;
@@ -76,17 +70,17 @@ public class Art {
 	private static Bitmap[][] startCountessCruller = cut("/art/player/start_cruller.png", 32, 32);
 	private static Bitmap[][] startNoOpponent = cut("/art/player/start_no_opponent.png", 32, 32);
 	
-	public static Bitmap[][] getPlayerBase(int characterID) {
-		switch (characterID) {
-		case NO_OPPONENT:
+	public static Bitmap[][] getPlayerBase(GameCharacter character) {
+		switch (character) {
+		case None:
 			return startNoOpponent;
-		case LORD_LARD:
+		case LordLard:
 			return startLordLard;
-		case HERR_VON_SPECK:
+		case HerrVonSpeck:
 			return startHerrSpeck;
-		case DUCHESS_DONUT:
+		case DuchessDonut:
 			return startDuchessDonut;
-		case COUNTESS_CRULLER:
+		case CountessCruller:
 			return startCountessCruller;
 		default:
 			return startLordLard;
