@@ -36,7 +36,7 @@ public class Snake extends HostileMob {
         if (tick >= 20) {
             tick = 0;
 
-	        if(TurnSynchronizer.synchedRandom.nextInt(4) == 0 && checkIfInFront(ATTACK_RADIUS, Player.class) != null) {
+	        if(TurnSynchronizer.synchedRandom.nextInt(5) == 0 && checkIfInFront(ATTACK_RADIUS, Player.class) != null) {
 	            aimVector.set(xd, yd);
 	            aimVector.normalizeSelf();
 	            weapon.primaryFire(xd, yd);
