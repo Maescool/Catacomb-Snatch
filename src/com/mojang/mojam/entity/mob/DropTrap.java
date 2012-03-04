@@ -12,7 +12,7 @@ import com.mojang.mojam.screen.Screen;
 import java.util.Set;
 
 public class DropTrap extends Mob implements IEditable {
-    public static final int COLOR = 0xff0000cc;
+    public static final int COLOR = 0xff0000c0;
 	private int crumble;
 	private boolean steppedOn;
 	private boolean playerFound;
