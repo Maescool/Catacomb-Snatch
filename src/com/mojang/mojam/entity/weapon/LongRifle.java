@@ -9,6 +9,7 @@ public class LongRifle extends Weapon {
 	
 	public LongRifle(Player owner) {
 		super(owner, bulletDamage, accuracy);
+		shootDelay = 6;
 		setSoundDir("/sound/Shot 1.wav");
 	}
 

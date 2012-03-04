@@ -7,7 +7,7 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.network.TurnSynchronizer;
 
-public abstract class Weapon implements IWeapon {
+public class Weapon implements IWeapon {
 
 	private Player owner;
 	protected static float BULLET_DAMAGE;

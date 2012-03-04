@@ -47,6 +47,8 @@ public class Player extends Mob implements LootCollector {
     public int mouseUseButton = 3;
     public Vec2 aimVector;
     public IWeapon weapon;
+    public IWeapon firstWeapon;
+    public IWeapon secondWeapon;
     private boolean mouseAiming;
     public double xd, yd;
     public int takeDelay = 0;
@@ -103,7 +105,11 @@ public class Player extends Mob implements LootCollector {
         aimVector = new Vec2(0, 1);
 
         score = 0;
-        weapon = new Rifle(this);
+        
+        firstWeapon = new Rifle(this);
+        secondWeapon = new LongRifle(this);
+        weapon = firstWeapon;
+        
         setRailPricesAndImmortality();
     }
     
@@ -222,6 +228,12 @@ public class Player extends Mob implements LootCollector {
             }
             if (keys.fireRight.isDown) {
                 xaShot++;
+            }
+            if (keys.firstWeapon.isDown) {
+            	this.weapon = firstWeapon;
+            }
+            if (keys.secondWeapon.isDown) {
+            	this.weapon = secondWeapon;
             }
         }
 
