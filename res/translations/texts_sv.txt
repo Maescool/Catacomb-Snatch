@@ -83,7 +83,7 @@ levelselect.start = STARTA
 levelselect.update = UPPDATERA KARTA
 
 mp.waitingForClient = VÄNTA PÅ ATT MOTSTÅNDAREN SKALL ANSLUTA...
-mp.enterIP = SKRIV IP ELLER HOST:
+mp.enterIP = SKRIV IP ELLER VÄRD:
 mp.localIP = DITT LOKALA IP:
 mp.externalIP = DITT EXTERNA IP:
 mp.join = ANSLUT
