@@ -120,9 +120,10 @@ public class GameMode {
 		newLevel.addEntity(new ShopItemHarvester(32 * (newLevel.width / 2 - .5), (newLevel.height - 4.5) * 32, Team.Team1));
 		newLevel.addEntity(new ShopItemBomb(32 * (newLevel.width / 2 + .5), (newLevel.height - 4.5) * 32, Team.Team1));
 		
-		
-		newLevel.setTile((newLevel.width / 2) - 1, 7, new UnbreakableRailTile(new SandTile()));	
-	    newLevel.setTile((newLevel.width / 2) - 1, newLevel.height - 8, new UnbreakableRailTile(new SandTile()));
+		for (int i=0; i<3; i++){
+		    newLevel.setTile((newLevel.width / 2) - i, 7, new UnbreakableRailTile(new SandTile()));	
+		    newLevel.setTile((newLevel.width / 2) - i, newLevel.height - 8, new UnbreakableRailTile(new SandTile()));
+		}
 	}
 	
 	protected void setTickItems() {
