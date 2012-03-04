@@ -256,8 +256,7 @@ public class Level {
 		if(monsterDensity[(int)(xTile/densityTileWidth)][(int)(yTile/densityTileHeight)] <allowedDensities[TitleMenu.difficulty.difficultyID])
 		{
 			addEntity(m);
-		} //else
-			//System.out.println("Denied mob placement from density tile ("+xTile/densityTileWidth+","+yTile/densityTileHeight+") on difficulty "+ TitleMenu.difficulty.difficultyName+"(ID "+TitleMenu.difficulty.difficultyID+", Max Mobs per tile:"+allowedDensities[TitleMenu.difficulty.difficultyID]+")");
+		}
 	}
 
 	public void removeEntity(Entity e) {
@@ -266,16 +265,13 @@ public class Level {
 	
 	public void updateDensityList()
 	{
-		//System.out.println("Density List Updating, Visual Representation:");
 		for(int x=0;x < monsterDensity.length;x++)
 		{
 			for(int y=0;y < monsterDensity[x].length;y++)
 			{
 				int entityNumb = getEntities(x*densityTileWidth*Tile.WIDTH,y*densityTileHeight*Tile.HEIGHT,x*(densityTileWidth+1)*Tile.WIDTH,y*(densityTileHeight+1)*Tile.HEIGHT).size();
 				monsterDensity[x][y] = entityNumb;
-				//System.out.print(entityNumb + " ");
 			}
-			//System.out.println();
 		}
 	}
 
