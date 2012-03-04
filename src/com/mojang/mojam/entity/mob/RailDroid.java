@@ -6,6 +6,7 @@ import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.building.TreasurePile;
 import com.mojang.mojam.entity.building.Turret;
+import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.tile.*;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.network.TurnSynchronizer;
@@ -52,7 +53,6 @@ public class RailDroid extends Mob {
 	}
 
 	public void tick() {
-
 		xBump = yBump = 0;
 
 		super.tick();
