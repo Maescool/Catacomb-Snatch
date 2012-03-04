@@ -306,46 +306,50 @@ public class Level {
 	}
 	
 	private void renderTilesAndBases(Screen screen, int x0, int y0, int x1, int y1){
-		// go through each currently visible cell
+	    // go through each currently visible cell
 	    for (int y = y0; y <= y1; y++) {
-            for (int x = x0; x <= x1; x++) {
-            	
-				// draw sand outside the level
-                if (x < 0 || x >= width || y < 0 || y >= height) {
-                    screen.blit(Art.floorTiles[5][0], x * Tile.WIDTH, y
-                            * Tile.HEIGHT);
-                    continue;
-                }
+	        for (int x = x0; x <= x1; x++) {
 
-				// if we are in the center area (4*7 Tiles): draw player bases
-                int xt = x - (width / 2) + 4;
-                int yt = y - 4;
-                if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (xt != 3 || yt < 3)) {
-                    screen.blit(Art.getPlayerBase(getPlayerCharacter(1))[xt][yt], x * Tile.WIDTH, y
-                            * Tile.HEIGHT);
-                    continue;
-                }
+	            // draw sand outside the level
+	            if (x < 0 || x >= width || y < 0 || y >= height) {
+	                screen.blit(Art.floorTiles[5][0], x * Tile.WIDTH, y
+	                        * Tile.HEIGHT);
+	                continue;
+	            }
 
-                yt = y - (height - 8);
-                if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (xt != 3 || yt > 0)) {
-                    screen.blit(Art.getPlayerBase(getPlayerCharacter(0))[xt][yt], x * Tile.WIDTH, y * Tile.HEIGHT);
-                    if ((xt == 0 || xt == 1 || xt == 5 || xt == 6) && yt == 0) {
-                        screen.blit(Art.shadow_north, x * Tile.WIDTH, y * Tile.HEIGHT);
-                    }
-                    if ((xt == 2) && yt == 0) {
-                        screen.blit(Art.shadow_north_west, x * Tile.WIDTH, y * Tile.HEIGHT);
-                    }
-                    if ((xt == 4) && yt == 0) {
-                        screen.blit(Art.shadow_north_east, x * Tile.WIDTH + Tile.WIDTH - Art.shadow_east.w, y * Tile.HEIGHT);
-                    }
-                    continue;
-                }
-                
-                if (canSee(x, y)) {
-                    tiles[x + y * width].render(screen);
-                }
-            }
-        }
+	            // if we are in the center area (4*7 Tiles): draw player bases
+	            int xt = x - (width / 2) + 4;
+	            int yt = y - 4;
+
+	            if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (isNotBaseRailTile(xt) || yt < 3)) {
+	                screen.blit(Art.getPlayerBase(getPlayerCharacter(1))[xt][yt], x * Tile.WIDTH, y
+	                        * Tile.HEIGHT);
+	                continue;
+	            }
+
+	            yt = y - (height - 8);
+	            if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (xt != 3 || yt > 0)) {
+	                screen.blit(Art.getPlayerBase(getPlayerCharacter(0))[xt][yt], x * Tile.WIDTH, y * Tile.HEIGHT);
+	                if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (isNotBaseRailTile(xt) || yt > 0)) {
+	                    screen.blit(Art.getPlayerBase(getPlayerCharacter(0))[xt][yt], x * Tile.WIDTH, y * Tile.HEIGHT);
+	                    if ((xt == 0 || xt == 1 || xt == 5 || xt == 6) && yt == 0) {
+	                        screen.blit(Art.shadow_north, x * Tile.WIDTH, y * Tile.HEIGHT);
+	                    }
+	                    if ((xt == 2) && yt == 0) {
+	                        screen.blit(Art.shadow_north_west, x * Tile.WIDTH, y * Tile.HEIGHT);
+	                    }
+	                    if ((xt == 4) && yt == 0) {
+	                        screen.blit(Art.shadow_north_east, x * Tile.WIDTH + Tile.WIDTH - Art.shadow_east.w, y * Tile.HEIGHT);
+	                    }
+	                    continue;
+	                }
+
+	                if (canSee(x, y)) {
+	                    tiles[x + y * width].render(screen);
+	                }
+	            }
+	        }
+	    }
 	}
 	
 	private GameCharacter getPlayerCharacter(int playerID){
@@ -353,6 +357,11 @@ public class Level {
 	    if (player == null) return GameCharacter.None;
 	    else return player.getCharacter();
 	}
+	
+	private boolean isNotBaseRailTile(int xt){
+	    return (xt != 2 && xt != 3 && xt != 4);
+	}
+	
 
 	private void renderTopOfWalls(Screen screen, int x0, int y0, int x1, int y1){
 	    for (int y = y0; y <= y1; y++) {
