@@ -112,6 +112,7 @@ options.locale_pt_br = BRAZILIAN PORTUGESE
 options.locale_ru = RUSSIAN
 options.locale_sl = SLOVENIAN
 options.locale_sv = SWEDISH
+options.locale_af = AFRIKAANS
 
 pausemenu.help = HELP
 pausemenu.backtomain = MAIN
