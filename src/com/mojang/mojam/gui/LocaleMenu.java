@@ -18,12 +18,12 @@ public class LocaleMenu extends GuiMenu {
 	private Button deBtn = null;
 	private Button esBtn = null;
 	private Button frBtn = null;
-	private Button inBtn = null;
+	private Button idBtn = null;
 	private Button itBtn = null;
 	private Button nlBtn = null;
 	private Button pt_brBtn = null;
 	private Button ruBtn = null;
-	private Button siBtn = null;
+	private Button slBtn = null;
 	private Button svBtn = null;
 
 	public LocaleMenu(boolean inGame) {
@@ -42,14 +42,14 @@ public class LocaleMenu extends GuiMenu {
 		deBtn = (Button) addButton(new Button(TitleMenu.LOCALE_DE_ID, MojamComponent.texts.getStatic("options.locale_de"), left_xOffset, (yOffset += offset)));
 		esBtn = (Button) addButton(new Button(TitleMenu.LOCALE_ES_ID, MojamComponent.texts.getStatic("options.locale_es"), left_xOffset, (yOffset += offset)));
 		frBtn = (Button) addButton(new Button(TitleMenu.LOCALE_FR_ID, MojamComponent.texts.getStatic("options.locale_fr"), left_xOffset, (yOffset += offset)));
-		inBtn = (Button) addButton(new Button(TitleMenu.LOCALE_IN_ID, MojamComponent.texts.getStatic("options.locale_in"), left_xOffset, (yOffset += offset)));
+		idBtn = (Button) addButton(new Button(TitleMenu.LOCALE_ID_ID, MojamComponent.texts.getStatic("options.locale_ind"), left_xOffset, (yOffset += offset)));
 		svBtn = (Button) addButton(new Button(TitleMenu.LOCALE_SV_ID, MojamComponent.texts.getStatic("options.locale_sv"), xOffset, (yOffset += offset)));
 		yOffset = TopYOffset;
 		itBtn = (Button) addButton(new Button(TitleMenu.LOCALE_IT_ID, MojamComponent.texts.getStatic("options.locale_it"), right_xOffset, (yOffset += offset)));
 		nlBtn = (Button) addButton(new Button(TitleMenu.LOCALE_NL_ID, MojamComponent.texts.getStatic("options.locale_nl"), right_xOffset, (yOffset += offset)));
 		pt_brBtn = (Button) addButton(new Button(TitleMenu.LOCALE_PT_BR_ID, MojamComponent.texts.getStatic("options.locale_pt_br"), right_xOffset, (yOffset += offset)));
 		ruBtn = (Button) addButton(new Button(TitleMenu.LOCALE_RU_ID, MojamComponent.texts.getStatic("options.locale_ru"), right_xOffset, (yOffset += offset)));
-		siBtn = (Button) addButton(new Button(TitleMenu.LOCALE_SL_ID, MojamComponent.texts.getStatic("options.locale_sl"), right_xOffset, (yOffset += offset)));
+		slBtn = (Button) addButton(new Button(TitleMenu.LOCALE_SL_ID, MojamComponent.texts.getStatic("options.locale_sl"), right_xOffset, (yOffset += offset)));
 		yOffset += offset;
 		back = (Button) addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"), xOffset, (yOffset += offset) + 20));
 	}
@@ -90,12 +90,12 @@ public class LocaleMenu extends GuiMenu {
 		deBtn.setLabel(MojamComponent.texts.getStatic("options.locale_de"));
 		esBtn.setLabel(MojamComponent.texts.getStatic("options.locale_es"));
 		frBtn.setLabel(MojamComponent.texts.getStatic("options.locale_fr"));
-		inBtn.setLabel(MojamComponent.texts.getStatic("options.locale_in"));
+		idBtn.setLabel(MojamComponent.texts.getStatic("options.locale_ind"));
 		itBtn.setLabel(MojamComponent.texts.getStatic("options.locale_it"));
 		nlBtn.setLabel(MojamComponent.texts.getStatic("options.locale_nl"));
 		pt_brBtn.setLabel(MojamComponent.texts.getStatic("options.locale_pt_br"));
 		ruBtn.setLabel(MojamComponent.texts.getStatic("options.locale_ru"));
-		siBtn.setLabel(MojamComponent.texts.getStatic("options.locale_si"));
+		slBtn.setLabel(MojamComponent.texts.getStatic("options.locale_sl"));
 		svBtn.setLabel(MojamComponent.texts.getStatic("options.locale_sv"));
 	}
 }
