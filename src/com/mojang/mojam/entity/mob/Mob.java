@@ -1,5 +1,6 @@
 package com.mojang.mojam.entity.mob;
 
+import com.mojang.mojam.GameCharacter;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
@@ -390,8 +391,8 @@ public abstract class Mob extends Entity {
                 level.addEntity(animation);
                 remove();
             } else {
-                int characterID = ((Player)this).getCharacterID();
-                level.addEntity(new PlayerFallingAnimation(x*Tile.WIDTH, y*Tile.HEIGHT, characterID));
+                GameCharacter character = ((Player)this).getCharacter();
+                level.addEntity(new PlayerFallingAnimation(x*Tile.WIDTH, y*Tile.HEIGHT, character));
                 if (((Player)this).isCarrying()){
                     ItemFallAnimation animation = new ItemFallAnimation(x*Tile.WIDTH, (y-1)*Tile.HEIGHT, ((Player)this).carrying.getSprite());
                     if(((Player)this).carrying instanceof Harvester){
@@ -400,7 +401,8 @@ public abstract class Mob extends Entity {
                     level.addEntity(animation);
                     ((Player)this).carrying.remove();
                 }
-                if (characterID < 2)
+                // TODO add a sex attribute to Characters
+                if (character.ordinal() < 2)
                     MojamComponent.soundPlayer.playSound("/sound/falling_male.wav", (float) pos.x, (float) pos.y);
                 else
                     MojamComponent.soundPlayer.playSound("/sound/falling_female.wav", (float) pos.x, (float) pos.y);

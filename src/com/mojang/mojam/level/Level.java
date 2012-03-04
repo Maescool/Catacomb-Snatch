@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.mojang.mojam.GameCharacter;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
@@ -303,47 +304,61 @@ public class Level {
 		
 		Notifications.getInstance().render(screen);
 	}
-	
-	private void renderTilesAndBases(Screen screen, int x0, int y0, int x1, int y1){
-	    for (int y = y0; y <= y1; y++) {
-            for (int x = x0; x <= x1; x++) {
-                if (x < 0 || x >= width || y < 0 || y >= height) {
-                    screen.blit(Art.floorTiles[5][0], x * Tile.WIDTH, y
-                            * Tile.HEIGHT);
-                    continue;
-                }
-                int xt = x - (width / 2) + 4;
-                int yt = y - 4;
-                if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (xt != 3 || yt < 3)) {
-                    screen.blit(Art.getPlayerBase(getPlayerCharacterID(1))[xt][yt], x * Tile.WIDTH, y
-                            * Tile.HEIGHT);
-                    continue;
-                }
 
-                yt = y - (height - 8);
-                if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (xt != 3 || yt > 0)) {
-                    screen.blit(Art.getPlayerBase(getPlayerCharacterID(0))[xt][yt], x * Tile.WIDTH, y * Tile.HEIGHT);
-                    if ((xt == 0 || xt == 1 || xt == 5 || xt == 6) && yt == 0) {
-                        screen.blit(Art.shadow_north, x * Tile.WIDTH, y * Tile.HEIGHT);
-                    }
-                    if ((xt == 2) && yt == 0) {
-                        screen.blit(Art.shadow_north_west, x * Tile.WIDTH, y * Tile.HEIGHT);
-                    }
-                    if ((xt == 4) && yt == 0) {
-                        screen.blit(Art.shadow_north_east, x * Tile.WIDTH + Tile.WIDTH - Art.shadow_east.w, y * Tile.HEIGHT);
-                    }
-                    continue;
-                }
-                if (canSee(x, y)) {
-                    tiles[x + y * width].render(screen);
-                }
-            }
-        }
+	private void renderTilesAndBases(Screen screen, int x0, int y0, int x1, int y1){
+	    // go through each currently visible cell
+	    for (int y = y0; y <= y1; y++) {
+	        for (int x = x0; x <= x1; x++) {
+
+	            // draw sand outside the level
+	            if (x < 0 || x >= width || y < 0 || y >= height) {
+	                screen.blit(Art.floorTiles[5][0], x * Tile.WIDTH, y
+	                        * Tile.HEIGHT);
+	                continue;
+	            }
+
+	            // if we are in the center area (4*7 Tiles): draw player bases
+	            int xt = x - (width / 2) + 4;
+	            int yt = y - 4;
+
+	            if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (isNotBaseRailTile(xt) || yt < 3)) {
+	                screen.blit(Art.getPlayerBase(getPlayerCharacter(1))[xt][yt], x * Tile.WIDTH, y
+	                        * Tile.HEIGHT);
+	                continue;
+	            }
+
+	            yt = y - (height - 8);
+	            if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (isNotBaseRailTile(xt) || yt > 0)) {
+	                screen.blit(Art.getPlayerBase(getPlayerCharacter(0))[xt][yt], x * Tile.WIDTH, y * Tile.HEIGHT);
+	                if ((xt == 0 || xt == 1 || xt == 5 || xt == 6) && yt == 0) {
+	                    screen.blit(Art.shadow_north, x * Tile.WIDTH, y * Tile.HEIGHT);
+	                }
+	                if ((xt == 2) && yt == 0) {
+	                    screen.blit(Art.shadow_north_west, x * Tile.WIDTH, y * Tile.HEIGHT);
+	                }
+	                if ((xt == 4) && yt == 0) {
+	                    screen.blit(Art.shadow_north_east, x * Tile.WIDTH + Tile.WIDTH - Art.shadow_east.w, y * Tile.HEIGHT);
+	                }
+	                continue;
+	            }
+
+	            if (canSee(x, y)) {
+	                tiles[x + y * width].render(screen);
+	            }
+	        }
+	    }
+	}
+
+	private GameCharacter getPlayerCharacter(int playerID){
+	    Player player = MojamComponent.instance.players[playerID];
+	    if (player == null) return GameCharacter.None;
+	    else return player.getCharacter();
 	}
 	
-	private int getPlayerCharacterID(int playerID){
-		return MojamComponent.instance.players[playerID].getCharacterID();
+	private boolean isNotBaseRailTile(int xt){
+	    return (xt != 2 && xt != 3 && xt != 4);
 	}
+	
 
 	private void renderTopOfWalls(Screen screen, int x0, int y0, int x1, int y1){
 	    for (int y = y0; y <= y1; y++) {
@@ -562,13 +577,13 @@ public class Level {
 	
 	private void renderPlayerScores(Screen screen){
 	    
-	    String player1score =  MojamComponent.texts.scoreCharacter(getPlayerCharacterID(0), player1Score * 100 / TARGET_SCORE);
+	    String player1score =  MojamComponent.texts.scoreCharacter(getPlayerCharacter(0), player1Score * 100 / TARGET_SCORE);
         Font.defaultFont().draw(screen, player1score, 280-player1score.length()*10, screen.h - 20); //adjust so it fits in the box
-        screen.blit(Art.getPlayer(getPlayerCharacterID(0))[0][2], 262, screen.h-42);
+        screen.blit(Art.getPlayer(getPlayerCharacter(0))[0][2], 262, screen.h-42);
 
-        if (MojamComponent.instance.players[1] != null && getPlayerCharacterID(1) != Art.NO_OPPONENT) {
-            Font.defaultFont().draw(screen, MojamComponent.texts.scoreCharacter(getPlayerCharacterID(1), player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
-            screen.blit(Art.getPlayer(getPlayerCharacterID(1))[0][6], 19, screen.h-42);
+        if (MojamComponent.instance.players[1] != null && getPlayerCharacter(1) != GameCharacter.None) {
+            Font.defaultFont().draw(screen, MojamComponent.texts.scoreCharacter(getPlayerCharacter(1), player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
+            screen.blit(Art.getPlayer(getPlayerCharacter(1))[0][6], 19, screen.h-42);
         }
 	}
 	
@@ -657,7 +672,7 @@ public class Level {
 		}
 	}
 	
-	// counts how many of a certain entitiy class are in play
+	// counts how many of a certain entity class are in play
 	public <T> int countEntities(Class<T> entityType) {
 		int count = 0;
 		for (Iterator<Entity> it = entities.iterator(); it.hasNext();) {

@@ -1,5 +1,6 @@
 package com.mojang.mojam.gui;
 
+import com.mojang.mojam.GameCharacter;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
@@ -22,14 +23,14 @@ public class CharacterButton extends Button {
 		backgrounds[2].fill(1, 1, WIDTH - 2, HEIGHT - 2, 0xff3a210f);
 	}
 
-	private int characterID;
+	private GameCharacter character;
 	private Bitmap characterArt;
 	private boolean selected;
 	private boolean hasFocus;
 
-	public CharacterButton(int id, int characterID, Bitmap characterArt, int x, int y) {
-		super(id, MojamComponent.texts.playerNameCharacter(characterID), x, y, WIDTH, HEIGHT);
-		this.characterID = characterID;
+	public CharacterButton(int id, GameCharacter character, Bitmap characterArt, int x, int y) {
+		super(id, MojamComponent.texts.playerNameCharacter(character), x, y, WIDTH, HEIGHT);
+		this.character = character;
 		this.characterArt = characterArt;
 	}
 
@@ -41,8 +42,8 @@ public class CharacterButton extends Button {
 		return selected;
 	}
 
-	public int getCharacterID() {
-		return characterID;
+	public GameCharacter getCharacter() {
+		return character;
 	}
 
 	public void setFocus(boolean focus) {

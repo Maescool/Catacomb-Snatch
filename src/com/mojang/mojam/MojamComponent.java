@@ -33,7 +33,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import com.mojang.mojam.entity.Player;
-import com.mojang.mojam.entity.building.Base;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.Button;
 import com.mojang.mojam.gui.ButtonListener;
@@ -139,7 +138,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	private int localId;
 	public static int localTeam; //local team is the team of the client. This can be used to check if something should be only rendered on one person's screen
 
-	public int playerCharacter;
+	public GameCharacter playerCharacter;
 	private boolean sendCharacter = false;
 
 	private Thread hostThread;
@@ -266,7 +265,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		if(!Options.isCharacterIDset()){
 			addMenu(new CharacterSelectionMenu());
 		}
-		playerCharacter = Options.getCharacterID();
+		playerCharacter = GameCharacter.values()[Options.getCharacterID()];
 	}
 
 	public void showError(String s) {
@@ -274,10 +273,10 @@ public class MojamComponent extends Canvas implements Runnable,
 		addMenu(new GuiError(s));
 	}
 
-	private synchronized void createLevel(String levelPath, GameMode mode, int characterID) {
+	private synchronized void createLevel(String levelPath, GameMode mode, GameCharacter character) {
 		LevelInformation li = LevelInformation.getInfoForPath(levelPath);
 		if (li != null) {
-			createLevel(li, mode, characterID);
+			createLevel(li, mode, character);
 			return;
 		} else if (!isMultiplayer) {
 			showError("Missing map.");
@@ -285,7 +284,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		showError("Missing map - Multiplayer");
 	}
 
-	private synchronized void createLevel(LevelInformation li, GameMode mode, int characterID) {
+	private synchronized void createLevel(LevelInformation li, GameMode mode, GameCharacter character) {
 		try {
 			//level = Level.fromFile(li);
 			level = mode.generateLevel(li);
@@ -294,24 +293,22 @@ public class MojamComponent extends Canvas implements Runnable,
 			showError("Unable to load map.");
 			return;
 		}
-		initLevel(characterID);
+		initLevel(character);
 		paused = false;
 	}
 
-	private synchronized void initLevel(int characterID) {
+	private synchronized void initLevel(GameCharacter character) {
 		if (level == null)
 			return;
 		// level.init();
 		players[0] = new Player(synchedKeys[0], synchedMouseButtons[0], level.width * Tile.WIDTH
-				/ 2 - 16, (level.height - 5 - 1) * Tile.HEIGHT - 16, Team.Team1, characterID);
+				/ 2 - 16, (level.height - 5 - 1) * Tile.HEIGHT - 16, Team.Team1, character);
 		players[0].setFacing(4);
 		level.addEntity(players[0]);
-		level.addEntity(new Base(34 * Tile.WIDTH, 7 * Tile.WIDTH, Team.Team1));
 		if (isMultiplayer) {
 			players[1] = new Player(synchedKeys[1], synchedMouseButtons[1], level.width
-					* Tile.WIDTH / 2 - 16, 7 * Tile.HEIGHT - 16, Team.Team2, characterID);
+					* Tile.WIDTH / 2 - 16, 7 * Tile.HEIGHT - 16, Team.Team2, character);
 			level.addEntity(players[1]);
-			level.addEntity(new Base(32 * Tile.WIDTH - 20, 32 * Tile.WIDTH - 20, Team.Team2));
 		} else {
 			players[1] = null;
 		}
@@ -551,9 +548,9 @@ public class MojamComponent extends Canvas implements Runnable,
 		if (level != null && level.victoryConditions != null) {
 			if(level.victoryConditions.isVictoryConditionAchieved()) {
 				int winner = level.victoryConditions.playerVictorious();
-				int characterID = winner == players[0].getTeam() ? players[0].getCharacterID()
-						: players[1].getCharacterID();
-				addMenu(new WinMenu(GAME_WIDTH, GAME_HEIGHT, winner, characterID));
+				GameCharacter winningCharacter = winner == players[0].getTeam() ? players[0].getCharacter()
+						: players[1].getCharacter();
+				addMenu(new WinMenu(GAME_WIDTH, GAME_HEIGHT, winner, winningCharacter));
                 level = null;
                 return;
             }
@@ -582,7 +579,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		}
 
 		if (sendCharacter) {
-			synchronizer.addCommand(new CharacterCommand(localId, playerCharacter));
+			synchronizer.addCommand(new CharacterCommand(localId, playerCharacter.ordinal()));
 			sendCharacter = false;
 		}
 
@@ -661,11 +658,11 @@ public class MojamComponent extends Canvas implements Runnable,
 			if (TitleMenu.level.vanilla) {
 				packetLink.sendPacket(new StartGamePacket(TurnSynchronizer.synchedSeed,
 						TitleMenu.level.getUniversalPath(), DifficultyList
-								.getDifficultyID(TitleMenu.difficulty), playerCharacter));
+								.getDifficultyID(TitleMenu.difficulty), playerCharacter.ordinal()));
 			} else {
 				packetLink.sendPacket(new StartGamePacketCustom(TurnSynchronizer.synchedSeed,
 						level, DifficultyList.getDifficultyID(TitleMenu.difficulty),
-						playerCharacter));
+						playerCharacter.ordinal()));
 			}
 			packetLink.setPacketListener(MojamComponent.this);
 
@@ -766,7 +763,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 		if (packet instanceof CharacterCommand) {
 			CharacterCommand charCommand = (CharacterCommand) packet;
-			players[charCommand.getPlayerID()].setCharacterID(charCommand.getCharacterID());
+			players[charCommand.getPlayerID()].setCharacter(GameCharacter.values()[charCommand.getCharacterID()]);
 		}
 
 		if (packet instanceof PauseCommand) {
@@ -790,7 +787,7 @@ public class MojamComponent extends Canvas implements Runnable,
 				TitleMenu.difficulty = DifficultyList.getDifficulties().get(
 						sgPacker.getDifficulty());
 				createLevel(sgPacker.getLevelFile(), TitleMenu.defaultGameMode,
-						sgPacker.getOpponentCharacterID());
+						GameCharacter.values()[sgPacker.getOpponentCharacterID()]);
 			}
 		} else if (packet instanceof TurnPacket) {
 			synchronizer.onTurnPacket((TurnPacket) packet);
@@ -803,7 +800,7 @@ public class MojamComponent extends Canvas implements Runnable,
 						sgPacker.getDifficulty());
 				level = sgPacker.getLevel();
 				paused = false;
-				initLevel(sgPacker.getOpponentCharacterID());
+				initLevel(GameCharacter.values()[sgPacker.getOpponentCharacterID()]);
 			}
 		} else if (packet instanceof PingPacket) {
 		    PingPacket pp = (PingPacket)packet;

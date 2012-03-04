@@ -3,7 +3,6 @@ package com.mojang.mojam.gui;
 import java.io.IOException;
 import java.util.Random;
 
-import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
