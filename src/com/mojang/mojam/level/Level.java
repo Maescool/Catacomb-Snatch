@@ -252,6 +252,7 @@ public class Level {
 	
 	public void addMob(Mob m, int xTile, int yTile)
 	{
+		updateDensityList();
 		if(monsterDensity[(int)(xTile/densityTileWidth)][(int)(yTile/densityTileHeight)] <allowedDensities[TitleMenu.difficulty.difficultyID])
 		{
 			addEntity(m);
@@ -262,19 +263,25 @@ public class Level {
 	public void removeEntity(Entity e) {
 		e.removed = true;
 	}
-
-	public void tick() {		
-		for(int i = 0; i < tickItems.size(); i++) {
-			tickItems.get(i).tick(this);
-		}
-		
+	
+	public void updateDensityList()
+	{
+		//System.out.println("Density List Updating, Visual Representation:");
 		for(int x=0;x < monsterDensity.length;x++)
 		{
 			for(int y=0;y < monsterDensity[x].length;y++)
 			{
 				int entityNumb = getEntities(x*densityTileWidth*Tile.WIDTH,y*densityTileHeight*Tile.HEIGHT,x*(densityTileWidth+1)*Tile.WIDTH,y*(densityTileHeight+1)*Tile.HEIGHT).size();
 				monsterDensity[x][y] = entityNumb;
+				//System.out.print(entityNumb + " ");
 			}
+			//System.out.println();
+		}
+	}
+
+	public void tick() {		
+		for(int i = 0; i < tickItems.size(); i++) {
+			tickItems.get(i).tick(this);
 		}
 
 		for (int i = 0; i < entities.size(); i++) {
