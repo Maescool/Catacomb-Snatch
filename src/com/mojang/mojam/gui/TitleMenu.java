@@ -79,6 +79,7 @@ public class TitleMenu extends GuiMenu {
 	public static final int LOCALE_RU_ID = 6009;
 	public static final int LOCALE_SL_ID = 6010;
 	public static final int LOCALE_SV_ID = 6011;
+	public static final int LOCALE_AF_ID = 6012;
 
 	public static LevelInformation level = null;
 	public static GameMode defaultGameMode = new GameModeVanilla();
