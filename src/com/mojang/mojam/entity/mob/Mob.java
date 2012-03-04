@@ -97,7 +97,7 @@ public abstract class Mob extends Entity {
 	}
 
 	public void tick() {
-		if (TitleMenu.difficulty.difficultyID >= 1 ) {
+		if (TitleMenu.difficulty.difficultyID >= 1 || this instanceof RailDroid) {
 			this.doRegenTime();
 		}
 		
@@ -256,6 +256,16 @@ public abstract class Mob extends Entity {
 		
 		this.healingTime = this.REGEN_INTERVAL;
 		
+		if (source instanceof Bullet){
+			Bullet bullet = (Bullet) source;
+			if (bullet.owner instanceof Player){
+				Player pl = (Player) bullet.owner;
+				if (!isNotFriendOf(pl)){
+					return;
+				}
+			}
+		}
+				
 		if (freezeTime <= 0) {
 			
 			if (source instanceof Bullet && !(this instanceof SpawnerEntity) && !(this instanceof RailDroid)) {
