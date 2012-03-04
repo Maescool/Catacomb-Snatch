@@ -105,7 +105,7 @@ options.locale_it = ITALIANO
 options.locale_nl = OLANDESE
 options.locale_pt_br = PORTOGESE (BRA)
 options.locale_ru = RUSSO
-options.locale_si = SLOVENO
+options.locale_sl = SLOVENO
 options.locale_sv = SVEDESE
 
 pausemenu.help = AIUTO
