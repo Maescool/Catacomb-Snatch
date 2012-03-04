@@ -186,7 +186,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		Stack<GuiMenu> menuClone = (Stack<GuiMenu>) menuStack.clone();
 		
 		while (!menuClone.isEmpty()) {
-			menuClone.pop().change_locale();
+			menuClone.pop().changeLocale();
 		}
 	}
 

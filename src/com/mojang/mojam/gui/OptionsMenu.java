@@ -24,7 +24,7 @@ public class OptionsMenu extends GuiMenu {
 	private Button credits;
 	private Button back;
 
-	public void change_locale() {
+	public void changeLocale() {
 		key_bindings.setLabel(MojamComponent.texts.getStatic("options.keyBindings"));
 		if (!inGame) {
 			character_select.setLabel(MojamComponent.texts.getStatic("options.characterSelect"));
