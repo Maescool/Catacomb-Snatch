@@ -145,7 +145,6 @@ public class TitleMenu extends GuiMenu {
 	}
 
 	public void change_locale() {
-		System.out.println("Called");
 		select_lvl_btn.setLabel(MojamComponent.texts.getStatic(("titlemenu.start")));
 		select_host_lvl.setLabel(MojamComponent.texts.getStatic(("titlemenu.host")));
 		join_host.setLabel(MojamComponent.texts.getStatic(("titlemenu.join")));

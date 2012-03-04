@@ -157,7 +157,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		this.addMouseListener(this);
 
 		String localeString = Options.get(Options.LOCALE, "en");
-		System.out.println(localeString);
 		setLocale(new Locale(localeString));
 
 		menu = new TitleMenu(GAME_WIDTH, GAME_HEIGHT);
@@ -179,7 +178,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public void setLocale(Locale locale) {
 		MojamComponent.locale = locale;
 		MojamComponent.texts = new Texts(locale);
-		System.out.println("Locale changed");
 		Locale.setDefault(locale);
 	}
 	
@@ -1013,7 +1011,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			break;
 
 		case TitleMenu.EXIT_GAME_ID:
-			System.out.println(locale.getDisplayLanguage());
 			System.exit(0);
 			break;
 
