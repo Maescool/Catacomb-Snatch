@@ -10,8 +10,8 @@ cancel = AVBRYT
 character.text = VÄLJ DIN KARAKTÄR!
 character.select = VÄLJ
 
-credits.leadDev = LEAD DEVELOPER:
-credits.maintainers = PROJECT MAINTAINERS:
+credits.leadDev = PROJEKTANSVARIG:
+credits.maintainers = PROJEKTARBETARE:
 credits.communityMan = COMMUNITY MAINTAINERS:
 credits.others = AND THANKS TO ALL CONTRIBUTORS, INCLUDING:
 credits.note = THIS PROJECT IS NOW MAINTAINED AS A COMMUNITY PROJECT
