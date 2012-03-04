@@ -2,21 +2,13 @@ package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
 
-import paulscode.sound.SoundSystem;
-
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
-import com.mojang.mojam.sound.ISoundPlayer;
 
 public class OptionsMenu extends GuiMenu {
 
-	private boolean fullscreen;
-	private boolean fps;
-	private float musicVolume;
-	private float soundsVolume;
-	private float volume;
 	private boolean creative;
     private boolean inGame;
     private int gameWidth;
@@ -24,7 +16,25 @@ public class OptionsMenu extends GuiMenu {
 
 	private int textY;
 
-	private ClickableComponent back;
+	private Button key_bindings;
+	private Button character_select;
+	private Button sound_and_video;
+	private Button locale;
+	private Checkbox creativeModeBtn;
+	private Button credits;
+	private Button back;
+
+	public void change_locale() {
+		key_bindings.setLabel(MojamComponent.texts.getStatic("options.keyBindings"));
+		if (!inGame) {
+			character_select.setLabel(MojamComponent.texts.getStatic("options.characterSelect"));
+		}
+		sound_and_video.setLabel(MojamComponent.texts.getStatic("options.sound_and_video"));
+		locale.setLabel(MojamComponent.texts.getStatic("options.locale_selection"));
+		creativeModeBtn.setLabel(MojamComponent.texts.getStatic("options.creative"));
+		credits.setLabel(MojamComponent.texts.getStatic("options.credits"));
+		back.setLabel(MojamComponent.texts.getStatic("back"));
+	}
 
 	public OptionsMenu(boolean inGame) {
 		loadOptions();
@@ -39,107 +49,16 @@ public class OptionsMenu extends GuiMenu {
 		textY = yOffset;
 		yOffset += offset;
 
-		addButton(new Button(TitleMenu.KEY_BINDINGS_ID,
-				MojamComponent.texts.getStatic("options.keyBindings"), xOffset, yOffset));
-
+		key_bindings = (Button) addButton(new Button(TitleMenu.KEY_BINDINGS_ID, MojamComponent.texts.getStatic("options.keyBindings"), xOffset, yOffset));
 		if (!inGame) {
-			addButton(new Button(TitleMenu.CHARACTER_ID,
-					MojamComponent.texts.getStatic("options.characterSelect"), xOffset,
-					yOffset += offset));
+			character_select = (Button) addButton(new Button(TitleMenu.CHARACTER_ID, MojamComponent.texts.getStatic("options.characterSelect"), xOffset, yOffset += offset));
 		}
+		sound_and_video = (Button) addButton(new Button(TitleMenu.AUDIO_VIDEO_ID, MojamComponent.texts.getStatic("options.sound_and_video"), xOffset, yOffset += offset));
+		locale = (Button) addButton(new Button(TitleMenu.LOCALE_ID, MojamComponent.texts.getStatic("options.locale_selection"), xOffset, yOffset += offset));
+		creativeModeBtn = (Checkbox) addButton(new Checkbox(TitleMenu.CREATIVE_ID, MojamComponent.texts.getStatic("options.creative"), xOffset, yOffset += offset, Options.getAsBoolean(Options.CREATIVE, Options.VALUE_FALSE)));
+		credits = (Button) addButton(new Button(TitleMenu.CREDITS_ID, MojamComponent.texts.getStatic("options.credits"), xOffset, yOffset += offset));
+		back = (Button) addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"), xOffset, (yOffset += offset) + 20));
 
-		ClickableComponent fullscreenBtn = addButton(new Checkbox(TitleMenu.FULLSCREEN_ID,
-				MojamComponent.texts.getStatic("options.fullscreen"), xOffset, yOffset += offset,
-				Options.getAsBoolean(Options.FULLSCREEN, Options.VALUE_FALSE)));
-
-		ClickableComponent fpsBtn = addButton(new Checkbox(TitleMenu.FPS_ID,
-				MojamComponent.texts.getStatic("options.showfps"), xOffset, yOffset += offset,
-				Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE)));
-
-		ClickableComponent soundVol = addButton(new Slider(TitleMenu.VOLUME,
-				MojamComponent.texts.getStatic("options.volume"), xOffset, yOffset += offset,
-				volume));
-
-		ClickableComponent musicVol = addButton(new Slider(TitleMenu.MUSIC,
-				MojamComponent.texts.getStatic("options.music"), xOffset - xOffset / 3 - 20,
-				yOffset += offset + 1, musicVolume));
-		ClickableComponent soundsVol = addButton(new Slider(TitleMenu.SOUND,
-				MojamComponent.texts.getStatic("options.sounds"), xOffset + xOffset / 3 + 20,
-				yOffset, soundsVolume));
-
-		ClickableComponent creativeModeBtn = addButton(new Checkbox(TitleMenu.CREATIVE_ID,
-				MojamComponent.texts.getStatic("options.creative"), xOffset, yOffset += offset,
-				Options.getAsBoolean(Options.CREATIVE, Options.VALUE_FALSE)));
-
-		addButton(new Button(TitleMenu.CREDITS_ID,
-				MojamComponent.texts.getStatic("options.credits"), xOffset, yOffset += offset));
-
-		back = addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"),
-				xOffset, (yOffset += offset) + 20));
-
-		fullscreenBtn.addListener(new ButtonListener() {
-			@Override
-			public void buttonPressed(ClickableComponent button) {
-				fullscreen = !fullscreen;
-				Options.set(Options.FULLSCREEN, fullscreen);
-				MojamComponent.toggleFullscreen();
-			}
-			@Override
-			public void buttonHovered(ClickableComponent clickableComponent) {
-			}
-		});
-		fpsBtn.addListener(new ButtonListener() {
-			@Override
-			public void buttonPressed(ClickableComponent button) {
-				fps = !fps;
-				Options.set(Options.DRAW_FPS, fps);
-			}
-			@Override
-			public void buttonHovered(ClickableComponent clickableComponent) {
-			}
-		});
-		soundVol.addListener(new ButtonListener() {
-			@Override
-			public void buttonPressed(ClickableComponent button) {
-				Slider slider = (Slider) button;
-				volume = slider.value;
-
-				Options.set(Options.VOLUME, volume + "");
-				SoundSystem soundSystem = MojamComponent.soundPlayer.getSoundSystem();
-				if (soundSystem != null)
-					soundSystem.setMasterVolume(slider.value);
-			}
-			@Override
-			public void buttonHovered(ClickableComponent clickableComponent) {
-			}
-		});
-		musicVol.addListener(new ButtonListener() {
-			@Override
-			public void buttonPressed(ClickableComponent button) {
-				Slider slider = (Slider) button;
-				musicVolume = slider.value;
-
-				Options.set(Options.MUSIC, musicVolume + "");
-				SoundSystem soundSystem = MojamComponent.soundPlayer.getSoundSystem();
-				if (soundSystem != null)
-					soundSystem.setVolume(ISoundPlayer.BACKGROUND_TRACK, slider.value);
-			}
-			@Override
-			public void buttonHovered(ClickableComponent clickableComponent) {
-			}
-		});
-		soundsVol.addListener(new ButtonListener() {
-			@Override
-			public void buttonPressed(ClickableComponent button) {
-				Slider slider = (Slider) button;
-				soundsVolume = slider.value;
-
-				Options.set(Options.SOUND, soundsVolume + "");	
-			}
-			@Override
-			public void buttonHovered(ClickableComponent clickableComponent) {
-			}
-		});
 		creativeModeBtn.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
@@ -162,11 +81,6 @@ public class OptionsMenu extends GuiMenu {
 	}
 
 	private void loadOptions() {
-		fullscreen = Options.getAsBoolean(Options.FULLSCREEN, Options.VALUE_FALSE);
-		fps = Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE);
-		musicVolume = Options.getAsFloat(Options.MUSIC, "1.0f");
-		soundsVolume = Options.getAsFloat(Options.SOUND, "1.0f");
-		volume = Options.getAsFloat(Options.VOLUME, "1.0f");
 		creative = Options.getAsBoolean(Options.CREATIVE, Options.VALUE_FALSE);
 	}
 
@@ -204,5 +118,4 @@ public class OptionsMenu extends GuiMenu {
 
 	@Override
 	public void keyReleased(KeyEvent e) {}
-
 }
