@@ -71,11 +71,6 @@ public class Console implements KeyListener {
 	
 	/***
 	 * Toggles between open and close.
-	 * equivalent to:
-	 * if(isOpen())
-	 *    close();
-	 * else
-	 *    open();
 	 */
 	public void toggle() {
 		if(open)
