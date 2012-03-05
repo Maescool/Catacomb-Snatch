@@ -1,14 +1,43 @@
 package com.mojang.mojam;
 
-import java.io.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.text.*;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+import java.io.PrintStream;
+import java.util.ArrayList;
 
-public class Console implements Runnable
+import javax.script.ScriptException;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.Timer;
+
+import com.mojang.mojam.Keys.Key;
+
+public class Console implements Runnable, KeyListener
 {
 	JTextArea displayPane;
 	BufferedReader reader;
+	ArrayList<String> commands = new ArrayList<String>();
+	String command = "";
+	public static JTextArea textArea = new JTextArea();
+	public static JScrollPane scrollPane = new JScrollPane(textArea);
+	public static JTextField textField = new JTextField();
+
+	Console()
+	{
+
+	}
 
 	private Console(JTextArea displayPane, PipedOutputStream pos)
 	{
@@ -70,13 +99,18 @@ public class Console implements Runnable
 	}
 
 	public static void main(String[] args)
-	{
-		JTextArea textArea = new JTextArea();
-		JScrollPane scrollPane = new JScrollPane(textArea);
+	{		
+		textField.addKeyListener(new Console());
+		scrollPane.setMinimumSize(new Dimension(30, 400));
 
-		JFrame frame = new JFrame("Redirect Output");
+		JFrame frame = new JFrame("Redirected Output");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().add(scrollPane);
+		JSplitPane panes = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, scrollPane, textField);
+		panes.setDividerLocation(530);
+		frame.getContentPane().add(panes);
+		//frame.
+		//frame.getContentPane().add(scrollPane);
+		//frame.getContentPane().add(textField);
 		frame.setSize(300, 600);
 		frame.setVisible(true);
 
@@ -93,4 +127,34 @@ public class Console implements Runnable
 		});
 		timer.start();
 	}
+
+	@Override
+	public void keyPressed(KeyEvent event)
+	{
+		if(event.getKeyCode() == KeyEvent.VK_ENTER) try
+		{
+			command = textField.getText();
+			Snatch.console(command);
+			commands.add(command);
+			System.out.println("Console: " + command);
+			command = "";
+			textField.setText("");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0)
+	{
+
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0)
+	{
+	}
+
 }

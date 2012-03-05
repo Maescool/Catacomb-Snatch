@@ -8,29 +8,22 @@ import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.gamemode.RandomSpawner;
 import com.mojang.mojam.network.Packet;
 
-/**
- * @author Edmund Smith
- * @since 2-3-2012
- */
-public abstract class Mod implements IMod
+public interface IMod
 {
+
 	/**
 	 * Called at the start of every synchronised tick in game, it
 	 * can be used for almost anything.
 	 * 
 	 */
-	public void OnTick()
-	{
-	}
+	public void OnTick();
 
 	/**
 	 * Called at the end of every synchronised tick, this is used in
 	 * rare circumstances, such as measuring latency or tick times.
 	 * 
 	 */
-	public void AfterTick()
-	{
-	}
+	public void AfterTick();
 
 	/**
 	 * Called at the start of every render tick, this is used in rare
@@ -38,9 +31,7 @@ public abstract class Mod implements IMod
 	 * here will likely be drawn over later.
 	 * 
 	 */
-	public void OnStartRender()
-	{
-	}
+	public void OnStartRender();
 
 	/**
 	 * Called at the end of every render tick, this is the main method
@@ -48,25 +39,19 @@ public abstract class Mod implements IMod
 	 * on top of everything else.
 	 * 
 	 */
-	public void OnRender()
-	{
-	}
+	public void OnRender();
 
 	/**
 	 * Called once before the main {@link MojamComponent} game loop. Used
 	 * for initialising scripts, since mods can use their constructors.
 	 */
-	public void RunOnce()
-	{
-	}
+	public void RunOnce();
 
 	/**
 	 * Called when the window is closed, used for shutting down scripts.
 	 * 
 	 */
-	public void OnClose()
-	{
-	}
+	public void OnClose();
 
 	/**
 	 * Called whenever a packet is sent to another player. Can not be
@@ -76,9 +61,7 @@ public abstract class Mod implements IMod
 	 *            The {@link Packet} being sent over the network
 	 * @see Packet
 	 */
-	public void OnSendPacket(Packet packet)
-	{
-	}
+	public void OnSendPacket(Packet packet);
 
 	/**
 	 * Called upon the victory of one player or team, so that fanfare
@@ -89,9 +72,7 @@ public abstract class Mod implements IMod
 	 * @see Team
 	 * @see com.mojang.mojam.level.gamemode.IVictoryConditions
 	 */
-	public void OnVictory(int team)
-	{
-	}
+	public void OnVictory(int team);
 
 	/**
 	 * Called whenever the level itself ticks, such as respawning
@@ -102,9 +83,7 @@ public abstract class Mod implements IMod
 	 *            The {@link Level} being ticked
 	 * @see Level
 	 */
-	public void OnLevelTick(Level level)
-	{
-	}
+	public void OnLevelTick(Level level);
 
 	/**
 	 * Called whenever a packet is received from another player.
@@ -114,10 +93,7 @@ public abstract class Mod implements IMod
 	 *            The {@link Packet} being received over the network
 	 * @see Packet
 	 */
-	public void OnReceivePacket(Packet packet)
-	{
-	}
-
+	public void OnReceivePacket(Packet packet);
 	/**
 	 * Called whenever a packet is sent or received. Can not be
 	 * intercepted, but can be recorded.
@@ -126,9 +102,7 @@ public abstract class Mod implements IMod
 	 *            The {@link Packet} being sent over the network
 	 * @see Packet
 	 */
-	public void HandlePacket(Packet packet)
-	{
-	}
+	public void HandlePacket(Packet packet);
 
 	/**
 	 * Called upon the level being created. This can change fields
@@ -138,9 +112,7 @@ public abstract class Mod implements IMod
 	 *            The {@link Level} being created
 	 * @see Level
 	 */
-	public void CreateLevel(Level level)
-	{
-	}
+	public void CreateLevel(Level level);
 
 	/**
 	 * Called whenever an entity is spawned. It cycles through
@@ -161,10 +133,7 @@ public abstract class Mod implements IMod
 	 * @see RandomSpawner
 	 * @see Entity
 	 */
-	public Entity getEntityInstanceById(int i, double x, double y)
-	{
-		return null;
-	}
+	public Entity getEntityInstanceById(int i, double x, double y);
 
 	/**
 	 * Called on every tick that the key is down
@@ -172,9 +141,7 @@ public abstract class Mod implements IMod
 	 * @param key
 	 *            The key that is down
 	 */
-	public void IfKeyDown(Key key)
-	{
-	}
+	public void IfKeyDown(Key key);
 
 	/**
 	 * Called on every tick that the key is up
@@ -182,31 +149,7 @@ public abstract class Mod implements IMod
 	 * @param key
 	 *            The key that is up
 	 */
-	public void IfKeyUp(Key key)
-	{
-	}
-
-	/**
-	 * Intended to be called when the key went off to on, omitted from release
-	 * 
-	 * @param key
-	 *            The key to be changing states
-	 */
-	@Deprecated
-	public void OnKeyPressed(Key key)
-	{
-	}
-
-	/**
-	 * Intended to be called when the key went on to off, omitted from release
-	 * 
-	 * @param key
-	 *            The key to be changing states
-	 */
-	@Deprecated
-	public void OnKeyReleased(Key key)
-	{
-	}
+	public void IfKeyUp(Key key);
 
 	/**
 	 * To be called when displaying an error
@@ -214,5 +157,5 @@ public abstract class Mod implements IMod
 	 * @return The mod's version
 	 * @see Snatch
 	 */
-	public abstract String getVersion();
+	public String getVersion();
 }

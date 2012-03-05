@@ -83,9 +83,10 @@ public final class Snatch
 		{
 			e1.printStackTrace();
 		}
-		if(isJar)
+		if(isJar||true)
 		{
 			displayConsoleWindow();
+			addMod(Snatch.class.getClassLoader(),"Console.class");
 		}
 		//System.setOut(new PrintStream(new FileOutputStream(new File(m.getMojamDir(), "log.txt"))));
 
@@ -315,14 +316,6 @@ public final class Snatch
 	private static ScriptEngine addScript(String s)
 	{
 		ScriptEngine e = lang.getEngineByExtension(s.substring(s.lastIndexOf('.') + 1));
-		/*for(ScriptEngineFactory factory:lang.getEngineFactories())
-		{
-			System.out.println(factory.getLanguageName()+":"+factory.getEngineName());
-			for(String s1:factory.getExtensions())
-			{
-				System.out.println("|__> "+ s1);
-			}
-		}*/
 		try
 		{
 			FileReader fr = new FileReader(s);
@@ -978,7 +971,8 @@ public final class Snatch
 		}
 		for(String s : stringList)
 		{
-			System.out.println(addScript(s));//TODO
+			//System.out.println(addScript(s));//TODO
+			addScript(s);
 		}
 	}
 
@@ -1029,7 +1023,6 @@ public final class Snatch
 		{
 			ChangeKeyCommand ckc = (ChangeKeyCommand) packet;
 			Key key = mojam.synchedKeys[playerId].getAll().get(ckc.getKey());
-			System.out.println("" + key.wasDown + key.isDown + key.nextState + key.name);
 			if(key.isDown)
 			{
 				if(!key.nextState)
@@ -1059,7 +1052,37 @@ public final class Snatch
 				}
 			}
 		}
-
+	}
+	
+	public static void console(String s) throws ScriptException
+	{
+		if(s.startsWith("echo "))
+		{
+			System.out.println(s.substring(5));
+		}
+		if(s.startsWith("exit"))
+		{
+			try{
+				System.exit(Integer.parseInt(s.substring(5)));
+			} catch (NumberFormatException e)
+			{
+				System.exit(1);
+			}
+		}
+		if(s.startsWith("js ")||s.startsWith("py ")||s.startsWith("rb ")||s.startsWith("lua "))
+		{
+			lang.getEngineByExtension(s.substring(0, 3).trim()).eval(s.substring(s.indexOf(' '+1)));
+		}
+		else
+		{
+			String s1 = s.substring(0,s.indexOf(' ')+1);
+			if(s1.length()==0)
+			{
+				System.out.println("Error: Unknown Command: "+s);
+			} else {
+				System.out.println("Error: Unknown Command: "+s1);
+			}
+		}
 	}
 
 }
