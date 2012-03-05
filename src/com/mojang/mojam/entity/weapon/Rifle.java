@@ -113,3 +113,4 @@ public class Rifle implements IWeapon {
 	}
 	
 }
+

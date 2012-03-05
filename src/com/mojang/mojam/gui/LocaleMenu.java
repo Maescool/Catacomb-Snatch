@@ -86,7 +86,7 @@ public class LocaleMenu extends GuiMenu {
 
 	}
 
-	public void change_locale() {
+	public void changeLocale() {
 		back.setLabel(MojamComponent.texts.getStatic("back"));
 		enBtn.setLabel(MojamComponent.texts.getStatic("options.locale_en"));
 		deBtn.setLabel(MojamComponent.texts.getStatic("options.locale_de"));
