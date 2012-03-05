@@ -122,6 +122,8 @@ public class Art {
 	public static Bitmap[][] turret2 = cut("/art/building/turret2.png", 32, 32);
 	public static Bitmap[][] turret3 = cut("/art/building/turret3.png", 32, 32);
 	public static Bitmap bomb = load("/art/building/bomb.png");
+	public static Bitmap[][] small_chest = cut("/art/building/chest_small.png", 32, 53);
+	public static Bitmap[][] large_chest = cut("/art/building/chest_large.png", 64, 53);
 
 	// Fonts
 	public static Bitmap[][] font_default = cut("/art/fonts/font_default.png", 8, 8);

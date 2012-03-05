@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.loot.Loot;
+import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.level.tile.HoleTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.network.TurnSynchronizer;
@@ -21,7 +22,7 @@ public class TreasureChest extends Building {
         super(x, y, team);
 //        int x1 = (int) x / Tile.WIDTH;
 //        int y1 = (int) y / Tile.HEIGHT;
-        
+
         this.value = value;
         
     }
@@ -41,6 +42,12 @@ public class TreasureChest extends Building {
             }
         }
     }
+
+	@Override
+	public boolean isNotFriendOf(Mob m) {
+	    return false;
+	}
+
     
     public void use(Entity user)
     {
