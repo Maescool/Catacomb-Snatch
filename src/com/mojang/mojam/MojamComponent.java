@@ -81,6 +81,7 @@ import com.mojang.mojam.network.packet.PingPacket;
 import com.mojang.mojam.network.packet.StartGamePacket;
 import com.mojang.mojam.network.packet.StartGamePacketCustom;
 import com.mojang.mojam.network.packet.TurnPacket;
+import com.mojang.mojam.resources.Constants;
 import com.mojang.mojam.resources.Texts;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
@@ -97,6 +98,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public static MojamComponent instance;
 	public static Locale locale;
 	public static Texts texts;
+	public static Constants constants;
 	private static final long serialVersionUID = 1L;
 	public static final int GAME_WIDTH = 512;
 	public static final int GAME_HEIGHT = GAME_WIDTH * 3 / 4;
@@ -148,6 +150,9 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private LocaleMenu localemenu = null;
 
 	public MojamComponent() {
+		
+		// initialize the constants
+		MojamComponent.constants = new Constants();
 
 		this.setPreferredSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
 		this.setMinimumSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
