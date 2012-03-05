@@ -4,12 +4,7 @@ import com.mojang.mojam.entity.mob.*;
 import com.mojang.mojam.screen.*;
 
 public class BulletBuckshot extends Bullet {
-	public double xa, ya;
-	public Mob owner;
-	boolean hit = false;
-	public int duration;
-	private float damage;
-
+	
 	public BulletBuckshot(Mob owner, double xa, double ya, float damage) {
 		super(owner, ya, ya, damage);
 		this.owner = owner;
@@ -35,7 +30,7 @@ public class BulletBuckshot extends Bullet {
 			remove();
 		}
 		if(damage > 0.5)
-		damage -= 0.25;
+		damage -= 0.5;
 	}
 
 	@Override

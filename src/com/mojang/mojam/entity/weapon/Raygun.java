@@ -10,23 +10,24 @@ public class Raygun extends Rifle {
 
 	public Raygun(Mob owner) {
 		super(owner);
+		shootDelay = 10;
 		image = Art.weaponList[2][0];
+		setWeaponMode();
 	}
 	
 	@Override
 	public void setWeaponMode(){
 		if(Options.getAsBoolean(Options.CREATIVE)){
-			BULLET_DAMAGE = 100f;
+			bulletDamge = 100f;
 			accuracy = 0;
 		}else{
-			BULLET_DAMAGE = 1.5f;
+			bulletDamge = 1.5f;
 			accuracy = 0.05;
 		}
-		shootDelay = 10;
 	}
 
 	public Bullet getAmmo(double xDir, double yDir) {
-		Bullet bullet = new BulletRay(owner, xDir, yDir, BULLET_DAMAGE);
+		Bullet bullet = new BulletRay(owner, xDir, yDir, bulletDamge);
 		return bullet;
 	}
 	

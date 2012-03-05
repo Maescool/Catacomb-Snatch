@@ -12,11 +12,6 @@ import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 
 public class Shotgun extends Rifle {
-
-	private static float BULLET_DAMAGE;
-	
-	private double accuracy;
-	private int shootDelay = 35;
 	private int knockBack = 7;
 	private int numberBullets = 7;
 	
@@ -25,16 +20,18 @@ public class Shotgun extends Rifle {
 	
 	public Shotgun(Mob owner) {
 		super(owner);
+		shootDelay = 35;
 		image = Art.weaponList[1][0];
+		setWeaponMode();
 	}
 	
 	@Override
 	public void setWeaponMode(){
 		if(Options.getAsBoolean(Options.CREATIVE)){
-			BULLET_DAMAGE = 100.0f;
+			bulletDamge = 100f;
 			accuracy = 0.06;
 		}else{
-			BULLET_DAMAGE = 4.5f;
+			bulletDamge = 4.5f;
 			accuracy = 0.06;
 		}
 	}
@@ -103,7 +100,7 @@ public class Shotgun extends Rifle {
 	}
 
 	public Bullet getAmmo(double xDir, double yDir) {
-		Bullet bullet = new BulletBuckshot(owner, xDir, yDir, BULLET_DAMAGE);
+		Bullet bullet = new BulletBuckshot(owner, xDir, yDir, bulletDamge);
 		return bullet;
 	}
 }

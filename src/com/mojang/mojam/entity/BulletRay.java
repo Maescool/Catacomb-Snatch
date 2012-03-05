@@ -5,14 +5,9 @@ import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.*;
 
 public class BulletRay extends Bullet {
-	public double xa, ya;
-	public Mob owner;
-	boolean hit = false;
-	public int duration;
 	private int maxBounceNumber;
 	private double previuosPositionX, previuosPositionY;
 	private int frame;
-	private float damage;
 
 	public BulletRay(Mob e, double xa, double ya, float damage) {
 		super(e, ya, ya, damage);

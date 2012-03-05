@@ -13,7 +13,7 @@ import com.mojang.mojam.screen.Bitmap;
 public class Rifle implements IWeapon {
 
 	protected Mob owner;
-	protected static float BULLET_DAMAGE;
+	protected float bulletDamge;
 	protected Bitmap image;
 	protected int upgradeIndex = 1;
 	protected double accuracy;
@@ -34,10 +34,10 @@ public class Rifle implements IWeapon {
 	
 	public void setWeaponMode(){
 		if(Options.getAsBoolean(Options.CREATIVE)){
-			BULLET_DAMAGE = 100f;
+			bulletDamge = 100f;
 			accuracy = 0;
 		}else{
-			BULLET_DAMAGE = .5f;
+			bulletDamge = .5f;
 			accuracy = 0.15;
 		}
 	}
@@ -78,7 +78,7 @@ public class Rifle implements IWeapon {
 	}
 
 	public Bullet getAmmo(double xDir, double yDir) {
-		Bullet bullet = new Bullet(owner, xDir, yDir, BULLET_DAMAGE);
+		Bullet bullet = new Bullet(owner, xDir, yDir, bulletDamge);
 		return bullet;
 	}
 
