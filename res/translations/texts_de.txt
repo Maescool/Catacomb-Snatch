@@ -115,14 +115,14 @@ player.exp = {0}
 player.level = {0}
 
 shop.turretTooltipTitle = GESCHÜTZ
-shop.turretTooltipLine1 = GENUTZT ZUR VERTEIDIGUNG.
-shop.turretTooltipLine2 = GREIFT GEGNER IN DER NÄHE AN.
+shop.turretTooltipLine1 = Genutzt zur Verteidigung.
+shop.turretTooltipLine2 = Greift Gegner in der Nähe an.
 shop.harvesterTooltipTitle = SAMMLER
-shop.harvesterTooltipLine1 = SAMMELT GELD IN DER NÄHE EIN.
-shop.harvesterTooltipLine2 = NUTZ ES UM DAS GELD ZU BEKOMMEN.
+shop.harvesterTooltipLine1 = Sammelt Geld in der Nähe ein.
+shop.harvesterTooltipLine2 = Nutze es um das Geld zu bekommen.
 shop.bombTooltipTitle = BOMBE
-shop.bombTooltipLine1 = ZERSTÖRT RISSIGE WÄNDE. BENUTZEN
-shop.bombTooltipLine2 = UM ABKÜRZUNGEN FREI ZU SPRENGEN.
+shop.bombTooltipLine1 = Zerstört rissige Wände. Benutzen
+shop.bombTooltipLine2 = um Abkürzungen frei zu sprengen.
 
 titlemenu.start = STARTEN
 titlemenu.host = HOST
