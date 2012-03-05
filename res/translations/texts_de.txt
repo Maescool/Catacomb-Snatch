@@ -97,20 +97,6 @@ options.creative = CREATIVE MODE
 options.alternative = ALTERNATIV SPIELER SKIN
 options.credits = CREDITS
 
-options.locale_selection = SPRACHE WÄHLEN
-options.locale_af = AFRIKAANS
-options.locale_de = DEUTSCH
-options.locale_en = ENGLISCH
-options.locale_es = SPANISCH
-options.locale_fr = FRANZÖSISCH
-options.locale_ind = INDONESICH
-options.locale_it = ITALIENISCH
-options.locale_nl = HOLLÄNDISCH
-options.locale_pt_br = BRASILIANISCH
-options.locale_ru = RUSSISCH
-options.locale_sl = SLOVENISCH
-options.locale_sv = SWEDISCH
-
 character.text = WÄHLE DEINEN SPIELER!
 character.select = AUSWÄHLEN
 
