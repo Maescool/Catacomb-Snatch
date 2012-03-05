@@ -34,3 +34,9 @@ com.mojang.mojam.entity.mob.Snake.strength=1
 com.mojang.mojam.entity.mob.Snake.health=3
 com.mojang.mojam.entity.mob.Snake.speed=1.5
 com.mojang.mojam.entity.mob.Snake.limp=4
+
+com.mojang.mojam.entity.mob.Pharao.deathPoints=30
+com.mojang.mojam.entity.mob.Pharao.strength=3
+com.mojang.mojam.entity.mob.Pharao.health=3
+com.mojang.mojam.entity.mob.Pharao.speed=1.0
+com.mojang.mojam.entity.mob.Pharao.limp=3
