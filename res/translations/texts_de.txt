@@ -97,7 +97,7 @@ options.mute = STUMM
 options.creative = CREATIVE MODE
 options.alternative = ALTERNATIV SPIELER SKIN
 options.credits = CREDITS
-#options.locale_selection = SPRACHE WÄHLEN
+options.locale_selection = SPRACHE WÄHLEN
 
 character.text = WÄHLE DEINEN SPIELER!
 character.select = AUSWÄHLEN
