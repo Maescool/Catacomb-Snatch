@@ -137,7 +137,8 @@ public class Art {
 	// Mob
     public static Bitmap[][] raildroid = cut("/art/mob/raildroid.png", 32, 32);
 	public static Bitmap[][] mummy = cut("/art/mob/enemy_mummy_anim_48.png", 48, 48);
-	public static Bitmap[][] snake = cut("/art/mob/enemy_snake_anim_48.png", 48, 48);
+	public static Bitmap[][] pharao = cut("/art/mob/enemy_pharao_anim_48.png", 48, 48);
+    public static Bitmap[][] snake = cut("/art/mob/enemy_snake_anim_48.png", 48, 48);
 	public static Bitmap[][] scarab = cut("/art/mob/enemy_scarab_anim_48.png", 48, 48);
 	public static Bitmap[][] bat = cut("/art/mob/enemy_bat_32.png", 32, 32);
 	public static Bitmap batShadow = load("/art/shadows/shadow_bat.png");
