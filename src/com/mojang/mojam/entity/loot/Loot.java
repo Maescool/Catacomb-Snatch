@@ -64,7 +64,7 @@ public class Loot extends Entity {
 		this.setSize(2, 2);
 		this.disappears=disappears;
 		physicsSlide = false;
-		life = 99999999;//TurnSynchronizer.synchedRandom.nextInt(100) + 600;
+		life = TurnSynchronizer.synchedRandom.nextInt(100) + 600;
 
 		animationTime = TurnSynchronizer.synchedRandom.nextInt(animationArt[value].length * 3);
 	}
