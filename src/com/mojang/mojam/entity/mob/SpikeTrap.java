@@ -11,6 +11,8 @@ import java.util.Set;
 
 public class SpikeTrap extends Mob implements IEditable {
     public static final int COLOR = 0xff0000ff;
+	public static final int COLOR1 = 0xff0000fe;
+	public static final int COLOR2 = 0xff0000fd;
 	private int spike = 0;
 
 	public SpikeTrap(double x, double y) {
@@ -19,6 +21,11 @@ public class SpikeTrap extends Mob implements IEditable {
 		this.isImmortal = true;
 		this.isBlocking = false;
 		this.yOffs = 0;
+	}
+	
+	public SpikeTrap(double x, double y, int offset) {
+		this(x, y);
+		this.freezeTime = offset;
 	}
 
 	@Override

@@ -71,6 +71,12 @@ public class LevelUtils {
 		case SpikeTrap.COLOR:
 			entity = new SpikeTrap(x * Tile.WIDTH,y * Tile.HEIGHT);
 			break;
+		case SpikeTrap.COLOR1:
+			entity = new SpikeTrap(x * Tile.WIDTH,y * Tile.HEIGHT, 30);
+			break;
+		case SpikeTrap.COLOR2:
+			entity = new SpikeTrap(x * Tile.WIDTH,y * Tile.HEIGHT, 60);
+			break;
 		case SpawnerForBat.COLOR:
 			entity = new SpawnerForBat(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
 			break;
