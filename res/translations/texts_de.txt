@@ -11,7 +11,7 @@ credits.leadDev = LEITENDER ENTWICKLER:
 credits.maintainers = PROJEKT VERWALTUNG:
 credits.communityMan = COMMUNITY VERWALTUNG:
 credits.others = UND DANKE AN ALLE MITWIRKENDEN, INSBESONDERE:
-credits.note = DIESES PROJEKT WIRD NUN ALS COMMUNITY PROJEKT WEITERENTWICKELT
+credits.note = DIESES PROJEKT WIRD NUN ALS COMMUNITY PROJEKT ENTWICKELT
 
 diffselect.title = WÄHLE EINEN SCHWIERIGKEITSGRAD
 diffselect.start = SPIEL STARTEN
@@ -90,12 +90,14 @@ options.characterSelect = SPIELER AUSW.
 options.fullscreen = VOLLBILDMODUS
 options.showfps = ZEIGE FPS
 options.music = MUSIK
+options.sounds = GERÄUSCHE
 options.sound_and_video = VIDEO & SOUND
 options.volume = LAUTST.
 options.mute = STUMM
 options.creative = CREATIVE MODE
 options.alternative = ALTERNATIV SPIELER SKIN
 options.credits = CREDITS
+#options.locale_selection = SPRACHE WÄHLEN
 
 character.text = WÄHLE DEINEN SPIELER!
 character.select = AUSWÄHLEN
@@ -131,6 +133,7 @@ titlemenu.help = ANLEITUNG
 titlemenu.options = OPTIONEN
 titlemenu.levelEditor = LEVEL EDITOR
 titlemenu.exit = SCHLIESSEN
+titlemenu.sound_and_video = VIDEO UND SOUND
 
 upgrade.full = BEREITS VOLL AUSGEBAUT!
 upgrade.notEnoughMoney = DU HAST NICHT GENUG GELD ({0})
