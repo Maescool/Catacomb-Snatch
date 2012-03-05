@@ -34,13 +34,22 @@ public class RailDroid extends Mob {
 
 	private Direction dir = Direction.UNKNOWN;
 	private Direction lDir = Direction.DOWN;
-	private int noTurnTime = 0;
+	private int waitForTurnTime = 0;
 	private int pauseTime = 0;
 	public boolean carrying = false;
 	public int swapTime = 0;
 	public int team;
 	public static boolean creative = Options.getAsBoolean(Options.CREATIVE);
 
+	boolean isOnRailTile;
+	boolean canGoLeft;
+    boolean canGoRight;
+    boolean canGoUp;
+    boolean canGoDown;
+	
+    double xOffsetToTileCenter;
+    double yOffsetToTileCenter;
+    
 	public RailDroid(double x, double y, int team) {
 		super(x, y, team);
 		this.team = team;
@@ -51,198 +60,234 @@ public class RailDroid extends Mob {
 			isImmortal = true;
 	}
 
-	public void tick() {
-		xBump = yBump = 0;
+    public void tick() {
+        xBump = yBump = 0;
+        super.tick();
 
-		super.tick();
-		if (freezeTime > 0)
-			return;
-		if (swapTime > 0)
-			swapTime--;
-		boolean hadPaused = pauseTime > 0;
-		if (pauseTime > 0) {
-			pauseTime--;
-			if (pauseTime > 0)
-				return;
-		}
-		int xt = (int) (pos.x / Tile.WIDTH);
-		int yt = (int) (pos.y / Tile.HEIGHT);
+        boolean hadPaused = pauseTime > 0;
 
-		boolean cr = level.getTile(xt, yt) instanceof RailTile;
-		boolean lr = level.getTile(xt - 1, yt) instanceof RailTile;
-		boolean rr = level.getTile(xt + 1, yt) instanceof RailTile;
-		boolean ur = level.getTile(xt, yt - 1) instanceof RailTile;
-		boolean dr = level.getTile(xt, yt + 1) instanceof RailTile;
-		xd *= 0.4;
-		yd *= 0.4;
+        if (freezeTime > 0)
+            return;
 
-		double xcd = pos.x - (xt * Tile.WIDTH + 16);
-		double ycd = pos.y - (yt * Tile.HEIGHT + 16);
-		boolean centerIsh = xcd * xcd + ycd * ycd < 2 * 2;
-		boolean xcenterIsh = xcd * xcd < 2 * 2;
-		boolean ycenterIsh = ycd * ycd < 2 * 2;
+        if (decreaseTimers())
+            return;
 
-		if (!xcenterIsh)
-			ur = false;
-		if (!xcenterIsh)
-			dr = false;
+        int xTile = (int) (pos.x / Tile.WIDTH);
+        int yTile = (int) (pos.y / Tile.HEIGHT);
 
-		if (!ycenterIsh)
-			lr = false;
-		if (!ycenterIsh)
-			rr = false;
+        isOnRailTile = level.getTile(xTile, yTile) instanceof RailTile;
+        canGoLeft = level.getTile(xTile - 1, yTile) instanceof RailTile;
+        canGoRight = level.getTile(xTile + 1, yTile) instanceof RailTile;
+        canGoUp = level.getTile(xTile, yTile - 1) instanceof RailTile;
+        canGoDown = level.getTile(xTile, yTile + 1) instanceof RailTile;
 
-		int lWeight = 0;
-		int uWeight = 0;
-		int rWeight = 0;
-		int dWeight = 0;
+        xd *= 0.4;
+        yd *= 0.4;
 
-		if (noTurnTime > 0)
-			noTurnTime--;
+        xOffsetToTileCenter = pos.x - (xTile * Tile.WIDTH + 16);
+        yOffsetToTileCenter = pos.y - (yTile * Tile.HEIGHT + 16);
 
-		if (noTurnTime == 0 && (!cr || dir == Direction.UNKNOWN || centerIsh)) {
-			noTurnTime = 4;
-			// int nd = 0;
-			if (dir == Direction.LEFT && ur)
-				uWeight += 16;
-			if (dir == Direction.UP && rr)
-				rWeight += 16;
-			if (dir == Direction.RIGHT && dr)
-				dWeight += 16;
-			if (dir == Direction.DOWN && lr)
-				lWeight += 16;
+        boolean isNearlyCentered = xOffsetToTileCenter * xOffsetToTileCenter
+                + yOffsetToTileCenter * yOffsetToTileCenter < 2 * 2;
+        boolean isNearlyCenteredX = xOffsetToTileCenter * xOffsetToTileCenter < 2 * 2;
+        boolean isNearlyCenteredY = yOffsetToTileCenter * yOffsetToTileCenter < 2 * 2;
 
-			if (lWeight + uWeight + rWeight + dWeight == 0) {
-				if (dir == Direction.LEFT && lr)
-					lWeight += 16;
-				if (dir == Direction.UP && ur)
-					uWeight += 16;
-				if (dir == Direction.RIGHT && rr)
-					rWeight += 16;
-				if (dir == Direction.DOWN && dr)
-					dWeight += 16;
-			}
+        if (!isNearlyCenteredX) {
+            canGoUp = false;
+            canGoDown = false;
+        }
+        if (!isNearlyCenteredY) {
+            canGoLeft = false;
+            canGoRight = false;
+        }
 
-			if (lWeight + uWeight + rWeight + dWeight == 0) {
-				if ((dir == Direction.LEFT || dir == Direction.RIGHT)) {
-					if (ur)
-						uWeight += 4;
-					if (dr)
-						dWeight += 4;
-				}
-				if ((dir == Direction.UP || dir == Direction.DOWN)) {
-					if (lr)
-						lWeight += 4;
-					if (rr)
-						rWeight += 4;
-				}
-			}
-			if (lWeight + uWeight + rWeight + dWeight == 0) {
-				if (lr)
-					lWeight += 1;
-				if (ur)
-					uWeight += 1;
-				if (rr)
-					rWeight += 1;
-				if (dr)
-					dWeight += 1;
-			}
+        determineDirection(isNearlyCentered);
+        centerPosition();
 
-			if (dir == Direction.LEFT)
-				rWeight = 0;
-			if (dir == Direction.UP)
-				dWeight = 0;
-			if (dir == Direction.RIGHT)
-				lWeight = 0;
-			if (dir == Direction.DOWN)
-				uWeight = 0;
+        double speed = 0.7;
+        if (dir != Direction.UNKNOWN)
+            lDir = dir;
+        switch (dir) {
+        case LEFT:
+            xd -= speed;
+            break;
+        case RIGHT:
+            xd += speed;
+            break;
+        case UP:
+            yd -= speed;
+            break;
+        case DOWN:
+            yd += speed;
+            break;
+        }
 
-			int totalWeight = lWeight + uWeight + rWeight + dWeight;
-			if (totalWeight == 0) {
-				dir = Direction.UNKNOWN;
-			} else {
-				int res = TurnSynchronizer.synchedRandom.nextInt(totalWeight);
-				// dir = 0;
-				dir = dir.turnBy180DegreesRight();
+        Vec2 oldPos = pos.clone();
+        move(xd, yd);
 
-				uWeight += lWeight;
-				rWeight += uWeight;
-				dWeight += rWeight;
+        if (hasNotMoved(oldPos)) {
+            if (hadPaused) {
+                dir = dir.turnBy180DegreesRight();
+                waitForTurnTime = 0;
+            } else {
+                pauseTime = 10;
+                waitForTurnTime = 0;
+            }
+        }
 
-				if (res < lWeight)
-					dir = Direction.LEFT;
-				else if (res < uWeight)
-					dir = Direction.UP;
-				else if (res < rWeight)
-					dir = Direction.RIGHT;
-				else if (res < dWeight)
-					dir = Direction.DOWN;
-			}
+        pickUpTreasure();
+        increaseScoreAtBase();
+    }
 
-			// dir = nd;
-		}
+    private boolean hasNotMoved(Vec2 oldPos) {
+        return dir != Direction.UNKNOWN && oldPos.distSqr(pos) < 0.1 * 0.1;
+    }
 
-		if (cr) {
-			double r = 1;
-			if (!(dir == Direction.LEFT || dir == Direction.RIGHT)) {
-				if (xcd < -r)
-					xd += 0.3;
-				if (xcd > +r)
-					xd -= 0.3;
-			}
+    private boolean decreaseTimers() {
+        boolean shouldReturnFromTick = false;
+        if (swapTime > 0) {
+            swapTime--;
+        }
+        if (pauseTime > 0) {
+            pauseTime--;
+            if (pauseTime > 0)
+                shouldReturnFromTick = true;
+        }
+        if (waitForTurnTime > 0) {
+            waitForTurnTime--;
+        }
+        return shouldReturnFromTick;
+    }
 
-			if (!(dir == Direction.UP || dir == Direction.DOWN)) {
-				if (ycd < -r)
-					yd += 0.3;
-				if (ycd > +r)
-					yd -= 0.3;
-			}
-			// if (!(dir == 1 || dir == 3) && xcd >= -r && xcd <= r) xd = -xcd;
-			// if (!(dir == 2 || dir == 4) && ycd >= -r && ycd <= r) yd = -ycd;
-		}
-		double speed = 0.7;
-		if (dir != Direction.UNKNOWN)
-			lDir = dir;
-		if (dir == Direction.LEFT)
-			xd -= speed;
-		if (dir == Direction.UP)
-			yd -= speed;
-		if (dir == Direction.RIGHT)
-			xd += speed;
-		if (dir == Direction.DOWN)
-			yd += speed;
+    private void determineDirection(boolean isAlmostCentered) {
+        int leftWeight = 0;
+        int upWeight = 0;
+        int rightWeight = 0;
+        int downWeight = 0;
 
-		Vec2 oldPos = pos.clone();
-		move(xd, yd);
-		if (dir != Direction.UNKNOWN && oldPos.distSqr(pos) < 0.1 * 0.1) {
-			if (hadPaused) {
-				dir = dir.turnBy180DegreesRight();
-				noTurnTime = 0;
-			} else {
-				pauseTime = 10;
-				noTurnTime = 0;
-			}
-		}
+        // no idea what magic happens here, maybe someone can refactor this to be more clear
+        if (waitForTurnTime == 0
+                && (!isOnRailTile || dir == Direction.UNKNOWN || isAlmostCentered)) {
+            waitForTurnTime = 4;
+            if (dir == Direction.LEFT && canGoUp)
+                upWeight += 16;
+            if (dir == Direction.UP && canGoRight)
+                rightWeight += 16;
+            if (dir == Direction.RIGHT && canGoDown)
+                downWeight += 16;
+            if (dir == Direction.DOWN && canGoLeft)
+                leftWeight += 16;
 
-		if (!carrying && swapTime == 0) {
-			if (level.getEntities(getBB().grow(32), TreasurePile.class).size() > 0) {
-				swapTime = 30;
-				carrying = true;
-			}
-		}
-		if (carrying && swapTime == 0) {
-			if (pos.y < 8 * Tile.HEIGHT) {
-				carrying = false;
-				level.player2Score += 2;
-			}
-			if (pos.y > (level.height - 7 - 1) * Tile.HEIGHT) {
-				carrying = false;
-				level.player1Score += 2;
-			}
-		}
-		// level.getTile(xt, yt)
-	}
+            if (leftWeight + upWeight + rightWeight + downWeight == 0) {
+                if (dir == Direction.LEFT && canGoLeft)
+                    leftWeight += 16;
+                if (dir == Direction.UP && canGoUp)
+                    upWeight += 16;
+                if (dir == Direction.RIGHT && canGoRight)
+                    rightWeight += 16;
+                if (dir == Direction.DOWN && canGoDown)
+                    downWeight += 16;
+            }
 
+            if (leftWeight + upWeight + rightWeight + downWeight == 0) {
+                if ((dir == Direction.LEFT || dir == Direction.RIGHT)) {
+                    if (canGoUp)
+                        upWeight += 4;
+                    if (canGoDown)
+                        downWeight += 4;
+                }
+                if ((dir == Direction.UP || dir == Direction.DOWN)) {
+                    if (canGoLeft)
+                        leftWeight += 4;
+                    if (canGoRight)
+                        rightWeight += 4;
+                }
+            }
+            if (leftWeight + upWeight + rightWeight + downWeight == 0) {
+                if (canGoLeft)
+                    leftWeight += 1;
+                if (canGoUp)
+                    upWeight += 1;
+                if (canGoRight)
+                    rightWeight += 1;
+                if (canGoDown)
+                    downWeight += 1;
+            }
+
+            if (dir == Direction.LEFT)
+                rightWeight = 0;
+            if (dir == Direction.UP)
+                downWeight = 0;
+            if (dir == Direction.RIGHT)
+                leftWeight = 0;
+            if (dir == Direction.DOWN)
+                upWeight = 0;
+
+            int totalWeight = leftWeight + upWeight + rightWeight + downWeight;
+            if (totalWeight == 0) {
+                dir = Direction.UNKNOWN;
+            } else {
+                int res = TurnSynchronizer.synchedRandom.nextInt(totalWeight);
+                dir = dir.turnBy180DegreesRight();
+
+                upWeight += leftWeight;
+                rightWeight += upWeight;
+                downWeight += rightWeight;
+
+                if (res < leftWeight) {
+                    dir = Direction.LEFT;
+                } else if (res < upWeight) {
+                    dir = Direction.UP;
+                } else if (res < rightWeight) {
+                    dir = Direction.RIGHT;
+                } else if (res < downWeight) {
+                    dir = Direction.DOWN;
+                }
+            }
+        }
+    }
+
+    private void centerPosition() {
+        if (isOnRailTile) {
+            double r = 1;
+            if (!(dir == Direction.LEFT || dir == Direction.RIGHT)) {
+                if (xOffsetToTileCenter < -r)
+                    xd += 0.3;
+                if (xOffsetToTileCenter > +r)
+                    xd -= 0.3;
+            }
+
+            if (!(dir == Direction.UP || dir == Direction.DOWN)) {
+                if (yOffsetToTileCenter < -r)
+                    yd += 0.3;
+                if (yOffsetToTileCenter > +r)
+                    yd -= 0.3;
+            }
+        }
+    }
+
+    private void pickUpTreasure() {
+        if (!carrying && swapTime == 0) {
+            if (level.getEntities(getBB().grow(32), TreasurePile.class).size() > 0) {
+                swapTime = 30;
+                carrying = true;
+            }
+        }
+    }
+
+    private void increaseScoreAtBase() {
+        if (carrying && swapTime == 0) {
+            if (pos.y < 8 * Tile.HEIGHT) {
+                carrying = false;
+                level.player2Score += 2;
+            }
+            if (pos.y > (level.height - 7 - 1) * Tile.HEIGHT) {
+                carrying = false;
+                level.player1Score += 2;
+            }
+        }
+    }
+	
 	@Override
 	public Bitmap getSprite() {
 		if (lDir == Direction.LEFT)

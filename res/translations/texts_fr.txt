@@ -91,6 +91,7 @@ character.select = Choisir
 pausemenu.help = AIDE
 pausemenu.backtomain = MENU PRINCIPAL
 pausemenu.resume = CONTINUER
+pausemenu.exit = QUITTER
 
 player.hasDied = {0} EST MORT!
 

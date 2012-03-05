@@ -7,6 +7,9 @@ build.removeRail = VOCÊ PRECISA DE {0} PARA REMOVER UM TRILHO.
 back = VOLTAR
 cancel = CANCELAR
 
+character.text = ESCOLHA SEU PERSONAGEM!
+character.select = SELECIONAR
+
 credits.leadDev = PRINCIPAIS DESENVOLVEDORES:
 credits.maintainers = MANTENEDORES DO PROJETO:
 credits.communityMan = MANTENEDORES DA COMUNIDADE:
@@ -92,13 +95,12 @@ options.showfps = MOSTRAR FPS
 options.music = MÚSICA
 options.sounds = SOM
 options.volume = VOLUME
+options.sound_and_video = VÍDEO E SOM
+options.locale_selection = ESCOLEHR LINGUAGEM
 options.mute = SEM SOM
 options.creative = MODO CRIATIVO
 options.alternative = SKIN ALTERNATIVA
 options.credits = CRÉDITOS
-
-character.text = ESCOLHA SEU PERSONAGEM!
-character.select = ESCOLHER
 
 pausemenu.help = AJUDA
 pausemenu.backtomain = MENU
@@ -113,6 +115,9 @@ player.money = {0}
 player.nextLevel = {0}
 player.exp = {0}
 player.level = {0}
+
+local.en = ENGLISH
+local.de = GERMAN
 
 shop.turretTooltipTitle = TURRET
 shop.turretTooltipLine1 = USADA PARA DEFESA.
@@ -129,10 +134,12 @@ titlemenu.host = HOST
 titlemenu.join = ENTRAR
 titlemenu.help = COMO JOGAR
 titlemenu.options = PREFERÊNCIAS
+titlemenu.sound_and_video = VÍDEO E SOM
 titlemenu.levelEditor = EDITOR DE FASES
 titlemenu.exit = SAIR
 
 upgrade.full = JÁ FOI MELHORADA AO MAXIMO.
+upgrade.shopItem = VOCÊ NÃO PODE MELHORAR UM ITEM DA LOJA.
 upgrade.notEnoughMoney = VOCÊ NÃO TEM DINHEIRO O BASTANTE ({0})
 upgrade.to = MELHORADA PARA O NÍVEL {0}
 

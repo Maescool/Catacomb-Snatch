@@ -16,7 +16,7 @@ public class PauseMenu extends GuiMenu {
 	private Button back_to_main = null;
 	private Button exit_game = null;
 
-	public void change_locale() {
+	public void changeLocale() {
 		resumeButton.setLabel(MojamComponent.texts.getStatic("pausemenu.resume"));
 		how_to.setLabel(MojamComponent.texts.getStatic("pausemenu.help"));
 		options.setLabel(MojamComponent.texts.getStatic("titlemenu.options"));

@@ -1,3 +1,4 @@
+
 package com.mojang.mojam.entity;
 
 import com.mojang.mojam.MojamComponent;

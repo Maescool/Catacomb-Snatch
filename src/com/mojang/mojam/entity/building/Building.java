@@ -89,7 +89,9 @@ public abstract class Building extends Mob implements IUsable {
 	@Override
 	public void tick() {
 		super.tick();
-		
+		if (carriedBy == null) {
+			fallDownHole();
+		}
 		xd = 0.0;
 		yd = 0.0;
 	}
@@ -141,7 +143,6 @@ public abstract class Building extends Mob implements IUsable {
 	@Override
 	public void slideMove(double xa, double ya) {
 		super.move(xa, ya);
-		fallDownHole();
 	}
 	
 	/**

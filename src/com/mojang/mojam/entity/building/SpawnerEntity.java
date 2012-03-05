@@ -69,7 +69,7 @@ public abstract class SpawnerEntity extends Building implements IEditable {
 		Mob te = getMob(x,y);
 		
 		if (level.countEntities(Mob.class) < level.maxMonsters && level.getEntities(te.getBB().grow(8), te.getClass()).size() == 0 && spawntile.canPass(te))
-			level.addEntity(te);
+			level.addMob(te,xin,yin);
 	}
 	
 	protected abstract Mob getMob(double x, double y);

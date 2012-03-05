@@ -102,7 +102,7 @@ public abstract class Mob extends Entity {
 	}
 
 	public void tick() {
-		if (TitleMenu.difficulty.difficultyID >= 1 || this instanceof RailDroid) {
+		if (TitleMenu.difficulty.difficultyID >= 1 || this.team != Team.Neutral) {
 			this.doRegenTime();
 		}
 		
