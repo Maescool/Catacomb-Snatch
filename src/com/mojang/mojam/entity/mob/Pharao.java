@@ -16,14 +16,9 @@ public class Pharao extends HostileMob {
     public Pharao(double x, double y) {
         super(x, y, Team.Neutral);
         setPos(x, y);
-        setStartHealth(40);
         dir = TurnSynchronizer.synchedRandom.nextDouble() * Math.PI * 2;
         yOffs = 10;
         facing = TurnSynchronizer.synchedRandom.nextInt(4);
-        deathPoints = 30;
-        strength = 3;
-        speed = 1.0;
-        limp = 3;
         REGEN_INTERVAL = 15;
     }
 
