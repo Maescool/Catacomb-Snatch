@@ -69,7 +69,7 @@ public abstract class SpawnerEntity extends Building implements IEditable {
 		Mob te = getMob(x,y);
 		
 		if (level.countEntities(Mob.class) < level.maxMonsters && level.getEntities(te.getBB().grow(8), te.getClass()).size() == 0 && spawntile.canPass(te))
-			level.addEntity(te);
+			level.addMob(te,xin,yin);
 	}
 	
 	protected abstract Mob getMob(double x, double y);
@@ -112,4 +112,11 @@ public abstract class SpawnerEntity extends Building implements IEditable {
 	    super.render(screen);
 	    screen.blit(Art.mobSpawnerShadow, pos.x - Art.mobSpawnerShadow.w / 2 - 1, pos.y - Art.mobSpawnerShadow.h / 2 + 7);
     }
+	
+	protected Bitmap blitMobOnTop(Bitmap mobicon) {
+		Bitmap bitmap = Art.mobSpawner[0][0].copy();
+		bitmap.blit(mobicon, (bitmap.w/2)-mobicon.w/2,(bitmap.h/2)-5-mobicon.h/2);
+		return bitmap;
+	}
+	
 }

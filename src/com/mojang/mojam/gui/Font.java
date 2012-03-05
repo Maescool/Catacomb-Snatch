@@ -219,6 +219,35 @@ public class Font {
 		}
 	}
 
+	/**
+	 * Draw the given text onto the given screen at the given position with given opacity
+	 * 
+	 * @param screen Screen
+	 * @param msg Message
+	 * @param x X coordinate
+	 * @param y Y coordinate
+	 * @param width Maximum line width in pixels
+	 * @param opaque Opacity of text. Range from 0x00 (transparent) to 0xff (opaque)
+	 */
+	public void drawOpaque(Screen screen, String msg, int x, int y, int width, int opaque) {
+		int startX = x;
+		int length = msg.length();
+		for (int i = 0; i < length; i++) {
+			char character = msg.charAt(i);
+			Bitmap bitmap = getCharacterBitmap(character);
+			int heightOffset = 0;
+			if (letters.indexOf(character) < 0) {
+				heightOffset = fontCharacterFactory.getHeightOffset(character);
+			}
+			screen.alphaBlit(bitmap, x, y + heightOffset, opaque);
+			x += bitmap.w + letterSpacing;
+			if (x > width - bitmap.w) {
+				x = startX;
+				y += glyphHeight + 2;
+			}
+		}
+	}
+  	 
 	private Bitmap getCharacterBitmap(char character) {
 		int charPosition = letters.indexOf(character);
 		if (charPosition >= 0) {
@@ -226,6 +255,20 @@ public class Font {
 		} else {
 			return fontCharacterFactory.getFontCharacter(character);
 		}
+	}
+
+	/**
+	 * 
+	 * * Draw the given text onto the given screen at the given position with given opacity
+	 * 
+	 * @param screen Screen
+	 * @param msg Message
+	 * @param x X coordinate
+	 * @param y Y coordinate
+	 * @param opaque Opacity of text. Range from 0x00 (transparent) to 0xff (opaque)
+	 */
+	public void drawOpaque(Screen screen, String msg, int x, int y, int opaque) {
+		drawOpaque(screen, msg, x, y, Integer.MAX_VALUE, opaque);
 	}
 
 	/**

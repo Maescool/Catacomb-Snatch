@@ -66,6 +66,12 @@ keys.build = COSTRUISCI
 keys.upgrade = AGGIORNA
 keys.chat = CHAT
 
+leveleditor.title = LEVEL EDITOR
+leveleditor.new = NUOVO
+leveleditor.open = APRI
+leveleditor.save = SALVA
+leveleditor.enterLevelName = NOME LIVELLO:
+
 levelselect.title = SCEGLI UN LIVELLO
 levelselect.start = GIOCA
 levelselect.update = AGGIORNA
@@ -84,10 +90,23 @@ options.showfps = MOSTRA FPS
 options.music = MUSICA
 options.sounds = SUONI
 options.volume = VOLUME
+options.sound_and_video = VIDEO E SUONI
+options.locale_selection = LINGUA
 options.mute = DISATTIVATA
 options.creative = CREATIVE MODE
 options.alternative = PERSONAGGIO ALTERNATIVO
 options.credits = CREDITI
+options.locale_en = INGLESE
+options.locale_de = TEDESCO
+options.locale_es = SPAGNOLO
+options.locale_fr = FRANCESE
+options.locale_id = INDONESIANO
+options.locale_it = ITALIANO
+options.locale_nl = OLANDESE
+options.locale_pt_br = PORTOGHESE (BRA)
+options.locale_ru = RUSSO
+options.locale_sl = SLOVENO
+options.locale_sv = SVEDESE
 
 pausemenu.help = AIUTO
 pausemenu.backtomain = MENU
@@ -118,6 +137,7 @@ titlemenu.host = OSPITA
 titlemenu.join = UNISCITI
 titlemenu.help = COME GIOCARE
 titlemenu.options = OPZIONI
+titlemenu.levelEditor = LEVEL EDITOR
 titlemenu.exit = ESCI
 
 upgrade.full = AGGIORNATO AL MASSIMO!

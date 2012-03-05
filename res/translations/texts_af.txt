@@ -7,6 +7,9 @@ build.removeRail = JY HET {0} NODIG OM 'N SPOOR TE VERWYDER.
 back = TERUG
 cancel = KANSELLEER
 
+character.text = KIES JOU KARAKTER!
+character.select = SELEKTEER
+
 credits.leadDev = HOOF ONTWIKKELAAR:
 credits.maintainers = PROJEK ONDERHOUERS:
 credits.communityMan = GEMEENSKAP ONDERHOUERS:
@@ -58,6 +61,10 @@ keys.left = LINKS
 keys.right=  REGS
 keys.sprint = HARDLOOP
 keys.fire = SKIET
+keys.fireUp = SKIET OP
+keys.fireDown = SKIET AF
+keys.fireLeft = SKIET LINKS
+keys.fireRight = SKIET REGS
 keys.use = GEBRUIK
 keys.build = BOU
 keys.upgrade = OPGRADEER
@@ -88,13 +95,12 @@ options.showfps = WYS FPS
 options.music = MUSIEK
 options.sounds = KLANKE
 options.volume = VOLUME
+options.sound_and_video = SKERM EN KLANK
+options.locale_selection = KIES TAAL
 options.mute = DEMP
 options.creative = KREATIEWE MODUS
 options.alternative = ALTERNATIEWE SPELER VEL
 options.credits = KREDIETE
-
-character.text = KIES JOU KARAKTER
-character.select = SELEKTEER
 
 pausemenu.help = HULP
 pausemenu.backtomain = HOOF
@@ -109,6 +115,9 @@ player.money = {0}
 player.nextLevel = {0}
 player.exp = {0}
 player.level = {0}
+
+local.en = ENGLISH
+local.de = GERMAN
 
 shop.turretTooltipTitle = GEWEER TORING
 shop.turretTooltipLine1 = GEBRUIK VIR VERDEDIGING.
@@ -125,10 +134,12 @@ titlemenu.host = ONTHAAL SPEL
 titlemenu.join = SLUIT AAN
 titlemenu.help = HULP
 titlemenu.options = OPSIES
+titlemenu.sound_and_video = SKERM EN KLANK
 titlemenu.levelEditor = ONTWERP KAMER
 titlemenu.exit = VERLAAT
 
 upgrade.full = REEDS TEN VOLLE OPGEGRADEER!
+upgrade.shopItem = JY KAN NIE WINKEL ITEMS OPGRADEER NIE!
 upgrade.notEnoughMoney = JY HET NIE GENOEG GOUD NIE ({0})
 upgrade.to = OPGEGRADEER NA VLAK {0}
 

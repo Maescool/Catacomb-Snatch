@@ -80,6 +80,8 @@ options.fullscreen = PLEIN ECRAN
 options.showfps = AFFICHER FPS
 options.music = Musique
 options.sounds = Sons
+options.sound_and_video = SON ET VIDÉO
+options.locale_selection = CHOISIR UNE LANGUE
 options.creative = MODE CRÉATIF
 options.credits = CRÉDITS
 
@@ -106,6 +108,8 @@ titlemenu.start = JOUER
 titlemenu.host = NV. SERVEUR
 titlemenu.join = REJOINDRE
 titlemenu.help = AIDE
+titlemenu.sound_and_video = SON ET VIDÉO
+titlemenu.levelEditor = ÉDITEUR DE NIVEAU
 titlemenu.exit = QUITTER
 
 upgrade.full = DEJA AUGMENTER AU MAX!

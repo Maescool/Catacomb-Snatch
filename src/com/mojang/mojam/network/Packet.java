@@ -10,6 +10,7 @@ import java.util.Map;
 import com.mojang.mojam.network.packet.ChangeKeyCommand;
 import com.mojang.mojam.network.packet.ChangeMouseButtonCommand;
 import com.mojang.mojam.network.packet.ChangeMouseCoordinateCommand;
+import com.mojang.mojam.network.packet.CharacterCommand;
 import com.mojang.mojam.network.packet.ChatCommand;
 import com.mojang.mojam.network.packet.PingPacket;
 import com.mojang.mojam.network.packet.StartGamePacket;
@@ -40,6 +41,7 @@ public abstract class Packet {
 		map(104, ChangeMouseButtonCommand.class);
 		map(105, ChangeMouseCoordinateCommand.class);
 		map(106, ChatCommand.class);
+		map(107, CharacterCommand.class);
 	}
 
 	public final int getId() {

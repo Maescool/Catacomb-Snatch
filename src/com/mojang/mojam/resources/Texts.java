@@ -1,13 +1,12 @@
 package com.mojang.mojam.resources;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Properties;
 
+import com.mojang.mojam.GameCharacter;
 import com.mojang.mojam.entity.mob.Team;
 
 public class Texts {
@@ -45,26 +44,26 @@ public class Texts {
 		}
 	}
 
-	public String winCharacter(int team, int characterID) {
+	public String winCharacter(int team, GameCharacter character) {
 		String winMessage;
 		if (team == Team.Team1) {
 			winMessage = getStatic("gameplay.player1Win");
 		} else {
 			winMessage = getStatic("gameplay.player2Win");
 		}
-		return MessageFormat.format(winMessage, playerNameCharacter(characterID));
+		return MessageFormat.format(winMessage, playerNameCharacter(character));
 	}
 
-	public String playerNameCharacter(int characterID) {
-		return getStatic("gameplay.player" + (characterID + 1) + "Name");
+	public String playerNameCharacter(GameCharacter character) {
+		return getStatic("gameplay.player" + (character.ordinal() + 1) + "Name");
 	}
 
-	public String hasDiedCharacter(int characterID) {
-		return MessageFormat.format(getStatic("player.hasDied"), playerNameCharacter(characterID));
+	public String hasDiedCharacter(GameCharacter character) {
+		return MessageFormat.format(getStatic("player.hasDied"), playerNameCharacter(character));
 	}
 
-	public String scoreCharacter(int characterID, int score) {
-		return MessageFormat.format(getStatic("player.score"), playerNameCharacter(characterID), score);
+	public String scoreCharacter(GameCharacter character, int score) {
+		return MessageFormat.format(getStatic("player.score"), playerNameCharacter(character), score);
 	}
 
 	public String cost(int cost) {
