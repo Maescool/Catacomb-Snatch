@@ -115,7 +115,7 @@ public class Console implements Runnable, KeyListener
 		frame.setSize(300, 600);
 		frame.setVisible(true);
 
-		Console.redirectOutput(textArea);
+		//Console.redirectOutput(textArea);
 		final int i = 0;
 
 		Timer timer = new Timer(1000, new ActionListener()

@@ -1057,7 +1057,7 @@ public final class Snatch
 		}
 		else if(s.startsWith("js ")||s.startsWith("py ")||s.startsWith("rb ")||s.startsWith("lua "))
 		{
-			lang.getEngineByExtension(s.substring(0, 3).trim()).eval(s.substring(s.indexOf(' '+1)));
+			lang.getEngineByExtension(s.substring(0, 3).trim()).eval(s.substring(s.indexOf(' ')+1));
 		}
 		else
 		{
