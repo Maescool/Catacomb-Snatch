@@ -185,6 +185,11 @@ public abstract class Mod implements IMod
 	public void IfKeyUp(Key key)
 	{
 	}
+	
+	public int OnConsole(String command,String params)
+	{
+		return 0;
+	}
 
 	/**
 	 * Intended to be called when the key went off to on, omitted from release

@@ -158,4 +158,13 @@ public interface IMod
 	 * @see Snatch
 	 */
 	public String getVersion();
+
+	/**
+	 * Called upon a console command
+	 * 
+	 * @param command The command given
+	 * @param params The rest of the console line
+	 * @return 1 if it has been responded to, 0 otherwise
+	 */
+	public int OnConsole(String command, String params);
 }

@@ -35,6 +35,7 @@ import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
 import com.mojang.mojam.Keys.Key;
@@ -57,12 +58,14 @@ public final class Snatch
 	public static List<IMod> modList = new ArrayList<IMod>();
 	public static List<ScriptEngine> scriptList = new ArrayList<ScriptEngine>();
 	private static MojamComponent mojam;
+	private static Level level;
 	private static InputHandler inputHandler;
 	private static Keys keys = new Keys();
 	public static Map<Integer, Entity> spawnList = new HashMap<Integer, Entity>();
 	private static ScriptEngineManager lang = new ScriptEngineManager();
 	public static PipedOutputStream sysOut = new PipedOutputStream();
 	public static JTextArea textArea;
+	public static JFrame console;
 	public static boolean isJar;
 	public static boolean isDebug;
 
@@ -83,10 +86,10 @@ public final class Snatch
 		{
 			e1.printStackTrace();
 		}
-		if(isJar||true)
+		if(isJar || true)
 		{
 			displayConsoleWindow();
-			addMod(Snatch.class.getClassLoader(),"Console.class");
+			addMod(Snatch.class.getClassLoader(), "Console.class");
 		}
 		//System.setOut(new PrintStream(new FileOutputStream(new File(m.getMojamDir(), "log.txt"))));
 
@@ -459,31 +462,40 @@ public final class Snatch
 	/**
 	 * Registers a new key <br>
 	 * {@code Key mykey = Snatch.addKey("aKey","a");}
-	 * @param name The name of the key
-	 * @param code The keyboard code of the key to be registered
+	 * 
+	 * @param name
+	 *            The name of the key
+	 * @param code
+	 *            The keyboard code of the key to be registered
 	 * @return The registered key
 	 */
 	public static Key addkey(String name, String code)
 	{
 		return addKey(name, keycode(code));
 	}
-	
+
 	/**
 	 * Registers a new key <br>
 	 * {@code Key mykey = Snatch.addKey("aKey",32);}
-	 * @param name The name of the key
-	 * @param code The keyboard code of the key to be registered
+	 * 
+	 * @param name
+	 *            The name of the key
+	 * @param code
+	 *            The keyboard code of the key to be registered
 	 * @return The registered key
 	 */
 	public static Key addKey(String name, int code)
 	{
-		return addKey(keys.new Key(name),code);
+		return addKey(keys.new Key(name), code);
 	}
-	
+
 	/**
 	 * Registers a given key
-	 * @param key The key being registered
-	 * @param code The keyboard code of the key being registered
+	 * 
+	 * @param key
+	 *            The key being registered
+	 * @param code
+	 *            The keyboard code of the key being registered
 	 * @return The key once registered
 	 */
 	public static Key addKey(Key key, int code)
@@ -504,7 +516,9 @@ public final class Snatch
 
 	/**
 	 * Gets the integer keycode for the name s
-	 * @param s The name of the key
+	 * 
+	 * @param s
+	 *            The name of the key
 	 * @return The intcode of the key
 	 */
 	public static int keycode(String s)
@@ -777,12 +791,13 @@ public final class Snatch
 		invoke("RunOnce");
 	}
 
-	public static void createLevel(Level level)
+	public static void createLevel(Level l)
 	{
 		for(IMod m : modList)
 		{
-			m.CreateLevel(level);
+			m.CreateLevel(l);
 		}
+		level = l;
 		invoke("CreateLevel");
 	}
 
@@ -820,6 +835,21 @@ public final class Snatch
 			m.OnTick();
 		}
 		invoke("OnTick");
+	}
+	
+	public static boolean runConsole(String command, String params)
+	{
+		int i = 0;
+		for(IMod m : modList)
+		{
+			i += m.OnConsole(command, params);
+		}
+		if(i==0)
+		{
+			System.out.println("Error: Command "+command +" is unregistered.");
+		}
+		invoke("OnConsole");
+		return i!=0;
 	}
 
 	public static void sendPacket(Packet packet)
@@ -1002,7 +1032,7 @@ public final class Snatch
 
 	private static void displayConsoleWindow()
 	{
-		Console.main(null);
+		console = Console.main(null);
 	}
 
 	/**
@@ -1039,7 +1069,7 @@ public final class Snatch
 			}
 		}
 	}
-	
+
 	public static void console(String s) throws ScriptException
 	{
 		if(s.startsWith("echo "))
@@ -1048,25 +1078,43 @@ public final class Snatch
 		}
 		else if(s.startsWith("exit"))
 		{
-			try{
+			try
+			{
 				System.exit(Integer.parseInt(s.substring(5)));
-			} catch (NumberFormatException e)
+			}
+			catch (NumberFormatException e)
 			{
 				System.exit(1);
 			}
 		}
-		else if(s.startsWith("js ")||s.startsWith("py ")||s.startsWith("rb ")||s.startsWith("lua "))
+		else if(s.startsWith("js ") || s.startsWith("py ") || s.startsWith("rb ") || s.startsWith("lua "))
 		{
-			lang.getEngineByExtension(s.substring(0, 3).trim()).eval(s.substring(s.indexOf(' ')+1));
+			lang.getEngineByExtension(s.substring(0, 3).trim()).eval(s.substring(s.indexOf(' ') + 1));
 		}
-		else
+		else if(s.startsWith("load "))
 		{
-			String s1 = s.substring(0,s.indexOf(' ')+1);
-			if(s1.length()==0)
+			System.out.println("-Unfinished.");//TODO
+		}
+		else if(s.startsWith("spawn "))
+		{
+			/*String sId = s.substring(s.indexOf(' ')+1);
+			sId.trim();
+			int iId = Integer.parseInt(sId);
+			Entity e = Snatch.getEntityById(iId, mojam.mouseButtons.getX() - mojam.player.xd, mojam.mouseButtons.getY() - mojam.player.yd);
+			level.addEntity(e);
+			System.out.println(e);
+			*/
+		}
+		else if(runConsole(s.substring(0, s.indexOf(' ') + 1).trim(), s.substring(s.indexOf(' ')+1).trim()))
+		{
+			String s1 = s.substring(0, s.indexOf(' ') + 1);
+			if(s1.length() == 0)
 			{
-				System.out.println("Error: Unknown Command: "+s);
-			} else {
-				System.out.println("Error: Unknown Command: "+s1);
+				System.out.println("Error: Unknown Command: " + s);
+			}
+			else
+			{
+				System.out.println("Error: Unknown Command: " + s1);
 			}
 		}
 	}

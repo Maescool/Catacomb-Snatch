@@ -99,12 +99,13 @@ public class Console implements Runnable, KeyListener
 		new Thread(console).start();
 	}
 
-	public static void main(String[] args)
+	public static JFrame main(String[] args)
 	{
 		textField.addKeyListener(new Console());
 		scrollPane.setMinimumSize(new Dimension(30, 400));
 
 		JFrame frame = new JFrame("Console Window");
+		//JFrame frame = (JFrame)Snatch.reflectField(Snatch.getMojam(),"guiFrame");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JSplitPane panes = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, scrollPane, textField);
 		panes.setDividerLocation(530);
@@ -115,7 +116,7 @@ public class Console implements Runnable, KeyListener
 		frame.setSize(300, 600);
 		frame.setVisible(true);
 
-		//Console.redirectOutput(textArea);
+		Console.redirectOutput(textArea);
 		final int i = 0;
 
 		Timer timer = new Timer(1000, new ActionListener()
@@ -127,6 +128,7 @@ public class Console implements Runnable, KeyListener
 			}
 		});
 		timer.start();
+		return frame;
 	}
 
 	@Override
@@ -134,13 +136,12 @@ public class Console implements Runnable, KeyListener
 	{
 		try
 		{
-			Snatch.console("echo Command: "+command);
 			if(event.getKeyCode() == KeyEvent.VK_ENTER)
 			{
 				//command = textField.getText();
 				Snatch.console(textField.getText());
 				commands.add(textField.getText());
-				System.out.println("Console: " + textField.getText());
+				//System.out.println("Console: " + textField.getText());
 				//command = "";
 				textField.setText("");
 				scroll = commands.size();
