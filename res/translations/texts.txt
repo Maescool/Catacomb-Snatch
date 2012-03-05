@@ -71,6 +71,8 @@ keys.build = BUILD
 keys.upgrade = UPGRADE
 keys.chat = CHAT
 keys.weaponSlot = WEAPON SLOT {0}
+keys.cycleLeft = NEXT WEAPON
+keys.cycleRight = PREV WEAPON
 
 leveleditor.title = LEVEL EDITOR
 leveleditor.new = NEW
