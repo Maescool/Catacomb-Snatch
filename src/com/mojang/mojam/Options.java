@@ -11,8 +11,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Properties;
 
-import com.mojang.mojam.screen.Art;
-
 public class Options {
 	
     public static final String DRAW_FPS = "drawFps";

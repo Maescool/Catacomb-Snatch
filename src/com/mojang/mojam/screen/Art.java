@@ -33,7 +33,8 @@ public class Art {
 	public static Bitmap shadow = load("/art/shadows/shadow_coin.png");
 	public static Bitmap[][] rails = cut("/art/map/rails.png", 32, 38);
     public static Bitmap[][] spikes = cut("/art/map/spiketrap.png", 32, 32);
-
+    public static Bitmap[][] dropFloor = cut("/art/map/droptrap.png", 32, 32);
+    
     // Player sheets
 	private static Bitmap[][] lordLard = cut("/art/player/lord_lard_sheet.png", 32, 32);
 	private static Bitmap[][] herrSpeck = cut("/art/player/herr_von_speck_sheet.png", 32, 32);
@@ -157,6 +158,7 @@ public class Art {
 	// Bullets and special effects
 	public static Bitmap[][] bullets = cut("/art/effects/bullets.png", 16, 16);
 	public static Bitmap[][] bullet = cut("/art/effects/bullet.png", 16, 16);
+	public static Bitmap[][] bulletpoison = cut("/art/effects/bullet_poison.png", 16, 16);
 	public static Bitmap[][] muzzle = cut("/art/effects/muzzle.png", 16, 16);
 	public static Bitmap[][] fxEnemyDie = cut("/art/effects/fx_enemydie_64.png", 64, 64);
 	public static Bitmap[][] fxSteam24 = cut("/art/effects/fx_steam1_24.png", 24, 24);

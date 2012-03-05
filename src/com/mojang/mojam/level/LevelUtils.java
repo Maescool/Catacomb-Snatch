@@ -10,6 +10,11 @@ import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.entity.building.TurretTeamOne;
 import com.mojang.mojam.entity.building.TurretTeamTwo;
 import com.mojang.mojam.entity.loot.Loot;
+import com.mojang.mojam.entity.mob.Bat;
+import com.mojang.mojam.entity.mob.DropTrap;
+import com.mojang.mojam.entity.mob.Mummy;
+import com.mojang.mojam.entity.mob.Scarab;
+import com.mojang.mojam.entity.mob.Snake;
 import com.mojang.mojam.entity.mob.SpikeTrap;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.level.tile.DestroyableWallTile;
@@ -59,7 +64,10 @@ public class LevelUtils {
 		
 		Entity entity = null;
 		
-		switch (color) {			
+		switch (color) {
+		case DropTrap.COLOR:
+			entity = new DropTrap(x * Tile.WIDTH,y * Tile.HEIGHT);
+			break;
 		case SpikeTrap.COLOR:
 			entity = new SpikeTrap(x * Tile.WIDTH,y * Tile.HEIGHT);
 			break;
@@ -74,6 +82,18 @@ public class LevelUtils {
 			break;
 		case SpawnerForScarab.COLOR:
 			entity = new SpawnerForScarab(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
+			break;
+		case Bat.COLOR:
+			entity = new Bat(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
+			break;
+		case Snake.COLOR:
+			entity = new Snake(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
+			break;			
+		case Mummy.COLOR:
+			entity = new Mummy(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
+			break;
+		case Scarab.COLOR:
+			entity = new Scarab(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
 			break;
 		case Turret.COLOR:
 			entity = new Turret(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2,Team.Neutral);

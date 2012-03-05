@@ -8,7 +8,6 @@ import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.math.BBOwner;
-import com.mojang.mojam.math.Facing;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;

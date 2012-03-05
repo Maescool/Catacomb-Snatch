@@ -4,10 +4,11 @@ import java.util.Set;
 
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.level.DifficultyInformation;
+import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.tile.Tile;
 
 
-public abstract class HostileMob extends Mob {
+public abstract class HostileMob extends Mob  implements IEditable {
 
 	public HostileMob(double x, double y, int team) {
 		super(x, y, team);
@@ -18,8 +19,20 @@ public abstract class HostileMob extends Mob {
 		super.setStartHealth(DifficultyInformation.calculateHealth(newHealth));
 	}
 	
-	public int FaceEntity(double x, double y, double radius, Class<? extends Entity> c, int facing){
-        Set<Entity> entities = level.getEntities(pos.x - radius, pos.y - radius, pos.x + radius, pos.y + radius, c);
+	public int faceEntity(double x, double y, double radius, Class<? extends Entity> c, int facing){
+        Entity closest = checkIfNear(radius, c);
+        if (closest !=null) {
+            chasing=true;
+            double angle = Math.atan2((closest.pos.y - pos.y), (closest.pos.x - pos.x));
+            facing = (int) Math.abs(2*(angle+(3*Math.PI/4))/Math.PI) % 4; 
+        } else {
+        	chasing=false;
+        }
+        return facing;
+	}
+
+	public Entity checkIfNear(double radius, Class<? extends Entity> c) {
+		Set<Entity> entities = level.getEntities(pos.x - radius, pos.y - radius, pos.x + radius, pos.y + radius, c);
         Entity closest = null;
         double closestDist = 99999999.0f;
         for (Entity e : entities) {
@@ -29,15 +42,63 @@ public abstract class HostileMob extends Mob {
                 closest = e;
             }
         }
-        if (closest != null && !isTargetBehindWall(closest.pos.x, closest.pos.y, closest)) {
-            chasing=true;
-            double angle = Math.atan2((closest.pos.y - pos.y), (closest.pos.x - pos.x));
-            facing = (int) Math.abs(2*(angle+(3*Math.PI/4))/Math.PI) % 4; 
-        } else {
-        	chasing=false;
-        }
-        return facing;
+        
+        if(closest != null && !isTargetBehindWall(closest.pos.x, closest.pos.y, closest))
+        	return closest;
+        else 
+        	return null;
 	}
+	
+	public Entity checkIfInFront(double radius, Class<? extends Entity> c) {
+		double x0 = 0, y0 = 0, x1 = 0, y1 = 0;
+		
+		switch (facing) {
+        case 0:
+        	x0 = pos.x - (radius/2);
+        	x1 = pos.x + (radius/2);
+        	y0 = pos.y - radius;
+        	y1 = pos.y;
+            break;
+        case 1:
+            x0 = pos.x;
+            x1 =  pos.x + radius;
+            y0 = pos.y - (radius/2);
+        	y1 = pos.y + (radius/2);
+            break;
+        case 2:
+        	x0 = pos.x - (radius/2);
+         	x1 = pos.x + (radius/2);
+            y0 = pos.y;
+            y1 = pos.y + radius;
+            break;
+        case 3:
+        	x0 = pos.x - radius;
+            x1 = pos.x;
+            y0 = pos.y - (radius/2);
+        	y1 = pos.y + (radius/2);
+            break;
+    	}
+		
+		
+		Set<Entity> entities = level.getEntities(x0,y0,x1,y1,c);
+        Entity closest = null;
+        double closestDist = 99999999.0f;
+        for (Entity e : entities) {
+            final double dist = e.pos.distSqr(pos);
+            if (dist < closestDist) {
+                closestDist = dist;
+                closest = e;
+            }
+        }
+        
+        if(closest != null && !isTargetBehindWall(closest.pos.x, closest.pos.y, closest))
+        	return closest;
+        else 
+        	return null;
+	}
+	
+	
+	
 	public void tick() {	
 		super.tick();
 		Tile thisTile = level.getTile((int)pos.x/Tile.WIDTH, (int)pos.y/Tile.HEIGHT);
