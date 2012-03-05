@@ -20,6 +20,7 @@ import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.entity.particle.Sparkle;
 import com.mojang.mojam.entity.weapon.IWeapon;
 import com.mojang.mojam.entity.weapon.Rifle;
+import com.mojang.mojam.entity.weapon.WeaponInventory;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.level.tile.RailTile;
 import com.mojang.mojam.level.tile.Tile;
@@ -77,6 +78,10 @@ public class Player extends Mob implements LootCollector {
     boolean isImmortal;
     private GameCharacter character;
 
+    public WeaponInventory weaponInventory = new WeaponInventory();
+    private int weaponSlot = 0;
+    private boolean isWeaponChanged = false;
+    
     /**
      * Constructor
      * 
@@ -103,7 +108,9 @@ public class Player extends Mob implements LootCollector {
         maxTimeSprint = 100;
         aimVector = new Vec2(0, 1);
         score = 0;
-        weapon = new Rifle(this);
+        
+        weaponInventory.add(new Rifle(this));
+        weapon = weaponInventory.get(weaponSlot);
         setRailPricesAndImmortality();
     }
     
@@ -232,6 +239,7 @@ public class Player extends Mob implements LootCollector {
             updateFacing();
         }
         
+        
         if (!mouseAiming && fireKeyIsDown() && xaShot * xaShot + yaShot * yaShot != 0) {
             aimVector.set(xaShot, yaShot);
             aimVector.normalizeSelf();
@@ -257,6 +265,7 @@ public class Player extends Mob implements LootCollector {
         muzzleImage = (muzzleImage + 1) & 3;
 
         handleWeaponFire(xa, ya);
+        handleWeaponSelection();
 
         int x = (int) pos.x / Tile.WIDTH;
         int y = (int) pos.y / Tile.HEIGHT;
@@ -436,6 +445,35 @@ public class Player extends Mob implements LootCollector {
             wasShooting = false;
             takeDelay = 15;
         }
+    }
+    
+    private void handleWeaponSelection() {
+        //Weapon selection
+    	int prevWeaponSlot = weaponSlot;
+        if (keys.weaponSlot1.wasPressed()) {
+        	weaponSlot = 0;
+        }
+        if (keys.weaponSlot2.wasPressed()) {
+        	weaponSlot = 1;
+        }
+        if (keys.weaponSlot3.wasPressed()) {
+        	weaponSlot = 2;
+        }
+        if (prevWeaponSlot != weaponSlot) {
+        	isWeaponChanged = true;
+        }
+    	if (isWeaponChanged) {
+    		IWeapon weapon = weaponInventory.get(weaponSlot);
+    		if(weapon != null) {
+    			this.weapon = weapon;
+    		}
+    		else {
+            	if(this.team == MojamComponent.localTeam) {
+            		Notifications.getInstance().add(MojamComponent.texts.buildDroid(COST_DROID));
+            	}
+    		}
+    		isWeaponChanged = false;
+    	}
     }
     
     /**

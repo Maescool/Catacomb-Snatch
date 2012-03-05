@@ -14,7 +14,6 @@ public class Shotgun extends Rifle {
 
 	private static float BULLET_DAMAGE;
 	
-	private int upgradeIndex = 1;
 	private double accuracy;
 	private int shootDelay = 35;
 	private int knockBack = 7;
@@ -27,6 +26,7 @@ public class Shotgun extends Rifle {
 		super(owner);
 	}
 	
+	@Override
 	public void setWeaponMode(){
 		if(Options.getAsBoolean(Options.CREATIVE)){
 			BULLET_DAMAGE = 100.0f;
@@ -35,11 +35,6 @@ public class Shotgun extends Rifle {
 			BULLET_DAMAGE = 4.5f;
 			accuracy = 0.06;
 		}
-	}
-	
-	@Override
-	public void upgradeWeapon() {
-		upgradeIndex++;
 	}
 
 	@Override
@@ -109,10 +104,4 @@ public class Shotgun extends Rifle {
 		Bullet bullet = new BulletBuckshot(owner, xDir, yDir, BULLET_DAMAGE);
 		return bullet;
 	}
-	
-	@Override
-	public void setOwner(Mob mob) {
-		this.owner = mob;
-	}
-
 }

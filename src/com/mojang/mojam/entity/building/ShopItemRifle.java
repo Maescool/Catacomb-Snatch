@@ -1,7 +1,9 @@
 package com.mojang.mojam.entity.building;
 
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.weapon.Rifle;
+import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.screen.Art;
 
 public class ShopItemRifle extends ShopItem {
@@ -15,6 +17,10 @@ public class ShopItemRifle extends ShopItem {
 
     
     public void useAction(Player player) {
-    	player.weapon = new Rifle(player);
+    	if(!player.weaponInventory.add(new Rifle(player))) {
+        	if(this.team == MojamComponent.localTeam) {
+        		Notifications.getInstance().add(MojamComponent.texts.buildDroid(0));
+        	}
+    	}
 	}
 }

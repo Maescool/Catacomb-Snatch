@@ -106,4 +106,10 @@ public class Rifle implements IWeapon {
 		this.owner = mob;
 	}
 
+	@Override
+	public boolean equals(Object other) {
+		if(other.getClass() == this.getClass()) return true;
+		return false;
+	}
+	
 }
