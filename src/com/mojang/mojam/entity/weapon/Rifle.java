@@ -7,16 +7,17 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.network.TurnSynchronizer;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
 
 public class Rifle implements IWeapon {
 
 	protected Mob owner;
 	protected static float BULLET_DAMAGE;
-	
-	private int upgradeIndex = 1;
+	protected Bitmap image;
+	protected int upgradeIndex = 1;
 	protected double accuracy;
 	protected int shootDelay = 5;
-	
 	private boolean readyToShoot = true;
 	private int currentShootDelay = 0;	
 	
@@ -24,6 +25,7 @@ public class Rifle implements IWeapon {
 		setOwner(mob);
 		
 		setWeaponMode();
+		image = Art.weaponList[0][0];
 		
 		if(mob.isSprint)
 			shootDelay *= 3;
@@ -100,6 +102,11 @@ public class Rifle implements IWeapon {
 		owner.xd -= xDir * strength;
 		owner.yd -= yDir * strength;
 	}
+	
+	@Override
+	public Bitmap getSprite() {
+		return image;
+	}
 
 	@Override
 	public void setOwner(Mob mob) {
@@ -111,6 +118,8 @@ public class Rifle implements IWeapon {
 		if(other.getClass() == this.getClass()) return true;
 		return false;
 	}
+	
+	
 	
 }
 

@@ -32,6 +32,7 @@ gameplay.player4Name = COUNTESS CRULLER
 gameplay.FPS = FPS: {0}
 gameplay.latency = LATENCY: {0}
 gameplay.cantPickup = YOU CAN NOT PICK THAT UP!
+gameplay.weaponAlready = YOU ALREADY HAVE THAT WEAPON!
 
 help.goal = GOAL
 help.help1 = COLLECT 50 BATCHES OF TREASURE
@@ -69,6 +70,7 @@ keys.use = USE
 keys.build = BUILD
 keys.upgrade = UPGRADE
 keys.chat = CHAT
+keys.weaponSlot = WEAPON SLOT {0}
 
 leveleditor.title = LEVEL EDITOR
 leveleditor.new = NEW
@@ -127,6 +129,7 @@ player.money = {0}
 player.nextLevel = {0}
 player.exp = {0}
 player.level = {0}
+player.weaponSlot = {0}
 
 local.en = ENGLISH
 local.de = GERMAN

@@ -1,17 +1,17 @@
 package com.mojang.mojam.entity.weapon;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class WeaponInventory {
 
-	private List<IWeapon> weaponList;
+	private LinkedList<IWeapon> weaponList;
 	/**
 	 * A list of the players current weapon(s). Can contain only one instance of each weapon
 	 */
 	
 	public WeaponInventory() {
-		weaponList = new ArrayList<IWeapon>();
+		weaponList = new LinkedList<IWeapon>();
 	}
 	
 	/**
@@ -49,4 +49,18 @@ public class WeaponInventory {
 		weaponList.clear();
 	}
 	
+	
+	public void cycleLeft() {
+		if(!weaponList.isEmpty()) {
+			IWeapon head = weaponList.pollFirst();
+			weaponList.addLast(head);
+		}
+	}
+	
+	public void cycleRight() {
+		if(!weaponList.isEmpty()) {
+			IWeapon tail = weaponList.pollLast();
+			weaponList.addFirst(tail);
+		}
+	}
 }

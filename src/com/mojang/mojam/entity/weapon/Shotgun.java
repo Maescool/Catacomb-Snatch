@@ -9,6 +9,7 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.network.TurnSynchronizer;
+import com.mojang.mojam.screen.Art;
 
 public class Shotgun extends Rifle {
 
@@ -24,6 +25,7 @@ public class Shotgun extends Rifle {
 	
 	public Shotgun(Mob owner) {
 		super(owner);
+		image = Art.weaponList[1][0];
 	}
 	
 	@Override

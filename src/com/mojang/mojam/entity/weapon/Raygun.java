@@ -4,11 +4,13 @@ import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.BulletRay;
 import com.mojang.mojam.entity.mob.Mob;
+import com.mojang.mojam.screen.Art;
 
 public class Raygun extends Rifle {
 
 	public Raygun(Mob owner) {
 		super(owner);
+		image = Art.weaponList[2][0];
 	}
 	
 	@Override

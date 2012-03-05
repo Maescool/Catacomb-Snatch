@@ -37,6 +37,8 @@ public class InputHandler implements KeyListener {
 		initKey(keys.weaponSlot1, KeyEvent.VK_1);
 		initKey(keys.weaponSlot2, KeyEvent.VK_2);
 		initKey(keys.weaponSlot3, KeyEvent.VK_3);
+		initKey(keys.cycleLeft, KeyEvent.VK_Z);
+		initKey(keys.cycleRight, KeyEvent.VK_X);
 		
 	}
 

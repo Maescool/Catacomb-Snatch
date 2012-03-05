@@ -79,7 +79,7 @@ public class Player extends Mob implements LootCollector {
     private GameCharacter character;
 
     public WeaponInventory weaponInventory = new WeaponInventory();
-    private int weaponSlot = 0;
+    public int weaponSlot = 0;
     private boolean isWeaponChanged = false;
     
     /**
@@ -458,6 +458,14 @@ public class Player extends Mob implements LootCollector {
         }
         if (keys.weaponSlot3.wasPressed()) {
         	weaponSlot = 2;
+        }
+        if (keys.cycleLeft.wasPressed()) {
+        	weaponInventory.cycleLeft();
+        	isWeaponChanged = true;
+        }
+        if (keys.cycleRight.wasPressed()) {
+        	weaponInventory.cycleRight();
+        	isWeaponChanged = true;
         }
         if (prevWeaponSlot != weaponSlot) {
         	isWeaponChanged = true;
