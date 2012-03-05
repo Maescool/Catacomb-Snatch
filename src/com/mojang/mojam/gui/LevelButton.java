@@ -3,6 +3,7 @@ package com.mojang.mojam.gui;
 import java.io.IOException;
 import java.util.Random;
 
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
@@ -18,16 +19,19 @@ public class LevelButton extends ClickableComponent {
 
 	public static final int WIDTH = 140;
 	public static final int HEIGHT = 84;
+	public static final int MAXDIM = 64;
 
 	private int id;
-	private Bitmap minimap;
+	private Bitmap minimap, displaymap;
 
     private final int MAX_LABEL_LENGTH = 15;
     
     private final String levelName;
 
+    private boolean largeMap;
 	private boolean isActive = false;
-
+	private int xScroll, yScroll;
+	
 	// Background bitmaps for pressed/unpressed/inactive state
 	private static Bitmap background[] = new Bitmap[3];
 	
@@ -59,6 +63,7 @@ public class LevelButton extends ClickableComponent {
 		this.levelName = levelInfo.levelName;
 
 		buildMinimap(levelInfo);
+		redrawDisplaymap();
 	}
 
 	/**
@@ -84,7 +89,9 @@ public class LevelButton extends ClickableComponent {
 		
 		// Render the level minimap into a bitmap
 		minimap = new Bitmap(w, h);
-
+		largeMap = w > MAXDIM || h > MAXDIM;
+		displaymap = new Bitmap(MAXDIM, MAXDIM);
+		
 		for (int y = 0; y < h; y++) {
 			for (int x = 0; x < w; x++) {
 				minimap.pixels[x + (y * w)] = l.getTile(x, y).minimapColor;
@@ -108,14 +115,55 @@ public class LevelButton extends ClickableComponent {
 		
 		// Render minimap
 		if (minimap != null) {
-			screen.blit(minimap, getX() + (getWidth() - minimap.w) / 2, getY() + 4);
-
+			screen.blit(largeMap ? displaymap : minimap, getX() + (getWidth() - MAXDIM) / 2, getY() + 4, MAXDIM, MAXDIM);
+			
 			// map name
 			Font.defaultFont().draw(screen, trimToFitButton(levelName), getX() + getWidth() / 2,
-					getY() + 4 + minimap.h + 8, Font.Align.CENTERED);
+					getY() + 4 + MAXDIM + 8, Font.Align.CENTERED);
 		} else {
 			Font.FONT_RED.draw(screen, trimToFitButton(levelName), getX() + getWidth() / 2,
 					getY() + 4 + 32, Font.Align.CENTERED);
+		}
+	}
+	
+	public void redrawDisplaymap(){
+		if(!largeMap) return;
+
+		for (int y = 0; y < MAXDIM; y++) {
+			for (int x = 0; x < MAXDIM; x++) {
+				displaymap.pixels[x + y * MAXDIM] = minimap.pixels[(x + xScroll) + (y + yScroll) * minimap.w];
+			}
+		}
+	}
+
+	@Override
+	public void tick(MouseButtons mb){
+		super.tick(mb);
+		int relx = mb.getX() / 2 - (getX() + (getWidth() - MAXDIM) / 2);
+		int rely = mb.getY() / 2 - (getY() + 4);
+		boolean changed = false;
+		if(relx > 0 && rely > 0 && relx < MAXDIM && rely < MAXDIM){
+			int i = 18;
+			int j = 1;
+			if(relx < i){
+				xScroll -= j;
+				changed = true;
+			} else if(relx > MAXDIM-i){
+				xScroll += j;
+				changed = true;
+			}
+			if(rely < i){
+				yScroll -= j;
+				changed = true;
+			} else if(rely > MAXDIM-i){
+				yScroll += j;
+				changed = true;
+			}
+		}
+		if(changed) {
+			xScroll = MojamComponent.clampi(xScroll, 0, minimap.w-MAXDIM);
+			yScroll = MojamComponent.clampi(yScroll, 0, minimap.h-MAXDIM);
+			redrawDisplaymap();
 		}
 	}
 

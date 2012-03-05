@@ -13,6 +13,7 @@ import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.mob.Bat;
 import com.mojang.mojam.entity.mob.DropTrap;
 import com.mojang.mojam.entity.mob.Mummy;
+import com.mojang.mojam.entity.mob.Pharao;
 import com.mojang.mojam.entity.mob.Scarab;
 import com.mojang.mojam.entity.mob.Snake;
 import com.mojang.mojam.entity.mob.SpikeTrap;
@@ -98,7 +99,10 @@ public class LevelUtils {
 		case Mummy.COLOR:
 			entity = new Mummy(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
 			break;
-		case Scarab.COLOR:
+		case Pharao.COLOR:
+            entity = new Pharao(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
+            break;
+        case Scarab.COLOR:
 			entity = new Scarab(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
 			break;
 		case Turret.COLOR:

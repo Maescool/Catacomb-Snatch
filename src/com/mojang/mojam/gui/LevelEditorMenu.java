@@ -23,6 +23,7 @@ import com.mojang.mojam.entity.building.TurretTeamOne;
 import com.mojang.mojam.entity.building.TurretTeamTwo;
 import com.mojang.mojam.entity.mob.Bat;
 import com.mojang.mojam.entity.mob.Mummy;
+import com.mojang.mojam.entity.mob.Pharao;
 import com.mojang.mojam.entity.mob.Scarab;
 import com.mojang.mojam.entity.mob.Snake;
 import com.mojang.mojam.entity.mob.SpikeTrap;
@@ -84,8 +85,8 @@ public class LevelEditorMenu extends GuiMenu {
         new Bat(0,0),
         new Snake(0,0),
         new Mummy(0,0),
-        new Scarab(0,0)
-        
+        new Scarab(0,0),
+        new Pharao(0,0)
     };
     
     private final int buttonsPerPage = 12;

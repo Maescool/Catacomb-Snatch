@@ -46,10 +46,14 @@ public class Button extends ClickableComponent {
 	@Override
 	public void render(Screen screen) {
 
-		if (isPressed()) {
-		    blitBackground(screen, 1);
+		if(enabled){
+			if (isPressed()) {
+			    blitBackground(screen, 1);
+			} else {
+			    blitBackground(screen, 0);
+			}
 		} else {
-		    blitBackground(screen, 0);
+			blitBackground(screen, 2);
 		}
 		Font.defaultFont().draw(screen, label, getX() + getWidth() / 2, getY() + getHeight() / 2, Font.Align.CENTERED);
 	}

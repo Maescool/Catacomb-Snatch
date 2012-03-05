@@ -12,12 +12,9 @@ public class Bat extends HostileMob  {
 	public Bat(double x, double y) {
 		super(x, y, Team.Neutral);
 		setPos(x, y);
-		setStartHealth(1);
 		dir = TurnSynchronizer.synchedRandom.nextDouble() * Math.PI * 2;
 		minimapColor = 0xffff0000;
 		yOffs = 5;
-		deathPoints = 1;
-		strength = 1;
 	}
 
 	public void tick() {
