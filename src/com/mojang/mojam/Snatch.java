@@ -54,7 +54,7 @@ public final class Snatch
 	private static boolean init = false;
 	public static File modDir;
 	public static File modsFolder;
-	public static List<Mod> modList = new ArrayList<Mod>();
+	public static List<IMod> modList = new ArrayList<IMod>();
 	public static List<ScriptEngine> scriptList = new ArrayList<ScriptEngine>();
 	private static MojamComponent mojam;
 	private static InputHandler inputHandler;
@@ -218,7 +218,7 @@ public final class Snatch
 		return mojam;
 	}
 
-	private static Mod addMod(ClassLoader classloader, String s)
+	private static IMod addMod(ClassLoader classloader, String s)
 	{
 		try
 		{
@@ -229,11 +229,11 @@ public final class Snatch
 				s1 = (new StringBuilder(String.valueOf(package1.getName()))).append(".").append(s1.substring(s.lastIndexOf('/') + 1)).toString();
 			}
 			Class class1 = classloader.loadClass(s1);
-			if(!(Mod.class).isAssignableFrom(class1))
+			if(!(IMod.class).isAssignableFrom(class1))
 			{
 				return null;
 			}
-			Mod mod = (Mod) class1.newInstance();
+			IMod mod = (IMod) class1.newInstance();
 			if(mod != null)
 			{
 				modList.add(mod);
@@ -425,7 +425,7 @@ public final class Snatch
 
 	public static Entity getEntityById(int i, double x, double y)
 	{
-		for(Mod m : modList)
+		for(IMod m : modList)
 		{
 			Entity e = m.getEntityInstanceById(i, x, y);
 			if(e != null) return e;
@@ -743,7 +743,7 @@ public final class Snatch
 
 	public static void afterRender()
 	{
-		for(Mod m : modList)
+		for(IMod m : modList)
 		{
 			m.OnRender();
 		}
@@ -752,7 +752,7 @@ public final class Snatch
 
 	public static void startRender()
 	{
-		for(Mod m : modList)
+		for(IMod m : modList)
 		{
 			m.OnStartRender();
 		}
@@ -761,7 +761,7 @@ public final class Snatch
 
 	public static void afterTick()
 	{
-		for(Mod m : modList)
+		for(IMod m : modList)
 		{
 			m.AfterTick();
 		}
@@ -770,7 +770,7 @@ public final class Snatch
 
 	public static void runOnce()
 	{
-		for(Mod m : modList)
+		for(IMod m : modList)
 		{
 			m.RunOnce();
 		}
@@ -779,7 +779,7 @@ public final class Snatch
 
 	public static void createLevel(Level level)
 	{
-		for(Mod m : modList)
+		for(IMod m : modList)
 		{
 			m.CreateLevel(level);
 		}
@@ -788,7 +788,7 @@ public final class Snatch
 
 	public static void onStop()
 	{
-		for(Mod m : modList)
+		for(IMod m : modList)
 		{
 			m.OnClose();
 		}
@@ -797,7 +797,7 @@ public final class Snatch
 
 	public static void onWin(int i)
 	{
-		for(Mod m : modList)
+		for(IMod m : modList)
 		{
 			m.OnVictory(i);
 		}
@@ -806,7 +806,7 @@ public final class Snatch
 
 	public static void levelTick(Level level)
 	{
-		for(Mod m : modList)
+		for(IMod m : modList)
 		{
 			m.OnLevelTick(level);
 		}
@@ -815,7 +815,7 @@ public final class Snatch
 
 	public static void updateTick()
 	{
-		for(Mod m : modList)
+		for(IMod m : modList)
 		{
 			m.OnTick();
 		}
@@ -824,7 +824,7 @@ public final class Snatch
 
 	public static void sendPacket(Packet packet)
 	{
-		for(Mod m : modList)
+		for(IMod m : modList)
 		{
 			m.OnSendPacket(packet);
 		}
@@ -833,7 +833,7 @@ public final class Snatch
 
 	public static void receivePacket(Packet packet)
 	{
-		for(Mod m : modList)
+		for(IMod m : modList)
 		{
 			m.OnReceivePacket(packet);
 		}
@@ -842,7 +842,7 @@ public final class Snatch
 
 	public static void handlePacket(Packet packet)
 	{
-		for(Mod m : modList)
+		for(IMod m : modList)
 		{
 			m.HandlePacket(packet);
 		}
@@ -1025,28 +1025,14 @@ public final class Snatch
 			Key key = mojam.synchedKeys[playerId].getAll().get(ckc.getKey());
 			if(key.isDown)
 			{
-				if(!key.nextState)
-				{
-					for(Mod m : modList)
-					{
-						m.OnKeyReleased(key);
-					}
-				}
-				for(Mod m : modList)
+				for(IMod m : modList)
 				{
 					m.IfKeyDown(key);
 				}
 			}
 			else
 			{
-				if(key.nextState)
-				{
-					for(Mod m : modList)
-					{
-						m.OnKeyPressed(key);
-					}
-				}
-				for(Mod m : modList)
+				for(IMod m : modList)
 				{
 					m.IfKeyUp(key);
 				}
@@ -1060,7 +1046,7 @@ public final class Snatch
 		{
 			System.out.println(s.substring(5));
 		}
-		if(s.startsWith("exit"))
+		else if(s.startsWith("exit"))
 		{
 			try{
 				System.exit(Integer.parseInt(s.substring(5)));
@@ -1069,7 +1055,7 @@ public final class Snatch
 				System.exit(1);
 			}
 		}
-		if(s.startsWith("js ")||s.startsWith("py ")||s.startsWith("rb ")||s.startsWith("lua "))
+		else if(s.startsWith("js ")||s.startsWith("py ")||s.startsWith("rb ")||s.startsWith("lua "))
 		{
 			lang.getEngineByExtension(s.substring(0, 3).trim()).eval(s.substring(s.indexOf(' '+1)));
 		}

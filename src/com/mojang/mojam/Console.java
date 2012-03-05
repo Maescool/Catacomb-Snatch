@@ -33,6 +33,7 @@ public class Console implements Runnable, KeyListener
 	public static JTextArea textArea = new JTextArea();
 	public static JScrollPane scrollPane = new JScrollPane(textArea);
 	public static JTextField textField = new JTextField();
+	static int scroll = 0;
 
 	Console()
 	{
@@ -99,11 +100,11 @@ public class Console implements Runnable, KeyListener
 	}
 
 	public static void main(String[] args)
-	{		
+	{
 		textField.addKeyListener(new Console());
 		scrollPane.setMinimumSize(new Dimension(30, 400));
 
-		JFrame frame = new JFrame("Redirected Output");
+		JFrame frame = new JFrame("Console Window");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JSplitPane panes = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, scrollPane, textField);
 		panes.setDividerLocation(530);
@@ -131,14 +132,42 @@ public class Console implements Runnable, KeyListener
 	@Override
 	public void keyPressed(KeyEvent event)
 	{
-		if(event.getKeyCode() == KeyEvent.VK_ENTER) try
+		try
 		{
-			command = textField.getText();
-			Snatch.console(command);
-			commands.add(command);
-			System.out.println("Console: " + command);
-			command = "";
-			textField.setText("");
+			Snatch.console("echo Command: "+command);
+			if(event.getKeyCode() == KeyEvent.VK_ENTER)
+			{
+				//command = textField.getText();
+				Snatch.console(textField.getText());
+				commands.add(textField.getText());
+				System.out.println("Console: " + textField.getText());
+				//command = "";
+				textField.setText("");
+				scroll = commands.size();
+				return;
+			}
+			if(event.getKeyCode() == KeyEvent.VK_UP && scroll > 0)
+			{
+				scroll--;
+				textField.setText(commands.get(scroll));
+				return;
+			}
+			if(event.getKeyCode() == KeyEvent.VK_DOWN && scroll < commands.size() - 1)
+			{
+				scroll++;
+				textField.setText(commands.get(scroll));
+				return;
+			}
+			if(event.getKeyCode() == KeyEvent.VK_DOWN && scroll < commands.size())
+			{
+				textField.setText(command);
+				return;
+			}
+			if(event.getKeyCode() != KeyEvent.VK_DOWN && event.getKeyCode() != KeyEvent.VK_UP)
+			{
+				command = textField.getText();
+			}
+			
 		}
 		catch (Exception e)
 		{
