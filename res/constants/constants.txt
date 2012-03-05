@@ -1,0 +1,21 @@
+options.locale_af = AFRIKAANS
+options.locale_de = DEUTSCH
+options.locale_en = ENGLISH
+options.locale_es = ESPAÑOL
+options.locale_fr = FRANÇAIS
+options.locale_ind = INDONESIA
+options.locale_it = ITALIANO
+options.locale_nl = NEDERLANDS
+options.locale_pt_br = PORTUGUÊS
+options.locale_ru = РУССКИЙ
+options.locale_sl = SLOVENSKI
+options.locale_sv = SVENSKT
+
+mob.bat.deathPoints=1
+mob.bat.strength=1
+mob.mummy.deathPoints=4
+mob.mummy.strength=2
+mob.scarab.deathPoints=4
+mob.scarab.strength=2
+mob.snake.deathPoints=2
+mob.snake.strength=1

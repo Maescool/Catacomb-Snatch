@@ -1,5 +1,6 @@
 package com.mojang.mojam.entity.mob;
 
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
@@ -15,8 +16,8 @@ public class Scarab extends HostileMob {
 		minimapColor = 0xffff0000;
 		yOffs = 10;
 		facing = TurnSynchronizer.synchedRandom.nextInt(4);
-		deathPoints = 4;
-		strength = 2;
+		deathPoints = MojamComponent.constants.getInt("mob.scarab.deathPoints");
+		strength = MojamComponent.constants.getInt("mob.scarab.strength");
 		speed = 0.7;
 		limp = 4;
 	}

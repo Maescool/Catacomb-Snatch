@@ -1,5 +1,6 @@
 package com.mojang.mojam.entity.mob;
 
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.weapon.VenomShooter;
 import com.mojang.mojam.network.TurnSynchronizer;
@@ -20,8 +21,8 @@ public class Snake extends HostileMob {
 		minimapColor = 0xffff0000;
 		yOffs = 10;
 		facing = TurnSynchronizer.synchedRandom.nextInt(4);
-		deathPoints = 2;
-		strength = 1;
+		deathPoints = MojamComponent.constants.getInt("mob.snake.deathPoints");
+		strength = MojamComponent.constants.getInt("mob.snake.strength");
 		speed=1.5;
 		limp = 4;
 		weapon = new VenomShooter(this);
