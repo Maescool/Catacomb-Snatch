@@ -3,8 +3,8 @@ package com.mojang.mojam.gui;
 import java.awt.event.KeyEvent;
 
 import com.mojang.mojam.MojamComponent;
-import com.mojang.mojam.screen.Screen;
 import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Screen;
 
 public class JoinGameMenu extends GuiMenu {
 
@@ -23,8 +23,8 @@ public class JoinGameMenu extends GuiMenu {
 
 		screen.clear(0);
 		screen.blit(Art.emptyBackground, 0, 0);
-		Font.draw(screen, MojamComponent.texts.getStatic("mp.enterIP"), 100, 100);
-		Font.draw(screen, TitleMenu.ip + "-", 100, 120);
+		Font.defaultFont().draw(screen, MojamComponent.texts.getStatic("mp.enterIP"), 100, 100);
+		Font.defaultFont().draw(screen, TitleMenu.ip + "-", 100, 120);
 
 		super.render(screen);
 	}
@@ -32,11 +32,14 @@ public class JoinGameMenu extends GuiMenu {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// Start on Enter, Cancel on Escape
-		if ((e.getKeyChar() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) && TitleMenu.ip.length() > 0) {
-			joinButton.postClick();
-		}
-		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			cancelButton.postClick();
+		if ((e.getKeyChar() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E)) {
+			if (TitleMenu.ip.length() > 0) {
+				joinButton.postClick();
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			cancelButton.postClick();	
+		} else {
+			super.keyPressed(e);
 		}
 	}
 
@@ -49,14 +52,13 @@ public class JoinGameMenu extends GuiMenu {
 
 		if (e.getKeyChar() == KeyEvent.VK_BACK_SPACE && TitleMenu.ip.length() > 0) {
 			TitleMenu.ip = TitleMenu.ip.substring(0, TitleMenu.ip.length() - 1);
-		} else if (Font.letters.indexOf(Character.toUpperCase(e.getKeyChar())) >= 0) {
+		} else {
 			TitleMenu.ip += e.getKeyChar();
 		}
 	}
 
 	@Override
 	public void buttonPressed(ClickableComponent button) {
-		// nothing
 	}
 
 }

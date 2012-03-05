@@ -4,99 +4,140 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
-import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.level.DifficultyInformation;
-import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
-public class ShopItem extends Building {
-
-    private int facing = 0;
-    public static final int SHOP_TURRET = 0;
-    public static final int SHOP_HARVESTER = 1;
-    public static final int SHOP_BOMB = 2;
-    public static final int[] COST = {150, 300, 500};
-    private final int type;
+/**
+ * Generic shop item, available from the players base
+ */
+public abstract class ShopItem extends Building {
+	
+	private final String name;
+	private Bitmap image;
+    private final int cost;
     private int effectiveCost;
-    
+   
 
-    public ShopItem(double x, double y, int type, int team, int localTeam) {
-        super(x, y, team, localTeam);
-        this.type = type;
+    public ShopItem(String name, double x, double y, int team, int cost, int yOffset) {
+        super(x, y, team);
+        this.name = name;
+        //Set building cost depending if creative mode is on or not
+    	this.cost = (Options.getAsBoolean(Options.CREATIVE)) ? 0:cost;
+    	yOffs = yOffset;
+    	image = null;
         isImmortal = true;
-        if (team == Team.Team1) {
-            facing = 4;   
-        }
-        setBuildingCost();
     }
-    public void setBuildingCost(){
-    	if(Player.creative == true){
-    		COST[0] = 0;
-    		COST[1] = 0;
-    		COST[2] = 0;
-    	}else{
-    		COST[0] = 150;
-    		COST[1] = 300;
-    		COST[2] = 500;
-    	}
-    }
+
 
     @Override
     public void render(Screen screen) {
         super.render(screen);
-        // Bitmap image = getSprite();
-        Font.drawCentered(screen, MojamComponent.texts.cost(effectiveCost), (int) (pos.x), (int) (pos.y + 10));
+        if(team == MojamComponent.localTeam) {
+        	//Render the Cost text
+            Font.defaultFont().draw(screen, MojamComponent.texts.cost(effectiveCost),
+            		(int) (pos.x), (int) (pos.y + 10), Font.Align.CENTERED);
+        }
+        renderInfo(screen);
     }
+    
+	/**
+	 * Render the shop info text onto the given screen
+	 * 
+	 * @param screen
+	 *            Screen
+	 */
+	protected void renderInfo(Screen screen) {
+		// Draw iiAtlas' shop item info graphics, thanks whoever re-wrote this!
+		if (highlight) {
+		        Bitmap image = getSprite();
+		        int teamYOffset = (team == 2) ? 90 : 0;
+		        
+		        String[] tooltip = this.getTooltip();
+		        int width = getLongestWidth(tooltip, Font.FONT_WHITE_SMALL)+4;
+		        int height = tooltip.length*(Font.FONT_GOLD_SMALL.getFontHeight()+3);
+		        
+		        Font font = Font.FONT_GOLD_SMALL;
+		        screen.blit(Bitmap.tooltipBitmap(width, height),
+                        (int)(pos.x - image.w / 2 - 10),
+                        (int)(pos.y + 20 - teamYOffset), width, height);
 
+		        for (int i=0; i<tooltip.length; i++) {
+		            font.draw(screen, tooltip[i], (int)(pos.x - image.w + 8), (int)pos.y + 22 - teamYOffset + (i==0?0:1) + i*(font.getFontHeight()+2));
+		            font = Font.FONT_WHITE_SMALL;
+		        }
+		}
+	}
+    
+    private String[] getTooltip() {
+        return MojamComponent.texts.shopTooltipLines(name);
+    }
+	
+	private int getLongestWidth(String[] string, Font font) {
+		int res = 0;
+		for ( String s : string ) {
+			int w = font.calculateStringWidth(s.trim());
+			res = w > res ? w : res;
+		}
+		return res;
+	}
+
+    @Override
     public void init() {
-        effectiveCost = DifficultyInformation.calculateCosts(COST[type]);
+        effectiveCost = DifficultyInformation.calculateCosts(cost);
     }
 
+    @Override
     public void tick() {
         super.tick();
     }
 
+    @Override
     public Bitmap getSprite() {
-        switch (type) {
-            case SHOP_TURRET:
-                return Art.turret[facing][0];
-            case SHOP_HARVESTER:
-                return Art.harvester[facing][0];
-            case SHOP_BOMB:
-                return Art.bomb;
-        }
-        return Art.turret[facing][0];
+    	return image;
+    }
+    
+    public void setSprite(Bitmap shopItemImage) {
+    	image = shopItemImage;
     }
 
+    /**
+     * Action to take when when item is used. 
+     * For most cases use useAction instead.
+     */
     @Override
     public void use(Entity user) {
         if (user instanceof Player && ((Player) user).getTeam() == team) {
             Player player = (Player) user;
             if (!player.isCarrying() && player.getScore() >= effectiveCost) {
-                player.payCost(effectiveCost);
-                Building item = null;
-                switch (type) {
-                    case SHOP_TURRET:
-                        item = new Turret(pos.x, pos.y, team,localTeam);
-                        break;
-                    case SHOP_HARVESTER:
-                        item = new Harvester(pos.x, pos.y, team, localTeam);
-                        break;
-                    case SHOP_BOMB:
-                        item = new Bomb(pos.x, pos.y, localTeam);
-                        break;
-                }
-                level.addEntity(item);
-                player.pickup(item);
-            } else if (player.getScore() < effectiveCost) {
-            	if(this.team == this.localTeam) {
+            	player.payCost(effectiveCost);
+            	useAction(player);
+            }
+            else if (player.getScore() < effectiveCost) {
+            	if(this.team == MojamComponent.localTeam) {
             		 Notifications.getInstance().add(MojamComponent.texts.upgradeNotEnoughMoney(effectiveCost));
             	}
                
             }
         }
     }
+    
+    /**
+     * Action to take when the user uses the ShopItem after 
+     * cost has been deducted. Should be used in most cases Override 
+     * use() if greater flexibility is needed
+     */
+    abstract void useAction(Player player);
+    
+    @Override
+    public boolean upgrade(Player p) {
+        if (this.team == MojamComponent.localTeam) {
+            Notifications.getInstance().add(
+                    MojamComponent.texts.getStatic("upgrade.shopItem"));
+        }
+        return false;
+    }   
+
 }

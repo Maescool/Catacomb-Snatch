@@ -24,8 +24,8 @@ public class Button extends ClickableComponent {
 		this.label = label;
 	}
 
-    public Button(int id, String label, int x, int y, int w) {
-        super(x, y, w, BUTTON_HEIGHT);
+    public Button(int id, String label, int x, int y, int w, int h) {
+        super(x, y, w, h);
         this.id = id;
         this.label = label;
     }
@@ -51,7 +51,7 @@ public class Button extends ClickableComponent {
 		} else {
 		    blitBackground(screen, 0);
 		}
-		Font.drawCentered(screen, label, getX() + getWidth() / 2, getY() + getHeight() / 2);
+		Font.defaultFont().draw(screen, label, getX() + getWidth() / 2, getY() + getHeight() / 2, Font.Align.CENTERED);
 	}
 	
 	private void blitBackground(Screen screen, int bitmapId) {

@@ -6,10 +6,10 @@ import com.mojang.mojam.Keys;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.Options;
-import com.mojang.mojam.entity.animation.EnemyDieAnimation;
 import com.mojang.mojam.entity.animation.SmokePuffAnimation;
 import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.building.Harvester;
+import com.mojang.mojam.entity.building.ShopItem;
 import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.loot.LootCollector;
@@ -20,7 +20,6 @@ import com.mojang.mojam.entity.particle.Sparkle;
 import com.mojang.mojam.entity.weapon.IWeapon;
 import com.mojang.mojam.entity.weapon.Rifle;
 import com.mojang.mojam.gui.Notifications;
-import com.mojang.mojam.level.HoleTile;
 import com.mojang.mojam.level.tile.RailTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.Vec2;
@@ -29,14 +28,15 @@ import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
+/**
+ * Implements the player entity
+ */
 public class Player extends Mob implements LootCollector {
-
     public static int COST_RAIL;
     public static int COST_DROID;
     public static int COST_REMOVE_RAIL;
-    public static final int REGEN_INTERVAL = 60 * 3;
+    public int REGEN_INTERVAL = 60 * 3;
     public int plevel;
-    public int pnextlevel;
     public double pexp;
     public double psprint;
     public boolean isSprint = false;
@@ -58,7 +58,7 @@ public class Player extends Mob implements LootCollector {
     private int facing = 0;
     private int time = 0;
     private int walkTime = 0;
-    private Entity selected = null;
+    private Building selected = null;
     static final int RailDelayTicks = 15;
     private int lastRailTick = -999;
     private final static int INTERACT_DISTANCE = 20 * 20; // Sqr
@@ -73,12 +73,46 @@ public class Player extends Mob implements LootCollector {
     private boolean dead = false;
     private int deadDelay = 0;
     private int nextWalkSmokeTick = 0;
-    private int regenDelay = 0;
-    public boolean isImmortal;
-    public static boolean creative = Options.getAsBoolean(Options.CREATIVE); 
+    boolean isImmortal;
+    private int characterID;
+
+    /**
+     * Constructor
+     * 
+     * @param keys Key bindings for this player
+     * @param mouseButtons Mouse Button state
+     * @param x Initial x coordinate
+     * @param y Initial y coordinate
+     * @param team Team number
+     */
+    public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team,  int characterID) {
+        super(x, y, team);
+        this.keys = keys;
+        this.mouseButtons = mouseButtons;
+        this.characterID = characterID;
+
+        startX = x;
+        startY = y;
+
+        plevel = 0; // will be displayed in GUI as lev 1
+        pexp = 0;
+        maxHealth = 5;
+        health = 5;
+        psprint = 1.5;
+        maxTimeSprint = 100;
+
+        aimVector = new Vec2(0, 1);
+
+        score = 0;
+        weapon = new Rifle(this);
+        setRailPricesAndImmortality();
+    }
     
-    public void setRailPricesandImmortality(){
-    	if (creative == true){
+    /**
+     * Handle creative mode
+     */
+    private void setRailPricesAndImmortality(){
+    	if (Options.getAsBoolean(Options.CREATIVE)){
     		COST_RAIL = 0;
     		COST_DROID = 0;
     		COST_REMOVE_RAIL = 0;
@@ -91,63 +125,55 @@ public class Player extends Mob implements LootCollector {
     	}
     }
 
-    public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team, int localTeam) {
-        super(x, y, team, localTeam);
-        this.keys = keys;
-        this.mouseButtons = mouseButtons;
+    /**
+     * Check if the player has reached enough XP for a levelup
+     */
+    private void handleLevelUp() {
+        if (xpSinceLastLevelUp() >= nettoXpNeededForLevel(plevel+1)) {
+            this.maxHealth++;
+            plevel++;
+            psprint += 0.1;
+            maxTimeSprint += 20;
 
-        startX = x;
-        startY = y;
-
-        plevel = 1;
-        pexp = 0;
-        maxHealth = 5;
-        health = 5;
-        psprint = 1.5;
-        maxTimeSprint = 100;
-
-        aimVector = new Vec2(0, 1);
-
-        score = 0;
-        weapon = new Rifle(this);
-        setRailPricesandImmortality();
-    }
-
-    private void checkForLevelUp() {
-        if (pexp >= nextLevel()) {
-            levelUp();
+            MojamComponent.soundPlayer.playSound("/sound/levelUp.wav", (float) pos.x, (float) pos.y, true);
         }
     }
 
-    private double nextLevel() {
-        double next = (plevel * 7) * (plevel * 7);
-        pnextlevel = (int) next;
-        return next;
+    /**
+     * 
+     * @param level to calculate summed up xp value for
+     *
+     * @return summed up xp value
+     */
+    public double summedUpXpNeededForLevel(int level){
+        return (level * 7) * (level * 7);
     }
-
-    public double getNextLevel() {
-        double next = nextLevel() - pexp;
-        return next;
+    
+    /**
+     * 
+     * @param level to calculate netto xp value for
+     *
+     * @return netto xp value
+     */
+    public double nettoXpNeededForLevel(int level){
+        if (level == 0) return 0;
+        return summedUpXpNeededForLevel(level) - summedUpXpNeededForLevel(level-1);
     }
-
-    private void levelUp() {
-        this.maxHealth++;
-        this.regenDelay = 2;
-        plevel++;
-        psprint += 0.1;
-        maxTimeSprint += 20;
-
-        MojamComponent.soundPlayer.playSound("/sound/levelUp.wav", (float) pos.x, (float) pos.y, true);
+    
+    /**
+     * 
+     * @return xp gained since last level up
+     */
+    public double xpSinceLastLevelUp(){
+        return pexp - summedUpXpNeededForLevel(plevel);
     }
-
+    
     @Override
     public void tick() {
 
-        // if mouse is in use, update player orientation before level tick
+        // If the mouse is used, update player orientation before level tick
         if (!mouseButtons.mouseHidden) {
-
-            // update player mouse, in world pixels relative to
-            // player
+            // Update player mouse, in world pixels relative to player
             setAimByMouse(
                     ((mouseButtons.getX() / MojamComponent.SCALE) - (MojamComponent.screen.w / 2)),
                     (((mouseButtons.getY() / MojamComponent.SCALE) + 24) - (MojamComponent.screen.h / 2)));
@@ -156,16 +182,20 @@ public class Player extends Mob implements LootCollector {
         }
 
         time++;
-
-        checkForLevelUp();
+		
+		this.doRegenTime();
+			
+        handleLevelUp();
         flashMiniMapIcon();
-        regeneratePlayer();
         countdownTimers();
         playStepSound();
 
         double xa = 0;
         double ya = 0;
+        double xaShot = 0;
+        double yaShot = 0;
 
+        // Handle keys
         if (!dead) {
             if (keys.up.isDown) {
                 ya--;
@@ -179,14 +209,37 @@ public class Player extends Mob implements LootCollector {
             if (keys.right.isDown) {
                 xa++;
             }
+            if (keys.right.isDown) {
+                xa++;
+            }
+            if (keys.fireUp.isDown) {
+                yaShot--;
+            }
+            if (keys.fireDown.isDown) {
+                yaShot++;
+            }
+            if (keys.fireLeft.isDown) {
+                xaShot--;
+            }
+            if (keys.fireRight.isDown) {
+                xaShot++;
+            }
         }
 
+        // Handle mouse aiming
         if (!mouseAiming && !keys.fire.isDown && !mouseButtons.isDown(mouseFireButton) && xa * xa + ya * ya != 0) {
             aimVector.set(xa, ya);
             aimVector.normalizeSelf();
             updateFacing();
         }
+        
+        if (!mouseAiming && fireKeyIsDown() && xaShot * xaShot + yaShot * yaShot != 0) {
+            aimVector.set(xaShot, yaShot);
+            aimVector.normalizeSelf();
+            updateFacing();
+        }
 
+        // Move player if it is not standing still
         if (xa != 0 || ya != 0) {
             handleMovement(xa, ya);
         }
@@ -197,6 +250,7 @@ public class Player extends Mob implements LootCollector {
             move(xd + xBump, yd + yBump);
 
         }
+        
         xd *= 0.4;
         yd *= 0.4;
         xBump *= 0.8;
@@ -208,7 +262,11 @@ public class Player extends Mob implements LootCollector {
         int x = (int) pos.x / Tile.WIDTH;
         int y = (int) pos.y / Tile.HEIGHT;
 
-        checkForHoleTiles(x, y);
+        if (!dead && fallDownHole()) {
+        	dead = true;
+        	carrying = null;
+        	deadDelay = 60;
+        }
 
         if (dead && deadDelay <= 0) {
             dead = false;
@@ -230,31 +288,20 @@ public class Player extends Mob implements LootCollector {
         }
     }
 
+    /**
+     * Update the display cycle of the player indicator on the minimap
+     */
     private void flashMiniMapIcon() {
-
         minimapIcon = time / 3 % 4;
         if (minimapIcon == 3) {
             minimapIcon = 1;
         }
     }
 
-    private void regeneratePlayer() {
-
-        if (regenDelay > 0) {
-            regenDelay--;
-            if (regenDelay == 0) {
-                if (health + 1 < maxHealth) {
-                    health++;
-                } else if (health != maxHealth) {
-                    health = maxHealth;
-                }
-                regenDelay = REGEN_INTERVAL;
-            }
-        }
-    }
-
+    /**
+     * Count down the internal timers
+     */
     private void countdownTimers() {
-
         if (flashTime > 0) {
             flashTime = 0;
         }
@@ -272,16 +319,21 @@ public class Player extends Mob implements LootCollector {
         }
     }
 
+    /**
+     * Play step sounds synchronized to player movement and carrying status
+     */
     private void playStepSound() {
-
         if (keys.up.isDown || keys.down.isDown || keys.left.isDown || keys.right.isDown) {
             int stepCount = 25;
+            
             if (carrying == null) {
                 stepCount = 15;
             }
+            
             if (isSprint) {
                 stepCount *= 0.6;
             }
+            
             if (steps % stepCount == 0) {
                 MojamComponent.soundPlayer.playSound("/sound/Step " + (TurnSynchronizer.synchedRandom.nextInt(2) + 1) + ".wav", (float) pos.x, (float) pos.y, true);
             }
@@ -289,13 +341,20 @@ public class Player extends Mob implements LootCollector {
         }
     }
 
+    /**
+     * Handler player movement
+     * 
+     * @param xa Position change on the x axis
+     * @param ya Position change on the y axis
+     */
     private void handleMovement(double xa, double ya) {
-
         int facing2 = (int) ((Math.atan2(-xa, ya) * 8 / (Math.PI * 2) + 8.5)) & 7;
         int diff = facing - facing2;
+        
         if (diff >= 4) {
             diff -= 8;
         }
+        
         if (diff < -4) {
             diff += 8;
         }
@@ -307,6 +366,7 @@ public class Player extends Mob implements LootCollector {
                 walkTime++;
             }
         }
+        
         if (diff > 2 || diff < -4) {
             walkTime--;
         } else {
@@ -351,46 +411,48 @@ public class Player extends Mob implements LootCollector {
         yd += ya;
     }
 
+    /**
+     * Handle weapon fire
+     * 
+     * @param xa Position change on the x axis
+     * @param ya Position change on the y axis
+     */
     private void handleWeaponFire(double xa, double ya) {
-
         weapon.weapontick();
+        
         if (!dead
-                && (carrying == null && keys.fire.isDown
+                && (carrying == null && fireKeyIsDown()
                 || carrying == null && mouseButtons.isDown(mouseFireButton))) {
-            primaryFire(xa, ya);
+            wasShooting = true;
+            if (takeDelay > 0) {
+                takeDelay--;
+            }
+            weapon.primaryFire(xa, ya);
         } else {
             if (wasShooting) {
                 suckRadius = 0;
+            } else {
+            	suckRadius = 60;
             }
             wasShooting = false;
-            if (suckRadius < 60) {
-                suckRadius++;
-            }
             takeDelay = 15;
         }
     }
-
-    private void primaryFire(double xa, double ya) {
-        wasShooting = true;
-        if (takeDelay > 0) {
-            takeDelay--;
-        }
-        weapon.primaryFire(xa, ya);
+    
+    /**
+     * Returns true if one of the keyboard fire buttons is down
+     * @return
+     */
+    private boolean fireKeyIsDown() {
+        return keys.fire.isDown || keys.fireUp.isDown || keys.fireDown.isDown || keys.fireRight.isDown || keys.fireLeft.isDown;
     }
 
-    private void checkForHoleTiles(int x, int y) {
-
-        if (level.getTile(x, y) instanceof HoleTile) {
-            if (!dead) {
-                dead = true;
-                carrying = null;
-                level.addEntity(new EnemyDieAnimation(pos.x, pos.y));
-                MojamComponent.soundPlayer.playSound("/sound/Fall.wav", (float) pos.x, (float) pos.y);
-                deadDelay = 50;
-            }
-        }
-    }
-
+    /**
+     * Handle rail building
+     * 
+     * @param xa Position change on the x axis
+     * @param ya Position change on the y axis
+     */
     private void handleRailBuilding(int x, int y) {
 
         if (level.getTile(x, y).isBuildable()) {
@@ -399,7 +461,7 @@ public class Player extends Mob implements LootCollector {
                 level.placeTile(x, y, new RailTile(level.getTile(x, y)), this);
                 payCost(COST_RAIL);
             } else if (score < COST_RAIL) {
-            	if(this.team == this.localTeam) {
+            	if(this.team == MojamComponent.localTeam) {
             		  Notifications.getInstance().add(MojamComponent.texts.buildRail(COST_RAIL));
             	}
               
@@ -407,10 +469,10 @@ public class Player extends Mob implements LootCollector {
         } else if (level.getTile(x, y) instanceof RailTile) {
             if ((y < 8 && team == Team.Team2) || (y > level.height - 9 && team == Team.Team1)) {
                 if (score >= COST_DROID) {
-                    level.addEntity(new RailDroid(pos.x, pos.y, team, localTeam));
+                    level.addEntity(new RailDroid(pos.x, pos.y, team));
                     payCost(COST_DROID);
                 } else {
-                	if(this.team == this.localTeam) {
+                	if(this.team == MojamComponent.localTeam) {
                 		Notifications.getInstance().add(MojamComponent.texts.buildDroid(COST_DROID));
                 	}
                 }
@@ -422,7 +484,7 @@ public class Player extends Mob implements LootCollector {
                         payCost(COST_REMOVE_RAIL);
                     }
                 } else if (score < COST_REMOVE_RAIL) {
-                	if(this.team == this.localTeam) {
+                	if(this.team == MojamComponent.localTeam) {
                 		Notifications.getInstance().add(MojamComponent.texts.removeRail(COST_REMOVE_RAIL));
                 	}
                 }
@@ -431,68 +493,103 @@ public class Player extends Mob implements LootCollector {
         }
     }
 
+    /**
+     * Handle object carrying
+     */
     private void handleCarrying() {
 
         carrying.setPos(pos.x, pos.y - 20);
-        if (!(carrying instanceof Turret)) {
-            carrying.tick();
-        }
+        carrying.tick();
         if (keys.use.wasPressed() || mouseButtons.isDown(mouseUseButton)) {
-            boolean allowed = true;
             mouseButtons.setNextState(mouseUseButton, false);
 
-            if (allowed && (!(carrying instanceof IUsable) || (carrying instanceof IUsable && ((IUsable) carrying).isAllowedToCancel()))) {
-                dropCarrying();
+            if (((IUsable) carrying).isAllowedToCancel()) {
+                drop();
             }
         }
     }
 
-    private void dropCarrying() {
-
-        carrying.removed = false;
-        carrying.xSlide = aimVector.x * 5;
-        carrying.ySlide = aimVector.y * 5;
-        carrying.freezeTime = 10;
-        carrying.justDroppedTicks=80;
-        carrying.setPos(pos);
-        level.addEntity(carrying);
-        carrying = null;
-    }
-
+    /**
+     * Handle interaction with entities
+     */
     private void handleEntityInteraction() {
+        // Unhighlight previously selected building
+        if (selected != null) {
+            selected.setHighlighted(false);
+            selected = null;
+        }
 
-        Entity closest = null;
+        // Find the closest Building within interation
+        // distance
+        Building closest = null;
         double closestDist = Double.MAX_VALUE;
         for (Entity e : level.getEntitiesSlower(pos.x - INTERACT_DISTANCE, pos.y - INTERACT_DISTANCE, pos.x + INTERACT_DISTANCE, pos.y + INTERACT_DISTANCE, Building.class)) {
+            Building b = (Building)e;
             double dist = e.pos.distSqr(getInteractPosition());
             if (dist <= INTERACT_DISTANCE && dist < closestDist) {
                 closestDist = dist;
-                closest = e;
+                closest = b;
             }
         }
-        if (selected != null) {
-            ((IUsable) selected).setHighlighted(false);
-        }
-        if (closest != null && ((IUsable) closest).isHighlightable()) {
-            selected = closest;
-            ((IUsable) selected).setHighlighted(true);
-        }
 
-        if (selected != null) {
-            if (selected.removed!=false){
-            	selected = null;
-            } else if (selected.pos.distSqr(getInteractPosition()) > INTERACT_DISTANCE) {
-                ((IUsable) selected).setHighlighted(false);
-                selected = null;
-            } else if (selected instanceof IUsable && (keys.use.wasPressed() || mouseButtons.isDown(mouseUseButton))) {
-                ((IUsable) selected).use(this);
-                mouseButtons.setNextState(mouseUseButton, false);
-            } else if (selected instanceof IUsable && keys.upgrade.wasPressed()) {
-                ((IUsable) selected).upgrade(this);
+        // If we found a building close enough to interact with...
+        if (closest != null) {
+            // Perform any allowed interactions if the correct
+            // keys have been pressed
+            if (keys.use.wasPressed() || mouseButtons.isDown(mouseUseButton)) {
+
+                if (canUseBuilding(closest)) {
+                    closest.use(this);
+                    mouseButtons.setNextState(mouseUseButton, false);
+                }
+            } else if (keys.upgrade.wasPressed()) {
+                
+                if (canUpgradeBuilding(closest)) {
+                    closest.upgrade(this);
+                }
+            }
+            
+            // If it is a building we should highlight on this game
+            // client, then highlight the building (also, remember the
+            // highlighted building, so we can unhighlight it again later)
+            if (shouldHighlightBuildingOnThisGameClient(closest)) {
+                selected = closest;
+                selected.setHighlighted(true);
             }
         }
     }
+    
+    // Whether this Player should see the building in question
+    // highlighted on their game client - this indicates that
+    // they can interact with the building
+    private boolean shouldHighlightBuildingOnThisGameClient(Building building) {
+        return building.isHighlightable() && canInteractWithBuilding(building) && this.team == MojamComponent.localTeam; 
+    }
+    
+    // Whether this Player is allowed to use the building in 
+    // question
+    private boolean canUseBuilding(Building building) {
+        //return building.team == this.team || building.team == Team.Neutral; // Players can only use their own and neutral buildings
+        return !(building instanceof ShopItem && building.team != this.team); // Players can only use their own shops, but can use any other building regardless of ownership
+    }
+    
+    // Whether this Player is allowed to upgrade the building
+    // in question
+    private boolean canUpgradeBuilding(Building building) {
+        return building.team == this.team; // Players can only upgrade their own buildings
+    }
+    
+    // Whether this Player is allowed to interact with the building in 
+    // question
+    private boolean canInteractWithBuilding(Building building) {
+        return canUseBuilding(building) || canUpgradeBuilding(building);
+    }
 
+    /**
+     * Pay for an item
+     * 
+     * @param cost Item cost
+     */
     public void payCost(int cost) {
         score -= cost;
 
@@ -506,15 +603,23 @@ public class Player extends Mob implements LootCollector {
         }
     }
 
-    public void addScore(int s) {
-        if (s > 0) {
-            score += s;
+    /**
+     * Add score points
+     * 
+     * @param points Points
+     */
+    public void addScore(int points) {
+        if (points > 0) {
+            score += points;
         }
     }
 
+    /**
+     * Drop all money. Animated, loot items will fall on the floor.
+     */
     public void dropAllMoney() {
-
         score /= 2;
+        
         while (score > 0) {
             double dir = TurnSynchronizer.synchedRandom.nextDouble() * Math.PI * 2;
             Loot loot = new Loot(pos.x, pos.y, Math.cos(dir), Math.sin(dir), score / 2);
@@ -527,8 +632,8 @@ public class Player extends Mob implements LootCollector {
 
     @Override
     public void render(Screen screen) {
-        Bitmap[][] sheet = Art.getLocalPlayerArt();
-		
+        Bitmap[][] sheet = Art.getPlayer(characterID);
+        
         if (dead) {
             // don't draw anything if we are dead (in a hole)
             return;
@@ -567,13 +672,13 @@ public class Player extends Mob implements LootCollector {
     
     @Override
     protected void renderCarrying(Screen screen, int yOffs) {
-    	if(carrying != null && carrying.team == this.localTeam ) {
+    	if(carrying != null && carrying.team == MojamComponent.localTeam ) {
 			if(carrying instanceof Turret) {
 				Turret turret = (Turret)carrying;
-				screen.blit(turret.areaBitmap, turret.pos.x-turret.radius , turret.pos.y-turret.radius - yOffs);	
+				turret.drawRadius(screen);	
 			} else if(carrying instanceof Harvester) {
 				Harvester harvester = (Harvester)carrying;
-				screen.blit(harvester.areaBitmap, pos.x - harvester.areaBitmap.w / 2, pos.y - harvester.areaBitmap.h / 2 - yOffs);	
+				harvester.drawRadius(screen);	
 			}//TODO make an interface to clean this up
        	}
 		
@@ -632,21 +737,18 @@ public class Player extends Mob implements LootCollector {
         return pos.add(new Vec2(Math.cos((facing) * (Math.PI) / 4 + Math.PI / 2), Math.sin((facing) * (Math.PI) / 4 + Math.PI / 2)).scale(30));
     }
 
-    public void pickup(Building b) {
-    	if(b.team != this.team && b.team != Team.Neutral) {
-    		
-    		if(this.team == localTeam) {
-    		 Notifications.getInstance().add(MojamComponent.texts.getStatic("gameplay.cantPickup"));
-    		}
-    		 return;
-    	}
-    	if (b.health > 0) {
-	        level.removeEntity(b);
-	        carrying = b;
-	        carrying.onPickup();
-    	}
+
+    public void drop() {
+        carrying.xSlide = aimVector.x * 5;
+        carrying.ySlide = aimVector.y * 5;
+        super.drop();
     }
 
+    /**
+     * Set player orientation
+     * 
+     * @param facing New Orientation
+     */
     public void setFacing(int facing) {
         this.facing = facing;
     }
@@ -677,8 +779,7 @@ public class Player extends Mob implements LootCollector {
             hurtTime = 25;
             freezeTime = 15;
             health -= damage;
-            regenDelay = REGEN_INTERVAL;
-
+            
             if (health <= 0) {
                 revive();
             } else {
@@ -692,8 +793,11 @@ public class Player extends Mob implements LootCollector {
         }
     }
 
+    /**
+     * Revive the player. Carried items are lost, as is all the money.
+     */
     private void revive() {
-        Notifications.getInstance().add(MojamComponent.texts.hasDied(team));
+        Notifications.getInstance().add(MojamComponent.texts.hasDiedCharacter(characterID));
         carrying = null;
         dropAllMoney();
         pos.set(startX, startY);
@@ -711,7 +815,10 @@ public class Player extends Mob implements LootCollector {
     }
 
     /**
-     * used to update player orientation, values relative to player.
+     * Orientate the player in the direction of the given mouse coordinates
+     * 
+     * @param x X coordinate
+     * @param y Y coordinate
      */
     public void setAimByMouse(int x, int y) {
         mouseAiming = true;
@@ -720,22 +827,35 @@ public class Player extends Mob implements LootCollector {
         updateFacing();
     }
 
+    /**
+     * Disable mouse aiming and activate keyboard aiming
+     */
     public void setAimByKeyboard() {
         mouseAiming = false;
     }
 
     /**
-     * Update facing for rendering
+     * Update player orientation for rendering
      */
     public void updateFacing() {
         facing = (int) ((Math.atan2(-aimVector.x, aimVector.y) * 8 / (Math.PI * 2) + 8.5)) & 7;
     }
 
+    /**
+     * Get current player position
+     * 
+     * @return Position
+     */
     public Vec2 getPosition() {
         return pos;
     }
 
-	public void setLocalTeam(int i) {
-		this.localTeam = i;
-	}
+    /**
+     * Get current player's characterID
+     * 
+     * @return charakterID
+     */
+    public int getCharacterID() {
+        return this.characterID;
+    }
 }

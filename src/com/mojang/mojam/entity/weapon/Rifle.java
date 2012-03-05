@@ -6,6 +6,13 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.network.TurnSynchronizer;
 
+import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.Options;
+import com.mojang.mojam.entity.Bullet;
+import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.Player;
+import com.mojang.mojam.network.TurnSynchronizer;
+
 public class Rifle implements IWeapon {
 
 	private Player owner;
@@ -14,25 +21,22 @@ public class Rifle implements IWeapon {
 	private int upgradeIndex = 1;
 	private double accuracy;
 	private int shootDelay = 5;
-	private int burstCount = 3;
-	private int burstCooldown = 25;
 	
-	private boolean wasShooting;
-	private int curShootDelay = 0;	
-	
-	private boolean isBursting;
-	private int curBurstCount;
-	private int curBurstDelay;	
+	private boolean readyToShoot = true;
+	private int currentShootDelay = 0;	
 	
 	public Rifle(Player owner) {
 		setOwner(owner);
 		
 		setWeaponMode();
 		
+		if(owner.isSprint)
+			shootDelay *= 3;
 		
 	}
+	
 	public void setWeaponMode(){
-		if(owner.creative == true){
+		if(Options.getAsBoolean(Options.CREATIVE)){
 			BULLET_DAMAGE = 100f;
 			accuracy = 0;
 		}else{
@@ -48,9 +52,12 @@ public class Rifle implements IWeapon {
 
 	@Override
 	public void primaryFire(double xDir, double yDir) {
-		wasShooting = true;
-		if (curShootDelay-- <= 0) {
-			double dir = getBulletDirection(accuracy);
+		if (readyToShoot) {
+			double dir;
+			if(owner.isSprint)
+				dir = getBulletDirection(accuracy * 2);
+			else
+				dir = getBulletDirection(accuracy);
 			xDir = Math.cos(dir);
 			yDir = Math.sin(dir);			
 			applyImpuls(xDir, yDir, 1);
@@ -61,7 +68,8 @@ public class Rifle implements IWeapon {
 			owner.muzzleTicks = 3;
 			owner.muzzleX = bullet.pos.x + 7 * xDir - 8;
 			owner.muzzleY = bullet.pos.y + 5 * yDir - 8 + 1;
-			curShootDelay = shootDelay;
+			currentShootDelay = shootDelay;
+			readyToShoot= false;
 			MojamComponent.soundPlayer.playSound("/sound/Shot 1.wav",
 					(float) owner.getPosition().x, (float) owner.getPosition().y);
 		}		
@@ -69,15 +77,10 @@ public class Rifle implements IWeapon {
 
 	@Override
 	public void weapontick() {
-		if(!wasShooting) {
-			curShootDelay = 0;
+		if(!readyToShoot) {
+			if(currentShootDelay > 0) currentShootDelay--;
+			else readyToShoot = true;
 		}
-		wasShooting = false;
-		
-		if(!isBursting) {
-			curBurstDelay--;
-		}
-		isBursting = false;
 	}
 	
 	private double getBulletDirection(double accuracy) {

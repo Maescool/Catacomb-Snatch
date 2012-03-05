@@ -1,0 +1,19 @@
+# Game texts encoded in UTF-8
+
+player1Name = LORD LARD
+player1NameAlt = DUCHESS DONUT
+player1Win = {0} VANN WOOHOO
+
+player2Name = HERR VON SPECK
+player2Win = {0} VANN YAY
+
+hasDied = {0} DOG!
+score = {0}: {1}%
+cost = {0}
+health = {0}%
+money = {0}
+
+waitingForClient = EN KLIENT KAN ANSLUTA NU...
+enterIP = SKRIV IN DEN ANDRA SPELARENS IP-ADRESS:
+FPS = FPS: {0}
+

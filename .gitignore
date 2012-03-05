@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 bin/
 .gradle
 build
@@ -9,3 +10,17 @@ build
 *.class
 *.sw?
 lib/.tmp/
+=======
+bin/
+.gradle
+build
+/nbproject/private/
+*~
+.DS_Store
+/dist/
+.settings
+*.class
+*.sw?
+lib/.tmp/
+doc/
+>>>>>>> 0f4d7cad438f437c7f233b272c161f4f873c8ebe

@@ -1,0 +1,138 @@
+# Game texts encoded in UTF-8
+
+build.rail = PERLU {0} KOIN UNTUK MEMBUAT RAIL
+build.droid = PERLU {0} KOIN UNTUK MEMBUAT RAIL DROID
+build.removeRail = PERLU {0} KOIN UNTUK MELEPAS SEBUAH RAIL
+
+back = KEMBALI
+cancel = BATAL
+
+credits.leadDev = PEMIMPIN DEVELOPER:
+credits.maintainers = PENGURUS PROYEK:
+credits.communityMan = PENGURUS KOMUNITAS:
+credits.others = DAN TERIMA KASIH UNTUK SEMUA KONTRIBUTOR, TERMASUK:
+credits.note = PROYEK INI SEKARANG DIKEMBANGKAN OLEH KOMUNITAS
+
+diffselect.title = PILIH TINGKAT KESULITAN
+diffselect.start = MULAI BERMAIN
+diffselect.easy = MUDAH
+diffselect.normal = NORMAL
+diffselect.hard = SULIT
+diffselect.nightmare = MIMPI BURUK
+
+gameplay.player1Win = {0} MENANG WOOHOO
+gameplay.player2Win = {0} MENANG YAY
+gameplay.player1Name = LORD LARD
+gameplay.player2Name = HERR VON SPECK
+gameplay.player3Name = DUCHESS DONUT
+gameplay.player4Name = COUNTESS CRULLER
+gameplay.FPS = FPS: {0}
+gameplay.latency = LATENSI: {0}
+gameplay.cantPickup = BARANG TERSEBUT TIDAK BISA DIANGKAT!
+
+help.goal = GOAL
+help.help1 = KUMPULKAN 50 KUMPULAN HARTA KARUN
+help.help2 = DARI TEMPAT PENYIMPANAN HARTA KARUN
+help.help3 = YANG TERLETAK DI TENGAH PETA
+help.help4 = SEBELUM LAWANMU
+help.turret = TURRET
+help.turret1 = MENEMBAK LAWAN DI SEKITARNYA.
+help.turret2 =
+help.turret3 =
+help.collector = COLLECTOR
+help.collector1 = MENYERAP KOIN DI SEKITARNYA. ANGKAT
+help.collector2= UNTUK MENGAMBIL KOIN YANG TERSERAP.
+help.collector3= 
+help.bomb = BOMB
+help.bomb1 = DIPAKAI UNTUK MENGHANCURKAN TEMBOK
+help.bomb2 = RUSAK.
+help.bomb3 = TEMBAKI UNTUK MELEDAKKAN BOMB.
+help.rails = RAILS
+help.rails1 = UNTUK RAIL-DROIDS MENGOLEKSI HARTA
+help.rails2 = KARUN. TEKAN 'BUILD' DI RAIL PERTAMA
+help.rails3 = UNTUK MEMBELI RAIL-DROID (50 KOIN)
+
+keys.up = ATAS
+keys.down = BAWAH
+keys.left = KIRI
+keys.right=  KANAN
+keys.sprint = LARI
+keys.fire = TEMBAK
+keys.fireUp = TEMBAK ATAS
+keys.fireDown = TEMBAK BAWAH
+keys.fireLeft = TEMBAK KIRI
+keys.fireRight = TEMBAK KANAN
+keys.use = PAKAI
+keys.build = BUILD
+keys.upgrade = UPGRADE
+keys.chat = CHAT
+
+leveleditor.title = PEMBUAT LEVEL
+leveleditor.new = BARU
+leveleditor.open = BUKA
+leveleditor.save = SIMPAN
+leveleditor.enterLevelName = MASUKKAN NAMA LEVEL:
+
+levelselect.title = PILIH LEVEL
+levelselect.start = MULAI
+levelselect.update = CEK ULANG
+
+mp.waitingForClient = MENUNGGU CLIENT UNTUK IKUT...
+mp.enterIP = MASUKKAN IP DARI HOST:
+mp.localIP = IP LOKAL ANDA:
+mp.externalIP = IP EKSTERNAL ANDA:
+mp.join = IKUT BERMAIN
+
+options.on = ON
+options.off = OFF
+options.keyBindings = PILIHAN KUNCI
+options.characterSelect = PILIH KARAKTER
+options.fullscreen = FULLSCREEN
+options.showfps = TUNJUKKAN FPS
+options.music = MUSIK
+options.sounds = SUARA
+options.volume = VOLUME
+options.mute = MATI
+options.creative = MODE KREATIF
+options.alternative = PEMAIN ALTERNATIF
+options.credits = KREDIT
+
+character.text = PILIH KARAKTERMU!
+character.select = LANJUT
+
+pausemenu.help = BANTUAN
+pausemenu.backtomain = KEMBALI KE MENU
+pausemenu.resume = LANJUTKAN
+pausemenu.exit = BERHENTI
+
+player.hasDied = {0} KEHILANGAN NYAWA!
+player.score = {0}: {1}%
+player.cost = {0}
+player.health = {0}%
+player.money = {0}
+player.nextLevel = {0}
+player.exp = {0}
+player.level = {0}
+
+shop.turretTooltipTitle = TURRET
+shop.turretTooltipLine1 = DIPAKAI UNTUK PERTAHANAN.
+shop.turretTooltipLine2 = MENYERANG MUSUH SEKITARNYA.
+shop.harvesterTooltipTitle = HARVESTER
+shop.harvesterTooltipLine1 = MENGUMPULKAN KOIN.
+shop.harvesterTooltipLine2 = GUNAKAN UNTUK MENGOLEKSI KOIN.
+shop.bombTooltipTitle = BOMB
+shop.bombTooltipLine1 = MENGHANCURKAN TEMBOK RUSAK.
+shop.bombTooltipLine2 = PAKAI UNTUK MEMBUAT JALAN PINTAS.
+
+titlemenu.start = MULAI BERMAIN
+titlemenu.host = HOST
+titlemenu.join = IKUT
+titlemenu.help = CARA BERMAIN
+titlemenu.options = PILIHAN
+titlemenu.levelEditor = PEMBUAT LEVEL
+titlemenu.exit = BERHENTI
+
+upgrade.full = TIDAK DAPAT DI-UPGRADE LAGI!
+upgrade.notEnoughMoney = TIDAK CUKUP UANG! ({0})
+upgrade.to = TELAH DI-UPGRADE KE LEVEL {0}
+

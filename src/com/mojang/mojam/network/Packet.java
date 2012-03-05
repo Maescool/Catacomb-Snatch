@@ -11,6 +11,7 @@ import com.mojang.mojam.Snatch;
 import com.mojang.mojam.network.packet.ChangeKeyCommand;
 import com.mojang.mojam.network.packet.ChangeMouseButtonCommand;
 import com.mojang.mojam.network.packet.ChangeMouseCoordinateCommand;
+import com.mojang.mojam.network.packet.ChatCommand;
 import com.mojang.mojam.network.packet.PingPacket;
 import com.mojang.mojam.network.packet.StartGamePacket;
 import com.mojang.mojam.network.packet.TurnPacket;
@@ -39,6 +40,7 @@ public abstract class Packet {
 		map(101, PauseCommand.class);
 		map(104, ChangeMouseButtonCommand.class);
 		map(105, ChangeMouseCoordinateCommand.class);
+		map(106, ChatCommand.class);
 	}
 
 	public final int getId() {
@@ -97,6 +99,7 @@ public abstract class Packet {
 
 	public void handle(PacketListener packetListener) {
 		packetListener.handle(this);
+		Snatch.handlePacket(this);
 	}
 
 }

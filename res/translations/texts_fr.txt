@@ -1,0 +1,114 @@
+# Game texts encoded in UTF-8
+
+build.rail = VOUS AVEZ BESOIN DE {0} POUR CONSTRUIRE UN RAIL
+build.droid = VOUS AVEZ BESOIN DE {0} POUR UN ROBOT
+build.removeRail = VOUS AVEZ BESOIN DE {0} POUR ENLEVER UN RAIL
+
+back = RETOUR
+cancel = ANNULER
+
+credits.leadDev = DEVELOPPEUR PRINCIPAL:
+credits.maintainers = MANAGERS PROJET:
+credits.communityMan = MANAGERS COMMUNAUTÉ:
+credits.others = ET MERCI À TOUS LES CONTRIBUTEURS, INCLUANT:
+credits.note = CE PROJET EST MAINTENANT MAINTENU GRÂCE À  LA COMMUNAUTÉ.
+
+diffselect.title = CHOISIR UNE DIFFICULTE
+diffselect.start = JOUER !
+diffselect.easy = FACILE
+diffselect.normal = NORMAL
+diffselect.hard = DUR
+diffselect.nightmare = HARDCORE
+
+gameplay.player1Win = {0} GAGNE WOOHOO
+gameplay.player2Name = HERR VON SPECK
+gameplay.player2Win = {0} GAGNE YAY
+gameplay.FPS = FPS: {0}
+gameplay.latency = LATENCE: {0}
+gameplay.cantPickup = VOUS NE POUVEZ PRENDRE CECI!
+
+help.goal1 = OBJECTIF
+help.help1 = COLLECTEZ 50 ELEMENTS CONTENUS 
+help.help2 = DANS LE COFFRE AU TRESOR SITUE
+help.help3 = AU CENTRE DE LA CARTE
+help.help4 = AVANT VOTRE/VOS ADVERSAIRE(S)
+help.turret = TOURELLE
+help.turret1 = TIRE SUR LES ENNEMIS A PROXIMITE.
+help.collector = COLLECTEUR
+help.collector1 = ASPIRE LES PIECES VOISINES.
+help.collector2= RAMASSEZ LE POUR RECUPERER
+help.collector3=  L'ARGENT COLLECTE.
+help.bomb = BOMBE
+help.bomb1 = DETRUIT LES MURS FISSURES.
+help.bomb2 = TIREZ POUR QU'ELLE EXPLOSE.
+help.rails = RAILS
+help.rails1 = PERMETTENT AUX ROBOTS DE COLLECTER
+help.rails2 = LES TRESORS. 'CONSTRUIRE' SUR LE
+help.rails3 = PREMIER RAIL ACHETE UN ROBOT (50PO)
+
+keys.up = HAUT
+keys.down = BAS
+keys.left = GAUCHE
+keys.right=  DROITE
+keys.sprint = SPRINT
+keys.fire = TIRER
+keys.use = UTILISER
+keys.build = CONSTRUIRE
+keys.upgrade = AMELIORER
+
+leveleditor.title = Créateur de Niveaux
+leveleditor.new = Nouveau
+leveleditor.open = Ouvrir
+leveleditor.save = Enregistrer
+leveleditor.enterLevelName = Entrez le nom du niveau:
+
+levelselect.title = CHOISIR UN NIVEAU
+levelselect.start = SUIVANT
+levelselect.update = RAFRAICHIR
+
+mp.waitingForClient = EN ATTENTE DU CLIENT...
+mp.enterIP = ENTREZ L'IP DE L'HEBERGEUR:
+mp.localIP = VOTRE IP LOCALE:
+mp.externalIP = VOTRE IP EXTERNE:
+mp.join = REJOINDRE
+
+options.on = ON
+options.off = OFF
+options.keyBindings = CONTROLES
+options.characterSelect = Sel. Joueur
+options.fullscreen = PLEIN ECRAN
+options.showfps = AFFICHER FPS
+options.music = Musique
+options.sounds = Sons
+options.creative = MODE CRÉATIF
+options.credits = CRÉDITS
+
+character.text = Choisissez votre joueur!
+character.select = Choisir
+
+pausemenu.help = AIDE
+pausemenu.backtomain = MENU PRINCIPAL
+pausemenu.resume = CONTINUER
+
+player.hasDied = {0} EST MORT!
+
+shop.turretTooltipTitle = TOURELLE
+shop.turretTooltipLine1 = UTILISÉE POUR LA DÉFENSE.
+shop.turretTooltipLine2 = ATTAQUE LES ENNEMIES PROCHES.
+shop.harvesterTooltipTitle = COLLECTEUR
+shop.harvesterTooltipLine1 = RAMASSE LE TRÉSOR.
+shop.harvesterTooltipLine2 = UTILISÉ POUR RÉCOLTER LE LOOT.
+shop.bombTooltipTitle = BOMBE
+shop.bombTooltipLine1 = DÉTRUIT LES MURS FISSURÉS.
+shop.bombTooltipLine2 = UTILISÉE POUR CRÉER DES RACCOURCIS.
+
+titlemenu.start = JOUER
+titlemenu.host = NV. SERVEUR
+titlemenu.join = REJOINDRE
+titlemenu.help = AIDE
+titlemenu.exit = QUITTER
+
+upgrade.full = DEJA AUGMENTER AU MAX!
+upgrade.notEnoughMoney = VOUS N AVEZ PAS ASSEZ D ARGENT ({0})
+upgrade.to = AUGMENTE AU NIVEAU {0}
+

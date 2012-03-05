@@ -11,20 +11,46 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Properties;
 
+import com.mojang.mojam.screen.Art;
+
 public class Options {
 	
     public static final String DRAW_FPS = "drawFps";
     public static final String FULLSCREEN = "fullscreen";
     public static final String MUSIC = "music";
+    public static final String SOUND = "sound";
     public static final String VOLUME = "volume";
 
     public static final String VALUE_TRUE = "true";
     public static final String VALUE_FALSE = "false";
     
     public static final String CREATIVE = "creative";
-    public static final String ALTERNATIVE = "alternative";
+    public static final String CHARACTER_ID = "character";
+    
+    public static final String MP_PORT = "mpPort";
+
+    public static final String LOCALE = "locale";
     
 	private static Properties properties = new Properties();
+	
+	public static int getCharacterID() {
+		String value = properties.getProperty(CHARACTER_ID);
+		if (value == null) {
+			return Art.LORD_LARD;
+		}
+		int id = Art.LORD_LARD;
+		try {
+			id = Integer.parseInt(value);
+		} catch (NumberFormatException e) {}
+		if (id < 0 || id >= Art.NUM_CHARACTERS) {
+			return Art.LORD_LARD;
+		}
+		return id;
+	}
+
+	public static boolean isCharacterIDset() {
+		return properties.get(CHARACTER_ID) != null;
+	}
 	
     public static String get(String key) {
         return properties.getProperty(key);
@@ -50,12 +76,24 @@ public class Options {
         return Float.parseFloat(get(key, defaultValue));
     }
     
+    public static int getAsInteger(String key) {
+        return Integer.parseInt(get(key));
+    }
+    
+    public static int getAsInteger(String key, Integer defaultValue) {
+        return Integer.parseInt(get(key, Integer.toString(defaultValue)));
+    }
+    
 	public static void set(String key, String value) {
 		properties.setProperty(key, value);
 	}
 	
     public static void set(String key, boolean value) {
         properties.setProperty(key, String.valueOf(value));
+    }
+    
+    public static void set(String key, Integer value) {
+    	properties.setProperty(key, String.valueOf(value));
     }
 
 	public static void loadProperties() {

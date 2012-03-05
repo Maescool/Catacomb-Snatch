@@ -16,10 +16,8 @@ public class GuiError extends GuiMenu {
 	@Override
 	public void render(Screen screen) {
 		screen.clear(0);
-		Font.setFont("red");
-		Font.draw(screen, "ERROR", 15, 30);
-		Font.setFont("");
-		Font.drawMulti(screen, message, 20, 40, 300);
+		Font.FONT_RED.draw(screen, "ERROR", 15, 30);
+		Font.defaultFont().draw(screen, message, 20, 40, 300);
 		super.render(screen);
 	}
 	

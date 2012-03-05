@@ -14,20 +14,20 @@ public class SnatchContent extends Mod
 	
 	public SnatchContent()
 	{
-		ids[0]=Snatch.addEntity(new Bat(0, 0, 0));
-		ids[1]=Snatch.addEntity(new Snake(0, 0, 0));
-		ids[2]=Snatch.addEntity(new Mummy(0, 0, 0));
-		ids[3]=Snatch.addEntity(new Scarab(0, 0, 0));
+		ids[0]=Snatch.addEntity(new Bat(0, 0));
+		ids[1]=Snatch.addEntity(new Snake(0, 0));
+		ids[2]=Snatch.addEntity(new Mummy(0, 0));
+		ids[3]=Snatch.addEntity(new Scarab(0, 0));
 	}
 
 	@Override
 	public Entity getEntityInstanceById(int type, double x, double y)
 	{
 		Mob te = null;
-		if(type == ids[0]) te = new Bat(x, y, 0);
-		if(type == ids[1]) te = new Snake(x, y, 0);
-		if(type == ids[2]) te = new Mummy(x, y, 0);
-		if(type == ids[3]) te = new Scarab(x, y, 0);
+		if(type == ids[0]) te = new Bat(x, y);
+		if(type == ids[1]) te = new Snake(x, y);
+		if(type == ids[2]) te = new Mummy(x, y);
+		if(type == ids[3]) te = new Scarab(x, y);
 		return te;
 	}
 

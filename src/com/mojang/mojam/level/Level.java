@@ -10,13 +10,13 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Snatch;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
-import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.level.gamemode.ILevelTickItem;
 import com.mojang.mojam.level.gamemode.IVictoryConditions;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.Tile;
+import com.mojang.mojam.level.tile.AnimatedTile;
 import com.mojang.mojam.level.tile.WallTile;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.math.Vec2;
@@ -32,7 +32,8 @@ public class Level {
 	public Tile[] tiles;
 	public List<Entity>[] entityMap;
 	public List<Entity> entities = new ArrayList<Entity>();
-	private Bitmap minimap;
+	private Bitmap minimap, displaymap;
+	private boolean largeMap = false, smallMap = false;
 	private boolean seen[];
 	final int[] neighbourOffsets;
 
@@ -42,15 +43,24 @@ public class Level {
 	public IVictoryConditions victoryConditions;
 	public int player1Score = 0;
 	public int player2Score = 0;
+	
+	public int player1Character;
+	public int player2Character;
 
 	@SuppressWarnings("unchecked")
-	public Level(int width, int height) {
+	public Level(int width, int height, int player1Character, int player2Character) {
 		neighbourOffsets = new int[] { -1, 1, -width, width };
 		this.width = width;
 		this.height = height;
+		this.player1Character = player1Character;
+		this.player2Character = player2Character;
 
 		minimap = new Bitmap(width, height);
-
+		displaymap = new Bitmap(64, 64);
+		
+		largeMap = height > 64 || width > 64;
+		smallMap = height < 64 && width < 64;
+		
 		tiles = new Tile[width * height];
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
@@ -77,7 +87,7 @@ public class Level {
 
 
 	public void setTile(int x, int y, Tile tile) {
-		final int index = x + y * width;
+		final int index = x + (y * width);
 		tiles[index] = tile;
 		tile.init(this, x, y);
 		for (int of : neighbourOffsets) {
@@ -87,6 +97,9 @@ public class Level {
 				if (neighbour != null)
 					neighbour.neighbourChanged(tile);
 			}
+		}
+		if(tile instanceof AnimatedTile) { 
+			tickItems.add((ILevelTickItem) tile);
 		}
 	}
 
@@ -303,20 +316,27 @@ public class Level {
 							* Tile.HEIGHT);
 					continue;
 				}
-				int xt = x - 28;
+				int xt = x - (width / 2) + 4;
 				int yt = y - 4;
 				if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4
 						&& (xt != 3 || yt < 3)) {
-					screen.blit(Art.startHerrSpeck[xt][yt], x * Tile.WIDTH, y
+					screen.blit(Art.getPlayerBase(player2Character)[xt][yt], x * Tile.WIDTH, y
 							* Tile.HEIGHT);
 					continue;
 				}
 
-				yt = y - (64 - 8);
-				if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4
-						&& (xt != 3 || yt > 0)) {
-					screen.blit(Art.startLordLard[xt][yt], x * Tile.WIDTH, y
-							* Tile.HEIGHT);
+				yt = y - (height - 8);
+				if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (xt != 3 || yt > 0)) {
+					screen.blit(Art.getPlayerBase(player1Character)[xt][yt], x * Tile.WIDTH, y * Tile.HEIGHT);
+					if ((xt == 0 || xt == 1 || xt == 5 || xt == 6) && yt == 0) {
+						screen.blit(Art.shadow_north, x * Tile.WIDTH, y * Tile.HEIGHT);
+					}
+					if ((xt == 2) && yt == 0) {
+						screen.blit(Art.shadow_north_west, x * Tile.WIDTH, y * Tile.HEIGHT);
+					}
+					if ((xt == 4) && yt == 0) {
+						screen.blit(Art.shadow_north_east, x * Tile.WIDTH + Tile.WIDTH - Art.shadow_east.w, y * Tile.HEIGHT);
+					}
 					continue;
 				}
 				if (canSee(x, y)) {
@@ -465,15 +485,87 @@ public class Level {
 				}
 			}
 		}
+		
+		// Display the real map!
+		if(largeMap){
+			int locx = x0 + 8;
+			int locy = y0 + 8;
+			
+			int drawx = 0, drawy = 0;
+			int donex = 0, doney = 0;
+			int diffx = 0, diffy = 0;
+			
+			if(width < 64) diffx = (64 - width) / 2;
+			if(height < 64) diffy = (64 - height) / 2;
+			
+			if(locx < 32 || width < 64){
+				drawx = 0;
+			} else if(locx > (width - 32)){
+				drawx = width - 64;
+			} else{
+				drawx = locx - 32;
+			}
+			
+			if(locy < 32 || height < 64){
+				drawy = 0;
+			} else if(locy > (height - 32)){
+				drawy = height - 64;
+			} else {
+				drawy = locy - 32;
+			}
+			
+			for (int y = 0; y < 64; y++) {
+				if(y < diffy || y >= (64 - diffy)) {
+					for (int x = 0; x < 64; x++) {
+						displaymap.pixels[x + (y * 64)] = Art.floorTileColors[5 & 7][5 / 8];
+					}
+				}
+				else{
+					for (int x = 0; x < 64; x++) {
+						if(x < diffx || x > (64 - diffx)) 
+							displaymap.pixels[x + (y * 64)] = Art.floorTileColors[5 & 7][5 / 8];
+						else{
+							if(((drawx + donex) + (drawy + doney) * width) < minimap.pixels.length -1) 
+								displaymap.pixels[x + (y * 64)] = minimap.pixels[(drawx + donex) + (drawy + doney) * width];
+								donex++;
+						}
+					}
+					donex = 0;
+					doney++;
+				}
+			}
+		} else if(smallMap){
+			int smallx = 0, smally = 0;
+			
+			for (int y = 0; y < 64; y++) {
+				for (int x = 0; x < 64; x++) {
+					if(x >= (32 - width/2) && x <= (32 + width/2) && y >= (32 - height/2) && y < (32 + height/2) - 1){
+						displaymap.pixels[x + y * 64] = minimap.pixels[smallx + smally * width];
+						smallx++;
+					}
+					else
+						displaymap.pixels[x + y * 64] = Art.floorTileColors[5 & 7][5 / 8];
+				}
+				smallx = 0;
+				
+				if(y >= (32 - height/2) && y < (32 + height/2) - 1)
+					smally++;
+			}
+		} else {
+			displaymap = minimap;
+		}
+		
 		screen.blit(Art.panel, 0, screen.h - 80);
-		screen.blit(minimap, 429, screen.h - 80 + 5);
+		screen.blit(displaymap, 429, screen.h - 80 + 5);
 		
-		String player1score =  MojamComponent.texts.score(Team.Team1, player1Score * 100 / TARGET_SCORE);
-		Font.draw(screen, player1score, 280-player1score.length()*10, screen.h - 20); //adjust so it fits in the box
-		Font.draw(screen, MojamComponent.texts.score(Team.Team2, player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
-		
-		screen.blit(Art.getLocalPlayerArt()[0][2], 262, screen.h-42);
-		screen.blit(Art.herrSpeck[0][6], 19, screen.h-42);
+		String player1score =  MojamComponent.texts.scoreCharacter(player1Character, player1Score * 100 / TARGET_SCORE);
+		Font.defaultFont().draw(screen, player1score, 280-player1score.length()*10, screen.h - 20); //adjust so it fits in the box
+		screen.blit(Art.getPlayer(player1Character)[0][2], 262, screen.h-42);
+
+		if (player2Character != Art.NO_OPPONENT) {
+			Font.defaultFont().draw(screen, MojamComponent.texts.scoreCharacter(player2Character, player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
+			screen.blit(Art.getPlayer(player2Character)[0][6], 19, screen.h-42);
+		}
 		
 		Notifications.getInstance().render(screen);
 	}

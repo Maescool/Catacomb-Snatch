@@ -1,3 +1,4 @@
+
 package com.mojang.mojam.entity.mob;
 
 import java.util.Set;
@@ -5,11 +6,17 @@ import java.util.Set;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.level.DifficultyInformation;
 
+import java.util.Set;
+
+import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.level.DifficultyInformation;
+import com.mojang.mojam.level.tile.Tile;
+
 
 public abstract class HostileMob extends Mob {
 
-	public HostileMob(double x, double y, int team, int localTeam) {
-		super(x, y, team,localTeam);
+	public HostileMob(double x, double y, int team) {
+		super(x, y, team);
 	}
 
 	@Override
@@ -37,4 +44,21 @@ public abstract class HostileMob extends Mob {
         }
         return facing;
 	}
+	public void tick() {	
+		super.tick();
+		Tile thisTile = level.getTile((int)pos.x/Tile.WIDTH, (int)pos.y/Tile.HEIGHT);
+		if (!thisTile.canPass(this)){
+			remove();
+		}
+	}
+	
+	public void collide(Entity entity, double xa, double ya) {
+		if (entity instanceof Mob) {
+			Mob mob = (Mob) entity;
+			if (isNotFriendOf(mob)) {
+				mob.hurt(this, DifficultyInformation.calculateStrength(strength));
+			}
+		}
+	}
+
 }

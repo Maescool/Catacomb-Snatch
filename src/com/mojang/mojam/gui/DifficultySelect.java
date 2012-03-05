@@ -11,6 +11,8 @@ import com.mojang.mojam.screen.Screen;
 
 public class DifficultySelect extends GuiMenu {
 	
+	private static final int DEFAULT_DIFFICULTY = 1;
+	
 	private ArrayList<DifficultyInformation> difficulties = DifficultyList.getDifficulties();
 	
 	private Checkbox[] DifficultyCheckboxes;
@@ -29,7 +31,7 @@ public class DifficultySelect extends GuiMenu {
 		DifficultyCheckboxes = new Checkbox[difficulties.size()];
 		setupDifficultyButtons();
 		
-		TitleMenu.difficulty = difficulties.get(0);
+		TitleMenu.difficulty = difficulties.get(DEFAULT_DIFFICULTY);
 		
 		startGameButton = new Button(hosting ? TitleMenu.HOST_GAME_ID : TitleMenu.START_GAME_ID,  
 				MojamComponent.texts.getStatic("diffselect.start"), (MojamComponent.GAME_WIDTH - 256 - 30), 
@@ -50,7 +52,7 @@ public class DifficultySelect extends GuiMenu {
             
             DifficultyCheckboxes[i] = (Checkbox) addButton(new Checkbox(i, difficulties.get(i).difficultyName, xStart + x * xSpacing, yStart + ySpacing * y));
             
-            if (i == 0) {
+            if (i == DEFAULT_DIFFICULTY) {
                 DifficultyCheckboxes[i].checked = true;
             }
         
@@ -63,7 +65,7 @@ public class DifficultySelect extends GuiMenu {
 	public void render(Screen screen) {
 		screen.blit(Art.emptyBackground, 0, 0);
 		super.render(screen);
-		Font.draw(screen, MojamComponent.texts.getStatic("diffselect.title"), 20, 20);
+		Font.defaultFont().draw(screen, MojamComponent.texts.getStatic("diffselect.title"), 20, 20);
 	}
 
 	@Override
@@ -114,20 +116,18 @@ public class DifficultySelect extends GuiMenu {
 			nextActiveButtonId = bestExistingDifficultyId(activeButtonId - 3, activeButtonId + 6, activeButtonId + 3);
 		}else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
 			nextActiveButtonId = bestExistingDifficultyId(activeButtonId + 3, activeButtonId - 6, activeButtonId - 3);
+		} else if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
+			startGameButton.postClick();
+		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			cancelButton.postClick();
+		} else {
+			super.keyPressed(e);
 		}
 		
 		// Update active button
 		if (nextActiveButtonId >= 0 && nextActiveButtonId < DifficultyCheckboxes.length) {
             checkOnlyOne(DifficultyCheckboxes[nextActiveButtonId]);
-		}
-
-		// Start on Enter, Cancel on Escape
-		if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E) {
-			startGameButton.postClick();
-		}
-		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			cancelButton.postClick();
-		}
+		}	
 	}
 	
 	public int bestExistingDifficultyId(int... options) {

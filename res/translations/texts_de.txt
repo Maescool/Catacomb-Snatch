@@ -1,0 +1,138 @@
+# Game texts encoded in UTF-8
+
+build.rail = DU BENÖTIGST {0} COINS UM EINE SCHIENE ZU PLATZIEREN
+build.droid = DU BENÖTIGST {0} COINS UM EINEN RAIL DROID ZU PLATZIEREN
+build.removeRail = DU BENÖTIGST {0} COINS UM EINE SCHIENE ZU ENTFERNEN
+
+back = ZURÜCK
+cancel = ABBRECHEN
+
+credits.leadDev = LEITENDER ENTWICKLER:
+credits.maintainers = PROJEKT VERWALTUNG:
+credits.communityMan = COMMUNITY VERWALTUNG:
+credits.others = UND DANKE AN ALLE MITWIRKENDEN, INSBESONDERE:
+credits.note = DIESES PROJEKT WIRD NUN ALS COMMUNITY PROJEKT WEITERENTWICKELT
+
+diffselect.title = WÄHLE EINEN SCHWIERIGKEITSGRAD
+diffselect.start = SPIEL STARTEN
+diffselect.easy = LEICHT
+diffselect.normal = NORMAL
+diffselect.hard = SCHWER
+diffselect.nightmare = ALBTRAUM
+
+gameplay.player1Win = {0} GEWINNT WOOHOO
+gameplay.player2Win = {0} GEWINNT YAY
+gameplay.player1Name = LORD LARD
+gameplay.player2Name = HERR VON SPECK
+gameplay.player3Name = DUCHESS DONUT
+gameplay.player4Name = COUNTESS CRULLER
+gameplay.FPS = FPS: {0}
+gameplay.latency = PING: {0}
+gameplay.cantPickup = DU KANNST DAS NICHT AUFHEBEN!
+
+help.goal = ZIEL
+help.help1 = SAMMLE ALS ERSTER 
+help.help2 = 50 LADUNGEN DES SCHATZES
+help.help3 = AUS DEM KELCH. DIESER BEFINDET 
+help.help4 = SICH IN DER MITTE DER KARTE.
+help.turret = GESCHÜTZ
+help.turret1 = SCHIESST AUF GEGNER RUNDHERUM.
+help.turret2 =
+help.turret3 =
+help.collector = SAMMLER
+help.collector1 = SAUGT COINS RUNDHERUM AUF. HEB IHN AUF,
+help.collector2 = UM DIE GESAMMELTEN COINS ZU ERHALTEN.
+help.collector3 =
+help.bomb = BOMBE
+help.bomb1 = SPRENGT DIE RISSIGEN WÄNDE.
+help.bomb2 = ANSCHIESSEN DAMIT SIE DETONIERT.
+help.bomb3 =
+help.rails = GLEISE
+help.rails1 = WERDEN FÜR RAIL-DROIDS BENÖTIGT.
+help.rails2 = DRÜCKE 'BAUEN' AUF DER ERSTEN SCHIENE
+help.rails3 = UM EINEN DROIDEN ZU PLATZIEREN (50 GOLD)
+
+keys.up = HOCH
+keys.down = RUNTER
+keys.left = LINKS
+keys.right = RECHTS
+keys.sprint = RENNEN
+keys.fire = SCHIESSEN
+keys.fireUp = HOCH SCHIESSEN
+keys.fireDown = RUNTER SCHIESSEN
+keys.fireLeft = LINKS SCHIESSEN
+keys.fireRight = RECHTS SCHIESSEN
+keys.use = BENUTZEN
+keys.build = BAUEN
+keys.upgrade = UPGRADE
+keys.chat = CHAT
+
+leveleditor.title = LEVEL EDITOR
+leveleditor.new = NEU
+leveleditor.open = ÖFFNEN
+leveleditor.save = SPEICHERN
+leveleditor.enterLevelName = LEVEL NAME EINGEBEN:
+
+levelselect.title = WÄHLE EIN LEVEL
+levelselect.start = WÄHLEN
+levelselect.update = AKTUALISIEREN
+
+mp.waitingForClient = WARTE AUF WEITERE SPIELER:
+mp.enterIP = GEBE DIE IP-ADRESSE DES HOSTS EIN:
+mp.localIP = DEINE LOKALE IP:
+mp.externalIP = DEINE EXTERNE IP:
+mp.join = BEITRETEN
+
+options.on = AN
+options.off = AUS
+options.keyBindings = TASTENBELEGUNG
+options.characterSelect = SPIELER AUSW.
+options.fullscreen = VOLLBILDMODUS
+options.showfps = ZEIGE FPS
+options.music = MUSIK
+options.sounds = SOUNDS
+options.volume = LAUTST.
+options.mute = STUMM
+options.creative = CREATIVE MODE
+options.alternative = ALTERNATIV SPIELER SKIN
+options.credits = CREDITS
+
+character.text = WÄHLE DEINEN SPIELER!
+character.select = AUSWÄHLEN
+
+pausemenu.help = HILFE
+pausemenu.backtomain = HAUPTMENÜ
+pausemenu.resume = FORTSETZEN 
+pausemenu.exit = SPIEL BEENDEN
+
+player.hasDied = {0} IST GESTORBEN!
+player.score = {0}: {1}%
+player.cost = {0}
+player.health = {0}%
+player.money = {0}
+player.nextLevel = {0}
+player.exp = {0}
+player.level = {0}
+
+shop.turretTooltipTitle = GESCHÜTZ
+shop.turretTooltipLine1 = GENUTZT ZUR VERTEIDIGUNG.
+shop.turretTooltipLine2 = GREIFT GEGNER IN DER NÄHE AN.
+shop.harvesterTooltipTitle = SAMMLER
+shop.harvesterTooltipLine1 = SAMMELT GELD IN DER NÄHE EIN.
+shop.harvesterTooltipLine2 = NUTZ ES UM DAS GELD ZU BEKOMMEN.
+shop.bombTooltipTitle = BOMBE
+shop.bombTooltipLine1 = ZERSTÖRT RISSIGE WÄNDE.
+shop.bombTooltipLine2 = BENUTZT UM ABKÜRZUNGEN FREI ZU SPRENGEN.
+
+titlemenu.start = STARTEN
+titlemenu.host = HOST
+titlemenu.join = BEITRETEN
+titlemenu.help = ANLEITUNG
+titlemenu.options = OPTIONEN
+titlemenu.levelEditor = LEVEL EDITOR
+titlemenu.exit = SCHLIESSEN
+
+upgrade.full = BEREITS VOLL AUSGEBAUT!
+upgrade.notEnoughMoney = DU HAST NICHT GENUG GELD ({0})
+upgrade.to = AUF LEVEL {0} AUSGEBAUT
+

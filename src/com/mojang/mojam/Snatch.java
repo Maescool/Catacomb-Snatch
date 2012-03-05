@@ -912,7 +912,7 @@ public final class Snatch
 	 */
 	public static Font getFont()
 	{
-		return Font.getFont();
+		return Font.defaultFont();
 	}
 
 	/**

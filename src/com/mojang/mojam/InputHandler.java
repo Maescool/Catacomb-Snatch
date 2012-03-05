@@ -2,17 +2,15 @@ package com.mojang.mojam;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Set;
 
 import com.mojang.mojam.Keys.Key;
 
 public class InputHandler implements KeyListener {
 
-	private Map<Integer, Key> mappings = new HashMap<Integer, Key>();
+	private Map<Key, Integer> mappings = new HashMap<Key, Integer>();
 
 	public InputHandler(Keys keys) {
 		// controls
@@ -24,12 +22,17 @@ public class InputHandler implements KeyListener {
 
 		// actions
 		initKey(keys.fire, KeyEvent.VK_SPACE);
+		initKey(keys.fireUp, KeyEvent.VK_UP);
+		initKey(keys.fireDown, KeyEvent.VK_DOWN);
+		initKey(keys.fireLeft, KeyEvent.VK_LEFT);
+		initKey(keys.fireRight, KeyEvent.VK_RIGHT);
 		initKey(keys.build, KeyEvent.VK_R);
 		initKey(keys.use, KeyEvent.VK_E);
 		initKey(keys.upgrade, KeyEvent.VK_F);
 		initKey(keys.pause, KeyEvent.VK_ESCAPE);
 		initKey(keys.screenShot, KeyEvent.VK_F2);
 		initKey(keys.fullscreen, KeyEvent.VK_F11);
+		initKey(keys.chat, KeyEvent.VK_T);
 	}
 
 	private void initKey(Key key, int defaultKeyCode) {
@@ -42,7 +45,7 @@ public class InputHandler implements KeyListener {
 				// default key code will be used
 			}
 		}
-		mappings.put(keyCode, key);
+		mappings.put(key, keyCode);
 	}
 
 	private String getKey(Key key) {
@@ -50,24 +53,24 @@ public class InputHandler implements KeyListener {
 	}
 
 	public void addMapping(Key key, int keyCode) {
-		mappings.put(keyCode, key);
+		// make sure no key is bound to more than one event
+		clearMappings(keyCode);
+		mappings.put(key, keyCode);
 		Options.set(getKey(key), String.valueOf(keyCode));
 	}
 
-	public void clearMappings(Key key) {
-		for (Integer mapping : getMappings(key)) {
-			mappings.remove(mapping);
-		}
-	}
-
-	public List<Integer> getMappings(Key key) {
-		ArrayList<Integer> keyCodes = new ArrayList<Integer>();
-		for (Entry<Integer, Key> entry : mappings.entrySet()) {
-			if (entry.getValue() == key) {
-				keyCodes.add(entry.getKey());
+	private void clearMappings(int keyCode) {
+		Set<Key> keySet = mappings.keySet();
+		for (Key _key : keySet) {
+			if (mappings.get(_key) == keyCode) {
+				mappings.put(_key, KeyEvent.VK_UNDEFINED);
+				Options.set(getKey(_key), String.valueOf(keyCode));
 			}
 		}
-		return keyCodes;
+	}
+	
+	public Integer getKeyEvent(Key key) {
+		return mappings.get(key);
 	}
 
 	@Override
@@ -84,7 +87,12 @@ public class InputHandler implements KeyListener {
 	public void keyTyped(KeyEvent ke) {}
 
 	private void toggle(KeyEvent ke, boolean state) {
-		Key key = mappings.get(ke.getKeyCode());
+		Key key = null;
+		Set<Key> keySet = mappings.keySet();
+		for (Key _key : keySet) {
+			if (mappings.get(_key) == ke.getKeyCode())
+				key = _key;
+		}
 		if (key != null) {
 			key.nextState = state;
 		}

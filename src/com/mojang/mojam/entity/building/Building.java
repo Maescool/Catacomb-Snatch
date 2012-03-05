@@ -1,48 +1,82 @@
 package com.mojang.mojam.entity.building;
 
 import com.mojang.mojam.MojamComponent;
-import com.mojang.mojam.entity.*;
+import com.mojang.mojam.Options;
+import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.IUsable;
+import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.network.TurnSynchronizer;
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.Screen;
 
-public class Building extends Mob implements IUsable {
+/**
+ * Generic building class
+ */
+public abstract class Building extends Mob implements IUsable {
 	public static final int SPAWN_INTERVAL = 60;
 	public static final int MIN_BUILDING_DISTANCE = 1700; // Sqr
-	public static final int HEALING_INTERVAL = 15;
+
+	public int REGEN_INTERVAL = 15;
+	public float REGEN_AMOUNT = 1;
+	public boolean REGEN_HEALTH = true;
+	public int healingTime = REGEN_INTERVAL;
 	
+
 	public int spawnTime = 0;
 	public boolean highlight = false;
-	private int healingTime = HEALING_INTERVAL;
+	public Mob carriedBy = null;
 
-	public Building(double x, double y, int team, int localTeam) {
-		super(x, y, team, localTeam);
+	protected int upgradeLevel = 0;
+	private int maxUpgradeLevel = 0;
+	private int[] upgradeCosts = null;
+
+	/**
+	 * Constructor
+	 * 
+	 * @param x
+	 *            Initial X coordinate
+	 * @param y
+	 *            Initial Y coordinate
+	 * @param team
+	 *            Team number
+	 */
+	public Building(double x, double y, int team) {
+		super(x, y, team);
 
 		setStartHealth(20);
 		freezeTime = 10;
 		spawnTime = TurnSynchronizer.synchedRandom.nextInt(SPAWN_INTERVAL);
 	}
 
-
-	
 	@Override
 	public void render(Screen screen) {
 		super.render(screen);
 		renderMarker(screen);
 	}
 
+	/**
+	 * Render the marker onto the given screen
+	 * 
+	 * @param screen
+	 *            Screen
+	 */
 	protected void renderMarker(Screen screen) {
-		if (highlight) {
+		if (highlight && !isCarried()) {
 			BB bb = getBB();
-			bb = bb.grow((getSprite().w - (bb.x1 - bb.x0)) / (3 + Math.sin(System.currentTimeMillis() * .01)));
+			bb = bb.grow((getSprite().w - (bb.x1 - bb.x0))
+					/ (3 + Math.sin(System.currentTimeMillis() * .01)));
 			int width = (int) (bb.x1 - bb.x0);
 			int height = (int) (bb.y1 - bb.y0);
 			Bitmap marker = new Bitmap(width, height);
 			for (int y = 0; y < height; y++) {
 				for (int x = 0; x < width; x++) {
-					if ((x < 2 || x > width - 3 || y < 2 || y > height - 3) && (x < 5 || x > width - 6) && (y < 5 || y > height - 6)) {
+					if ((x < 2 || x > width - 3 || y < 2 || y > height - 3)
+							&& (x < 5 || x > width - 6)
+							&& (y < 5 || y > height - 6)) {
 						int i = x + y * width;
 						marker.pixels[i] = 0xffffffff;
 					}
@@ -52,114 +86,144 @@ public class Building extends Mob implements IUsable {
 		}
 	}
 
+	@Override
 	public void tick() {
 		super.tick();
-		if (freezeTime > 0) {
-			return;
-		}
-		if (hurtTime <= 0) {
-			if (health < maxHealth) {
-				if (--healingTime <= 0) {
-					++health;
-					healingTime = HEALING_INTERVAL;
-				}
-			}
-		}
-
+		
 		xd = 0.0;
 		yd = 0.0;
 	}
-
-	@Override
-	public void hurt(Bullet bullet) {
-		super.hurt(bullet);
-		healingTime = HEALING_INTERVAL;
+	
+	public void doRegenTime() {
+		if (freezeTime <= 0) {
+			super.doRegenTime();
+		} else {
+			// DO NOTHING
+		}
+	}
+	
+	/**
+	 * Called if this building is picked up
+	 * 
+	 * @param mob Reference to the mob object carrying this building
+	 */
+	public void onPickup(Mob mob) {
+	    carriedBy = mob;
+	}
+	
+	/**
+	 * Called if this building is dropped by its carrier
+	 */
+	public void onDrop() {
+	    carriedBy = null;
+	}
+	
+	/**
+	 * Check if this building is being carried
+	 * 
+	 * @return True if carried, false if not
+	 */
+	public boolean isCarried() {
+	    return carriedBy != null;
 	}
 
-	@Override
-	public void hurt(Entity source, float damage) {
-		super.hurt(source, damage);
-		healingTime = HEALING_INTERVAL;
-	}
 
+	@Override
 	public Bitmap getSprite() {
 		return Art.floorTiles[3][2];
 	}
 
+	@Override
 	public boolean move(double xBump, double yBump) {
 		return false;
 	}
 
+	@Override
 	public void slideMove(double xa, double ya) {
 		super.move(xa, ya);
+		fallDownHole();
 	}
-
-	//
-	// Upgrade
-	//
+	
+	/**
+	 * Called if building upgrade is complete
+	 */
 	protected void upgradeComplete() {
-
 	}
 
-	protected int upgradeLevel = 0;
-	private int maxUpgradeLevel = 0;
-	private int[] upgradeCosts = null;
-
+	@Override
 	public boolean upgrade(Player p) {
 		if (upgradeLevel >= maxUpgradeLevel) {
-			MojamComponent.soundPlayer.playSound("/sound/Fail.wav", (float) pos.x, (float) pos.y, true);
-			if(this.team == this.localTeam) {
-				Notifications.getInstance().add(MojamComponent.texts.getStatic("upgrade.full"));
+			MojamComponent.soundPlayer.playSound("/sound/Fail.wav",
+					(float) pos.x, (float) pos.y, true);
+			if (this.team == MojamComponent.localTeam) {
+				Notifications.getInstance().add(
+						MojamComponent.texts.getStatic("upgrade.full"));
 			}
 			return false;
 		}
 
 		final int cost = upgradeCosts[upgradeLevel];
-		if (cost > p.getScore()) {
-			MojamComponent.soundPlayer.playSound("/sound/Fail.wav", (float) pos.x, (float) pos.y, true);
-			if(this.team == this.localTeam) {
-				Notifications.getInstance().add(MojamComponent.texts.upgradeNotEnoughMoney(cost));
+		if (cost > p.getScore() && !Options.getAsBoolean(Options.CREATIVE)) {
+			MojamComponent.soundPlayer.playSound("/sound/Fail.wav",
+					(float) pos.x, (float) pos.y, true);
+			if (this.team == MojamComponent.localTeam) {
+				Notifications.getInstance().add(
+						MojamComponent.texts.upgradeNotEnoughMoney(cost));
 			}
 			return false;
 		}
 
-		MojamComponent.soundPlayer.playSound("/sound/Upgrade.wav", (float) pos.x, (float) pos.y, true);
+		MojamComponent.soundPlayer.playSound("/sound/Upgrade.wav",
+				(float) pos.x, (float) pos.y, true);
 
 		++upgradeLevel;
 		p.useMoney(cost);
 		upgradeComplete();
-		
-		if(this.team == this.localTeam) {
-			Notifications.getInstance().add(MojamComponent.texts.upgradeTo(upgradeLevel+1));
+
+		if (this.team == MojamComponent.localTeam) {
+			Notifications.getInstance().add(
+					MojamComponent.texts.upgradeTo(upgradeLevel + 1));
 		}
 		return true;
 	}
 
+	/**
+	 * Make this building upgradeable
+	 * 
+	 * @param costs Cost vector
+	 */
 	void makeUpgradeableWithCosts(int[] costs) {
-		maxUpgradeLevel = 0;
-		if (costs == null)
-			return;
-
-		upgradeCosts = costs;
-		maxUpgradeLevel = costs.length - 1;
-		upgradeComplete();
+		if (costs == null) {
+			maxUpgradeLevel = 0;
+		} else {
+			upgradeCosts = costs;
+			maxUpgradeLevel = costs.length - 1;
+			upgradeComplete();
+		}
+		return;
 	}
 
+	@Override
 	public void use(Entity user) {
 		if (user instanceof Player) {
 			((Player) user).pickup(this);
 		}
 	}
-  
+
+	@Override
 	public boolean isHighlightable() {
 		return true;
 	}
 
+	@Override
 	public void setHighlighted(boolean hl) {
 		highlight = hl;
+		justDroppedTicks = 80;
 	}
 
+	@Override
 	public boolean isAllowedToCancel() {
 		return true;
 	}
+	
 }

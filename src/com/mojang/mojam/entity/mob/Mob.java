@@ -5,10 +5,18 @@ import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.animation.EnemyDieAnimation;
+import com.mojang.mojam.entity.animation.ItemFallAnimation;
+import com.mojang.mojam.entity.animation.PlayerFallingAnimation;
+import com.mojang.mojam.entity.building.Building;
+import com.mojang.mojam.entity.building.Harvester;
 import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.loot.Loot;
+import com.mojang.mojam.gui.TitleMenu;
+import com.mojang.mojam.level.DifficultyInformation;
+import com.mojang.mojam.level.tile.HoleTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.Vec2;
+import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
@@ -19,7 +27,7 @@ public abstract class Mob extends Entity {
 	public final static int MoveControlFlag = 1;
 
 	// private double speed = 0.82;
-	private double speed = 1.0;
+	protected double speed = 1.0;
 	public int team;
 	protected boolean doShowHealthBar = true;
     protected int healthBarOffset = 10;
@@ -31,20 +39,30 @@ public abstract class Mob extends Entity {
 	public float health = maxHealth;
 	public boolean isImmortal = false;
 	public double xBump, yBump;
-	public Mob carrying = null;
+	public Building carrying = null;
 	public int yOffs = 8;
 	public double xSlide;
 	public double ySlide;
 	public int deathPoints = 0;
 	public boolean chasing=false;
 	public int justDroppedTicks = 0;
-	public int localTeam;
+	public int strength = 0;
+	public int REGEN_INTERVAL;
+	public float REGEN_AMOUNT = 1;
+	public boolean REGEN_HEALTH = true;
+	public int healingTime = REGEN_INTERVAL;
+    protected int facing;
+    private int walkTime;
+    protected int stepTime;
+    protected int limp;
 	
-	public Mob(double x, double y, int team, int localTeam) {
+	public Mob(double x, double y, int team) {
 		super();
 		setPos(x, y);
 		this.team = team;
-		this.localTeam = localTeam;
+		DifficultyInformation difficulty = TitleMenu.difficulty;
+		this.REGEN_INTERVAL = (difficulty != null && difficulty.difficultyID == 3) ? 15 : 25;
+		this.healingTime = this.REGEN_INTERVAL;
 	}
 
 	public void init() {
@@ -78,18 +96,23 @@ public abstract class Mob extends Entity {
 	}
 
 	public void tick() {
+		if (TitleMenu.difficulty.difficultyID >= 1 ) {
+			this.doRegenTime();
+		}
+		
 		if (hurtTime > 0) {
 			hurtTime--;
 		}
+		
 		if (bounceWallTime > 0) {
 			bounceWallTime--;
 		}
-
+		
 		if (freezeTime > 0) {
 			slideMove(xSlide, ySlide);
 			xSlide *= 0.8;
 			ySlide *= 0.8;
-
+			
 			if (xBump != 0 || yBump != 0) {
 				move(xBump, yBump);
 			}
@@ -104,7 +127,27 @@ public abstract class Mob extends Entity {
 			}
 		}
 	}
-
+	
+	public void doRegenTime() {
+		if (!this.REGEN_HEALTH) {
+			// DO NOTHING
+		} else if (hurtTime <= 0 && health < maxHealth && --healingTime <= 0) {
+			this.healingTime = this.REGEN_INTERVAL;
+			this.onRegenTime();
+		}
+	}
+	
+	public void onRegenTime() {
+			this.regenerateHealthBy( this.REGEN_AMOUNT );
+			// Can add thing here like a custom regen action
+	}
+	
+	public void regenerateHealthBy(float a) { 
+	    health += a ;
+	    if (health > maxHealth)
+	    	health = maxHealth;
+	}
+	
 	public void slideMove(double xa, double ya) {
 		move(xa, ya);
 	}
@@ -167,25 +210,41 @@ public abstract class Mob extends Entity {
 		if (doShowHealthBar && health < maxHealth) {
             addHealthBar(screen);
         }
-
-		// @todo maybe not have the rendering of carried item here..
-		renderCarrying(screen, 0);
 	}
 
 	protected void addHealthBar(Screen screen) {
         
         int start = (int) (health * 21 / maxHealth);
         
-        screen.blit(Art.healthBar[start][0], pos.x - 16, pos.y + healthBarOffset);
+        float one_tenth_hp = (float) (maxHealth / 10f);
+		float three_tenths_hp = one_tenth_hp * 3;
+		float size_tenths_hp = one_tenth_hp * 6;
+		float eigth_tenths_hp = one_tenth_hp * 8;
+		
+		int color = 0;
+		
+		if(health < three_tenths_hp){
+			color = 0xf62800;
+		}else if (health < size_tenths_hp){
+			color = 0xfe7700;
+		}else if (health < eigth_tenths_hp){
+			color = 0xfef115;
+		}else {
+			color = 0x8af116;
+		}
+
+		screen.blit(Art.healthBar_Underlay[start][0], pos.x - 16, pos.y + healthBarOffset);
+		screen.colorBlit(Art.healthBar[start][0], pos.x - 16, pos.y + healthBarOffset, (0xa8 << 24) + color);
+		screen.blit(Art.healthBar_Outline[0][0], pos.x - 16, pos.y + healthBarOffset);
     }
 
 	protected void renderCarrying(Screen screen, int yOffs) {
 		if (carrying == null)
 			return;
 
-		Bitmap image = carrying.getSprite();
-		screen.blit(image, carrying.pos.x - image.w / 2, carrying.pos.y - image.h + 8 + yOffs);// image.h
-		// / 2 - 8);
+		carrying.yOffs -= yOffs;
+		carrying.render(screen);
+		carrying.yOffs += yOffs;
 	}
 
 	public abstract Bitmap getSprite();
@@ -193,7 +252,9 @@ public abstract class Mob extends Entity {
 	public void hurt(Entity source, float damage) {
 		if (isImmortal)
 			return;
-
+		
+		this.healingTime = this.REGEN_INTERVAL;
+		
 		if (freezeTime <= 0) {
 			
 			if (source instanceof Bullet && !(this instanceof SpawnerEntity) && !(this instanceof RailDroid)) {
@@ -227,9 +288,24 @@ public abstract class Mob extends Entity {
 		return deathPoints;
 	}
 
-	public void onPickup() {
+	public void pickup(Building b) {
+        if (b.health > 0) {
+            level.removeEntity(b);
+            carrying = b;
+            carrying.onPickup(this);
+        }
 	}
-        
+	
+	public void drop() {
+        carrying.removed = false;
+        carrying.freezeTime = 10;
+        carrying.justDroppedTicks=80;
+        carrying.setPos(pos);
+        level.addEntity(carrying);
+        carrying.onDrop();
+        carrying = null;
+	}
+
 	public boolean isCarrying() {
 		return (this.carrying != null);
 	}
@@ -242,7 +318,8 @@ public abstract class Mob extends Entity {
 
         int dx, dy, inx, iny, a;
         Tile temp;
-
+        Tile dTile1;
+        Tile dTile2;
         dx = x2 - x1;
         dy = y2 - y1;
         inx = dx > 0 ? 1 : -1;
@@ -261,6 +338,11 @@ public abstract class Mob extends Entity {
                     return true;
                 }
                 if (a >= 0) {
+                	dTile1=level.getTile(x1+inx,y1);
+                	dTile2=level.getTile(x1,y1+iny);
+                	if (!(dTile1.canPass(e)||dTile2.canPass(e))){
+                		return true;
+                	}
                     y1 += iny;
                     a -= dx;
                 }
@@ -277,7 +359,12 @@ public abstract class Mob extends Entity {
                     return true;
                 }
                 if (a >= 0) {
-                    x1 += inx;
+                	dTile1=level.getTile(x1+inx,y1);
+                	dTile2=level.getTile(x1,y1+iny);
+                	if (!(dTile1.canPass(e)||dTile2.canPass(e))){
+                		return true;
+                	}
+                	x1 += inx;
                     a -= dy;
                 }
                 a += dx;
@@ -289,5 +376,63 @@ public abstract class Mob extends Entity {
             return true;
         }
         return false;
+    }
+    
+    public boolean fallDownHole() {
+        int x=(int)(pos.x/Tile.WIDTH);
+        int y=(int)(pos.y/Tile.HEIGHT);
+        if (level.getTile(x, y) instanceof HoleTile) {
+            if (!(this instanceof Player)){
+                ItemFallAnimation animation = new ItemFallAnimation(x*Tile.WIDTH, y*Tile.HEIGHT, this.getSprite());
+                if(this instanceof Harvester){
+                    animation.setHarvester();
+                }
+                level.addEntity(animation);
+                remove();
+            } else {
+                int characterID = ((Player)this).getCharacterID();
+                level.addEntity(new PlayerFallingAnimation(x*Tile.WIDTH, y*Tile.HEIGHT, characterID));
+                if (characterID < 2)
+                    MojamComponent.soundPlayer.playSound("/sound/falling_male.wav", (float) pos.x, (float) pos.y);
+                else
+                    MojamComponent.soundPlayer.playSound("/sound/falling_female.wav", (float) pos.x, (float) pos.y);
+            }
+            return true;
+        }
+        return false;
+    }
+    
+    public void walk(){
+    	switch (facing) {
+        case 0:
+            yd -= speed;
+            break;
+        case 1:
+            xd += speed;
+            break;
+        case 2:
+            yd += speed;
+            break;
+        case 3:
+            xd -= speed;
+            break;
+    	}
+    	walkTime++;
+
+    	if (walkTime / 12 % limp != 0) {
+    		if (shouldBounceOffWall(xd, yd)) {
+    			facing = (facing + 2) % 4;
+    			xd = -xd;
+    			yd = -yd;
+    		}
+
+    		stepTime++;
+    		if ((!move(xd, yd) || (walkTime > 10 && TurnSynchronizer.synchedRandom.nextInt(200) == 0) && chasing==false)) {
+    			facing = TurnSynchronizer.synchedRandom.nextInt(4);
+    			walkTime = 0;
+    		}
+    	}
+    	xd *= 0.2;
+    	yd *= 0.2;
     }
 }

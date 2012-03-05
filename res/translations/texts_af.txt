@@ -1,0 +1,134 @@
+# Game texts encoded in UTF-8
+
+build.rail = JY MOET {0} GOUD Hê OM 'N SPOOR TE BOU
+build.droid = JY HET {0} GOUD NODIG VIR 'N SPOOR-ROBOT
+build.removeRail = JY HET {0} NODIG OM 'N SPOOR TE VERWYDER. 
+
+back = TERUG
+cancel = KANSELLEER
+
+credits.leadDev = HOOF ONTWIKKELAAR:
+credits.maintainers = PROJEK ONDERHOUERS:
+credits.communityMan = GEMEENSKAP ONDERHOUERS:
+credits.others = DANKIE VIR AL DIE BYDRAERS, INSLUITEND:
+credits.note = HIERDIE PROJEK WORD NOU ONDERHOU DEUR DIE GEMEENSKAP
+
+diffselect.title = KIES MOEILIJKHEIDSVLAK
+diffselect.start = BEGIN
+diffselect.easy = MAKLIK
+diffselect.normal = NORMAAL
+diffselect.hard = MOEILIK
+diffselect.nightmare = NAGMERRIE
+
+gameplay.player1Win = {0} WEN WOOHOO
+gameplay.player2Win = {0} WEN YAY
+gameplay.player1Name = LORD LARD
+gameplay.player2Name = HERR VON SPECK
+gameplay.player3Name = DUCHESS DONUT
+gameplay.player4Name = COUNTESS CRULLER
+gameplay.FPS = FPS: {0}
+gameplay.latency = LATENTIE: {0}
+gameplay.cantPickup = JY KAN DIT NIE OPTEL NIE!
+
+help.goal = DOELWIT
+help.help1 = VERSAMEL 50 LOTTE GOUD VAN DIE
+help.help2 = SKATKIS WAT GELEë IS IN DIE
+help.help3 =  MIDDEL VAN DIE KAMER VOORDAT
+help.help4 =  JOU TEENSTANDER(S) DIT DOEN.
+help.turret = TORING
+help.turret1 = SKIET VYANDE IN DIE OMGEWING.
+help.turret2 =
+help.turret3 =
+help.collector = INSAMELAAR
+help.collector1 = TREK MUNSTUKKE IN OMGEWING BINNE.
+help.collector2 = TEL DIE INSAMELAAR OP OM DIE
+help.collector3 = VERSAMELDE MUNTE TE ONTVANG.
+help.bomb = BOM
+help.bomb1 = DIT WORD GEBRUIK OM GEKRAAKTE MURE
+help.bomb2 = TE VERNIETIG. SKIET DIT OM DIT TE
+help.bomb3 = LAAT ONTPLOF.
+help.rails = SPORE
+help.rails1 = VIR DIE SPOOR-ROBOTTE OM GOUD IN TE
+help.rails2 = SAMEL. DRUK BOU OP DIE EERSTE SPOOR
+help.rails3 = OM 'N SPOOR-ROBOT TE KOOP (50 GOUD)
+
+keys.up = OP
+keys.down = AF
+keys.left = LINKS
+keys.right=  REGS
+keys.sprint = HARDLOOP
+keys.fire = SKIET
+keys.use = GEBRUIK
+keys.build = BOU
+keys.upgrade = OPGRADEER
+keys.chat = GESêLS
+
+leveleditor.title = KAMER ONTWERP
+leveleditor.new = NUWE
+leveleditor.open = OPEN
+leveleditor.save = STOOR
+leveleditor.enterLevelName = KAMER NAAM:
+
+levelselect.title = KIES 'N KAMER
+levelselect.start = BEGIN
+levelselect.update = VERVRIS KAMERS
+
+mp.waitingForClient = WAG VIR DIE KLIëNT OM AAN TE SLUIT...
+mp.enterIP = TIK DIE IP VAN DIE GASHEER:
+mp.localIP = JOU PLAASLIKE IP:
+mp.externalIP = JOU EKSTERNE IP:
+mp.join = SLUIT AAN
+
+options.on = AAN
+options.off = AF
+options.keyBindings = SLEUTELBORD
+options.characterSelect = KARAKTER KEUSE
+options.fullscreen = VOLSKERM
+options.showfps = WYS FPS
+options.music = MUSIEK
+options.sounds = KLANKE
+options.volume = VOLUME
+options.mute = DEMP
+options.creative = KREATIEWE MODUS
+options.alternative = ALTERNATIEWE SPELER VEL
+options.credits = KREDIETE
+
+character.text = KIES JOU KARAKTER
+character.select = SELEKTEER
+
+pausemenu.help = HULP
+pausemenu.backtomain = HOOF
+pausemenu.resume = GAAN VOORT
+pausemenu.exit = VERLAAT SPEL
+
+player.hasDied = {0} HET GESTERF!
+player.score = {0}: {1}%
+player.cost = {0}
+player.health = {0}%
+player.money = {0}
+player.nextLevel = {0}
+player.exp = {0}
+player.level = {0}
+
+shop.turretTooltipTitle = GEWEER TORING
+shop.turretTooltipLine1 = GEBRUIK VIR VERDEDIGING.
+shop.turretTooltipLine2 = VAL NABY VYANDE AAN.
+shop.harvesterTooltipTitle = STROPER
+shop.harvesterTooltipLine1 = VERSAMEL SKATTE.
+shop.harvesterTooltipLine2 = GEBRUIK OM GOUD TE EIS.
+shop.bombTooltipTitle = BOM
+shop.bombTooltipLine1 = VERNIETIG GEKRAAKTE MURE.
+shop.bombTooltipLine2 = KAN KORTPAAIE SKEP.
+
+titlemenu.start = BEGIN
+titlemenu.host = ONTHAAL SPEL
+titlemenu.join = SLUIT AAN
+titlemenu.help = HULP
+titlemenu.options = OPSIES
+titlemenu.levelEditor = ONTWERP KAMER
+titlemenu.exit = VERLAAT
+
+upgrade.full = REEDS TEN VOLLE OPGEGRADEER!
+upgrade.notEnoughMoney = JY HET NIE GENOEG GOUD NIE ({0})
+upgrade.to = OPGEGRADEER NA VLAK {0}
+

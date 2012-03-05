@@ -11,10 +11,9 @@ import com.mojang.mojam.screen.Bitmap;
 public class EntityBoss extends Mob
 {
 
-	public EntityBoss(double x, double y, int i)
+	public EntityBoss(double x, double y)
 	{
-		super(x, y, Team.Neutral, i);
-		localTeam = i;
+		super(x, y, Team.Neutral);
 		setPos(x, y);
 		radius = new Vec2(20, 20);
 		maxHealth = 50;
@@ -40,7 +39,7 @@ public class EntityBoss extends Mob
 		}
 		if(Snatch.getMojam().synchronizer.synchedRandom.nextInt(2000) == 0)
 		{
-			if(carrying == null) carrying = new Bomb(pos.x, pos.y, localTeam);
+			if(carrying == null) carrying = new Bomb(pos.x, pos.y);
 			else handleCarrying();
 		}
 		if(bounceWallTime > 0)
@@ -79,7 +78,7 @@ public class EntityBoss extends Mob
 		carrying.setPos(pos.x, pos.y - 20);
 		if(!(carrying instanceof Turret))
 		{
-			carrying.tick();
+			//carrying.tick();
 		}
 
 		if(Snatch.getMojam().synchronizer.synchedRandom.nextInt(2000) == 0 && (!(carrying instanceof IUsable) || (carrying instanceof IUsable && ((IUsable) carrying).isAllowedToCancel())))

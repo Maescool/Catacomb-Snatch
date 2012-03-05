@@ -20,14 +20,14 @@ public class mod_TestSpawners extends Mod
 
 	public mod_TestSpawners()
 	{
-		id = Snatch.addEntity(new TestEntity(0, 0, 0));
+		id = Snatch.addEntity(new TestEntity(0, 0));
 	}
 
 	@Override
 	public Entity getEntityInstanceById(int i, double x, double y)
 	{
 		Mob te = null;
-		if(i == id) te = new TestEntity(x, y, 0);
+		if(i == id) te = new TestEntity(x, y);
 		return te;
 	}
 	

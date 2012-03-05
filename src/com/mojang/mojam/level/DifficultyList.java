@@ -10,10 +10,10 @@ public class DifficultyList {
 
 	private static void createDifficultyList() {
 		Difficulties = new ArrayList<DifficultyInformation>();
-		Difficulties.add(new DifficultyInformation(MojamComponent.texts.getStatic("diffselect.easy"), .5f, .5f, 1.5f, .5f));
-		Difficulties.add(new DifficultyInformation(MojamComponent.texts.getStatic("diffselect.normal"), 1, 1, 1, 1));
-		Difficulties.add(new DifficultyInformation(MojamComponent.texts.getStatic("diffselect.hard"), 3, 3, .5f, 1.5f));
-		Difficulties.add(new DifficultyInformation(MojamComponent.texts.getStatic("diffselect.nightmare"), 6, 5, .25f, 2.5f));
+		Difficulties.add(new DifficultyInformation(MojamComponent.texts.getStatic("diffselect.easy"), .5f, .5f, 1.5f, .5f, 0));
+		Difficulties.add(new DifficultyInformation(MojamComponent.texts.getStatic("diffselect.normal"), 1, 1, 1, 1, 1));
+		Difficulties.add(new DifficultyInformation(MojamComponent.texts.getStatic("diffselect.hard"), 3, 3, .5f, 1.5f, 2));
+		Difficulties.add(new DifficultyInformation(MojamComponent.texts.getStatic("diffselect.nightmare"), 6, 5, .25f, 2.5f, 3));
 	}
 
 	public static ArrayList<DifficultyInformation> getDifficulties() {

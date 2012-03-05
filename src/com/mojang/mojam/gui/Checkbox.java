@@ -46,7 +46,7 @@ public class Checkbox extends ClickableComponent
                 screen.blit(Art.checkbox[0][0], getX(), getY());
         }
         
-        Font.draw(screen, label, getX() + 24 + 4, getY() + getHeight() / 2 - 4);
+        Font.defaultFont().draw(screen, label, getX() + 24 + 4, getY() + getHeight() / 2 - 4);
     }
 
     public int getId()
