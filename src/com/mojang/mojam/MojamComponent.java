@@ -111,6 +111,7 @@ public class MojamComponent extends Canvas implements Runnable,
 	public static Screen screen = new Screen(GAME_WIDTH, GAME_HEIGHT);
 	private Level level;
 	private Chat chat = new Chat();
+	public Console console = new Console();
 
 	// Latency counter
 	private static final int CACHE_EMPTY=0, CACHE_PRIMING=1, CACHE_PRIMED=2;
@@ -168,6 +169,7 @@ public class MojamComponent extends Canvas implements Runnable,
 		addMenu(menu);
 		addKeyListener(this);
 		addKeyListener(chat);
+		addKeyListener(console);
 
 		instance = this;
 		LevelList.createLevelList();
@@ -453,6 +455,10 @@ public class MojamComponent extends Canvas implements Runnable,
 		if (isMultiplayer && menuStack.isEmpty()) {
 			chat.render(screen);
 		}
+		
+		if(console.isOpen() && menuStack.isEmpty()) {
+			console.render(screen);
+		}
 
 		g.setColor(Color.BLACK);
 
@@ -531,6 +537,21 @@ public class MojamComponent extends Canvas implements Runnable,
 	}
 
 	private void tick() {
+		//console open/close
+		if (this.isFocusOwner() && level != null) {
+			keys.console.tick();
+			if (keys.console.wasPressed()) {
+				console.toggle();
+				paused = !paused;
+			}
+			if(console.isOpen()) {
+				if(menuStack.isEmpty()) { 
+					keys.release();
+					mouseButtons.releaseAll();
+				}
+				console.tick();
+			}
+		}
 		//Not-In-Focus-Pause
 		if (level != null && !isMultiplayer && !paused && !this.isFocusOwner()) {
 			keys.release();
@@ -585,8 +606,7 @@ public class MojamComponent extends Canvas implements Runnable,
 
 		if (level == null) {
 			mouseButtons.tick();
-		} else 
-		if (level != null) {
+		} else {
 			if (synchronizer.preTurn()) {
 				synchronizer.postTurn();
 
