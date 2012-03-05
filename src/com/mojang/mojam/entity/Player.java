@@ -79,7 +79,7 @@ public class Player extends Mob implements LootCollector {
     private GameCharacter character;
 
     public WeaponInventory weaponInventory = new WeaponInventory();
-    public int weaponSlot = 0;
+    private int weaponSlot = 0;
     private boolean isWeaponChanged = false;
     
     /**
@@ -475,11 +475,7 @@ public class Player extends Mob implements LootCollector {
     		if(weapon != null) {
     			this.weapon = weapon;
     		}
-    		else {
-            	if(this.team == MojamComponent.localTeam) {
-            		Notifications.getInstance().add(MojamComponent.texts.buildDroid(COST_DROID));
-            	}
-    		}
+    		else weaponSlot = prevWeaponSlot;
     		isWeaponChanged = false;
     	}
     }
@@ -774,6 +770,10 @@ public class Player extends Mob implements LootCollector {
         return score;
     }
 
+    public int getActiveWeaponSlot() {
+    	return weaponSlot;
+    }
+    
     @Override
     public Bitmap getSprite() {
         return null;

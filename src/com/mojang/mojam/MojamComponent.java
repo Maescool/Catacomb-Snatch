@@ -515,7 +515,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private void addWeaponSlots(Screen screen) {
 		Font font = Font.FONT_GOLD;
 		for(int i = 0; i < 3 && i < player.weaponInventory.size(); i++) {
-			if(player.weaponSlot == i) {
+			if(i == player.getActiveWeaponSlot()) {
 				screen.alphaFill(2 + i*32, 2, 30, 30, 0xffaaaaaa, 0x30);
 			}
 			else {
