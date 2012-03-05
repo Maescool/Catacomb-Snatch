@@ -151,6 +151,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 	public MojamComponent() {
 		
+		// initialize the constants
 		MojamComponent.constants = new Constants();
 
 		this.setPreferredSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));

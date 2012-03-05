@@ -6,12 +6,18 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.tile.Tile;
+import com.mojang.mojam.resources.Constants;
 
 
 public abstract class HostileMob extends Mob  implements IEditable {
 
 	public HostileMob(double x, double y, int team) {
 		super(x, y, team);
+		deathPoints = Constants.getInt("deathPoints", this);
+		strength = Constants.getInt("strength", this);
+		speed = Constants.getDouble("speed", this);
+		limp = Constants.getInt("limp", this);
+		setStartHealth(Constants.getFloat("health", this));
 	}
 
 	@Override

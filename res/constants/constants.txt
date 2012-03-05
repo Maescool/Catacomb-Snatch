@@ -11,11 +11,26 @@ options.locale_ru = РУССКИЙ
 options.locale_sl = SLOVENSKI
 options.locale_sv = SVENSKT
 
-mob.bat.deathPoints=1
-mob.bat.strength=1
-mob.mummy.deathPoints=4
-mob.mummy.strength=2
-mob.scarab.deathPoints=4
-mob.scarab.strength=2
-mob.snake.deathPoints=2
-mob.snake.strength=1
+com.mojang.mojam.entity.mob.Bat.deathPoints=1
+com.mojang.mojam.entity.mob.Bat.strength=1
+com.mojang.mojam.entity.mob.Bat.health=1
+com.mojang.mojam.entity.mob.Bat.speed=1
+com.mojang.mojam.entity.mob.Bat.limp=0
+
+com.mojang.mojam.entity.mob.Mummy.deathPoints=4
+com.mojang.mojam.entity.mob.Mummy.strength=2
+com.mojang.mojam.entity.mob.Mummy.health=7
+com.mojang.mojam.entity.mob.Mummy.speed=0.5
+com.mojang.mojam.entity.mob.Mummy.limp=3
+
+com.mojang.mojam.entity.mob.Scarab.deathPoints=4
+com.mojang.mojam.entity.mob.Scarab.strength=2
+com.mojang.mojam.entity.mob.Scarab.health=5
+com.mojang.mojam.entity.mob.Scarab.speed=0.7
+com.mojang.mojam.entity.mob.Scarab.limp=4
+
+com.mojang.mojam.entity.mob.Snake.deathPoints=2
+com.mojang.mojam.entity.mob.Snake.strength=1
+com.mojang.mojam.entity.mob.Snake.health=3
+com.mojang.mojam.entity.mob.Snake.speed=1.5
+com.mojang.mojam.entity.mob.Snake.limp=4
