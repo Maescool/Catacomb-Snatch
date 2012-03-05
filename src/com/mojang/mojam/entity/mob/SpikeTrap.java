@@ -67,6 +67,14 @@ public class SpikeTrap extends Mob implements IEditable {
 		}
 		return false;
 	}
+	
+	/**
+	 * Position of spike with 0 being  completely in the floor and 3 max out.
+	 * @return the spike phase
+	 */
+	public int getSpikePhase() {
+		return spike;
+	}
 
 	public boolean isBuildable() {
 		return false;
