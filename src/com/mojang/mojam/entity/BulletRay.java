@@ -1,7 +1,5 @@
 package com.mojang.mojam.entity;
 
-import com.mojang.mojam.MojamComponent;
-import com.mojang.mojam.entity.building.Bomb;
 import com.mojang.mojam.entity.mob.*;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.*;
@@ -69,35 +67,7 @@ public class BulletRay extends Bullet {
 	}
 
 	@Override
-	protected boolean shouldBlock(Entity e) {
-			if (e instanceof BulletRay)
-				return false;
-			if ((e instanceof Mob) && !(e instanceof RailDroid) && !((Mob) e).isNotFriendOf(owner))
-				return false;
-			return e != owner;
-	}
-
-	@Override
 	public void render(Screen screen) {
 		screen.blit(Art.plasmaBall[frame][0], (int)pos.x - 8, (int)pos.y - 10);
-	}
-
-	@Override
-	public void collide(Entity entity, double xa, double ya) {
-		if (entity instanceof Mob) {
-			Mob mobEnt = (Mob) entity;
-			if (entity instanceof Bomb) {
-				((Bomb)entity).hit();
-			} else if (mobEnt.isNotFriendOf(owner) || (entity instanceof RailDroid)) {
-				mobEnt.hurt(this,damage);
-				hit = true;
-			}
-		} else {
-			entity.hurt(this);
-			hit = true;
-		}
-		if (hit) {
-			MojamComponent.soundPlayer.playSound("/sound/Shot 2.wav", (float) pos.x, (float) pos.y);
-		}
 	}
 }
