@@ -34,7 +34,7 @@ public abstract class ShopItem extends Building {
 
 
     @Override
-    public final void render(Screen screen) {
+    public void render(Screen screen) {
         super.render(screen);
         if(team == MojamComponent.localTeam) {
         	//Render the Cost text
