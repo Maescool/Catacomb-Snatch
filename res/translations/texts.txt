@@ -94,6 +94,7 @@ options.on = ON
 options.off = OFF
 options.keyBindings = KEY BINDINGS
 options.characterSelect = SEL. CHARACTER
+options.trapmouse = TRAP MOUSE IN WINDOW
 options.fullscreen = FULLSCREEN
 options.showfps = SHOW FPS
 options.music = MUSIC
