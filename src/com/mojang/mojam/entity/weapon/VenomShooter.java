@@ -12,7 +12,7 @@ public class VenomShooter extends Rifle {
 	}
 
 	public Bullet getAmmo(double xDir, double yDir) {
-		Bullet bullet = new BulletPoison(owner, xDir, yDir, bulletDamge);
+		Bullet bullet = new BulletPoison(owner, xDir, yDir, bulletDamage);
 		bullet.pos.y = bullet.pos.y-19; //this will make the bullet look like its coming out of the snakes mouth
 		bullet.pos.x = bullet.pos.x;
 		return bullet;
