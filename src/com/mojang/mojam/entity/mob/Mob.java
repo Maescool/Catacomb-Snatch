@@ -158,6 +158,8 @@ public abstract class Mob extends Entity {
 		// Like apply buffs based to Health effects
 		regen = this.buffs.effectsOf(Buff.BuffType.HEALTH_MODIF, regen);
 		regen = this.buffs.effectsOf(Buff.BuffType.REGEN_RATE  , regen);
+
+		this.regenerateHealthBy( regen );
 	}
 	
 	public void regenerateHealthBy(float a) { 
