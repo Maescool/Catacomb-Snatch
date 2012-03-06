@@ -48,6 +48,7 @@ public class Harvester extends Building implements LootCollector {
 		setStartHealth(10);
 		freezeTime = 10;
 		yOffs = 20;
+		//TODO should this upgrade cost change with Difficulty like Turret?
 		makeUpgradeableWithCosts(new int[] { 500, 1000, 5000 });
 		healthBarOffset = 13;
 		areaBitmap = Bitmap.rangeBitmap(radius,RADIUS_COLOR);

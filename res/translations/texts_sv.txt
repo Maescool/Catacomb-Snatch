@@ -7,14 +7,16 @@ build.removeRail = DU BEHÖVER {0} FÖR ATT RIVA EN RÄLS
 back = BAKÅT
 cancel = AVBRYT
 
+campaignmenu.title = VÄLJ EN KAMPANJ
+
 character.text = VÄLJ DIN KARAKTÄR!
 character.select = VÄLJ
 
 credits.leadDev = PROJEKTANSVARIG:
 credits.maintainers = PROJEKTARBETARE:
 credits.communityMan = COMMUNITY ANSVARIGA:
-credits.others = AND THANKS TO ALL CONTRIBUTORS, INCLUDING:
-credits.note = THIS PROJECT IS NOW MAINTAINED AS A COMMUNITY PROJECT
+credits.others = OCH TACK TILL ALLA SOM HJÄLPT TILL, INKLUSIVE:
+credits.note = DETTA PROJEKT KÖRS SOM ETT COMMUNITY PROJEKT
 
 diffselect.title = VÄLJ SVÅRIGHETSGRAD
 diffselect.start = BÖRJA SPELA
@@ -22,6 +24,15 @@ diffselect.easy = LÄTT
 diffselect.normal = NORMAL
 diffselect.hard = SVÅR
 diffselect.nightmare = OMÖJLIG
+
+exitmenu.headline = VILL DU VERKLIGEN SLUTA SPELA?
+exitmenu.cancel = NEJ
+exitmenu.exit = JA
+
+gamemodemenu.title = VÄLJ ETT SPELLÄGE
+gamemodemenu.campaign = KAMPANJ
+gamemodemenu.arcade = ARKAD
+gamemodemenu.creative = KREATIV
 
 gameplay.player1Win = {0} VANN YAY
 gameplay.player2Win = {0} VANN YAY
@@ -139,4 +150,4 @@ titlemenu.exit = AVSLUTA
 upgrade.full = REDAN FULLT UPPGRADERAD!
 upgrade.shopItem = DU KAN INTE UPPGRADERA AFFÄRS SAKER!
 upgrade.notEnoughMoney = DU HAR INTE TILLRÄCKLIGT MED PENGAR ({0})
-upgrade.to = UPPDATERAD TILL {0}
+upgrade.to = UPPDATERAD TILL NIVÅ {0}

@@ -45,6 +45,7 @@ import com.mojang.mojam.gui.CharacterSelectionMenu;
 import com.mojang.mojam.gui.ClickableComponent;
 import com.mojang.mojam.gui.CreditsScreen;
 import com.mojang.mojam.gui.DifficultySelect;
+import com.mojang.mojam.gui.ExitMenu;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.GuiError;
 import com.mojang.mojam.gui.GuiMenu;
@@ -59,7 +60,7 @@ import com.mojang.mojam.gui.OptionsMenu;
 import com.mojang.mojam.gui.PauseMenu;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.gui.WinMenu;
-import com.mojang.mojam.level.DifficultyList;
+import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.LevelList;
@@ -248,11 +249,15 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		thread.start();
 	}
 
-	public void stop() {
-		running = false;
-		soundPlayer.stopBackgroundMusic();
-		soundPlayer.shutdown();
-		System.exit(0);
+	public void stop(boolean exit) {
+		if (exit) {		
+			running = false;
+			soundPlayer.stopBackgroundMusic();
+			soundPlayer.shutdown();
+			System.exit(0);
+		} else {
+			addMenu(new ExitMenu(GAME_WIDTH, GAME_HEIGHT));
+		}
 	}
 
 	private void init() {
@@ -706,11 +711,10 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			synchronizer.setStarted(true);
 			if (TitleMenu.level.vanilla) {
 				packetLink.sendPacket(new StartGamePacket(TurnSynchronizer.synchedSeed,
-						TitleMenu.level.getUniversalPath(), DifficultyList
-								.getDifficultyID(TitleMenu.difficulty), playerCharacter.ordinal()));
+						TitleMenu.level.getUniversalPath(), TitleMenu.difficulty.ordinal(), playerCharacter.ordinal()));
 			} else {
 				packetLink.sendPacket(new StartGamePacketCustom(TurnSynchronizer.synchedSeed,
-						level, DifficultyList.getDifficultyID(TitleMenu.difficulty),
+						level, TitleMenu.difficulty.ordinal(),
 						playerCharacter.ordinal()));
 			}
 			packetLink.setPacketListener(MojamComponent.this);
@@ -832,7 +836,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 				sendCharacter = true;
 				StartGamePacket sgPacker = (StartGamePacket) packet;
 				synchronizer.onStartGamePacket(sgPacker);
-				TitleMenu.difficulty = DifficultyList.getDifficulties().get(
+				TitleMenu.difficulty = DifficultyInformation.getByInt(
 						sgPacker.getDifficulty());
 				createLevel(sgPacker.getLevelFile(), TitleMenu.defaultGameMode,
 						GameCharacter.values()[sgPacker.getOpponentCharacterID()]);
@@ -844,7 +848,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 				sendCharacter = true;
 				StartGamePacketCustom sgPacker = (StartGamePacketCustom) packet;
 				synchronizer.onStartGamePacket((StartGamePacket) packet);
-				TitleMenu.difficulty = DifficultyList.getDifficulties().get(
+				TitleMenu.difficulty = DifficultyInformation.getByInt(
 						sgPacker.getDifficulty());
 				level = sgPacker.getLevel();
 				paused = false;
@@ -1057,7 +1061,11 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			break;
 
 		case TitleMenu.EXIT_GAME_ID:
-			stop();
+			stop(false);
+			break;
+
+		case TitleMenu.REALLY_EXIT_GAME_ID:
+			stop(true);
 			break;
 
 		case TitleMenu.RETURN_ID:
@@ -1216,7 +1224,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private static WindowListener newWindowClosinglistener() {
 		return new WindowAdapter() {
 			public void windowClosing(WindowEvent winEvt) {
-				MojamComponent.instance.stop();
+				MojamComponent.instance.stop(false);
 			}
 		};
 	}

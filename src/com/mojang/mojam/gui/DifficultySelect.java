@@ -1,19 +1,15 @@
 package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.level.DifficultyInformation;
-import com.mojang.mojam.level.DifficultyList;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
 public class DifficultySelect extends GuiMenu {
 	
 	private static final int DEFAULT_DIFFICULTY = 1;
-	
-	private ArrayList<DifficultyInformation> difficulties = DifficultyList.getDifficulties();
 	
 	private Checkbox[] DifficultyCheckboxes;
 	private final int xButtons = 3;
@@ -28,10 +24,10 @@ public class DifficultySelect extends GuiMenu {
 	public DifficultySelect(boolean hosting) {
 		super();
 		
-		DifficultyCheckboxes = new Checkbox[difficulties.size()];
+		DifficultyCheckboxes = new Checkbox[DifficultyInformation.values().length];
 		setupDifficultyButtons();
 		
-		TitleMenu.difficulty = difficulties.get(DEFAULT_DIFFICULTY);
+		TitleMenu.difficulty = DifficultyInformation.getByInt(DEFAULT_DIFFICULTY);
 		
 		startGameButton = new Button(hosting ? TitleMenu.HOST_GAME_ID : TitleMenu.START_GAME_ID,  
 				MojamComponent.texts.getStatic("diffselect.start"), (MojamComponent.GAME_WIDTH - 256 - 30), 
@@ -46,14 +42,15 @@ public class DifficultySelect extends GuiMenu {
 	
 	private void setupDifficultyButtons() {
 		int y = 0;
-
-        for (int i = 0; i < difficulties.size(); i++) {
-            int x = i % xButtons;
+        int counter = 0;
+        for (DifficultyInformation curInfo: DifficultyInformation.values()) {
+            counter = curInfo.ordinal();
+        	int x = counter % xButtons;
             
-            DifficultyCheckboxes[i] = (Checkbox) addButton(new Checkbox(i, difficulties.get(i).difficultyName, xStart + x * xSpacing, yStart + ySpacing * y));
+            DifficultyCheckboxes[counter] = (Checkbox) addButton(new Checkbox(counter, curInfo.getDifficultyName(), xStart + x * xSpacing, yStart + ySpacing * y));
             
-            if (i == DEFAULT_DIFFICULTY) {
-                DifficultyCheckboxes[i].checked = true;
+            if (counter == DEFAULT_DIFFICULTY) {
+                DifficultyCheckboxes[counter].checked = true;
             }
         
             if (x == (xButtons - 1))
@@ -73,7 +70,7 @@ public class DifficultySelect extends GuiMenu {
 		if (button instanceof Checkbox) {
 
 		    Checkbox cb = (Checkbox) button;
-			TitleMenu.difficulty = difficulties.get(cb.getId());
+			TitleMenu.difficulty = DifficultyInformation.getByInt(cb.getId());
 			
 			checkOnlyOne(cb);
 		}
@@ -109,7 +106,7 @@ public class DifficultySelect extends GuiMenu {
 		
 		int nextActiveButtonId = -2;
 		if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
-			nextActiveButtonId = bestExistingDifficultyId(activeButtonId - 1, difficulties.size() - 1);
+			nextActiveButtonId = bestExistingDifficultyId(activeButtonId - 1, DifficultyInformation.values().length - 1);
 		}else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
 			nextActiveButtonId = bestExistingDifficultyId(activeButtonId + 1, 0);
 		} else if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
@@ -132,7 +129,7 @@ public class DifficultySelect extends GuiMenu {
 	
 	public int bestExistingDifficultyId(int... options) {
 		for (int option : options) {
-			if (option >= 0 && option < difficulties.size()) {
+			if (option >= 0 && option < DifficultyInformation.values().length) {
 				return option;
 			}
 		}

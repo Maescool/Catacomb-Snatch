@@ -6,7 +6,7 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
-import com.mojang.mojam.level.DifficultyInformation;
+import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
@@ -86,7 +86,7 @@ public abstract class ShopItem extends Building {
 
     @Override
     public void init() {
-        effectiveCost = DifficultyInformation.calculateCosts(cost);
+        effectiveCost = TitleMenu.difficulty.calculateCosts(cost);
     }
 
     @Override

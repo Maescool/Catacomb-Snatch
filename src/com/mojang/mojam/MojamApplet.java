@@ -19,6 +19,6 @@ public class MojamApplet extends Applet {
 	}
 
 	public void stop() {
-		game.stop();
+		game.stop(false);
 	}
 }
