@@ -9,6 +9,7 @@ import com.mojang.mojam.entity.building.TreasurePile;
 import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.entity.building.TurretTeamOne;
 import com.mojang.mojam.entity.building.TurretTeamTwo;
+import com.mojang.mojam.entity.building.TreasureChest;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.mob.Bat;
 import com.mojang.mojam.entity.mob.DropTrap;
@@ -123,6 +124,9 @@ public class LevelUtils {
 				entity = new Loot(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2, Math.cos(dir), Math.sin(dir), 200, false);
 			}
 			break;
+		case TreasureChest.COLOR:
+			entity = new TreasureChest(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2 -5, Team.Neutral, 800);
+			break;	
 		default:
 			entity = null;
 			break;
