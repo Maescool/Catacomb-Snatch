@@ -98,6 +98,14 @@ public class Texts {
 		return MessageFormat.format(getStatic("player.level"), plevel);
 	}
 	
+	public String playerWeaponSlot(int slot) {
+		return MessageFormat.format(getStatic("player.weaponSlot"), slot);
+	}
+	
+	public String keyWeaponSlot(int slot) {
+		return MessageFormat.format(getStatic("keys.weaponSlot"), slot);
+	}
+	
 	public String[] shopTooltipLines(String shopItemName) {
 	    return new String[] { 
 	            getStatic("shop." + shopItemName + "TooltipTitle"),

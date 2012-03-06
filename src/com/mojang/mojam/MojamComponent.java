@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
@@ -460,13 +461,14 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		}
 
 		if (Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE)) {
-			Font.defaultFont().draw(screen, texts.FPS(fps), 10, 10);
+			Font.defaultFont().draw(screen, texts.FPS(fps), 100, 10);
 		}
 
 		if (player != null && menuStack.size() == 0) {
 			addHealthBar(screen);
 			addXpBar(screen);
 			addScore(screen);
+			addWeaponSlots(screen);
 
 			Font font = Font.defaultFont();
 			if (isMultiplayer) {
@@ -527,6 +529,20 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		screen.blit(Art.panel_star, 314, screen.h - 40);
 		Font font = Font.defaultFont();
 		font.draw(screen, texts.playerLevel(player.plevel + 1), 335, screen.h - 36);
+	}
+	
+	private void addWeaponSlots(Screen screen) {
+		Font font = Font.FONT_GOLD;
+		for(int i = 0; i < 3 && i < player.weaponInventory.size(); i++) {
+			if(i == player.getActiveWeaponSlot()) {
+				screen.alphaFill(2 + i*32, 2, 30, 30, 0xffaaaaaa, 0x30);
+			}
+			else {
+				screen.alphaFill(2 + i*32, 2, 30, 30, 0xff000000, 0x30);
+			}
+			screen.blit(player.weaponInventory.get(i).getSprite(), 2 + i*32, 2);
+			font.draw(screen, texts.playerWeaponSlot(i+1), 14 + i*32, 30);
+		}
 	}
 
 	private void addScore(Screen screen) {

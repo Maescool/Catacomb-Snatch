@@ -11,6 +11,8 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.building.ShopItemBomb;
 import com.mojang.mojam.entity.building.ShopItemHarvester;
+import com.mojang.mojam.entity.building.ShopItemRaygun;
+import com.mojang.mojam.entity.building.ShopItemShotgun;
 import com.mojang.mojam.entity.building.ShopItemTurret;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.TitleMenu;
@@ -110,15 +112,20 @@ public class GameMode {
 
 
 	protected void setupPlayerSpawnArea() {
-		newLevel.maxMonsters = 1500 + (int)TitleMenu.difficulty.calculateStrength(500);	
+		newLevel.maxMonsters = 1500 + (int)TitleMenu.difficulty.calculateStrength(500);
 		
 		newLevel.addEntity(new ShopItemTurret(32 * (newLevel.width / 2 - 1.5), 4.5 * 32, Team.Team2));
 		newLevel.addEntity(new ShopItemHarvester(32 * (newLevel.width / 2 - .5), 4.5 * 32, Team.Team2));
 		newLevel.addEntity(new ShopItemBomb(32 * (newLevel.width / 2 + .5), 4.5 * 32, Team.Team2));
+		newLevel.addEntity(new ShopItemShotgun(32 * (newLevel.width / 2 - 2.0), 6.5 * 32, Team.Team2));
+		newLevel.addEntity(new ShopItemRaygun(32 * (newLevel.width / 2 - 2.0), 5.5 * 32, Team.Team2));
 		
 		newLevel.addEntity(new ShopItemTurret(32 * (newLevel.width / 2 - 1.5), (newLevel.height - 4.5) * 32, Team.Team1));
 		newLevel.addEntity(new ShopItemHarvester(32 * (newLevel.width / 2 - .5), (newLevel.height - 4.5) * 32, Team.Team1));
 		newLevel.addEntity(new ShopItemBomb(32 * (newLevel.width / 2 + .5), (newLevel.height - 4.5) * 32, Team.Team1));
+		newLevel.addEntity(new ShopItemShotgun(32 * (newLevel.width / 2 - 2.0), (newLevel.height - 6.5) * 32, Team.Team1));
+		newLevel.addEntity(new ShopItemRaygun(32 * (newLevel.width / 2 - 2.0), (newLevel.height - 5.5) * 32, Team.Team1));
+
 		
 		for (int i=0; i<3; i++){
 		    newLevel.setTile((newLevel.width / 2) - i, 7, new UnbreakableRailTile(new SandTile()));	

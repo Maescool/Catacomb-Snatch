@@ -53,7 +53,13 @@ public class Keys {
 	public Key screenShot = new Key("screenShot");
 	public Key chat = new Key("chat");
 	public Key console = new Key("console");
-
+	
+	public Key weaponSlot1 = new Key("weaponSlot1");
+	public Key weaponSlot2 = new Key("weaponSlot2");
+	public Key weaponSlot3 = new Key("weaponSlot3");
+	public Key cycleLeft = new Key("cycleLeft");
+	public Key cycleRight = new Key("cycleRight");
+	
 	public void tick() {
 		for (Key key : all)
 			key.tick();
