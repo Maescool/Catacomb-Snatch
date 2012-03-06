@@ -274,7 +274,7 @@ public class Console implements KeyListener {
 			if(args.length > 0 && args[0].equals("0"))
 				System.exit(0);
 			else
-				MojamComponent.instance.stop();
+				MojamComponent.instance.stop(false);
 		}
 	};
 	
