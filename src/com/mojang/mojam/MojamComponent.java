@@ -124,6 +124,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private Stack<GuiMenu> menuStack = new Stack<GuiMenu>();
 
 	private InputHandler inputHandler;
+	private int lastX = 0;
+	private int lastY = 0;
 	private boolean mouseMoved = false;
 	private int mouseHideTime = 0;
 	public MouseButtons mouseButtons = new MouseButtons();
@@ -203,13 +205,17 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent arg0) {
+	public void mouseDragged(MouseEvent e) {
 		mouseMoved = true;
+		lastX = e.getXOnScreen();
+		lastY = e.getYOnScreen();
 	}
 
 	@Override
-	public void mouseMoved(MouseEvent arg0) {
+	public void mouseMoved(MouseEvent e) {
 		mouseMoved = true;
+		lastX = e.getXOnScreen();
+		lastY = e.getYOnScreen();
 	}
 
 	@Override
@@ -222,7 +228,17 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		mouseButtons.releaseAll();
+		if ( Options.getAsBoolean(Options.TRAP_MOUSE, Options.VALUE_FALSE) ) {
+			try {
+	            Robot robot = new Robot();   
+	            robot.mouseMove(lastX, lastY);
+	        }
+	        catch (Exception ex) {
+	            ex.printStackTrace();
+	        }
+		} else {
+			mouseButtons.releaseAll();
+		}
 	}
 
 	@Override

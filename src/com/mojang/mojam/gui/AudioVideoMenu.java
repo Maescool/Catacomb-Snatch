@@ -12,6 +12,7 @@ import com.mojang.mojam.sound.ISoundPlayer;
 
 public class AudioVideoMenu extends GuiMenu {
 	private boolean fullscreen;
+	private boolean trapMouse;
 	private boolean fps;
 	private float musicVolume;
 	private float soundsVolume;
@@ -22,8 +23,9 @@ public class AudioVideoMenu extends GuiMenu {
     private boolean inGame;
 	private int textY;
 
-	private Button back;
+	private ClickableComponent back;
 	private ClickableComponent fullscreenBtn;
+	private ClickableComponent trapMouseBtn;
 	private ClickableComponent fpsBtn;
 	private ClickableComponent soundVol;
 	private ClickableComponent musicVol;
@@ -43,13 +45,43 @@ public class AudioVideoMenu extends GuiMenu {
 		textY = yOffset;
 		yOffset += offset;
 
-		fullscreenBtn = (ClickableComponent) addButton(new Checkbox(TitleMenu.FULLSCREEN_ID, MojamComponent.texts.getStatic("options.fullscreen"), xOffset, yOffset += offset, Options.getAsBoolean(Options.FULLSCREEN, Options.VALUE_FALSE)));
-		fpsBtn = (ClickableComponent) addButton(new Checkbox(TitleMenu.FPS_ID, MojamComponent.texts.getStatic("options.showfps"), xOffset, yOffset += offset, Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE)));
-		soundVol = (ClickableComponent) addButton(new Slider(TitleMenu.VOLUME, MojamComponent.texts.getStatic("options.volume"), xOffset, yOffset += offset, volume));
-		musicVol = (ClickableComponent) addButton(new Slider(TitleMenu.MUSIC, MojamComponent.texts.getStatic("options.music"), xOffset - xOffset / 3 - 20, yOffset += offset, musicVolume));
-		soundsVol = (ClickableComponent) addButton(new Slider(TitleMenu.SOUND, MojamComponent.texts.getStatic("options.sounds"), xOffset + xOffset / 3 + 20, yOffset, soundsVolume));
-
-		back = (Button) addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"), xOffset, (yOffset += offset) + 20));
+		fullscreenBtn = addButton(
+					new Checkbox(TitleMenu.FULLSCREEN_ID,
+						MojamComponent.texts.getStatic("options.fullscreen"), xOffset,
+						yOffset += offset, Options.getAsBoolean(Options.FULLSCREEN,
+						Options.VALUE_FALSE))
+				);
+		trapMouseBtn = addButton(
+				new Checkbox(TitleMenu.MOUSE_TRAP_ID,
+					MojamComponent.texts.getStatic("options.trapmouse"), xOffset,
+					yOffset += offset, Options.getAsBoolean(Options.TRAP_MOUSE,
+					Options.VALUE_FALSE))
+			);
+		fpsBtn = addButton(
+					new Checkbox(TitleMenu.FPS_ID,
+						MojamComponent.texts.getStatic("options.showfps"), xOffset,
+						yOffset += offset, Options.getAsBoolean(Options.DRAW_FPS,
+						Options.VALUE_FALSE))
+				);
+		soundVol = addButton(
+					new Slider(TitleMenu.VOLUME,
+						MojamComponent.texts.getStatic("options.volume"), xOffset,
+						yOffset += offset, volume)
+				);
+		musicVol = addButton(
+					new Slider(TitleMenu.MUSIC,
+						MojamComponent.texts.getStatic("options.music"),
+						xOffset	- xOffset / 3 - 20, yOffset += offset, musicVolume)
+				);
+		soundsVol = addButton(
+					new Slider(TitleMenu.SOUND,
+						MojamComponent.texts.getStatic("options.sounds"),
+						xOffset + xOffset / 3 + 20, yOffset, soundsVolume)
+				);
+		back = addButton(
+					new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"),
+							xOffset, (yOffset += offset) + 20)
+				);
 
 		fullscreenBtn.addListener(new ButtonListener() {
 			@Override
@@ -57,6 +89,17 @@ public class AudioVideoMenu extends GuiMenu {
 				fullscreen = !fullscreen;
 				Options.set(Options.FULLSCREEN, fullscreen);
 				MojamComponent.toggleFullscreen();
+			}
+
+			@Override
+			public void buttonHovered(ClickableComponent clickableComponent) {
+			}
+		});
+		trapMouseBtn.addListener(new ButtonListener() {
+			@Override
+			public void buttonPressed(ClickableComponent button) {
+				trapMouse = !trapMouse;
+				Options.set(Options.TRAP_MOUSE, trapMouse);
 			}
 
 			@Override
@@ -132,6 +175,7 @@ public class AudioVideoMenu extends GuiMenu {
 
 	private void loadOptions() {
 		fullscreen = Options.getAsBoolean(Options.FULLSCREEN, Options.VALUE_FALSE);
+		trapMouse = Options.getAsBoolean(Options.TRAP_MOUSE, Options.VALUE_FALSE);
 		fps = Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE);
 		musicVolume = Options.getAsFloat(Options.MUSIC, "1.0f");
 		soundsVolume = Options.getAsFloat(Options.SOUND, "1.0f");
