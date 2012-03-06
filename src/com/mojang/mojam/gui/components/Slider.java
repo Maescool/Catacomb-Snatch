@@ -1,4 +1,4 @@
-package com.mojang.mojam.gui;
+package com.mojang.mojam.gui.components;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;

@@ -5,6 +5,8 @@ import java.util.Random;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
+import com.mojang.mojam.gui.components.ClickableComponent;
+import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.gamemode.GameMode;

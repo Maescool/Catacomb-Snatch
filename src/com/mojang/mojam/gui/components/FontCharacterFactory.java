@@ -1,4 +1,4 @@
-package com.mojang.mojam.gui;
+package com.mojang.mojam.gui.components;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

@@ -6,6 +6,12 @@ import paulscode.sound.SoundSystem;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
+import com.mojang.mojam.gui.components.Button;
+import com.mojang.mojam.gui.components.ButtonListener;
+import com.mojang.mojam.gui.components.Checkbox;
+import com.mojang.mojam.gui.components.ClickableComponent;
+import com.mojang.mojam.gui.components.Font;
+import com.mojang.mojam.gui.components.Slider;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 import com.mojang.mojam.sound.ISoundPlayer;

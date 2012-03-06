@@ -2,6 +2,9 @@ package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
 
+import com.mojang.mojam.gui.components.Button;
+import com.mojang.mojam.gui.components.ClickableComponent;
+import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.screen.Screen;
 
 public class GuiError extends GuiMenu {

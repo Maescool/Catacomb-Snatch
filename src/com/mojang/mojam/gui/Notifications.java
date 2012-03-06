@@ -1,6 +1,7 @@
 package com.mojang.mojam.gui;
 
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.screen.Screen;
 import java.util.Iterator;
 import java.util.List;

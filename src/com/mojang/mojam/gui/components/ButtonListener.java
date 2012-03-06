@@ -1,4 +1,4 @@
-package com.mojang.mojam.gui;
+package com.mojang.mojam.gui.components;
 
 public interface ButtonListener {
 

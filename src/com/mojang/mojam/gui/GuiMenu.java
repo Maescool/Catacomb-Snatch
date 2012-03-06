@@ -7,6 +7,11 @@ import java.util.List;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
+import com.mojang.mojam.gui.components.ButtonListener;
+import com.mojang.mojam.gui.components.ClickableComponent;
+import com.mojang.mojam.gui.components.GuiComponent;
+import com.mojang.mojam.gui.components.Slider;
+import com.mojang.mojam.gui.components.Text;
 import com.mojang.mojam.screen.Screen;
 
 public abstract class GuiMenu extends GuiComponent implements ButtonListener, KeyListener {

@@ -1,4 +1,4 @@
-package com.mojang.mojam.gui;
+package com.mojang.mojam.gui.components;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +53,7 @@ public abstract class ClickableComponent extends VisibleComponent {
 		}
 	}
 	
-	protected void postHover() {
+	public void postHover() {
 		performHover = true;
 	}
 
@@ -61,7 +61,7 @@ public abstract class ClickableComponent extends VisibleComponent {
 	 * Internal function, forcing the component to run its clicked() method and
 	 * iterate over listeners
 	 */
-	protected void postClick() {
+	public void postClick() {
 		performClick = true;
 	}
 

@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
-import com.mojang.mojam.gui.Font;
+import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.screen.Screen;
 
 public class Console implements KeyListener {
