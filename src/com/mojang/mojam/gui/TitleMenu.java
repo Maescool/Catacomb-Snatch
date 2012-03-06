@@ -1,7 +1,6 @@
 package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
-import java.util.Locale;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.level.DifficultyInformation;
@@ -17,6 +16,7 @@ public class TitleMenu extends GuiMenu {
 	public static final int HOST_GAME_ID = 1002;
 	public static final int JOIN_GAME_ID = 1003;
 	public static final int EXIT_GAME_ID = 1001;
+	public static final int REALLY_EXIT_GAME_ID = 1022;
 
 	public static final int CANCEL_JOIN_ID = 1004;
 	public static final int PERFORM_JOIN_ID = 1005;

@@ -44,6 +44,7 @@ import com.mojang.mojam.gui.CharacterSelectionMenu;
 import com.mojang.mojam.gui.ClickableComponent;
 import com.mojang.mojam.gui.CreditsScreen;
 import com.mojang.mojam.gui.DifficultySelect;
+import com.mojang.mojam.gui.ExitMenu;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.GuiError;
 import com.mojang.mojam.gui.GuiMenu;
@@ -247,11 +248,14 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		thread.start();
 	}
 
-	public void stop() {
-		running = false;
-		soundPlayer.stopBackgroundMusic();
-		soundPlayer.shutdown();
-		System.exit(0);
+	public void stop(boolean exit) {
+		addMenu(new ExitMenu(GAME_WIDTH, GAME_HEIGHT));
+		if (exit) {		
+			running = false;
+			soundPlayer.stopBackgroundMusic();
+			soundPlayer.shutdown();
+			System.exit(0);
+		}
 	}
 
 	private void init() {
@@ -1041,7 +1045,11 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			break;
 
 		case TitleMenu.EXIT_GAME_ID:
-			stop();
+			stop(false);
+			break;
+
+		case TitleMenu.REALLY_EXIT_GAME_ID:
+			stop(true);
 			break;
 
 		case TitleMenu.RETURN_ID:
@@ -1200,7 +1208,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private static WindowListener newWindowClosinglistener() {
 		return new WindowAdapter() {
 			public void windowClosing(WindowEvent winEvt) {
-				MojamComponent.instance.stop();
+				MojamComponent.instance.stop(false);
 			}
 		};
 	}
