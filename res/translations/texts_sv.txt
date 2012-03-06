@@ -7,6 +7,8 @@ build.removeRail = DU BEHÖVER {0} FÖR ATT RIVA EN RÄLS
 back = BAKÅT
 cancel = AVBRYT
 
+campaignmenu.title = VÄLJ EN KAMPANJ
+
 character.text = VÄLJ DIN KARAKTÄR!
 character.select = VÄLJ
 
@@ -22,6 +24,11 @@ diffselect.easy = LÄTT
 diffselect.normal = NORMAL
 diffselect.hard = SVÅR
 diffselect.nightmare = OMÖJLIG
+
+gamemodemenu.title = VÄLJ ETT SPELLÄGE
+gamemodemenu.campaign = KAMPANJ
+gamemodemenu.arcade = ARKAD
+gamemodemenu.creative = KREATIV
 
 gameplay.player1Win = {0} VANN YAY
 gameplay.player2Win = {0} VANN YAY

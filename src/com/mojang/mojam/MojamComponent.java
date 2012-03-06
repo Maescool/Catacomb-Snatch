@@ -16,6 +16,9 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -41,6 +44,7 @@ import com.mojang.mojam.gui.CharacterSelectionMenu;
 import com.mojang.mojam.gui.ClickableComponent;
 import com.mojang.mojam.gui.CreditsScreen;
 import com.mojang.mojam.gui.DifficultySelect;
+import com.mojang.mojam.gui.ExitMenu;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.GuiError;
 import com.mojang.mojam.gui.GuiMenu;
@@ -244,10 +248,15 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		thread.start();
 	}
 
-	public void stop() {
-		running = false;
-		soundPlayer.stopBackgroundMusic();
-		soundPlayer.shutdown();
+	public void stop(boolean exit) {
+		if (exit) {		
+			running = false;
+			soundPlayer.stopBackgroundMusic();
+			soundPlayer.shutdown();
+			System.exit(0);
+		} else {
+			addMenu(new ExitMenu(GAME_WIDTH, GAME_HEIGHT));
+		}
 	}
 
 	private void init() {
@@ -724,7 +733,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		guiFrame.pack();
 		guiFrame.setResizable(false);
 		guiFrame.setLocationRelativeTo(null);
-		guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		guiFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		guiFrame.addWindowListener(newWindowClosinglistener());
 		ArrayList<BufferedImage> icoList = new ArrayList<BufferedImage>();
 		icoList.add(Art.icon32);
 		icoList.add(Art.icon64);
@@ -1035,7 +1045,11 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			break;
 
 		case TitleMenu.EXIT_GAME_ID:
-			System.exit(0);
+			stop(false);
+			break;
+
+		case TitleMenu.REALLY_EXIT_GAME_ID:
+			stop(true);
 			break;
 
 		case TitleMenu.RETURN_ID:
@@ -1189,5 +1203,13 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	
 	public static int clampi(int val, int min, int max){
 		return (val < min) ? min : (val > max) ? max : val;
+	}
+	
+	private static WindowListener newWindowClosinglistener() {
+		return new WindowAdapter() {
+			public void windowClosing(WindowEvent winEvt) {
+				MojamComponent.instance.stop(false);
+			}
+		};
 	}
 }
