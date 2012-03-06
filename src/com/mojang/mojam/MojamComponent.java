@@ -249,12 +249,13 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	}
 
 	public void stop(boolean exit) {
-		addMenu(new ExitMenu(GAME_WIDTH, GAME_HEIGHT));
 		if (exit) {		
 			running = false;
 			soundPlayer.stopBackgroundMusic();
 			soundPlayer.shutdown();
 			System.exit(0);
+		} else {
+			addMenu(new ExitMenu(GAME_WIDTH, GAME_HEIGHT));
 		}
 	}
 
