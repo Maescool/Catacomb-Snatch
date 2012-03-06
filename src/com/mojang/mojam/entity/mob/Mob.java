@@ -208,7 +208,6 @@ public abstract class Mob extends Entity {
 	}
 
 	public void render(Screen screen) {
-		System.out.println(this.getClass());
 		Bitmap image = getSprite();
 		if (hurtTime > 0) {
 			if (hurtTime > 40 - 6 && hurtTime / 2 % 2 == 0) {

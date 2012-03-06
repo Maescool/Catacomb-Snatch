@@ -118,11 +118,6 @@ public class Console implements KeyListener {
 		}
 	}
 	
-	public void addMessage(String s)
-	{
-		verboseData.add(s);
-	}
-	
 	private void processInput(String input) {
 		log(">" + input);
 		String command = getCommand(input);

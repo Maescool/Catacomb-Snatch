@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PipedOutputStream;
+import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -63,9 +64,6 @@ public final class Snatch
 	private static Keys keys = new Keys();
 	public static Map<Integer, Entity> spawnList = new HashMap<Integer, Entity>();
 	private static ScriptEngineManager lang = new ScriptEngineManager();
-	public static PipedOutputStream sysOut = new PipedOutputStream();
-	public static JTextArea textArea;
-	public static JFrame console;
 	public static boolean isJar;
 	public static boolean isDebug;
 
@@ -85,11 +83,6 @@ public final class Snatch
 		catch (URISyntaxException e1)
 		{
 			e1.printStackTrace();
-		}
-		if(isJar || true)
-		{
-			displayConsoleWindow();
-			addMod(Snatch.class.getClassLoader(), "Console.class");
 		}
 		//System.setOut(new PrintStream(new FileOutputStream(new File(m.getMojamDir(), "log.txt"))));
 
@@ -1030,10 +1023,6 @@ public final class Snatch
 		return new File(dest);
 	}
 
-	private static void displayConsoleWindow()
-	{
-		console = SnatchConsole.main(null);
-	}
 
 	/**
 	 * Used for impromptu class casting in dynamic languages
@@ -1125,7 +1114,7 @@ public final class Snatch
 		{
 			if(command.equals("echo"))
 			{
-				System.out.println(input);
+				console.log(input);
 			}
 			else if(command.equals("exit"))
 			{
@@ -1138,15 +1127,15 @@ public final class Snatch
 					System.exit(0);
 				}
 			}
-			else if(command.equals("js") || command.equals("py ") || command.equals("rb ") || command.equals("lua "))
+			else if(command.equals("js") || command.equals("py") || command.equals("rb") || command.equals("lua"))
 			{
 				lang.getEngineByExtension(command.trim()).eval(input);
 			}
-			else if(command.equals("load "))
+			else if(command.equals("load"))
 			{
-				System.out.println("-Unfinished.");//TODO
+				console.log("-Unfinished.");//TODO
 			}
-			else if(command.equals("spawn "))
+			else if(command.equals("spawn"))
 			{
 				/*String sId = s.substring(s.indexOf(' ')+1);
 				sId.trim();
@@ -1165,7 +1154,7 @@ public final class Snatch
 		{
 			if(runConsole(command, input))
 			{
-				console.addMessage("Error: Unrecognised command: " + command);
+				console.log("Error: Unrecognised command: " + command);
 			}
 		}
 	}
