@@ -52,6 +52,7 @@ public class Keys {
 	public Key sprint = new Key("sprint");
 	public Key screenShot = new Key("screenShot");
 	public Key chat = new Key("chat");
+	public Key console = new Key("console");
 	
 	public Key weaponSlot1 = new Key("weaponSlot1");
 	public Key weaponSlot2 = new Key("weaponSlot2");

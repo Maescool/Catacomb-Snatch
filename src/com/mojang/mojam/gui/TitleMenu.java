@@ -66,7 +66,8 @@ public class TitleMenu extends GuiMenu {
 	public static final int KEY_WEAPON_SLOT_2_ID = 3018;
 	public static final int KEY_WEAPON_SLOT_3_ID = 3019;
 	
-
+	public static final int KEY_CONSOLE_ID = 3020;
+	
 	public static final int CREDITS_ID = 4000;
 	public static final int CREDITS_TITLE_ID = 4001;
 	public static final int CREDITS_TEXT_ID = 4002;

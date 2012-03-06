@@ -115,8 +115,10 @@ public class KeyBindingsMenu extends GuiMenu {
 		addButton(new KeyBindingButton(TitleMenu.KEY_WEAPON_SLOT_2_ID, keys.weaponSlot2, tab1, yOffset + 7
 				* BUTTON_SPACING));
 		addButton(new KeyBindingButton(TitleMenu.KEY_WEAPON_SLOT_3_ID, keys.weaponSlot3, tab1, yOffset + 8
+				* BUTTON_SPACING));	
+		addButton(new KeyBindingButton(TitleMenu.KEY_CONSOLE_ID, keys.console, tab1, yOffset + 9
 				* BUTTON_SPACING));
-		
+				
 		addButton(new KeyBindingButton(TitleMenu.KEY_FIRE_UP_ID, keys.fireUp, tab2, yOffset + 0
 				* BUTTON_SPACING));
 		addButton(new KeyBindingButton(TitleMenu.KEY_FIRE_DOWN_ID, keys.fireDown, tab2, yOffset + 1
@@ -167,6 +169,7 @@ public class KeyBindingsMenu extends GuiMenu {
 		write(screen, txts.keyWeaponSlot(1), 0, 6);
 		write(screen, txts.keyWeaponSlot(2), 0, 7);
 		write(screen, txts.keyWeaponSlot(3), 0, 8);
+		write(screen, "CONSOLE", 0, 9); //add translations
 
 		write(screen, txts.getStatic("keys.fireUp"), 1, 0);
 		write(screen, txts.getStatic("keys.fireDown"), 1, 1);

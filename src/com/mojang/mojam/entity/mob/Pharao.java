@@ -1,24 +1,25 @@
 package com.mojang.mojam.entity.mob;
 
 import com.mojang.mojam.entity.Player;
+import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 
-public class Mummy extends HostileMob {
+public class Pharao extends HostileMob {
 
     private int tick = 0;
-    public static double ATTACK_RADIUS = 128.0;
+    public static double ATTACK_RADIUS = 5 * Tile.WIDTH;
 
-	public static final int COLOR = 0xffffCC00;
+	public static final int COLOR = 0xffffdd00;
 	
-    public Mummy(double x, double y) {
+    public Pharao(double x, double y) {
         super(x, y, Team.Neutral);
         setPos(x, y);
         dir = TurnSynchronizer.synchedRandom.nextDouble() * Math.PI * 2;
-        minimapColor = 0xffff0000;
         yOffs = 10;
         facing = TurnSynchronizer.synchedRandom.nextInt(4);
+        REGEN_INTERVAL = 15;
     }
 
     public void tick() {
@@ -39,12 +40,12 @@ public class Mummy extends HostileMob {
     }
 
     public Bitmap getSprite() {
-        return Art.mummy[((stepTime / 6) & 3)][(facing + 1) & 3];
+        return Art.pharao[((stepTime / 6) & 3)][(facing + 1) & 3];
     }
 
     @Override
     public String getDeathSound() {
-        return "/sound/Enemy Death 2.wav";
+        return "/sound/pharao_dies.wav";
     }
 
 	@Override
@@ -59,11 +60,11 @@ public class Mummy extends HostileMob {
 
 	@Override
 	public String getName() {
-		return "MUMMY";
+		return "PHARAO";
 	}
 
 	@Override
 	public Bitmap getBitMapForEditor() {
-		return Art.mummy[0][0];
+		return Art.pharao[0][0];
 	}
 }

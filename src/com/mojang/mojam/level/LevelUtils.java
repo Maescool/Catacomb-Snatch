@@ -9,10 +9,12 @@ import com.mojang.mojam.entity.building.TreasurePile;
 import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.entity.building.TurretTeamOne;
 import com.mojang.mojam.entity.building.TurretTeamTwo;
+import com.mojang.mojam.entity.building.TreasureChest;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.mob.Bat;
 import com.mojang.mojam.entity.mob.DropTrap;
 import com.mojang.mojam.entity.mob.Mummy;
+import com.mojang.mojam.entity.mob.Pharao;
 import com.mojang.mojam.entity.mob.Scarab;
 import com.mojang.mojam.entity.mob.Snake;
 import com.mojang.mojam.entity.mob.SpikeTrap;
@@ -71,6 +73,12 @@ public class LevelUtils {
 		case SpikeTrap.COLOR:
 			entity = new SpikeTrap(x * Tile.WIDTH,y * Tile.HEIGHT);
 			break;
+		case SpikeTrap.COLOR1:
+			entity = new SpikeTrap(x * Tile.WIDTH,y * Tile.HEIGHT, 30);
+			break;
+		case SpikeTrap.COLOR2:
+			entity = new SpikeTrap(x * Tile.WIDTH,y * Tile.HEIGHT, 60);
+			break;
 		case SpawnerForBat.COLOR:
 			entity = new SpawnerForBat(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
 			break;
@@ -92,7 +100,10 @@ public class LevelUtils {
 		case Mummy.COLOR:
 			entity = new Mummy(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
 			break;
-		case Scarab.COLOR:
+		case Pharao.COLOR:
+            entity = new Pharao(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
+            break;
+        case Scarab.COLOR:
 			entity = new Scarab(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
 			break;
 		case Turret.COLOR:
@@ -113,6 +124,9 @@ public class LevelUtils {
 				entity = new Loot(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2, Math.cos(dir), Math.sin(dir), 200, false);
 			}
 			break;
+		case TreasureChest.COLOR:
+			entity = new TreasureChest(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2 -5, Team.Neutral, 800);
+			break;	
 		default:
 			entity = null;
 			break;
