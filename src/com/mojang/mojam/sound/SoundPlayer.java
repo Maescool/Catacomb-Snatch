@@ -180,7 +180,9 @@ public class SoundPlayer implements ISoundPlayer {
 				// effect.
 				return playSound(sourceName, x, y, false, index + 1);
 			}
-			getSoundSystem().stop(indexedSourceName);
+//			if (getSoundSystem().playing(indexedSourceName)) {
+				getSoundSystem().stop(indexedSourceName);
+//			}
 			getSoundSystem().setPriority(indexedSourceName, false);
 			getSoundSystem().setPosition(indexedSourceName, x, y, 0);
 			getSoundSystem().setAttenuation(indexedSourceName, SoundSystemConfig.ATTENUATION_ROLLOFF);
