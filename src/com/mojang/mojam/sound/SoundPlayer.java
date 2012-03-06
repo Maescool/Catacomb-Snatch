@@ -81,7 +81,7 @@ public class SoundPlayer implements ISoundPlayer {
 				stopBackgroundMusic();
 
 			String backgroundTrack = "/sound/ThemeTitle.ogg";
-			getSoundSystem().backgroundMusic(BACKGROUND_TRACK, SoundPlayer.class.getResource(backgroundTrack), backgroundTrack, false);
+			getSoundSystem().backgroundMusic(BACKGROUND_TRACK, SoundPlayer.class.getResource(backgroundTrack), backgroundTrack, true);
 		}
 
         getSoundSystem().setVolume(BACKGROUND_TRACK, musicVolume);
@@ -98,7 +98,7 @@ public class SoundPlayer implements ISoundPlayer {
                 stopBackgroundMusic();
 
 			String backgroundTrack = "/sound/ThemeEnd.ogg";
-            getSoundSystem().backgroundMusic(BACKGROUND_TRACK, SoundPlayer.class.getResource(backgroundTrack), backgroundTrack, false);
+            getSoundSystem().backgroundMusic(BACKGROUND_TRACK, SoundPlayer.class.getResource(backgroundTrack), backgroundTrack, true);
 		}
 
         getSoundSystem().setVolume(BACKGROUND_TRACK, musicVolume);
@@ -180,9 +180,9 @@ public class SoundPlayer implements ISoundPlayer {
 				// effect.
 				return playSound(sourceName, x, y, false, index + 1);
 			}
-//			if (getSoundSystem().playing(indexedSourceName)) {
+			if (getSoundSystem().playing(indexedSourceName)) {
 				getSoundSystem().stop(indexedSourceName);
-//			}
+			}
 			getSoundSystem().setPriority(indexedSourceName, false);
 			getSoundSystem().setPosition(indexedSourceName, x, y, 0);
 			getSoundSystem().setAttenuation(indexedSourceName, SoundSystemConfig.ATTENUATION_ROLLOFF);
