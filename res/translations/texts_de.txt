@@ -107,6 +107,10 @@ pausemenu.backtomain = HAUPTMENÜ
 pausemenu.resume = FORTSETZEN 
 pausemenu.exit = SPIEL BEENDEN
 
+exitmenu.headline = MÖCHTEST DU DAS SPIEL WIRKLICH BEENDEN?
+exitmenu.cancel = NEIN 
+exitmenu.exit = JA
+
 player.hasDied = {0} IST GESTORBEN!
 player.score = {0}: {1}%
 player.cost = {0}
