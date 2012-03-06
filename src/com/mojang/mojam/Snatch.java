@@ -836,7 +836,7 @@ public final class Snatch
 		}
 		invoke("OnTick");
 	}
-	
+
 	public static boolean runConsole(String command, String params)
 	{
 		int i = 0;
@@ -844,12 +844,12 @@ public final class Snatch
 		{
 			i += m.OnConsole(command, params);
 		}
-		if(i==0)
+		if(i == 0)
 		{
-			System.out.println("Error: Command "+command +" is unregistered.");
+			System.out.println("Error: Command " + command + " is unregistered.");
 		}
 		invoke("OnConsole");
-		return i!=0;
+		return i != 0;
 	}
 
 	public static void sendPacket(Packet packet)
@@ -1032,7 +1032,7 @@ public final class Snatch
 
 	private static void displayConsoleWindow()
 	{
-		console = Console.main(null);
+		console = SnatchConsole.main(null);
 	}
 
 	/**
@@ -1105,7 +1105,7 @@ public final class Snatch
 			System.out.println(e);
 			*/
 		}
-		else if(runConsole(s.substring(0, s.indexOf(' ') + 1).trim(), s.substring(s.indexOf(' ')+1).trim()))
+		else if(runConsole(s.substring(0, s.indexOf(' ') + 1).trim(), s.substring(s.indexOf(' ') + 1).trim()))
 		{
 			String s1 = s.substring(0, s.indexOf(' ') + 1);
 			if(s1.length() == 0)
@@ -1115,6 +1115,57 @@ public final class Snatch
 			else
 			{
 				System.out.println("Error: Unknown Command: " + s1);
+			}
+		}
+	}
+
+	public static void console(String command, String input, Console console)
+	{
+		try
+		{
+			if(command.equals("echo"))
+			{
+				System.out.println(input);
+			}
+			else if(command.equals("exit"))
+			{
+				try
+				{
+					System.exit(Integer.parseInt(input));
+				}
+				catch (NumberFormatException e)
+				{
+					System.exit(0);
+				}
+			}
+			else if(command.equals("js") || command.equals("py ") || command.equals("rb ") || command.equals("lua "))
+			{
+				lang.getEngineByExtension(command.trim()).eval(input);
+			}
+			else if(command.equals("load "))
+			{
+				System.out.println("-Unfinished.");//TODO
+			}
+			else if(command.equals("spawn "))
+			{
+				/*String sId = s.substring(s.indexOf(' ')+1);
+				sId.trim();
+				int iId = Integer.parseInt(sId);
+				Entity e = Snatch.getEntityById(iId, mojam.mouseButtons.getX() - mojam.player.xd, mojam.mouseButtons.getY() - mojam.player.yd);
+				level.addEntity(e);
+				System.out.println(e);
+				*/
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			if(runConsole(command, input))
+			{
+				console.addMessage("Error: Unrecognised command: " + command);
 			}
 		}
 	}

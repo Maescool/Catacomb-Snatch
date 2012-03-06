@@ -188,7 +188,6 @@ public class SoundPlayer implements ISoundPlayer {
 			getSoundSystem().setPitch(indexedSourceName, 1.0f);
 			soundVolume = Options.getAsFloat(Options.SOUND, "1.0f");
 			getSoundSystem().setVolume(indexedSourceName, soundVolume);
-			getSoundSystem().activate(indexedSourceName);
 			getSoundSystem().play(indexedSourceName);
 			return true;
 		}

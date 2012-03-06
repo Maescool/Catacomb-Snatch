@@ -21,6 +21,11 @@ import com.mojang.mojam.entity.building.TreasurePile;
 import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.entity.building.TurretTeamOne;
 import com.mojang.mojam.entity.building.TurretTeamTwo;
+import com.mojang.mojam.entity.mob.Bat;
+import com.mojang.mojam.entity.mob.Mummy;
+import com.mojang.mojam.entity.mob.Pharao;
+import com.mojang.mojam.entity.mob.Scarab;
+import com.mojang.mojam.entity.mob.Snake;
 import com.mojang.mojam.entity.mob.SpikeTrap;
 import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.LevelInformation;
@@ -29,7 +34,9 @@ import com.mojang.mojam.level.LevelUtils;
 import com.mojang.mojam.level.tile.DestroyableWallTile;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.HoleTile;
+import com.mojang.mojam.level.tile.SandTile;
 import com.mojang.mojam.level.tile.UnbreakableRailTile;
+import com.mojang.mojam.level.tile.UnpassableSandTile;
 import com.mojang.mojam.level.tile.WallTile;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
@@ -61,6 +68,8 @@ public class LevelEditorMenu extends GuiMenu {
     private final IEditable[] editableTiles = {
         new FloorTile(),
         new HoleTile(),
+        new SandTile(),
+        new UnpassableSandTile(),
         new WallTile(),
         new DestroyableWallTile(),
         new TreasurePile(0, 0),
@@ -72,7 +81,12 @@ public class LevelEditorMenu extends GuiMenu {
         new SpawnerForBat(0, 0),
         new SpawnerForSnake(0, 0),
         new SpawnerForMummy(0, 0),
-        new SpawnerForScarab(0, 0)
+        new SpawnerForScarab(0, 0),
+        new Bat(0,0),
+        new Snake(0,0),
+        new Mummy(0,0),
+        new Scarab(0,0),
+        new Pharao(0,0)
     };
     
     private final int buttonsPerPage = 12;
@@ -197,23 +211,19 @@ public class LevelEditorMenu extends GuiMenu {
             for (int y = 0; y < LEVEL_WIDTH; y++) {
 
                 if (map[x][y] == null) continue;
+   
+                Bitmap tile = map[x][y];
 
-                if (map[x][y].h == TILE_HEIGHT) {
-                    if (mapTile[x][y] == HoleTile.COLOR) {
-                        if (y > 0 && !(mapTile[x][y - 1] == HoleTile.COLOR)) {
-                            screen.blit(map[x][y], TILE_HEIGHT * x + mapX, TILE_HEIGHT * y + mapY);
-                        } else {
-                            screen.fill(TILE_HEIGHT * x + mapX, TILE_HEIGHT * y + mapY, TILE_WIDTH, TILE_HEIGHT, 0);
+                // change tiles that requires some sort of drawing modification
+                switch (mapTile[x][y]) {
+                    case HoleTile.COLOR:
+                        if (y > 0 && (mapTile[x][y - 1] == HoleTile.COLOR)) {
+                            tile = null;
+                        } else if (y > 0 && (mapTile[x][y - 1] == SandTile.COLOR || mapTile[x][y - 1] == UnpassableSandTile.COLOR)) {
+                            tile = Art.floorTiles[7][0];
                         }
-                    } else {
-                        screen.blit(map[x][y], TILE_HEIGHT * x + mapX, TILE_HEIGHT * y + mapY);
-                    }
-                } else {
-                    //tile real height
-                    int tileH = (int) (Math.ceil(map[x][y].h / (float) TILE_HEIGHT)) * TILE_WIDTH;
-                    int tileY = TILE_HEIGHT - (tileH - map[x][y].h);
-
-                    if (mapTile[x][y] == UnbreakableRailTile.COLOR) {
+                        break;
+                    case UnbreakableRailTile.COLOR:
                         boolean n = y > 0 && mapTile[x][y - 1] == UnbreakableRailTile.COLOR;
                         boolean s = y < 47 && mapTile[x][y + 1] == UnbreakableRailTile.COLOR;
                         boolean w = x > 0 && mapTile[x - 1][y] == UnbreakableRailTile.COLOR;
@@ -236,12 +246,19 @@ public class LevelEditorMenu extends GuiMenu {
                         } else {                        // 3 or more turning disk
                             img = 6;
                         }
-                        screen.blit(Art.rails[img][0], mapX + TILE_HEIGHT * x, mapY + TILE_HEIGHT * y - tileY);
-                    } else {
-                        screen.blit(map[x][y], mapX + TILE_HEIGHT * x, mapY + TILE_HEIGHT * y - tileY);
-                    }
+
+                        map[x][y] = Art.rails[img][0];
+                        break;
                 }
-  
+                  
+                // draw the tile or fill with black if it's null
+                if (tile != null) {
+                    screen.blit(tile,
+                            x * TILE_WIDTH - (tile.w - TILE_WIDTH) / 2 + mapX,
+                            y * TILE_HEIGHT - (tile.h - TILE_HEIGHT) + mapY);
+                } else {
+                    screen.fill(x * TILE_WIDTH + mapX, y * TILE_HEIGHT + mapY, TILE_WIDTH, TILE_HEIGHT, 0);
+                }
             }
         }
         
@@ -615,7 +632,7 @@ public class LevelEditorMenu extends GuiMenu {
             } else {
                 if (e.getKeyChar() == KeyEvent.VK_ENTER) return;
                 
-                saveLevelName += e.getKeyChar();;
+                saveLevelName += e.getKeyChar();
             }
         }
     }

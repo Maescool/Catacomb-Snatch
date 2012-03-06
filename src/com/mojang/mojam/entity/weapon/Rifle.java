@@ -1,22 +1,17 @@
 package com.mojang.mojam.entity.weapon;
 
 import com.mojang.mojam.MojamComponent;
-import com.mojang.mojam.entity.Bullet;
-import com.mojang.mojam.entity.Entity;
-import com.mojang.mojam.entity.Player;
-import com.mojang.mojam.network.TurnSynchronizer;
-
-import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
+import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.network.TurnSynchronizer;
 
 public class Rifle implements IWeapon {
 
-	private Player owner;
-	private static float BULLET_DAMAGE;
+	protected Mob owner;
+	protected static float BULLET_DAMAGE;
 	
 	private int upgradeIndex = 1;
 	private double accuracy;
@@ -25,12 +20,12 @@ public class Rifle implements IWeapon {
 	private boolean readyToShoot = true;
 	private int currentShootDelay = 0;	
 	
-	public Rifle(Player owner) {
-		setOwner(owner);
+	public Rifle(Mob mob) {
+		setOwner(mob);
 		
 		setWeaponMode();
 		
-		if(owner.isSprint)
+		if(mob.isSprint)
 			shootDelay *= 3;
 		
 	}
@@ -62,18 +57,29 @@ public class Rifle implements IWeapon {
 			yDir = Math.sin(dir);			
 			applyImpuls(xDir, yDir, 1);
 			
-			Entity bullet = new Bullet(owner, xDir, yDir, BULLET_DAMAGE);
+			Entity bullet = getAmmo(xDir, yDir);
+			
 			owner.level.addEntity(bullet);
 			
-			owner.muzzleTicks = 3;
-			owner.muzzleX = bullet.pos.x + 7 * xDir - 8;
-			owner.muzzleY = bullet.pos.y + 5 * yDir - 8 + 1;
+			if(owner instanceof Player) {
+				Player player = (Player)owner;
+				player.muzzleTicks = 3;
+				player.muzzleX = bullet.pos.x + 7 * xDir - 8;
+				player.muzzleY = bullet.pos.y + 5 * yDir - 8 + 1;
+			}
+			
 			currentShootDelay = shootDelay;
 			readyToShoot= false;
 			MojamComponent.soundPlayer.playSound("/sound/Shot 1.wav",
 					(float) owner.getPosition().x, (float) owner.getPosition().y);
 		}		
 	}
+
+	public Bullet getAmmo(double xDir, double yDir) {
+		Bullet bullet = new Bullet(owner, xDir, yDir, BULLET_DAMAGE);
+		return bullet;
+	}
+
 
 	@Override
 	public void weapontick() {
@@ -97,8 +103,8 @@ public class Rifle implements IWeapon {
 	}
 
 	@Override
-	public void setOwner(Player player) {
-		this.owner = player;
+	public void setOwner(Mob mob) {
+		this.owner = mob;
 	}
 
 }

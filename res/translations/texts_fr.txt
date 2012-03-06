@@ -80,6 +80,8 @@ options.fullscreen = PLEIN ECRAN
 options.showfps = AFFICHER FPS
 options.music = Musique
 options.sounds = Sons
+options.sound_and_video = SON ET VIDÉO
+options.locale_selection = CHOISIR UNE LANGUE
 options.creative = MODE CRÉATIF
 options.credits = CRÉDITS
 
@@ -89,6 +91,7 @@ character.select = Choisir
 pausemenu.help = AIDE
 pausemenu.backtomain = MENU PRINCIPAL
 pausemenu.resume = CONTINUER
+pausemenu.exit = QUITTER
 
 player.hasDied = {0} EST MORT!
 
@@ -106,6 +109,8 @@ titlemenu.start = JOUER
 titlemenu.host = NV. SERVEUR
 titlemenu.join = REJOINDRE
 titlemenu.help = AIDE
+titlemenu.sound_and_video = SON ET VIDÉO
+titlemenu.levelEditor = ÉDITEUR DE NIVEAU
 titlemenu.exit = QUITTER
 
 upgrade.full = DEJA AUGMENTER AU MAX!

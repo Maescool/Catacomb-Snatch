@@ -47,4 +47,3 @@ public class GameModeVanilla extends GameMode {
 		newLevel.TARGET_SCORE = 100;
 	}
 }
-

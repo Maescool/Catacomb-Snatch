@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 bin/
 .gradle
 build
@@ -11,6 +12,8 @@ build
 *.sw?
 lib/.tmp/
 =======
+=======
+>>>>>>> 9cded3f616ba70524524bc08b8bddd74fd5192d1
 bin/
 .gradle
 build
@@ -23,4 +26,7 @@ build
 *.sw?
 lib/.tmp/
 doc/
+<<<<<<< HEAD
 >>>>>>> 0f4d7cad438f437c7f233b272c161f4f873c8ebe
+=======
+>>>>>>> 9cded3f616ba70524524bc08b8bddd74fd5192d1

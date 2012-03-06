@@ -1,5 +1,6 @@
 package com.mojang.mojam.entity.mob;
 
+import com.mojang.mojam.GameCharacter;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
@@ -11,6 +12,7 @@ import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.building.Harvester;
 import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.loot.Loot;
+import com.mojang.mojam.entity.weapon.IWeapon;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.tile.HoleTile;
@@ -20,6 +22,7 @@ import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.buff.*;
 
 public abstract class Mob extends Entity {
 
@@ -55,6 +58,10 @@ public abstract class Mob extends Entity {
     private int walkTime;
     protected int stepTime;
     protected int limp;
+	public boolean isSprint = false;
+    public Vec2 aimVector;
+    public IWeapon weapon;
+	protected Buffs buffs = new Buffs();
 	
 	public Mob(double x, double y, int team) {
 		super();
@@ -63,6 +70,7 @@ public abstract class Mob extends Entity {
 		DifficultyInformation difficulty = TitleMenu.difficulty;
 		this.REGEN_INTERVAL = (difficulty != null && difficulty.difficultyID == 3) ? 15 : 25;
 		this.healingTime = this.REGEN_INTERVAL;
+		aimVector = new Vec2(0, 1);
 	}
 
 	public void init() {
@@ -96,7 +104,8 @@ public abstract class Mob extends Entity {
 	}
 
 	public void tick() {
-		if (TitleMenu.difficulty.difficultyID >= 1 ) {
+		this.buffs.tick();
+		if (TitleMenu.difficulty.difficultyID >= 1 || this.team != Team.Neutral) {
 			this.doRegenTime();
 		}
 		
@@ -126,11 +135,17 @@ public abstract class Mob extends Entity {
 				return;
 			}
 		}
+		
+		handleWeaponFire(xd, yd);
+	}
+	
+	public void addBuff( Buff buff ) {
+		this.buffs.add(buff);
 	}
 	
 	public void doRegenTime() {
 		if (!this.REGEN_HEALTH) {
-			// DO NOTHING
+			// DO NOTHING -> REGEN_HEALTH Apply to all health based buff, so prefer REGEN_AMOUNT = 0 for entity that can apply Poison, and Healing potion.
 		} else if (hurtTime <= 0 && health < maxHealth && --healingTime <= 0) {
 			this.healingTime = this.REGEN_INTERVAL;
 			this.onRegenTime();
@@ -138,8 +153,11 @@ public abstract class Mob extends Entity {
 	}
 	
 	public void onRegenTime() {
-			this.regenerateHealthBy( this.REGEN_AMOUNT );
-			// Can add thing here like a custom regen action
+		float regen = this.REGEN_AMOUNT ;
+		// Can add thing here like a custom regen action
+		// Like apply buffs based to Health effects
+		regen = this.buffs.effectsOf(Buff.BuffType.HEALTH_MODIF, regen);
+		regen = this.buffs.effectsOf(Buff.BuffType.REGEN_RATE  , regen);
 	}
 	
 	public void regenerateHealthBy(float a) { 
@@ -190,6 +208,7 @@ public abstract class Mob extends Entity {
 	}
 
 	public void render(Screen screen) {
+		System.out.println(this.getClass());
 		Bitmap image = getSprite();
 		if (hurtTime > 0) {
 			if (hurtTime > 40 - 6 && hurtTime / 2 % 2 == 0) {
@@ -233,8 +252,8 @@ public abstract class Mob extends Entity {
 			color = 0x8af116;
 		}
 
-		screen.blit(Art.healthBar_Underlay[start][0], pos.x - 16, pos.y + healthBarOffset);
-		screen.colorBlit(Art.healthBar[start][0], pos.x - 16, pos.y + healthBarOffset, (0xa8 << 24) + color);
+		screen.blit(Art.healthBar_Underlay[0][0], pos.x - 16, pos.y + healthBarOffset);
+		screen.colorBlit(Art.healthBar[start][0], pos.x - 16, pos.y + healthBarOffset, (0xff << 24) + color);
 		screen.blit(Art.healthBar_Outline[0][0], pos.x - 16, pos.y + healthBarOffset);
     }
 
@@ -255,6 +274,16 @@ public abstract class Mob extends Entity {
 		
 		this.healingTime = this.REGEN_INTERVAL;
 		
+		if (source instanceof Bullet){
+			Bullet bullet = (Bullet) source;
+			if (bullet.owner instanceof Player){
+				Player pl = (Player) bullet.owner;
+				if (!isNotFriendOf(pl)){
+					return;
+				}
+			}
+		}
+				
 		if (freezeTime <= 0) {
 			
 			if (source instanceof Bullet && !(this instanceof SpawnerEntity) && !(this instanceof RailDroid)) {
@@ -390,9 +419,18 @@ public abstract class Mob extends Entity {
                 level.addEntity(animation);
                 remove();
             } else {
-                int characterID = ((Player)this).getCharacterID();
-                level.addEntity(new PlayerFallingAnimation(x*Tile.WIDTH, y*Tile.HEIGHT, characterID));
-                if (characterID < 2)
+                GameCharacter character = ((Player)this).getCharacter();
+                level.addEntity(new PlayerFallingAnimation(x*Tile.WIDTH, y*Tile.HEIGHT, character));
+                if (((Player)this).isCarrying()){
+                    ItemFallAnimation animation = new ItemFallAnimation(x*Tile.WIDTH, (y-1)*Tile.HEIGHT, ((Player)this).carrying.getSprite());
+                    if(((Player)this).carrying instanceof Harvester){
+                        animation.setHarvester();
+                    }
+                    level.addEntity(animation);
+                    ((Player)this).carrying.remove();
+                }
+                // TODO add a sex attribute to Characters
+                if (character.ordinal() < 2)
                     MojamComponent.soundPlayer.playSound("/sound/falling_male.wav", (float) pos.x, (float) pos.y);
                 else
                     MojamComponent.soundPlayer.playSound("/sound/falling_female.wav", (float) pos.x, (float) pos.y);
@@ -434,5 +472,25 @@ public abstract class Mob extends Entity {
     	}
     	xd *= 0.2;
     	yd *= 0.2;
+    }
+    
+    /**
+     * Get current player position
+     * 
+     * @return Position
+     */
+    public Vec2 getPosition() {
+        return pos;
+    }
+    
+    /**
+     * Handle weapon fire
+     * 
+     * @param xa Position change on the x axis
+     * @param ya Position change on the y axis
+     */
+    private void handleWeaponFire(double xa, double ya) {
+    	if(weapon != null)
+        weapon.weapontick();
     }
 }

@@ -5,18 +5,16 @@ import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
-public class Bat extends HostileMob {
+public class Bat extends HostileMob  {
+	public static final int COLOR = 0xffff6600;
 	private int tick = 0;
 
 	public Bat(double x, double y) {
 		super(x, y, Team.Neutral);
 		setPos(x, y);
-		setStartHealth(1);
 		dir = TurnSynchronizer.synchedRandom.nextDouble() * Math.PI * 2;
 		minimapColor = 0xffff0000;
 		yOffs = 5;
-		deathPoints = 1;
-		strength = 1;
 	}
 	public void tick() {
 		super.tick();
@@ -55,5 +53,25 @@ public class Bat extends HostileMob {
 	public void render(Screen screen) {
 		screen.alphaBlit(Art.batShadow, (int)(pos.x - Art.batShadow.w / 2), (int)(pos.y - Art.batShadow.h / 2 - yOffs + 16), 0x45);
 		super.render(screen);
+	}
+
+	@Override
+	public int getColor() {
+		return Bat.COLOR;
+	}
+
+	@Override
+	public int getMiniMapColor() {
+		return Bat.COLOR;
+	}
+
+	@Override
+	public String getName() {
+		return "BAT";
+	}
+
+	@Override
+	public Bitmap getBitMapForEditor() {
+		return Art.bat[0][0];
 	}
 }

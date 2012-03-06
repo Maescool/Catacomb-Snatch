@@ -1,19 +1,142 @@
 # Game texts encoded in UTF-8
 
-player1Name = LORD LARD
-player1NameAlt = DUCHESS DONUT
-player1Win = {0} VANN WOOHOO
+build.rail = DU BEHÖVER {0} FÖR ATT BYGGA EN RÄLS
+build.droid = DU BEHÖVER {0} FÖR ATT KÖPA EN RÄLSBOT
+build.removeRail = DU BEHÖVER {0} FÖR ATT RIVA EN RÄLS
 
-player2Name = HERR VON SPECK
-player2Win = {0} VANN YAY
+back = BAKÅT
+cancel = AVBRYT
 
-hasDied = {0} DOG!
-score = {0}: {1}%
-cost = {0}
-health = {0}%
-money = {0}
+character.text = VÄLJ DIN KARAKTÄR!
+character.select = VÄLJ
 
-waitingForClient = EN KLIENT KAN ANSLUTA NU...
-enterIP = SKRIV IN DEN ANDRA SPELARENS IP-ADRESS:
-FPS = FPS: {0}
+credits.leadDev = PROJEKTANSVARIG:
+credits.maintainers = PROJEKTARBETARE:
+credits.communityMan = COMMUNITY ANSVARIGA:
+credits.others = AND THANKS TO ALL CONTRIBUTORS, INCLUDING:
+credits.note = THIS PROJECT IS NOW MAINTAINED AS A COMMUNITY PROJECT
 
+diffselect.title = VÄLJ SVÅRIGHETSGRAD
+diffselect.start = BÖRJA SPELA
+diffselect.easy = LÄTT
+diffselect.normal = NORMAL
+diffselect.hard = SVÅR
+diffselect.nightmare = OMÖJLIG
+
+gameplay.player1Win = {0} VANN YAY
+gameplay.player2Win = {0} VANN YAY
+gameplay.player3Win = {0} VANN YAY
+gameplay.player4Win = {0} VANN YAY
+gameplay.player1Name = LORD LARD
+gameplay.player2Name = HERR VON SPECK
+gameplay.player3Name = DUCHESS DONUT
+gameplay.player4Name = COUNTESS CRULLER
+gameplay.FPS = FPS: {0}
+gameplay.latency = LATENCY: {0}
+gameplay.cantPickup = DU KAN INTE PLOCKA UPP DETTA!
+
+help.goal = MÅL
+help.help1 = FÖR ATT VINNA
+help.help2 = SKALL DU SAMLA 50 VAGNAR
+help.help3 = FRÅN FONTÄNEN I MITTEN AV
+help.help4 = KARTAN INNAN DIN MOTSTÅNDARE
+help.turret = KANONEN
+help.turret1 = STJUTER FIENDER RUNT OM SIG.
+help.turret2 =
+help.turret3 =
+help.collector = SAMLAREN
+help.collector1 = SUGER UPP MYNT OMKRING SIG.
+help.collector2 = PLOCKA UPP DEN FÖR ATT
+help.collector3 = FÅ PENGARNA
+help.bomb = BOMBEN
+help.bomb1 = ANVÄNDS FÖR ATT FÖRSTÖRA VÄGGAR.
+help.bomb2 = STJUT FÖR ATT DETONERA.
+help.bomb3 =
+help.rails = RÄLSEN
+help.rails1 = FÖR RÄLSBOTEN TUR/RETUR TILL SKATTEN
+help.rails2 = TRYCK 'BYGG' PÅ DEN FÖRSTA RÄLSEN
+help.rails3 = FÖR ATT KÖPA EN RÄLSBOT (50 GULD)
+
+keys.up = UPP
+keys.down = NER
+keys.left = VÄNSTER
+keys.right= HÖGER
+keys.sprint = RUSA
+keys.fire = SKJUT
+keys.fireUp = SKJUT UPP
+keys.fireDown = SKJUT NER
+keys.fireLeft = SKJUT VÄNSTER
+keys.fireRight = SKJUT HÖGER
+keys.use = ANVÄND
+keys.build = BYGG
+keys.upgrade = UPDATERA
+keys.chat = CHAT
+
+leveleditor.title = KARTREDIGERAREN
+leveleditor.new = NY
+leveleditor.open = ÖPPNA
+leveleditor.save = SPARA
+leveleditor.enterLevelName = SKRIV KARTNAMN:
+
+levelselect.title = VÄLJ KARTA
+levelselect.start = STARTA
+levelselect.update = UPPDATERA KARTA
+
+mp.waitingForClient = VÄNTA PÅ ATT MOTSTÅNDAREN SKALL ANSLUTA...
+mp.enterIP = SKRIV IP ELLER VÄRD:
+mp.localIP = DITT LOKALA IP:
+mp.externalIP = DITT EXTERNA IP:
+mp.join = ANSLUT
+
+options.on = PÅ
+options.off = AV
+options.keyBindings = ÄNDRA KNAPPAR
+options.characterSelect = VÄLJ KARRAKTÄR
+options.fullscreen = HELSKÄRM
+options.showfps = VISA FPS
+options.music = MUSIK
+options.sounds = LJUD
+options.volume = VOLYM
+options.sound_and_video = VIDEO OCH LJUD
+options.locale_selection = VÄLJ SPRÅK
+options.mute = TYST
+options.creative = KREAKTIVT LÄGE
+options.alternative = ALTERNATIVT SPELARHUD
+options.credits = MEDVERKANDE
+
+pausemenu.help = HJÄLP
+pausemenu.backtomain = HUVUDMENY
+pausemenu.resume = FORSTÄTT
+pausemenu.exit = AVSLUTA SPELET
+
+player.hasDied = {0} HAR DÖTT!
+player.score = {0}: {1}%
+player.cost = {0}
+player.health = {0}%
+player.money = {0}
+player.nextLevel = {0}
+player.exp = {0}
+player.level = {0}
+
+shop.turretTooltipTitle = KANONEN
+shop.turretTooltipLine1 = Används som försvar.
+shop.turretTooltipLine2 = Attackerar närgående fiender.
+shop.harvesterTooltipTitle = SAMLAREN
+shop.harvesterTooltipLine1 = Samlar mynt.
+shop.harvesterTooltipLine2 = Tryck på 'använd' för att inkassera.
+shop.bombTooltipTitle = BOMBEN
+shop.bombTooltipLine1 = Förstör väggar med sprickor.
+shop.bombTooltipLine2 = Används för att fixa genvägar.
+
+titlemenu.start = STARTA
+titlemenu.host = SKAPA SRV
+titlemenu.join = ANSLUT SRV
+titlemenu.help = HUR MAN SPELAR
+titlemenu.options = INSTÄLLNINGAR
+titlemenu.levelEditor = KARTREDIGERAREN
+titlemenu.exit = AVSLUTA
+
+upgrade.full = REDAN FULLT UPPGRADERAD!
+upgrade.shopItem = DU KAN INTE UPPGRADERA AFFÄRS SAKER!
+upgrade.notEnoughMoney = DU HAR INTE TILLRÄCKLIGT MED PENGAR ({0})
+upgrade.to = UPPDATERAD TILL {0}

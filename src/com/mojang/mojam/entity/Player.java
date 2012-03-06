@@ -2,6 +2,7 @@ package com.mojang.mojam.entity;
 
 import java.util.Random;
 
+import com.mojang.mojam.GameCharacter;
 import com.mojang.mojam.Keys;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
@@ -46,10 +47,10 @@ public class Player extends Mob implements LootCollector {
     public MouseButtons mouseButtons;
     public int mouseFireButton = 1;
     public int mouseUseButton = 3;
-    public Vec2 aimVector;
-    public IWeapon weapon;
+
+    
     private boolean mouseAiming;
-    public double xd, yd;
+   
     public int takeDelay = 0;
     public int flashTime = 0;
     public int suckRadius = 0;
@@ -74,7 +75,7 @@ public class Player extends Mob implements LootCollector {
     private int deadDelay = 0;
     private int nextWalkSmokeTick = 0;
     boolean isImmortal;
-    private int characterID;
+    private GameCharacter character;
 
     /**
      * Constructor
@@ -85,11 +86,11 @@ public class Player extends Mob implements LootCollector {
      * @param y Initial y coordinate
      * @param team Team number
      */
-    public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team,  int characterID) {
+    public Player(Keys keys, MouseButtons mouseButtons, int x, int y, int team, GameCharacter character) {
         super(x, y, team);
         this.keys = keys;
         this.mouseButtons = mouseButtons;
-        this.characterID = characterID;
+        this.character = character;
 
         startX = x;
         startY = y;
@@ -100,9 +101,7 @@ public class Player extends Mob implements LootCollector {
         health = 5;
         psprint = 1.5;
         maxTimeSprint = 100;
-
         aimVector = new Vec2(0, 1);
-
         score = 0;
         weapon = new Rifle(this);
         setRailPricesAndImmortality();
@@ -450,22 +449,20 @@ public class Player extends Mob implements LootCollector {
     /**
      * Handle rail building
      * 
-     * @param xa Position change on the x axis
-     * @param ya Position change on the y axis
+     * @param x current position's X coordinate
+     * @param y current position's Y coordinate
      */
     private void handleRailBuilding(int x, int y) {
-
+    	boolean outsideLevel = y < 8 || y > level.height - 9;
         if (level.getTile(x, y).isBuildable()) {
-            if (score >= COST_RAIL && time - lastRailTick >= RailDelayTicks) {
+        	
+            if (score >= COST_RAIL && time - lastRailTick >= RailDelayTicks && !outsideLevel) {
                 lastRailTick = time;
                 level.placeTile(x, y, new RailTile(level.getTile(x, y)), this);
                 payCost(COST_RAIL);
-            } else if (score < COST_RAIL) {
-            	if(this.team == MojamComponent.localTeam) {
-            		  Notifications.getInstance().add(MojamComponent.texts.buildRail(COST_RAIL));
-            	}
-              
-            }
+            } else if (score < COST_RAIL && this.team == MojamComponent.localTeam) {
+            	Notifications.getInstance().add(MojamComponent.texts.buildRail(COST_RAIL));
+            }            
         } else if (level.getTile(x, y) instanceof RailTile) {
             if ((y < 8 && team == Team.Team2) || (y > level.height - 9 && team == Team.Team1)) {
                 if (score >= COST_DROID) {
@@ -632,8 +629,12 @@ public class Player extends Mob implements LootCollector {
 
     @Override
     public void render(Screen screen) {
-        Bitmap[][] sheet = Art.getPlayer(characterID);
-        
+		Bitmap[][] sheet = Art.getPlayer(getCharacter());
+    	
+		if(sheet == null){
+			return;
+		}
+		
         if (dead) {
             // don't draw anything if we are dead (in a hole)
             return;
@@ -663,6 +664,14 @@ public class Player extends Mob implements LootCollector {
             screen.blit(Art.muzzle[muzzleImage][0], xmuzzle, ymuzzle);
         }
 	}
+    
+    public void setCharacter(GameCharacter character) {
+		this.character = character;
+	}
+    
+    public GameCharacter getCharacter(){
+    	return character;
+    }
 
 	@Override
 	public void renderTop(Screen screen) {
@@ -797,7 +806,7 @@ public class Player extends Mob implements LootCollector {
      * Revive the player. Carried items are lost, as is all the money.
      */
     private void revive() {
-        Notifications.getInstance().add(MojamComponent.texts.hasDiedCharacter(characterID));
+        Notifications.getInstance().add(MojamComponent.texts.hasDiedCharacter(getCharacter()));
         carrying = null;
         dropAllMoney();
         pos.set(startX, startY);
@@ -841,21 +850,6 @@ public class Player extends Mob implements LootCollector {
         facing = (int) ((Math.atan2(-aimVector.x, aimVector.y) * 8 / (Math.PI * 2) + 8.5)) & 7;
     }
 
-    /**
-     * Get current player position
-     * 
-     * @return Position
-     */
-    public Vec2 getPosition() {
-        return pos;
-    }
 
-    /**
-     * Get current player's characterID
-     * 
-     * @return charakterID
-     */
-    public int getCharacterID() {
-        return this.characterID;
-    }
+
 }

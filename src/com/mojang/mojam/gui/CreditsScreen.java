@@ -19,7 +19,7 @@ public class CreditsScreen extends GuiMenu {
 	public String[] officialDev  = {"Borsty", "danielduner", "flet", "judgedead53", "Maescool",
 			"master-lincoln", "mkalam-alami", "Scorpion1122"};
 	public String[] communityMan = {"Austin01", "zorro300"};
-	public String[] others = {"xPaw", "BubblegumBalloon", "Elosanda", "GreenLightning"};
+	public String[] others = {"xPaw", "BubblegumBalloon", "Elosanda", "GreenLightning", "Mebibyte", "Hammy55"};
 
 	public CreditsScreen(int gameWidth, int gameHeight) {
 		super();
@@ -59,7 +59,7 @@ public class CreditsScreen extends GuiMenu {
 		drawNames(others, screen, 240);
 
 		// Back button character
-		screen.blit(Art.getPlayer(MojamComponent.instance.playerCharacter)[0][6], (gameWidth - 128) / 2 - 40,
+		screen.blit(Art.getLocalPlayerArt()[0][6], (gameWidth - 128) / 2 - 40,
 				gameHeight - 50 - 20);
 	
 	}

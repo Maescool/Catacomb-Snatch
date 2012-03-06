@@ -12,6 +12,7 @@ public abstract class ClickableComponent extends VisibleComponent {
 	private boolean isPressed;
 	protected boolean performClick = false;
 	protected boolean performHover = false;
+	public boolean enabled = true;
 
 	public ClickableComponent(int x, int y, int w, int h) {
 		super(x, y, w, h);
@@ -24,7 +25,7 @@ public abstract class ClickableComponent extends VisibleComponent {
 		int mx = mouseButtons.getX() / 2;
 		int my = mouseButtons.getY() / 2;
 		isPressed = false;
-		if (mx >= getX() && my >= getY() && mx < (getX() + getWidth()) && my < (getY() + getHeight())) {
+		if (enabled && mx >= getX() && my >= getY() && mx < (getX() + getWidth()) && my < (getY() + getHeight())) {
 			postHover();
 			if (mouseButtons.isRelased(1)) {
 				postClick();
