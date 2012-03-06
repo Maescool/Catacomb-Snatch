@@ -1,7 +1,6 @@
 package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
-import java.util.Locale;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.level.DifficultyInformation;
@@ -84,7 +83,7 @@ public class TitleMenu extends GuiMenu {
 
 	public static LevelInformation level = null;
 	public static GameMode defaultGameMode = new GameModeVanilla();
-	public static DifficultyInformation difficulty = null;
+	public static DifficultyInformation difficulty = DifficultyInformation.NORMAL;
 
 	public static String ip = "";
 
