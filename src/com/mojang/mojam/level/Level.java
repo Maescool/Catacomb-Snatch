@@ -45,7 +45,6 @@ public class Level {
 	public int[][] monsterDensity;
 	public int densityTileWidth = 5;
 	public int densityTileHeight = 5;
-	public int[] allowedDensities = {3/*EASY*/,7/*NORMAL*/,12/*HARD*/,100000/*NIGHTMARE*/};
 
 	public IVictoryConditions victoryConditions;
 	public int player1Score = 0;
@@ -256,7 +255,7 @@ public class Level {
 	public void addMob(Mob m, int xTile, int yTile)
 	{
 		updateDensityList();
-		if(monsterDensity[(int)(xTile/densityTileWidth)][(int)(yTile/densityTileHeight)] <allowedDensities[TitleMenu.difficulty.difficultyID])
+		if(monsterDensity[(int)(xTile/densityTileWidth)][(int)(yTile/densityTileHeight)] < TitleMenu.difficulty.getAllowedMobDensity())
 		{
 			addEntity(m);
 		}

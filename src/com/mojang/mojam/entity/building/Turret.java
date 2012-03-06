@@ -6,11 +6,11 @@ import java.util.Set;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.mob.DropTrap;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.mob.RailDroid;
 import com.mojang.mojam.entity.mob.SpikeTrap;
-import com.mojang.mojam.entity.mob.DropTrap;
-import com.mojang.mojam.level.DifficultyInformation;
+import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.screen.Art;
@@ -57,9 +57,9 @@ public class Turret extends Building implements IEditable {
 
 	@Override
 	public void init() {
-		makeUpgradeableWithCosts(new int[] { DifficultyInformation.calculateCosts(500), 
-				DifficultyInformation.calculateCosts(1000), 
-				DifficultyInformation.calculateCosts(5000)});
+		makeUpgradeableWithCosts(new int[] { TitleMenu.difficulty.calculateCosts(500), 
+				TitleMenu.difficulty.calculateCosts(1000), 
+				TitleMenu.difficulty.calculateCosts(5000)});
 	}
 
 	@Override

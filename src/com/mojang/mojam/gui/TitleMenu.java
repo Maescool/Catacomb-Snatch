@@ -84,7 +84,7 @@ public class TitleMenu extends GuiMenu {
 
 	public static LevelInformation level = null;
 	public static GameMode defaultGameMode = new GameModeVanilla();
-	public static DifficultyInformation difficulty = null;
+	public static DifficultyInformation difficulty = DifficultyInformation.NORMAL;
 
 	public static String ip = "";
 
