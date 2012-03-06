@@ -4,8 +4,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Properties;
 
-import com.mojang.mojam.entity.mob.Mob;
-
 public class Constants {
 
 	private final static Properties constants = new Properties();
@@ -31,8 +29,8 @@ public class Constants {
 		}
 	}
 
-	public static int getInt(String constant, Mob mobClass) {
-		StringBuffer string = new StringBuffer(mobClass.getClass().getName());
+	public static int getInt(String constant, Object obj) {
+		StringBuffer string = new StringBuffer(obj.getClass().getName());
 		string.append(".").append(constant);
 		return getInt(string.toString());
 	}
@@ -46,8 +44,8 @@ public class Constants {
 		return 0;
 	}
 
-	public static float getFloat(String constant, Mob mobClass) {
-		StringBuffer string = new StringBuffer(mobClass.getClass().getName());
+	public static float getFloat(String constant, Object obj) {
+		StringBuffer string = new StringBuffer(obj.getClass().getName());
 		string.append(".").append(constant);
 		return getFloat(string.toString());
 	}
@@ -61,8 +59,8 @@ public class Constants {
 		return 0;
 	}
 	
-	public static double getDouble(String constant, Mob mobClass) {
-		StringBuffer string = new StringBuffer(mobClass.getClass().getName());
+	public static double getDouble(String constant, Object obj) {
+		StringBuffer string = new StringBuffer(obj.getClass().getName());
 		string.append(".").append(constant);
 		return getFloat(string.toString());
 	}

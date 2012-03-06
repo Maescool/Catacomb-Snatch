@@ -20,7 +20,6 @@ public class Shotgun extends Rifle {
 	
 	public Shotgun(Mob owner) {
 		super(owner);
-		shootDelay = 35;
 		image = Art.weaponList[1][0];
 		setWeaponMode();
 	}
@@ -31,8 +30,7 @@ public class Shotgun extends Rifle {
 			bulletDamge = 100f;
 			accuracy = 0.06;
 		}else{
-			bulletDamge = 4.5f;
-			accuracy = 0.06;
+			super.setWeaponMode();
 		}
 	}
 

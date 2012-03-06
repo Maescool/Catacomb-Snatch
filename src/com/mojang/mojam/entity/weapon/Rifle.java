@@ -7,6 +7,7 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.network.TurnSynchronizer;
+import com.mojang.mojam.resources.Constants;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 
@@ -17,31 +18,32 @@ public class Rifle implements IWeapon {
 	protected Bitmap image;
 	protected int upgradeIndex = 1;
 	protected double accuracy;
-	protected int shootDelay = 5;
+	protected int shootDelay;
 	private boolean readyToShoot = true;
-	private int currentShootDelay = 0;	
-	
+	private int currentShootDelay = 0;
+
 	public Rifle(Mob mob) {
 		setOwner(mob);
-		
+
 		setWeaponMode();
 		image = Art.weaponList[0][0];
-		
-		if(mob.isSprint)
+
+		if (mob.isSprint)
 			shootDelay *= 3;
-		
+
 	}
-	
-	public void setWeaponMode(){
-		if(Options.getAsBoolean(Options.CREATIVE)){
+
+	public void setWeaponMode() {
+		if (Options.getAsBoolean(Options.CREATIVE)) {
 			bulletDamge = 100f;
 			accuracy = 0;
-		}else{
-			bulletDamge = .5f;
-			accuracy = 0.15;
+		} else {
+			bulletDamge = Constants.getFloat("bulletDamage", this);
+			accuracy = Constants.getDouble("accuracy", this);
+			shootDelay = Constants.getInt("shootDelay", this);
 		}
 	}
-	
+
 	@Override
 	public void upgradeWeapon() {
 		upgradeIndex++;
@@ -51,30 +53,31 @@ public class Rifle implements IWeapon {
 	public void primaryFire(double xDir, double yDir) {
 		if (readyToShoot) {
 			double dir;
-			if(owner.isSprint)
+			if (owner.isSprint)
 				dir = getBulletDirection(accuracy * 2);
 			else
 				dir = getBulletDirection(accuracy);
 			xDir = Math.cos(dir);
-			yDir = Math.sin(dir);			
+			yDir = Math.sin(dir);
 			applyImpuls(xDir, yDir, 1);
-			
+
 			Entity bullet = getAmmo(xDir, yDir);
-			
+
 			owner.level.addEntity(bullet);
-			
-			if(owner instanceof Player) {
-				Player player = (Player)owner;
+
+			if (owner instanceof Player) {
+				Player player = (Player) owner;
 				player.muzzleTicks = 3;
 				player.muzzleX = bullet.pos.x + 7 * xDir - 8;
 				player.muzzleY = bullet.pos.y + 5 * yDir - 8 + 1;
 			}
-			
+
 			currentShootDelay = shootDelay;
-			readyToShoot= false;
+			readyToShoot = false;
 			MojamComponent.soundPlayer.playSound("/sound/Shot 1.wav",
-					(float) owner.getPosition().x, (float) owner.getPosition().y);
-		}		
+					(float) owner.getPosition().x,
+					(float) owner.getPosition().y);
+		}
 	}
 
 	public Bullet getAmmo(double xDir, double yDir) {
@@ -84,25 +87,27 @@ public class Rifle implements IWeapon {
 
 	@Override
 	public void weapontick() {
-		if(!readyToShoot) {
-			if(currentShootDelay > 0) currentShootDelay--;
-			else readyToShoot = true;
+		if (!readyToShoot) {
+			if (currentShootDelay > 0)
+				currentShootDelay--;
+			else
+				readyToShoot = true;
 		}
 	}
-	
+
 	private double getBulletDirection(double accuracy) {
 		double dir = Math.atan2(owner.aimVector.y, owner.aimVector.x)
 				+ (TurnSynchronizer.synchedRandom.nextFloat() - TurnSynchronizer.synchedRandom
 						.nextFloat()) * accuracy;
-		
+
 		return dir;
 	}
-	
-	private void applyImpuls(double xDir, double yDir, double strength) {		
+
+	private void applyImpuls(double xDir, double yDir, double strength) {
 		owner.xd -= xDir * strength;
 		owner.yd -= yDir * strength;
 	}
-	
+
 	@Override
 	public Bitmap getSprite() {
 		return image;
@@ -115,11 +120,9 @@ public class Rifle implements IWeapon {
 
 	@Override
 	public boolean equals(Object other) {
-		if(other.getClass() == this.getClass()) return true;
+		if (other.getClass() == this.getClass())
+			return true;
 		return false;
 	}
-	
-	
-	
-}
 
+}

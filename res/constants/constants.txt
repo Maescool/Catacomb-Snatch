@@ -40,3 +40,15 @@ com.mojang.mojam.entity.mob.Pharao.strength=3
 com.mojang.mojam.entity.mob.Pharao.health=40
 com.mojang.mojam.entity.mob.Pharao.speed=1.0
 com.mojang.mojam.entity.mob.Pharao.limp=3
+
+com.mojang.mojam.entity.weapon.Rifle.bulletDamage=0.5
+com.mojang.mojam.entity.weapon.Rifle.accuracy=0.15
+com.mojang.mojam.entity.weapon.Rifle.shootDelay=5
+
+com.mojang.mojam.entity.weapon.Raygun.bulletDamage=1.5
+com.mojang.mojam.entity.weapon.Raygun.accuracy=0.05
+com.mojang.mojam.entity.weapon.Raygun.shootDelay=10
+
+com.mojang.mojam.entity.weapon.Shotgun.bulletDamage=4.5
+com.mojang.mojam.entity.weapon.Shotgun.accuracy=0.06
+com.mojang.mojam.entity.weapon.Shotgun.shootDelay=35
