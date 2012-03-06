@@ -52,3 +52,7 @@ com.mojang.mojam.entity.weapon.Raygun.shootDelay=10
 com.mojang.mojam.entity.weapon.Shotgun.bulletDamage=4.5
 com.mojang.mojam.entity.weapon.Shotgun.accuracy=0.06
 com.mojang.mojam.entity.weapon.Shotgun.shootDelay=35
+
+com.mojang.mojam.entity.weapon.VenomShooter.bulletDamage=0.5
+com.mojang.mojam.entity.weapon.VenomShooter.accuracy=0.15
+com.mojang.mojam.entity.weapon.VenomShooter.shootDelay=5

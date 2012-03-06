@@ -17,7 +17,7 @@ public class Raygun extends Rifle {
 	@Override
 	public void setWeaponMode() {
 		if (Options.getAsBoolean(Options.CREATIVE)) {
-			bulletDamge = 100f;
+			bulletDamage = 100f;
 			accuracy = 0;
 		} else {
 			super.setWeaponMode();
@@ -25,7 +25,7 @@ public class Raygun extends Rifle {
 	}
 
 	public Bullet getAmmo(double xDir, double yDir) {
-		Bullet bullet = new BulletRay(owner, xDir, yDir, bulletDamge);
+		Bullet bullet = new BulletRay(owner, xDir, yDir, bulletDamage);
 		return bullet;
 	}
 }

@@ -14,7 +14,7 @@ import com.mojang.mojam.screen.Bitmap;
 public class Rifle implements IWeapon {
 
 	protected Mob owner;
-	protected float bulletDamge;
+	protected float bulletDamage;
 	protected Bitmap image;
 	protected int upgradeIndex = 1;
 	protected double accuracy;
@@ -28,17 +28,18 @@ public class Rifle implements IWeapon {
 		setWeaponMode();
 		image = Art.weaponList[0][0];
 
-		if (mob.isSprint)
+		if (mob.isSprint) {
 			shootDelay *= 3;
+		}
 
 	}
 
 	public void setWeaponMode() {
 		if (Options.getAsBoolean(Options.CREATIVE)) {
-			bulletDamge = 100f;
+			bulletDamage = 100f;
 			accuracy = 0;
 		} else {
-			bulletDamge = Constants.getFloat("bulletDamage", this);
+			bulletDamage = Constants.getFloat("bulletDamage", this);
 			accuracy = Constants.getDouble("accuracy", this);
 			shootDelay = Constants.getInt("shootDelay", this);
 		}
@@ -81,17 +82,18 @@ public class Rifle implements IWeapon {
 	}
 
 	public Bullet getAmmo(double xDir, double yDir) {
-		Bullet bullet = new Bullet(owner, xDir, yDir, bulletDamge);
+		Bullet bullet = new Bullet(owner, xDir, yDir, bulletDamage);
 		return bullet;
 	}
 
 	@Override
 	public void weapontick() {
 		if (!readyToShoot) {
-			if (currentShootDelay > 0)
+			if (currentShootDelay > 0) {
 				currentShootDelay--;
-			else
+			} else {
 				readyToShoot = true;
+			}
 		}
 	}
 
@@ -120,8 +122,9 @@ public class Rifle implements IWeapon {
 
 	@Override
 	public boolean equals(Object other) {
-		if (other.getClass() == this.getClass())
+		if (other.getClass() == this.getClass()) {
 			return true;
+		}
 		return false;
 	}
 

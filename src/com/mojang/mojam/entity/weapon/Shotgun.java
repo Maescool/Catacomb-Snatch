@@ -27,7 +27,7 @@ public class Shotgun extends Rifle {
 	@Override
 	public void setWeaponMode(){
 		if(Options.getAsBoolean(Options.CREATIVE)){
-			bulletDamge = 100f;
+			bulletDamage = 100f;
 			accuracy = 0.06;
 		}else{
 			super.setWeaponMode();
@@ -40,30 +40,31 @@ public class Shotgun extends Rifle {
 			double direction;
 			double directionSum = 0.0;
 			
-			for(int i = 0; i < numberBullets; i++) {
-			if(owner.isSprint)
-				direction = getBulletDirection(accuracy * 2 * i);
-			else
-				direction = getBulletDirection(accuracy * i);
-			directionSum += direction;
-			
-			xDirection = Math.cos(direction);
-			yDirection = Math.sin(direction);
-			
-			Entity bullet = getAmmo(xDirection, yDirection);
-			
-			owner.level.addEntity(bullet);
-			
-			if(owner instanceof Player) {
-				Player player = (Player)owner;
-				player.muzzleTicks = 3;
-				player.muzzleX = bullet.pos.x + 7 * xDirection - 8;
-				player.muzzleY = bullet.pos.y + 5 * yDirection - 8 + 1;
+			for (int i = 0; i < numberBullets; i++) {
+				if (owner.isSprint) {
+					direction = getBulletDirection(accuracy * 2 * i);
+				} else {
+					direction = getBulletDirection(accuracy * i);
+				}
+				directionSum += direction;
+
+				xDirection = Math.cos(direction);
+				yDirection = Math.sin(direction);
+
+				Entity bullet = getAmmo(xDirection, yDirection);
+
+				owner.level.addEntity(bullet);
+
+				if (owner instanceof Player) {
+					Player player = (Player) owner;
+					player.muzzleTicks = 3;
+					player.muzzleX = bullet.pos.x + 7 * xDirection - 8;
+					player.muzzleY = bullet.pos.y + 5 * yDirection - 8 + 1;
+				}
+
 			}
 			
-			}
-			
-			double directionAverage = directionSum/numberBullets;
+			double directionAverage = directionSum / numberBullets;
 			xDirection = Math.cos(directionAverage);
 			yDirection = Math.sin(directionAverage);
 			applyImpuls(xDirection, yDirection, knockBack);
@@ -98,7 +99,7 @@ public class Shotgun extends Rifle {
 	}
 
 	public Bullet getAmmo(double xDir, double yDir) {
-		Bullet bullet = new BulletBuckshot(owner, xDir, yDir, bulletDamge);
+		Bullet bullet = new BulletBuckshot(owner, xDir, yDir, bulletDamage);
 		return bullet;
 	}
 }
