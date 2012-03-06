@@ -82,6 +82,9 @@ keys.use = ANVÄND
 keys.build = BYGG
 keys.upgrade = UPDATERA
 keys.chat = CHAT
+keys.weaponSlot = VAPENPLATS {0}
+keys.cycleLeft = NÄSTA VAPEN
+keys.cycleRight = FÖRRA VAPNET
 
 leveleditor.title = KARTREDIGERAREN
 leveleditor.new = NY
@@ -138,6 +141,15 @@ shop.harvesterTooltipLine2 = Tryck på 'använd' för att inkassera.
 shop.bombTooltipTitle = BOMBEN
 shop.bombTooltipLine1 = Förstör väggar med sprickor.
 shop.bombTooltipLine2 = Används för att fixa genvägar.
+shop.rifleTooltipTitle = GEVÄR
+shop.rifleTooltipLine1 = Vapnet du startar med.
+shop.rifleTooltipLine2 = Bra all-round.
+shop.shotgunTooltipTitle = SHOTGUN
+shop.shotgunTooltipLine1 = Stort spridningsområde.
+shop.shotgunTooltipLine2 = Hög skada, kort räckvidd.
+shop.raygunTooltipTitle = ENERGI PISTOL
+shop.raygunTooltipLine1 = Skott som studsar på väggar.
+shop.raygunTooltipLine2 = Varje studs ökar skadan.
 
 titlemenu.start = STARTA
 titlemenu.host = SKAPA SRV
