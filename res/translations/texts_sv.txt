@@ -25,6 +25,10 @@ diffselect.normal = NORMAL
 diffselect.hard = SVÅR
 diffselect.nightmare = OMÖJLIG
 
+exitmenu.headline = VILL DU VERKLIGEN SLUTA SPELA?
+exitmenu.cancel = NEJ
+exitmenu.exit = JA
+
 gamemodemenu.title = VÄLJ ETT SPELLÄGE
 gamemodemenu.campaign = KAMPANJ
 gamemodemenu.arcade = ARKAD
