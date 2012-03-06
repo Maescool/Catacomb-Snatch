@@ -3,7 +3,7 @@ package com.mojang.mojam.entity.mob;
 import java.util.Set;
 
 import com.mojang.mojam.entity.Entity;
-import com.mojang.mojam.level.DifficultyInformation;
+import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.resources.Constants;
@@ -22,7 +22,7 @@ public abstract class HostileMob extends Mob  implements IEditable {
 
 	@Override
 	public void setStartHealth(float newHealth) {
-		super.setStartHealth(DifficultyInformation.calculateHealth(newHealth));
+		super.setStartHealth(TitleMenu.difficulty.calculateHealth(newHealth));
 	}
 	
 	public int faceEntity(double x, double y, double radius, Class<? extends Entity> c, int facing){
@@ -117,7 +117,7 @@ public abstract class HostileMob extends Mob  implements IEditable {
 		if (entity instanceof Mob) {
 			Mob mob = (Mob) entity;
 			if (isNotFriendOf(mob)) {
-				mob.hurt(this, DifficultyInformation.calculateStrength(strength));
+				mob.hurt(this, TitleMenu.difficulty.calculateStrength(strength));
 			}
 		}
 	}

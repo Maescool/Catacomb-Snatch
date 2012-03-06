@@ -13,7 +13,7 @@ import com.mojang.mojam.entity.building.ShopItemBomb;
 import com.mojang.mojam.entity.building.ShopItemHarvester;
 import com.mojang.mojam.entity.building.ShopItemTurret;
 import com.mojang.mojam.entity.mob.Team;
-import com.mojang.mojam.level.DifficultyInformation;
+import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.LevelUtils;
@@ -110,7 +110,7 @@ public class GameMode {
 
 
 	protected void setupPlayerSpawnArea() {
-		newLevel.maxMonsters = 1500 + (int)DifficultyInformation.calculateStrength(500);	
+		newLevel.maxMonsters = 1500 + (int)TitleMenu.difficulty.calculateStrength(500);	
 		
 		newLevel.addEntity(new ShopItemTurret(32 * (newLevel.width / 2 - 1.5), 4.5 * 32, Team.Team2));
 		newLevel.addEntity(new ShopItemHarvester(32 * (newLevel.width / 2 - .5), 4.5 * 32, Team.Team2));

@@ -1,13 +1,14 @@
 package com.mojang.mojam.entity.mob;
 
+import java.util.Set;
+
 import com.mojang.mojam.entity.Entity;
-import com.mojang.mojam.level.DifficultyInformation;
+import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
-import java.util.Set;
 
 public class SpikeTrap extends Mob implements IEditable {
     public static final int COLOR = 0xff0000ff;
@@ -39,7 +40,7 @@ public class SpikeTrap extends Mob implements IEditable {
 			Set<Entity> entities = level.getEntities(pos.x - 2, pos.y - 2, pos.x + Tile.WIDTH, pos.y + Tile.HEIGHT);
 			for (Entity e : entities) {
 				if (e instanceof Mob && !(e instanceof Bat)) {
-					((Mob) e).hurt(this, DifficultyInformation.calculateStrength(1));
+					((Mob) e).hurt(this, TitleMenu.difficulty.calculateStrength(1));
 				}
 			}
 		}
