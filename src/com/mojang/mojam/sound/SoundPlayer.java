@@ -81,7 +81,7 @@ public class SoundPlayer implements ISoundPlayer {
 				stopBackgroundMusic();
 
 			String backgroundTrack = "/sound/ThemeTitle.ogg";
-			getSoundSystem().backgroundMusic(BACKGROUND_TRACK, SoundPlayer.class.getResource(backgroundTrack), backgroundTrack, false);
+			getSoundSystem().backgroundMusic(BACKGROUND_TRACK, SoundPlayer.class.getResource(backgroundTrack), backgroundTrack, true);
 		}
 
         getSoundSystem().setVolume(BACKGROUND_TRACK, musicVolume);
@@ -98,7 +98,7 @@ public class SoundPlayer implements ISoundPlayer {
                 stopBackgroundMusic();
 
 			String backgroundTrack = "/sound/ThemeEnd.ogg";
-            getSoundSystem().backgroundMusic(BACKGROUND_TRACK, SoundPlayer.class.getResource(backgroundTrack), backgroundTrack, false);
+            getSoundSystem().backgroundMusic(BACKGROUND_TRACK, SoundPlayer.class.getResource(backgroundTrack), backgroundTrack, true);
 		}
 
         getSoundSystem().setVolume(BACKGROUND_TRACK, musicVolume);
