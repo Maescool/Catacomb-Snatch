@@ -142,7 +142,7 @@ shop.rifleTooltipLine2 = Guter Allrounder.
 shop.shotgunTooltipTitle = SCHROTFLINTE
 shop.shotgunTooltipLine1 = Schuß deckt große Fläche ab.
 shop.shotgunTooltipLine2 = Hoher Schaden, kurze Reichweite.
-shop.raygunTooltipTitle = SCHIESSGEWEHR
+shop.raygunTooltipTitle = STRAHLENKANONE
 shop.raygunTooltipLine1 = Schüße prallen von Wänden ab.
 shop.raygunTooltipLine2 = Jeder Abpraller erhöht den Schaden.
 
