@@ -28,6 +28,7 @@ public class StartGamePacket extends Packet {
 		levelFile = dis.readUTF();
 		difficulty = dis.readInt();
 		opponentCharacterID = dis.readInt();
+		System.out.println("StartGamePacket read() .. "+gameSeed+","+levelFile+","+difficulty+","+opponentCharacterID);
 	}
 
 	@Override

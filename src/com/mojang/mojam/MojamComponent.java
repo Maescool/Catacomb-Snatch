@@ -316,6 +316,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	}
 
 	private synchronized void createLevel(String levelPath, GameMode mode, GameCharacter character) {
+		System.out.println("Creating level: "+levelPath);
 		LevelInformation li = LevelInformation.getInfoForPath(levelPath);
 		if (li != null) {
 			createLevel(li, mode, character);

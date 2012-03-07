@@ -52,10 +52,10 @@ public class JoinGameMenu extends GuiMenu {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-
-		if (e.getKeyChar() == KeyEvent.VK_BACK_SPACE && TitleMenu.ip.length() > 0) {
-			TitleMenu.ip = TitleMenu.ip.substring(0, TitleMenu.ip.length() - 1);
-		} else {
+		if (e.getKeyChar() == KeyEvent.VK_BACK_SPACE) {
+			if(TitleMenu.ip.length() > 0)
+				TitleMenu.ip = TitleMenu.ip.substring(0, TitleMenu.ip.length() - 1);
+		} else if(!e.isActionKey()) {
 			TitleMenu.ip += e.getKeyChar();
 		}
 	}
