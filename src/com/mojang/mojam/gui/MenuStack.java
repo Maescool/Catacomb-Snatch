@@ -13,8 +13,9 @@ public class MenuStack extends Stack<GuiMenu> implements KeyListener {
 
 	private static final long serialVersionUID = 1L;
 	private ButtonListener stackButtonListener;
+	
 	/**
-	 * 
+	 * Creates an empty MenuStack
 	 */
 	public MenuStack() {
 	}
