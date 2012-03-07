@@ -76,7 +76,8 @@ public class Turret extends Building implements IEditable {
     		Entity closest = null;
     		double closestDist = 99999999.0f;
     		for (Entity e : entities) {
-    			if (!(e instanceof Mob) || (e instanceof RailDroid && e.team == this.team) || e instanceof Bomb || e instanceof SpikeTrap)
+    			if (!(e instanceof Mob) || (e instanceof RailDroid && e.team == this.team) || e instanceof Bomb || e instanceof SpikeTrap || 
+    					e instanceof ShopItem)
     				continue;
     			if (!((Mob) e).isNotFriendOf(this))
     				continue;
