@@ -35,13 +35,13 @@ public class Rifle implements IWeapon {
 	}
 
 	public void setWeaponMode() {
+		shootDelay = Constants.getInt("shootDelay", this);
 		if (Options.getAsBoolean(Options.CREATIVE)) {
 			bulletDamage = 100f;
 			accuracy = 0;
 		} else {
 			bulletDamage = Constants.getFloat("bulletDamage", this);
 			accuracy = Constants.getDouble("accuracy", this);
-			shootDelay = Constants.getInt("shootDelay", this);
 		}
 	}
 

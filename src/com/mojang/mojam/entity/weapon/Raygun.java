@@ -16,11 +16,10 @@ public class Raygun extends Rifle {
 
 	@Override
 	public void setWeaponMode() {
+		super.setWeaponMode();
 		if (Options.getAsBoolean(Options.CREATIVE)) {
 			bulletDamage = 100f;
 			accuracy = 0;
-		} else {
-			super.setWeaponMode();
 		}
 	}
 
