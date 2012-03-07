@@ -17,11 +17,13 @@ import com.mojang.mojam.entity.building.SpawnerForBat;
 import com.mojang.mojam.entity.building.SpawnerForMummy;
 import com.mojang.mojam.entity.building.SpawnerForScarab;
 import com.mojang.mojam.entity.building.SpawnerForSnake;
+import com.mojang.mojam.entity.building.TreasureChest;
 import com.mojang.mojam.entity.building.TreasurePile;
 import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.entity.building.TurretTeamOne;
 import com.mojang.mojam.entity.building.TurretTeamTwo;
 import com.mojang.mojam.entity.mob.Bat;
+import com.mojang.mojam.entity.mob.DropTrap;
 import com.mojang.mojam.entity.mob.Mummy;
 import com.mojang.mojam.entity.mob.Pharao;
 import com.mojang.mojam.entity.mob.Scarab;
@@ -78,11 +80,13 @@ public class LevelEditorMenu extends GuiMenu {
         new WallTile(),
         new DestroyableWallTile(),
         new TreasurePile(0, 0),
+        new TreasureChest(0, 0, 0, 0),
         new UnbreakableRailTile(new FloorTile()),
         new Turret(0, 0, 0),
         new TurretTeamOne(0, 0),
         new TurretTeamTwo(0, 0),
         new SpikeTrap(0, 0),
+        new DropTrap(0, 0),
         new SpawnerForBat(0, 0),
         new SpawnerForSnake(0, 0),
         new SpawnerForMummy(0, 0),
