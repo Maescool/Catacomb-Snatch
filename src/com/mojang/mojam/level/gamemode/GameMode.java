@@ -68,15 +68,17 @@ public class GameMode {
 	
 	private int[] defaultRgbArray(int width, int height) {
 		int[] rgbs = new int[width * height];
+		// fill everything with UnpassableSandTiles
 		Arrays.fill(rgbs, 0xffA8A800);
-
+		
+		// add SandTiles for player bases
 		for (int y = 0 + 4; y < height - 4; y++) {
-			for (int x = (width / 2) - 4; x < (width / 2) + 3; x++) {
+			for (int x = (width / 2) - 5; x < (width / 2) + 4; x++) {
 				rgbs[x + y * width] = 0xff888800;
 			}
 		}
 		for (int y = 0 + 5; y < height - 5; y++) {
-			for (int x = (width / 2) - 2; x < (width / 2) + 1; x++) {
+			for (int x = (width / 2) - 3; x < (width / 2) + 2; x++) {
 				rgbs[x + y * width] = 0xffA8A800;
 			}
 		}
@@ -117,16 +119,15 @@ public class GameMode {
 		newLevel.addEntity(new ShopItemTurret(32 * (newLevel.width / 2 - 1.5), 4.5 * 32, Team.Team2));
 		newLevel.addEntity(new ShopItemHarvester(32 * (newLevel.width / 2 - .5), 4.5 * 32, Team.Team2));
 		newLevel.addEntity(new ShopItemBomb(32 * (newLevel.width / 2 + .5), 4.5 * 32, Team.Team2));
-		newLevel.addEntity(new ShopItemShotgun(32 * (newLevel.width / 2 - 2.0), 6.5 * 32, Team.Team2));
-		newLevel.addEntity(new ShopItemRaygun(32 * (newLevel.width / 2 - 2.0), 5.5 * 32, Team.Team2));
+		newLevel.addEntity(new ShopItemShotgun(32 * (newLevel.width / 2 - 2.5), 6.5 * 32, Team.Team2));
+		newLevel.addEntity(new ShopItemRaygun(32 * (newLevel.width / 2 - 2.5), 5.5 * 32, Team.Team2));
 		
 		newLevel.addEntity(new ShopItemTurret(32 * (newLevel.width / 2 - 1.5), (newLevel.height - 4.5) * 32, Team.Team1));
 		newLevel.addEntity(new ShopItemHarvester(32 * (newLevel.width / 2 - .5), (newLevel.height - 4.5) * 32, Team.Team1));
 		newLevel.addEntity(new ShopItemBomb(32 * (newLevel.width / 2 + .5), (newLevel.height - 4.5) * 32, Team.Team1));
-		newLevel.addEntity(new ShopItemShotgun(32 * (newLevel.width / 2 - 2.0), (newLevel.height - 6.5) * 32, Team.Team1));
-		newLevel.addEntity(new ShopItemRaygun(32 * (newLevel.width / 2 - 2.0), (newLevel.height - 5.5) * 32, Team.Team1));
+		newLevel.addEntity(new ShopItemShotgun(32 * (newLevel.width / 2 - 2.5), (newLevel.height - 6.5) * 32, Team.Team1));
+		newLevel.addEntity(new ShopItemRaygun(32 * (newLevel.width / 2 - 2.5), (newLevel.height - 5.5) * 32, Team.Team1));
 
-		
 		for (int i=0; i<3; i++){
 		    newLevel.setTile((newLevel.width / 2) - i, 7, new UnbreakableRailTile(new SandTile()));	
 		    newLevel.setTile((newLevel.width / 2) - i, newLevel.height - 8, new UnbreakableRailTile(new SandTile()));

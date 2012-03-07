@@ -359,19 +359,19 @@ public class Level {
 	            }
 
 	            // if we are in the center area (4*7 Tiles): draw player bases
-	            int xt = x - (width / 2) + 4;
+	            int xt = x - (width / 2) + 5;
 	            int yt = y - 4;
 
-	            if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (isNotBaseRailTile(xt) || yt < 3)) {
+	            if (xt >= 0 && yt >= 0 && xt < 9 && yt < 4 && (isNotBaseRailTile(xt) || yt < 3)) {
 	                screen.blit(Art.getPlayerBase(getPlayerCharacter(1))[xt][yt], x * Tile.WIDTH, y
 	                        * Tile.HEIGHT);
 	                continue;
 	            }
 
 	            yt = y - (height - 8);
-	            if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (isNotBaseRailTile(xt) || yt > 0)) {
+	            if (xt >= 0 && yt >= 0 && xt < 9 && yt < 4 && (isNotBaseRailTile(xt) || yt > 0)) {
 	                screen.blit(Art.getPlayerBase(getPlayerCharacter(0))[xt][yt], x * Tile.WIDTH, y * Tile.HEIGHT);
-	                if ((xt == 0 || xt == 1 || xt == 5 || xt == 6) && yt == 0) {
+	                if ((xt == 0 || xt == 1 || xt >= 7 && xt <= 8) && yt == 0) {
 	                    screen.blit(Art.shadow_north, x * Tile.WIDTH, y * Tile.HEIGHT);
 	                }
 	                if ((xt == 2) && yt == 0) {

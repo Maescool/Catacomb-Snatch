@@ -65,11 +65,11 @@ public class Art {
     public static Bitmap exclamation_mark = load ("/art/effects/exclamation_mark.png");
 	
 	// Player starting points
-	private static Bitmap[][] startLordLard = cut("/art/player/start_lordlard.png", 32, 32);
+	private static Bitmap[][] startLordLard = cut("/art/player/start_lordlard_big.png", 32, 32);
 	private static Bitmap[][] startHerrSpeck = cut("/art/player/start_herrspeck.png", 32, 32);
 	private static Bitmap[][] startDuchessDonut = startLordLard;
 	private static Bitmap[][] startCountessCruller = cut("/art/player/start_cruller.png", 32, 32);
-	private static Bitmap[][] startNoOpponent = cut("/art/player/start_no_opponent.png", 32, 32);
+	private static Bitmap[][] startNoOpponent = cut("/art/player/start_no_opponent_big.png", 32, 32);
 	
 	public static Bitmap[][] getPlayerBase(GameCharacter character) {
 		switch (character) {
