@@ -11,8 +11,6 @@ import java.awt.GraphicsDevice;
 import java.awt.Point;
 import java.awt.Robot;
 import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -52,6 +50,7 @@ import com.mojang.mojam.gui.KeyBindingsMenu;
 import com.mojang.mojam.gui.LevelEditorMenu;
 import com.mojang.mojam.gui.LevelSelect;
 import com.mojang.mojam.gui.LocaleMenu;
+import com.mojang.mojam.gui.MenuStack;
 import com.mojang.mojam.gui.OptionsMenu;
 import com.mojang.mojam.gui.PauseMenu;
 import com.mojang.mojam.gui.TitleMenu;
@@ -95,7 +94,7 @@ import com.mojang.mojam.sound.ISoundPlayer;
 import com.mojang.mojam.sound.NoSoundPlayer;
 import com.mojang.mojam.sound.SoundPlayer;
 
-public class MojamComponent extends Canvas implements Runnable, MouseMotionListener, CommandListener, PacketListener, MouseListener, ButtonListener, KeyListener {
+public class MojamComponent extends Canvas implements Runnable, MouseMotionListener, CommandListener, PacketListener, MouseListener, ButtonListener {
 
 	public static final String GAME_TITLE = "Catacomb Snatch";
 	public static final String GAME_VERSION = "1.0.0-SNAPSHOT";
@@ -121,7 +120,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	
 	private LatencyCache latencyCache = new LatencyCache();
 
-	private Stack<GuiMenu> menuStack = new Stack<GuiMenu>();
+	private MenuStack menuStack = new MenuStack();
 
 	private InputHandler inputHandler;
 	private int lastX = 0;
@@ -172,9 +171,10 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		String localeString = Options.get(Options.LOCALE, "en");
 		setLocale(new Locale(localeString));
 
+		menuStack.setStackButtonListener(this);
 		menu = new TitleMenu(GAME_WIDTH, GAME_HEIGHT);
-		addMenu(menu);
-		addKeyListener(this);
+		menuStack.add(menu);
+		addKeyListener(menuStack);
 		addKeyListener(chat);
 		addKeyListener(console);
 
@@ -272,7 +272,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			soundPlayer.shutdown();
 			System.exit(0);
 		} else {
-			addMenu(new ExitMenu(GAME_WIDTH, GAME_HEIGHT));
+			menuStack.add(new ExitMenu(GAME_WIDTH, GAME_HEIGHT));
 		}
 	}
 
@@ -305,14 +305,14 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	
 	private void initCharacters(){
 		if(!Options.isCharacterIDset()){
-			addMenu(new CharacterSelectionMenu());
+			menuStack.add(new CharacterSelectionMenu());
 		}
 		playerCharacter = GameCharacter.values()[Options.getCharacterID()];
 	}
 
 	public void showError(String s) {
 		handleAction(TitleMenu.RETURN_TO_TITLESCREEN);
-		addMenu(new GuiError(s));
+		menuStack.add(new GuiError(s));
 	}
 
 	private synchronized void createLevel(String levelPath, GameMode mode, GameCharacter character) {
@@ -624,7 +624,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 				int winner = level.victoryConditions.playerVictorious();
 				GameCharacter winningCharacter = winner == players[0].getTeam() ? players[0].getCharacter()
 						: players[1].getCharacter();
-				addMenu(new WinMenu(GAME_WIDTH, GAME_HEIGHT, winner, winningCharacter));
+				menuStack.add(new WinMenu(GAME_WIDTH, GAME_HEIGHT, winner, winningCharacter));
                 level = null;
                 return;
             }
@@ -721,7 +721,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 			synchronizer = new TurnSynchronizer(MojamComponent.this, packetLink, localId, 2);
 
-			clearMenus();
+			menuStack.clear();
 			createLevel(TitleMenu.level, TitleMenu.defaultGameMode, playerCharacter);
 
 			synchronizer.setStarted(true);
@@ -838,9 +838,9 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			PauseCommand pc = (PauseCommand) packet;
 			paused = pc.isPause();
 			if (paused) {
-				addMenu(new PauseMenu(GAME_WIDTH, GAME_HEIGHT));
+				menuStack.add(new PauseMenu(GAME_WIDTH, GAME_HEIGHT));
 			} else {
-				popMenu();
+				menuStack.safePop();
 			}
 		}
 	}
@@ -930,17 +930,17 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			setLocale("af");
 			break;
 		case TitleMenu.RETURN_TO_TITLESCREEN:
-			clearMenus();
+			menuStack.clear();
 			level = null;
 			TitleMenu menu = new TitleMenu(GAME_WIDTH, GAME_HEIGHT);
-			addMenu(menu);
+			menuStack.add(menu);
 			this.nextMusicInterval = 0;
 			soundPlayer.stopBackgroundMusic();
 			soundPlayer.startTitleMusic();
 			break;
 
 		case TitleMenu.START_GAME_ID:
-			clearMenus();
+			menuStack.clear();
 			isMultiplayer = false;
 			chat.clear();
 
@@ -954,20 +954,20 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			break;
 
 		case TitleMenu.SELECT_LEVEL_ID:
-			addMenu(new LevelSelect(false));
+			menuStack.add(new LevelSelect(false));
 			break;
 
 		case TitleMenu.SELECT_HOST_LEVEL_ID:
-			addMenu(new LevelSelect(true));
+			menuStack.add(new LevelSelect(true));
 			break;
 		/*
 		 * case TitleMenu.UPDATE_LEVELS: GuiMenu menu = menuStack.pop(); if
-		 * (menu instanceof LevelSelect) { addMenu(new
-		 * LevelSelect(((LevelSelect) menu).bHosting)); } else { addMenu(new
+		 * (menu instanceof LevelSelect) { menuStack.add(new
+		 * LevelSelect(((LevelSelect) menu).bHosting)); } else { menuStack.add(new
 		 * LevelSelect(false)); } }
 		 */
 		case TitleMenu.HOST_GAME_ID:
-			addMenu(new HostingWaitMenu());
+			menuStack.add(new HostingWaitMenu());
 			isMultiplayer = true;
 			isServer = true;
 			chat.clear();
@@ -1018,11 +1018,11 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			break;
 
 		case TitleMenu.JOIN_GAME_ID:
-			addMenu(new JoinGameMenu());
+			menuStack.add(new JoinGameMenu());
 			break;
 
 		case TitleMenu.CANCEL_JOIN_ID:
-			popMenu();
+			menuStack.safePop();
 			if (hostThread != null) {
 				hostThread.interrupt();
 				hostThread = null;
@@ -1048,32 +1048,32 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			} catch (Exception e) {
 				e.printStackTrace();
 				// System.exit(1);
-				addMenu(new TitleMenu(GAME_WIDTH, GAME_HEIGHT));
+				menuStack.add(new TitleMenu(GAME_WIDTH, GAME_HEIGHT));
 			}
 			break;
 
 		case TitleMenu.HOW_TO_PLAY:
-			addMenu(new HowToPlayMenu(level != null));
+			menuStack.add(new HowToPlayMenu(level != null));
 			break;
 
 		case TitleMenu.OPTIONS_ID:
-			addMenu(new OptionsMenu(level != null));
+			menuStack.add(new OptionsMenu(level != null));
 			break;
 
 		case TitleMenu.SELECT_DIFFICULTY_ID:
-			addMenu(new DifficultySelect(false));
+			menuStack.add(new DifficultySelect(false));
 			break;
 
 		case TitleMenu.SELECT_DIFFICULTY_HOSTING_ID:
-			addMenu(new DifficultySelect(true));
+			menuStack.add(new DifficultySelect(true));
 			break;
 
 		case TitleMenu.KEY_BINDINGS_ID:
-			addMenu(new KeyBindingsMenu(keys, inputHandler));
+			menuStack.add(new KeyBindingsMenu(keys, inputHandler));
 			break;
 
 		case TitleMenu.LEVEL_EDITOR_ID:
-			addMenu(new LevelEditorMenu());
+			menuStack.add(new LevelEditorMenu());
 			break;
 
 		case TitleMenu.EXIT_GAME_ID:
@@ -1090,63 +1090,25 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			break;
 
 		case TitleMenu.BACK_ID:
-			popMenu();
+			menuStack.safePop();
 			break;
 
 		case TitleMenu.CREDITS_ID:
-			addMenu(new CreditsScreen(GAME_WIDTH, GAME_HEIGHT));
+			menuStack.add(new CreditsScreen(GAME_WIDTH, GAME_HEIGHT));
 			break;
 
 		case TitleMenu.CHARACTER_ID:
-			addMenu(new CharacterSelectionMenu());
+			menuStack.add(new CharacterSelectionMenu());
 			break;
 
 		case TitleMenu.AUDIO_VIDEO_ID:
-			addMenu(new AudioVideoMenu(level != null));
+			menuStack.add(new AudioVideoMenu(level != null));
 			break;
 
 		case TitleMenu.LOCALE_ID:
 			localemenu = new LocaleMenu(level != null);
-			addMenu(localemenu);
+			menuStack.add(localemenu);
 			break;
-		}
-	}
-
-	private void clearMenus() {
-		while (!menuStack.isEmpty()) {
-			menuStack.pop();
-		}
-	}
-
-	private void addMenu(GuiMenu menu) {
-		menuStack.add(menu);
-		menu.addButtonListener(this);
-	}
-
-	private void popMenu() {
-		if (!menuStack.isEmpty()) {
-			menuStack.pop();
-		}
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (!menuStack.isEmpty()) {
-			menuStack.peek().keyPressed(e);
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		if (!menuStack.isEmpty()) {
-			menuStack.peek().keyReleased(e);
-		}
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		if (!menuStack.isEmpty()) {
-			menuStack.peek().keyTyped(e);
 		}
 	}
 
