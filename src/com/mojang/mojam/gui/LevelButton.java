@@ -33,6 +33,7 @@ public class LevelButton extends ClickableComponent {
     private boolean largeMap;
 	private boolean isActive = false;
 	private int xScroll, yScroll;
+	private int renderWidth, renderHeight;
 	
 	// Background bitmaps for pressed/unpressed/inactive state
 	private static Bitmap background[] = new Bitmap[3];
@@ -92,6 +93,8 @@ public class LevelButton extends ClickableComponent {
 		// Render the level minimap into a bitmap
 		minimap = new Bitmap(w, h);
 		largeMap = w > MAXDIM || h > MAXDIM;
+		renderWidth = w < MAXDIM ? w : MAXDIM;
+		renderHeight = h < MAXDIM ? h : MAXDIM;
 		displaymap = new Bitmap(MAXDIM, MAXDIM);
 		
 		for (int y = 0; y < h; y++) {
@@ -117,7 +120,8 @@ public class LevelButton extends ClickableComponent {
 		
 		// Render minimap
 		if (minimap != null) {
-			screen.blit(largeMap ? displaymap : minimap, getX() + (getWidth() - MAXDIM) / 2, getY() + 4, MAXDIM, MAXDIM);
+			screen.blit(largeMap ? displaymap : minimap, getX() + (getWidth() - renderWidth) / 2,
+					getY() + 4 + (MAXDIM - renderHeight) / 2, renderWidth, renderHeight);
 			
 			// map name
 			Font.defaultFont().draw(screen, trimToFitButton(levelName), getX() + getWidth() / 2,
@@ -131,9 +135,10 @@ public class LevelButton extends ClickableComponent {
 	public void redrawDisplaymap(){
 		if(!largeMap) return;
 
-		for (int y = 0; y < MAXDIM; y++) {
-			for (int x = 0; x < MAXDIM; x++) {
-				displaymap.pixels[x + y * MAXDIM] = minimap.pixels[(x + xScroll) + (y + yScroll) * minimap.w];
+		int i = Math.max(renderWidth, renderHeight);
+		for (int y = 0; y < renderHeight; y++) {
+			for (int x = 0; x < renderWidth; x++) {
+				displaymap.pixels[x + y * i] = minimap.pixels[(x + xScroll) + (y + yScroll) * minimap.w];
 			}
 		}
 	}
@@ -141,30 +146,30 @@ public class LevelButton extends ClickableComponent {
 	@Override
 	public void tick(MouseButtons mb){
 		super.tick(mb);
-		int relx = mb.getX() / 2 - (getX() + (getWidth() - MAXDIM) / 2);
-		int rely = mb.getY() / 2 - (getY() + 4);
+		int relx = mb.getX() / 2 - (getX() + (getWidth() - renderWidth) / 2);
+		int rely = mb.getY() / 2 - (getY() + 4 + (MAXDIM - renderHeight) / 2);
 		boolean changed = false;
-		if(relx > 0 && rely > 0 && relx < MAXDIM && rely < MAXDIM){
+		if(relx > 0 && rely > 0 && relx < renderWidth && rely < renderHeight){
 			int i = 18;
 			int j = 1;
 			if(relx < i){
 				xScroll -= j;
 				changed = true;
-			} else if(relx > MAXDIM-i){
+			} else if(relx > renderWidth-i){
 				xScroll += j;
 				changed = true;
 			}
 			if(rely < i){
 				yScroll -= j;
 				changed = true;
-			} else if(rely > MAXDIM-i){
+			} else if(rely > renderHeight-i){
 				yScroll += j;
 				changed = true;
 			}
 		}
 		if(changed) {
-			xScroll = MojamComponent.clampi(xScroll, 0, minimap.w-MAXDIM);
-			yScroll = MojamComponent.clampi(yScroll, 0, minimap.h-MAXDIM);
+			xScroll = MojamComponent.clampi(xScroll, 0, minimap.w-renderWidth);
+			yScroll = MojamComponent.clampi(yScroll, 0, minimap.h-renderHeight);
 			redrawDisplaymap();
 		}
 	}
