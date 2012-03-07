@@ -172,7 +172,7 @@ public class KeyBindingsMenu extends GuiMenu {
 		write(screen, txts.keyWeaponSlot(1), 0, 6);
 		write(screen, txts.keyWeaponSlot(2), 0, 7);
 		write(screen, txts.keyWeaponSlot(3), 0, 8);
-		write(screen, "CONSOLE", 0, 9); //add translations
+		write(screen, txts.getStatic("keys.console"), 0, 9);
 
 		write(screen, txts.getStatic("keys.fireUp"), 1, 0);
 		write(screen, txts.getStatic("keys.fireDown"), 1, 1);

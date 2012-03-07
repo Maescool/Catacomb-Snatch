@@ -73,6 +73,7 @@ keys.chat = CHAT
 keys.weaponSlot = WEAPON SLOT {0}
 keys.cycleLeft = NEXT WEAPON
 keys.cycleRight = PREV WEAPON
+keys.console = CONSOLE
 
 leveleditor.title = LEVEL EDITOR
 leveleditor.new = NEW
