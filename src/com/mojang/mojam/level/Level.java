@@ -358,20 +358,32 @@ public class Level {
 	                continue;
 	            }
 
+	            Bitmap[][] playerBaseZero = Art.getPlayerBase(getPlayerCharacter(0));
+	            Bitmap[][] playerBaseOne = Art.getPlayerBase(getPlayerCharacter(1));
+	            int baseOneTileHeight = playerBaseOne[0].length;
+	            int baseOneTileWidth = playerBaseOne.length;
+	            int baseZeroTileHeight = playerBaseZero[0].length;
+	            int baseZeroTileWidth = playerBaseZero.length;
+	            
+	            
 	            // if we are in the center area (4*7 Tiles): draw player bases
-	            int xt = x - (width / 2) + 5;
-	            int yt = y - 4;
+				int xt = x - (width / 2) + ((baseOneTileWidth-(baseOneTileWidth%2))/2) + (baseOneTileWidth%2);
+				int yt = y - baseOneTileHeight;
 
-	            if (xt >= 0 && yt >= 0 && xt < 9 && yt < 4 && (isNotBaseRailTile(xt) || yt < 3)) {
-	                screen.blit(Art.getPlayerBase(getPlayerCharacter(1))[xt][yt], x * Tile.WIDTH, y
+	            if (xt >= 0 && yt >= 0 && xt < baseOneTileWidth && yt < baseOneTileHeight && (isNotBaseRailTile(xt) || yt < baseOneTileHeight-1)) {
+	                screen.blit(playerBaseOne[xt][yt], x * Tile.WIDTH, y
 	                        * Tile.HEIGHT);
 	                continue;
 	            }
-
+	            
+	            // if we are in the center area (4*7 Tiles): draw player bases
+				xt = x - (width / 2) + ((baseZeroTileWidth-(baseZeroTileWidth%2))/2) + (baseZeroTileWidth%2);
+				
+				
 	            yt = y - (height - 8);
-	            if (xt >= 0 && yt >= 0 && xt < 9 && yt < 4 && (isNotBaseRailTile(xt) || yt > 0)) {
-	                screen.blit(Art.getPlayerBase(getPlayerCharacter(0))[xt][yt], x * Tile.WIDTH, y * Tile.HEIGHT);
-	                if ((xt == 0 || xt == 1 || xt >= 7 && xt <= 8) && yt == 0) {
+	            if (xt >= 0 && yt >= 0 && xt < baseZeroTileWidth && yt < baseZeroTileHeight && (isNotBaseRailTile(xt) || yt > 0)) {       
+					screen.blit(playerBaseZero[xt][yt], x * Tile.WIDTH, y * Tile.HEIGHT);
+	                if (yt == 0 && ((xt <=(baseZeroTileWidth-3)/2) || (xt >=((baseZeroTileWidth-3)/2)+3 ))) {
 	                    screen.blit(Art.shadow_north, x * Tile.WIDTH, y * Tile.HEIGHT);
 	                }
 	                if ((xt == 2) && yt == 0) {
