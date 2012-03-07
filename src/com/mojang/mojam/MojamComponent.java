@@ -478,7 +478,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		}
 
 		if (Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE)) {
-			Font.defaultFont().draw(screen, texts.FPS(fps), GAME_WIDTH - 66, 10);
+			Font.defaultFont().draw(screen, texts.FPS(fps), GAME_WIDTH - 73, 10);
 		}
 
 		if (player != null && menuStack.size() == 0) {
@@ -489,7 +489,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 			Font font = Font.defaultFont();
 			if (isMultiplayer) {
-				font.draw(screen, texts.latency(latencyCache.latencyCacheReady() ? "" + latencyCache.avgLatency() : "-"), 10, 20);
+				font.draw(screen, texts.latency(latencyCache.latencyCacheReady() ? "" + latencyCache.avgLatency() : "-"), GAME_WIDTH - 105, 20);
 			}
 		}
 
