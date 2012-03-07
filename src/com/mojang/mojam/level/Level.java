@@ -371,7 +371,7 @@ public class Level {
 	            yt = y - (height - 8);
 	            if (xt >= 0 && yt >= 0 && xt < 9 && yt < 4 && (isNotBaseRailTile(xt) || yt > 0)) {
 	                screen.blit(Art.getPlayerBase(getPlayerCharacter(0))[xt][yt], x * Tile.WIDTH, y * Tile.HEIGHT);
-	                if ((xt == 0 || xt == 1 || xt >= 5 && xt <= 8) && yt == 0) {
+	                if ((xt == 0 || xt == 1 || xt >= 7 && xt <= 8) && yt == 0) {
 	                    screen.blit(Art.shadow_north, x * Tile.WIDTH, y * Tile.HEIGHT);
 	                }
 	                if ((xt == 2) && yt == 0) {
