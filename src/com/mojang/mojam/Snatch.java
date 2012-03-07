@@ -106,7 +106,7 @@ public final class Snatch
 		{
 			e.printStackTrace();
 		}
-		ConsoleCommands.load.getClass();//.doCommand(new String[]{"Siege"});
+		//ConsoleCommands.load.getClass();//.doCommand(new String[]{"Siege"});
 	}
 
 	private static void readFromModsFolder()

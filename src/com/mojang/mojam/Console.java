@@ -3,8 +3,12 @@ package com.mojang.mojam;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Date;
 
+import com.mojang.mojam.entity.weapon.*;
 import com.mojang.mojam.gui.Font;
+import com.mojang.mojam.gui.TitleMenu;
+import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.screen.Screen;
 
 public class Console implements KeyListener {
@@ -37,6 +41,15 @@ public class Console implements KeyListener {
 	 * Top padding size when drawing console text. affects console height
 	 */
 	public static final int yOffset = 5;
+	
+	public Console()
+	{
+		log("------------------------------------------------------------");//Deep magic lining it up
+		log("|Catacomb Snatch Console v1.1                           |");
+		log("|Type commands with a slash in front, like /this        |");
+		log("|If in doubt, type /help                                  |");
+		log("------------------------------------------------------------");
+	}
 	
 	/***
 	 * Logs the verbose info into the console
@@ -98,9 +111,11 @@ public class Console implements KeyListener {
 			int fontHeight = Font.FONT_WHITE_SMALL.getFontHeight();
 			int consoleHeight = (MAX_LINES + 1) * fontHeight + yOffset; //+1 for the input line
 			
-			s.alphaFill(0, 0, s.w, consoleHeight, 0xff000000, 0x50); //50% black I believe. took it from PauseMenu and changed 0x30 to 0x50
+			//s.alphaFill(0, 0, s.w, consoleHeight, 0xff000000, 0x50); //50% black I believe. took it from PauseMenu and changed 0x30 to 0x50
+			s.alphaFill(0, 0, s.w, consoleHeight, 0xff000000, 0x80); //50% Black. 0xblah is hexadecimal, not percentages
+			s.fill(0, consoleHeight, s.w, 2, 0xffffffff);
 			
-			Font.FONT_WHITE_SMALL.draw(s, typing + "|", xOffset,(consoleHeight -= fontHeight)); //draws bottom up starting with typing
+			Font.FONT_WHITE_SMALL.draw(s, typing + ((((int)System.currentTimeMillis()/500)&1)==1?"|":""), xOffset,(consoleHeight -= fontHeight)); //draws bottom up starting with typing
 			
 			for(int i = 0; i < verboseData.size(); i++) {
 				Font.FONT_WHITE_SMALL.draw(s, verboseData.get(i), xOffset, (consoleHeight -= fontHeight) ); // and then the verbose data in order of newest first
@@ -288,6 +303,91 @@ public class Console implements KeyListener {
 			}
 			msg += args[args.length-1];
 			MojamComponent.instance.synchronizer.addCommand(new com.mojang.mojam.network.packet.ChatCommand(msg));
+		}
+	};
+	
+	public Command load = new Command("load", 1, "Loads a map by name")
+	{
+		@Override
+		public void doCommand(String[] args)
+		{
+			log("Loading map " + args[0]);
+			log("Incomplete");
+			//TitleMenu.level = new LevelInformation(args[0], "/levels/" + args[0].replace('_', ' ') + ".bmp", true);
+			//TODO: Needs MUCH work
+			//MojamComponent.instance.handleAction(TitleMenu.START_GAME_ID);
+		}
+	};
+	public Command lang = new Command("lang", 1, "Sets the language")
+	{
+		@Override
+		public void doCommand(String[] args)
+		{
+			if(args[0].equals("help"))
+			{
+				log("Enter your two letter language code, e.g. /lang af -> Afrikaans, /lang it -> Italiano");
+			}				
+			else 
+			{
+				MojamComponent.instance.setLocale(args[0]);
+			}
+		}
+	};
+	public Command menu = new Command("menu", 0, "Return to menu")
+	{
+		@Override
+		public void doCommand(String[] args)
+		{
+			MojamComponent.instance.handleAction(TitleMenu.RETURN_TO_TITLESCREEN);
+		}
+	};
+	
+	public Command give = new Command("give", 1, "Gives a weapon")
+	{
+		@Override
+		public void doCommand(String[] args)
+		{
+			if(args[0].toLowerCase().equals("shotgun"))
+			{
+				log("Giving player a shotgun");
+				MojamComponent.instance.player.weapon = new Shotgun(MojamComponent.instance.player);
+			}
+			else if(args[0].toLowerCase().equals("rifle"))
+			{
+				log("Giving player a rifle");
+				MojamComponent.instance.player.weapon = new Rifle(MojamComponent.instance.player);
+			}
+			else if(args[0].toLowerCase().equals("venom"))
+			{
+				log("Giving player a veonomshooter");
+				MojamComponent.instance.player.weapon = new VenomShooter(MojamComponent.instance.player);
+			}
+			else if(args[0].toLowerCase().equals("elephant"))
+			{
+				log("Giving player an elephant gun");
+				MojamComponent.instance.player.weapon = new ElephantGun(MojamComponent.instance.player);
+			}
+			else if(args[0].toLowerCase().equals("fist"))
+			{
+				log("Giving player a lesson in boxing");
+				MojamComponent.instance.player.weapon = new Melee(MojamComponent.instance.player);
+			}
+			else if(args[0].toLowerCase().equals("help"))
+			{
+				log("Options:");
+				log(">rifle (Rifle)");
+				log(">shotgun (Shotgun)");
+				log(">venom (VenomShooter)");
+				log(">elephant (Elephant Gun)");
+				log(">fist (Melee)");
+			}
+		}
+	};
+	Command time = new Command("time", 0, "Show the current time"){
+		@Override
+		public void doCommand(String[] s)
+		{
+			log(new Date(System.currentTimeMillis()).toString());
 		}
 	};
 	
