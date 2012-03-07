@@ -44,12 +44,16 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.Level;
+import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.gamemode.GameMode;
+import com.mojang.mojam.level.gamemode.GameModeVanilla;
 import com.mojang.mojam.network.NetworkCommand;
 import com.mojang.mojam.network.Packet;
 import com.mojang.mojam.network.packet.ChangeKeyCommand;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
+
+import static com.mojang.mojam.Console.*;
 
 public final class Snatch
 {
@@ -102,6 +106,7 @@ public final class Snatch
 		{
 			e.printStackTrace();
 		}
+		ConsoleCommands.load.getClass();//.doCommand(new String[]{"Siege"});
 	}
 
 	private static void readFromModsFolder()
@@ -187,7 +192,7 @@ public final class Snatch
 					{
 						for(int k = 0; k < afile1.length; k++)
 						{
-							System.out.println(afile1[k].getAbsolutePath());
+							//System.out.println(afile1[k].getAbsolutePath());
 							String s2 = afile1[k].getName();
 							if(afile1[k].isFile() && s2.startsWith("mod_") && s2.endsWith(".class"))
 							{
@@ -450,6 +455,16 @@ public final class Snatch
 		int i = spawnList.size() - 1;
 		System.out.println("Registered " + spawnList.get(i).getClass().getSimpleName() + " with id " + i);
 		return i;
+	}
+	
+	public static Console getConsole()
+	{
+		return mojam.console;
+	}
+	
+	public static boolean addConsoleCommand(Console.Command c)
+	{
+		return Console.Command.commands.contains(c);
 	}
 
 	/**

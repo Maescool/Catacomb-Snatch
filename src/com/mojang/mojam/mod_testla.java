@@ -1,6 +1,7 @@
 package com.mojang.mojam;
 
-import com.mojang.mojam.Keys.Key;
+import java.util.Date;
+
 import com.mojang.mojam.network.Packet;
 
 public class mod_testla extends Mod
@@ -8,6 +9,7 @@ public class mod_testla extends Mod
 	public mod_testla()
 	{
 		System.out.println("Testla Running!");
+		
 	}
 	
 	@Override
@@ -19,7 +21,7 @@ public class mod_testla extends Mod
 	@Override
 	public void RunOnce()
 	{
-		System.out.println("\"Rawr\" - Charles Testla, 1898");
+		System.out.println("\"Rawr\" - Charles Testla, 1898");		
 	}
 	@Override
 	public void OnRender()

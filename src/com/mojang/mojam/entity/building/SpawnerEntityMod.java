@@ -41,8 +41,6 @@ public class SpawnerEntityMod extends SpawnerEntity
 	@Override
 	protected Mob getMob(double x, double y)
 	{
-		System.out.println(type);
-		System.out.println(Snatch.spawnList.get(type));
 		if((Mob) Snatch.getEntityById(type,x,y)!=null)return (Mob) Snatch.getEntityById(type,x,y);
 		return (Mob) Snatch.getEntityById(type, x, y);
 	}

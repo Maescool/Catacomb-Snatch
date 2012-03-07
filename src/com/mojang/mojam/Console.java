@@ -159,6 +159,7 @@ public class Console implements KeyListener {
 				return;
 			}
 		}
+		System.out.println("Console");
 		Snatch.console(command,input,this);
 	}
 
