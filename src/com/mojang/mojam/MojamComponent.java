@@ -478,7 +478,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		}
 
 		if (Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE)) {
-			Font.defaultFont().draw(screen, texts.FPS(fps), 100, 10);
+			Font.defaultFont().draw(screen, texts.FPS(fps), GAME_WIDTH - 66, 10);
 		}
 
 		if (player != null && menuStack.size() == 0) {
