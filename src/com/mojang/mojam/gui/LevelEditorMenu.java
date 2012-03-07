@@ -23,7 +23,6 @@ import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.entity.building.TurretTeamOne;
 import com.mojang.mojam.entity.building.TurretTeamTwo;
 import com.mojang.mojam.entity.mob.Bat;
-import com.mojang.mojam.entity.mob.DropTrap;
 import com.mojang.mojam.entity.mob.Mummy;
 import com.mojang.mojam.entity.mob.Pharao;
 import com.mojang.mojam.entity.mob.Scarab;
@@ -39,6 +38,7 @@ import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.LevelList;
 import com.mojang.mojam.level.LevelUtils;
 import com.mojang.mojam.level.tile.DestroyableWallTile;
+import com.mojang.mojam.level.tile.DropTrap;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.HoleTile;
 import com.mojang.mojam.level.tile.SandTile;
@@ -86,7 +86,7 @@ public class LevelEditorMenu extends GuiMenu {
         new TurretTeamOne(0, 0),
         new TurretTeamTwo(0, 0),
         new SpikeTrap(0, 0),
-        new DropTrap(0, 0),
+        new DropTrap(),
         new SpawnerForBat(0, 0),
         new SpawnerForSnake(0, 0),
         new SpawnerForMummy(0, 0),
