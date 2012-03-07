@@ -5,6 +5,7 @@ import java.util.Random;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.mob.Mob;
+import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.tile.HoleTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.network.TurnSynchronizer;
@@ -12,7 +13,7 @@ import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
-public class TreasureChest extends Building {
+public class TreasureChest extends Building implements IEditable {
 
 	public static final int COLOR = 0xffc4e570;
     private int value = 0, status = 0, disappearTime = 0;
@@ -66,5 +67,24 @@ public class TreasureChest extends Building {
         }
         value = 0;
     }
-    
+
+    @Override
+    public int getColor() {
+        return TreasureChest.COLOR;
+    }
+
+    @Override
+    public int getMiniMapColor() {
+        return TreasureChest.COLOR;
+    }
+
+    @Override
+    public String getName() {
+        return "TREASURE CHEST";
+    }
+
+    @Override
+    public Bitmap getBitMapForEditor() {
+        return Art.small_chest[0][0];
+    }
 } 
