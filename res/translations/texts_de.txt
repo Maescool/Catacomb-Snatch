@@ -66,6 +66,11 @@ keys.use = BENUTZEN
 keys.build = BAUEN
 keys.upgrade = UPGRADE
 keys.chat = CHAT
+keys.weaponSlot = WAFFE {0}
+keys.cycleLeft = NÄCHSTE WAFFE
+keys.cycleRight = VORH. WAFFE
+keys.console = KONSOLE
+
 
 leveleditor.title = LEVEL EDITOR
 leveleditor.new = NEU
@@ -87,6 +92,7 @@ options.on = AN
 options.off = AUS
 options.keyBindings = TASTENBELEGUNG
 options.characterSelect = SPIELER AUSW.
+options.trapmouse = MAUS FANGEN
 options.fullscreen = VOLLBILDMODUS
 options.showfps = ZEIGE FPS
 options.music = MUSIK
@@ -129,6 +135,17 @@ shop.harvesterTooltipLine2 = Nutze es um das Geld zu bekommen.
 shop.bombTooltipTitle = BOMBE
 shop.bombTooltipLine1 = Zerstört rissige Wände. Benutzen
 shop.bombTooltipLine2 = um Abkürzungen frei zu sprengen.
+
+shop.rifleTooltipTitle = BÜCHSE
+shop.rifleTooltipLine1 = Standard Waffe.
+shop.rifleTooltipLine2 = Guter Allrounder.
+shop.shotgunTooltipTitle = SCHROTFLINTE
+shop.shotgunTooltipLine1 = Schuß deckt große Fläche ab.
+shop.shotgunTooltipLine2 = Hoher Schaden, kurze Reichweite.
+shop.raygunTooltipTitle = STRAHLENKANONE
+shop.raygunTooltipLine1 = Schüße prallen von Wänden ab.
+shop.raygunTooltipLine2 = Jeder Abpraller erhöht den Schaden.
+
 
 titlemenu.start = STARTEN
 titlemenu.host = HOST
