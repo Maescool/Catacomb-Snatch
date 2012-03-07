@@ -26,11 +26,10 @@ public class Shotgun extends Rifle {
 	
 	@Override
 	public void setWeaponMode(){
+		super.setWeaponMode();
 		if(Options.getAsBoolean(Options.CREATIVE)){
 			bulletDamage = 100f;
 			accuracy = 0.06;
-		}else{
-			super.setWeaponMode();
 		}
 	}
 
