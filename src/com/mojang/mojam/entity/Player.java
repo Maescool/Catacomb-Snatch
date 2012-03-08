@@ -82,6 +82,8 @@ public class Player extends Mob implements LootCollector {
     private int weaponSlot = 0;
     private boolean isWeaponChanged = false;
     
+    private boolean isSprintIgnore = false;
+    
     /**
      * Constructor
      * 
@@ -394,22 +396,38 @@ public class Player extends Mob implements LootCollector {
         double speed = getSpeed() / dd;
 
         if (this.keys.sprint.isDown) {
-            if (timeSprint < maxTimeSprint) {
-                isSprint = true;
-                if (carrying == null) {
-                    speed = getSpeed() / dd * psprint;
-                } else {
-                    speed = getSpeed() / dd * (psprint - 0.5);
-                }
-                timeSprint++;
-            } else {
-                isSprint = false;
-            }
+        	if (!isSprintIgnore) {
+	            if (timeSprint < maxTimeSprint) {
+	                isSprint = true;
+	                if (carrying == null) {
+	                    speed = getSpeed() / dd * psprint;
+	                } else {
+	                    speed = getSpeed() / dd * (psprint - 0.5);
+	                }
+	                timeSprint++;
+	            } else {
+	            	if (timeSprint > 0) {
+	                    timeSprint--;
+	                }   
+	            	isSprint = false;
+	                isSprintIgnore = true;
+	            }
+        	} else {
+        		if (timeSprint > 0) {
+                    timeSprint--;
+                }   
+            	isSprint = false;
+                isSprintIgnore = true;
+        	}
         } else {
-            if (timeSprint >= 0) {
+        	if (timeSprint > 0) {
                 timeSprint--;
-            }
-            isSprint = false;
+            } 
+        	isSprint = false;              
+        }
+        
+        if (this.keys.sprint.wasReleased()) {
+        	isSprintIgnore = false;
         }
 
         xa *= speed;
