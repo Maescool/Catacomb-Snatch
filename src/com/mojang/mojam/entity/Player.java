@@ -60,7 +60,7 @@ public class Player extends Mob implements LootCollector {
     private int facing = 0;
     private int time = 0;
     private int walkTime = 0;
-    private Building selected = null;
+    private Entity selected = null;
     static final int RailDelayTicks = 15;
     private int lastRailTick = -999;
     private final static int INTERACT_DISTANCE = 20 * 20; // Sqr
@@ -573,8 +573,8 @@ public class Player extends Mob implements LootCollector {
      */
     private void handleEntityInteraction() {
         // Unhighlight previously selected building
-        if (selected != null) {
-            selected.setHighlighted(false);
+    	if (selected != null && selected instanceof IUsable) {
+    		((IUsable)selected).setHighlighted(false);
             selected = null;
         }
 
