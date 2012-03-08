@@ -136,4 +136,10 @@ public class Vec2 implements Cloneable {
 		}
 	}
 
+	public Vec2 normal() {
+		Vec2 r = new Vec2(x, y);
+		r.normalizeSelf();
+		return r;
+	}
+
 }
