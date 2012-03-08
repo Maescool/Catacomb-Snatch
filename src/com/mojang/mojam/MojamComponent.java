@@ -196,7 +196,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	
 	@SuppressWarnings("unchecked")
 	public void notifyLocaleChange(){
-		Stack<GuiMenu> menuClone = (Stack<GuiMenu>) menuStack.clone();
+		MenuStack menuClone = (MenuStack) menuStack.clone();
 		
 		while (!menuClone.isEmpty()) {
 			menuClone.pop().changeLocale();
