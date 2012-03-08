@@ -6,6 +6,7 @@ import java.util.PriorityQueue;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.Vec2;
+import com.mojang.mojam.network.TurnSynchronizer;
 
 public class AStar {
 	Level level;
@@ -19,62 +20,6 @@ public class AStar {
 	public AStar(Level level, Mob mob) {
 		this.level = level;
 		this.mob = mob;
-	}
-
-	public Path getPath(Vec2 gridStart, Vec2 gridGoal) {
-		nodes.clear();
-
-		if (!canWalk(gridStart))
-			return new Path(false);
-
-		Node start = createNode(gridStart);
-		Node goal = createNode(gridGoal);
-		if (start.pos.equals(goal.pos))
-			return new Path(true);
-
-		PriorityQueue<Node> queue = new PriorityQueue<Node>();
-		queue.add(start);
-
-		Path bestPath = null;
-		while (queue.size() != 0) {
-			Node current = queue.poll();
-			if (current.__visited)
-				continue;
-
-			if (current == goal) {
-				bestPath = _reconstructPath(goal);
-				break;
-			}
-
-			addNeighbors(current);
-			current.__visited = true;
-
-			for (Node neighbor : current.getNeighbors()) {
-				if (neighbor.__visited)
-					continue;
-				if (!canWalk(neighbor.pos))
-					continue;
-
-				double distance = current.__pathDistance
-						+ current.pos.dist(neighbor.pos);
-				if (neighbor.__parent != null
-						&& distance >= neighbor.__pathDistance)
-					continue;
-
-				neighbor.__pathDistance = distance;
-				neighbor.__heuristicDistance = neighbor.pos.dist(goal.pos)
-						+ distance;
-				if (neighbor.__parent == null) {
-					neighbor.__priority = neighbor.__heuristicDistance;
-					queue.add(neighbor);
-				} else
-					neighbor.__priority = neighbor.__heuristicDistance;
-
-				neighbor.__parent = current;
-			}
-		}
-
-		return bestPath == null ? new Path(false) : bestPath;
 	}
 
 	private boolean canWalk(Vec2 gridPos) {
@@ -111,5 +56,85 @@ public class AStar {
 			node = node.__parent;
 		}
 		return path;
+	}
+
+	public Path getPath(Vec2 gridStart, Vec2 gridGoal) {
+		return getPathMods(gridStart, gridGoal, 0, 0);
+	}
+
+	public Path getPathMods(Vec2 gridStart, Vec2 gridGoal,
+			double avoidWallsModifier, double randomDistanceModifier) {
+	
+		double distanceMod = 1;
+		Random random = TurnSynchronizer.synchedRandom;
+	
+		nodes.clear();
+	
+		if (!canWalk(gridStart))
+			return new Path(false);
+	
+		Node start = createNode(gridStart);
+		Node goal = createNode(gridGoal);
+		if (start.pos.equals(goal.pos))
+			return new Path(true);
+	
+		PriorityQueue<Node> queue = new PriorityQueue<Node>();
+		queue.add(start);
+	
+		Path bestPath = null;
+		while (queue.size() != 0) {
+	
+			Node current = queue.poll();
+			if (current.__visited)
+				continue;
+	
+			if (current == goal) {
+				bestPath = _reconstructPath(goal);
+				break;
+			}
+	
+			addNeighbors(current);
+			current.__visited = true;
+	
+			distanceMod = 1;
+	
+			distanceMod *= avoidWallsModifier
+					* (5 - current.getNeighbors().size());
+	
+			for (Node neighbor : current.getNeighbors()) {
+				if (neighbor.__visited)
+					continue;
+				if (!canWalk(neighbor.pos)) {
+					continue;
+				}
+	
+				double distance = current.__pathDistance
+						+ current.pos.dist(neighbor.pos);
+	
+				if (randomDistanceModifier > 0) {
+					distanceMod += (random.nextDouble() - 0.5)
+							* randomDistanceModifier;
+				}
+	
+				distance = distance * distanceMod;
+	
+				if (neighbor.__parent != null
+						&& distance >= neighbor.__pathDistance)
+					continue;
+	
+				neighbor.__pathDistance = distance;
+				neighbor.__heuristicDistance = neighbor.pos.dist(goal.pos)
+						+ distance;
+				if (neighbor.__parent == null) {
+					neighbor.__priority = neighbor.__heuristicDistance;
+					queue.add(neighbor);
+				} else
+					neighbor.__priority = neighbor.__heuristicDistance;
+	
+				neighbor.__parent = current;
+			}
+		}
+	
+		return bestPath == null ? new Path(false) : bestPath;
 	}
 }
