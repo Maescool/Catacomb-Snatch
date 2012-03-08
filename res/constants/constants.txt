@@ -44,6 +44,12 @@ com.mojang.mojam.entity.mob.Pharao.health=40
 com.mojang.mojam.entity.mob.Pharao.speed=1.0
 com.mojang.mojam.entity.mob.Pharao.limp=3
 
+com.mojang.mojam.entity.mob.pather.Soldier.deathPoints=30
+com.mojang.mojam.entity.mob.pather.Soldier.strength=3
+com.mojang.mojam.entity.mob.pather.Soldier.health=40
+com.mojang.mojam.entity.mob.pather.Soldier.speed=1.0
+com.mojang.mojam.entity.mob.pather.Soldier.limp=3
+
 com.mojang.mojam.entity.weapon.Rifle.bulletDamage=0.5
 com.mojang.mojam.entity.weapon.Rifle.accuracy=0.15
 com.mojang.mojam.entity.weapon.Rifle.shootDelay=5
