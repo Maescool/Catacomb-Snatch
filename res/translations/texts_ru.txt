@@ -26,7 +26,7 @@ gameplay.player1Name = Лорд Жиротрест
 gameplay.player2Name = Герр Ван Куроед
 gameplay.player3Name = Герцогиня Ватрушка
 gameplay.player4Name = Графиня Круассан
-gameplay.FPS = FPS:
+gameplay.FPS = FPS: {0}
 gameplay.latency = Задержка:
 gameplay.cantPickup = Вы не можете это поднять!
 
