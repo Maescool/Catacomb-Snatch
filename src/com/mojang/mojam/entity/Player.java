@@ -617,11 +617,13 @@ public class Player extends Mob implements LootCollector {
         }
     }
     
-    // Whether this Player should see the building in question
+    // Whether this Player should see the Entity in question
     // highlighted on their game client - this indicates that
-    // they can interact with the building
-    private boolean shouldHighlightBuildingOnThisGameClient(Building building) {
-        return building.isHighlightable() && canInteractWithBuilding(building) && this.team == MojamComponent.localTeam; 
+    // they can interact with the Entity
+    private boolean shouldHighlightEntityOnThisGameClient(Entity entity) {
+    	if (!(entity instanceof IUsable))
+    		return false;
+    	return ((IUsable)entity).isHighlightable() && canInteractWithEntity(entity) && this.team == MojamComponent.localTeam; 
     }
     
     // Whether this Player is allowed to use the building in 
