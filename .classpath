@@ -7,5 +7,11 @@
 	<classpathentry kind="lib" path="lib/LibraryJavaSound.jar"/>
 	<classpathentry kind="lib" path="lib/SoundSystem.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/LibraryLWJGLOpenAL.jar"/>
+	<classpathentry kind="lib" path="lib/lwjgl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="CatacombSnatch-GIT/res/native/windows"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
