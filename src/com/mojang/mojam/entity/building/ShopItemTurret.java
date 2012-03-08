@@ -5,7 +5,6 @@ import com.mojang.mojam.screen.Art;
 
 public class ShopItemTurret extends ShopItem {
 
-
     public ShopItemTurret(double x, double y, int team) {
         super("turret",x, y, team, 150, 10);
         
@@ -19,4 +18,10 @@ public class ShopItemTurret extends ShopItem {
         level.addEntity(item);
         player.pickup(item);
 	}
+
+	@Override
+	boolean canBuy(Player player) {
+		return true;
+	}
+    
 }

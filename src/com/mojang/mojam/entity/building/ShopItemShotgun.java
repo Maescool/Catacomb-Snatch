@@ -2,7 +2,6 @@ package com.mojang.mojam.entity.building;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Player;
-import com.mojang.mojam.entity.weapon.Rifle;
 import com.mojang.mojam.entity.weapon.Shotgun;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.screen.Art;
@@ -16,10 +15,15 @@ public class ShopItemShotgun extends ShopItem {
     }
 
     public void useAction(Player player) {
-    	if(!player.weaponInventory.add(new Shotgun(player))) {
-        	if(this.team == MojamComponent.localTeam) {
-                Notifications.getInstance().add(MojamComponent.texts.getStatic("gameplay.weaponAlready"));
-        	}
+    	player.weaponInventory.add(new Shotgun(player));
+	}
+
+	@Override
+	public boolean canBuy(Player player) {
+		boolean alreadyOwned = player.weaponInventory.hasWeapon(new Shotgun(player));
+		if( alreadyOwned && this.team == MojamComponent.localTeam ) {
+            Notifications.getInstance().add(MojamComponent.texts.getStatic("gameplay.weaponAlready"));
     	}
+		return !alreadyOwned;
 	}
 }
