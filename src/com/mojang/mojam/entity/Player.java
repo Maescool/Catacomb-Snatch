@@ -578,42 +578,41 @@ public class Player extends Mob implements LootCollector {
             selected = null;
         }
 
-        // Find the closest Building within interation
+        // Find the closest Entity within interaction
         // distance
-        Building closest = null;
+        Entity closest = null;
         double closestDist = Double.MAX_VALUE;
-        for (Entity e : level.getEntitiesSlower(pos.x - INTERACT_DISTANCE, pos.y - INTERACT_DISTANCE, pos.x + INTERACT_DISTANCE, pos.y + INTERACT_DISTANCE, Building.class)) {
-            Building b = (Building)e;
+        for (Entity e : level.getEntitiesSlower(pos.x - INTERACT_DISTANCE, pos.y - INTERACT_DISTANCE, pos.x + INTERACT_DISTANCE, pos.y + INTERACT_DISTANCE, Mob.class)) {
             double dist = e.pos.distSqr(getInteractPosition());
-            if (dist <= INTERACT_DISTANCE && dist < closestDist) {
+            if (dist <= INTERACT_DISTANCE && dist < closestDist && e instanceof IUsable) {
                 closestDist = dist;
-                closest = b;
+                closest = e;
             }
         }
 
-        // If we found a building close enough to interact with...
+        // If we found a entity close enough to interact with...
         if (closest != null) {
             // Perform any allowed interactions if the correct
             // keys have been pressed
             if (keys.use.wasPressed() || mouseButtons.isDown(mouseUseButton)) {
 
-                if (canUseBuilding(closest)) {
-                    closest.use(this);
+                if (canUseEntity(closest)) {
+                	((IUsable)closest).use(this);
                     mouseButtons.setNextState(mouseUseButton, false);
                 }
             } else if (keys.upgrade.wasPressed()) {
                 
-                if (canUpgradeBuilding(closest)) {
-                    closest.upgrade(this);
+                if (canUpgradeEntity(closest)) {
+                	((IUsable)closest).upgrade(this);
                 }
             }
             
             // If it is a building we should highlight on this game
             // client, then highlight the building (also, remember the
             // highlighted building, so we can unhighlight it again later)
-            if (shouldHighlightBuildingOnThisGameClient(closest)) {
+            if (shouldHighlightEntityOnThisGameClient(closest)) {
                 selected = closest;
-                selected.setHighlighted(true);
+                ((IUsable)selected).setHighlighted(true);
             }
         }
     }
