@@ -633,10 +633,10 @@ public class Player extends Mob implements LootCollector {
     	return !(entity instanceof ShopItem && entity.team != this.team); // Players can only use their own shops, but can use any other building regardless of ownership
     }
     
-    // Whether this Player is allowed to upgrade the building
+    // Whether this Player is allowed to upgrade the Entity
     // in question
-    private boolean canUpgradeBuilding(Building building) {
-        return building.team == this.team; // Players can only upgrade their own buildings
+    private boolean canUpgradeEntity(Entity entity) {
+    	return entity.team == this.team; // Players can only upgrade their own Entities
     }
     
     // Whether this Player is allowed to interact with the building in 
