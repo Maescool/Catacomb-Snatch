@@ -626,11 +626,11 @@ public class Player extends Mob implements LootCollector {
     	return ((IUsable)entity).isHighlightable() && canInteractWithEntity(entity) && this.team == MojamComponent.localTeam; 
     }
     
-    // Whether this Player is allowed to use the building in 
+    // Whether this Player is allowed to use the Entity in 
     // question
-    private boolean canUseBuilding(Building building) {
+    private boolean canUseEntity(Entity entity) {
         //return building.team == this.team || building.team == Team.Neutral; // Players can only use their own and neutral buildings
-        return !(building instanceof ShopItem && building.team != this.team); // Players can only use their own shops, but can use any other building regardless of ownership
+    	return !(entity instanceof ShopItem && entity.team != this.team); // Players can only use their own shops, but can use any other building regardless of ownership
     }
     
     // Whether this Player is allowed to upgrade the building
