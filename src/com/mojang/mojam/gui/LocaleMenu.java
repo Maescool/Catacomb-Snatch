@@ -80,14 +80,19 @@ public class LocaleMenu extends GuiMenu {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-
+	}
+	
+	@Override
+	public void keyPressed(KeyEvent e){
+		if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+			back.postClick();
+		} else {
+			super.keyPressed(e);
+		}
 	}
 
 	public void changeLocale() {

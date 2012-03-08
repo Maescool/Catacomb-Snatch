@@ -203,6 +203,15 @@ public class AudioVideoMenu extends GuiMenu {
 	}
 
 	@Override
+	public void keyPressed(KeyEvent e){
+		if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+			back.postClick();
+		} else {
+			super.keyPressed(e);
+		}
+	}
+	
+	@Override
 	public void buttonPressed(ClickableComponent button) {
 		// TODO Auto-generated method stub
 
