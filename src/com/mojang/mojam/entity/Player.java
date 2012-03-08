@@ -44,6 +44,7 @@ public class Player extends Mob implements LootCollector {
     public boolean isSprint = false;
     public int timeSprint = 0;
     public int maxTimeSprint;
+    public boolean isSprintIgnore = false;
     public Keys keys;
     public MouseButtons mouseButtons;
     public int mouseFireButton = 1;
@@ -394,22 +395,32 @@ public class Player extends Mob implements LootCollector {
         double speed = getSpeed() / dd;
 
         if (this.keys.sprint.isDown) {
-            if (timeSprint < maxTimeSprint) {
-                isSprint = true;
-                if (carrying == null) {
-                    speed = getSpeed() / dd * psprint;
+            if (!isSprintIgnore) {
+                if (timeSprint < maxTimeSprint) {
+                    isSprint = true;
+                    if (carrying == null) {
+                        speed = getSpeed() / dd * psprint;
+                    } else {
+                        speed = getSpeed() / dd * (psprint - 0.5);
+                    }
+                    timeSprint++;
                 } else {
-                    speed = getSpeed() / dd * (psprint - 0.5);
+                    isSprint = false;
+                    isSprintIgnore = true;
+                    if (timeSprint > 0) {
+                        timeSprint--;
+                    }
                 }
-                timeSprint++;
             } else {
                 isSprint = false;
+                if (timeSprint > 0) {
+                    timeSprint--;
+                }
             }
-        } else {
-            if (timeSprint >= 0) {
-                timeSprint--;
-            }
-            isSprint = false;
+        }
+
+        if (this.keys.sprint.wasReleased()) {
+            isSprintIgnore = false;
         }
 
         xa *= speed;
