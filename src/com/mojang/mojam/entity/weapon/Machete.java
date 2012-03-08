@@ -2,7 +2,11 @@ package com.mojang.mojam.entity.weapon;
 
 import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Bullet;
+import com.mojang.mojam.entity.BulletMelee;
 import com.mojang.mojam.entity.mob.Mob;
+import com.mojang.mojam.resources.Constants;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
 public class Machete extends Melee
@@ -13,40 +17,31 @@ public class Machete extends Melee
 		super(mob);
 	}
 	
+
 	public void setWeaponMode()
 	{
+		shootDelay = Constants.getInt("shootDelay", this);
 		if(Options.getAsBoolean(Options.CREATIVE))
 		{
 			BULLET_DAMAGE = 100f;
 		}
 		else
 		{
-			BULLET_DAMAGE = 2f;
+			BULLET_DAMAGE = Constants.getFloat("bulletDamage", this);
 		}
 	}
 	
 	public Bullet getAmmo(double xDir, double yDir)
 	{
-		Bullet bullet = new Bullet(owner, xDir, yDir, BULLET_DAMAGE)
-		{
-			@Override
-			public void tick()
-			{
-				if (--duration <= 18) {
-					remove();
-					return;
-				}	
-				super.tick();
-			}
-			
-			@Override
-			public void render(Screen screen)
-			{
-				//super.render(screen);
-				//TODO: Effects
-			}
-		};
+		Bullet bullet = new BulletMelee(owner, xDir, yDir, BULLET_DAMAGE,25);
 		return bullet;
+	}
+	
+	@Override
+	public Bitmap getSprite()
+	{
+		// TODO Auto-generated method stub
+		return Art.weaponList[1][1];
 	}
 
 }

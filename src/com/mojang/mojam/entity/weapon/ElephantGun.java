@@ -7,6 +7,7 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.network.TurnSynchronizer;
+import com.mojang.mojam.resources.Constants;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 
@@ -33,8 +34,10 @@ public class ElephantGun implements IWeapon
 
 	}
 
+
 	public void setWeaponMode()
 	{
+		shootDelay = Constants.getInt("shootDelay", this);
 		if(Options.getAsBoolean(Options.CREATIVE))
 		{
 			BULLET_DAMAGE = 100f;
@@ -42,8 +45,8 @@ public class ElephantGun implements IWeapon
 		}
 		else
 		{
-			BULLET_DAMAGE = 15f;
-			accuracy = 0.1f;
+			BULLET_DAMAGE = Constants.getFloat("bulletDamage", this);
+			accuracy = Constants.getFloat("accuracy", this);
 		}
 	}
 
@@ -124,7 +127,7 @@ public class ElephantGun implements IWeapon
 	public Bitmap getSprite()
 	{
 		// TODO Auto-generated method stub
-		return Art.weaponList[0][0];
+		return Art.weaponList[2][1];
 	}
 
 }

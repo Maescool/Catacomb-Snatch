@@ -5,11 +5,13 @@ import java.util.Set;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Bullet;
+import com.mojang.mojam.entity.BulletCannonball;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.animation.LargeBombExplodeAnimation;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.network.TurnSynchronizer;
+import com.mojang.mojam.resources.Constants;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
@@ -39,6 +41,7 @@ public class Cannon implements IWeapon
 
 	public void setWeaponMode()
 	{
+		shootDelay = Constants.getInt("shootDelay", this);
 		if(Options.getAsBoolean(Options.CREATIVE))
 		{
 			BULLET_DAMAGE = 100f;
@@ -46,8 +49,8 @@ public class Cannon implements IWeapon
 		}
 		else
 		{
-			BULLET_DAMAGE = 30f;
-			accuracy = 0f;
+			BULLET_DAMAGE = Constants.getFloat("bulletDamage", this);
+			accuracy = Constants.getFloat("accuracy", this);
 		}
 	}
 
@@ -91,49 +94,7 @@ public class Cannon implements IWeapon
 
 	public Bullet getAmmo(double xDir, double yDir)
 	{
-		Bullet bullet = new Bullet(owner, xDir, yDir, BULLET_DAMAGE)
-		{
-			@Override
-			public void tick()
-			{
-				if (--duration <= -20) {
-					remove();
-					return;
-				}
-				if(!move(xa,ya))
-				{
-					if(move(-xa,ya))xa = -xa;
-					if(move(xa,-ya))ya = -ya;
-				}
-				xa *= 0.95;
-				ya *= 0.95;
-			}
-			
-			@Override
-			public void remove()
-			{
-				level.addEntity(new LargeBombExplodeAnimation(pos.x, pos.y));
-				MojamComponent.soundPlayer.playSound("/sound/Explosion 2.wav",
-						(float) pos.x, (float) pos.y);
-				float BOMB_DISTANCE = 100;
-				Set<Entity> entities = level.getEntities(pos.x - BOMB_DISTANCE, pos.y
-						- BOMB_DISTANCE, pos.x + BOMB_DISTANCE, pos.y + BOMB_DISTANCE,
-						Mob.class);
-				for (Entity e : entities) {
-					double distSqr = pos.distSqr(e.pos);
-					if (distSqr < (BOMB_DISTANCE * BOMB_DISTANCE)) {
-						((Mob) e).hurt(this, (float) (BULLET_DAMAGE*BULLET_DAMAGE/distSqr));
-					}
-				}
-				super.remove();
-			}
-			
-			@Override
-			public void render(Screen screen)
-			{
-				screen.blit(Art.bomb, pos.x-16, pos.y-16);
-			}
-		};
+		Bullet bullet = new BulletCannonball(owner, xDir, yDir, BULLET_DAMAGE);
 		return bullet;
 	}
 
@@ -170,7 +131,7 @@ public class Cannon implements IWeapon
 	public Bitmap getSprite()
 	{
 		// TODO Auto-generated method stub
-		return Art.weaponList[0][0];
+		return Art.weaponList[3][0];
 	}
 
 	
