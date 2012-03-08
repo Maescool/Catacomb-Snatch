@@ -20,9 +20,11 @@ public class CreditsScreen extends GuiMenu {
 	public String officialGame   = "Mojang AB";
 	public String[] leadDev      = {"Maescool"};
 	public String[] officialDev  = {"Borsty", "danielduner", "flet", "judgedead53", "Maescool",
-			"master-lincoln", "mkalam-alami", "Scorpion1122"};
-	public String[] communityMan = {"Austin01", "zorro300"};
-	public String[] others = {"xPaw", "BubblegumBalloon", "Elosanda", "GreenLightning", "Mebibyte", "Hammy55"};
+			"master-lincoln", "mkalam-alami", "Scorpion1122", "Ankkah", "yofreke"};
+	public String[] communityMan = {"Austin01", "", "zorro300"};
+	public String[] others = {"xPaw", "BubblegumBalloon", "Elosanda", "GreenLightning", "Mebibyte", "Hammy55", 
+		"skyrick", "RaXaR", "LordofMaps", "KyleBrodie", "ervilsoft", "Stuessy", "xdreamcoding", "eirthepriest", 
+		"spidernetlabs", "..."};
 
 	public CreditsScreen(int gameWidth, int gameHeight) {
 		super();
