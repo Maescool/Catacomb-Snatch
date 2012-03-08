@@ -82,6 +82,7 @@ options.music = Musique
 options.sounds = Sons
 options.sound_and_video = SON ET VIDÉO
 options.locale_selection = CHOISIR UNE LANGUE
+options.mute = MUET
 options.creative = MODE CRÉATIF
 options.credits = CRÉDITS
 
@@ -92,6 +93,10 @@ pausemenu.help = AIDE
 pausemenu.backtomain = MENU PRINCIPAL
 pausemenu.resume = CONTINUER
 pausemenu.exit = QUITTER
+
+exitmenu.headline = VOULEZ-VOUS RÉELLEMENT QUITTER LE JEU ?
+exitmenu.cancel = NON
+exitmenu.exit = OUI
 
 player.hasDied = {0} EST MORT!
 
@@ -104,6 +109,16 @@ shop.harvesterTooltipLine2 = UTILISÉ POUR RÉCOLTER LE LOOT.
 shop.bombTooltipTitle = BOMBE
 shop.bombTooltipLine1 = DÉTRUIT LES MURS FISSURÉS.
 shop.bombTooltipLine2 = UTILISÉE POUR CRÉER DES RACCOURCIS.
+
+shop.rifleTooltipTitle = FUSIL
+shop.rifleTooltipLine1 = ARME DE DÉPART (PAR DÉFAUT).
+shop.rifleTooltipLine2 = Good all-round.
+shop.shotgunTooltipTitle = CARABINE
+shop.shotgunTooltipLine1 = LES TIRS COUVRENT UNE LARGE ZONE.
+shop.shotgunTooltipLine2 = PORTÉE COURTE, DÉGATS IMPORTANTS.
+shop.raygunTooltipTitle = PISTOLET À ÉNERGIE
+shop.raygunTooltipLine1 = LES TIRS REBONDISSENT SUR LES MURS.
+shop.raygunTooltipLine2 = CHAQUE REBONDS ACCROÎT LES DÉGATS.
 
 titlemenu.start = JOUER
 titlemenu.host = NV. SERVEUR
