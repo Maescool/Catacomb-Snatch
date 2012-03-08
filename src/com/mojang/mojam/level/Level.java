@@ -370,7 +370,7 @@ public class Level {
 				int xt = x - (width / 2) + ((baseOneTileWidth-(baseOneTileWidth%2))/2) + (baseOneTileWidth%2);
 				int yt = y - baseOneTileHeight;
 
-	            if (xt >= 0 && yt >= 0 && xt < baseOneTileWidth && yt < baseOneTileHeight && (isNotBaseRailTile(xt) || yt < baseOneTileHeight-1)) {
+	            if (xt >= 0 && yt >= 0 && xt < baseOneTileWidth && yt < baseOneTileHeight && (isNotBaseRailTile(x) || yt < baseOneTileHeight-1)) {
 	                screen.blit(playerBaseOne[xt][yt], x * Tile.WIDTH, y
 	                        * Tile.HEIGHT);
 	                continue;
@@ -381,7 +381,7 @@ public class Level {
 				
 				
 	            yt = y - (height - 8);
-	            if (xt >= 0 && yt >= 0 && xt < baseZeroTileWidth && yt < baseZeroTileHeight && (isNotBaseRailTile(xt) || yt > 0)) {       
+	            if (xt >= 0 && yt >= 0 && xt < baseZeroTileWidth && yt < baseZeroTileHeight && (isNotBaseRailTile(x) || yt > 0)) {       
 					screen.blit(playerBaseZero[xt][yt], x * Tile.WIDTH, y * Tile.HEIGHT);
 	                if (yt == 0 && ((xt <=(baseZeroTileWidth-3)/2) || (xt >=((baseZeroTileWidth-3)/2)+3 ))) {
 	                    screen.blit(Art.shadow_north, x * Tile.WIDTH, y * Tile.HEIGHT);
@@ -408,8 +408,8 @@ public class Level {
 	    else return player.getCharacter();
 	}
 	
-	private boolean isNotBaseRailTile(int xt){
-	    return (xt != 2 && xt != 3 && xt != 4);
+	private boolean isNotBaseRailTile(int x){
+	    return (x < (width/2 - 2) || x > (width/2));
 	}
 	
 
