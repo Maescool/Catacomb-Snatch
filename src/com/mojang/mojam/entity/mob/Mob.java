@@ -382,6 +382,8 @@ public abstract class Mob extends Entity {
 	}
     
     public boolean isTargetBehindWall(double dx2, double dy2, Entity e) {
+    	return !level.checkLineOfSight(this, new Vec2(dx2,dy2));
+    	/*
         int x1 = (int) pos.x / Tile.WIDTH;
         int y1 = (int) pos.y / Tile.HEIGHT;
         int x2 = (int) dx2 / Tile.WIDTH;
@@ -447,6 +449,7 @@ public abstract class Mob extends Entity {
             return true;
         }
         return false;
+        */
     }
     
     public boolean fallDownHole() {
