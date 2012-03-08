@@ -175,6 +175,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		menuStack.setStackButtonListener(this);
 		menu = new TitleMenu(GAME_WIDTH, GAME_HEIGHT);
 		menuStack.add(menu);
+		addKeyListener(menuStack);
 		addKeyListener(chat);
 		addKeyListener(console);
 
