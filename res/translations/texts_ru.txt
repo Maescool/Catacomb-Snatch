@@ -26,7 +26,7 @@ gameplay.player1Name = Лорд Жиротрест
 gameplay.player2Name = Герр Ван Куроед
 gameplay.player3Name = Герцогиня Ватрушка
 gameplay.player4Name = Графиня Круассан
-gameplay.FPS = FPS:
+gameplay.FPS = FPS: {0}
 gameplay.latency = Задержка:
 gameplay.cantPickup = Вы не можете это поднять!
 
@@ -128,3 +128,6 @@ upgrade.full = Уже полностью усовершенствована!
 upgrade.notEnoughMoney = У вас недостаточно денег ({0})
 upgrade.to = Улучшен до уровня {0}
 
+exitmenu.headline = Вы действительно хотите выйти?
+exitmenu.cancel = Нет
+exitmenu.exit = Да
