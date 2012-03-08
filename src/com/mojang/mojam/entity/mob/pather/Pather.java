@@ -53,7 +53,7 @@ public abstract class Pather extends HostileMob {
 	 */
 
 	public Pather(double x, double y, int team) {
-		super(x, y, Team.Team1);
+		super(x, y, team);
 		yOffs = 10;
 		facing = TurnSynchronizer.synchedRandom.nextInt(4);
 		deathPoints = 4;

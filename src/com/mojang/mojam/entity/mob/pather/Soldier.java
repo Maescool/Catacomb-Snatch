@@ -59,7 +59,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	 */
 
 	public Soldier(double x, double y, int team, Entity followEntity) {
-		super(x, y, Team.Team1);
+		super(x, y, team);
 		setPos(x, y);
 		setStartHealth(70);
 		setAvoidWallsModifier(0);
