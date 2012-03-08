@@ -639,10 +639,10 @@ public class Player extends Mob implements LootCollector {
     	return entity.team == this.team; // Players can only upgrade their own Entities
     }
     
-    // Whether this Player is allowed to interact with the building in 
+    // Whether this Player is allowed to interact with the Entity in 
     // question
-    private boolean canInteractWithBuilding(Building building) {
-        return canUseBuilding(building) || canUpgradeBuilding(building);
+    private boolean canInteractWithEntity(Entity entity) {
+    	return canUseEntity(entity) || canUpgradeEntity(entity);
     }
 
     /**
