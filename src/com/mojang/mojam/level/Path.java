@@ -76,4 +76,16 @@ public class Path {
 		}
 		return s;
 	}
+
+	public Vec2 getCurrentWorldPos() {
+		return getWorldPos(index);
+	}
+
+	public void previous() {
+		index--;
+	
+		if (index <= 0) {
+			index = 0;
+		}
+	}
 }
