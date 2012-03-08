@@ -10,3 +10,5 @@ build
 *.sw?
 lib/.tmp/
 doc/
+.classpath
+.project
