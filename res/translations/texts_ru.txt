@@ -128,3 +128,6 @@ upgrade.full = Уже полностью усовершенствована!
 upgrade.notEnoughMoney = У вас недостаточно денег ({0})
 upgrade.to = Улучшен до уровня {0}
 
+exitmenu.headline = Вы действительно хотите выйти?
+exitmenu.cancel = Нет
+exitmenu.exit = Да
