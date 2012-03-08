@@ -543,4 +543,13 @@ public abstract class Mob extends Entity {
 	public void setHighlight(boolean highlight) {
 		this.highlight = highlight;
 	}
+
+	public IWeapon getWeapon() {
+		return weapon;
+	}
+
+	public void setWeapon(IWeapon weapon) {
+		this.weapon = weapon;
+	}
+    
 }
