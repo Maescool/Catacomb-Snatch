@@ -251,6 +251,8 @@ public class Player extends Mob implements LootCollector {
         // Move player if it is not standing still
         if (xa != 0 || ya != 0) {
             handleMovement(xa, ya);
+        } else {
+        	restoreTimeSprint();
         }
 
         if (freezeTime > 0) {
@@ -406,24 +408,15 @@ public class Player extends Mob implements LootCollector {
 	                }
 	                timeSprint++;
 	            } else {
-	            	if (timeSprint > 0) {
-	                    timeSprint--;
-	                }   
-	            	isSprint = false;
+	            	restoreTimeSprint();
 	                isSprintIgnore = true;
 	            }
         	} else {
-        		if (timeSprint > 0) {
-                    timeSprint--;
-                }   
-            	isSprint = false;
+        		restoreTimeSprint();
                 isSprintIgnore = true;
         	}
         } else {
-        	if (timeSprint > 0) {
-                timeSprint--;
-            } 
-        	isSprint = false;              
+        	restoreTimeSprint();          
         }
         
         if (this.keys.sprint.wasReleased()) {
@@ -435,6 +428,13 @@ public class Player extends Mob implements LootCollector {
 
         xd += xa;
         yd += ya;
+    }
+    
+    private void restoreTimeSprint() {
+    	if (timeSprint > 0) {
+            timeSprint--;
+        } 
+    	isSprint = false;
     }
 
     /**
