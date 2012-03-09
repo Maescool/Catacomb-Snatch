@@ -576,7 +576,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		int crosshairSize = 15;
 		int crosshairSizeHalf = crosshairSize / 2;
 
-		Bitmap marker = new Bitmap(crosshairSize, crosshairSize);
+		Bitmap marker = Bitmap.getSystemCompatibleBitmap(crosshairSize, crosshairSize);
 
 		// horizontal line
 		for (int i = 0; i < crosshairSize; i++) {

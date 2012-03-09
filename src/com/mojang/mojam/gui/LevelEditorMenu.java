@@ -64,10 +64,10 @@ public class LevelEditorMenu extends GuiMenu {
     
     private int[][] mapTile = new int[LEVEL_HEIGHT][LEVEL_WIDTH];
     private Bitmap[][] map = new Bitmap[LEVEL_HEIGHT][LEVEL_WIDTH];
-    private Bitmap mapFloor = new Bitmap(mapW, mapH);
-    private Bitmap minimap = new Bitmap(LEVEL_WIDTH, LEVEL_HEIGHT);
+    private Bitmap mapFloor = Bitmap.getSystemCompatibleBitmap(mapW, mapH);
+    private Bitmap minimap = Bitmap.getSystemCompatibleBitmap(LEVEL_WIDTH, LEVEL_HEIGHT);
         
-    private Bitmap pencil = new Bitmap(TILE_WIDTH, TILE_HEIGHT);
+    private Bitmap pencil = Bitmap.getSystemCompatibleBitmap(TILE_WIDTH, TILE_HEIGHT);
     private int pencilX;
     private int pencilY;
     private boolean drawing;

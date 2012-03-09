@@ -37,7 +37,7 @@ public class SpawnerForScarab extends SpawnerEntity {
 	
 	@Override
 	public Bitmap getBitMapForEditor() {
-		Bitmap shrink = Bitmap.shrink(Art.scarab[0][1].copy());
+		Bitmap shrink = Bitmap.shrink(Art.scarab[0][1].clone());
 		Bitmap bitmap = blitMobOnTop(shrink);
 		return bitmap;
 	}

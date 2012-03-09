@@ -114,7 +114,7 @@ public abstract class SpawnerEntity extends Building implements IEditable {
     }
 	
 	protected Bitmap blitMobOnTop(Bitmap mobicon) {
-		Bitmap bitmap = Art.mobSpawner[0][0].copy();
+		Bitmap bitmap = Art.mobSpawner[0][0].clone();
 		bitmap.blit(mobicon, (bitmap.w/2)-mobicon.w/2,(bitmap.h/2)-5-mobicon.h/2);
 		return bitmap;
 	}

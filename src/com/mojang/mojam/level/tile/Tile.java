@@ -45,7 +45,7 @@ public abstract class Tile implements BBOwner, IEditable {
 
 	public void render(Screen screen) {
 	    
-	    Bitmap floorTile = (Art.floorTiles[img & 7][img / 8]).copy();
+	    Bitmap floorTile = (Art.floorTiles[img & 7][img / 8]).clone();
 	    addShadows(floorTile);
 	    screen.blit(floorTile, x * Tile.WIDTH, y * Tile.HEIGHT);
 	    

@@ -218,7 +218,7 @@ public class Art {
 
 			for (int x = 0; x < xTiles; x++) {
 				for (int y = 0; y < yTiles; y++) {
-				    result[x][y] = new Bitmap(w, h);
+				    result[x][y] = Bitmap.getSystemCompatibleBitmap(w, h);
 					bi.getRGB(bx + x * w, by + y * h, w, h,
 							result[x][y].pixels, 0, w);
 				}
@@ -248,7 +248,7 @@ public class Art {
                         w++;
                     }
                     if (w > 0) {
-                        Bitmap bitmap = new Bitmap(w, h);
+                        Bitmap bitmap = Bitmap.getSystemCompatibleBitmap(w, h);
                         bi.getRGB(xCursor, y * h, w, h, bitmap.pixels, 0, w );
                         row.add(bitmap);
                     }
@@ -318,7 +318,7 @@ public class Art {
 			int w = bi.getWidth();
 			int h = bi.getHeight();
 
-			Bitmap result = new Bitmap(w, h);
+			Bitmap result = Bitmap.getSystemCompatibleBitmap(w, h);
 			bi.getRGB(0, 0, w, h, result.pixels, 0, w);
 
 			return result;

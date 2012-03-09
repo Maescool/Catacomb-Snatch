@@ -70,7 +70,7 @@ public class Level {
 		
 		monsterDensity = new int[denseTileArrayWidth][denseTileArrayHeight];
 
-		minimap = new Bitmap(width, height);
+		minimap = Bitmap.getSystemCompatibleBitmap(width, height);
 		
 		largeMap = height > 64 || width > 64;
 		smallMap = height < 64 && width < 64;
@@ -540,7 +540,7 @@ public class Level {
     }
 	
 	private void renderPanelAndMinimap(Screen screen, int x0, int y0){
-	    Bitmap displaymap = new Bitmap(64, 64);
+	    Bitmap displaymap = Bitmap.getSystemCompatibleBitmap(64, 64);
 	    
 	    if(largeMap){
             displaymap = calculateLargeMapDisplay(x0, y0);
@@ -556,7 +556,7 @@ public class Level {
 	
 	private Bitmap calculateLargeMapDisplay(int x0, int y0) {
 	    
-	    Bitmap largeMap = new Bitmap(64, 64);
+	    Bitmap largeMap = Bitmap.getSystemCompatibleBitmap(64, 64);
 	    int locx = x0 + 8;
         int locy = y0 + 8;
         
@@ -609,7 +609,7 @@ public class Level {
 	
 	private Bitmap calculateSmallMapDisplay() {
 	    
-	    Bitmap smallMap = new Bitmap(64, 64);
+	    Bitmap smallMap = Bitmap.getSystemCompatibleBitmap(64, 64);
         int smallx = 0, smally = 0;
         for (int y = 0; y < 64; y++) {
             for (int x = 0; x < 64; x++) {

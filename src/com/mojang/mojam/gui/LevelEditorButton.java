@@ -33,13 +33,13 @@ public class LevelEditorButton extends ClickableComponent {
 
     // Initialize background bitmaps
     private void createBackground() {
-        background[0] = new Bitmap(WIDTH, HEIGHT);
+        background[0] = Bitmap.getSystemCompatibleBitmap(WIDTH, HEIGHT);
         background[0].fill(0, 0, WIDTH, HEIGHT, 0xff522d16);
         background[0].fill(1, 1, WIDTH - 2, HEIGHT - 2, 0);
-        background[1] = new Bitmap(WIDTH, HEIGHT);
+        background[1] = Bitmap.getSystemCompatibleBitmap(WIDTH, HEIGHT);
         background[1].fill(0, 0, WIDTH, HEIGHT, 0xff26150a);
         background[1].fill(1, 1, WIDTH - 2, HEIGHT - 2, 0);
-        background[2] = new Bitmap(WIDTH, HEIGHT);
+        background[2] = Bitmap.getSystemCompatibleBitmap(WIDTH, HEIGHT);
         background[2].fill(0, 0, WIDTH, HEIGHT, 0xff26150a);
         background[2].fill(1, 1, WIDTH - 2, HEIGHT - 2, 0xff3a210f);
     }
