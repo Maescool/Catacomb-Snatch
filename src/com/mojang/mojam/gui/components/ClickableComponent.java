@@ -22,8 +22,8 @@ public abstract class ClickableComponent extends VisibleComponent {
 	public void tick(MouseButtons mouseButtons) {
 		super.tick(mouseButtons);
 
-		int mx = mouseButtons.getX() / 2;
-		int my = mouseButtons.getY() / 2;
+		int mx = mouseButtons.getX();
+		int my = mouseButtons.getY();
 		isPressed = false;
 		if (enabled && mx >= getX() && my >= getY() && mx < (getX() + getWidth()) && my < (getY() + getHeight())) {
 			postHover();
