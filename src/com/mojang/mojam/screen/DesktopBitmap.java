@@ -89,13 +89,6 @@ public class DesktopBitmap extends Bitmap {
 	    }
 	}
 
-	/**
-	 * Draws a Bitmap semi-transparent
-	 * @param bitmap image to draw
-	 * @param x position on screen
-	 * @param y position on screen
-	 * @param alpha range from 0x00 (transparent) to 0xff (opaque)
-	 */
     public void alphaBlit(Bitmap bitmap, int x, int y, int alpha) {
 
         if(alpha == 255)
@@ -209,11 +202,11 @@ public class DesktopBitmap extends Bitmap {
         if (blitArea.bottomRightY > h) blitArea.bottomRightY = h;
 	}
 
-	public void rectangle(int x, int y, int bw, int bh, int color) {
+	public void rectangle(int x, int y, int width, int height, int color) {
 		int x0 = x;
-		int x1 = x + bw;
+		int x1 = x + width;
 		int y0 = y;
-		int y1 = y + bh;
+		int y1 = y + height;
 		if (x0 < 0)
 			x0 = 0;
 		if (y0 < 0)
