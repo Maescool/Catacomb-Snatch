@@ -65,6 +65,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 		setRandomDistanceModifier(0);
 		setMoney(0);
 		setMaxMoney(500);
+		setDoShowMoneyBar(false);
 		makeUpgradeableWithCosts(upgradeCosts);
 
 		//damageEffectType = Mob.DamageEffectBlood;
