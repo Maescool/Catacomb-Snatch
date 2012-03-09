@@ -486,6 +486,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			addXpBar(screen);
 			addScore(screen);
 			addWeaponSlots(screen);
+			addSprintBar(screen);
 
 			Font font = Font.defaultFont();
 			if (isMultiplayer) {
@@ -516,6 +517,20 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 	}
 
+	private void addSprintBar(Screen screen) {
+		Font font = Font.defaultFont();
+		font.draw(screen, "Sprint: ", 0, 50);
+		
+		int maxIndex = Art.panel_healthBar[0].length - 1;
+		int index = maxIndex - Math.round(player.getTimeSprint() * maxIndex / player.getMaxTimeSprint());
+		if (index < 0)
+			index = 0;
+		else if (index > maxIndex)
+			index = maxIndex;
+
+		screen.blit(Art.panel_healthBar[0][index], 50, 50);
+	}
+	
 	private void addHealthBar(Screen screen) {
 		int maxIndex = Art.panel_healthBar[0].length - 1;
 		int index = maxIndex - Math.round(player.health * maxIndex / player.maxHealth);
