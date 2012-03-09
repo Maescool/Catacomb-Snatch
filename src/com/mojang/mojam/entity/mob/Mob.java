@@ -34,6 +34,10 @@ public abstract class Mob extends Entity {
 	protected double speed = 1.0;
 	protected boolean doShowHealthBar = true;
     protected int healthBarOffset = 10;
+    private boolean doShowMoneyBar = true;
+	private int moneyBarOffset = 16;
+	private int money = 0;
+	
 	double dir = 0;
 	public int hurtTime = 0;
 	public int freezeTime = 0;
@@ -251,6 +255,9 @@ public abstract class Mob extends Entity {
 		}
 
 		if (doShowHealthBar && health < maxHealth) {
+            addHealthBar(screen);
+        }
+		if (doShowMoneyBar && money > 0 ) {
             addHealthBar(screen);
         }
 		
@@ -576,6 +583,34 @@ public abstract class Mob extends Entity {
 
 	public void setWeapon(IWeapon weapon) {
 		this.weapon = weapon;
+	}
+
+	public boolean isDoShowMoneyBar() {
+		return doShowMoneyBar;
+	}
+
+	public void setDoShowMoneyBar(boolean doShowMoneyBar) {
+		this.doShowMoneyBar = doShowMoneyBar;
+	}
+
+	public int getMoney() {
+		return money;
+	}
+
+	public void setMoney(int money) {
+		this.money = money;
+	}
+	
+	public void addMoney(int dMoney) {
+		this.money += dMoney;
+	}
+	
+	public int getMoneyBarOffset() {
+		return moneyBarOffset;
+	}
+
+	public void setMoneyBarOffset(int moneyBarOffset) {
+		this.moneyBarOffset = moneyBarOffset;
 	}
     
 }

@@ -20,7 +20,7 @@ import com.mojang.mojam.screen.AbstractScreen;
  */
 public class Harvester extends Building implements LootCollector {
 	private int capacity = 1500;
-	private int money = 0;
+
 	private int time = 0;
 	private int harvestingTicks = 20;
 	private boolean isHarvesting = false;
@@ -188,6 +188,7 @@ public class Harvester extends Building implements LootCollector {
 
 	@Override
 	public void flash() {
+		setFlashTime(5);
 	}
 
 	@Override
