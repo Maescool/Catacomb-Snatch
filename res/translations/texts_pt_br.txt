@@ -95,6 +95,7 @@ options.on = LIGADO
 options.off = DESLIGADO
 options.keyBindings = CONTROLES
 options.characterSelect = MUDAR PERSONAGEM
+options.trapmouse = TRANCAR MOUSE NA TELA
 options.fullscreen = TELA-CHEIA
 options.showfps = MOSTRAR FPS
 options.music = MÚSICA
