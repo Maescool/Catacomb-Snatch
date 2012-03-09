@@ -78,6 +78,14 @@ public abstract class Mob extends Entity {
 		super.init();
 	}
 
+	public int getFlashTime() {
+		return flashTime;
+	}
+
+	public void setFlashTime(int flashTime) {
+		this.flashTime = flashTime;
+	}
+
 	public void setStartHealth(float newHealth) {
 		maxHealth = health = newHealth;
 	}

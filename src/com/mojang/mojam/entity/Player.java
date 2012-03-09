@@ -734,7 +734,7 @@ public class Player extends Mob implements LootCollector {
 
         if (hurtTime % 2 != 0) {
             screen.colorBlit(sheet[frame][facing], pos.x - Tile.WIDTH / 2, pos.y - Tile.HEIGHT / 2 - 8, 0x80ff0000);
-        } else if (flashTime > 0) {
+        } else if (getFlashTime() > 0) {
             screen.colorBlit(sheet[frame][facing], pos.x - Tile.WIDTH / 2, pos.y - Tile.HEIGHT / 2 - 8, 0x80ffff80);
         } else {
             screen.blit(sheet[frame][facing], pos.x - Tile.WIDTH / 2, pos.y - Tile.HEIGHT / 2 - 8);
@@ -810,7 +810,7 @@ public class Player extends Mob implements LootCollector {
 
     @Override
     public void flash() {
-        flashTime = 20;
+        setFlashTime(20);
     }
 
     @Override
