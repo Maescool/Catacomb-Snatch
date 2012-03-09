@@ -38,7 +38,7 @@ public class Melee implements IWeapon
 
 	public void setWeaponMode()
 	{
-		shootDelay = Constants.getInt("shootDelay", this);
+		shootDelay = Constants.getInt("attackDelay", this);
 		if(Options.getAsBoolean(Options.CREATIVE))
 		{
 			BULLET_DAMAGE = 100f;

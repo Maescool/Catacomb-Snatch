@@ -20,7 +20,7 @@ public class Machete extends Melee
 
 	public void setWeaponMode()
 	{
-		shootDelay = Constants.getInt("shootDelay", this);
+		shootDelay = Constants.getInt("attackDelay", this);
 		if(Options.getAsBoolean(Options.CREATIVE))
 		{
 			BULLET_DAMAGE = 100f;
@@ -33,7 +33,7 @@ public class Machete extends Melee
 	
 	public Bullet getAmmo(double xDir, double yDir)
 	{
-		Bullet bullet = new BulletMelee(owner, xDir, yDir, BULLET_DAMAGE,25);
+		Bullet bullet = new BulletMelee(owner, xDir, yDir, BULLET_DAMAGE,25,0xffcccccc);
 		return bullet;
 	}
 	
