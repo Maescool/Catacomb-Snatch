@@ -68,6 +68,7 @@ public abstract class Mob extends Entity {
 	protected Buffs buffs = new Buffs();
 	private boolean highlight;
 	private int flashTime;
+	private int maxMoney;
 	
 	public Mob(double x, double y, int team) {
 		super();
@@ -302,7 +303,7 @@ public abstract class Mob extends Entity {
 	
 	protected void addHealthBar(AbstractScreen screen) {
         
-        int start = (int) (health * 21 / maxHealth);
+        int start = (int) (health * 20 / maxHealth);
         
         float one_tenth_hp = (float) (maxHealth / 10f);
 		float three_tenths_hp = one_tenth_hp * 3;
@@ -603,6 +604,9 @@ public abstract class Mob extends Entity {
 	
 	public void addMoney(int dMoney) {
 		this.money += dMoney;
+		if (money > maxMoney) {
+			money = maxMoney;
+		}
 	}
 	
 	public int getMoneyBarOffset() {
@@ -611,6 +615,14 @@ public abstract class Mob extends Entity {
 
 	public void setMoneyBarOffset(int moneyBarOffset) {
 		this.moneyBarOffset = moneyBarOffset;
+	}
+
+	public int getMaxMoney() {
+		return maxMoney;
+	}
+
+	public void setMaxMoney(int maxMoney) {
+		this.maxMoney = maxMoney;
 	}
     
 }
