@@ -109,9 +109,9 @@ pausemenu.resume = Продолжить
 pausemenu.exit = Выход из игры
 
 player.hasDied = {0} умер!
-player.score = {0}:
+player.score = {0}: {1}%
 player.cost = {0}
-player.health = {0} %
+player.health = {0}%
 player.money = {0}
 player.nextLevel = {0}
 player.exp = {0}
