@@ -38,9 +38,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	private Entity followEntity;
 
 	private boolean highlight;
-	private int money;
 	private double suckPower;
-	private int maxMoney;
 	private int maxUpgradeLevel;
 	private int upgradeLevel;
 
@@ -65,8 +63,8 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 		setStartHealth(70);
 		setAvoidWallsModifier(0);
 		setRandomDistanceModifier(0);
-		money = 0;
-		maxMoney = 500;
+		setMoney(0);
+		setMaxMoney(500);
 		makeUpgradeableWithCosts(upgradeCosts);
 
 		//damageEffectType = Mob.DamageEffectBlood;
@@ -99,8 +97,8 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 				health=maxHealth;
 				if (followEntity instanceof Player)
 					if (((Player) followEntity).canTake())
-						((Player) followEntity).addScore(money);
-						money=0;
+						((Player) followEntity).addScore(getMoney());
+						setMoney(0);
 			}
 					
 			if (getTeam() == Team.Team1) {
@@ -111,7 +109,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 			break;
 		case Mode_Patrol:
 		default:
-			if ( health < maxHealth/2 || money >= maxMoney) {
+			if ( health < maxHealth/2 || getMoney() >= getMaxMoney()) {
 				setMode(Mode_ReturnHome);
 				return null;
 			}
@@ -179,7 +177,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 
 	@Override
 	public boolean canTake() {
-		if (money < maxMoney)
+		if (getMoney() < getMaxMoney())
 			return true;
 		return false;
 	}
@@ -193,7 +191,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 
 		level.addEntity(new Sparkle(pos.x, pos.y, -1, 0));
 		level.addEntity(new Sparkle(pos.x, pos.y, +1, 0));
-		money += loot.getScoreValue();
+		addMoney(loot.getScoreValue());
 	}
 
 	@Override
@@ -210,7 +208,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 
 	@Override
 	public int getScore() {
-		return money;
+		return getMoney();
 	}
 
 	@Override
@@ -227,10 +225,15 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 
 	@Override
 	public void setHighlighted(boolean hl) {
-		if (this.highlight && !hl)
+		if (this.highlight && !hl) {
+			setDoShowMoneyBar(false);
 			resetPath();
+		}
 		this.highlight = hl;
 		this.freezeTime = 10;
+		
+		if(team == MojamComponent.localTeam)
+			setDoShowMoneyBar(true);
 	}
 
 	@Override
