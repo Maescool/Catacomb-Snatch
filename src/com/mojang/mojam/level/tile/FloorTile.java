@@ -118,6 +118,7 @@ public class FloorTile extends Tile {
     }	
 	
 	public boolean isSandTile(Tile tile) {
-		return (tile instanceof SandTile || tile instanceof UnpassableSandTile);
+		return (tile instanceof SandTile || tile instanceof UnpassableSandTile ||
+				(tile instanceof RailTile && this.isSandTile(((RailTile) tile).parent)));
 	}
 }
