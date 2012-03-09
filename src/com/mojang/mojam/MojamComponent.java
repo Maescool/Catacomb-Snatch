@@ -521,14 +521,14 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		Font font = Font.defaultFont();
 		font.draw(screen, "sprint", 314, screen.h - 27);
 		
-		int maxIndex = Art.panel_healthBar[0].length - 1;
+		int maxIndex = Art.panel_xpBar[0].length - 1;
 		int index = maxIndex - Math.round(player.getTimeSprint() * maxIndex / player.getMaxTimeSprint());
 		if (index < 0)
 			index = 0;
 		else if (index > maxIndex)
 			index = maxIndex;
 
-		screen.blit(Art.panel_healthBar[0][index], 312, screen.h - 19);
+		screen.blit(Art.panel_xpBar[0][index], 312, screen.h - 19);
 	}
 	
 	private void addHealthBar(Screen screen) {
