@@ -233,7 +233,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 		this.highlight = hl;
 		this.freezeTime = 10;
 		
-		if(team == MojamComponent.localTeam)
+		if(team == MojamComponent.localTeam && hl)
 			setDoShowMoneyBar(true);
 	}
 
