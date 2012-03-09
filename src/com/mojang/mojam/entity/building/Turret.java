@@ -51,14 +51,14 @@ public class Turret extends Building implements IEditable {
 		this.team = team;
 		setStartHealth(10);
 		freezeTime = 10;
-		areaBitmap = Bitmap.rangeBitmap(radius,RADIUS_COLOR);
-	}
-
-	@Override
-	public void init() {
+		areaBitmap = Bitmap.rangeBitmap(radius, RADIUS_COLOR);
 		makeUpgradeableWithCosts(new int[] { TitleMenu.difficulty.calculateCosts(500), 
 				TitleMenu.difficulty.calculateCosts(1000), 
 				TitleMenu.difficulty.calculateCosts(5000)});
+	}
+
+	@Override
+	public void init() {		
 	}
 
 	@Override
