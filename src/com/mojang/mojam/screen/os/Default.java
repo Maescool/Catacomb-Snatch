@@ -1,16 +1,46 @@
-package com.mojang.mojam.screen;
+package com.mojang.mojam.screen.os;
 
-import com.mojang.mojam.screen.os.Default;
+import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.Rect;
 import java.awt.Color;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public abstract class Bitmap {
+public class Default extends Bitmap {
 
-	public int w, h;
-	public int[] pixels;
-	public static String abstractClassName = "com.mojang.mojam.screen.os.default";
+	public Default() {
+	}
+
+	public Default(int w, int h, int[] pixels) {
+		this.w = w;
+		this.h = h;
+	}
+
+	public Default(int[][] pixels2D) {
+		w = pixels2D.length;
+		if (w > 0) {
+			h = pixels2D[0].length;
+			pixels = new int[w * h];
+			for (int y = 0; y < h; y++) {
+				for (int x = 0; x < w; x++) {
+					pixels[y * w + x] = pixels2D[x][y];
+				}
+			}
+		} else {
+			h = 0;
+			pixels = new int[0];
+		}
+	}
+
+	@Override
+	protected void initialize(int w, int h) {
+		this.w = w;
+		this.h = h;
+		pixels = new int[w * h];
+	}
+	@Override
+	protected void setPixels(int[] data) {
+		this.pixels = data;
+	}
 
 	private void adjustBlitArea(Rect blitArea) {
 
@@ -288,89 +318,4 @@ public abstract class Bitmap {
 
 	}
 
-	public static Bitmap rangeBitmap(int radius, int color) {
-		Bitmap circle = createInstance(radius * 2 + 100, radius * 2 + 100);
-
-		circle.circleFill(radius, radius, radius, color);
-		return circle;
-	}
-
-	public static Bitmap rectangleBitmap(int x, int y, int x2, int y2, int color) {
-		Bitmap rect = createInstance(x2, y2);
-		rect.rectangle(x, y, x2, y2, color);
-		return rect;
-	}
-
-	public static Bitmap scaleBitmap(Bitmap bitmap, int width, int height) {
-		Bitmap scaledBitmap = createInstance(width, height);
-
-		int scaleRatioWidth = ((bitmap.w << 16) / width);
-		int scaleRatioHeight = ((bitmap.h << 16) / height);
-
-		int i = 0;
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				scaledBitmap.pixels[i++] = bitmap.pixels[(bitmap.w * ((y * scaleRatioHeight) >> 16)) + ((x * scaleRatioWidth) >> 16)];
-			}
-		}
-
-		return scaledBitmap;
-	}
-
-	public static Bitmap shrink(Bitmap bitmap) {
-		Bitmap newbmp = createInstance(bitmap.w / 2, bitmap.h / 2);
-		int[] pix = bitmap.pixels;
-		int blarg = 0;
-		for (int i = 0; i < pix.length; i++) {
-			if (blarg >= newbmp.pixels.length) {
-				break;
-			}
-			if (i % 2 == 0) {
-				newbmp.pixels[blarg] = pix[i];
-				blarg++;
-			}
-			if (i % bitmap.w == 0) {
-				i += bitmap.w;
-			}
-		}
-
-		return newbmp;
-	}
-
-	public static Bitmap tooltipBitmap(int width, int height) {
-		int cRadius = 3;
-		int color = Color.black.getRGB();
-		Bitmap tooltip = createInstance(width + 3, height + 3);
-		tooltip.fill(0, cRadius, width, height - 2 * cRadius, color);
-		tooltip.fill(cRadius, 0, width - 2 * cRadius, height, color);
-		// draw corner circles
-		tooltip.circleFill(cRadius, cRadius, cRadius, color);
-		tooltip.circleFill(width - cRadius, cRadius, cRadius, color);
-		tooltip.circleFill(width - cRadius, height - cRadius, cRadius, color);
-		tooltip.circleFill(cRadius, height - cRadius, cRadius, color);
-
-		return tooltip;
-	}
-
-	public static Bitmap createInstance(int width, int height) {
-		Bitmap res = null;
-		try {
-			res = (Bitmap) Class.forName(abstractClassName).newInstance();
-		} catch (ClassNotFoundException ex) {
-			res=null;
-		} catch (InstantiationException ex) {
-			res=null;
-		} catch (IllegalAccessException ex) {
-			res=null;
-		}
-		if (res == null) {
-			res = new Default();
-		}
-		res.initialize(width, height);
-		return res;
-	}
-
-	protected abstract void initialize(int w, int h);
-
-	protected abstract void setPixels(int[] data);
 }
