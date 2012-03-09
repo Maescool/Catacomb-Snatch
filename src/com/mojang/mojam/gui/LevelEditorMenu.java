@@ -179,8 +179,8 @@ public class LevelEditorMenu extends GuiMenu {
         if(saveMenuVisible) return;
 
         // update pencil location
-        pencilX = (mouseButtons.getX() / 2) - (TILE_WIDTH / 2);
-        pencilY = (mouseButtons.getY() / 2) - (TILE_HEIGHT / 2);
+        pencilX = mouseButtons.getX() - (TILE_WIDTH / 2);
+        pencilY = mouseButtons.getY() - (TILE_HEIGHT / 2);
 
         // move level x with mouse
         if (mouseButtons.getX() - MENU_WIDTH > MENU_WIDTH) {
