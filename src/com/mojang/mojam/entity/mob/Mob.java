@@ -105,17 +105,12 @@ public abstract class Mob extends Entity {
 	}
 
 	public void tick() {
+		
+        countdownTimers();
+        
 		this.buffs.tick();
 		if (TitleMenu.difficulty.isMobRegenerationAllowed() || this.team != Team.Neutral) {
 			this.doRegenTime();
-		}
-		
-		if (hurtTime > 0) {
-			hurtTime--;
-		}
-		
-		if (bounceWallTime > 0) {
-			bounceWallTime--;
 		}
 		
 		if (freezeTime > 0) {
@@ -126,7 +121,6 @@ public abstract class Mob extends Entity {
 			if (xBump != 0 || yBump != 0) {
 				move(xBump, yBump);
 			}
-			freezeTime--;
 			return;
 		} else {
 			xSlide = ySlide = 0;
@@ -140,6 +134,24 @@ public abstract class Mob extends Entity {
 		handleWeaponFire(xd, yd);
 	}
 	
+	   /**
+     * Count down the internal timers
+     */
+    protected void countdownTimers() {
+        if (flashTime > 0) {
+            flashTime = 0;
+        }
+        if (hurtTime > 0) {
+            hurtTime--;
+        }
+        if (freezeTime > 0) {
+            freezeTime--;
+        }
+		if (bounceWallTime > 0) {
+			bounceWallTime--;
+		}
+    }
+    
 	public void addBuff( Buff buff ) {
 		this.buffs.add(buff);
 	}

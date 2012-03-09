@@ -309,16 +309,9 @@ public class Player extends Mob implements LootCollector {
     /**
      * Count down the internal timers
      */
-    private void countdownTimers() {
-        if (flashTime > 0) {
-            flashTime = 0;
-        }
-        if (hurtTime > 0) {
-            hurtTime--;
-        }
-        if (freezeTime > 0) {
-            freezeTime--;
-        }
+    protected void countdownTimers() {
+    	super.countdownTimers();
+    	
         if (muzzleTicks > 0) {
             muzzleTicks--;
         }
