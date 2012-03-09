@@ -810,7 +810,7 @@ public class Player extends Mob implements LootCollector {
 
     @Override
     public void flash() {
-        setFlashTime(20);
+        setFlashTime(5);
     }
 
     @Override

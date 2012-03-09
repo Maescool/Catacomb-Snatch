@@ -215,7 +215,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 
 	@Override
 	public void flash() {
-		setFlashTime(1);
+		setFlashTime(5);
 	}
 
 	@Override
