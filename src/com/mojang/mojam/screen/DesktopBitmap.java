@@ -153,16 +153,6 @@ public class DesktopBitmap extends Bitmap {
 		}
 	}
 
-
-    /**
-     * Fills semi-transparent region on screen
-     * @param x position on screen
-     * @param y position on screen
-     * @param width of the region
-     * @param height of the region
-     * @param color to fill the region
-     * @param alpha range from 0x00 (transparent) to 0xff (opaque)
-     */
     public void alphaFill(int x, int y, int width, int height, int color, int alpha) {
 
         if(alpha == 255)
