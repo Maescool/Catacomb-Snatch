@@ -519,7 +519,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 	private void addSprintBar(Screen screen) {
 		Font font = Font.defaultFont();
-		font.draw(screen, "Sprint: ", 0, 50);
+		font.draw(screen, "sprint", 314, screen.h - 27);
 		
 		int maxIndex = Art.panel_healthBar[0].length - 1;
 		int index = maxIndex - Math.round(player.getTimeSprint() * maxIndex / player.getMaxTimeSprint());
@@ -528,7 +528,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		else if (index > maxIndex)
 			index = maxIndex;
 
-		screen.blit(Art.panel_healthBar[0][index], 50, 50);
+		screen.blit(Art.panel_healthBar[0][index], 312, screen.h - 19);
 	}
 	
 	private void addHealthBar(Screen screen) {
@@ -539,10 +539,10 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		else if (index > maxIndex)
 			index = maxIndex;
 
-		screen.blit(Art.panel_healthBar[0][index], 311, screen.h - 17);
-		screen.blit(Art.panel_heart, 314, screen.h - 24);
+		screen.blit(Art.panel_healthBar[0][index], 311, screen.h - 71);
+		screen.blit(Art.panel_heart, 314, screen.h - 82);
 		Font font = Font.defaultFont();
-		font.draw(screen, texts.health(player.health, player.maxHealth), 335, screen.h - 21);
+		font.draw(screen, texts.health(player.health, player.maxHealth), 335, screen.h - 80);
 	}
 
 	private void addXpBar(Screen screen) {
@@ -557,10 +557,10 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		else if (index > maxIndex)
 			index = maxIndex;
 
-		screen.blit(Art.panel_xpBar[0][index], 311, screen.h - 32);
-		screen.blit(Art.panel_star, 314, screen.h - 40);
+		screen.blit(Art.panel_xpBar[0][index], 311, screen.h - 35);
+		screen.blit(Art.panel_star, 314, screen.h - 47);
 		Font font = Font.defaultFont();
-		font.draw(screen, texts.playerLevel(player.plevel + 1), 335, screen.h - 36);
+		font.draw(screen, texts.playerLevel(player.plevel + 1), 335, screen.h - 44);
 	}
 	
 	private void addWeaponSlots(Screen screen) {
@@ -578,9 +578,9 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	}
 
 	private void addScore(Screen screen) {
-		screen.blit(Art.panel_coin, 314, screen.h - 55);
+		screen.blit(Art.panel_coin, 314, screen.h - 62);
 		Font font = Font.defaultFont();
-		font.draw(screen, texts.money(player.score), 335, screen.h - 52);
+		font.draw(screen, texts.money(player.score), 335, screen.h - 59);
 	}
 
 	private void renderMouse(Screen screen, MouseButtons mouseButtons) {

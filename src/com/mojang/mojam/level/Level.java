@@ -550,8 +550,8 @@ public class Level {
             displaymap = minimap;
         }
         
-        screen.blit(Art.panel, 0, screen.h - 80);
-        screen.blit(displaymap, 429, screen.h - 80 + 5);
+        screen.blit(Art.panel, 0, screen.h - 97);
+        screen.blit(displaymap, 429, screen.h - 81);
 	}
 	
 	private Bitmap calculateLargeMapDisplay(int x0, int y0) {
