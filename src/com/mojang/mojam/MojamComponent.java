@@ -587,7 +587,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			marker.pixels[i + crosshairSizeHalf * crosshairSize] = 0xffffffff;
 		}
 
-		screen.blit(marker, mouseButtons.getX() / SCALE - crosshairSizeHalf - 2, mouseButtons.getY() / SCALE - crosshairSizeHalf - 2);
+		screen.blit(marker, mouseButtons.getX() - crosshairSizeHalf - 2, mouseButtons.getY() - crosshairSizeHalf - 2);
 	}
 
 	private void tick() {
@@ -635,7 +635,11 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			packetLink.tick();
 		}
 
-		mouseButtons.setPosition(getMousePosition());
+		// Store virtual position of mouse (pre-scaled)
+		Point mousePosition = getMousePosition();
+		if (mousePosition != null) {
+			mouseButtons.setPosition(mousePosition.x / SCALE, mousePosition.y / SCALE);
+		}
 		if (!menuStack.isEmpty()) {
 			menuStack.peek().tick(mouseButtons);
 		}
