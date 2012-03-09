@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
@@ -794,13 +793,11 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	}
 
 	public static void main(String[] args) {
-		//attempt OpenGL Acceleration
-		
-		System.setProperty("sun.java2d.opengl", "True");
-		//True for verbose console output, true for silent
-		
 		Options.loadProperties();
 		MojamComponent mc = new MojamComponent();
+		System.out.println("Starting "+(Options.getAsBoolean(Options.OPENGL,Options.VALUE_FALSE)?"with":"without")+"OpenGL support");
+		System.setProperty("sun.java2d.opengl", Options.get(Options.OPENGL,Options.VALUE_FALSE));
+		//True for verbose console output, true for silent
 		guiFrame = new JFrame(GAME_TITLE);
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(mc);

@@ -97,6 +97,7 @@ options.keyBindings = KEY BINDINGS
 options.characterSelect = SEL. CHARACTER
 options.trapmouse = TRAP MOUSE IN WINDOW
 options.fullscreen = FULLSCREEN
+options.opengl = OPENGL
 options.showfps = SHOW FPS
 options.music = MUSIC
 options.sounds = SOUNDS
