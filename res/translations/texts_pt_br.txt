@@ -30,7 +30,7 @@ gameplay.player2Name = HERR VON SPECK
 gameplay.player3Name = DUCHESS DONUT
 gameplay.player4Name = COUNTESS CRULLER
 gameplay.FPS = FPS: {0}
-gameplay.latency = LATENCY: {0}
+gameplay.latency = LATÊNCIA: {0}
 gameplay.cantPickup = VOCÊ NÃO PODE PEGAR ISSO!
 gameplay.weaponAlready = VOCÊ JÁ TEM ESSA ARMA!
 
@@ -73,6 +73,7 @@ keys.chat = CONVERSAR
 keys.weaponSlot = ARMA {0}
 keys.cycleLeft = PROXIMA ARMA
 keys.cycleRight = ARMA ANTERIOR
+keys.console = CONSOLE
 
 leveleditor.title = EDITOR DE FASES
 leveleditor.new = NOVA
@@ -157,7 +158,7 @@ titlemenu.sound_and_video = VÍDEO E SOM
 titlemenu.levelEditor = EDITOR DE FASES
 titlemenu.exit = SAIR
 
-upgrade.full = JÁ FOI MELHORADA AO MAXIMO.
+upgrade.full = JÁ FOI MELHORADA AO MÁXIMO.
 upgrade.shopItem = VOCÊ NÃO PODE MELHORAR UM ITEM DA LOJA.
 upgrade.notEnoughMoney = VOCÊ NÃO TEM DINHEIRO O BASTANTE ({0})
 upgrade.to = MELHORADA PARA O NÍVEL {0}
