@@ -794,6 +794,11 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	}
 
 	public static void main(String[] args) {
+		//attempt OpenGL Acceleration
+		
+		System.setProperty("sun.java2d.opengl", "True");
+		//True for verbose console output, true for silent
+		
 		Options.loadProperties();
 		MojamComponent mc = new MojamComponent();
 		guiFrame = new JFrame(GAME_TITLE);
