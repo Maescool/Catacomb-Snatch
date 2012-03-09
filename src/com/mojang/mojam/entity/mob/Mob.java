@@ -147,7 +147,7 @@ public abstract class Mob extends Entity {
      */
     protected void countdownTimers() {
         if (flashTime > 0) {
-            flashTime = 0;
+            flashTime--;
         }
         if (hurtTime > 0) {
             hurtTime--;

@@ -51,7 +51,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	private double[] upgradeSuckPower = new double[] { 0.75, 1, 1.25 };
 
 	private int shootRadius;
-	private int flashTime;
+
 
 	
 	/**
@@ -215,7 +215,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 
 	@Override
 	public void flash() {
-		flashTime = 20;
+		setFlashTime(20);
 	}
 
 	@Override
