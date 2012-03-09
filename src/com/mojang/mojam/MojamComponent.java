@@ -7,7 +7,10 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Robot;
 import java.awt.Toolkit;
@@ -26,7 +29,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
@@ -511,11 +513,41 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 			// render mouse
 			renderMouse(screen, mouseButtons);
-
-			g.drawImage(screen.image, 0, 0, GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE, null);
+			BufferedImage image = toCompatibleImage(screen.image);
+			g.drawImage(image, 0, 0, GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE, null);
 		}
 
 	}
+	
+	private BufferedImage toCompatibleImage(BufferedImage image)
+	{
+	        // obtain the current system graphical settings
+	        GraphicsConfiguration gfx_config = GraphicsEnvironment.
+	                getLocalGraphicsEnvironment().getDefaultScreenDevice().
+	                getDefaultConfiguration();
+
+	        /*
+	         * if image is already compatible and optimized for current system 
+	         * settings, simply return it
+	         */
+	        if (image.getColorModel().equals(gfx_config.getColorModel()))
+	                return image;
+
+	        // image is not optimized, so create a new image that is
+	        BufferedImage new_image = gfx_config.createCompatibleImage(
+	                        image.getWidth(), image.getHeight(), image.getTransparency());
+
+	        // get the graphics context of the new image to draw the old image on
+	        Graphics2D g2d = (Graphics2D) new_image.getGraphics();
+
+	        // actually draw the image and dispose of context no longer needed
+	        g2d.drawImage(image, 0, 0, null);
+	        g2d.dispose();
+
+	        // return the new optimized image
+	        return new_image; 
+	}
+
 
 	private void addSprintBar(Screen screen) {
 		Font font = Font.defaultFont();
@@ -778,6 +810,9 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public static void main(String[] args) {
 		Options.loadProperties();
 		MojamComponent mc = new MojamComponent();
+		System.out.println("Starting "+(Options.getAsBoolean(Options.OPENGL,Options.VALUE_FALSE)?"with":"without")+"OpenGL support");
+		System.setProperty("sun.java2d.opengl", Options.get(Options.OPENGL,Options.VALUE_FALSE));
+		//True for verbose console output, true for silent
 		guiFrame = new JFrame(GAME_TITLE);
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(mc);

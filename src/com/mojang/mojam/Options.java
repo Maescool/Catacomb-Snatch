@@ -16,6 +16,7 @@ public class Options {
     public static final String DRAW_FPS = "drawFps";
     public static final String TRAP_MOUSE = "trapMouse";
     public static final String FULLSCREEN = "fullscreen";
+    public static final String OPENGL = "opengl";
     public static final String MUSIC = "music";
     public static final String SOUND = "sound";
     public static final String VOLUME = "volume";
