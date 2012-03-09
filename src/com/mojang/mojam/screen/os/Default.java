@@ -42,22 +42,6 @@ public class Default extends Bitmap {
 		this.pixels = data;
 	}
 
-	private void adjustBlitArea(Rect blitArea) {
-
-		if (blitArea.topLeftX < 0) {
-			blitArea.topLeftX = 0;
-		}
-		if (blitArea.topLeftY < 0) {
-			blitArea.topLeftY = 0;
-		}
-		if (blitArea.bottomRightX > w) {
-			blitArea.bottomRightX = w;
-		}
-		if (blitArea.bottomRightY > h) {
-			blitArea.bottomRightY = h;
-		}
-	}
-
 	public void alphaBlit(Bitmap bitmap, int x, int y, int alpha) {
 
 		if (alpha == 255) {
@@ -168,52 +152,6 @@ public class Default extends Bitmap {
 		}
 	}
 
-	private void circle(int centerX, int centerY, int radius, int color) {
-		int d = 3 - (2 * radius);
-		int x = 0;
-		int y = radius;
-
-		do {
-			setPixel(centerX + x, centerY + y, color);
-			setPixel(centerX + x, centerY - y, color);
-			setPixel(centerX - x, centerY + y, color);
-			setPixel(centerX - x, centerY - y, color);
-			setPixel(centerX + y, centerY + x, color);
-			setPixel(centerX + y, centerY - x, color);
-			setPixel(centerX - y, centerY + x, color);
-			setPixel(centerX - y, centerY - x, color);
-
-			if (d < 0) {
-				d = d + (4 * x) + 6;
-			} else {
-				d = d + 4 * (x - y) + 10;
-				y--;
-			}
-			x++;
-		} while (x <= y);
-	}
-
-	private void circleFill(int centerX, int centerY, int radius, int color) {
-		int d = 3 - (2 * radius);
-		int x = 0;
-		int y = radius;
-
-		do {
-			horizonalLine(centerX + x, centerX - x, centerY + y, color);
-			horizonalLine(centerX + x, centerX - x, centerY - y, color);
-			horizonalLine(centerX + y, centerX - y, centerY + x, color);
-			horizonalLine(centerX + y, centerX - y, centerY - x, color);
-
-			if (d < 0) {
-				d = d + (4 * x) + 6;
-			} else {
-				d = d + 4 * (x - y) + 10;
-				y--;
-			}
-			x++;
-		} while (x <= y);
-	}
-
 	public void clear(int color) {
 		Arrays.fill(pixels, color);
 	}
@@ -272,18 +210,6 @@ public class Default extends Bitmap {
 		}
 	}
 
-	private void horizonalLine(int x1, int x2, int y, int color) {
-		if (x1 > x2) {
-			int xx = x1;
-			x1 = x2;
-			x2 = xx;
-		}
-
-		for (int xx = x1; xx <= x2; xx++) {
-			setPixel(xx, y, color);
-		}
-	}
-
 	public void rectangle(int x, int y, int bw, int bh, int color) {
 		int x0 = x;
 		int x1 = x + bw;
@@ -311,11 +237,6 @@ public class Default extends Bitmap {
 			setPixel(xx, y0, color);
 			setPixel(xx, y1 - 1, color);
 		}
-	}
-
-	private void setPixel(int x, int y, int color) {
-		pixels[x + y * w] = color;
-
 	}
 
 }
