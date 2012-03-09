@@ -37,6 +37,7 @@ public abstract class Mob extends Entity {
     private boolean doShowMoneyBar = true;
 	private int moneyBarOffset = 16;
 	private int money = 0;
+	private int maxMoney;
 	
 	double dir = 0;
 	public int hurtTime = 0;
@@ -67,7 +68,6 @@ public abstract class Mob extends Entity {
     public IWeapon weapon;
 	protected Buffs buffs = new Buffs();
 	private int flashTime;
-	private int maxMoney;
 	private boolean highlight;
 	
 	public Mob(double x, double y, int team) {
