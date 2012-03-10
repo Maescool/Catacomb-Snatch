@@ -16,4 +16,9 @@ public class ShopItemBomb extends ShopItem {
         level.addEntity(item);
         player.pickup(item);
 	}
+
+	@Override
+	boolean canBuy(Player player) {
+		return true;
+	}
 }

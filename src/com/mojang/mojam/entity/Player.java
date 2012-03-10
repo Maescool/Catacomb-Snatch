@@ -82,6 +82,8 @@ public class Player extends Mob implements LootCollector {
     private int weaponSlot = 0;
     private boolean isWeaponChanged = false;
     
+    private boolean isSprintIgnore = false;
+    
     /**
      * Constructor
      * 
@@ -181,8 +183,8 @@ public class Player extends Mob implements LootCollector {
         if (!mouseButtons.mouseHidden) {
             // Update player mouse, in world pixels relative to player
             setAimByMouse(
-                    ((mouseButtons.getX() / MojamComponent.SCALE) - (MojamComponent.screen.w / 2)),
-                    (((mouseButtons.getY() / MojamComponent.SCALE) + 24) - (MojamComponent.screen.h / 2)));
+                    (mouseButtons.getX() - (MojamComponent.screen.w / 2)),
+                    ((mouseButtons.getY() + 24) - (MojamComponent.screen.h / 2)));
         } else {
             setAimByKeyboard();
         }
@@ -249,6 +251,8 @@ public class Player extends Mob implements LootCollector {
         // Move player if it is not standing still
         if (xa != 0 || ya != 0) {
             handleMovement(xa, ya);
+        } else {
+        	restoreTimeSprint();
         }
 
         if (freezeTime > 0) {
@@ -394,22 +398,29 @@ public class Player extends Mob implements LootCollector {
         double speed = getSpeed() / dd;
 
         if (this.keys.sprint.isDown) {
-            if (timeSprint < maxTimeSprint) {
-                isSprint = true;
-                if (carrying == null) {
-                    speed = getSpeed() / dd * psprint;
-                } else {
-                    speed = getSpeed() / dd * (psprint - 0.5);
-                }
-                timeSprint++;
-            } else {
-                isSprint = false;
-            }
+        	if (!isSprintIgnore) {
+	            if (timeSprint < maxTimeSprint) {
+	                isSprint = true;
+	                if (carrying == null) {
+	                    speed = getSpeed() / dd * psprint;
+	                } else {
+	                    speed = getSpeed() / dd * (psprint - 0.5);
+	                }
+	                timeSprint++;
+	            } else {
+	            	restoreTimeSprint();
+	                isSprintIgnore = true;
+	            }
+        	} else {
+        		restoreTimeSprint();
+                isSprintIgnore = true;
+        	}
         } else {
-            if (timeSprint >= 0) {
-                timeSprint--;
-            }
-            isSprint = false;
+        	restoreTimeSprint();          
+        }
+        
+        if (this.keys.sprint.wasReleased()) {
+        	isSprintIgnore = false;
         }
 
         xa *= speed;
@@ -417,6 +428,13 @@ public class Player extends Mob implements LootCollector {
 
         xd += xa;
         yd += ya;
+    }
+    
+    private void restoreTimeSprint() {
+    	if (timeSprint > 0) {
+            timeSprint--;
+        } 
+    	isSprint = false;
     }
 
     /**

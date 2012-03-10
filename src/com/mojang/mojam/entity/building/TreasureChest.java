@@ -6,12 +6,9 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.level.IEditable;
-import com.mojang.mojam.level.tile.HoleTile;
-import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
 
 public class TreasureChest extends Building implements IEditable {
 

@@ -51,9 +51,13 @@ public class MouseButtons {
 
 	public void setPosition(Point mousePosition) {
 		if (mousePosition != null) {
-			x = mousePosition.x;
-			y = mousePosition.y;
+			this.setPosition(mousePosition.x, mousePosition.y);
 		}
+	}
+
+	public void setPosition(int x, int y) {
+		this.x = x;
+		this.y = y;
 	}
 
 }

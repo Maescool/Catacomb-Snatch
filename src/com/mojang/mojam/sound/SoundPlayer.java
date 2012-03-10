@@ -10,6 +10,7 @@ import paulscode.sound.SoundSystemException;
 import paulscode.sound.codecs.CodecJOrbis;
 import paulscode.sound.codecs.CodecWav;
 import paulscode.sound.libraries.LibraryJavaSound;
+import paulscode.sound.libraries.LibraryLWJGLOpenAL;
 
 import com.mojang.mojam.Options;
 
@@ -29,8 +30,7 @@ public class SoundPlayer implements ISoundPlayer {
 	private int nextSong = 0;
 
 	public SoundPlayer() {
-		libraryType = LibraryJavaSound.class;
-
+		
 		try {
 			SoundSystemConfig.setCodec("ogg", CodecJOrbis.class);
 		} catch (SoundSystemException ex) {
@@ -42,6 +42,13 @@ public class SoundPlayer implements ISoundPlayer {
 		} catch (SoundSystemException ex) {
 			wavPlaybackSupport = false;
 		}
+
+		boolean aLCompatible = SoundSystem.libraryCompatible(LibraryLWJGLOpenAL.class);
+		if (aLCompatible) {
+			libraryType = LibraryLWJGLOpenAL.class; // OpenAL
+		} else {
+			libraryType = LibraryJavaSound.class; // Java Sound
+	    } 
 
 		try {
 			setSoundSystem(new SoundSystem(libraryType));
@@ -180,7 +187,8 @@ public class SoundPlayer implements ISoundPlayer {
 				// effect.
 				return playSound(sourceName, x, y, false, index + 1);
 			}
-			if (getSoundSystem().playing(indexedSourceName)) {
+			
+			if ( getSoundSystem().playing(indexedSourceName) || libraryType.equals(LibraryJavaSound.class) ) {
 				getSoundSystem().stop(indexedSourceName);
 			}
 			getSoundSystem().setPriority(indexedSourceName, false);

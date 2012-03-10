@@ -21,4 +21,13 @@ public class ShopItemRaygun extends ShopItem {
         	}
     	}
 	}
+    
+    @Override
+	public boolean canBuy(Player player) {
+		boolean alreadyOwned = player.weaponInventory.hasWeapon(new Raygun(player));
+		if( alreadyOwned && this.team == MojamComponent.localTeam ) {
+            Notifications.getInstance().add(MojamComponent.texts.getStatic("gameplay.weaponAlready"));
+    	}
+		return !alreadyOwned;
+	}
 }

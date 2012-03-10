@@ -65,12 +65,6 @@ public enum DifficultyInformation {
 	 * Look up an enum by the ordinal
 	 */
 	public static DifficultyInformation getByInt(int ordinal){
-		DifficultyInformation found = null;
-		for(DifficultyInformation curDiff : DifficultyInformation.values()){
-			if(curDiff.ordinal() == ordinal){
-				found = curDiff;
-			}
-		}
-		return found;
+		return DifficultyInformation.values()[ordinal];
 	}
 }

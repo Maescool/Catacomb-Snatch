@@ -45,6 +45,7 @@ gameplay.player4Name = COUNTESS CRULLER
 gameplay.FPS = FPS: {0}
 gameplay.latency = LATENCY: {0}
 gameplay.cantPickup = DU KAN INTE PLOCKA UPP DETTA!
+gameplay.weaponAlready = DU HAR REDAN DET VAPNET!
 
 help.goal = MÅL
 help.help1 = FÖR ATT VINNA
@@ -85,6 +86,7 @@ keys.chat = CHAT
 keys.weaponSlot = VAPENPLATS {0}
 keys.cycleLeft = NÄSTA VAPEN
 keys.cycleRight = FÖRRA VAPNET
+keys.console = KONSOLEN
 
 leveleditor.title = KARTREDIGERAREN
 leveleditor.new = NY
@@ -106,6 +108,7 @@ options.on = PÅ
 options.off = AV
 options.keyBindings = ÄNDRA KNAPPAR
 options.characterSelect = VÄLJ KARRAKTÄR
+options.trapmouse = LÅS MUSEN TILL FÖNSTRET
 options.fullscreen = HELSKÄRM
 options.showfps = VISA FPS
 options.music = MUSIK
@@ -131,6 +134,7 @@ player.money = {0}
 player.nextLevel = {0}
 player.exp = {0}
 player.level = {0}
+player.weaponSlot = {0}
 
 shop.turretTooltipTitle = KANONEN
 shop.turretTooltipLine1 = Används som försvar.

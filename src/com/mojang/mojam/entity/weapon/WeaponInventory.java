@@ -1,7 +1,6 @@
 package com.mojang.mojam.entity.weapon;
 
 import java.util.LinkedList;
-import java.util.List;
 
 public class WeaponInventory {
 
@@ -62,5 +61,9 @@ public class WeaponInventory {
 			IWeapon tail = weaponList.pollLast();
 			weaponList.addFirst(tail);
 		}
+	}
+	
+	public boolean hasWeapon(IWeapon weapon) {
+		return weaponList.contains(weapon);
 	}
 }

@@ -26,8 +26,8 @@ gameplay.player1Name = Лорд Жиротрест
 gameplay.player2Name = Герр Ван Куроед
 gameplay.player3Name = Герцогиня Ватрушка
 gameplay.player4Name = Графиня Круассан
-gameplay.FPS = FPS:
-gameplay.latency = Задержка:
+gameplay.FPS = FPS: {0}
+gameplay.latency = Задержка: {0}
 gameplay.cantPickup = Вы не можете это поднять!
 
 help.goal = Цель
@@ -48,16 +48,24 @@ help.rails1 = для вагонеток-собирателей.
 help.rails2 = Нажмите 'Построить' в начале рельс
 help.rails3 = для постройки вагонетки (50 золотых)
 
-keys.up = вверх
-keys.down = вниз
-keys.left = влево
-keys.right = вправо
-keys.sprint = бег
-keys.fire = огонь
-keys.use = использовать
-keys.build = строить
-keys.upgrade = улучшить
+keys.up = Вверх
+keys.down = Вниз
+keys.left = Влево
+keys.right = Вправо
+keys.sprint = Бег
+keys.fire = Огонь
+keys.use = Использовать
+keys.build = Строить
+keys.upgrade = Улучшить
 keys.chat = Чат
+keys.fireUp = Огонь вверх
+keys.fireDown = Огонь вниз
+keys.fireLeft = Огонь влево
+keys.fireRight = Огонь вправо
+keys.weaponSlot = Слот оружия {0}
+keys.cycleLeft = След. оружие
+keys.cycleRight = Пред. оружие
+keys.console = Консоль
 
 leveleditor.title = Редактор Уровней
 leveleditor.new = Новый
@@ -88,9 +96,12 @@ options.mute = Выкл.
 options.creative = Режим разработчика
 options.alternative = Альтернативный скин
 options.credits = Авторы
+options.sound_and_video = Видео и звук
+options.trapmouse = Мышь всегда в окне
 
 character.text = Выберите своего персонажа!
 character.select = Выбрать
+options.locale_selection = Выбор языка
 
 pausemenu.help = Помощь
 pausemenu.backtomain = Главное Меню
@@ -98,9 +109,9 @@ pausemenu.resume = Продолжить
 pausemenu.exit = Выход из игры
 
 player.hasDied = {0} умер!
-player.score = {0}:
+player.score = {0}: {1}%
 player.cost = {0}
-player.health = {0} %
+player.health = {0}%
 player.money = {0}
 player.nextLevel = {0}
 player.exp = {0}
@@ -128,3 +139,6 @@ upgrade.full = Уже полностью усовершенствована!
 upgrade.notEnoughMoney = У вас недостаточно денег ({0})
 upgrade.to = Улучшен до уровня {0}
 
+exitmenu.headline = Вы действительно хотите выйти?
+exitmenu.cancel = Нет
+exitmenu.exit = Да

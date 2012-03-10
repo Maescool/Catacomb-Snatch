@@ -32,6 +32,7 @@ gameplay.player4Name = COUNTESS CRULLER
 gameplay.FPS = FPS: {0}
 gameplay.latency = LATENTIE: {0}
 gameplay.cantPickup = JY KAN DIT NIE OPTEL NIE!
+gameplay.weaponAlready = JY HET REEDS DAARDIE WAPEN!
 
 help.goal = DOELWIT
 help.help1 = VERSAMEL 50 LOTTE GOUD VAN DIE
@@ -69,6 +70,10 @@ keys.use = GEBRUIK
 keys.build = BOU
 keys.upgrade = OPGRADEER
 keys.chat = GESêLS
+keys.weaponSlot = WAPEN SLOT {0}
+keys.cycleLeft = VOLG. WAPEN
+keys.cycleRight = VORIGE WAPEN
+keys.console = KONSOLE
 
 leveleditor.title = KAMER ONTWERP
 leveleditor.new = NUWE
@@ -90,6 +95,7 @@ options.on = AAN
 options.off = AF
 options.keyBindings = SLEUTELBORD
 options.characterSelect = KARAKTER KEUSE
+options.trapmouse = HOU MUIS IN VENSTER
 options.fullscreen = VOLSKERM
 options.showfps = WYS FPS
 options.music = MUSIEK
@@ -102,10 +108,26 @@ options.creative = KREATIEWE MODUS
 options.alternative = ALTERNATIEWE SPELER VEL
 options.credits = KREDIETE
 
+
+
+
+
+
+
+
+
+
+
+
+
 pausemenu.help = HULP
 pausemenu.backtomain = HOOF
 pausemenu.resume = GAAN VOORT
 pausemenu.exit = VERLAAT SPEL
+
+exitmenu.headline = WIL JY REGTIG DIE SPEL VERLAAT?
+exitmenu.cancel = NEE 
+exitmenu.exit = JA
 
 player.hasDied = {0} HET GESTERF!
 player.score = {0}: {1}%
@@ -115,6 +137,7 @@ player.money = {0}
 player.nextLevel = {0}
 player.exp = {0}
 player.level = {0}
+player.weaponSlot = {0}
 
 local.en = ENGLISH
 local.de = GERMAN
@@ -128,6 +151,16 @@ shop.harvesterTooltipLine2 = GEBRUIK OM GOUD TE EIS.
 shop.bombTooltipTitle = BOM
 shop.bombTooltipLine1 = VERNIETIG GEKRAAKTE MURE.
 shop.bombTooltipLine2 = KAN KORTPAAIE SKEP.
+
+shop.rifleTooltipTitle = GEWEER
+shop.rifleTooltipLine1 = Verstek wapen.
+shop.rifleTooltipLine2 = Goed in die algemeen.
+shop.shotgunTooltipTitle = HAALGEWEER
+shop.shotgunTooltipLine1 = Skote spry oor 'n wye area.
+shop.shotgunTooltipLine2 = Hoë skade, kort afstand.
+shop.raygunTooltipTitle = ENERGIE GEWEER
+shop.raygunTooltipLine1 = Skote hop van mure af.
+shop.raygunTooltipLine2 = Elke hop verhoog skade.
 
 titlemenu.start = BEGIN
 titlemenu.host = ONTHAAL SPEL

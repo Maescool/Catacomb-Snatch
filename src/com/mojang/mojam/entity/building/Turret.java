@@ -52,10 +52,6 @@ public class Turret extends Building implements IEditable {
 		setStartHealth(10);
 		freezeTime = 10;
 		areaBitmap = Bitmap.rangeBitmap(radius,RADIUS_COLOR);
-	}
-
-	@Override
-	public void init() {
 		makeUpgradeableWithCosts(new int[] { TitleMenu.difficulty.calculateCosts(500), 
 				TitleMenu.difficulty.calculateCosts(1000), 
 				TitleMenu.difficulty.calculateCosts(5000)});

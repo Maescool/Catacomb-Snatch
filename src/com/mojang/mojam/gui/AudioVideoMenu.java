@@ -18,6 +18,7 @@ import com.mojang.mojam.sound.ISoundPlayer;
 
 public class AudioVideoMenu extends GuiMenu {
 	private boolean fullscreen;
+	private boolean opengl;
 	private boolean trapMouse;
 	private boolean fps;
 	private float musicVolume;
@@ -31,6 +32,7 @@ public class AudioVideoMenu extends GuiMenu {
 
 	private ClickableComponent back;
 	private ClickableComponent fullscreenBtn;
+	private ClickableComponent openGlBtn;
 	private ClickableComponent trapMouseBtn;
 	private ClickableComponent fpsBtn;
 	private ClickableComponent soundVol;
@@ -57,6 +59,12 @@ public class AudioVideoMenu extends GuiMenu {
 						yOffset += offset, Options.getAsBoolean(Options.FULLSCREEN,
 						Options.VALUE_FALSE))
 				);
+		openGlBtn = addButton(
+				new Checkbox(TitleMenu.OPEN_GL_ID,
+					MojamComponent.texts.getStatic("options.opengl"), xOffset,
+					yOffset += offset, Options.getAsBoolean(Options.OPENGL,
+					Options.VALUE_FALSE))
+			);
 		trapMouseBtn = addButton(
 				new Checkbox(TitleMenu.MOUSE_TRAP_ID,
 					MojamComponent.texts.getStatic("options.trapmouse"), xOffset,
@@ -95,6 +103,18 @@ public class AudioVideoMenu extends GuiMenu {
 				fullscreen = !fullscreen;
 				Options.set(Options.FULLSCREEN, fullscreen);
 				MojamComponent.toggleFullscreen();
+			}
+
+			@Override
+			public void buttonHovered(ClickableComponent clickableComponent) {
+			}
+		});
+		openGlBtn.addListener(new ButtonListener() {
+			@Override
+			public void buttonPressed(ClickableComponent button) {
+				opengl = !opengl;
+				Options.set(Options.OPENGL, opengl);
+				// TODO
 			}
 
 			@Override
@@ -182,6 +202,7 @@ public class AudioVideoMenu extends GuiMenu {
 	private void loadOptions() {
 		fullscreen = Options.getAsBoolean(Options.FULLSCREEN, Options.VALUE_FALSE);
 		trapMouse = Options.getAsBoolean(Options.TRAP_MOUSE, Options.VALUE_FALSE);
+		opengl = Options.getAsBoolean(Options.OPENGL, Options.VALUE_FALSE);
 		fps = Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE);
 		musicVolume = Options.getAsFloat(Options.MUSIC, "1.0f");
 		soundsVolume = Options.getAsFloat(Options.SOUND, "1.0f");
@@ -202,6 +223,15 @@ public class AudioVideoMenu extends GuiMenu {
 		screen.blit(Art.getLocalPlayerArt()[0][6], buttons.get(selectedItem).getX() - 40, buttons.get(selectedItem).getY() - 8);
 	}
 
+	@Override
+	public void keyPressed(KeyEvent e){
+		if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+			back.postClick();
+		} else {
+			super.keyPressed(e);
+		}
+	}
+	
 	@Override
 	public void buttonPressed(ClickableComponent button) {
 		// TODO Auto-generated method stub

@@ -111,7 +111,7 @@ public abstract class ShopItem extends Building {
     public void use(Entity user) {
         if (user instanceof Player && ((Player) user).getTeam() == team) {
             Player player = (Player) user;
-            if (!player.isCarrying() && player.getScore() >= effectiveCost) {
+            if (!player.isCarrying() && canBuy(player) && player.getScore() >= effectiveCost) {
             	player.payCost(effectiveCost);
             	useAction(player);
             }
@@ -130,6 +130,16 @@ public abstract class ShopItem extends Building {
      * use() if greater flexibility is needed
      */
     abstract void useAction(Player player);
+    
+    /**
+     * Checks if the user can currently buy this (not checking money).
+     * E.g. check if maximum number of this item is in inventory or
+     * if a certain experience level is reached
+     * 
+     * @param player the player trying to buy this
+     * @return true if he is allowed to buy
+     */
+    abstract boolean canBuy(Player player);
 
     @Override
     public boolean upgrade(Player p) {
