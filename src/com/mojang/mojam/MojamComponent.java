@@ -65,7 +65,6 @@ import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
-import com.mojang.mojam.level.LevelList;
 import com.mojang.mojam.level.gamemode.GameMode;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.mc.EnumOS2;
@@ -1027,6 +1026,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 									Socket socket = null;
 									try {
 										socket = serverSocket.accept();
+										socket.setTcpNoDelay(true);
 									} catch (SocketTimeoutException e) {
 									}
 									if (socket == null) {

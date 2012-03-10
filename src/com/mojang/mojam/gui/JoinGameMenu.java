@@ -6,6 +6,7 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.gui.components.Button;
 import com.mojang.mojam.gui.components.ClickableComponent;
 import com.mojang.mojam.gui.components.Font;
+import com.mojang.mojam.level.LevelList;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 
@@ -16,7 +17,8 @@ public class JoinGameMenu extends GuiMenu {
 
 	public JoinGameMenu() {
 		super();
-
+		//load the levels!
+		LevelList.createLevelList();
 		joinButton = (Button) addButton(new Button(TitleMenu.PERFORM_JOIN_ID, MojamComponent.texts.getStatic("mp.join"), 100, 180));
 		cancelButton = (Button) addButton(new Button(TitleMenu.CANCEL_JOIN_ID, MojamComponent.texts.getStatic("cancel"), 250, 180));
 	}
