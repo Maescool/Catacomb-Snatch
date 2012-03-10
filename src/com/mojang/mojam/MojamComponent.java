@@ -181,7 +181,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		addKeyListener(console);
 
 		instance = this;
-		LevelList.createLevelList();
 	}
 
 	public void setLocale(String locale) {
@@ -795,7 +794,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public static void main(String[] args) {
 		Options.loadProperties();
 		MojamComponent mc = new MojamComponent();
-		System.out.println("Starting "+(Options.getAsBoolean(Options.OPENGL,Options.VALUE_FALSE)?"with":"without")+"OpenGL support");
+		System.out.println("Starting "+(Options.getAsBoolean(Options.OPENGL,Options.VALUE_FALSE)?"with":"without")+" OpenGL support");
 		System.setProperty("sun.java2d.opengl", Options.get(Options.OPENGL,Options.VALUE_FALSE));
 		//True for verbose console output, true for silent
 		guiFrame = new JFrame(GAME_TITLE);
