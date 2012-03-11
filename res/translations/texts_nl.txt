@@ -6,6 +6,7 @@ build.removeRail = JE HEBT {0} NODIG OM EEN RAIL TE VERWIJDEREN.
 
 back = TERUG
 cancel = ANNULEER
+select = KIES
 
 diffselect.title = KIES EEN MOEILIJKHEIDSGRAAD
 diffselect.start = BEGIN HET SPEL
