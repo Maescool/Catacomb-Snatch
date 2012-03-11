@@ -1,4 +1,4 @@
-# Game texts encoded in UTF-8
+﻿# Game texts encoded in UTF-8
 
 build.rail = DU BENÖTIGST {0} COINS UM EINE SCHIENE ZU PLATZIEREN
 build.droid = DU BENÖTIGST {0} COINS UM EINEN RAIL DROID ZU PLATZIEREN
@@ -6,6 +6,7 @@ build.removeRail = DU BENÖTIGST {0} COINS UM EINE SCHIENE ZU ENTFERNEN
 
 back = ZURÜCK
 cancel = ABBRECHEN
+select = AUSWÄHLEN
 
 credits.leadDev = LEITENDER ENTWICKLER:
 credits.maintainers = PROJEKT VERWALTUNG:
