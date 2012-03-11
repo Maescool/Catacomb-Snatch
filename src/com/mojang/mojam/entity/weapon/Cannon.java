@@ -1,17 +1,22 @@
 package com.mojang.mojam.entity.weapon;
 
+import java.util.Set;
+
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Bullet;
+import com.mojang.mojam.entity.BulletCannonball;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
+import com.mojang.mojam.entity.animation.LargeBombExplodeAnimation;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.resources.Constants;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.Screen;
 
-public class ElephantGun implements IWeapon
+public class Cannon implements IWeapon
 {
 
 	protected Mob owner;
@@ -19,12 +24,12 @@ public class ElephantGun implements IWeapon
 
 	private int upgradeIndex = 1;
 	private double accuracy;
-	private int shootDelay = 120;
+	private int shootDelay = 900;
 
 	private boolean readyToShoot = true;
 	private int currentShootDelay = 0;
 
-	public ElephantGun(Mob mob)
+	public Cannon(Mob mob)
 	{
 		setOwner(mob);
 
@@ -89,7 +94,7 @@ public class ElephantGun implements IWeapon
 
 	public Bullet getAmmo(double xDir, double yDir)
 	{
-		Bullet bullet = new Bullet(owner, xDir, yDir, BULLET_DAMAGE);
+		Bullet bullet = new BulletCannonball(owner, xDir, yDir, BULLET_DAMAGE);
 		return bullet;
 	}
 
@@ -126,7 +131,8 @@ public class ElephantGun implements IWeapon
 	public Bitmap getSprite()
 	{
 		// TODO Auto-generated method stub
-		return Art.weaponList[2][1];
+		return Art.weaponList[3][0];
 	}
 
+	
 }

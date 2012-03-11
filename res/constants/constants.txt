@@ -1,4 +1,4 @@
-options.locale_af = AFRIKAANS
+﻿options.locale_af = AFRIKAANS
 options.locale_de = DEUTSCH
 options.locale_en = ENGLISH
 options.locale_es = ESPAÑOL
@@ -56,3 +56,17 @@ com.mojang.mojam.entity.weapon.Shotgun.shootDelay=35
 com.mojang.mojam.entity.weapon.VenomShooter.bulletDamage=0.5
 com.mojang.mojam.entity.weapon.VenomShooter.accuracy=0.15
 com.mojang.mojam.entity.weapon.VenomShooter.shootDelay=5
+
+com.mojang.mojam.entity.weapon.Cannon.bulletDamage=30
+com.mojang.mojam.entity.weapon.Cannon.accuracy=0.0
+com.mojang.mojam.entity.weapon.Cannon.shootDelay=900
+
+com.mojang.mojam.entity.weapon.ElephantGun.bulletDamage=15
+com.mojang.mojam.entity.weapon.ElephantGun.accuracy=0.05
+com.mojang.mojam.entity.weapon.ElephantGun.shootDelay=120
+
+com.mojang.mojam.entity.weapon.Machete.bulletDamage=2
+com.mojang.mojam.entity.weapon.Machete.attackDelay=35
+
+com.mojang.mojam.entity.weapon.Melee.bulletDamage=1.5
+com.mojang.mojam.entity.weapon.Melee.attackDelay=30

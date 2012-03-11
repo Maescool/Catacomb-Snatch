@@ -3,12 +3,15 @@ package com.mojang.mojam.entity.weapon;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Bullet;
+import com.mojang.mojam.entity.BulletMelee;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.network.TurnSynchronizer;
+import com.mojang.mojam.resources.Constants;
+import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+
 
 public class Melee implements IWeapon
 {
@@ -18,7 +21,8 @@ public class Melee implements IWeapon
 
 	private int upgradeIndex = 1;
 	private double accuracy;
-	private int shootDelay = 30;
+	protected int shootDelay = 30;
+
 
 	private boolean readyToShoot = true;
 	private int currentShootDelay = 0;
@@ -35,6 +39,7 @@ public class Melee implements IWeapon
 
 	public void setWeaponMode()
 	{
+		shootDelay = Constants.getInt("attackDelay", this);
 		if(Options.getAsBoolean(Options.CREATIVE))
 		{
 			BULLET_DAMAGE = 100f;
@@ -42,8 +47,8 @@ public class Melee implements IWeapon
 		}
 		else
 		{
-			BULLET_DAMAGE = 1.5f;
-			accuracy = 0.1f;
+			BULLET_DAMAGE = Constants.getFloat("bulletDamage", this);
+			accuracy = Constants.getFloat("accuracy", this);
 		}
 	}
 
@@ -93,25 +98,7 @@ public class Melee implements IWeapon
 
 	public Bullet getAmmo(double xDir, double yDir)
 	{
-		Bullet bullet = new Bullet(owner, xDir, yDir, BULLET_DAMAGE)
-		{
-			@Override
-			public void tick()
-			{
-				if (--duration <= 22) {
-					remove();
-					return;
-				}	
-				super.tick();
-			}
-			
-			@Override
-			public void render(Screen screen)
-			{
-				//super.render(screen);
-				//TODO: Effects
-			}
-		};
+		Bullet bullet = new BulletMelee(owner, xDir, yDir, BULLET_DAMAGE,18);
 		return bullet;
 	}
 
@@ -148,7 +135,7 @@ public class Melee implements IWeapon
 	public Bitmap getSprite()
 	{
 		// TODO Auto-generated method stub
-		return null;
+		return Art.weaponList[0][1];
 	}
 
 }

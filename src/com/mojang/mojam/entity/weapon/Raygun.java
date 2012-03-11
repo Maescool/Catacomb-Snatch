@@ -10,6 +10,7 @@ public class Raygun extends Rifle {
 
 	public Raygun(Mob owner) {
 		super(owner);
+		image = Art.weaponList[2][0];
 		setWeaponMode();
 	}
 
@@ -17,11 +18,13 @@ public class Raygun extends Rifle {
 	public void setWeaponMode() {
 		super.setWeaponMode();
 		if (Options.getAsBoolean(Options.CREATIVE)) {
+			bulletDamage = 100f;
+			accuracy = 0;
 		}
 	}
 
 	public Bullet getAmmo(double xDir, double yDir) {
-		Bullet bullet = new BulletRay(owner, xDir, yDir, 0);
+		Bullet bullet = new BulletRay(owner, xDir, yDir, bulletDamage);
 		return bullet;
 	}
 }
