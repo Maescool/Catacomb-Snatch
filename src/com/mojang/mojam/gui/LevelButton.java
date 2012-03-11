@@ -40,13 +40,13 @@ public class LevelButton extends ClickableComponent {
 	
 	// Initialize background bitmaps
 	static {
-		background[0] = new Bitmap(WIDTH, HEIGHT);
+		background[0] = Bitmap.getSystemCompatibleBitmap(WIDTH, HEIGHT);
 		background[0].fill(0, 0, WIDTH, HEIGHT, 0xff522d16);
 		background[0].fill(1, 1, WIDTH-2, HEIGHT-2, 0);
-		background[1] = new Bitmap(WIDTH, HEIGHT);
+		background[1] = Bitmap.getSystemCompatibleBitmap(WIDTH, HEIGHT);
 		background[1].fill(0, 0, WIDTH, HEIGHT, 0xff26150a);
 		background[1].fill(1, 1, WIDTH-2, HEIGHT-2, 0);
-		background[2] = new Bitmap(WIDTH, HEIGHT);
+		background[2] = Bitmap.getSystemCompatibleBitmap(WIDTH, HEIGHT);
 		background[2].fill(0, 0, WIDTH, HEIGHT, 0xff26150a);
 		background[2].fill(1, 1, WIDTH-2, HEIGHT-2, 0xff3a210f);
 	}
@@ -91,11 +91,11 @@ public class LevelButton extends ClickableComponent {
 		int h = l.height;
 		
 		// Render the level minimap into a bitmap
-		minimap = new Bitmap(w, h);
+		minimap = Bitmap.getSystemCompatibleBitmap(w, h);
 		largeMap = w > MAXDIM || h > MAXDIM;
 		renderWidth = w < MAXDIM ? w : MAXDIM;
 		renderHeight = h < MAXDIM ? h : MAXDIM;
-		displaymap = new Bitmap(MAXDIM, MAXDIM);
+		displaymap = Bitmap.getSystemCompatibleBitmap(MAXDIM, MAXDIM);
 		
 		for (int y = 0; y < h; y++) {
 			for (int x = 0; x < w; x++) {

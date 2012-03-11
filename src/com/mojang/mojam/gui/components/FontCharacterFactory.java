@@ -84,11 +84,11 @@ public class FontCharacterFactory {
 		
 		width = pixels.length;
 		if (width == 0) {
-			return new Bitmap(pixels);
+			return Bitmap.getSystemCompatibleBitmap(pixels);
 		}
 		height = pixels[0].length;
 
-		Bitmap characterBitmap = new Bitmap(pixels);
+		Bitmap characterBitmap = Bitmap.getSystemCompatibleBitmap(pixels);
 		characterCache.put(character, characterBitmap);
 		
 		return characterBitmap;

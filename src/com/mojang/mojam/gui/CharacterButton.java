@@ -14,13 +14,13 @@ public class CharacterButton extends Button {
 
 	private static Bitmap backgrounds[] = new Bitmap[3];
 	static {
-		backgrounds[0] = new Bitmap(WIDTH, HEIGHT);
+		backgrounds[0] = Bitmap.getSystemCompatibleBitmap(WIDTH, HEIGHT);
 		backgrounds[0].fill(0, 0, WIDTH, HEIGHT, 0xff522d16);
 		backgrounds[0].fill(1, 1, WIDTH - 2, HEIGHT - 2, 0);
-		backgrounds[1] = new Bitmap(WIDTH, HEIGHT);
+		backgrounds[1] = Bitmap.getSystemCompatibleBitmap(WIDTH, HEIGHT);
 		backgrounds[1].fill(0, 0, WIDTH, HEIGHT, 0xff26150a);
 		backgrounds[1].fill(1, 1, WIDTH - 2, HEIGHT - 2, 0);
-		backgrounds[2] = new Bitmap(WIDTH, HEIGHT);
+		backgrounds[2] = Bitmap.getSystemCompatibleBitmap(WIDTH, HEIGHT);
 		backgrounds[2].fill(0, 0, WIDTH, HEIGHT, 0xff26150a);
 		backgrounds[2].fill(1, 1, WIDTH - 2, HEIGHT - 2, 0xff3a210f);
 	}

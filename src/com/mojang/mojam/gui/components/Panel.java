@@ -50,23 +50,23 @@ public class Panel extends ClickableComponent {
 	    // Cut panel textures
 	    if (mainBitmap != Art.button[0][0]) {
 	        mainBitmap = Art.button[0][0];
-	        trCorner = new Bitmap(5, 5);
+	        trCorner = Bitmap.getSystemCompatibleBitmap(5, 5);
 	        trCorner.blit(mainBitmap, - BUTTON_WIDTH + 5, 0);
-	        dlCorner = new Bitmap(5, 5);
+	        dlCorner = Bitmap.getSystemCompatibleBitmap(5, 5);
 	        dlCorner.blit(mainBitmap, 0, - BUTTON_HEIGHT + 5);
-	        drCorner = new Bitmap(5, 5);
+	        drCorner = Bitmap.getSystemCompatibleBitmap(5, 5);
 	        drCorner.blit(mainBitmap, - BUTTON_WIDTH + 5, - BUTTON_HEIGHT + 5);
 	        
 	        int bandWidth = Math.min(getWidth(), mainBitmap.w) - 10;
-	        tBand = new Bitmap(bandWidth, 5);
+	        tBand = Bitmap.getSystemCompatibleBitmap(bandWidth, 5);
 	        tBand.blit(mainBitmap, -5, 0);
-	        dBand = new Bitmap(bandWidth, 5);
+	        dBand = Bitmap.getSystemCompatibleBitmap(bandWidth, 5);
 		    dBand.blit(mainBitmap, -5, - BUTTON_HEIGHT + 5);
 	        
 	        int bandHeight = Math.min(getHeight(), mainBitmap.h) - 10;
-	        lBand = new Bitmap(5, bandHeight);
+	        lBand = Bitmap.getSystemCompatibleBitmap(5, bandHeight);
 	        lBand.blit(mainBitmap, 0, -5);
-	        rBand = new Bitmap(5, bandHeight);
+	        rBand = Bitmap.getSystemCompatibleBitmap(5, bandHeight);
 	        rBand.blit(mainBitmap, - BUTTON_WIDTH + 5, -5);
 	        
 	        centerColor = mainBitmap.pixels[BUTTON_HEIGHT * 10 + BUTTON_WIDTH];

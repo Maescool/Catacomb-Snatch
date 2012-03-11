@@ -71,7 +71,7 @@ public abstract class Building extends Mob implements IUsable {
 					/ (3 + Math.sin(System.currentTimeMillis() * .01)));
 			int width = (int) (bb.x1 - bb.x0);
 			int height = (int) (bb.y1 - bb.y0);
-			Bitmap marker = new Bitmap(width, height);
+			Bitmap marker = Bitmap.getSystemCompatibleBitmap(width, height);
 			for (int y = 0; y < height; y++) {
 				for (int x = 0; x < width; x++) {
 					if ((x < 2 || x > width - 3 || y < 2 || y > height - 3)

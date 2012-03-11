@@ -37,7 +37,7 @@ public class SpawnerForSnake extends SpawnerEntity {
 
 	@Override
 	public Bitmap getBitMapForEditor() {
-		Bitmap shrink = Bitmap.shrink(Art.snake[0][3].copy());
+		Bitmap shrink = Bitmap.shrink(Art.snake[0][3].clone());
 		Bitmap bitmap = blitMobOnTop(shrink);
 		return bitmap;
 	}

@@ -70,9 +70,9 @@ public class Button extends ClickableComponent {
     	    // Cut button textures
     	    if (mainBitmap != Art.button[0][bitmapId]) {
     	        mainBitmap = Art.button[0][bitmapId];
-    	        rightBorderBitmap = new Bitmap(10, BUTTON_HEIGHT);
+    	        rightBorderBitmap = Bitmap.getSystemCompatibleBitmap(10, BUTTON_HEIGHT);
     	        rightBorderBitmap.blit(mainBitmap, - BUTTON_WIDTH + 10, 0);
-                middleBitmap = new Bitmap(1, BUTTON_HEIGHT);
+                middleBitmap = Bitmap.getSystemCompatibleBitmap(1, BUTTON_HEIGHT);
                 middleBitmap.blit(mainBitmap, -10, 0);
     	    }
     	    
