@@ -1,4 +1,4 @@
-# Game texts encoded in UTF-8
+﻿# Game texts encoded in UTF-8
 
 build.rail = VOCÊ PRECISA DE {0} PARA CONSTRUIR UM TRILHO.
 build.droid = VOCÊ PRECISA DE {0} PARA UM DROID COLETOR.
@@ -6,6 +6,7 @@ build.removeRail = VOCÊ PRECISA DE {0} PARA REMOVER UM TRILHO.
 
 back = VOLTAR
 cancel = CANCELAR
+select = SELECIONAR
 
 character.text = ESCOLHA SEU PERSONAGEM!
 character.select = SELECIONAR

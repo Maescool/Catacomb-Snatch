@@ -1,4 +1,4 @@
-# Game texts encoded in UTF-8
+﻿# Game texts encoded in UTF-8
 
 build.rail = DU BEHÖVER {0} FÖR ATT BYGGA EN RÄLS
 build.droid = DU BEHÖVER {0} FÖR ATT KÖPA EN RÄLSBOT
@@ -6,6 +6,7 @@ build.removeRail = DU BEHÖVER {0} FÖR ATT RIVA EN RÄLS
 
 back = BAKÅT
 cancel = AVBRYT
+select = VÄLJ
 
 campaignmenu.title = VÄLJ EN KAMPANJ
 

@@ -1,4 +1,4 @@
-# Game texts encoded in UTF-8
+﻿# Game texts encoded in UTF-8
 
 build.rail = NECESITAS {0} PARA CONSTRUIR UN RAIL.
 build.droid = NECESITAS {0} PARA CONSTRUIR UN ROBOT.
@@ -6,6 +6,7 @@ build.removeRail = NECESITAS {0} PARA BORRAR UN RAIL.
 
 back = VOLVER
 cancel = CANCELAR
+select = SELECCIONA
 
 credits.leadDev = DESAROLLADOR LIDER:
 credits.maintainers = SOPORTE DEL PROYECTO:

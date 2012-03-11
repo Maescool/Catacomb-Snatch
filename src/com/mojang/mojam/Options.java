@@ -52,6 +52,10 @@ public class Options {
 		return properties.get(CHARACTER_ID) != null;
 	}
 	
+	public static boolean isLocaleSet() {
+		return properties.get(LOCALE) != null;
+	}
+	
     public static String get(String key) {
         return properties.getProperty(key);
     }

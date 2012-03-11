@@ -304,6 +304,9 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	}
 	
 	private void initCharacters(){
+		if(!Options.isLocaleSet()){
+			addMenu(new LocaleMenu("select"));
+		}
 		if(!Options.isCharacterIDset()){
 			addMenu(new CharacterSelectionMenu());
 		}

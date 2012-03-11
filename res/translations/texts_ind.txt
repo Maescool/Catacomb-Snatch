@@ -6,6 +6,7 @@ build.removeRail = PERLU {0} KOIN UNTUK MELEPAS SEBUAH RAIL
 
 back = KEMBALI
 cancel = BATAL
+select = LANJUT
 
 credits.leadDev = PEMIMPIN DEVELOPER:
 credits.maintainers = PENGURUS PROYEK:
