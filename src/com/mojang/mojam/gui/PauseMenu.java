@@ -3,6 +3,8 @@ package com.mojang.mojam.gui;
 import java.awt.event.KeyEvent;
 
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.gui.components.Button;
+import com.mojang.mojam.gui.components.ClickableComponent;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 

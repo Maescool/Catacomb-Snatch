@@ -1,4 +1,4 @@
-package com.mojang.mojam.gui;
+package com.mojang.mojam.gui.components;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
@@ -34,8 +34,8 @@ public class Slider extends ClickableComponent {
 	public void tick(MouseButtons mouseButtons) {
 		super.tick(mouseButtons);
 
-		int mx = mouseButtons.getX() / 2;
-		int my = mouseButtons.getY() / 2;
+		int mx = mouseButtons.getX();
+		int my = mouseButtons.getY();
 
 		if (mx >= getX() && my >= getY() && mx < (getX() + getWidth())
 				&& my < (getY() + getHeight())) {

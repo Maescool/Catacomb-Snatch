@@ -98,7 +98,7 @@ public class Melee implements IWeapon
 			@Override
 			public void tick()
 			{
-				if (--life <= 22) {
+				if (--duration <= 22) {
 					remove();
 					return;
 				}	
@@ -142,6 +142,13 @@ public class Melee implements IWeapon
 	public void setOwner(Mob mob)
 	{
 		this.owner = mob;
+	}
+
+	@Override
+	public Bitmap getSprite()
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

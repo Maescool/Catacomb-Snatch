@@ -32,6 +32,7 @@ gameplay.player4Name = COUNTESS CRULLER
 gameplay.FPS = FPS: {0}
 gameplay.latency = LATENCY: {0}
 gameplay.cantPickup = YOU CAN NOT PICK THAT UP!
+gameplay.weaponAlready = YOU ALREADY HAVE THAT WEAPON!
 
 help.goal = GOAL
 help.help1 = COLLECT 50 BATCHES OF TREASURE
@@ -69,6 +70,10 @@ keys.use = USE
 keys.build = BUILD
 keys.upgrade = UPGRADE
 keys.chat = CHAT
+keys.weaponSlot = WEAPON SLOT {0}
+keys.cycleLeft = NEXT WEAPON
+keys.cycleRight = PREV WEAPON
+keys.console = CONSOLE
 
 leveleditor.title = LEVEL EDITOR
 leveleditor.new = NEW
@@ -90,7 +95,9 @@ options.on = ON
 options.off = OFF
 options.keyBindings = KEY BINDINGS
 options.characterSelect = SEL. CHARACTER
+options.trapmouse = TRAP MOUSE IN WINDOW
 options.fullscreen = FULLSCREEN
+options.opengl = OPENGL
 options.showfps = SHOW FPS
 options.music = MUSIC
 options.sounds = SOUNDS
@@ -119,6 +126,10 @@ pausemenu.backtomain = MAIN
 pausemenu.resume = RESUME 
 pausemenu.exit = EXIT GAME
 
+exitmenu.headline = DO YOU REALLY WANT TO QUIT THE GAME?
+exitmenu.cancel = NO 
+exitmenu.exit = YES
+
 player.hasDied = {0} HAS DIED!
 player.score = {0}: {1}%
 player.cost = {0}
@@ -127,6 +138,7 @@ player.money = {0}
 player.nextLevel = {0}
 player.exp = {0}
 player.level = {0}
+player.weaponSlot = {0}
 
 local.en = ENGLISH
 local.de = GERMAN
@@ -140,6 +152,16 @@ shop.harvesterTooltipLine2 = Use to reclaim loot.
 shop.bombTooltipTitle = BOMB
 shop.bombTooltipLine1 = Destroys cracked walls.
 shop.bombTooltipLine2 = Use to create shortcuts.
+
+shop.rifleTooltipTitle = RIFLE
+shop.rifleTooltipLine1 = Default starting weapon.
+shop.rifleTooltipLine2 = Good all-round.
+shop.shotgunTooltipTitle = SHOTGUN
+shop.shotgunTooltipLine1 = Shots cover a large area.
+shop.shotgunTooltipLine2 = High damage, short range.
+shop.raygunTooltipTitle = ENERGY GUN
+shop.raygunTooltipLine1 = Shots bounce off walls.
+shop.raygunTooltipLine2 = Each bounce increases damage.
 
 titlemenu.start = START
 titlemenu.host = HOST

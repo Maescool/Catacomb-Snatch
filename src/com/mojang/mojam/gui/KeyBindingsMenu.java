@@ -6,6 +6,9 @@ import com.mojang.mojam.InputHandler;
 import com.mojang.mojam.Keys;
 import com.mojang.mojam.Keys.Key;
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.gui.components.Button;
+import com.mojang.mojam.gui.components.ClickableComponent;
+import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.resources.Texts;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
@@ -71,7 +74,7 @@ public class KeyBindingsMenu extends GuiMenu {
 	}
 
 	private static final int BORDER = 10;
-	private static final int BUTTON_SPACING = 32;
+	private static final int BUTTON_SPACING = 28;
 
 	private int textWidth;
 	private int yOffset;
@@ -93,7 +96,7 @@ public class KeyBindingsMenu extends GuiMenu {
 		int gameWidth = MojamComponent.GAME_WIDTH;
 		int gameHeight = MojamComponent.GAME_HEIGHT;
 		textWidth = (gameWidth - 2 * BORDER - 2 * 32 - 2 * Button.BUTTON_WIDTH) / 2;
-		int numRows = 6;
+		int numRows = 8;
 		int tab1 = BORDER + 32 + textWidth;
 		int tab2 = gameWidth - BORDER - Button.BUTTON_WIDTH;
 		yOffset = (gameHeight - (numRows * BUTTON_SPACING + 32)) / 2;
@@ -110,8 +113,15 @@ public class KeyBindingsMenu extends GuiMenu {
 				* BUTTON_SPACING));
 		addButton(new KeyBindingButton(TitleMenu.KEY_FIRE_ID, keys.fire, tab1, yOffset + 5
 				* BUTTON_SPACING));
-		addButton(new KeyBindingButton(TitleMenu.KEY_CONSOLE_ID, keys.console, tab1, yOffset + 6
+		addButton(new KeyBindingButton(TitleMenu.KEY_WEAPON_SLOT_1_ID, keys.weaponSlot1, tab1, yOffset + 6
 				* BUTTON_SPACING));
+		addButton(new KeyBindingButton(TitleMenu.KEY_WEAPON_SLOT_2_ID, keys.weaponSlot2, tab1, yOffset + 7
+				* BUTTON_SPACING));
+		addButton(new KeyBindingButton(TitleMenu.KEY_WEAPON_SLOT_3_ID, keys.weaponSlot3, tab1, yOffset + 8
+				* BUTTON_SPACING));	
+		addButton(new KeyBindingButton(TitleMenu.KEY_CONSOLE_ID, keys.console, tab1, yOffset + 9
+				* BUTTON_SPACING));
+				
 		addButton(new KeyBindingButton(TitleMenu.KEY_FIRE_UP_ID, keys.fireUp, tab2, yOffset + 0
 				* BUTTON_SPACING));
 		addButton(new KeyBindingButton(TitleMenu.KEY_FIRE_DOWN_ID, keys.fireDown, tab2, yOffset + 1
@@ -126,8 +136,14 @@ public class KeyBindingsMenu extends GuiMenu {
 				* BUTTON_SPACING));
 		addButton(new KeyBindingButton(TitleMenu.KEY_UPGRADE_ID, keys.upgrade, tab2, yOffset + 6
 				* BUTTON_SPACING));
-		addButton(new KeyBindingButton(TitleMenu.KEY_CHAT_ID, keys.chat, tab2, yOffset + 7
+		addButton(new KeyBindingButton(TitleMenu.KEY_CYCLE_LEFT_ID, keys.cycleLeft, tab2, yOffset + 7
 				* BUTTON_SPACING));
+		addButton(new KeyBindingButton(TitleMenu.KEY_CYCLE_RIGHT_ID, keys.cycleRight, tab2, yOffset + 8
+				* BUTTON_SPACING));
+		addButton(new KeyBindingButton(TitleMenu.KEY_CHAT_ID, keys.chat, tab2, yOffset + 9
+				* BUTTON_SPACING));
+
+		
 		back = addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"),
 				(gameWidth - Button.BUTTON_WIDTH) / 2, yOffset + numRows * BUTTON_SPACING
 						- Button.BUTTON_HEIGHT + 88));
@@ -153,7 +169,11 @@ public class KeyBindingsMenu extends GuiMenu {
 		write(screen, txts.getStatic("keys.right"), 0, 3);
 		write(screen, txts.getStatic("keys.sprint"), 0, 4);
 		write(screen, txts.getStatic("keys.fire"), 0, 5);
-		write(screen, "CONSOLE", 0, 6); //add translations
+		write(screen, txts.keyWeaponSlot(1), 0, 6);
+		write(screen, txts.keyWeaponSlot(2), 0, 7);
+		write(screen, txts.keyWeaponSlot(3), 0, 8);
+		write(screen, txts.getStatic("keys.console"), 0, 9);
+
 		write(screen, txts.getStatic("keys.fireUp"), 1, 0);
 		write(screen, txts.getStatic("keys.fireDown"), 1, 1);
 		write(screen, txts.getStatic("keys.fireLeft"), 1, 2);
@@ -161,7 +181,9 @@ public class KeyBindingsMenu extends GuiMenu {
 		write(screen, txts.getStatic("keys.build"), 1, 4);
 		write(screen, txts.getStatic("keys.use"), 1, 5);
 		write(screen, txts.getStatic("keys.upgrade"), 1, 6);
-		write(screen, txts.getStatic("keys.chat"), 1, 7);
+		write(screen, txts.getStatic("keys.cycleLeft"), 1, 7);
+		write(screen, txts.getStatic("keys.cycleRight"), 1, 8);
+		write(screen, txts.getStatic("keys.chat"), 1, 9);
 		super.render(screen);
 		ClickableComponent button = buttons.get(selectedItem);
 		if (button == back) {

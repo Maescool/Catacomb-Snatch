@@ -7,6 +7,7 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.network.TurnSynchronizer;
+import com.mojang.mojam.screen.Bitmap;
 
 public class ElephantGun implements IWeapon
 {
@@ -116,6 +117,13 @@ public class ElephantGun implements IWeapon
 	public void setOwner(Mob mob)
 	{
 		this.owner = mob;
+	}
+
+	@Override
+	public Bitmap getSprite()
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

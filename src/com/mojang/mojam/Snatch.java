@@ -10,8 +10,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PipedOutputStream;
-import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -36,24 +34,18 @@ import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import javax.swing.JFrame;
-import javax.swing.JTextArea;
 
 import com.mojang.mojam.Keys.Key;
 import com.mojang.mojam.entity.Entity;
-import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.TitleMenu;
+import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.level.Level;
-import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.gamemode.GameMode;
-import com.mojang.mojam.level.gamemode.GameModeVanilla;
 import com.mojang.mojam.network.NetworkCommand;
 import com.mojang.mojam.network.Packet;
 import com.mojang.mojam.network.packet.ChangeKeyCommand;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
-
-import static com.mojang.mojam.Console.*;
 
 public final class Snatch
 {

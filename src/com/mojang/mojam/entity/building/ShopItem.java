@@ -4,9 +4,9 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
-import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
-import com.mojang.mojam.level.DifficultyInformation;
+import com.mojang.mojam.gui.TitleMenu;
+import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
@@ -19,7 +19,7 @@ public abstract class ShopItem extends Building {
 	private Bitmap image;
     private final int cost;
     private int effectiveCost;
-   
+    public int teamTooltipYOffset;
 
     public ShopItem(String name, double x, double y, int team, int cost, int yOffset) {
         super(x, y, team);
@@ -28,6 +28,7 @@ public abstract class ShopItem extends Building {
     	this.cost = (Options.getAsBoolean(Options.CREATIVE)) ? 0:cost;
     	yOffs = yOffset;
     	image = null;
+    	teamTooltipYOffset = (team == 2) ? 90 : 0;
         isImmortal = true;
     }
 
@@ -53,7 +54,6 @@ public abstract class ShopItem extends Building {
 		// Draw iiAtlas' shop item info graphics, thanks whoever re-wrote this!
 		if (highlight) {
 		        Bitmap image = getSprite();
-		        int teamYOffset = (team == 2) ? 90 : 0;
 		        
 		        String[] tooltip = this.getTooltip();
 		        int width = getLongestWidth(tooltip, Font.FONT_WHITE_SMALL)+4;
@@ -62,10 +62,10 @@ public abstract class ShopItem extends Building {
 		        Font font = Font.FONT_GOLD_SMALL;
 		        screen.blit(Bitmap.tooltipBitmap(width, height),
                         (int)(pos.x - image.w / 2 - 10),
-                        (int)(pos.y + 20 - teamYOffset), width, height);
+                        (int)(pos.y + 20 - teamTooltipYOffset), width, height);
 
 		        for (int i=0; i<tooltip.length; i++) {
-		            font.draw(screen, tooltip[i], (int)(pos.x - image.w + 8), (int)pos.y + 22 - teamYOffset + (i==0?0:1) + i*(font.getFontHeight()+2));
+		            font.draw(screen, tooltip[i], (int)(pos.x - image.w + 8), (int)pos.y + 22 - teamTooltipYOffset + (i==0?0:1) + i*(font.getFontHeight()+2));
 		            font = Font.FONT_WHITE_SMALL;
 		        }
 		}
@@ -86,7 +86,7 @@ public abstract class ShopItem extends Building {
 
     @Override
     public void init() {
-        effectiveCost = DifficultyInformation.calculateCosts(cost);
+        effectiveCost = TitleMenu.difficulty.calculateCosts(cost);
     }
 
     @Override
@@ -111,7 +111,7 @@ public abstract class ShopItem extends Building {
     public void use(Entity user) {
         if (user instanceof Player && ((Player) user).getTeam() == team) {
             Player player = (Player) user;
-            if (!player.isCarrying() && player.getScore() >= effectiveCost) {
+            if (!player.isCarrying() && canBuy(player) && player.getScore() >= effectiveCost) {
             	player.payCost(effectiveCost);
             	useAction(player);
             }
@@ -131,6 +131,16 @@ public abstract class ShopItem extends Building {
      */
     abstract void useAction(Player player);
     
+    /**
+     * Checks if the user can currently buy this (not checking money).
+     * E.g. check if maximum number of this item is in inventory or
+     * if a certain experience level is reached
+     * 
+     * @param player the player trying to buy this
+     * @return true if he is allowed to buy
+     */
+    abstract boolean canBuy(Player player);
+
     @Override
     public boolean upgrade(Player p) {
         if (this.team == MojamComponent.localTeam) {
@@ -139,5 +149,5 @@ public abstract class ShopItem extends Building {
         }
         return false;
     }   
-
+    
 }

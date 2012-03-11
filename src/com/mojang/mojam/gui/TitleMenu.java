@@ -1,9 +1,11 @@
 package com.mojang.mojam.gui;
 
 import java.awt.event.KeyEvent;
-import java.util.Locale;
 
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.gui.components.Button;
+import com.mojang.mojam.gui.components.ClickableComponent;
+import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.gamemode.GameMode;
@@ -17,6 +19,7 @@ public class TitleMenu extends GuiMenu {
 	public static final int HOST_GAME_ID = 1002;
 	public static final int JOIN_GAME_ID = 1003;
 	public static final int EXIT_GAME_ID = 1001;
+	public static final int REALLY_EXIT_GAME_ID = 1022;
 
 	public static final int CANCEL_JOIN_ID = 1004;
 	public static final int PERFORM_JOIN_ID = 1005;
@@ -44,6 +47,8 @@ public class TitleMenu extends GuiMenu {
 	public static final int SOUND = 2004;
 	public static final int CREATIVE_ID = 2005;
 	public static final int ALTERNATIVE_ID = 2006;
+	public static final int MOUSE_TRAP_ID = 2007;
+	public static final int OPEN_GL_ID = 2008;
 
 	public static final int KEY_BINDINGS_ID = 3000;
 	public static final int KEY_UP_ID = 3001;
@@ -60,7 +65,13 @@ public class TitleMenu extends GuiMenu {
 	public static final int KEY_FIRE_DOWN_ID = 3012;
 	public static final int KEY_FIRE_LEFT_ID = 3013;
 	public static final int KEY_FIRE_RIGHT_ID = 3014;
-	public static final int KEY_CONSOLE_ID = 3015;
+	public static final int KEY_CYCLE_LEFT_ID = 3015;
+	public static final int KEY_CYCLE_RIGHT_ID = 3016;
+	public static final int KEY_WEAPON_SLOT_1_ID = 3017;
+	public static final int KEY_WEAPON_SLOT_2_ID = 3018;
+	public static final int KEY_WEAPON_SLOT_3_ID = 3019;
+	
+	public static final int KEY_CONSOLE_ID = 3020;
 	
 	public static final int CREDITS_ID = 4000;
 	public static final int CREDITS_TITLE_ID = 4001;
@@ -84,7 +95,7 @@ public class TitleMenu extends GuiMenu {
 
 	public static LevelInformation level = null;
 	public static GameMode defaultGameMode = new GameModeVanilla();
-	public static DifficultyInformation difficulty = null;
+	public static DifficultyInformation difficulty = DifficultyInformation.NORMAL;
 
 	public static String ip = "";
 

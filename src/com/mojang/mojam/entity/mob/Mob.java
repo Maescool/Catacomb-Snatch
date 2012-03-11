@@ -2,6 +2,8 @@ package com.mojang.mojam.entity.mob;
 
 import com.mojang.mojam.GameCharacter;
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.buff.Buff;
+import com.mojang.mojam.buff.Buffs;
 import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
@@ -14,7 +16,6 @@ import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.weapon.IWeapon;
 import com.mojang.mojam.gui.TitleMenu;
-import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.tile.HoleTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.Vec2;
@@ -22,7 +23,6 @@ import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
-import com.mojang.mojam.buff.*;
 
 public abstract class Mob extends Entity {
 
@@ -67,8 +67,7 @@ public abstract class Mob extends Entity {
 		super();
 		setPos(x, y);
 		this.team = team;
-		DifficultyInformation difficulty = TitleMenu.difficulty;
-		this.REGEN_INTERVAL = (difficulty != null && difficulty.difficultyID == 3) ? 15 : 25;
+		this.REGEN_INTERVAL = TitleMenu.difficulty.getRegenerationInterval();
 		this.healingTime = this.REGEN_INTERVAL;
 		aimVector = new Vec2(0, 1);
 	}
@@ -105,7 +104,7 @@ public abstract class Mob extends Entity {
 
 	public void tick() {
 		this.buffs.tick();
-		if (TitleMenu.difficulty.difficultyID >= 1 || this.team != Team.Neutral) {
+		if (TitleMenu.difficulty.isMobRegenerationAllowed() || this.team != Team.Neutral) {
 			this.doRegenTime();
 		}
 		
@@ -158,6 +157,8 @@ public abstract class Mob extends Entity {
 		// Like apply buffs based to Health effects
 		regen = this.buffs.effectsOf(Buff.BuffType.HEALTH_MODIF, regen);
 		regen = this.buffs.effectsOf(Buff.BuffType.REGEN_RATE  , regen);
+
+		this.regenerateHealthBy( regen );
 	}
 	
 	public void regenerateHealthBy(float a) { 

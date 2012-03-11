@@ -1,51 +1,70 @@
 package com.mojang.mojam.level;
 
-import com.mojang.mojam.gui.TitleMenu;
+import com.mojang.mojam.MojamComponent;
 
-public class DifficultyInformation {
+public enum DifficultyInformation {
+	EASY(MojamComponent.texts.getStatic("diffselect.easy"), .5f, .5f, 1.5f, .5f, false, 25, 3),
+	NORMAL(MojamComponent.texts.getStatic("diffselect.normal"), 1, 1, 1, 1, false, 25, 7),
+	HARD(MojamComponent.texts.getStatic("diffselect.hard"), 3, 3, .5f, 1.5f, true, 25, 12),
+	NIGHTMARE(MojamComponent.texts.getStatic("diffselect.nightmare"), 6, 5, .25f, 2.5f, true, 15, 100000);
+	
+	private String difficultyName;
 
-	public String difficultyName;
-	public int difficultyID;
+	private final float mobHealthModifier;
+	private final float mobStrengthModifier;
+	private final float mobSpawnModifier;
+	private final float shopCostsModifier;
+	private boolean mobRegenerationAllowed;
+	private int regenerationInterval;
+	private int allowedMobDensity;
 
-	public final float mobHealthModifier;
-	public final float mobStrengthModifier;
-	public final float mobSpawnModifier;
-	public final float shopCostsModifier;
-
-	public DifficultyInformation(String difficultyName, float mobHealthModifier, float mobStrengthModifier, float mobSpawnModifier, float shopCostsModifier, int difficultyID) {
+	private DifficultyInformation(String difficultyName, float mobHealthModifier, float mobStrengthModifier, float mobSpawnModifier, float shopCostsModifier, boolean mobRegeneration, int regenerationInterval, int allowedMobDensity) {
 		this.difficultyName = difficultyName;
 		this.mobHealthModifier = mobHealthModifier;
 		this.mobStrengthModifier = mobStrengthModifier;
 		this.mobSpawnModifier = mobSpawnModifier;
 		this.shopCostsModifier = shopCostsModifier;
-		this.difficultyID = difficultyID;
+		this.mobRegenerationAllowed = mobRegeneration;
+		this.regenerationInterval = regenerationInterval;
+		this.allowedMobDensity = allowedMobDensity;
 	}
 
-	public static float calculateHealth(float baseHealth) {
-		if(TitleMenu.difficulty != null)
-			return baseHealth * TitleMenu.difficulty.mobHealthModifier;
-		else
-			return 0;
+	public float calculateHealth(float baseHealth) {
+			return baseHealth * this.mobHealthModifier;
 	}
 
-	public static float calculateStrength(int baseStrength) {
-		if(TitleMenu.difficulty != null)
-			return baseStrength * TitleMenu.difficulty.mobStrengthModifier;
-		else
-			return 0;
+	public float calculateStrength(int baseStrength) {
+			return baseStrength * this.mobStrengthModifier;
 	}
 
-	public static int calculateSpawntime(int baseSpawntime) {
-		if(TitleMenu.difficulty != null)
-			return (int)(baseSpawntime * TitleMenu.difficulty.mobSpawnModifier);
-		else
-			return 0;
+	public int calculateSpawntime(int baseSpawntime) {
+			return (int)(baseSpawntime * this.mobSpawnModifier);
 	}
 
-	public static int calculateCosts(int baseCost) {
-		if(TitleMenu.difficulty != null)
-			return (int)(baseCost * TitleMenu.difficulty.shopCostsModifier);
-		else
-			return 0;
+	public int calculateCosts(int baseCost) {
+			return (int)(baseCost * this.shopCostsModifier);
+	}
+
+	public String getDifficultyName() {
+		return difficultyName;
+	}
+
+	public boolean isMobRegenerationAllowed() {
+		return mobRegenerationAllowed;
+	}
+
+	public int getRegenerationInterval() {
+		return regenerationInterval;
+	}
+
+	public int getAllowedMobDensity() {
+		return allowedMobDensity;
+	}
+	
+	/*
+	 * Look up an enum by the ordinal
+	 */
+	public static DifficultyInformation getByInt(int ordinal){
+		return DifficultyInformation.values()[ordinal];
 	}
 }

@@ -22,8 +22,11 @@ public class ItemFallAnimation extends Animation {
         if (!isHarvester) posY += Tile.HEIGHT;
         screen.blit(fallingImage, pos.x, posY - anim*3);
         
-        Tile tileBelow = level.getTile((int)pos.x/Tile.WIDTH, (int)pos.y/Tile.WIDTH+1);
-        if (tileBelow.getName() != HoleTile.NAME) tileBelow.render(screen);
+        Tile tileBelow;
+        for(int i = 1; i <= 2; i++) {
+        	tileBelow = level.getTile((int)pos.x/Tile.WIDTH, (int)pos.y/Tile.WIDTH+i);
+        	if (tileBelow.getName() != HoleTile.NAME) tileBelow.render(screen);
+        }
     }
     
     public void setHarvester(){

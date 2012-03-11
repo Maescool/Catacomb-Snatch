@@ -5,10 +5,13 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.mojang.mojam.entity.weapon.*;
-import com.mojang.mojam.gui.Font;
+import com.mojang.mojam.entity.weapon.ElephantGun;
+import com.mojang.mojam.entity.weapon.Melee;
+import com.mojang.mojam.entity.weapon.Rifle;
+import com.mojang.mojam.entity.weapon.Shotgun;
+import com.mojang.mojam.entity.weapon.VenomShooter;
 import com.mojang.mojam.gui.TitleMenu;
-import com.mojang.mojam.level.LevelInformation;
+import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.screen.Screen;
 
 public class Console implements KeyListener {
@@ -291,7 +294,7 @@ public class Console implements KeyListener {
 			if(args.length > 0 && args[0].equals("0"))
 				System.exit(0);
 			else
-				MojamComponent.instance.stop();
+				MojamComponent.instance.stop(false);
 		}
 	};
 	

@@ -17,6 +17,7 @@ import com.mojang.mojam.entity.building.SpawnerForBat;
 import com.mojang.mojam.entity.building.SpawnerForMummy;
 import com.mojang.mojam.entity.building.SpawnerForScarab;
 import com.mojang.mojam.entity.building.SpawnerForSnake;
+import com.mojang.mojam.entity.building.TreasureChest;
 import com.mojang.mojam.entity.building.TreasurePile;
 import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.entity.building.TurretTeamOne;
@@ -27,11 +28,17 @@ import com.mojang.mojam.entity.mob.Pharao;
 import com.mojang.mojam.entity.mob.Scarab;
 import com.mojang.mojam.entity.mob.Snake;
 import com.mojang.mojam.entity.mob.SpikeTrap;
+import com.mojang.mojam.gui.components.Button;
+import com.mojang.mojam.gui.components.ClickableComponent;
+import com.mojang.mojam.gui.components.Font;
+import com.mojang.mojam.gui.components.Panel;
+import com.mojang.mojam.gui.components.Text;
 import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.LevelList;
 import com.mojang.mojam.level.LevelUtils;
 import com.mojang.mojam.level.tile.DestroyableWallTile;
+import com.mojang.mojam.level.tile.DropTrap;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.HoleTile;
 import com.mojang.mojam.level.tile.SandTile;
@@ -73,11 +80,13 @@ public class LevelEditorMenu extends GuiMenu {
         new WallTile(),
         new DestroyableWallTile(),
         new TreasurePile(0, 0),
+        new TreasureChest(0, 0, 0, 0),
         new UnbreakableRailTile(new FloorTile()),
         new Turret(0, 0, 0),
         new TurretTeamOne(0, 0),
         new TurretTeamTwo(0, 0),
         new SpikeTrap(0, 0),
+        new DropTrap(),
         new SpawnerForBat(0, 0),
         new SpawnerForSnake(0, 0),
         new SpawnerForMummy(0, 0),
@@ -170,8 +179,8 @@ public class LevelEditorMenu extends GuiMenu {
         if(saveMenuVisible) return;
 
         // update pencil location
-        pencilX = (mouseButtons.getX() / 2) - (TILE_WIDTH / 2);
-        pencilY = (mouseButtons.getY() / 2) - (TILE_HEIGHT / 2);
+        pencilX = mouseButtons.getX() - (TILE_WIDTH / 2);
+        pencilY = mouseButtons.getY() - (TILE_HEIGHT / 2);
 
         // move level x with mouse
         if (mouseButtons.getX() - MENU_WIDTH > MENU_WIDTH) {

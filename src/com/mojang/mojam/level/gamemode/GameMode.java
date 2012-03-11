@@ -11,9 +11,11 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.building.ShopItemBomb;
 import com.mojang.mojam.entity.building.ShopItemHarvester;
+import com.mojang.mojam.entity.building.ShopItemRaygun;
+import com.mojang.mojam.entity.building.ShopItemShotgun;
 import com.mojang.mojam.entity.building.ShopItemTurret;
 import com.mojang.mojam.entity.mob.Team;
-import com.mojang.mojam.level.DifficultyInformation;
+import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.LevelUtils;
@@ -28,7 +30,6 @@ public class GameMode {
 	
 	protected Level newLevel;
 	
-
 	public Level generateLevel(LevelInformation li)  throws IOException {
 		BufferedImage bufferedImage;
 		//System.out.println("Loading level from file: "+li.getPath());
@@ -67,15 +68,17 @@ public class GameMode {
 	
 	private int[] defaultRgbArray(int width, int height) {
 		int[] rgbs = new int[width * height];
+		// fill everything with UnpassableSandTiles
 		Arrays.fill(rgbs, 0xffA8A800);
-
+		
+		// add SandTiles for player bases
 		for (int y = 0 + 4; y < height - 4; y++) {
-			for (int x = (width / 2) - 4; x < (width / 2) + 3; x++) {
+			for (int x = (width / 2) - 5; x < (width / 2) + 4; x++) {
 				rgbs[x + y * width] = 0xff888800;
 			}
 		}
 		for (int y = 0 + 5; y < height - 5; y++) {
-			for (int x = (width / 2) - 2; x < (width / 2) + 1; x++) {
+			for (int x = (width / 2) - 3; x < (width / 2) + 2; x++) {
 				rgbs[x + y * width] = 0xffA8A800;
 			}
 		}
@@ -111,16 +114,20 @@ public class GameMode {
 
 
 	protected void setupPlayerSpawnArea() {
-		newLevel.maxMonsters = 1500 + (int)DifficultyInformation.calculateStrength(500);	
+		newLevel.maxMonsters = 1500 + (int)TitleMenu.difficulty.calculateStrength(500);
 		
 		newLevel.addEntity(new ShopItemTurret(32 * (newLevel.width / 2 - 1.5), 4.5 * 32, Team.Team2));
 		newLevel.addEntity(new ShopItemHarvester(32 * (newLevel.width / 2 - .5), 4.5 * 32, Team.Team2));
 		newLevel.addEntity(new ShopItemBomb(32 * (newLevel.width / 2 + .5), 4.5 * 32, Team.Team2));
+		newLevel.addEntity(new ShopItemShotgun(32 * (newLevel.width / 2 - 2.5), 6.5 * 32, Team.Team2));
+		newLevel.addEntity(new ShopItemRaygun(32 * (newLevel.width / 2 - 2.5), 5.5 * 32, Team.Team2));
 		
 		newLevel.addEntity(new ShopItemTurret(32 * (newLevel.width / 2 - 1.5), (newLevel.height - 4.5) * 32, Team.Team1));
 		newLevel.addEntity(new ShopItemHarvester(32 * (newLevel.width / 2 - .5), (newLevel.height - 4.5) * 32, Team.Team1));
 		newLevel.addEntity(new ShopItemBomb(32 * (newLevel.width / 2 + .5), (newLevel.height - 4.5) * 32, Team.Team1));
-		
+		newLevel.addEntity(new ShopItemShotgun(32 * (newLevel.width / 2 - 2.5), (newLevel.height - 6.5) * 32, Team.Team1));
+		newLevel.addEntity(new ShopItemRaygun(32 * (newLevel.width / 2 - 2.5), (newLevel.height - 5.5) * 32, Team.Team1));
+
 		for (int i=0; i<3; i++){
 		    newLevel.setTile((newLevel.width / 2) - i, 7, new UnbreakableRailTile(new SandTile()));	
 		    newLevel.setTile((newLevel.width / 2) - i, newLevel.height - 8, new UnbreakableRailTile(new SandTile()));

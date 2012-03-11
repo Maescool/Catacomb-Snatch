@@ -9,7 +9,8 @@ public class Bullet extends Entity {
 	public double xa, ya;
 	public Mob owner;
 	boolean hit = false;
-	public int life;
+
+	public int duration;
 	protected int facing;
 	protected float damage;
 
@@ -20,7 +21,7 @@ public class Bullet extends Entity {
 		this.ya = ya * 6;
 		this.setSize(4, 4);
 		physicsSlide = false;
-		life = 40;
+		duration = 40;
 		double angle = (Math.atan2(ya, xa) + Math.PI * 1.625);
 		facing = (8 + (int) (angle / Math.PI * 4)) & 7;
 		this.damage = damage;
@@ -28,7 +29,7 @@ public class Bullet extends Entity {
 
 	@Override
 	public void tick() {
-		if (--life <= 0) {
+		if (--duration <= 0) {
 			remove();
 			return;
 		}

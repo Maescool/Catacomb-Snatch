@@ -12,9 +12,9 @@ import com.mojang.mojam.Snatch;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
-import com.mojang.mojam.gui.Font;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.gui.TitleMenu;
+import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.level.gamemode.ILevelTickItem;
 import com.mojang.mojam.level.gamemode.IVictoryConditions;
 import com.mojang.mojam.level.tile.FloorTile;
@@ -46,7 +46,6 @@ public class Level {
 	public int[][] monsterDensity;
 	public int densityTileWidth = 5;
 	public int densityTileHeight = 5;
-	public int[] allowedDensities = {3/*EASY*/,7/*NORMAL*/,12/*HARD*/,100000/*NIGHTMARE*/};
 
 	public IVictoryConditions victoryConditions;
 	public int player1Score = 0;
@@ -257,7 +256,7 @@ public class Level {
 	public void addMob(Mob m, int xTile, int yTile)
 	{
 		updateDensityList();
-		if(monsterDensity[(int)(xTile/densityTileWidth)][(int)(yTile/densityTileHeight)] <allowedDensities[TitleMenu.difficulty.difficultyID])
+		if(monsterDensity[(int)(xTile/densityTileWidth)][(int)(yTile/densityTileHeight)] < TitleMenu.difficulty.getAllowedMobDensity())
 		{
 			addEntity(m);
 		}
@@ -361,20 +360,32 @@ public class Level {
 	                continue;
 	            }
 
+	            Bitmap[][] playerBaseZero = Art.getPlayerBase(getPlayerCharacter(0));
+	            Bitmap[][] playerBaseOne = Art.getPlayerBase(getPlayerCharacter(1));
+	            int baseOneTileHeight = playerBaseOne[0].length;
+	            int baseOneTileWidth = playerBaseOne.length;
+	            int baseZeroTileHeight = playerBaseZero[0].length;
+	            int baseZeroTileWidth = playerBaseZero.length;
+	            
+	            
 	            // if we are in the center area (4*7 Tiles): draw player bases
-	            int xt = x - (width / 2) + 4;
-	            int yt = y - 4;
+				int xt = x - (width / 2) + ((baseOneTileWidth-(baseOneTileWidth%2))/2) + (baseOneTileWidth%2);
+				int yt = y - baseOneTileHeight;
 
-	            if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (isNotBaseRailTile(xt) || yt < 3)) {
-	                screen.blit(Art.getPlayerBase(getPlayerCharacter(1))[xt][yt], x * Tile.WIDTH, y
+	            if (xt >= 0 && yt >= 0 && xt < baseOneTileWidth && yt < baseOneTileHeight && (isNotBaseRailTile(x) || yt < baseOneTileHeight-1)) {
+	                screen.blit(playerBaseOne[xt][yt], x * Tile.WIDTH, y
 	                        * Tile.HEIGHT);
 	                continue;
 	            }
-
+	            
+	            // if we are in the center area (4*7 Tiles): draw player bases
+				xt = x - (width / 2) + ((baseZeroTileWidth-(baseZeroTileWidth%2))/2) + (baseZeroTileWidth%2);
+				
+				
 	            yt = y - (height - 8);
-	            if (xt >= 0 && yt >= 0 && xt < 7 && yt < 4 && (isNotBaseRailTile(xt) || yt > 0)) {
-	                screen.blit(Art.getPlayerBase(getPlayerCharacter(0))[xt][yt], x * Tile.WIDTH, y * Tile.HEIGHT);
-	                if ((xt == 0 || xt == 1 || xt == 5 || xt == 6) && yt == 0) {
+	            if (xt >= 0 && yt >= 0 && xt < baseZeroTileWidth && yt < baseZeroTileHeight && (isNotBaseRailTile(x) || yt > 0)) {       
+					screen.blit(playerBaseZero[xt][yt], x * Tile.WIDTH, y * Tile.HEIGHT);
+	                if (yt == 0 && ((xt <=(baseZeroTileWidth-3)/2) || (xt >=((baseZeroTileWidth-3)/2)+3 ))) {
 	                    screen.blit(Art.shadow_north, x * Tile.WIDTH, y * Tile.HEIGHT);
 	                }
 	                if ((xt == 2) && yt == 0) {
@@ -399,8 +410,8 @@ public class Level {
 	    else return player.getCharacter();
 	}
 	
-	private boolean isNotBaseRailTile(int xt){
-	    return (xt != 2 && xt != 3 && xt != 4);
+	private boolean isNotBaseRailTile(int x){
+	    return (x < (width/2 - 2) || x > (width/2));
 	}
 	
 

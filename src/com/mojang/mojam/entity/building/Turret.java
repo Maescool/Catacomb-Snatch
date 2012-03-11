@@ -9,8 +9,7 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.mob.RailDroid;
 import com.mojang.mojam.entity.mob.SpikeTrap;
-import com.mojang.mojam.entity.mob.DropTrap;
-import com.mojang.mojam.level.DifficultyInformation;
+import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.screen.Art;
@@ -53,13 +52,9 @@ public class Turret extends Building implements IEditable {
 		setStartHealth(10);
 		freezeTime = 10;
 		areaBitmap = Bitmap.rangeBitmap(radius,RADIUS_COLOR);
-	}
-
-	@Override
-	public void init() {
-		makeUpgradeableWithCosts(new int[] { DifficultyInformation.calculateCosts(500), 
-				DifficultyInformation.calculateCosts(1000), 
-				DifficultyInformation.calculateCosts(5000)});
+		makeUpgradeableWithCosts(new int[] { TitleMenu.difficulty.calculateCosts(500), 
+				TitleMenu.difficulty.calculateCosts(1000), 
+				TitleMenu.difficulty.calculateCosts(5000)});
 	}
 
 	@Override
@@ -78,7 +73,7 @@ public class Turret extends Building implements IEditable {
     		double closestDist = 99999999.0f;
     		for (Entity e : entities) {
     			if (!(e instanceof Mob) || (e instanceof RailDroid && e.team == this.team) || e instanceof Bomb || e instanceof SpikeTrap || 
-    					e instanceof DropTrap)
+    					e instanceof ShopItem)
     				continue;
     			if (!((Mob) e).isNotFriendOf(this))
     				continue;

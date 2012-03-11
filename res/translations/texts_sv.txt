@@ -7,14 +7,16 @@ build.removeRail = DU BEHÖVER {0} FÖR ATT RIVA EN RÄLS
 back = BAKÅT
 cancel = AVBRYT
 
+campaignmenu.title = VÄLJ EN KAMPANJ
+
 character.text = VÄLJ DIN KARAKTÄR!
 character.select = VÄLJ
 
 credits.leadDev = PROJEKTANSVARIG:
 credits.maintainers = PROJEKTARBETARE:
 credits.communityMan = COMMUNITY ANSVARIGA:
-credits.others = AND THANKS TO ALL CONTRIBUTORS, INCLUDING:
-credits.note = THIS PROJECT IS NOW MAINTAINED AS A COMMUNITY PROJECT
+credits.others = OCH TACK TILL ALLA SOM HJÄLPT TILL, INKLUSIVE:
+credits.note = DETTA PROJEKT KÖRS SOM ETT COMMUNITY PROJEKT
 
 diffselect.title = VÄLJ SVÅRIGHETSGRAD
 diffselect.start = BÖRJA SPELA
@@ -22,6 +24,15 @@ diffselect.easy = LÄTT
 diffselect.normal = NORMAL
 diffselect.hard = SVÅR
 diffselect.nightmare = OMÖJLIG
+
+exitmenu.headline = VILL DU VERKLIGEN SLUTA SPELA?
+exitmenu.cancel = NEJ
+exitmenu.exit = JA
+
+gamemodemenu.title = VÄLJ ETT SPELLÄGE
+gamemodemenu.campaign = KAMPANJ
+gamemodemenu.arcade = ARKAD
+gamemodemenu.creative = KREATIV
 
 gameplay.player1Win = {0} VANN YAY
 gameplay.player2Win = {0} VANN YAY
@@ -34,6 +45,7 @@ gameplay.player4Name = COUNTESS CRULLER
 gameplay.FPS = FPS: {0}
 gameplay.latency = LATENCY: {0}
 gameplay.cantPickup = DU KAN INTE PLOCKA UPP DETTA!
+gameplay.weaponAlready = DU HAR REDAN DET VAPNET!
 
 help.goal = MÅL
 help.help1 = FÖR ATT VINNA
@@ -71,6 +83,10 @@ keys.use = ANVÄND
 keys.build = BYGG
 keys.upgrade = UPDATERA
 keys.chat = CHAT
+keys.weaponSlot = VAPENPLATS {0}
+keys.cycleLeft = NÄSTA VAPEN
+keys.cycleRight = FÖRRA VAPNET
+keys.console = KONSOLEN
 
 leveleditor.title = KARTREDIGERAREN
 leveleditor.new = NY
@@ -92,6 +108,7 @@ options.on = PÅ
 options.off = AV
 options.keyBindings = ÄNDRA KNAPPAR
 options.characterSelect = VÄLJ KARRAKTÄR
+options.trapmouse = LÅS MUSEN TILL FÖNSTRET
 options.fullscreen = HELSKÄRM
 options.showfps = VISA FPS
 options.music = MUSIK
@@ -117,6 +134,7 @@ player.money = {0}
 player.nextLevel = {0}
 player.exp = {0}
 player.level = {0}
+player.weaponSlot = {0}
 
 shop.turretTooltipTitle = KANONEN
 shop.turretTooltipLine1 = Används som försvar.
@@ -127,6 +145,15 @@ shop.harvesterTooltipLine2 = Tryck på 'använd' för att inkassera.
 shop.bombTooltipTitle = BOMBEN
 shop.bombTooltipLine1 = Förstör väggar med sprickor.
 shop.bombTooltipLine2 = Används för att fixa genvägar.
+shop.rifleTooltipTitle = GEVÄR
+shop.rifleTooltipLine1 = Vapnet du startar med.
+shop.rifleTooltipLine2 = Bra all-round.
+shop.shotgunTooltipTitle = SHOTGUN
+shop.shotgunTooltipLine1 = Stort spridningsområde.
+shop.shotgunTooltipLine2 = Hög skada, kort räckvidd.
+shop.raygunTooltipTitle = ENERGI PISTOL
+shop.raygunTooltipLine1 = Skott som studsar på väggar.
+shop.raygunTooltipLine2 = Varje studs ökar skadan.
 
 titlemenu.start = STARTA
 titlemenu.host = SKAPA SRV
@@ -139,4 +166,4 @@ titlemenu.exit = AVSLUTA
 upgrade.full = REDAN FULLT UPPGRADERAD!
 upgrade.shopItem = DU KAN INTE UPPGRADERA AFFÄRS SAKER!
 upgrade.notEnoughMoney = DU HAR INTE TILLRÄCKLIGT MED PENGAR ({0})
-upgrade.to = UPPDATERAD TILL {0}
+upgrade.to = UPPDATERAD TILL NIVÅ {0}

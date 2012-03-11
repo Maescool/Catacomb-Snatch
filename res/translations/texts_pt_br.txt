@@ -30,8 +30,9 @@ gameplay.player2Name = HERR VON SPECK
 gameplay.player3Name = DUCHESS DONUT
 gameplay.player4Name = COUNTESS CRULLER
 gameplay.FPS = FPS: {0}
-gameplay.latency = LATENCY: {0}
+gameplay.latency = LATÊNCIA: {0}
 gameplay.cantPickup = VOCÊ NÃO PODE PEGAR ISSO!
+gameplay.weaponAlready = VOCÊ JÁ TEM ESSA ARMA!
 
 help.goal = OBJETIVO
 help.help1 = COLETE 50 FRAGMENTOS DE TESOURO
@@ -69,6 +70,10 @@ keys.use = USAR
 keys.build = CONSTRUIR
 keys.upgrade = MELHORAR
 keys.chat = CONVERSAR
+keys.weaponSlot = ARMA {0}
+keys.cycleLeft = PROXIMA ARMA
+keys.cycleRight = ARMA ANTERIOR
+keys.console = CONSOLE
 
 leveleditor.title = EDITOR DE FASES
 leveleditor.new = NOVA
@@ -90,13 +95,14 @@ options.on = LIGADO
 options.off = DESLIGADO
 options.keyBindings = CONTROLES
 options.characterSelect = MUDAR PERSONAGEM
+options.trapmouse = TRANCAR MOUSE NA TELA
 options.fullscreen = TELA-CHEIA
 options.showfps = MOSTRAR FPS
 options.music = MÚSICA
 options.sounds = SOM
 options.volume = VOLUME
 options.sound_and_video = VÍDEO E SOM
-options.locale_selection = ESCOLEHR LINGUAGEM
+options.locale_selection = ESCOLHER LINGUAGEM
 options.mute = SEM SOM
 options.creative = MODO CRIATIVO
 options.alternative = SKIN ALTERNATIVA
@@ -107,6 +113,10 @@ pausemenu.backtomain = MENU
 pausemenu.resume = RETORNAR
 pausemenu.exit = SAIR DO JOGO
 
+exitmenu.headline = VOCÊ REALMENTE QUER SAIR DO JOGO?
+exitmenu.cancel = NÃO
+exitmenu.exit = SIM
+
 player.hasDied = {0} MORREU!
 player.score = {0}: {1}%
 player.cost = {0}
@@ -115,6 +125,7 @@ player.money = {0}
 player.nextLevel = {0}
 player.exp = {0}
 player.level = {0}
+player.weaponSlot = {0}
 
 local.en = ENGLISH
 local.de = GERMAN
@@ -129,16 +140,26 @@ shop.bombTooltipTitle = BOMB
 shop.bombTooltipLine1 = DESTRÓI PAREDES RACHADAS.
 shop.bombTooltipLine2 = USE PARA CRIAR ATALHOS.
 
+shop.rifleTooltipTitle = RIFLE
+shop.rifleTooltipLine1 = ARMA INICIA
+shop.rifleTooltipLine2 = EQUILIBRADA
+shop.shotgunTooltipTitle = ESPINGARDA
+shop.shotgunTooltipLine1 = TIROS COBREM UMA GRANDE ÁREA 
+shop.shotgunTooltipLine2 = DANO ALTO,ALCANCE BAIXO
+shop.raygunTooltipTitle = ARMA DE ENERGIA
+shop.raygunTooltipLine1 = TIROS RICOCHETEIAM NA PAREDE.
+shop.raygunTooltipLine2 = CADA RICOCHETE AUMENTA O DANO.
+
 titlemenu.start = JOGAR
 titlemenu.host = HOST
 titlemenu.join = ENTRAR
 titlemenu.help = COMO JOGAR
-titlemenu.options = PREFERÊNCIAS
+titlemenu.options = OPÇÕES
 titlemenu.sound_and_video = VÍDEO E SOM
 titlemenu.levelEditor = EDITOR DE FASES
 titlemenu.exit = SAIR
 
-upgrade.full = JÁ FOI MELHORADA AO MAXIMO.
+upgrade.full = JÁ FOI MELHORADA AO MÁXIMO.
 upgrade.shopItem = VOCÊ NÃO PODE MELHORAR UM ITEM DA LOJA.
 upgrade.notEnoughMoney = VOCÊ NÃO TEM DINHEIRO O BASTANTE ({0})
 upgrade.to = MELHORADA PARA O NÍVEL {0}

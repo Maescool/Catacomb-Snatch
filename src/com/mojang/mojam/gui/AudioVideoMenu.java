@@ -6,12 +6,20 @@ import paulscode.sound.SoundSystem;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
+import com.mojang.mojam.gui.components.Button;
+import com.mojang.mojam.gui.components.ButtonListener;
+import com.mojang.mojam.gui.components.Checkbox;
+import com.mojang.mojam.gui.components.ClickableComponent;
+import com.mojang.mojam.gui.components.Font;
+import com.mojang.mojam.gui.components.Slider;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Screen;
 import com.mojang.mojam.sound.ISoundPlayer;
 
 public class AudioVideoMenu extends GuiMenu {
 	private boolean fullscreen;
+	private boolean opengl;
+	private boolean trapMouse;
 	private boolean fps;
 	private float musicVolume;
 	private float soundsVolume;
@@ -22,8 +30,10 @@ public class AudioVideoMenu extends GuiMenu {
     private boolean inGame;
 	private int textY;
 
-	private Button back;
+	private ClickableComponent back;
 	private ClickableComponent fullscreenBtn;
+	private ClickableComponent openGlBtn;
+	private ClickableComponent trapMouseBtn;
 	private ClickableComponent fpsBtn;
 	private ClickableComponent soundVol;
 	private ClickableComponent musicVol;
@@ -43,13 +53,49 @@ public class AudioVideoMenu extends GuiMenu {
 		textY = yOffset;
 		yOffset += offset;
 
-		fullscreenBtn = (ClickableComponent) addButton(new Checkbox(TitleMenu.FULLSCREEN_ID, MojamComponent.texts.getStatic("options.fullscreen"), xOffset, yOffset += offset, Options.getAsBoolean(Options.FULLSCREEN, Options.VALUE_FALSE)));
-		fpsBtn = (ClickableComponent) addButton(new Checkbox(TitleMenu.FPS_ID, MojamComponent.texts.getStatic("options.showfps"), xOffset, yOffset += offset, Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE)));
-		soundVol = (ClickableComponent) addButton(new Slider(TitleMenu.VOLUME, MojamComponent.texts.getStatic("options.volume"), xOffset, yOffset += offset, volume));
-		musicVol = (ClickableComponent) addButton(new Slider(TitleMenu.MUSIC, MojamComponent.texts.getStatic("options.music"), xOffset - xOffset / 3 - 20, yOffset += offset, musicVolume));
-		soundsVol = (ClickableComponent) addButton(new Slider(TitleMenu.SOUND, MojamComponent.texts.getStatic("options.sounds"), xOffset + xOffset / 3 + 20, yOffset, soundsVolume));
-
-		back = (Button) addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"), xOffset, (yOffset += offset) + 20));
+		fullscreenBtn = addButton(
+					new Checkbox(TitleMenu.FULLSCREEN_ID,
+						MojamComponent.texts.getStatic("options.fullscreen"), xOffset,
+						yOffset += offset, Options.getAsBoolean(Options.FULLSCREEN,
+						Options.VALUE_FALSE))
+				);
+		openGlBtn = addButton(
+				new Checkbox(TitleMenu.OPEN_GL_ID,
+					MojamComponent.texts.getStatic("options.opengl"), xOffset,
+					yOffset += offset, Options.getAsBoolean(Options.OPENGL,
+					Options.VALUE_FALSE))
+			);
+		trapMouseBtn = addButton(
+				new Checkbox(TitleMenu.MOUSE_TRAP_ID,
+					MojamComponent.texts.getStatic("options.trapmouse"), xOffset,
+					yOffset += offset, Options.getAsBoolean(Options.TRAP_MOUSE,
+					Options.VALUE_FALSE))
+			);
+		fpsBtn = addButton(
+					new Checkbox(TitleMenu.FPS_ID,
+						MojamComponent.texts.getStatic("options.showfps"), xOffset,
+						yOffset += offset, Options.getAsBoolean(Options.DRAW_FPS,
+						Options.VALUE_FALSE))
+				);
+		soundVol = addButton(
+					new Slider(TitleMenu.VOLUME,
+						MojamComponent.texts.getStatic("options.volume"), xOffset,
+						yOffset += offset, volume)
+				);
+		musicVol = addButton(
+					new Slider(TitleMenu.MUSIC,
+						MojamComponent.texts.getStatic("options.music"),
+						xOffset	- xOffset / 3 - 20, yOffset += offset, musicVolume)
+				);
+		soundsVol = addButton(
+					new Slider(TitleMenu.SOUND,
+						MojamComponent.texts.getStatic("options.sounds"),
+						xOffset + xOffset / 3 + 20, yOffset, soundsVolume)
+				);
+		back = addButton(
+					new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"),
+							xOffset, (yOffset += offset) + 20)
+				);
 
 		fullscreenBtn.addListener(new ButtonListener() {
 			@Override
@@ -57,6 +103,29 @@ public class AudioVideoMenu extends GuiMenu {
 				fullscreen = !fullscreen;
 				Options.set(Options.FULLSCREEN, fullscreen);
 				MojamComponent.toggleFullscreen();
+			}
+
+			@Override
+			public void buttonHovered(ClickableComponent clickableComponent) {
+			}
+		});
+		openGlBtn.addListener(new ButtonListener() {
+			@Override
+			public void buttonPressed(ClickableComponent button) {
+				opengl = !opengl;
+				Options.set(Options.OPENGL, opengl);
+				// TODO
+			}
+
+			@Override
+			public void buttonHovered(ClickableComponent clickableComponent) {
+			}
+		});
+		trapMouseBtn.addListener(new ButtonListener() {
+			@Override
+			public void buttonPressed(ClickableComponent button) {
+				trapMouse = !trapMouse;
+				Options.set(Options.TRAP_MOUSE, trapMouse);
 			}
 
 			@Override
@@ -132,6 +201,8 @@ public class AudioVideoMenu extends GuiMenu {
 
 	private void loadOptions() {
 		fullscreen = Options.getAsBoolean(Options.FULLSCREEN, Options.VALUE_FALSE);
+		trapMouse = Options.getAsBoolean(Options.TRAP_MOUSE, Options.VALUE_FALSE);
+		opengl = Options.getAsBoolean(Options.OPENGL, Options.VALUE_FALSE);
 		fps = Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE);
 		musicVolume = Options.getAsFloat(Options.MUSIC, "1.0f");
 		soundsVolume = Options.getAsFloat(Options.SOUND, "1.0f");
@@ -152,6 +223,15 @@ public class AudioVideoMenu extends GuiMenu {
 		screen.blit(Art.getLocalPlayerArt()[0][6], buttons.get(selectedItem).getX() - 40, buttons.get(selectedItem).getY() - 8);
 	}
 
+	@Override
+	public void keyPressed(KeyEvent e){
+		if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+			back.postClick();
+		} else {
+			super.keyPressed(e);
+		}
+	}
+	
 	@Override
 	public void buttonPressed(ClickableComponent button) {
 		// TODO Auto-generated method stub

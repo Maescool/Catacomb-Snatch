@@ -65,11 +65,11 @@ public class Art {
     public static Bitmap exclamation_mark = load ("/art/effects/exclamation_mark.png");
 	
 	// Player starting points
-	private static Bitmap[][] startLordLard = cut("/art/player/start_lordlard.png", 32, 32);
+	private static Bitmap[][] startLordLard = cut("/art/player/start_lordlard_big.png", 32, 32);
 	private static Bitmap[][] startHerrSpeck = cut("/art/player/start_herrspeck.png", 32, 32);
 	private static Bitmap[][] startDuchessDonut = startLordLard;
 	private static Bitmap[][] startCountessCruller = cut("/art/player/start_cruller.png", 32, 32);
-	private static Bitmap[][] startNoOpponent = cut("/art/player/start_no_opponent.png", 32, 32);
+	private static Bitmap[][] startNoOpponent = cut("/art/player/start_no_opponent_big.png", 32, 32);
 	
 	public static Bitmap[][] getPlayerBase(GameCharacter character) {
 		switch (character) {
@@ -125,6 +125,9 @@ public class Art {
 	public static Bitmap[][] small_chest = cut("/art/building/chest_small.png", 32, 53);
 	public static Bitmap[][] large_chest = cut("/art/building/chest_large.png", 64, 53);
 
+	//Weapons
+	public static Bitmap[][] weaponList = cut("/art/weapons/weapon_list.png", 32, 32);
+	
 	// Fonts
 	public static Bitmap[][] font_default = cut("/art/fonts/font_default.png", 8, 8);
 	public static Bitmap[][] font_blue = cut("/art/fonts/font_blue.png", 8, 8);
@@ -161,6 +164,8 @@ public class Art {
 	// Bullets and special effects
 	public static Bitmap[][] bullets = cut("/art/effects/bullets.png", 16, 16);
 	public static Bitmap[][] bullet = cut("/art/effects/bullet.png", 16, 16);
+	public static Bitmap buckShot = load("/art/effects/bullet_buckshot.png");
+	public static Bitmap[][] plasmaBall = cut("/art/effects/plasmaball.png", 16, 16);
 	public static Bitmap[][] bulletpoison = cut("/art/effects/bullet_poison.png", 16, 16);
 	public static Bitmap[][] muzzle = cut("/art/effects/muzzle.png", 16, 16);
 	public static Bitmap[][] fxEnemyDie = cut("/art/effects/fx_enemydie_64.png", 64, 64);

@@ -1,6 +1,7 @@
 package com.mojang.mojam.gui;
 
 import com.mojang.mojam.MouseButtons;
+import com.mojang.mojam.gui.components.ClickableComponent;
 import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
