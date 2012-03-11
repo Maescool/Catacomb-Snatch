@@ -65,7 +65,6 @@ import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
-import com.mojang.mojam.level.LevelList;
 import com.mojang.mojam.level.gamemode.GameMode;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.mc.EnumOS2;
@@ -181,7 +180,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		addKeyListener(console);
 
 		instance = this;
-		LevelList.createLevelList();
 	}
 
 	public void setLocale(String locale) {
@@ -810,7 +808,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public static void main(String[] args) {
 		Options.loadProperties();
 		MojamComponent mc = new MojamComponent();
-		System.out.println("Starting "+(Options.getAsBoolean(Options.OPENGL,Options.VALUE_FALSE)?"with":"without")+"OpenGL support");
+		System.out.println("Starting "+(Options.getAsBoolean(Options.OPENGL,Options.VALUE_FALSE)?"with":"without")+" OpenGL support");
 		System.setProperty("sun.java2d.opengl", Options.get(Options.OPENGL,Options.VALUE_FALSE));
 		//True for verbose console output, true for silent
 		guiFrame = new JFrame(GAME_TITLE);
@@ -1043,6 +1041,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 									Socket socket = null;
 									try {
 										socket = serverSocket.accept();
+										socket.setTcpNoDelay(true);
 									} catch (SocketTimeoutException e) {
 									}
 									if (socket == null) {

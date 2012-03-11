@@ -31,7 +31,7 @@ public class NetworkPacketLink implements PacketLink {
 
 	public NetworkPacketLink(Socket socket) throws IOException {
 		this.socket = socket;
-
+		socket.setTcpNoDelay(true);
 		inputStream = new DataInputStream(socket.getInputStream());
 		outputStream = new DataOutputStream(new BufferedOutputStream(
 				socket.getOutputStream(), SEND_BUFFER_SIZE));
