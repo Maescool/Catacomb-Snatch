@@ -1,27 +1,27 @@
-
 package com.mojang.mojam.entity.weapon;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Bullet;
-import com.mojang.mojam.entity.BulletBuckshot;
+import com.mojang.mojam.entity.BulletFlame;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 
-public class Shotgun extends Rifle {
-	private int knockBack = 7;
+public class Flamethrower extends Rifle {
+
 	private int numberBullets = 7;
 	
 	private boolean readyToShoot = true;
 	private int currentShootDelay = 0;	
 	
-	public Shotgun(Mob owner) {
+	public Flamethrower(Mob owner) {
 		super(owner);
-		image = Art.weaponList[1][0];
+		image = Art.weaponList[3][1];
 		setWeaponMode();
+
 	}
 	
 	@Override
@@ -34,14 +34,26 @@ public class Shotgun extends Rifle {
 	}
 
 	@Override
+	public void upgradeWeapon() {
+		upgradeIndex++;
+	}
+
+	@Override
 	public void primaryFire(double xDirection, double yDirection) {
+		
+		
+		shootDelay = 2;  //Constants.getInt("shootDelay", this);
+		bulletDamage = 0.5f;  //Constants.getFloat("bulletDamage", this);
+		accuracy = 0.06; //Constants.getDouble("accuracy", this);
+			
+		
 		if (readyToShoot) {
 			double direction;
 			double directionSum = 0.0;
 			
 			for (int i = 0; i < numberBullets; i++) {
 				if (owner.isSprint) {
-					direction = getBulletDirection(accuracy * 2 * i);
+					direction = getBulletDirection(accuracy * 0.4 * i);
 				} else {
 					direction = getBulletDirection(accuracy * i);
 				}
@@ -66,7 +78,7 @@ public class Shotgun extends Rifle {
 			double directionAverage = directionSum / numberBullets;
 			xDirection = Math.cos(directionAverage);
 			yDirection = Math.sin(directionAverage);
-			applyImpuls(xDirection, yDirection, knockBack);
+			//applyImpuls(xDirection, yDirection, knockBack);
 			
 			currentShootDelay = shootDelay;
 			MojamComponent.soundPlayer.playSound("/sound/Shot 1.wav",
@@ -98,7 +110,8 @@ public class Shotgun extends Rifle {
 	}
 
 	public Bullet getAmmo(double xDir, double yDir) {
-		Bullet bullet = new BulletBuckshot(owner, xDir, yDir, bulletDamage);
+		Bullet bullet = new BulletFlame(owner, xDir, yDir, bulletDamage);
 		return bullet;
 	}
+
 }
