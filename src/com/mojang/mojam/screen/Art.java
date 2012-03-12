@@ -14,12 +14,12 @@ import com.mojang.mojam.MojamComponent;
  * Art management class
  */
 public class Art {
-	
+
 	public static Bitmap[][] floorTiles = cut("/art/map/floortiles.png", 32, 32);
 	public static Bitmap shadow_north = load("/art/shadows/shadow_north.png");
 	public static Bitmap shadow_north_east = load("/art/shadows/shadow_north_east.png");
 	public static Bitmap shadow_north_west = load("/art/shadows/shadow_north_west.png");
-    public static Bitmap shadow_east = load("/art/shadows/shadow_east.png");
+	public static Bitmap shadow_east = load("/art/shadows/shadow_east.png");
 	public static Bitmap shadow_west = load("/art/shadows/shadow_west.png");
 	public static int[][] floorTileColors = getColors(floorTiles);
 	public static Bitmap[][] wallTiles = cut("/art/map/walltiles.png", 32, 56, 0, 0);
@@ -32,68 +32,63 @@ public class Art {
 	public static Bitmap[][] mapIcons = cut("/art/map/mapicons.png", 5, 5);
 	public static Bitmap shadow = load("/art/shadows/shadow_coin.png");
 	public static Bitmap[][] rails = cut("/art/map/rails.png", 32, 38);
-    public static Bitmap[][] spikes = cut("/art/map/spiketrap.png", 32, 32);
-    public static Bitmap[][] dropFloor = cut("/art/map/droptrap.png", 32, 32);
-    
-    // Player sheets
+	public static Bitmap[][] spikes = cut("/art/map/spiketrap.png", 32, 32);
+	public static Bitmap[][] dropFloor = cut("/art/map/droptrap.png", 32, 32);
+	// Player sheets
 	private static Bitmap[][] lordLard = cut("/art/player/lord_lard_sheet.png", 32, 32);
 	private static Bitmap[][] herrSpeck = cut("/art/player/herr_von_speck_sheet.png", 32, 32);
 	private static Bitmap[][] duchessDonut = cut("/art/player/duchess_donut_sheet.png", 32, 32);
 	private static Bitmap[][] countessCruller = cut("/art/player/countess_cruller_sheet.png", 32, 32);
-	
+
 	public static Bitmap[][] getPlayer(GameCharacter character) {
 		switch (character) {
-		case None:
-			return null;
-		case LordLard:
-			return lordLard;
-		case HerrVonSpeck:
-			return herrSpeck;
-		case DuchessDonut:
-			return duchessDonut;
-		case CountessCruller:
-			return countessCruller;
-		default:
-			return lordLard;
+			case None:
+				return null;
+			case LordLard:
+				return lordLard;
+			case HerrVonSpeck:
+				return herrSpeck;
+			case DuchessDonut:
+				return duchessDonut;
+			case CountessCruller:
+				return countessCruller;
+			default:
+				return lordLard;
 		}
 	}
-	
+
 	public static Bitmap[][] getLocalPlayerArt() {
 		return getPlayer(MojamComponent.instance.playerCharacter);
 	}
-	
-    public static Bitmap exclamation_mark = load ("/art/effects/exclamation_mark.png");
-	
+	public static Bitmap exclamation_mark = load("/art/effects/exclamation_mark.png");
 	// Player starting points
 	private static Bitmap[][] startLordLard = cut("/art/player/start_lordlard_big.png", 32, 32);
 	private static Bitmap[][] startHerrSpeck = cut("/art/player/start_herrspeck.png", 32, 32);
 	private static Bitmap[][] startDuchessDonut = startLordLard;
 	private static Bitmap[][] startCountessCruller = cut("/art/player/start_cruller.png", 32, 32);
 	private static Bitmap[][] startNoOpponent = cut("/art/player/start_no_opponent_big.png", 32, 32);
-	
+
 	public static Bitmap[][] getPlayerBase(GameCharacter character) {
 		switch (character) {
-		case None:
-			return startNoOpponent;
-		case LordLard:
-			return startLordLard;
-		case HerrVonSpeck:
-			return startHerrSpeck;
-		case DuchessDonut:
-			return startDuchessDonut;
-		case CountessCruller:
-			return startCountessCruller;
-		default:
-			return startLordLard;
+			case None:
+				return startNoOpponent;
+			case LordLard:
+				return startLordLard;
+			case HerrVonSpeck:
+				return startHerrSpeck;
+			case DuchessDonut:
+				return startDuchessDonut;
+			case CountessCruller:
+				return startCountessCruller;
+			default:
+				return startLordLard;
 		}
 	}
-	
 	// Tooltips
 	public static Bitmap tooltipBackground = load("/art/screen/tooltipBackground.png");
-    public static Bitmap turretText = load("/art/screen/atlasTurretText.png");
-    public static Bitmap harvesterText = load("/art/screen/atlasHarvesterText.png");
-    public static Bitmap bombText = load("/art/screen/atlasBombText.png");
-
+	public static Bitmap turretText = load("/art/screen/atlasTurretText.png");
+	public static Bitmap harvesterText = load("/art/screen/atlasHarvesterText.png");
+	public static Bitmap bombText = load("/art/screen/atlasBombText.png");
 	// Screens
 	public static Bitmap titleScreen = load("/art/screen/TITLESCREEN.png");
 	public static Bitmap howToPlayScreen = load("/art/screen/how_to_play.png");
@@ -101,20 +96,18 @@ public class Art {
 	public static Bitmap gameOverScreen = load("/art/screen/game_over.png");
 	public static Bitmap pauseScreen = load("/art/screen/pause_screen.png");
 	public static Bitmap mojangLogo = load("/art/logo/mojang.png");
-	
 	// UI elements
 	public static Bitmap[][] button = cut("/art/screen/button.png", 128, 24);
-    public static Bitmap[][] checkbox = cut("/art/screen/checkbox.png", 24, 24);
+	public static Bitmap[][] checkbox = cut("/art/screen/checkbox.png", 24, 24);
 	public static Bitmap panel = load("/art/screen/panel/panel.png");
 	public static Bitmap[][] panel_healthBar = cut("/art/screen/panel/panel_healthbar.png", 100, 6);
 	public static Bitmap panel_heart = load("/art/screen/panel/p_heart.png");
 	public static Bitmap panel_coin = load("/art/screen/panel/p_coin.png");
 	public static Bitmap panel_star = load("/art/screen/panel/p_level.png");
-    public static Bitmap[][] panel_xpBar = cut("/art/screen/panel/panel_xpbar.png", 100, 6);
+	public static Bitmap[][] panel_xpBar = cut("/art/screen/panel/panel_xpbar.png", 100, 6);
 	public static Bitmap background = load("/art/screen/BACKGROUND.png");
-    public static Bitmap[][] slider = cut("/art/screen/slider.png", 16, 24);
-	
-    // Buildings
+	public static Bitmap[][] slider = cut("/art/screen/slider.png", 16, 24);
+	// Buildings
 	public static Bitmap[][] harvester = cut("/art/building/bot_vacuum.png", 32, 56);
 	public static Bitmap[][] harvester2 = cut("/art/building/bot_vacuum2.png", 32, 56);
 	public static Bitmap[][] harvester3 = cut("/art/building/bot_vacuum3.png", 32, 56);
@@ -124,30 +117,25 @@ public class Art {
 	public static Bitmap bomb = load("/art/building/bomb.png");
 	public static Bitmap[][] small_chest = cut("/art/building/chest_small.png", 32, 53);
 	public static Bitmap[][] large_chest = cut("/art/building/chest_large.png", 64, 53);
-
 	//Weapons
 	public static Bitmap[][] weaponList = cut("/art/weapons/weapon_list.png", 32, 32);
-	
 	// Fonts
 	public static Bitmap[][] font_default = cut("/art/fonts/font_default.png", 8, 8);
 	public static Bitmap[][] font_blue = cut("/art/fonts/font_blue.png", 8, 8);
 	public static Bitmap[][] font_gray = cut("/art/fonts/font_gray.png", 8, 8);
 	public static Bitmap[][] font_red = cut("/art/fonts/font_red.png", 8, 8);
 	public static Bitmap[][] font_gold = cut("/art/fonts/font_gold.png", 8, 8);
-	
 	public static Bitmap[][] font_small_black = cutv("/art/fonts/font_small_black.png", 7);
-    public static Bitmap[][] font_small_white = cutv("/art/fonts/font_small_white.png", 7);
-    public static Bitmap[][] font_small_gold = cutv("/art/fonts/font_small_gold.png", 7);
-
+	public static Bitmap[][] font_small_white = cutv("/art/fonts/font_small_white.png", 7);
+	public static Bitmap[][] font_small_gold = cutv("/art/fonts/font_small_gold.png", 7);
 	// Mob
-    public static Bitmap[][] raildroid = cut("/art/mob/raildroid.png", 32, 32);
+	public static Bitmap[][] raildroid = cut("/art/mob/raildroid.png", 32, 32);
 	public static Bitmap[][] mummy = cut("/art/mob/enemy_mummy_anim_48.png", 48, 48);
 	public static Bitmap[][] pharao = cut("/art/mob/enemy_pharao_anim_48.png", 48, 48);
-    public static Bitmap[][] snake = cut("/art/mob/enemy_snake_anim_48.png", 48, 48);
+	public static Bitmap[][] snake = cut("/art/mob/enemy_snake_anim_48.png", 48, 48);
 	public static Bitmap[][] scarab = cut("/art/mob/enemy_scarab_anim_48.png", 48, 48);
 	public static Bitmap[][] bat = cut("/art/mob/enemy_bat_32.png", 32, 32);
 	public static Bitmap batShadow = load("/art/shadows/shadow_bat.png");
-
 	// Coins
 	public static Bitmap[][] pickupCoinBronzeSmall = cut("/art/pickup/pickup_coin_bronze_small_8.png", 8, 8);
 	public static Bitmap[][] pickupCoinBronze = cut("/art/pickup/pickup_coin_bronze_16.png", 16, 16);
@@ -160,7 +148,6 @@ public class Art {
 	public static Bitmap[][] pickupGemDiamond = cut("/art/pickup/pickup_gem_diamond_24.png", 24, 24);
 	public static Bitmap[][] shineSmall = cut("/art/pickup/effect_shine_small_13.png", 13, 13);
 	public static Bitmap[][] shineBig = cut("/art/pickup/effect_shine_big_13.png", 13, 13);
-
 	// Bullets and special effects
 	public static Bitmap[][] bullets = cut("/art/effects/bullets.png", 16, 16);
 	public static Bitmap[][] bullet = cut("/art/effects/bullet.png", 16, 16);
@@ -179,37 +166,35 @@ public class Art {
 	public static Bitmap[][] healthBar = cut("/art/effects/bar_green.png", 32, 4);
 	public static Bitmap[][] healthBar_Outline = cut("/art/effects/bar_outline.png", 32, 4);
 	public static Bitmap[][] healthBar_Underlay = cut("/art/effects/bar_green_underlay.png", 32, 4);
-		
 	// Icons
 	public static BufferedImage icon32 = loadBufferedImage("/art/icon/icon32.png");
 	public static BufferedImage icon64 = loadBufferedImage("/art/icon/icon64.png");
-	
-    /**
-     * Return the bitmaps for a given piece of art, cut out from a sheet
-     * 
-     * @param string Art piece name
-     * @param w Width of a single bitmap
-     * @param h Height of a single bitmap
-     * @return Bitmap array
-     */
+
+	/**
+	 * Return the bitmaps for a given piece of art, cut out from a sheet
+	 * 
+	 * @param string Art piece name
+	 * @param w Width of a single bitmap
+	 * @param h Height of a single bitmap
+	 * @return Bitmap array
+	 */
 	public static Bitmap[][] cut(String string, int w, int h) {
-	    return cut(string, w, h, 0, 0);
+		return cut(string, w, h, 0, 0);
 	}
 
-    /**
-     * Return the bitmaps for a given piece of art, cut out from a sheet
-     * 
-     * @param string Art piece name
-     * @param w Width of a single bitmap
-     * @param h Height of a single bitmap
-     * @param bx
-     * @param by
-     * @return Bitmap array
-     */
+	/**
+	 * Return the bitmaps for a given piece of art, cut out from a sheet
+	 * 
+	 * @param string Art piece name
+	 * @param w Width of a single bitmap
+	 * @param h Height of a single bitmap
+	 * @param bx
+	 * @param by
+	 * @return Bitmap array
+	 */
 	private static Bitmap[][] cut(String string, int w, int h, int bx, int by) {
 		try {
-			BufferedImage bi = ImageIO.read(MojamComponent.class
-					.getResource(string));
+			BufferedImage bi = ImageIO.read(MojamComponent.class.getResource(string));
 
 			int xTiles = (bi.getWidth() - bx) / w;
 			int yTiles = (bi.getHeight() - by) / h;
@@ -218,9 +203,9 @@ public class Art {
 
 			for (int x = 0; x < xTiles; x++) {
 				for (int y = 0; y < yTiles; y++) {
-				    result[x][y] = new Bitmap(w, h);
+					result[x][y] = Bitmap.createInstance(w, h);
 					bi.getRGB(bx + x * w, by + y * h, w, h,
-							result[x][y].pixels, 0, w);
+						result[x][y].pixels, 0, w);
 				}
 			}
 
@@ -231,51 +216,53 @@ public class Art {
 		return null;
 	}
 
-    private static Bitmap[][] cutv(String string, int h) {
-        try {
-            BufferedImage bi = ImageIO.read(MojamComponent.class.getResource(string));
+	private static Bitmap[][] cutv(String string, int h) {
+		try {
+			BufferedImage bi = ImageIO.read(MojamComponent.class.getResource(string));
 
-            int yTiles = bi.getHeight() / h;
+			int yTiles = bi.getHeight() / h;
 
-            int xTiles = 0;
-            Bitmap[][] result = new Bitmap[yTiles][];
-            for (int y = 0; y < yTiles; y++) {
-                List<Bitmap> row = new ArrayList<Bitmap>();
-                int xCursor=0;
-                while (xCursor < bi.getWidth()) {
-                    int w = 0;
-                    while (xCursor + w < bi.getWidth() && bi.getRGB(xCursor + w, y * h) != 0xffed1c24) {
-                        w++;
-                    }
-                    if (w > 0) {
-                        Bitmap bitmap = new Bitmap(w, h);
-                        bi.getRGB(xCursor, y * h, w, h, bitmap.pixels, 0, w );
-                        row.add(bitmap);
-                    }
-                    xCursor += w+1;
-                }
-                if (xTiles < row.size()) xTiles = row.size();
-                result[y] = row.toArray(new Bitmap[0]);
-            }
+			int xTiles = 0;
+			Bitmap[][] result = new Bitmap[yTiles][];
+			for (int y = 0; y < yTiles; y++) {
+				List<Bitmap> row = new ArrayList<Bitmap>();
+				int xCursor = 0;
+				while (xCursor < bi.getWidth()) {
+					int w = 0;
+					while (xCursor + w < bi.getWidth() && bi.getRGB(xCursor + w, y * h) != 0xffed1c24) {
+						w++;
+					}
+					if (w > 0) {
+						Bitmap bitmap = Bitmap.createInstance(w, h);
+						bi.getRGB(xCursor, y * h, w, h, bitmap.pixels, 0, w);
+						row.add(bitmap);
+					}
+					xCursor += w + 1;
+				}
+				if (xTiles < row.size()) {
+					xTiles = row.size();
+				}
+				result[y] = row.toArray(new Bitmap[0]);
+			}
 
-            Bitmap[][] resultT = new Bitmap[xTiles][yTiles];
-            for (int x = 0; x < xTiles; x++) {
-                for (int y = 0; y < yTiles; y++) {
-                    try {
-                        resultT[x][y] = result[y][x];
-                    } catch (IndexOutOfBoundsException e) {
-                        resultT[x][y] = null;
-                    }
-                }
-            }
+			Bitmap[][] resultT = new Bitmap[xTiles][yTiles];
+			for (int x = 0; x < xTiles; x++) {
+				for (int y = 0; y < yTiles; y++) {
+					try {
+						resultT[x][y] = result[y][x];
+					} catch (IndexOutOfBoundsException e) {
+						resultT[x][y] = null;
+					}
+				}
+			}
 
-            return resultT;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-	
+			return resultT;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	private static int[][] getColors(Bitmap[][] tiles) {
 		int[][] result = new int[tiles.length][tiles[0].length];
 		for (int y = 0; y < tiles[0].length; y++) {
@@ -312,13 +299,12 @@ public class Art {
 	 */
 	private static Bitmap load(String string) {
 		try {
-			BufferedImage bi = ImageIO.read(MojamComponent.class
-					.getResource(string));
+			BufferedImage bi = ImageIO.read(MojamComponent.class.getResource(string));
 
 			int w = bi.getWidth();
 			int h = bi.getHeight();
 
-			Bitmap result = new Bitmap(w, h);
+			Bitmap result = Bitmap.createInstance(w, h);
 			bi.getRGB(0, 0, w, h, result.pixels, 0, w);
 
 			return result;
@@ -328,7 +314,7 @@ public class Art {
 
 		return null;
 	}
-	
+
 	/**
 	 * Load a bitmap resource by name
 	 * 
@@ -337,8 +323,7 @@ public class Art {
 	 */
 	private static BufferedImage loadBufferedImage(String string) {
 		try {
-			BufferedImage bi = ImageIO.read(MojamComponent.class
-					.getResource(string));
+			BufferedImage bi = ImageIO.read(MojamComponent.class.getResource(string));
 			return bi;
 		} catch (IOException e) {
 			e.printStackTrace();
