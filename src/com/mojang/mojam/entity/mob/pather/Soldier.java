@@ -13,6 +13,7 @@ import com.mojang.mojam.entity.loot.LootCollector;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.entity.particle.Sparkle;
 import com.mojang.mojam.entity.weapon.Rifle;
+import com.mojang.mojam.gui.components.Font;
 
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.BB;
@@ -274,7 +275,8 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 			//			upgradeCosts[upgradeLevel]), (int) (pos.x),
 			//			(int) (pos.y - 24 - yOffs));
 			//}
-			//Font.drawCenter(screen, getCurrentModeName(), (int) (pos.x),
+			Font.FONT_WHITE_SMALL.draw(screen, getCurrentModeName(), (int) (pos.x), (int) (pos.y - yOffs - 16), Font.Align.CENTERED);
+			//drawCenter(screen, getCurrentModeName(), (int) (pos.x),
 			//		(int) (pos.y - 24 - yOffs - 8));
 		}
 	}
