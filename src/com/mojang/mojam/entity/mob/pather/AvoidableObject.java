@@ -6,15 +6,17 @@ public class AvoidableObject {
 	Vec2 pos;
 	double danger;
 	double radius;
+	double avoidDistance;
 	Vec2 bounds;
 
 	Object object;
 
-	public AvoidableObject(Vec2 pos, double danger, Object object, double radius) {
+	public AvoidableObject(Vec2 pos, double danger, Object object, double radius, double avoidDistance) {
 		this.pos = pos;
 		this.danger = danger;
 		this.object = object;
 		this.radius = radius;
+		this.avoidDistance = avoidDistance;
 	}
 
 	public AvoidableObject(Vec2 pos, double danger, Object object, Vec2 bounds) {
