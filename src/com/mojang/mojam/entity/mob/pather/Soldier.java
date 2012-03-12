@@ -170,13 +170,6 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 		renderMarker(screen);
 	}
 
-	protected void renderFillBar(Screen screen, int width, int height) {
-		// if (money > 1)
-		//screen.progressBar((int) (pos.x - width / 2),
-		//		(int) (pos.y + height / 2 - yOffs) - 4, (int) width, 2,
-		//		0xF000FFFF, 0xF00000FF, 0x00000000, 0, maxMoney, money);
-	}
-
 	@Override
 	public boolean canTake() {
 		if (getMoney() < getMaxMoney())
