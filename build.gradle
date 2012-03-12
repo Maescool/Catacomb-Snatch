@@ -46,7 +46,7 @@ apply plugin: 'macAppBundle'
 
 macAppBundle {
     mainClassName = "com.mojang.mojam.MojamComponent"
-    icon = "cs_icons.icns"
+    icon = "res/art/icon/cs_icons.icns"
 }
 
 buildscript {
