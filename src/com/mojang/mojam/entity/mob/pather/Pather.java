@@ -208,7 +208,7 @@ public abstract class Pather extends HostileMob {
 				continue;
 			}
 
-			r.add(new AvoidableObject(e.pos, eDanger, e, ((Mob) e).radius));
+			r.add(new AvoidableObject(e.pos, eDanger, e, ((Mob) e).radius,objectAvoidanceRadius));
 		}
 		return r;
 	}
@@ -225,13 +225,13 @@ public abstract class Pather extends HostileMob {
 			for (y = -1; y <= 1; y++) {
 				tile = level.getTile((int) (x + cTilePos.x),
 						(int) (y + cTilePos.y));
-				if (tile.canPass(this))
+				if (tile != null && tile.canPass(this))
 					continue;
 				tDanger = 0.9;
 
 				r.add(new AvoidableObject(level.getPositionFromTile(
 						(int) (x + cTilePos.x), (int) (y + cTilePos.y)),
-						tDanger, tile, new Vec2(Tile.WIDTH, Tile.HEIGHT)));
+						tDanger, tile, new Vec2(Tile.WIDTH/2, Tile.HEIGHT/2),Tile.WIDTH));
 			}
 		}
 
@@ -270,22 +270,22 @@ public abstract class Pather extends HostileMob {
 		for (AvoidableObject o : avoidableObjects) {
 			ePos = o.getPos().sub(pos);
 			eDanger = o.getDanger();
-			eDistance = ePos.length();
+			eDistance = ePos.length() - o.radius;
 
-			if (eDistance > objectAvoidanceRadius) {
-				continue;
-			}
+			//if (eDistance > objectAvoidanceRadius) {
+			//	continue;
+			//}
 
 			ePosRads = Math.atan2(ePos.x, ePos.y);
 			ePosRads -= dPosRads;
 			ePosRads += Math.PI;
 			ePosRads = Mth.normalizeAngle(ePosRads, 0.0);
 
-			eInverseDistance = objectAvoidanceRadius - eDistance;
+			eInverseDistance = o.avoidDistance - eDistance;
 			eInverseDistanceSquared = eInverseDistance * eInverseDistance;
 
 			eDanger *= (eInverseDistanceSquared)
-					/ (objectAvoidanceRadius * objectAvoidanceRadius);
+					/ (o.avoidDistance * o.avoidDistance);
 			// this.ePosArray.add(ePos.normal().scale((32 * (eDanger + 1))));
 			// this.aObjectArray.add(o);
 			dPosRadsNew += (eDanger * ePosRads);

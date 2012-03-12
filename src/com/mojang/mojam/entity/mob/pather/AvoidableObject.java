@@ -25,6 +25,7 @@ public class AvoidableObject {
 		this.object = object;
 		this.radius = bounds.length();
 		this.bounds = bounds;
+		this.avoidDistance = avoidDistance;
 	}
 
 	public Vec2 getPos() {
