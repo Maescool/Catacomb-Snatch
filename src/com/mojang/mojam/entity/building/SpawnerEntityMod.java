@@ -1,11 +1,7 @@
 package com.mojang.mojam.entity.building;
 
-import com.mojang.mojam.Snatch;
-import com.mojang.mojam.entity.mob.Bat;
 import com.mojang.mojam.entity.mob.Mob;
-import com.mojang.mojam.entity.mob.Mummy;
-import com.mojang.mojam.entity.mob.Scarab;
-import com.mojang.mojam.entity.mob.Snake;
+import com.mojang.mojam.mod.ModSystem;
 
 public class SpawnerEntityMod extends SpawnerEntity
 {
@@ -35,14 +31,14 @@ public class SpawnerEntityMod extends SpawnerEntity
 	public String getName()
 	{
 		// TODO Auto-generated method stub
-		return Snatch.getEntityById(type, 0, 0).getClass().getSimpleName() + " Spawner";
+		return ModSystem.getEntityById(type, 0, 0).getClass().getSimpleName() + " Spawner";
 	}
 
 	@Override
 	protected Mob getMob(double x, double y)
 	{
-		if((Mob) Snatch.getEntityById(type,x,y)!=null)return (Mob) Snatch.getEntityById(type,x,y);
-		return (Mob) Snatch.getEntityById(type, x, y);
+		if((Mob) ModSystem.getEntityById(type,x,y)!=null)return (Mob) ModSystem.getEntityById(type,x,y);
+		return (Mob) ModSystem.getEntityById(type, x, y);
 	}
 
 }

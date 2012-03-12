@@ -1,6 +1,7 @@
 package com.mojang.mojam.level;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.Vec2;

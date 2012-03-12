@@ -13,5 +13,7 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Catacomb-Snatch/lib/native/windows"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/jython.jar"/>
+	<classpathentry kind="lib" path="lib/jruby.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

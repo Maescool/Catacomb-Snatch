@@ -1,7 +1,8 @@
 package com.mojang.mojam.entity.mob;
 
 import com.mojang.mojam.network.TurnSynchronizer;
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
 
 public class TestEntity extends Mob {
 	public TestEntity(double x, double y) {

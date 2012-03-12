@@ -8,7 +8,6 @@ import java.util.TreeSet;
 
 import com.mojang.mojam.GameCharacter;
 import com.mojang.mojam.MojamComponent;
-import com.mojang.mojam.Snatch;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
@@ -17,12 +16,13 @@ import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.level.gamemode.ILevelTickItem;
 import com.mojang.mojam.level.gamemode.IVictoryConditions;
+import com.mojang.mojam.level.tile.AnimatedTile;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.Tile;
-import com.mojang.mojam.level.tile.AnimatedTile;
 import com.mojang.mojam.level.tile.WallTile;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.math.Vec2;
+import com.mojang.mojam.mod.ModSystem;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
@@ -303,7 +303,7 @@ public class Level {
 		if(victoryConditions != null)
 			victoryConditions.updateVictoryConditions(this);
 		Notifications.getInstance().tick();
-		Snatch.levelTick(this);
+		ModSystem.levelTick(this);
 	}
 
 	private boolean hasSeen(int x, int y) {

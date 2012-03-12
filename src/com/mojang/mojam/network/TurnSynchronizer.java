@@ -1,8 +1,12 @@
 package com.mojang.mojam.network;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
-import com.mojang.mojam.network.packet.*;
+import com.mojang.mojam.network.packet.PingPacket;
+import com.mojang.mojam.network.packet.StartGamePacket;
+import com.mojang.mojam.network.packet.TurnPacket;
 
 public class TurnSynchronizer {
 

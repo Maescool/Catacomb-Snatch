@@ -16,6 +16,7 @@ import com.mojang.mojam.entity.weapon.Shotgun;
 import com.mojang.mojam.entity.weapon.VenomShooter;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.gui.components.Font;
+import com.mojang.mojam.mod.ModSystem;
 import com.mojang.mojam.screen.Screen;
 
 public class Console implements KeyListener {
@@ -180,8 +181,7 @@ public class Console implements KeyListener {
 				return;
 			}
 		}
-		System.out.println("Console");
-		Snatch.console(command,input,this);
+		ModSystem.runConsole(command,input.substring(command.length()+2));
 	}
 
 	private String[] getArgs(String input, int numberOfArgs) {

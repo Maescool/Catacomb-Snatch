@@ -1,14 +1,12 @@
 package com.mojang.mojam.entity.building;
 
-import com.mojang.mojam.Snatch;
-import com.mojang.mojam.entity.mob.*;
-import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.tile.Tile;
+import com.mojang.mojam.mod.ModSystem;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
@@ -101,7 +99,7 @@ public abstract class SpawnerEntity extends Building implements IEditable
 	public static Entity getRandomSpawner(double x, double y)
 	{
 
-		int nextInt = TurnSynchronizer.synchedRandom.nextInt(Snatch.numEntitiesLoaded());
+		int nextInt = TurnSynchronizer.synchedRandom.nextInt(ModSystem.numEntitiesLoaded());
 
 		if(nextInt == 0) return new SpawnerForBat(x, y);
 		if(nextInt == 1) return new SpawnerForSnake(x, y);

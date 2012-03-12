@@ -1,7 +1,8 @@
 package com.mojang.mojam.entity;
 
-import com.mojang.mojam.entity.mob.*;
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.entity.mob.Mob;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Screen;
 
 public class BulletBuckshot extends Bullet {
 	

@@ -1,8 +1,13 @@
 package com.mojang.mojam.network;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class NetworkPacketLink implements PacketLink {
 

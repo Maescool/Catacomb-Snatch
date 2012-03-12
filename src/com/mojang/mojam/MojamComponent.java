@@ -69,6 +69,7 @@ import com.mojang.mojam.level.gamemode.GameMode;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.mc.EnumOS2;
 import com.mojang.mojam.mc.EnumOSMappingHelper;
+import com.mojang.mojam.mod.ModSystem;
 import com.mojang.mojam.network.ClientSidePacketLink;
 import com.mojang.mojam.network.CommandListener;
 import com.mojang.mojam.network.NetworkCommand;
@@ -177,7 +178,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		addMenu(menu);
 		addKeyListener(this);
 		
-		Snatch.init(this);
+		ModSystem.init(this);
 		addKeyListener(chat);
 		addKeyListener(console);
 
@@ -359,7 +360,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		}
 		player = players[localId];
 		player.setCanSee(true);
-		Snatch.createLevel(level);
+		ModSystem.createLevel(level);
 	}
 
 	@Override
@@ -386,10 +387,11 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		int min = 999999999;
 		int max = 0;
 
-		Snatch.runOnce();
+		ModSystem.runOnce();
 		
 
 while (running) {
+			ModSystem.updateTick();
 			if (!this.hasFocus()) {
 				keys.release();
 			}
@@ -469,13 +471,14 @@ while (running) {
 				fps = frames;
 				frames = 0;
 			}
+			ModSystem.afterTick();
 		}
-		Snatch.onStop();
+		ModSystem.onStop();
 	}
 
 	private synchronized void render(Graphics g)
 	{
-		Snatch.startRender();
+		ModSystem.startRender();
 
 		if (level != null) {
 			int xScroll = (int) (player.pos.x - screen.w / 2);
@@ -516,7 +519,7 @@ while (running) {
 		g.translate((getWidth() - GAME_WIDTH * SCALE) / 2, (getHeight() - GAME_HEIGHT * SCALE) / 2);
 		g.clipRect(0, 0, GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE);
 
-		Snatch.afterRender();
+		ModSystem.afterRender();
 		
 		if (!menuStack.isEmpty() || level != null) {
 
@@ -667,7 +670,7 @@ while (running) {
 				int winner = level.victoryConditions.playerVictorious();
 				GameCharacter winningCharacter = winner == players[0].getTeam() ? players[0].getCharacter()
 						: players[1].getCharacter();
-				Snatch.onWin(winner);
+				ModSystem.onWin(winner);
 				addMenu(new WinMenu(GAME_WIDTH, GAME_HEIGHT, winner, winningCharacter));
                 level = null;
                 return;
@@ -785,7 +788,7 @@ while (running) {
 			packetLink.setPacketListener(MojamComponent.this);
 
 		}
-		Snatch.afterTick();
+		ModSystem.afterTick();
 	}
 
 	private void tickChat() {
@@ -861,7 +864,7 @@ while (running) {
 	@Override
 	public void handle(int playerId, NetworkCommand packet) {
 
-		Snatch.handleNetworkCommand(playerId,packet);
+		ModSystem.handleNetworkCommand(playerId,packet);
 		if (packet instanceof ChangeKeyCommand) {
 			ChangeKeyCommand ckc = (ChangeKeyCommand) packet;
 			synchedKeys[playerId].getAll().get(ckc.getKey()).nextState = ckc.getNextState();
@@ -931,7 +934,7 @@ while (running) {
 				latencyCache.addToLatencyCache(pp.getLatency());
 			}
 		}
-		Snatch.handlePacket(packet);
+		ModSystem.handlePacket(packet);
 	}
 
 
@@ -1138,7 +1141,7 @@ while (running) {
 			break;
 
 		case TitleMenu.REALLY_EXIT_GAME_ID:
-			Snatch.onStop();
+			ModSystem.onStop();
 			stop(true);
 			break;
 

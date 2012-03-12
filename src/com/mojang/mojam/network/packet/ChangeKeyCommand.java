@@ -1,6 +1,8 @@
 package com.mojang.mojam.network.packet;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 import com.mojang.mojam.network.NetworkCommand;
 

@@ -1,6 +1,7 @@
 package com.mojang.mojam.network;
 
-import java.net.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 import com.mojang.mojam.network.packet.TurnPacket;
 
