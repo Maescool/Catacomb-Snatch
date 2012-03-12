@@ -11,13 +11,12 @@
 			<attribute name="javadoc_location" value="file:/C:/dev/libs/kryonet-1.04/api/"/>
 		</attributes>
 	</classpathentry>
-		<classpathentry kind="lib" path="lib/LibraryLWJGLOpenAL.jar"/>
-	<classpathentry kind="lib" path="lib/lwjgl.jar">
+	<classpathentry kind="lib" path="lib/LibraryLWJGLOpenAL.jar"/>
+	<classpathentry kind="lib" path="lib/lwjgl.jar" sourcepath="C:/Users/Dan/.m2/repository/org/lwjgl/lwjgl/lwjgl/2.8.3/lwjgl-2.8.3-sources.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Catacomb-Snatch/lib/native/windows"/>
 		</attributes>
 	</classpathentry>
-	
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

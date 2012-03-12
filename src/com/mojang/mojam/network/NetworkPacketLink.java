@@ -4,7 +4,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.*;
 
-public class NetworkPacketLink implements PacketLink {
+public class NetworkPacketLink  {
 
 	private static final int SEND_BUFFER_SIZE = 1024 * 5;
 
@@ -82,15 +82,7 @@ public class NetworkPacketLink implements PacketLink {
 		writeThread.start();
 	}
 
-	public void tick() {
-		int max = 1000;
-		while (!incoming.isEmpty() && max-- >= 0) {
-			Packet packet = incoming.remove(0);
-			if (packetListener != null) {
-				packet.handle(packetListener);
-			}
-		}
-	}
+
 
 	public void sendPacket(Packet packet) {
 		if (isQuitting) {

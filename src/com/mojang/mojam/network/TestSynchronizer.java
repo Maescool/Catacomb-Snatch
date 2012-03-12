@@ -19,10 +19,10 @@ public class TestSynchronizer {
 
 			serverSocket = new ServerSocket(3000);
 			Socket socket = serverSocket.accept();
-			packetLink = new NetworkPacketLink(socket);
+			//packetLink = new NetworkPacketLink(socket);
 
 		} else {
-			packetLink = new ClientSidePacketLink("localhost", 3000);
+			//packetLink = new ClientSidePacketLink("localhost", 3000);
 			localId = 1;
 		}
 
@@ -49,8 +49,8 @@ public class TestSynchronizer {
 		public PlayThread(int localId, PacketLink packetLink) {
 			this.localId = localId;
 			this.packetLink = packetLink;
-			turnSynchronizer = new TurnSynchronizer(null, packetLink, localId,
-					2);
+			//turnSynchronizer = new TurnSynchronizer(null, packetLink, localId,
+			//		2);
 			packetLink.setPacketListener(this);
 		}
 
@@ -76,7 +76,7 @@ public class TestSynchronizer {
 
 		public void handle(Packet packet) {
 			if (packet instanceof TurnPacket) {
-				turnSynchronizer.onTurnPacket((TurnPacket) packet);
+				//turnSynchronizer.onTurnPacket((TurnPacket) packet);
 			}
 		}
 	}

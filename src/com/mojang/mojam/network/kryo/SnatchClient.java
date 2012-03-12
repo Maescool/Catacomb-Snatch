@@ -1,43 +1,38 @@
 package com.mojang.mojam.network.kryo;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Container;
 import java.awt.EventQueue;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.Point;
 import java.io.IOException;
-
-import javax.swing.DefaultListModel;
-import javax.swing.DefaultListSelectionModel;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.esotericsoftware.minlog.Log;
+import com.mojang.mojam.GameCharacter;
+import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.gui.PauseMenu;
+import com.mojang.mojam.gui.TitleMenu;
+import com.mojang.mojam.level.DifficultyInformation;
+import com.mojang.mojam.network.MessageListener;
+import com.mojang.mojam.network.kryo.Network.ChangeKeyMessage;
+import com.mojang.mojam.network.kryo.Network.ChangeMouseButtonMessage;
+import com.mojang.mojam.network.kryo.Network.ChangeMouseCoordinateMessage;
+import com.mojang.mojam.network.kryo.Network.CharacterMessage;
 import com.mojang.mojam.network.kryo.Network.ChatMessage;
+import com.mojang.mojam.network.kryo.Network.PauseMessage;
+import com.mojang.mojam.network.kryo.Network.PingMessage;
 import com.mojang.mojam.network.kryo.Network.RegisterName;
-import com.mojang.mojam.network.kryo.Network.UpdateNames;
+import com.mojang.mojam.network.kryo.Network.StartGameCustomMessage;
+import com.mojang.mojam.network.kryo.Network.StartGameMessage;
+import com.mojang.mojam.network.kryo.Network.TurnMessage;
+import com.mojang.mojam.network.packet.PingPacket;
+import com.mojang.mojam.network.packet.StartGamePacket;
+import com.mojang.mojam.network.packet.StartGamePacketCustom;
+import com.mojang.mojam.network.packet.TurnPacket;
 
-public class SnatchClient {
+public class SnatchClient implements MessageListener {
 
-	ChatFrame chatFrame;
 	Client client;
+	private MojamComponent mojamComponent;
 
 	public SnatchClient() {
 		client = new Client();
@@ -50,198 +45,149 @@ public class SnatchClient {
 		client.addListener(new Listener() {
 			public void connected (Connection connection) {
 				RegisterName registerName = new RegisterName();
-				registerName.name = "meow";
+				registerName.name = "USER"+Math.random();
 				client.sendTCP(registerName);
 			}
 
 			public void received (Connection connection, Object object) {
-				if (object instanceof UpdateNames) {
-					UpdateNames updateNames = (UpdateNames)object;
-					chatFrame.setNames(updateNames.names);
-					return;
-				}
+				
+				//if (object instanceof UpdateNames) {
+				//	UpdateNames updateNames = (UpdateNames)object;
+				//	chatFrame.setNames(updateNames.names);
+				//	return;
+				//}
 
-				if (object instanceof ChatMessage) {
-					ChatMessage chatMessage = (ChatMessage)object;
-					chatFrame.addMessage(chatMessage.text);
-					return;
-				}
+				handleMessage(mojamComponent.localId, object);
+				
 			}
 
 			public void disconnected (Connection connection) {
 				EventQueue.invokeLater(new Runnable() {
 					public void run () {
 						// Closing the frame calls the close listener which will stop the client's update thread.
-						chatFrame.dispose();
+						//chatFrame.dispose();
 					}
 				});
 			}
 		});
 
-		// Request the host from the user.
-		String input = (String)JOptionPane.showInputDialog(null, "Host:", "Connect to chat server", JOptionPane.QUESTION_MESSAGE,
-			null, null, "localhost");
-		if (input == null || input.trim().length() == 0) System.exit(1);
-		final String host = input.trim();
-
-		// Request the user's name.
-		input = (String)JOptionPane.showInputDialog(null, "Name:", "Connect to chat server", JOptionPane.QUESTION_MESSAGE, null,
-			null, "Test");
-		if (input == null || input.trim().length() == 0) System.exit(1);
-		final String name = input.trim();
-
-		// All the ugly Swing stuff is hidden in ChatFrame so it doesn't clutter the KryoNet example code.
-		chatFrame = new ChatFrame(host);
-		// This listener is called when the send button is clicked.
-		chatFrame.setSendListener(new Runnable() {
-			public void run () {
-				ChatMessage chatMessage = new ChatMessage();
-				chatMessage.text = chatFrame.getSendText();
-				client.sendTCP(chatMessage);
-			}
-		});
-		// This listener is called when the chat window is closed.
-		chatFrame.setCloseListener(new Runnable() {
-			public void run () {
-				client.stop();
-			}
-		});
-		chatFrame.setVisible(true);
-
-		// We'll do the connect on a new thread so the ChatFrame can show a progress bar.
-		// Connecting to localhost is usually so fast you won't see the progress bar.
-		new Thread("Connect") {
-			public void run () {
-				try {
-					client.connect(5000, host, Network.port);
-					// Server communication after connection can go here, or in Listener#connected().
-				} catch (IOException ex) {
-					ex.printStackTrace();
-					System.exit(1);
-				}
-			}
-		}.start();
 	}
 
-	static private class ChatFrame extends JFrame {
-		CardLayout cardLayout;
-		JProgressBar progressBar;
-		JList messageList;
-		JTextField sendText;
-		JButton sendButton;
-		JList nameList;
-
-		public ChatFrame (String host) {
-			super("Chat Client");
-			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			setSize(640, 200);
-			setLocationRelativeTo(null);
-
-			Container contentPane = getContentPane();
-			cardLayout = new CardLayout();
-			contentPane.setLayout(cardLayout);
-			{
-				JPanel panel = new JPanel(new BorderLayout());
-				contentPane.add(panel, "progress");
-				panel.add(new JLabel("Connecting to " + host + "..."));
-				{
-					panel.add(progressBar = new JProgressBar(), BorderLayout.SOUTH);
-					progressBar.setIndeterminate(true);
-				}
-			}
-			{
-				JPanel panel = new JPanel(new BorderLayout());
-				contentPane.add(panel, "chat");
-				{
-					JPanel topPanel = new JPanel(new GridLayout(1, 2));
-					panel.add(topPanel);
-					{
-						topPanel.add(new JScrollPane(messageList = new JList()));
-						messageList.setModel(new DefaultListModel());
-					}
-					{
-						topPanel.add(new JScrollPane(nameList = new JList()));
-						nameList.setModel(new DefaultListModel());
-					}
-					DefaultListSelectionModel disableSelections = new DefaultListSelectionModel() {
-						public void setSelectionInterval (int index0, int index1) {
-						}
-					};
-					messageList.setSelectionModel(disableSelections);
-					nameList.setSelectionModel(disableSelections);
-				}
-				{
-					JPanel bottomPanel = new JPanel(new GridBagLayout());
-					panel.add(bottomPanel, BorderLayout.SOUTH);
-					bottomPanel.add(sendText = new JTextField(), new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.CENTER,
-						GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-					bottomPanel.add(sendButton = new JButton("Send"), new GridBagConstraints(1, 0, 1, 1, 0, 0,
-						GridBagConstraints.CENTER, 0, new Insets(0, 0, 0, 0), 0, 0));
-				}
-			}
-
-			sendText.addActionListener(new ActionListener() {
-				public void actionPerformed (ActionEvent e) {
-					sendButton.doClick();
-				}
-			});
-		}
-
-		public void setSendListener (final Runnable listener) {
-			sendButton.addActionListener(new ActionListener() {
-				public void actionPerformed (ActionEvent evt) {
-					if (getSendText().length() == 0) return;
-					listener.run();
-					sendText.setText("");
-					sendText.requestFocus();
-				}
-			});
-		}
-
-		public void setCloseListener (final Runnable listener) {
-			addWindowListener(new WindowAdapter() {
-				public void windowClosed (WindowEvent evt) {
-					listener.run();
-				}
-
-				public void windowActivated (WindowEvent evt) {
-					sendText.requestFocus();
-				}
-			});
-		}
-
-		public String getSendText () {
-			return sendText.getText().trim();
-		}
-
-		public void setNames (final String[] names) {
-			// This listener is run on the client's update thread, which was started by client.start().
-			// We must be careful to only interact with Swing components on the Swing event thread.
-			EventQueue.invokeLater(new Runnable() {
-				public void run () {
-					cardLayout.show(getContentPane(), "chat");
-					DefaultListModel model = (DefaultListModel)nameList.getModel();
-					model.removeAllElements();
-					for (String name : names)
-						model.addElement(name);
-				}
-			});
-		}
-
-		public void addMessage (final String message) {
-			EventQueue.invokeLater(new Runnable() {
-				public void run () {
-					DefaultListModel model = (DefaultListModel)messageList.getModel();
-					model.addElement(message);
-					messageList.ensureIndexIsVisible(model.size() - 1);
-				}
-			});
+	public void connectLocal() {
+		connect("localhost", Network.port);
+	}
+	
+	public void connect(String host, int port) {
+		try {
+			client.connect(5000,host, port);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
-	public static void main (String[] args) {
-		Log.set(Log.LEVEL_DEBUG);
-		new SnatchClient();
+	public void tick() {
+
+	//		int max = 1000;
+	//		while (!incoming.isEmpty() && max-- >= 0) {
+	//			Packet packet = incoming.remove(0);
+	//			if (packetListener != null) {
+	//				packet.handle(packetListener);
+	//			}
+	//		}
+	
 	}
 
+	public void sendMessage(Object message) {
+		client.sendTCP(message);	
+	}
+
+	public void setComponent(MojamComponent mojamComponent) {
+		this.mojamComponent = mojamComponent;
+	}
+
+	@Override
+	public void handleMessage(int playerId, Object message) {
+
+		if (message instanceof RegisterName) {
+			RegisterName registerNamemessage = (RegisterName)message;
+			mojamComponent.createServerState = 1;
+			return;
+		}
+		
+
+		if (message instanceof ChangeKeyMessage) {
+			ChangeKeyMessage ckc = (ChangeKeyMessage) message;
+			mojamComponent.synchedKeys[playerId].getAll().get(ckc.key).nextState = ckc.nextState;
+		}
+
+		if (message instanceof ChangeMouseButtonMessage) {
+			ChangeMouseButtonMessage ckc = (ChangeMouseButtonMessage) message;
+			mojamComponent.synchedMouseButtons[playerId].nextState[ckc.button] = ckc.nextState;
+		}
+
+		if (message instanceof ChangeMouseCoordinateMessage) {
+			ChangeMouseCoordinateMessage ccc = (ChangeMouseCoordinateMessage) message;
+			mojamComponent.synchedMouseButtons[playerId].setPosition(new Point(ccc.x, ccc.y));
+			mojamComponent.synchedMouseButtons[playerId].mouseHidden = ccc.mouseHidden;
+		}
+
+		if (message instanceof ChatMessage) {
+			ChatMessage cc = (ChatMessage) message;
+			mojamComponent.chat.addMessage(cc.message);
+		}
+
+		if (message instanceof CharacterMessage) {
+			CharacterMessage charMessage = (CharacterMessage) message;
+			mojamComponent.players[charMessage.localId].setCharacter(GameCharacter.values()[charMessage.ordinal]);
+		}
+
+		if (message instanceof PauseMessage) {
+			PauseMessage pm = (PauseMessage) message;
+			mojamComponent.paused = pm.paused;
+			if (pm.paused) {
+				mojamComponent.addMenu(new PauseMenu(MojamComponent.GAME_WIDTH, MojamComponent.GAME_HEIGHT));
+			} else {
+				mojamComponent.popMenu();
+			}
+		}
+		
+		
+		//packet listener
+
+		if (message instanceof StartGameMessage) {
+			if (!mojamComponent.isServer) {
+				mojamComponent.sendCharacter = true;
+				StartGameMessage sgMessage = (StartGameMessage) message;
+				
+				mojamComponent.createLevel(sgMessage.levelFile, TitleMenu.defaultGameMode,
+						GameCharacter.values()[sgMessage.opponentCharacterID]);
+				TitleMenu.difficulty = DifficultyInformation.getByInt(sgMessage.difficulty);
+				mojamComponent.synchronizer.startGame(sgMessage.gameSeed);
+				
+			}
+		} else if (message instanceof TurnMessage) {
+			
+			mojamComponent.synchronizer.onTurnMessage((TurnMessage)message);
+			
+		} else if (message instanceof StartGameCustomMessage) {
+			if (!mojamComponent.isServer) {
+				mojamComponent.sendCharacter = true;
+				StartGameCustomMessage sgMessage = (StartGameCustomMessage) message;
+				mojamComponent.synchronizer.startGame(sgMessage.gameSeed);
+				TitleMenu.difficulty = DifficultyInformation.getByInt(
+						sgMessage.difficulty);
+				mojamComponent.createLevel(sgMessage.levelFile, TitleMenu.defaultGameMode,
+						GameCharacter.values()[sgMessage.opponentCharacterID]);
+			}
+		} else if (message instanceof PingMessage) {
+			PingMessage pp = (PingMessage) message;
+			//synchronizer.onPingPacket(pp);
+			if (pp.getType() == PingPacket.TYPE_ACK) {
+				mojamComponent.latencyCache.addToLatencyCache(pp.getLatency());
+			}
+		}
+	
+	}
+
+	
 }
