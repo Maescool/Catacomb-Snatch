@@ -38,15 +38,17 @@ public class Checkbox extends ClickableComponent {
 
 	public void render(Screen screen) {
 		if (isPressed()) {
-			if (checked)
+			if (checked) {
 				screen.blit(Art.checkbox[1][1], getX(), getY());
-			else
+			} else {
 				screen.blit(Art.checkbox[0][1], getX(), getY());
+			}
 		} else {
-			if (checked)
+			if (checked) {
 				screen.blit(Art.checkbox[1][0], getX(), getY());
-			else
+			} else {
 				screen.blit(Art.checkbox[0][0], getX(), getY());
+			}
 		}
 
 		Font.defaultFont().draw(screen, label, getX() + 24 + 4,

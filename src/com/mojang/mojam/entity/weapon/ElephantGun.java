@@ -28,8 +28,9 @@ public class ElephantGun implements IWeapon {
 
 		setWeaponMode();
 
-		if (mob.isSprint)
+		if (mob.isSprint) {
 			shootDelay *= 3;
+		}
 
 	}
 
@@ -53,10 +54,11 @@ public class ElephantGun implements IWeapon {
 	public void primaryFire(double xDir, double yDir) {
 		if (readyToShoot) {
 			double dir;
-			if (owner.isSprint)
+			if (owner.isSprint) {
 				dir = getBulletDirection(accuracy * 2);
-			else
+			} else {
 				dir = getBulletDirection(accuracy);
+			}
 			Entity bullet = null;
 
 			xDir = Math.cos(dir);
@@ -88,10 +90,11 @@ public class ElephantGun implements IWeapon {
 	@Override
 	public void weapontick() {
 		if (!readyToShoot) {
-			if (currentShootDelay > 0)
+			if (currentShootDelay > 0) {
 				currentShootDelay--;
-			else
+			} else {
 				readyToShoot = true;
+			}
 		}
 	}
 

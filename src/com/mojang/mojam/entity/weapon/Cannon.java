@@ -93,10 +93,11 @@ public class Cannon implements IWeapon {
 	@Override
 	public void weapontick() {
 		if (!readyToShoot) {
-			if (currentShootDelay > 0)
+			if (currentShootDelay > 0) {
 				currentShootDelay--;
-			else
+			} else {
 				readyToShoot = true;
+			}
 		}
 	}
 

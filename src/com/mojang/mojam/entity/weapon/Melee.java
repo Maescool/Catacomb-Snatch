@@ -54,13 +54,17 @@ public class Melee implements IWeapon {
 	public void primaryFire(double xDir, double yDir) {
 		if (readyToShoot) {
 			double dir;
-			if (owner.isSprint)
+			
+			if (owner.isSprint) {
 				dir = getBulletDirection(accuracy * 2);
-			else
+			} else {
 				dir = getBulletDirection(accuracy);
+			}
+			
 			Entity bullet = null;
 			final float spread = 0.8F;
 			final int pellets = 21;
+			
 			for (int i = 0; i < pellets; i++) {
 				xDir = Math.cos(dir - (spread / pellets * ((pellets / 2) - 1)) + (i * spread / pellets));
 				yDir = Math.sin(dir - (spread / pellets * ((pellets / 2) - 1)) + (i * spread / pellets));
@@ -80,8 +84,11 @@ public class Melee implements IWeapon {
 			}
 
 			currentShootDelay = shootDelay;
-			if (owner.isSprint)
+			
+			if (owner.isSprint) {
 				currentShootDelay -= 20;
+			}
+			
 			readyToShoot = false;
 			MojamComponent.soundPlayer.playSound("/sound/Shot 1.wav", (float) owner.getPosition().x, (float) owner.getPosition().y);
 		}
@@ -95,10 +102,11 @@ public class Melee implements IWeapon {
 	@Override
 	public void weapontick() {
 		if (!readyToShoot) {
-			if (currentShootDelay > 0)
+			if (currentShootDelay > 0) {
 				currentShootDelay--;
-			else
+			} else {
 				readyToShoot = true;
+			}
 		}
 	}
 
