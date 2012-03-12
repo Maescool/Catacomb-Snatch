@@ -166,6 +166,7 @@ public class Art {
 	public static Bitmap[][] bullets = cut("/art/effects/bullets.png", 16, 16);
 	public static Bitmap[][] bullet = cut("/art/effects/bullet.png", 16, 16);
 	public static Bitmap buckShot = load("/art/effects/bullet_buckshot.png");
+	public static Bitmap[][] bulletflame = cut("/art/effects/bullet_flame.png", 16, 16);
 	public static Bitmap[][] plasmaBall = cut("/art/effects/plasmaball.png", 16, 16);
 	public static Bitmap[][] bulletpoison = cut("/art/effects/bullet_poison.png", 16, 16);
 	public static Bitmap[][] muzzle = cut("/art/effects/muzzle.png", 16, 16);
@@ -184,6 +185,9 @@ public class Art {
 	// Icons
 	public static BufferedImage icon32 = loadBufferedImage("/art/icon/icon32.png");
 	public static BufferedImage icon64 = loadBufferedImage("/art/icon/icon64.png");
+	
+	
+
 	
     /**
      * Return the bitmaps for a given piece of art, cut out from a sheet

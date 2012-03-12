@@ -24,6 +24,10 @@ diffselect.normal = NORMAL
 diffselect.hard = HARD
 diffselect.nightmare = NIGHTMARE
 
+exitmenu.headline = DO YOU REALLY WANT TO QUIT THE GAME?
+exitmenu.cancel = NO 
+exitmenu.exit = YES
+
 gameplay.player1Win = {0} WINS WOOHOO
 gameplay.player2Win = {0} WINS YAY
 gameplay.player1Name = LORD LARD
@@ -127,10 +131,6 @@ pausemenu.backtomain = MAIN
 pausemenu.resume = RESUME 
 pausemenu.exit = EXIT GAME
 
-exitmenu.headline = DO YOU REALLY WANT TO QUIT THE GAME?
-exitmenu.cancel = NO 
-exitmenu.exit = YES
-
 player.hasDied = {0} HAS DIED!
 player.score = {0}: {1}%
 player.cost = {0}
@@ -140,9 +140,6 @@ player.nextLevel = {0}
 player.exp = {0}
 player.level = {0}
 player.weaponSlot = {0}
-
-local.en = ENGLISH
-local.de = GERMAN
 
 shop.turretTooltipTitle = TURRET
 shop.turretTooltipLine1 = Used for defense.
