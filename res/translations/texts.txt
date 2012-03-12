@@ -6,6 +6,7 @@ build.removeRail = YOU NEED {0} TO REMOVE A RAIL
 
 back = BACK
 cancel = CANCEL
+select = SELECT
 
 character.text = SELECT YOUR CHARACTER!
 character.select = SELECT

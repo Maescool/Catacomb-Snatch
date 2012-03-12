@@ -16,6 +16,7 @@ public class LocaleMenu extends GuiMenu {
 	private int gameWidth;
 	private int gameHeight;
 	private int textY;
+	private String confirm = MojamComponent.texts.getStatic("back");
 
 	private boolean inGame;
 	private Button enBtn = null;
@@ -59,6 +60,12 @@ public class LocaleMenu extends GuiMenu {
 		yOffset += offset;
 		back = (Button) addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"), xOffset, (yOffset += offset) + 20));
 	}
+	
+	public LocaleMenu(String s) {
+		this(false);
+		confirm = MojamComponent.texts.getStatic(s);
+		changeLocale();
+	}
 
 	@Override
 	public void buttonPressed(ClickableComponent button) {
@@ -96,7 +103,7 @@ public class LocaleMenu extends GuiMenu {
 	}
 
 	public void changeLocale() {
-		back.setLabel(MojamComponent.texts.getStatic("back"));
+		back.setLabel(confirm);
 		enBtn.setLabel(Constants.getString("options.locale_en"));
 		deBtn.setLabel(Constants.getString("options.locale_de"));
 		esBtn.setLabel(Constants.getString("options.locale_es"));

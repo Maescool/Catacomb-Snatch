@@ -6,6 +6,7 @@ build.removeRail = TI SERVONO {0} PER RIMUOVERE UNA ROTAIA
 
 back = INDIETRO
 cancel = ANNULLA
+select = SELEZIONA
 
 character.text = SELEZIONA IL PERSONAGGIO!
 character.select = SELEZIONA

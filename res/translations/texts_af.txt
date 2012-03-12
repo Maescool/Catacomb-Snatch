@@ -1,4 +1,4 @@
-# Game texts encoded in UTF-8
+﻿# Game texts encoded in UTF-8
 
 build.rail = JY MOET {0} GOUD Hê OM 'N SPOOR TE BOU
 build.droid = JY HET {0} GOUD NODIG VIR 'N SPOOR-ROBOT
@@ -6,6 +6,7 @@ build.removeRail = JY HET {0} NODIG OM 'N SPOOR TE VERWYDER.
 
 back = TERUG
 cancel = KANSELLEER
+select = SELEKTEER
 
 character.text = KIES JOU KARAKTER!
 character.select = SELEKTEER
