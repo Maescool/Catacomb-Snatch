@@ -279,6 +279,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private void init() {
 		initInput();
 		initCharacters();
+		initLocale();
 
 		soundPlayer = new SoundPlayer();
 		if (soundPlayer.getSoundSystem() == null)
@@ -301,6 +302,12 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private void initInput() {
 		inputHandler = new InputHandler(keys);
 		addKeyListener(inputHandler);
+	}
+	
+	private void initLocale(){
+		if(!Options.isLocaleSet()){
+			addMenu(new LocaleMenu("select"));
+		}
 	}
 	
 	private void initCharacters(){
