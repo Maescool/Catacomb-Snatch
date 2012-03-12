@@ -12,6 +12,7 @@ sourceSets {
     }
     resources {
       srcDir 'res'
+      exclude '**/*.ogg'
     }
   }
 }
@@ -27,7 +28,7 @@ jar {
     configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
   }
   manifest {
-    attributes "Main-Class" : "com.mojang.mojam.MojamComponent"
+    attributes "Main-Class" : "com.mojang.mojam.MojamStartup"
   }
 }
 
@@ -56,6 +57,6 @@ buildscript {
     }
 
     dependencies {
-        classpath 'edu.sc.seis:gradle-macappbundle:1.0.3'
+        classpath 'edu.sc.seis:gradle-macappbundle:1.0.4'
     }
 }
