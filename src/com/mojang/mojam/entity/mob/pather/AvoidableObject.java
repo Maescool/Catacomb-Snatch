@@ -19,7 +19,7 @@ public class AvoidableObject {
 		this.avoidDistance = avoidDistance;
 	}
 
-	public AvoidableObject(Vec2 pos, double danger, Object object, Vec2 bounds) {
+	public AvoidableObject(Vec2 pos, double danger, Object object, Vec2 bounds, double avoidDistance) {
 		this.pos = pos;
 		this.danger = danger;
 		this.object = object;
