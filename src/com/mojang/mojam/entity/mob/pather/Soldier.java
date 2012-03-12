@@ -50,8 +50,6 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	private double[] upgradeSuckPower = new double[] { 0.75, 1, 1.25 };
 
 	private int shootRadius;
-
-
 	
 	/**
 	 * @param x
@@ -74,13 +72,30 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 		setMode(Mode_Patrol);
 		setWeapon(new Rifle(this));
 		setShootRadius(4*32);
+		
+		this.REGEN_INTERVAL=0;
+		this.REGEN_HEALTH=false;
 	}
 
 	public void tick() {
 		super.tick();
 		tryToShoot();
 	}
+	
+	public void collide(Entity entity, double xa, double ya) {
+		super.collide(entity, xa, ya);
 
+			if(entity instanceof Player) {
+				if (!((Player)entity).isNotFriendOf(this)) {
+					double dist = entity.pos.dist(pos);
+					xBump = (pos.x - entity.pos.x) / dist * 2;
+					yBump = (pos.y - entity.pos.y) / dist * 2;
+				}
+			}
+		if (TurnSynchronizer.synchedRandom.nextInt(10) > 5)
+			resetPath();
+	}
+	
 	protected Vec2 getPathTarget() {
 		Tile tileTo = null;
 

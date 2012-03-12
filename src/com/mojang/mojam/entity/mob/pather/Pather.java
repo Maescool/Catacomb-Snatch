@@ -341,16 +341,6 @@ public abstract class Pather extends HostileMob {
 	public void collide(Entity entity, double xa, double ya) {
 		super.collide(entity, xa, ya);
 
-		if (entity instanceof Mob) {
-			Mob mob = (Mob) entity;
-			if (isNotFriendOf(mob)) {
-				mob.hurt(this, 2);
-			}
-		}
-		freezeTime = TurnSynchronizer.synchedRandom.nextInt(5) + 5;
-		xBump = xa;
-		yBump = ya;
-
 		if (TurnSynchronizer.synchedRandom.nextInt(10) > 5)
 			resetPath();
 	}
