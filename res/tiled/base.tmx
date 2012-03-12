@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="48" height="48" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" source="tilesets/Tileset-Floor.tsx"/>
+ <tileset firstgid="17" source="tilesets/Tileset-Overlay.tsx"/>
+ <tileset firstgid="41" source="tilesets/Tileset-Wall.tsx"/>
+ <tileset firstgid="49" source="tilesets/Tileset-Player1.tsx"/>
+ <tileset firstgid="89" source="tilesets/Tileset-Player2.tsx"/>
+ <layer name="floor" width="48" height="48">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3BAQ0AAADCoPdPbQ43oAAAAAAAAAAAgFcDEWH4ywAkAAA=
+  </data>
+ </layer>
+ <layer name="overlay" width="48" height="48">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3BAQ0AAADCoPdPbQ43oAAAAAAAAAAAgFcDEWH4ywAkAAA=
+  </data>
+ </layer>
+ <layer name="wall" width="48" height="48">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3BAQ0AAADCoPdPbQ43oAAAAAAAAAAAgFcDEWH4ywAkAAA=
+  </data>
+ </layer>
+</map>

@@ -8,7 +8,7 @@ public class ShopItemTurret extends ShopItem {
     public ShopItemTurret(double x, double y, int team) {
         super("turret",x, y, team, 150, 10);
         
-        int facing = (team == 2) ? 0:4;
+        facing = 0;
         
         setSprite(Art.turret[facing][0]);
     }
@@ -18,6 +18,14 @@ public class ShopItemTurret extends ShopItem {
         level.addEntity(item);
         player.pickup(item);
 	}
+    
+    @Override
+    public void tick() {
+        super.tick();
+        if(freezeTime > 0) return;
+        setSprite(Art.turret[(facing++)&7][0]);
+        freezeTime = 100;
+    }
 
 	@Override
 	boolean canBuy(Player player) {

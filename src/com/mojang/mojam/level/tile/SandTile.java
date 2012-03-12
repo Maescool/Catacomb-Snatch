@@ -7,7 +7,7 @@ import com.mojang.mojam.screen.Screen;
 
 public class SandTile extends Tile {
 	public static final int COLOR = 0xffA8A800;
-	private static final String NAME = "SAND";
+	public static final String NAME = "SAND";
 
 	public SandTile() {
 		img = 5;

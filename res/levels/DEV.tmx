@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="64" height="64" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" source="../tiled/tilesets/Tileset-Floor.tsx"/>
+ <tileset firstgid="65" source="../tiled/tilesets/Tileset-Overlay.tsx"/>
+ <tileset firstgid="129" source="../tiled/tilesets/Tileset-Wall.tsx"/>
+ <tileset firstgid="193" source="../tiled/tilesets/Tileset-Player1.tsx"/>
+ <tileset firstgid="257" source="../tiled/tilesets/Tileset-Player2.tsx"/>
+ <layer name="floor" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3Y0QqEIBCFYcm58f1feJGQZgcF3VXU/D8YlIroMDUXOQcAAAAAAAAAAAAAAAAAZxFVUVCV4xvv7yv2M7Xmf5tT86f3T8wazNriqqwV6O9PzLm39z4a0f+d0P/bif2PM8i7Zx6J+55PwdXPstxcs/vc+V/u24vOL2YNZm19zty+dM0K+Xv2v0evd+7/qBqZf1T/V8+vs6dK2VPNzk3+9fL7wvFS+Yr9zPw7FNbxz/8fAACAnj57XdC9AEAAAA==
+  </data>
+ </layer>
+ <layer name="overlay" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3Xx07DQBRAUZsWeu+sgD9JQOG36b13EP1HuCyQLCuOLJGJiH2PdDXZ2HpP402iSJIkSZIkSZIkSZIkSZLUyPofnq3TRoPf6gy1RM30xlHUR6sUUxd1Uw8tUYX64zYM3GK11JllhN1GaYUGaJCGaJgWaYzGC7D/Wur8NcNus7RMEzRJUzRNCzRH8x26f/L7z9q/qPLef1GV/f6riX5k7b9Le/RBm7RF27RDj7RPB6GHDaCaOrP2P6Uz+qRDOqJjOqEnOqeLoJOGkff+b+mOvuiSruiabuiZ7ukh9LAB5L3/F3pt8p43em/dWG2T3r9s0t+/ysf/v5IkSdL/8Q2rr6HFAEAAAA==
+  </data>
+ </layer>
+ <layer name="wall" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3XSQrAIAwAQL/evLynQi8upVJqnAHxIIrBRLQUAAAAAAAAAAAAeo4HrSUG5sf87f9GDDZyus62VTu9GlrZSG6LP6+49bV7b5f4a2Piz0v+94k/r93fP6xp1v93xhrwtVn5DwDwxgljfnezAEAAAA==
+  </data>
+ </layer>
+</map>

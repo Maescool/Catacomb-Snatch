@@ -513,10 +513,9 @@ public class Player extends Mob implements LootCollector {
      * @param y current position's Y coordinate
      */
     private void handleRailBuilding(int x, int y) {
-    	boolean outsideLevel = y < 8 || y > level.height - 9;
         if (level.getTile(x, y).isBuildable()) {
         	
-            if (score >= COST_RAIL && time - lastRailTick >= RailDelayTicks && !outsideLevel) {
+            if (score >= COST_RAIL && time - lastRailTick >= RailDelayTicks) {
                 lastRailTick = time;
                 level.placeTile(x, y, new RailTile(level.getTile(x, y)), this);
                 payCost(COST_RAIL);
@@ -873,7 +872,8 @@ public class Player extends Mob implements LootCollector {
         Notifications.getInstance().add(MojamComponent.texts.hasDiedCharacter(getCharacter()));
         carrying = null;
         dropAllMoney();
-        pos.set(startX, startY);
+        Vec2 randomSpawnPoint = level.getRandomSpawnPoint(team);
+        pos.set(randomSpawnPoint.x, randomSpawnPoint.y);
         health = maxHealth;
     }
 

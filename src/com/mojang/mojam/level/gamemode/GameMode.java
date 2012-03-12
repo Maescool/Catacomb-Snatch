@@ -20,30 +20,47 @@ import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.LevelUtils;
 import com.mojang.mojam.level.tile.FloorTile;
+import com.mojang.mojam.level.tile.PlayerSpawn;
 import com.mojang.mojam.level.tile.SandTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.level.tile.UnbreakableRailTile;
+import com.mojang.mojam.level.tile.WallTile;
+import com.mojang.mojam.math.Vec2;
+import com.mojang.mojam.tiled.TiledMap;
 
 public class GameMode {
 
 	public static final int LEVEL_BORDER_SIZE = 16;
 	
 	protected Level newLevel;
+	private TiledMap map;
 	
 	public Level generateLevel(LevelInformation li)  throws IOException {
 		BufferedImage bufferedImage;
-		//System.out.println("Loading level from file: "+li.getPath());
-		if(li.vanilla){
-			bufferedImage = ImageIO.read(MojamComponent.class.getResource(li.getPath()));
-		} else {
-			bufferedImage = ImageIO.read(new File(li.getPath()));
+		int w;
+		int h;
+		int layers;
+		
+		try {
+			map = new TiledMap(MojamComponent.class.getResourceAsStream(li.getPath()));
+			layers = map.getLayerCount();
+			if(layers < 3) {
+				throw new IOException();
+			}
+			w = map.getWidth();
+			h = map.getHeight();
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+			map = null;
+			w = 0;
+			h = 0;
+			layers = 0;
 		}
-		int w = bufferedImage.getWidth() + LEVEL_BORDER_SIZE;
-		int h = bufferedImage.getHeight() + LEVEL_BORDER_SIZE;
 		
 		newLevel = new Level(w, h);
 		
-		processLevelImage(bufferedImage, w, h);
+		processLevelMap(w, h, layers);
+		//processLevelImage(bufferedImage, w, h);
 		darkenMap(w, h);
 		
 		setupPlayerSpawnArea();
@@ -62,6 +79,31 @@ public class GameMode {
 			for (int x = 0; x < w; x++) {
 				int col = rgbs[x + y * w] & 0xffffffff;
 				loadColorTile(col, x, y);
+			}
+		}
+	}
+	
+	private void processLevelMap(int w, int h, int layers) {
+		for (int l = 0; l < layers; l++) {
+				processMapLayer(w, h, l);
+		}
+	}
+	
+	private void processMapLayer(int w, int h, int mapLayer) {
+		for (int x = 0; x < w; x++) {
+			for (int y = 0; y < h; y++) {
+				int id = this.map.getTileId(x, y, mapLayer);
+				
+				Object obj = LevelUtils.getNewObjectFromId(x, y, id);
+				
+				if (obj != null) {
+					if (obj instanceof Tile) {
+						newLevel.setTile(x, y, (Tile)obj);
+					}
+					if (obj instanceof Entity) {
+						newLevel.addEntity((Entity)obj);
+					}
+				}
 			}
 		}
 	}

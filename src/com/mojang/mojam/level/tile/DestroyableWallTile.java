@@ -51,7 +51,7 @@ public class DestroyableWallTile extends WallTile {
 	}
 
 	public void bomb(LargeBombExplodeAnimation largeBombExplodeAnimation) {
-		level.setTile(x, y, new FloorTile());
+		level.removeTile(x, y, this);
 		level.addEntity(new TileExplodeAnimation((x + 0.5) * Tile.WIDTH,
 				(y + 0.5) * Tile.HEIGHT));
 	}
