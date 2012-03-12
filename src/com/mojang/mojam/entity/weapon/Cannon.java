@@ -33,8 +33,9 @@ public class Cannon implements IWeapon {
 
 		setWeaponMode();
 
-		if (mob.isSprint)
+		if (mob.isSprint) {
 			shootDelay *= 3;
+		}
 
 	}
 
@@ -58,10 +59,13 @@ public class Cannon implements IWeapon {
 	public void primaryFire(double xDir, double yDir) {
 		if (readyToShoot) {
 			double dir;
-			if (owner.isSprint)
+			
+			if (owner.isSprint) {
 				dir = getBulletDirection(accuracy * 2);
-			else
+			} else {
 				dir = getBulletDirection(accuracy);
+			}
+			
 			Entity bullet = null;
 
 			xDir = Math.cos(dir);

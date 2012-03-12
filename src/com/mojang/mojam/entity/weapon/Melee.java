@@ -29,8 +29,9 @@ public class Melee implements IWeapon {
 
 		setWeaponMode();
 
-		if (mob.isSprint)
+		if (mob.isSprint) {
 			shootDelay *= 0.8;
+		}
 
 	}
 
