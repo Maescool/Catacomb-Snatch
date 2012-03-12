@@ -180,13 +180,11 @@ public class Art {
 	public static Bitmap[][] healthBar = cut("/art/effects/bar_green.png", 32, 4);
 	public static Bitmap[][] healthBar_Outline = cut("/art/effects/bar_outline.png", 32, 4);
 	public static Bitmap[][] healthBar_Underlay = cut("/art/effects/bar_green_underlay.png", 32, 4);
+	public static Bitmap[][] sprintBar = cut("/art/effects/sprint_bar.png", 32, 4);
 		
 	// Icons
 	public static BufferedImage icon32 = loadBufferedImage("/art/icon/icon32.png");
 	public static BufferedImage icon64 = loadBufferedImage("/art/icon/icon64.png");
-	
-	
-
 	
     /**
      * Return the bitmaps for a given piece of art, cut out from a sheet
