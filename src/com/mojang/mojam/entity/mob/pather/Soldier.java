@@ -12,7 +12,10 @@ import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.loot.LootCollector;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.entity.particle.Sparkle;
+import com.mojang.mojam.entity.weapon.IWeapon;
+import com.mojang.mojam.entity.weapon.Raygun;
 import com.mojang.mojam.entity.weapon.Rifle;
+import com.mojang.mojam.entity.weapon.Shotgun;
 import com.mojang.mojam.entity.weapon.SoldierRifle;
 import com.mojang.mojam.gui.components.Font;
 
@@ -41,6 +44,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 
 	private boolean highlight;
 	private double suckPower;
+	private double reloadTime;
 	private int maxUpgradeLevel;
 	private int upgradeLevel;
 
@@ -49,7 +53,9 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 			5 * Tile.WIDTH, 7 * Tile.WIDTH };
 	private int[] upgradeReloadTime = new int[] { 24, 21, 18 };
 	private double[] upgradeSuckPower = new double[] { 0.75, 1, 1.25 };
-
+	private IWeapon[] upgradeWeapon = new IWeapon[] { new SoldierRifle(this) , new Shotgun(this), new Raygun(this) };
+	private double[] upgradeMaxHealth = new double[] { 20, 30, 40 };
+	
 	private int shootRadius;
 	
 	/**
@@ -60,7 +66,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	public Soldier(double x, double y, int team, Entity followEntity) {
 		super(x, y, team);
 		setPos(x, y);
-		setStartHealth(70);
+
 		setAvoidWallsModifier(0);
 		setRandomDistanceModifier(0);
 		setMoney(0);
@@ -71,7 +77,6 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 		//damageEffectType = Mob.DamageEffectBlood;
 		setFollowEntity(followEntity);
 		setMode(Mode_Patrol);
-		setWeapon(new SoldierRifle(this));
 		setShootRadius(4*32);
 		
 		this.REGEN_INTERVAL=0;
@@ -318,9 +323,20 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	}
 
 	private void upgradeComplete(int i) {
-		//setReloadTime(getUpgradeReloadTime(upgradeLevel));
-		//setShootRadius(getUpgradeShootRadius(upgradeLevel));
-		//setSuckPower(getUpgradeSuckPower(upgradeLevel));
+		setReloadTime(getUpgradeReloadTime(upgradeLevel));
+		setShootRadius(getUpgradeShootRadius(upgradeLevel));
+		setSuckPower(getUpgradeSuckPower(upgradeLevel));
+		setStartHealth((float) getUpgradeMaxHealth(upgradeLevel));
+		setWeapon(getUpgradeWeapon(upgradeLevel));
+	}
+
+	private double getUpgradeMaxHealth(int upgradeLevel) {
+		return upgradeMaxHealth[upgradeLevel];
+	}
+
+	
+	private IWeapon getUpgradeWeapon(int upgradeLevel) {
+		return upgradeWeapon[upgradeLevel];
 	}
 
 	private int getUpgradeShootRadius(int upgradeLevel) {
@@ -426,5 +442,13 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	public void setShootRadius(int shootRadius) {
 		this.shootRadius = shootRadius;
 
+	}
+
+	public double getReloadTime() {
+		return reloadTime;
+	}
+
+	public void setReloadTime(double reloadTime) {
+		this.reloadTime = reloadTime;
 	}
 }
