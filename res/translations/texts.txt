@@ -90,9 +90,6 @@ levelselect.title = CHOOSE A LEVEL
 levelselect.start = START
 levelselect.update = UPDATE LEVELS
 
-local.en = ENGLISH
-local.de = GERMAN
-
 mp.waitingForClient = WAITING FOR CLIENT TO JOIN...
 mp.enterIP = ENTER IP OF HOST:
 mp.localIP = YOUR LOCAL IP:
