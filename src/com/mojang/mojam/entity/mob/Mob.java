@@ -292,10 +292,13 @@ public abstract class Mob extends Entity {
 					Player pl = (Player) bullet.owner;
 					pl.pexp++;
 				}
+				
+				freezeTime = bullet.freezeTime;
+			} else {
+				freezeTime = 5;
 			}
 			
 			hurtTime = 40;
-			freezeTime = 5;
 			health -= damage;
 			if (health < 0) {
 				health = 0;
