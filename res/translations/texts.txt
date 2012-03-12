@@ -145,6 +145,10 @@ shop.bombTooltipTitle = BOMB
 shop.bombTooltipLine1 = Destroys cracked walls.
 shop.bombTooltipLine2 = Use to create shortcuts.
 
+shop.soldierTooltipTitle = SOLDIER
+shop.soldierTooltipLine1 = Used for attack. Attacks
+shop.soldierTooltipLine2 = enemies, Collects coins.
+
 shop.rifleTooltipTitle = RIFLE
 shop.rifleTooltipLine1 = Default starting weapon.
 shop.rifleTooltipLine2 = Good all-round.
