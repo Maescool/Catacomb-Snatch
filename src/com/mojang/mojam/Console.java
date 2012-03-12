@@ -8,6 +8,7 @@ import java.util.Date;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.weapon.Cannon;
 import com.mojang.mojam.entity.weapon.ElephantGun;
+import com.mojang.mojam.entity.weapon.Flamethrower;
 import com.mojang.mojam.entity.weapon.Machete;
 import com.mojang.mojam.entity.weapon.Melee;
 import com.mojang.mojam.entity.weapon.Raygun;
@@ -395,6 +396,11 @@ public class Console implements KeyListener {
 				if(!player.weaponInventory.add(new Cannon(player))) {
 		        	log("You already have this item.");
 		    	}
+				
+				log("Giving player a flamethrower!");
+				if(!player.weaponInventory.add(new Flamethrower(player))) {
+		        	log("You already have this item.");
+		    	}
 		}
 	};
 
@@ -460,6 +466,13 @@ public class Console implements KeyListener {
 			{
 				log("Giving player a cannon!");
 				if(!player.weaponInventory.add(new Cannon(player))) {
+		        	log("You already have this item.");
+		    	}
+			}
+			else if(args[0].toLowerCase().equals("flamethrower"))
+			{
+				log("Giving player a flamethrower!");
+				if(!player.weaponInventory.add(new Flamethrower(player))) {
 		        	log("You already have this item.");
 		    	}
 			}

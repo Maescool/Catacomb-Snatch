@@ -2,8 +2,10 @@ package com.mojang.mojam.entity;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.building.Bomb;
-import com.mojang.mojam.entity.mob.*;
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.entity.mob.Mob;
+import com.mojang.mojam.entity.mob.RailDroid;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Screen;
 
 public class Bullet extends Entity {
 	public double xa, ya;
@@ -13,6 +15,7 @@ public class Bullet extends Entity {
 	public int duration;
 	protected int facing;
 	protected float damage;
+	public int freezeTime = 5; //how many ticks must pass before damage can be taken by mob again
 
 	public Bullet(Mob e, double xa, double ya, float damage) {
 		this.owner = e;
