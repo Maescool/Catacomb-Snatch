@@ -54,6 +54,10 @@ com.mojang.mojam.entity.weapon.Rifle.bulletDamage=0.5
 com.mojang.mojam.entity.weapon.Rifle.accuracy=0.15
 com.mojang.mojam.entity.weapon.Rifle.shootDelay=5
 
+com.mojang.mojam.entity.weapon.SoldierRifle.bulletDamage=0.5
+com.mojang.mojam.entity.weapon.SoldierRifle.accuracy=0.5
+com.mojang.mojam.entity.weapon.SoldierRifle.shootDelay=15
+
 com.mojang.mojam.entity.weapon.Raygun.bulletDamage=1.5
 com.mojang.mojam.entity.weapon.Raygun.accuracy=0.05
 com.mojang.mojam.entity.weapon.Raygun.shootDelay=10

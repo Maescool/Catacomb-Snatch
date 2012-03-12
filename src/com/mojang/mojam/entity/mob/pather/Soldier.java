@@ -13,6 +13,7 @@ import com.mojang.mojam.entity.loot.LootCollector;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.entity.particle.Sparkle;
 import com.mojang.mojam.entity.weapon.Rifle;
+import com.mojang.mojam.entity.weapon.SoldierRifle;
 import com.mojang.mojam.gui.components.Font;
 
 import com.mojang.mojam.level.tile.Tile;
@@ -70,7 +71,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 		//damageEffectType = Mob.DamageEffectBlood;
 		setFollowEntity(followEntity);
 		setMode(Mode_Patrol);
-		setWeapon(new Rifle(this));
+		setWeapon(new SoldierRifle(this));
 		setShootRadius(4*32);
 		
 		this.REGEN_INTERVAL=0;
