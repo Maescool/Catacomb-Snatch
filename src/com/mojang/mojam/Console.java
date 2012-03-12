@@ -347,6 +347,58 @@ public class Console implements KeyListener {
 		}
 	};
 
+	public Command allweapons = new Command("allweapons", 1, "Gives all weapons")
+	{
+		@Override
+		public void doCommand(String[] args)
+		{
+			args[0].trim();
+			Player player = MojamComponent.instance.player;
+			int i;
+		
+				log("Giving player a shotgun");
+				if(!player.weaponInventory.add(new Shotgun(player))) {
+		        	log("You already have this item.");
+		    	}
+		
+				log("Giving player a rifle");
+				if(!player.weaponInventory.add(new Rifle(player))) {
+		        	log("You already have this item.");
+		    	}
+		
+				log("Giving player a veonomshooter");
+				if(!player.weaponInventory.add(new VenomShooter(player))) {
+		        	log("You already have this item.");
+		    	}
+		
+				log("Giving player an elephant gun");
+				if(!player.weaponInventory.add(new ElephantGun(player))) {
+		        	log("You already have this item.");
+		    	}
+		
+				log("Giving player a lesson in boxing");
+				if(!player.weaponInventory.add(new Melee(player))) {
+		        	log("You already have this item.");
+		    	}
+		
+				log("Giving player a raygun");
+				if(!player.weaponInventory.add(new Raygun(player))) {
+		        	log("You already have this item.");
+		    	}
+		
+				log("Giving player a machete");
+				if(!player.weaponInventory.add(new Machete(player))) {
+		        	log("You already have this item.");
+		    	}
+		
+				log("Giving player a cannon!");
+				if(!player.weaponInventory.add(new Cannon(player))) {
+		        	log("You already have this item.");
+		    	}
+		}
+	};
+
+	
 	public Command give = new Command("give", 1, "Gives a weapon")
 	{
 		@Override
