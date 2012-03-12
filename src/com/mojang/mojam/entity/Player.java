@@ -732,7 +732,7 @@ public class Player extends Mob implements LootCollector {
     		return; 
     	}
     	int start = (int) (this.timeSprint * 20 / this.maxTimeSprint);
-        screen.blit(Art.moneyBar[start][0], pos.x - 16, pos.y + 8);
+        screen.blit(Art.sprintBar[start][0], pos.x - 16, pos.y + 8);
     }
     
     public void setCharacter(GameCharacter character) {
