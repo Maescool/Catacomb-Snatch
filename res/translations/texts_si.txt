@@ -6,6 +6,7 @@ build.removeRail = POTREBUJES {0} ZA UMIK TIRA
 
 back = NAZAJ
 cancel = PREKLIC
+select = IZBERI
 
 diffselect.title = IZBERI TEZAVNOST
 diffselect.start = ZACETEK IGRE

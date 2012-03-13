@@ -894,10 +894,13 @@ public class Player extends Mob implements LootCollector {
      * @param y Y coordinate
      */
     public void setAimByMouse(int x, int y) {
-        mouseAiming = true;
-        aimVector.set(x, y);
-        aimVector.normalizeSelf();
-        updateFacing();
+    	/* Only update aim if vector has direction */
+    	if (x != 0 || y != 0) {
+	        mouseAiming = true;
+	        aimVector.set(x, y);
+	        aimVector.normalizeSelf();
+	        updateFacing();
+    	}
     }
 
     /**
