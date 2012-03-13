@@ -44,8 +44,9 @@ public class LargeBombExplodeAnimation extends Animation {
 			// update shadows on FloorTiles after all DestroyableWallTiles have been removed
 			for (int yy = yt - r; yy <= yt + r; yy++) {
                 for (int xx = xt - r; xx <= xt + r; xx++) {
-                    if (level.getTile(xx, yy).getName() == FloorTile.NAME || level.getTile(xx, yy).getName() == SandTile.NAME)
-                        level.getTile(xx, yy).updateShadows();
+                    if (level.getTile(xx, yy).getName() == FloorTile.NAME || level.getTile(xx, yy).getName() == SandTile.NAME) {
+                    	level.getTile(xx, yy).updateShadows();
+                    }
                 }
             }
 		}

@@ -160,8 +160,8 @@ public class Level {
 	}
 	
 	private void updateTiles(int x, int y, Tile tile) {
-		for (int of : neighbourOffsets) {
-			final int nbIndex = x + (y * width) + of;
+		for (int offset : neighbourOffsets) {
+			final int nbIndex = x + (y * width) + offset;
 			if (nbIndex >= 0 && nbIndex < width * height) {
 				final Tile neighbour = activeTiles[nbIndex];
 				if (neighbour != null) {
@@ -174,15 +174,14 @@ public class Level {
 				
 			}
 		}
+		tile.neighbourChanged(null);
 	}
 	
 	public void addSpawnPoint(int x, int y, int team) {
 		if (team == Team.Team1) {
 			spawnPointsP1.add(new Vec2(x, y));
-			System.out.println("P1");
 		} else if (team == Team.Team2) {
 			spawnPointsP2.add(new Vec2(x, y));
-			System.out.println("P2");
 		} else {
 			return;
 		}
@@ -193,11 +192,9 @@ public class Level {
 		int index;
 		if (team == Team.Team1) {
 			index = TurnSynchronizer.synchedRandom.nextInt(spawnPointsP1.size() - 1);
-			System.out.println("got P1");
 			return spawnPointsP1.get(index);
 		} else if (team == Team.Team2) {
 			index = TurnSynchronizer.synchedRandom.nextInt(spawnPointsP2.size() - 1);
-			System.out.println("got P2");
 			return spawnPointsP2.get(index);
 		} else {
 			return null;
@@ -435,8 +432,7 @@ public class Level {
 
 	            // draw sand outside the level
 	            if (x < 0 || x >= width || y < 0 || y >= height) {
-	                screen.blit(Art.floorTiles[5][0], x * Tile.WIDTH, y
-	                        * Tile.HEIGHT);
+	                screen.blit(Art.floorTiles[5][0], x * Tile.WIDTH, y * Tile.HEIGHT);
 	                continue;
 	            }
 

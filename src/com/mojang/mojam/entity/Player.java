@@ -22,6 +22,7 @@ import com.mojang.mojam.entity.weapon.IWeapon;
 import com.mojang.mojam.entity.weapon.Rifle;
 import com.mojang.mojam.entity.weapon.WeaponInventory;
 import com.mojang.mojam.gui.Notifications;
+import com.mojang.mojam.level.tile.PlayerRailTile;
 import com.mojang.mojam.level.tile.RailTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.Vec2;
@@ -513,30 +514,32 @@ public class Player extends Mob implements LootCollector {
      * @param y current position's Y coordinate
      */
     private void handleRailBuilding(int x, int y) {
-        if (level.getTile(x, y).isBuildable()) {
-        	
+    	Tile tile = level.getTile(x, y);
+    	
+        if (tile.isBuildable()) {
             if (score >= COST_RAIL && time - lastRailTick >= RailDelayTicks) {
                 lastRailTick = time;
-                level.placeTile(x, y, new RailTile(level.getTile(x, y)), this);
+                level.placeTile(x, y, new RailTile(), this);
                 payCost(COST_RAIL);
             } else if (score < COST_RAIL && this.team == MojamComponent.localTeam) {
             	Notifications.getInstance().add(MojamComponent.texts.buildRail(COST_RAIL));
             }            
-        } else if (level.getTile(x, y) instanceof RailTile) {
-            if ((y < 8 && team == Team.Team2) || (y > level.height - 9 && team == Team.Team1)) {
-                if (score >= COST_DROID) {
-                    level.addEntity(new RailDroid(pos.x, pos.y, team));
-                    payCost(COST_DROID);
-                } else {
-                	if(this.team == MojamComponent.localTeam) {
-                		Notifications.getInstance().add(MojamComponent.texts.buildDroid(COST_DROID));
-                	}
-                }
+        } else if (tile instanceof RailTile) {
+            if (tile instanceof PlayerRailTile) {
+            	if ( ((PlayerRailTile) tile).isTeam(team)) {
+	                if (score >= COST_DROID) {
+	                    level.addEntity(new RailDroid(pos.x, pos.y, team));
+	                    payCost(COST_DROID);
+	                } else {
+	                	if(this.team == MojamComponent.localTeam) {
+	                		Notifications.getInstance().add(MojamComponent.texts.buildDroid(COST_DROID));
+	                	}
+	                }
+            	}
             } else {
-
                 if (score >= COST_REMOVE_RAIL && time - lastRailTick >= RailDelayTicks) {
                     lastRailTick = time;
-                    if (((RailTile) level.getTile(x, y)).remove()) {
+                    if (((RailTile) tile).remove()) {
                         payCost(COST_REMOVE_RAIL);
                     }
                 } else if (score < COST_REMOVE_RAIL) {

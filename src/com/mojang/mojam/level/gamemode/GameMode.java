@@ -19,6 +19,7 @@ import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.SandTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.level.tile.UnbreakableRailTile;
+import com.mojang.mojam.tiled.TileSet;
 import com.mojang.mojam.tiled.TiledMap;
 
 public class GameMode {
@@ -51,18 +52,26 @@ public class GameMode {
 		
 		newLevel = new Level(w, h);
 		
+		processMapTilesets();
 		processLevelMap(w, h, layers);
 		darkenMap(w, h);
 		
-		setupPlayerSpawnArea();
+		//setupPlayerSpawnArea();
 		setTickItems();
 		setVictoryCondition();
 		setTargetScore();
 		return newLevel;
 	}
 	
+	private void processMapTilesets() {
+		for (int i = 0; i < map.getTileSetCount(); i ++) {
+			TileSet tileSet = map.getTileSet(i);
+			System.out.println(tileSet.name);
+		}
+	}
+	
 	private void processLevelMap(int w, int h, int layers) {
-		for (int l = 0; l < layers; l++) {
+		for (int l = 0; l < layers; l++) {			
 				processMapLayer(w, h, l);
 		}
 	}
@@ -71,7 +80,6 @@ public class GameMode {
 		for (int x = 0; x < w; x++) {
 			for (int y = 0; y < h; y++) {
 				int id = this.map.getTileId(x, y, mapLayer);
-				
 				Object obj = LevelUtils.getNewObjectFromId(x, y, id);
 				
 				if (obj != null) {
@@ -149,8 +157,8 @@ public class GameMode {
 		newLevel.addEntity(new ShopItemRaygun(32 * (newLevel.width / 2 - 2.5), (newLevel.height - 5.5) * 32, Team.Team1));
 
 		for (int i=0; i<3; i++){
-		    newLevel.setTile((newLevel.width / 2) - i, 7, new UnbreakableRailTile(new SandTile()));	
-		    newLevel.setTile((newLevel.width / 2) - i, newLevel.height - 8, new UnbreakableRailTile(new SandTile()));
+		    newLevel.setTile((newLevel.width / 2) - i, 7, new UnbreakableRailTile());	
+		    newLevel.setTile((newLevel.width / 2) - i, newLevel.height - 8, new UnbreakableRailTile());
 		}
 	}
 	

@@ -12,17 +12,10 @@ public class RailTile extends Tile {
 
 	private static final int COLOR = -1;
 
-	Tile parent;
-
 	public int numConnections = 0;
 	private boolean[] connections = new boolean[4];
 
 	// private boolean[] exits = new boolean[4];
-
-	public RailTile(Tile parent) {
-		this.parent = parent;
-		minimapColor = Art.floorTileColors[4][1];
-	}
 	
 	public RailTile() {
 		//this.parent = parent;
@@ -30,10 +23,8 @@ public class RailTile extends Tile {
 	}
 
 	public void init(Level level, int x, int y) {
-		//parent.init(level, x, y);
 		super.init(level, x, y);
 		neighbourChanged(null);
-		//parent.neighbourChanged(null);
 	}
 
 	public void render(Screen screen) {

@@ -30,6 +30,7 @@ import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.HoleTile;
 import com.mojang.mojam.level.tile.PlayerBaseLeft;
 import com.mojang.mojam.level.tile.PlayerBaseRight;
+import com.mojang.mojam.level.tile.PlayerRailTile;
 import com.mojang.mojam.level.tile.PlayerSpawn;
 import com.mojang.mojam.level.tile.RailTile;
 import com.mojang.mojam.level.tile.SandTile;
@@ -56,7 +57,7 @@ public class LevelUtils {
 			tile = new SandTile();
 			break;			
 		case UnbreakableRailTile.COLOR:
-			tile = new UnbreakableRailTile(new FloorTile());
+			tile = new UnbreakableRailTile();
 			break;			
 		case UnpassableSandTile.COLOR:
 			tile = new UnpassableSandTile();
@@ -105,11 +106,14 @@ public class LevelUtils {
 			break;
 			
 		//Overlay IDs
+		case TILESET_OVERLAY_BASE_ID:
+			obj = new TreasurePile(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT + 12);
+			break;
 		case TILESET_OVERLAY_BASE_ID + 1:
 			obj = new RailTile();
 			break;
 		case TILESET_OVERLAY_BASE_ID + 2:
-			obj = new UnbreakableRailTile(new FloorTile());
+			obj = new UnbreakableRailTile();
 			break;
 		case TILESET_OVERLAY_BASE_ID + 3:
 			obj = new SpikeTrap(x * Tile.WIDTH,y * Tile.HEIGHT);
@@ -203,7 +207,7 @@ public class LevelUtils {
 			obj =  new PlayerBaseRight(5, Team.Team1);
 			break;
 			
-			
+
 		case TILESET_PLAYER1_BASE_ID + 24:
 			obj =  new ShopItemTurret(x * Tile.WIDTH+Tile.WIDTH/2, y * Tile.HEIGHT+Tile.HEIGHT/2, Team.Team1);
 			break;
@@ -212,6 +216,9 @@ public class LevelUtils {
 			break;
 		case TILESET_PLAYER1_BASE_ID + 26:
 			obj =  new ShopItemBomb(x * Tile.WIDTH+Tile.WIDTH/2, y * Tile.HEIGHT+Tile.HEIGHT/2, Team.Team1);
+			break;
+		case TILESET_PLAYER1_BASE_ID + 27:
+			obj =  new PlayerRailTile(Team.Team1);
 			break;
 		case TILESET_PLAYER1_BASE_ID + 32:
 			obj =  new ShopItemRifle(x * Tile.WIDTH+Tile.WIDTH/2, y * Tile.HEIGHT+Tile.HEIGHT/2, Team.Team1);
@@ -312,6 +319,9 @@ public class LevelUtils {
 			break;
 		case TILESET_PLAYER2_BASE_ID + 26:
 			obj =  new ShopItemBomb(x * Tile.WIDTH+Tile.WIDTH/2, y * Tile.HEIGHT+Tile.HEIGHT/2, Team.Team2);
+			break;
+		case TILESET_PLAYER2_BASE_ID + 27:
+			obj =  new PlayerRailTile(Team.Team2);
 			break;
 		case TILESET_PLAYER2_BASE_ID + 32:
 			obj =  new ShopItemRifle(x * Tile.WIDTH+Tile.WIDTH/2, y * Tile.HEIGHT+Tile.HEIGHT/2, Team.Team2);
