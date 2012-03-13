@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.mojang.mojam.GameCharacter;
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.IRemoveEntityNotify;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.entity.mob.pather.AvoidableObject;
@@ -12,7 +14,7 @@ import com.mojang.mojam.entity.mob.pather.Soldier;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 
-public class ShopItemSoldier extends ShopItem {
+public class ShopItemSoldier extends ShopItem implements IRemoveEntityNotify{
 
 	Bitmap baseSprite;
 	List<Soldier> soldiers=new ArrayList<Soldier>();
@@ -64,14 +66,20 @@ public class ShopItemSoldier extends ShopItem {
 		//really should just add a counter not a list and
 		//decrease on the soldiers death.
 		//a push instead of a poll
-		int i=0;
-		int ii=soldiers.size();
-		for (i=0;i<ii;i++) {
-			if(soldiers.get(i).removed) {
-				soldiers.remove(i);
-				i--;
-				ii--;
-			}
-		}
+		//int i=0;
+		//int ii=soldiers.size();
+		//for (i=0;i<ii;i++) {
+		//	if(soldiers.get(i).removed) {
+		//		soldiers.remove(i);
+		//		i--;
+		//		ii--;
+		//	}
+		//}
+	}
+
+	@Override
+	public void removeEntityNotice(Entity e) {
+		soldiers.remove(e);
+		
 	}
 }

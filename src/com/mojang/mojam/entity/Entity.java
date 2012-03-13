@@ -165,6 +165,9 @@ public abstract class Entity implements BBOwner {
 
 	public void remove() {
 		removed = true;
+		if (spawnSource != null && spawnSource instanceof IRemoveEntityNotify) {
+			((IRemoveEntityNotify)spawnSource).removeEntityNotice(this);
+		}
 	}
 
 	@Override
