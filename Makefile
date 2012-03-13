@@ -16,8 +16,8 @@ class:
 
 jar: class | lib/.tmp $(distdir)
 	cd lib/.tmp && find ../ -maxdepth 1 -name '*.jar' -exec jar xf '{}' ';'
-	jar cfe $(distjar) com.mojang.mojam.MojamComponent -C src/ . -C res/ .
-	jar ufe $(distjar) com.mojang.mojam.MojamComponent -C lib/.tmp/ .
+	jar cfe $(distjar) com.mojang.mojam.MojamStartup -C src/ . -C res/ .
+	jar ufe $(distjar) com.mojang.mojam.MojamStartup -C lib/.tmp/ .
 
 lib/.tmp:
 	mkdir -p lib/.tmp

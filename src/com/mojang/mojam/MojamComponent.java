@@ -159,7 +159,14 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private LocaleMenu localemenu = null;
 
 	public MojamComponent() {
-		
+	    final String nativeLibDir = MojamComponent.getMojamDir()
+			.getAbsolutePath().toString()
+			+ File.separator
+			+ "bin"
+			+ File.separator
+			+ "native"
+			+ File.separator;
+	    System.setProperty("org.lwjgl.librarypath", nativeLibDir);
 		// initialize the constants
 		MojamComponent.constants = new Constants();
 
@@ -796,8 +803,13 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			synchronizer.addCommand(new ChatCommand(texts.playerNameCharacter(playerCharacter) + ": " + msg));
 		}
 	}
+	
+	public static void main(String[] args){
+	    System.err.println("YOU SHOULD CHANGE YOUR STARTUP COMPONENT TO MojamStartup!");
+	    MojamComponent.startgame();
+	}
 
-	public static void main(String[] args) {
+	public static void startgame() {
 		Options.loadProperties();
 		MojamComponent mc = new MojamComponent();
 		System.out.println("Starting "+(Options.getAsBoolean(Options.OPENGL,Options.VALUE_FALSE)?"with":"without")+" OpenGL support");
