@@ -6,6 +6,7 @@ build.removeRail = VOCÊ PRECISA DE {0} PARA REMOVER UM TRILHO.
 
 back = VOLTAR
 cancel = CANCELAR
+select = SELECIONAR
 
 character.text = ESCOLHA SEU PERSONAGEM!
 character.select = SELECIONAR
@@ -22,6 +23,10 @@ diffselect.easy = FÁCIL
 diffselect.normal = NORMAL
 diffselect.hard = DIFÍCIL
 diffselect.nightmare = PESADELO
+
+exitmenu.headline = VOCÊ REALMENTE DESEJA SAIR DO JOGO?
+exitmenu.cancel = NÃO
+exitmenu.exit = SIM
 
 gameplay.player1Win = {0} GANHOU!
 gameplay.player2Win = {0} GANHOU
@@ -97,6 +102,7 @@ options.keyBindings = CONTROLES
 options.characterSelect = MUDAR PERSONAGEM
 options.trapmouse = TRANCAR MOUSE NA TELA
 options.fullscreen = TELA-CHEIA
+options.opengl = OPENGL
 options.showfps = MOSTRAR FPS
 options.music = MÚSICA
 options.sounds = SOM
@@ -113,10 +119,6 @@ pausemenu.backtomain = MENU
 pausemenu.resume = RETORNAR
 pausemenu.exit = SAIR DO JOGO
 
-exitmenu.headline = VOCÊ REALMENTE QUER SAIR DO JOGO?
-exitmenu.cancel = NÃO
-exitmenu.exit = SIM
-
 player.hasDied = {0} MORREU!
 player.score = {0}: {1}%
 player.cost = {0}
@@ -126,9 +128,6 @@ player.nextLevel = {0}
 player.exp = {0}
 player.level = {0}
 player.weaponSlot = {0}
-
-local.en = ENGLISH
-local.de = GERMAN
 
 shop.turretTooltipTitle = TURRET
 shop.turretTooltipLine1 = USADA PARA DEFESA.
@@ -164,3 +163,5 @@ upgrade.shopItem = VOCÊ NÃO PODE MELHORAR UM ITEM DA LOJA.
 upgrade.notEnoughMoney = VOCÊ NÃO TEM DINHEIRO O BASTANTE ({0})
 upgrade.to = MELHORADA PARA O NÍVEL {0}
 
+download.downloading = BAIXANDO...
+download.unpacking = DESCOMPACTANDO..
