@@ -131,7 +131,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public boolean isServer;
 	public int localId;
 	public static int localTeam; //local team is the team of the client. This can be used to check if something should be only rendered on one person's screen
-
+	public static Player localPlayer;
+	
 	public GameCharacter playerCharacter;
 	public boolean sendCharacter = false;
 
@@ -389,6 +390,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			players[1] = null;
 		}
 		player = players[localId];
+		MojamComponent.localPlayer=player;
 		player.setCanSee(true);
 		ModSystem.createLevel(level);
 	}
