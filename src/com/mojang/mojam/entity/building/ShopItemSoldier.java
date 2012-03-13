@@ -36,6 +36,7 @@ public class ShopItemSoldier extends ShopItem implements IRemoveEntityNotify{
 		if (player.getTeam() == team && checkPlayerLevel(player)) {
 			Soldier soldier = new Soldier(player.pos.x, player.pos.y, team,	player);
 			soldiers.add(soldier);
+			soldier.setSpawnSource(this);
 			level.addEntity(soldier);
 		}
 	}

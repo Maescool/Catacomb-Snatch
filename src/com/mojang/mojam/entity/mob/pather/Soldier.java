@@ -85,7 +85,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 
 	public void tick() {
 		super.tick();
-		tryToShoot();
+		//tryToShoot();
 	}
 	
 	public void collide(Entity entity, double xa, double ya) {
