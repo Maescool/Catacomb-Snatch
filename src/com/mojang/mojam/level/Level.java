@@ -491,7 +491,7 @@ public class Level {
                     count++;
                 if (c3)
                     count++;
-                int yo = -16;
+                int yo = 0;
 
                 if (count == 4) {
                     screen.blit(Art.darkness[1][1], x * Tile.WIDTH, y

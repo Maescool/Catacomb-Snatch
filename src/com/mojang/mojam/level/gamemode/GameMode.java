@@ -16,7 +16,6 @@ import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.LevelUtils;
 import com.mojang.mojam.level.tile.FloorTile;
-import com.mojang.mojam.level.tile.SandTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.level.tile.UnbreakableRailTile;
 import com.mojang.mojam.tiled.TileSet;
@@ -54,7 +53,7 @@ public class GameMode {
 		
 		processMapTilesets();
 		processLevelMap(w, h, layers);
-		darkenMap(w, h);
+		//darkenMap(w, h);
 		
 		//setupPlayerSpawnArea();
 		setTickItems();
