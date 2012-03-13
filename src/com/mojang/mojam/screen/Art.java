@@ -101,6 +101,7 @@ public class Art {
 	public static Bitmap gameOverScreen = load("/art/screen/game_over.png");
 	public static Bitmap pauseScreen = load("/art/screen/pause_screen.png");
 	public static Bitmap mojangLogo = load("/art/logo/mojang.png");
+	public static Bitmap downloadScreen = load("/art/screen/download_screen.png");
 	
 	// UI elements
 	public static Bitmap[][] button = cut("/art/screen/button.png", 128, 24);
