@@ -21,7 +21,16 @@ public class SmokePuffAnimation extends Animation {
 		width = bitmap.length;
 		numFrames = width * bitmap[0].length;
 	}
-
+	
+	public SmokePuffAnimation(double x, double y, double xa, double ya, Bitmap[][] bitmap, int duration) {
+		super(x, y, duration);
+		this.xa = xa;
+		this.ya = ya;
+		this.bitmap = bitmap;
+		width = bitmap.length;
+		numFrames = width * bitmap[0].length;
+	}
+	
 	public void tick() {
 		super.tick();
 		move(xa, ya);
