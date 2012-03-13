@@ -42,7 +42,6 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 
 	private Entity followEntity;
 
-	private boolean highlight;
 	private double suckPower;
 	private double reloadTime;
 	private int maxUpgradeLevel;
@@ -188,9 +187,24 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 
 	public void render(Screen screen) {
 		super.render(screen);
-		renderMarker(screen);
 	}
 
+	protected void renderMarker(Screen screen) {
+		super.renderMarker(screen);
+
+		if (this.highlight) {
+			Font.FONT_WHITE_SMALL.draw(screen, getCurrentModeName(),
+					(int) (pos.x), (int) (pos.y - yOffs - 16),
+					Font.Align.CENTERED);
+
+			if (upgradeLevel < maxUpgradeLevel) {
+				Font.FONT_WHITE_SMALL.draw(screen, String.format("Upgrade: %d",
+						upgradeCosts[upgradeLevel]), (int) (pos.x),
+						(int) (pos.y - yOffs - 24), Font.Align.CENTERED);
+			}
+		}
+	}
+	
 	@Override
 	public boolean canTake() {
 		if (getMoney() < getMaxMoney())
@@ -262,37 +276,6 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	public boolean isAllowedToCancel() {
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-	protected void renderMarker(Screen screen) {
-		if (highlight) {
-			BB bb = getBB();
-			bb = bb.grow((getSprite().w - (bb.x1 - bb.x0))
-					/ (3 + Math.sin(System.currentTimeMillis() * .01)));
-			int width = (int) (bb.x1 - bb.x0);
-			int height = (int) (bb.y1 - bb.y0);
-			Bitmap marker = new Bitmap(width, height);
-			for (int y = 0; y < height; y++) {
-				for (int x = 0; x < width; x++) {
-					if ((x < 2 || x > width - 3 || y < 2 || y > height - 3)
-							&& (x < 5 || x > width - 6)
-							&& (y < 5 || y > height - 6)) {
-						int i = x + y * width;
-						marker.pixels[i] = 0xffffffff;
-					}
-				}
-			}
-			screen.blit(marker, bb.x0, bb.y0 - 4);
-			//renderFillBar(screen, 32, 32);
-			//if (upgradeLevel < maxUpgradeLevel) {
-			//	Font.drawCenter(screen, String.format("Upgrade: %d",
-			//			upgradeCosts[upgradeLevel]), (int) (pos.x),
-			//			(int) (pos.y - 24 - yOffs));
-			//}
-			Font.FONT_WHITE_SMALL.draw(screen, getCurrentModeName(), (int) (pos.x), (int) (pos.y - yOffs - 16), Font.Align.CENTERED);
-			//drawCenter(screen, getCurrentModeName(), (int) (pos.x),
-			//		(int) (pos.y - 24 - yOffs - 8));
-		}
 	}
 
 	public boolean upgrade(Player p) {

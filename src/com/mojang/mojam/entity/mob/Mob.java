@@ -261,7 +261,6 @@ public abstract class Mob extends Entity {
 		if (doShowMoneyBar && money > 0 ) {
             addMoneyBar(screen);
         }
-		
 		renderMarker(screen);
 	}
 
