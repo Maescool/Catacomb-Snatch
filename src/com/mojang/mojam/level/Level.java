@@ -177,12 +177,12 @@ public class Level {
 	}
 	
 	public void addSpawnPoint(int x, int y, int team) {
-		spawnPointsP1.add(new Vec2(x, y));
-		
 		if (team == Team.Team1) {
 			spawnPointsP1.add(new Vec2(x, y));
+			System.out.println("P1");
 		} else if (team == Team.Team2) {
 			spawnPointsP2.add(new Vec2(x, y));
+			System.out.println("P2");
 		} else {
 			return;
 		}
@@ -193,9 +193,11 @@ public class Level {
 		int index;
 		if (team == Team.Team1) {
 			index = TurnSynchronizer.synchedRandom.nextInt(spawnPointsP1.size() - 1);
+			System.out.println("got P1");
 			return spawnPointsP1.get(index);
 		} else if (team == Team.Team2) {
 			index = TurnSynchronizer.synchedRandom.nextInt(spawnPointsP2.size() - 1);
+			System.out.println("got P2");
 			return spawnPointsP2.get(index);
 		} else {
 			return null;

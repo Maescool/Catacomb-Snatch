@@ -1,11 +1,7 @@
 package com.mojang.mojam.level.gamemode;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-
-import javax.imageio.ImageIO;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
@@ -20,12 +16,9 @@ import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.LevelUtils;
 import com.mojang.mojam.level.tile.FloorTile;
-import com.mojang.mojam.level.tile.PlayerSpawn;
 import com.mojang.mojam.level.tile.SandTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.level.tile.UnbreakableRailTile;
-import com.mojang.mojam.level.tile.WallTile;
-import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.tiled.TiledMap;
 
 public class GameMode {
@@ -36,7 +29,6 @@ public class GameMode {
 	private TiledMap map;
 	
 	public Level generateLevel(LevelInformation li)  throws IOException {
-		BufferedImage bufferedImage;
 		int w;
 		int h;
 		int layers;
@@ -60,7 +52,6 @@ public class GameMode {
 		newLevel = new Level(w, h);
 		
 		processLevelMap(w, h, layers);
-		//processLevelImage(bufferedImage, w, h);
 		darkenMap(w, h);
 		
 		setupPlayerSpawnArea();
@@ -68,19 +59,6 @@ public class GameMode {
 		setVictoryCondition();
 		setTargetScore();
 		return newLevel;
-	}
-	
-	private void processLevelImage(BufferedImage bufferedImage, int w, int h) {		
-		int[] rgbs = defaultRgbArray(w, h);
-		
-		bufferedImage.getRGB(0, 0, w - 16, h - 16, rgbs, 8 + 8 * w, w);
-		
-		for (int y = 0; y < h; y++) {
-			for (int x = 0; x < w; x++) {
-				int col = rgbs[x + y * w] & 0xffffffff;
-				loadColorTile(col, x, y);
-			}
-		}
 	}
 	
 	private void processLevelMap(int w, int h, int layers) {

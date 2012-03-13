@@ -223,9 +223,9 @@ public class LevelUtils {
 			obj =  new ShopItemRaygun(x * Tile.WIDTH+Tile.WIDTH/2, y * Tile.HEIGHT+Tile.HEIGHT/2, Team.Team1);
 			break;
 
-		//Player 1 IDs
+		//Player 2 IDs
 		
-		//Player 1 Spawn
+		//Player 2 Spawn
 		case TILESET_PLAYER2_BASE_ID:
 			obj =  new PlayerSpawn(0, Team.Team2);
 			break;
@@ -263,7 +263,7 @@ public class LevelUtils {
 			obj =  new PlayerSpawn(11, Team.Team2);
 			break;
 		
-		//Player 1 Base Left
+		//Player 2 Base Left
 		case TILESET_PLAYER2_BASE_ID + 4:
 			obj =  new PlayerBaseLeft(0, Team.Team2);
 			break;
@@ -283,7 +283,7 @@ public class LevelUtils {
 			obj =  new PlayerBaseLeft(5, Team.Team2);
 			break;
 		
-		//Player 1 Base Right
+		//Player 2 Base Right
 		case TILESET_PLAYER2_BASE_ID + 6:
 			obj =  new PlayerBaseRight(0, Team.Team2);
 			break;
