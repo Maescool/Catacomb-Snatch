@@ -35,7 +35,7 @@ public class MojamStartup extends Canvas implements Runnable, KeyListener,
 
     public static final int GAME_WIDTH = 512;
     public static final int GAME_HEIGHT = GAME_WIDTH * 3 / 4;
-    public static final int SCALE = 1;
+    public static final int SCALE = 2;
 
     public static Screen screen = new Screen(GAME_WIDTH, GAME_HEIGHT);
 
