@@ -21,7 +21,7 @@ import com.mojang.mojam.screen.*;
  */
 public abstract class Pather extends HostileMob {
 	public int facing;
-	public int walkTime;
+	
 	public double stepTime;
 
 	private AStar aStar;

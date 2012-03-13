@@ -1,5 +1,6 @@
 package com.mojang.mojam.entity.mob.pather;
 
+import java.util.Random;
 import java.util.Set;
 
 import com.mojang.mojam.GameCharacter;
@@ -8,6 +9,7 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.IUsable;
 import com.mojang.mojam.entity.Player;
+import com.mojang.mojam.entity.animation.SmokePuffAnimation;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.loot.LootCollector;
 import com.mojang.mojam.entity.mob.Team;
@@ -52,11 +54,13 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 			5 * Tile.WIDTH, 7 * Tile.WIDTH };
 	private int[] upgradeReloadTime = new int[] { 24, 21, 18 };
 	private double[] upgradeSuckPower = new double[] { 0.75, 1, 1.25 };
-	private IWeapon[] upgradeWeapon = new IWeapon[] { new SoldierRifle(this) , new Shotgun(this), new Raygun(this) };
+	private IWeapon[] upgradeWeapon = new IWeapon[] { new SoldierRifle(this),
+			new Shotgun(this), new Raygun(this) };
 	private double[] upgradeMaxHealth = new double[] { 20, 30, 40 };
-	
+
 	private int shootRadius;
-	
+	private int nextWalkSmokeTick = 0;
+
 	/**
 	 * @param x
 	 * @param y
@@ -73,65 +77,75 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 		setDoShowMoneyBar(false);
 		makeUpgradeableWithCosts(upgradeCosts);
 
-		//damageEffectType = Mob.DamageEffectBlood;
+		// damageEffectType = Mob.DamageEffectBlood;
 		setFollowEntity(followEntity);
 		setMode(Mode_Patrol);
-		setShootRadius(4*32);
-		
-		this.REGEN_INTERVAL=0;
-		this.REGEN_HEALTH=false;
+		setShootRadius(4 * 32);
+
+		this.REGEN_INTERVAL = 0;
+		this.REGEN_HEALTH = false;
 	}
 
 	public void tick() {
 		super.tick();
 		tryToShoot();
+
+		Random random = TurnSynchronizer.synchedRandom;
+		if (stepTime >= nextWalkSmokeTick) {
+			level.addEntity(new SmokePuffAnimation(pos.x, pos.y, 0, -1,
+					Art.fxDust12, 35 + random.nextInt(10)));
+			nextWalkSmokeTick += (15 + random.nextInt(15));
+		}
+		if (random.nextDouble() < 0.02f) {
+			level.addEntity(new SmokePuffAnimation(pos.x, pos.y, 0, -0.5,
+					Art.fxDust12, 35 + random.nextInt(10)));
+		}
 	}
-	
+
 	public void collide(Entity entity, double xa, double ya) {
 		super.collide(entity, xa, ya);
 
-			if(entity instanceof Player) {
-				if (!((Player)entity).isNotFriendOf(this)) {
-					double dist = entity.pos.dist(pos);
-					xBump = (pos.x - entity.pos.x) / dist * 2;
-					yBump = (pos.y - entity.pos.y) / dist * 2;
-				}
+		if (entity instanceof Player) {
+			if (!((Player) entity).isNotFriendOf(this)) {
+				double dist = entity.pos.dist(pos);
+				xBump = (pos.x - entity.pos.x) / dist * 2;
+				yBump = (pos.y - entity.pos.y) / dist * 2;
 			}
+		}
 		if (TurnSynchronizer.synchedRandom.nextInt(10) > 5)
 			resetPath();
 	}
-	
+
 	protected Vec2 getPathTarget() {
 		Tile tileTo = null;
 
 		switch (mode) {
 
-		
 		case Mode_Follow:
 			if (followEntity != null)
 				tileTo = level.getTile(followEntity.pos);
 			break;
 		case Mode_ReturnHome:
-					
-			if ((pos.y < (8*Tile.HEIGHT) && getTeam() == Team.Team2)
-					|| (pos.y > ((level.height - 9) *Tile.HEIGHT)  && getTeam() == Team.Team1)) {
+
+			if ((pos.y < (8 * Tile.HEIGHT) && getTeam() == Team.Team2)
+					|| (pos.y > ((level.height - 9) * Tile.HEIGHT) && getTeam() == Team.Team1)) {
 				setMode(Mode_Patrol);
-				health=maxHealth;
+				health = maxHealth;
 				if (followEntity instanceof Player)
 					if (((Player) followEntity).canTake())
 						((Player) followEntity).addScore(getMoney());
-						setMoney(0);
+				setMoney(0);
 			}
-					
+
 			if (getTeam() == Team.Team1) {
-				tileTo=level.getTile(level.width/2,(level.height - 5 - 1));
+				tileTo = level.getTile(level.width / 2, (level.height - 5 - 1));
 			} else {
-				tileTo=level.getTile(level.width/2,6);
+				tileTo = level.getTile(level.width / 2, 6);
 			}
 			break;
 		case Mode_Patrol:
 		default:
-			if ( health < maxHealth/2 || getMoney() >= getMaxMoney()) {
+			if (health < maxHealth / 2 || getMoney() >= getMaxMoney()) {
 				setMode(Mode_ReturnHome);
 				return null;
 			}
@@ -161,13 +175,13 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	private void tryToShoot() {
 
 		int shootRadius = getShootRadius();
-		
-		Entity closest = checkIfEnemyNear( shootRadius, Mob.class, true);
+
+		Entity closest = checkIfEnemyNear(shootRadius, Mob.class, true);
 
 		if (closest != null) {
 			double yDir = closest.pos.y - pos.y;
 			double xDir = closest.pos.x - pos.x;
-			aimVector=(closest.pos.sub(pos));
+			aimVector = (closest.pos.sub(pos));
 			weapon.primaryFire(xDir, yDir);
 		}
 	}
@@ -175,11 +189,11 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	public Bitmap getSprite() {
 		Bitmap[][] sheet = null;
 		if (followEntity instanceof Player) {
-			sheet =Art.getPlayer(((Player)followEntity).getCharacter());
+			sheet = Art.getPlayer(((Player) followEntity).getCharacter());
 		} else {
-			sheet =Art.getPlayer(GameCharacter.LordLard);
+			sheet = Art.getPlayer(GameCharacter.LordLard);
 		}
-		
+
 		if (sheet != null)
 			return sheet[(int) stepTime % 6][facing];
 		return null;
@@ -204,7 +218,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 			}
 		}
 	}
-	
+
 	@Override
 	public boolean canTake() {
 		if (getMoney() < getMaxMoney())
@@ -261,8 +275,8 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 		}
 		this.highlight = hl;
 		this.freezeTime = 10;
-		
-		if(team == MojamComponent.localTeam && hl)
+
+		if (team == MojamComponent.localTeam && hl)
 			setDoShowMoneyBar(true);
 	}
 
@@ -317,7 +331,6 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 		return upgradeMaxHealth[upgradeLevel];
 	}
 
-	
 	private IWeapon getUpgradeWeapon(int upgradeLevel) {
 		return upgradeWeapon[upgradeLevel];
 	}
