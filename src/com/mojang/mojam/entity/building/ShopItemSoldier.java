@@ -42,10 +42,6 @@ public class ShopItemSoldier extends ShopItem implements IRemoveEntityNotify{
 	}
 	
 	public void tick() {
-		//check if player is the right level to buy stuff!
-		//checkPlayerLevel();
-		checkSoldierList();
-		
 		if (!( this.team == MojamComponent.localTeam && checkPlayerLevel(MojamComponent.localPlayer))) {
 			Bitmap sprite=new Bitmap(baseSprite.w,baseSprite.h);
 			int col=64+(int)(64*(Math.sin(System.currentTimeMillis() * .001)+1.5));
@@ -62,22 +58,6 @@ public class ShopItemSoldier extends ShopItem implements IRemoveEntityNotify{
 		return true;
 	}
 	
-	protected void checkSoldierList() {
-		//OMG this is nasty.. but its just POC
-		//really should just add a counter not a list and
-		//decrease on the soldiers death.
-		//a push instead of a poll
-		//int i=0;
-		//int ii=soldiers.size();
-		//for (i=0;i<ii;i++) {
-		//	if(soldiers.get(i).removed) {
-		//		soldiers.remove(i);
-		//		i--;
-		//		ii--;
-		//	}
-		//}
-	}
-
 	@Override
 	public void removeEntityNotice(Entity e) {
 		soldiers.remove(e);
