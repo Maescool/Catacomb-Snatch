@@ -29,7 +29,7 @@ public class TurretTeamTwo extends Turret {
 
 	@Override
 	public Bitmap getBitMapForEditor() {
-		return Art.turret[0][0];
+		return Art.teamTurret2[0][0];
 	}
 	
 	
