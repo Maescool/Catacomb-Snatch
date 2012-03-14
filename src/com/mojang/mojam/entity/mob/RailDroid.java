@@ -42,6 +42,7 @@ public class RailDroid extends Mob {
 	public static boolean creative = Options.getAsBoolean(Options.CREATIVE);
 
 	boolean isOnRailTile;
+	boolean isOnPlayerRailTile;
 	boolean canGoLeft;
     boolean canGoRight;
     boolean canGoUp;
@@ -76,6 +77,14 @@ public class RailDroid extends Mob {
         int yTile = (int) (pos.y / Tile.HEIGHT);
 
         isOnRailTile = level.getTile(xTile, yTile) instanceof RailTile;
+        
+        if (isOnRailTile) {
+        	isOnPlayerRailTile = level.getTile(xTile, yTile) instanceof PlayerRailTile;
+        	if (isOnPlayerRailTile) {
+        		isOnPlayerRailTile = ((PlayerRailTile) level.getTile(xTile, yTile)).isTeam(team);
+        	}
+        }
+        
         canGoLeft = level.getTile(xTile - 1, yTile) instanceof RailTile;
         canGoRight = level.getTile(xTile + 1, yTile) instanceof RailTile;
         canGoUp = level.getTile(xTile, yTile - 1) instanceof RailTile;
@@ -276,15 +285,9 @@ public class RailDroid extends Mob {
     }
 
     private void increaseScoreAtBase() {
-        if (carrying && swapTime == 0) {
-            if (pos.y < 8 * Tile.HEIGHT) {
-                carrying = false;
-                level.player2Score += 2;
-            }
-            if (pos.y > (level.height - 7 - 1) * Tile.HEIGHT) {
-                carrying = false;
-                level.player1Score += 2;
-            }
+        if (carrying && swapTime == 0 && isOnPlayerRailTile) {
+            carrying = false;
+            level.player1Score += 2;
         }
     }
 	
