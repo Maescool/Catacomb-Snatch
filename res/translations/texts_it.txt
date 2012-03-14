@@ -6,8 +6,9 @@ build.removeRail = TI SERVONO {0} PER RIMUOVERE UNA ROTAIA
 
 back = INDIETRO
 cancel = ANNULLA
+select = SELEZIONA
 
-character.text = SELECZIONA IL PERSONAGGIO!
+character.text = SELEZIONA IL PERSONAGGIO!
 character.select = SELEZIONA
 
 credits.leadDev = LEAD DEVELOPER:
@@ -23,6 +24,10 @@ diffselect.normal = NORMALE
 diffselect.hard = DIFFICILE
 diffselect.nightmare = INCUBO
 
+exitmenu.headline = VUOI VERAMENTE USCIRE DAL GIOCO?
+exitmenu.cancel = NO 
+exitmenu.exit = SÌ
+
 gameplay.player1Win = {0} VITTORIA WOOHOO
 gameplay.player2Win = {0} VITTORIA EVVAI
 gameplay.player1Name = LORD LARD
@@ -32,6 +37,7 @@ gameplay.player4Name = COUNTESS CRULLER
 gameplay.FPS = FPS: {0}
 gameplay.latency = LATENZA: {0}
 gameplay.cantPickup = NON PUOI PRENDERLO!
+gameplay.weaponAlready = POSSIEDI GIÀ QUEST'ARMA!
 
 help.goal = SCOPO
 help.help1 = RACCOGLI 50 LOTTI
@@ -63,8 +69,11 @@ keys.fireLeft = SPARA A SX
 keys.fireRight = SPARA A DX
 keys.use = USA
 keys.build = COSTRUISCI
-keys.upgrade = AGGIORNA
+keys.upgrade = POTENZIA
 keys.chat = CHAT
+keys.weaponSlot = WEAPON SLOT {0}
+keys.cycleLeft = ARMA SUCC.
+keys.cycleRight = ARMA PREC.
 
 leveleditor.title = LEVEL EDITOR
 leveleditor.new = NUOVO
@@ -85,6 +94,8 @@ mp.join = UNISCITI
 options.on = ON
 options.off = OFF
 options.keyBindings = CONTROLLI
+options.characterSelect = SEL. PERSONAGGIO
+options.trapmouse = INTRAPPOLA MOUSE NELLA FINESTRA
 options.fullscreen = SCHERMO INTERO
 options.showfps = MOSTRA FPS
 options.music = MUSICA
@@ -96,24 +107,13 @@ options.mute = DISATTIVATA
 options.creative = CREATIVE MODE
 options.alternative = PERSONAGGIO ALTERNATIVO
 options.credits = CREDITI
-options.locale_en = INGLESE
-options.locale_de = TEDESCO
-options.locale_es = SPAGNOLO
-options.locale_fr = FRANCESE
-options.locale_id = INDONESIANO
-options.locale_it = ITALIANO
-options.locale_nl = OLANDESE
-options.locale_pt_br = PORTOGHESE (BRA)
-options.locale_ru = RUSSO
-options.locale_sl = SLOVENO
-options.locale_sv = SVEDESE
 
 pausemenu.help = AIUTO
 pausemenu.backtomain = MENU
 pausemenu.resume = RIPRENDI
 pausemenu.exit = ESCI
 
-player.hasDied = {0} E' MORTO!
+player.hasDied = {0} È MORTO!
 player.score = {0}: {1}%
 player.cost = {0}
 player.health = {0}%
@@ -132,6 +132,16 @@ shop.bombTooltipTitle = BOMBA
 shop.bombTooltipLine1 = DISTRUGGE I MURI.
 shop.bombTooltipLine2 = USATA PER CRARE SCORCIATOIE.
 
+shop.rifleTooltipTitle = FUCILE
+shop.rifleTooltipLine1 = L'arma predefinita.
+shop.rifleTooltipLine2 = Va bene per tutto.
+shop.shotgunTooltipTitle = SHOTGUN
+shop.shotgunTooltipLine1 = I colpi coprono un'area più grande.
+shop.shotgunTooltipLine2 = Alto danno, corto raggio.
+shop.raygunTooltipTitle = ENERGY GUN
+shop.raygunTooltipLine1 = I colpi rimbalzano sulle pareti.
+shop.raygunTooltipLine2 = Ogni rimbalzo aumenta i danni.
+
 titlemenu.start = GIOCA
 titlemenu.host = OSPITA
 titlemenu.join = UNISCITI
@@ -140,7 +150,7 @@ titlemenu.options = OPZIONI
 titlemenu.levelEditor = LEVEL EDITOR
 titlemenu.exit = ESCI
 
-upgrade.full = AGGIORNATO AL MASSIMO!
+upgrade.full = POTENZIATO AL MASSIMO!
 upgrade.notEnoughMoney = NON HAI ABBASTANZA MONETE ({0})
-upgrade.to = AGGIORNATO AL LIVELLO {0}
+upgrade.to = POTENZIATO AL LIVELLO {0}
 

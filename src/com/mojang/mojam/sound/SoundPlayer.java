@@ -1,5 +1,8 @@
 package com.mojang.mojam.sound;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -12,6 +15,7 @@ import paulscode.sound.codecs.CodecWav;
 import paulscode.sound.libraries.LibraryJavaSound;
 import paulscode.sound.libraries.LibraryLWJGLOpenAL;
 
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
 
 public class SoundPlayer implements ISoundPlayer {
@@ -82,16 +86,22 @@ public class SoundPlayer implements ISoundPlayer {
 	 */
 	@Override
 	public void startTitleMusic() {
-		musicVolume = Options.getAsFloat(Options.MUSIC, "1.0f");
-		if (!isMuted() && hasOggPlaybackSupport()) {
-			if (isPlaying(BACKGROUND_TRACK))
-				stopBackgroundMusic();
+	    musicVolume = Options.getAsFloat(Options.MUSIC, "1.0f");
+	    if (!isMuted() && hasOggPlaybackSupport()) {
+		if (isPlaying(BACKGROUND_TRACK))
+		    stopBackgroundMusic();
 
-			String backgroundTrack = "/sound/ThemeTitle.ogg";
-			getSoundSystem().backgroundMusic(BACKGROUND_TRACK, SoundPlayer.class.getResource(backgroundTrack), backgroundTrack, true);
+		String backgroundTrack = "/resources/sound/ThemeTitle.ogg";
+		try {
+		    URL backgroundURL = new File(MojamComponent.getMojamDir(), backgroundTrack).toURI().toURL();
+		    getSoundSystem().backgroundMusic(BACKGROUND_TRACK, backgroundURL, backgroundTrack, true);
+		} catch (MalformedURLException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
 		}
+	    }
 
-        getSoundSystem().setVolume(BACKGROUND_TRACK, musicVolume);
+	    getSoundSystem().setVolume(BACKGROUND_TRACK, musicVolume);
 	}
 
 	/* (non-Javadoc)
@@ -99,16 +109,22 @@ public class SoundPlayer implements ISoundPlayer {
 	 */
 	@Override
 	public void startEndMusic() {
-		musicVolume = Options.getAsFloat(Options.MUSIC, "1.0f");
-		if (!isMuted() && hasOggPlaybackSupport()) {
-		    if (isPlaying(BACKGROUND_TRACK))
-                stopBackgroundMusic();
+	    musicVolume = Options.getAsFloat(Options.MUSIC, "1.0f");
+	    if (!isMuted() && hasOggPlaybackSupport()) {
+		if (isPlaying(BACKGROUND_TRACK))
+		    stopBackgroundMusic();
 
-			String backgroundTrack = "/sound/ThemeEnd.ogg";
-            getSoundSystem().backgroundMusic(BACKGROUND_TRACK, SoundPlayer.class.getResource(backgroundTrack), backgroundTrack, true);
+		String backgroundTrack = "/resources/sound/ThemeEnd.ogg";
+		try {
+		    URL backgroundURL = new File(MojamComponent.getMojamDir(), backgroundTrack).toURI().toURL();
+		    getSoundSystem().backgroundMusic(BACKGROUND_TRACK, backgroundURL, backgroundTrack, true);
+		} catch (MalformedURLException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
 		}
+	    }
 
-        getSoundSystem().setVolume(BACKGROUND_TRACK, musicVolume);
+	    getSoundSystem().setVolume(BACKGROUND_TRACK, musicVolume);
 	}
 
 	/*
@@ -118,22 +134,28 @@ public class SoundPlayer implements ISoundPlayer {
 	 */
 	@Override
 	public void startBackgroundMusic() {
-		System.out.println("*** startBackgroundMusic ***");
-		musicVolume = Options.getAsFloat(Options.MUSIC, "1.0f");
-		if (!isMuted() && hasOggPlaybackSupport()) {
-			if (isPlaying(BACKGROUND_TRACK))
-				stopBackgroundMusic();
+	    System.out.println("*** startBackgroundMusic ***");
+	    musicVolume = Options.getAsFloat(Options.MUSIC, "1.0f");
+	    if (!isMuted() && hasOggPlaybackSupport()) {
+		if (isPlaying(BACKGROUND_TRACK))
+		    stopBackgroundMusic();
 
-            nextSong++;
-            if (nextSong>4) nextSong = 1;
-            //nextSong = TurnSynchronizer.synchedRandom.nextInt(4)+1;
-            String backgroundTrack = "/sound/Background " + nextSong + ".ogg";
-            System.out.println("next song: " + backgroundTrack);
-            
-            getSoundSystem().backgroundMusic(BACKGROUND_TRACK, SoundPlayer.class.getResource(backgroundTrack), backgroundTrack, false);
+		nextSong++;
+		if (nextSong>4) nextSong = 1;
+		//nextSong = TurnSynchronizer.synchedRandom.nextInt(4)+1;
+		String backgroundTrack = "/resources/sound/Background " + nextSong + ".ogg";
+		System.out.println("next song: " + backgroundTrack);
+		try {
+		    URL backgroundURL = new File(MojamComponent.getMojamDir(), backgroundTrack).toURI().toURL();
+		    getSoundSystem().backgroundMusic(BACKGROUND_TRACK, backgroundURL, backgroundTrack, true);
+		} catch (MalformedURLException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
 		}
 
-        getSoundSystem().setVolume(BACKGROUND_TRACK, musicVolume);
+	    }
+
+	    getSoundSystem().setVolume(BACKGROUND_TRACK, musicVolume);
 	}
 
 	/* (non-Javadoc)

@@ -15,6 +15,7 @@ public class Bullet extends Entity {
 	public int duration;
 	protected int facing;
 	protected float damage;
+	public int freezeTime = 5; //how many ticks must pass before damage can be taken by mob again
 
 	public Bullet(Mob e, double xa, double ya, float damage) {
 		this.owner = e;

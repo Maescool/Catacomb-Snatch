@@ -1,4 +1,5 @@
-# Game texts encoded in UTF-8
+﻿
+﻿# Game texts encoded in UTF-8
 
 build.rail = Вам нужно {0} для постройки рельс
 build.droid = Вам нужен {0} для железнодорожных дроид
@@ -6,6 +7,7 @@ build.removeRail = Вам нужно {0} для вагонетки
 
 back = Вернуться
 cancel = Отмена
+select = Выбрать
 
 credits.leadDev = Ведущий разработчик:
 credits.maintainers = Координаторы проекта:
@@ -141,4 +143,5 @@ upgrade.to = Улучшен до уровня {0}
 
 exitmenu.headline = Вы действительно хотите выйти?
 exitmenu.cancel = Нет
+
 exitmenu.exit = Да
