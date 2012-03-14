@@ -1,4 +1,4 @@
-var Snatch;
+var ModSystem;
 
 function OnRender(){}
 
