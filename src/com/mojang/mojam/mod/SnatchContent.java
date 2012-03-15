@@ -14,11 +14,11 @@ public class SnatchContent extends Mod
 	
 	public SnatchContent()
 	{
-		ids[0]=ModSystem.addEntity(new Bat(0, 0));
-		ids[1]=ModSystem.addEntity(new Snake(0, 0));
-		ids[2]=ModSystem.addEntity(new Mummy(0, 0));
-		ids[3]=ModSystem.addEntity(new Scarab(0, 0));
-		ids[4]=ModSystem.addEntity(new Pharao(0,0));
+		ids[0]=ModSystem.addEntity(Bat.class);
+		ids[1]=ModSystem.addEntity(Snake.class);
+		ids[2]=ModSystem.addEntity(Mummy.class);
+		ids[3]=ModSystem.addEntity(Scarab.class);
+		ids[4]=ModSystem.addEntity(Pharao.class);
 	}
 
 	@Override

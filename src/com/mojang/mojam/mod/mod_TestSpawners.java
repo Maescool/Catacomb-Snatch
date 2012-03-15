@@ -19,7 +19,7 @@ public class mod_TestSpawners extends Mod
 
 	public mod_TestSpawners()
 	{
-		id = ModSystem.addEntity(new TestEntity(0, 0));
+		id = ModSystem.addEntity(TestEntity.class);
 	}
 
 	@Override
