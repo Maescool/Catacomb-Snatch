@@ -555,7 +555,8 @@ public class Player extends Mob implements LootCollector {
      * Handle object carrying
      */
     private void handleCarrying() {
-
+    	if (!isCarrying())
+    		return;
         carrying.setPos(pos.x, pos.y - 20);
         carrying.tick();
         if (keys.use.wasPressed() || mouseButtons.isDown(mouseUseButton)) {
