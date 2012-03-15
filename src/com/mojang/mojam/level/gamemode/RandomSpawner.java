@@ -10,22 +10,22 @@ import com.mojang.mojam.network.TurnSynchronizer;
 
 public class RandomSpawner implements ILevelTickItem {
 
-    @Override
-    public void tick(Level level) {
-        final Random random = TurnSynchronizer.synchedRandom;
-        final int width = level.width;
-        final int height = level.height;
+	@Override
+	public void tick(Level level) {
+		final Random random = TurnSynchronizer.synchedRandom;
+		final int width = level.width;
+		final int height = level.height;
 
-        final double x = (random.nextInt(width - 16) + 8) * Tile.WIDTH
-                + Tile.WIDTH / 2;
-        final double y = (random.nextInt(height - 16) + 8) * Tile.HEIGHT
-                + Tile.HEIGHT / 2 - 4;
-        final Tile tile = level.getTile((int) (x / Tile.WIDTH),
-                (int) (y / Tile.HEIGHT));
-        if (tile instanceof FloorTile
-                && SpawnSurroundingsChecker.isClear(level, x, y)) {
-            level.addEntity(SpawnerEntity.getRandomSpawner(x, y));
-        }
-    }
+		final double x = (random.nextInt(width - 16) + 8) * Tile.WIDTH
+				+ Tile.WIDTH / 2;
+		final double y = (random.nextInt(height - 16) + 8) * Tile.HEIGHT
+				+ Tile.HEIGHT / 2 - 4;
+		final Tile tile = level.getTile((int) (x / Tile.WIDTH),
+				(int) (y / Tile.HEIGHT));
+		if (tile instanceof FloorTile
+				&& SpawnSurroundingsChecker.isClear(level, x, y)) {
+			level.addEntity(SpawnerEntity.getRandomSpawner(x, y));
+		}
+	}
 
 }
