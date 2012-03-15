@@ -89,7 +89,7 @@ public class RailTile extends Tile {
 	}
 
 	public boolean remove() {
-		level.removeTile(x, y, this);
+		level.removeTile(x, y);
 		
 		// trigger neighbours checks
 		if ( connections[Facing.NORTH] ) ( (RailTile) level.getTile(x, y - 1) ).neighbourChanged( null );

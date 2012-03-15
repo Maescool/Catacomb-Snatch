@@ -117,7 +117,11 @@ public class LevelUtils {
 			break;
 		case TILESET_OVERLAY_BASE_ID + 3:
 			obj = new SpikeTrap(x * Tile.WIDTH,y * Tile.HEIGHT);
-			break;			
+			break;
+		case TILESET_OVERLAY_BASE_ID + 32:
+			//Do not darken this tile
+			obj = (int)32;
+			break;	
 
 		//Wall IDs
 		case TILESET_WALL_BASE_ID:

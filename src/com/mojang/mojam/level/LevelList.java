@@ -37,8 +37,8 @@ public class LevelList {
 	            int mid= fileName.lastIndexOf(".");
 	            fname=fileName.substring(0,mid);
 	            ext=fileName.substring(mid+1);
-	            System.out.println("  Found level: "+fname+" . "+ext);
 	            if(ext.toLowerCase().equals("tmx")){
+	            	System.out.println("  Found level: "+fname+" . "+ext);
 	        		levels.add(new LevelInformation("+ "+fname, child.getPath(),false));
 	            }
 	        }

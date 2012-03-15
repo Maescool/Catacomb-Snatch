@@ -45,9 +45,13 @@ public class StartGamePacketCustom extends StartGamePacket {
 		dos.writeInt(level.width);
 		dos.writeInt(level.height);
 		dos.writeInt(opponentCharacterID);
-		for (int i = 0; i < level.activeTiles.length; i++) {
-			dos.writeShort(TileID.tileToShort(level.activeTiles[i]));
+		for (int x = 0; x < level.width; x++) {
+			for (int y = 0; y < level.height; y++) {
+				dos.writeShort(TileID.tileToShort(level.getTile(x, y)));
+			}
+			
 		}
+
 		dos.writeInt(difficulty);
 	}
 

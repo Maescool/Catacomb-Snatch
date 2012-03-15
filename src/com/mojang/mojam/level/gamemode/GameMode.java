@@ -1,24 +1,13 @@
 package com.mojang.mojam.level.gamemode;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
-import com.mojang.mojam.entity.building.ShopItemBomb;
-import com.mojang.mojam.entity.building.ShopItemHarvester;
-import com.mojang.mojam.entity.building.ShopItemRaygun;
-import com.mojang.mojam.entity.building.ShopItemShotgun;
-import com.mojang.mojam.entity.building.ShopItemTurret;
-import com.mojang.mojam.entity.mob.Team;
-import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.LevelUtils;
-import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.Tile;
-import com.mojang.mojam.level.tile.UnbreakableRailTile;
-import com.mojang.mojam.tiled.TileSet;
 import com.mojang.mojam.tiled.TiledMap;
 
 public class GameMode {
@@ -73,6 +62,9 @@ public class GameMode {
 						newLevel.setTile(x, y, (Tile)obj);
 					} else if (obj instanceof Entity) {
 						newLevel.addEntity((Entity)obj);
+					} else if ((int)obj == 32) {
+						System.out.println("light!");
+						newLevel.getSeen()[x + y * (w + 1)] = true;
 					}
 				}
 			}
