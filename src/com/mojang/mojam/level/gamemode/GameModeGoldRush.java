@@ -20,7 +20,8 @@ public class GameModeGoldRush extends GameMode {
 					+ Tile.HEIGHT / 2 - 4;
 			final Tile tile = newLevel.getTile((int) (x / Tile.WIDTH),
 					(int) (y / Tile.HEIGHT));
-			if (tile instanceof FloorTile) {
+			if (tile instanceof FloorTile
+                    && SpawnSurroundingsChecker.isClear(newLevel, x, y)) {
 				newLevel.addEntity(new SpawnerForBat(x, y));
 			}
 		}
