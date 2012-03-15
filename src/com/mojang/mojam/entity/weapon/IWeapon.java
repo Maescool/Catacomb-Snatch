@@ -11,4 +11,5 @@ public interface IWeapon {
 	void primaryFire(double xDir, double yDir);
 	Bullet getAmmo(double xDir, double yDir);
 	public Bitmap getSprite();
+	void setWeaponMode();
 }

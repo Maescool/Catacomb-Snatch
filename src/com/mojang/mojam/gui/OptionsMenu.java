@@ -4,6 +4,8 @@ import java.awt.event.KeyEvent;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Options;
+import com.mojang.mojam.entity.building.ShopItem;
+import com.mojang.mojam.entity.weapon.IWeapon;
 import com.mojang.mojam.gui.components.Button;
 import com.mojang.mojam.gui.components.ButtonListener;
 import com.mojang.mojam.gui.components.Checkbox;
@@ -69,6 +71,7 @@ public class OptionsMenu extends GuiMenu {
 			public void buttonPressed(ClickableComponent button) {
 				creative = !creative;
 				Options.set(Options.CREATIVE, creative);
+				setPrices();
 			}
 			@Override
 			public void buttonHovered(ClickableComponent clickableComponent) {
@@ -87,6 +90,14 @@ public class OptionsMenu extends GuiMenu {
 
 	private void loadOptions() {
 		creative = Options.getAsBoolean(Options.CREATIVE, Options.VALUE_FALSE);
+	}
+	
+	public void setPrices(){
+	    MojamComponent.instance.player.setRailPricesAndImmortality();
+	    ShopItem.updatePrices();
+	    for(IWeapon i:MojamComponent.instance.player.weaponInventory.weaponList){
+		i.setWeaponMode();
+	    }
 	}
 
 	@Override
