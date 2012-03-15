@@ -289,11 +289,12 @@ public class Player extends Mob implements LootCollector {
             handleRailBuilding(x, y);
         }
 
-        if (carrying != null) {
+        // Removed this limitation so we can still select RailDroids while carrying.
+       // if (carrying != null) {
             handleCarrying();
-        } else {
+      //  } else {
             handleEntityInteraction();
-        }
+       // }
 
         if (isSeeing) {
             level.reveal(x, y, 5);
