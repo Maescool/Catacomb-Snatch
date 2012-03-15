@@ -51,6 +51,7 @@ public class RailDroid extends Mob implements IUsable{
 	
     double xOffsetToTileCenter;
     double yOffsetToTileCenter;
+	private boolean highlight;
     
 	public RailDroid(double x, double y, int team) {
 		super(x, y, team);
@@ -374,26 +375,22 @@ public class RailDroid extends Mob implements IUsable{
 
 	@Override
 	public void use(Entity user) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public boolean upgrade(Player player) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void setHighlighted(boolean hl) {
-		// TODO Auto-generated method stub
-		
+		this.highlight = hl;
+		this.freezeTime = 10;
 	}
 
 	@Override
 	public boolean isHighlightable() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
