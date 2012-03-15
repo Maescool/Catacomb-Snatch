@@ -3,6 +3,7 @@ package com.mojang.mojam.entity.mob;
 
 import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.IUsable;
+import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.building.Building;
@@ -13,7 +14,7 @@ import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.*;
 
-public class RailDroid extends Mob {
+public class RailDroid extends Mob implements IUsable{
 	private enum Direction {
 		UNKNOWN, LEFT, UP, RIGHT, DOWN;
 
@@ -369,6 +370,36 @@ public class RailDroid extends Mob {
 		} else {
 			screen.blit(Art.bullets[1][1], pos.x - 8, pos.y - 20 - yOffs);
 		}*/
+	}
+
+	@Override
+	public void use(Entity user) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean upgrade(Player player) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setHighlighted(boolean hl) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isHighlightable() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isAllowedToCancel() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
