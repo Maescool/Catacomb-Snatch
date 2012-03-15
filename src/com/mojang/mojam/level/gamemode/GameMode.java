@@ -63,6 +63,7 @@ public class GameMode {
 					} else if (obj instanceof Entity) {
 						newLevel.addEntity((Entity)obj);
 					} else if ((int)obj == 32) {
+						//TODO Clean up this area and if statement
 						System.out.println("light!");
 						newLevel.getSeen()[x + y * (w + 1)] = true;
 					}
