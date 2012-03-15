@@ -830,6 +830,9 @@ public class Level {
 	 * [ ][ ][X][ ][ ][ ]
 	 * [ ][ ][X][ ][ ][T]
 	 *  
+	 * TODO: currently uses Entity.canPass() which is for Walking NOT seeing
+	 * 			Need to add a method Entity.canSee() or something.
+	 * 
 	 * @param eSource the source Entity ie this entity wants to see...
 	 * @param vTarget the target the eSource is looking at
 	 * @return boolean true if eSource can see vTarget
