@@ -11,33 +11,34 @@ import com.mojang.mojam.math.Vec2;
  * @see Pather
  */
 public class AvoidableObject {
-	Vec2 pos;
-	double danger;
-	double radius;
-	double avoidDistance;
-	Vec2 bounds;
+	private Vec2 pos;
+	private double danger;
+	private double radius;
+	private double avoidDistance;
+	private Vec2 bounds;
+	
 	/*
 	 * generic pointer to the Object that this Avoidance data is related to just in case
 	 * other parts of the code need to gather further information.
 	 * 
 	 */
-	Object object;
+	private Object object;
 
 	public AvoidableObject(Vec2 pos, double danger, Object object, double radius, double avoidDistance) {
 		this.pos = pos;
 		this.danger = danger;
 		this.object = object;
-		this.radius = radius;
-		this.avoidDistance = avoidDistance;
+		this.setRadius(radius);
+		this.setAvoidDistance(avoidDistance);
 	}
 
 	public AvoidableObject(Vec2 pos, double danger, Object object, Vec2 bounds, double avoidDistance) {
 		this.pos = pos;
 		this.danger = danger;
 		this.object = object;
-		this.radius = bounds.length();
+		this.setRadius(bounds.length());
 		this.bounds = bounds;
-		this.avoidDistance = avoidDistance;
+		this.setAvoidDistance(avoidDistance);
 	}
 
 	public Vec2 getPos() {
@@ -64,21 +65,29 @@ public class AvoidableObject {
 		this.object = object;
 	}
 
+	public Vec2 getBounds() {
+		return bounds;
+	}
+
+	public void setBounds(Vec2 bounds) {
+		this.setRadius(bounds.length());
+		this.bounds = bounds;
+	}
+
+	public double getAvoidDistance() {
+		return avoidDistance;
+	}
+
+	public void setAvoidDistance(double avoidDistance) {
+		this.avoidDistance = avoidDistance;
+	}
+
 	public double getRadius() {
 		return radius;
 	}
 
 	public void setRadius(double radius) {
 		this.radius = radius;
-	}
-
-	public Vec2 getBounds() {
-		return bounds;
-	}
-
-	public void setBounds(Vec2 bounds) {
-		this.radius = bounds.length();
-		this.bounds = bounds;
 	}
 
 }

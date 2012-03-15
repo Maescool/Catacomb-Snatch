@@ -365,18 +365,18 @@ public abstract class Pather extends HostileMob {
 		for (AvoidableObject o : avoidableObjects) {
 			ePos = o.getPos().sub(pos);
 			eDanger = o.getDanger();
-			eDistance = ePos.length() - o.radius;
+			eDistance = ePos.length() - o.getRadius();
 
 			ePosRads = Math.atan2(ePos.x, ePos.y);
 			ePosRads -= dPosRads;
 			ePosRads += Math.PI;
 			ePosRads = Mth.normalizeAngle(ePosRads, 0.0);
 
-			eInverseDistance = o.avoidDistance - eDistance;
+			eInverseDistance = o.getAvoidDistance() - eDistance;
 			eInverseDistanceSquared = eInverseDistance * eInverseDistance;
 
 			eDanger *= (eInverseDistanceSquared)
-					/ (o.avoidDistance * o.avoidDistance);
+					/ (o.getAvoidDistance() * o.getAvoidDistance());
 			/*
 			 * // Used for debugging the local object avoidance code
 			 * this.ePosArray.add(ePos.normal().scale((32 * (eDanger + 1))));
