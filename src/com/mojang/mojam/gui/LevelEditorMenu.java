@@ -375,60 +375,64 @@ public class LevelEditorMenu extends GuiMenu {
         minimap.fill(x, y, 1, 1, tileOrEntity.getMiniMapColor() );
     }
 
-    private void newLevel() {
-        for (int x = 0; x < LEVEL_HEIGHT; x++) {
-            for (int y = 0; y < LEVEL_WIDTH; y++) {
-                mapTile[x][y] = FloorTile.COLOR;
-                map[x][y] = null;
-            }
-        }
-       minimap.fill(0, 0, minimap.w, minimap.h, editableTiles[0].getMiniMapColor());
-       removeText(levelName);
-       levelName = new Text(1, "<New Level>", 120, 5);
-       addText(levelName);
-    }
+	private void newLevel() {
+		for (int x = 0; x < LEVEL_HEIGHT; x++) {
+			for (int y = 0; y < LEVEL_WIDTH; y++) {
+				mapTile[x][y] = FloorTile.COLOR;
+				map[x][y] = null;
+			}
+		}
+		minimap.fill(0, 0, minimap.w, minimap.h,
+				editableTiles[0].getMiniMapColor());
+		removeText(levelName);
+		levelName = new Text(1, "<New Level>", 120, 5);
+		addText(levelName);
+	}
 
-    private void openLevel(LevelInformation li) {
-        BufferedImage bufferedImage = null;
-        
-        try {
-            if (li.vanilla) {
-                bufferedImage = ImageIO.read(MojamComponent.class.getResource(li.getPath()));
-            } else {
-                bufferedImage = ImageIO.read(new File(li.getPath()));
-            }
-        } catch (IOException ioe) {
-        }
+	private void openLevel(LevelInformation li) {
+		BufferedImage bufferedImage = null;
 
-        int w = bufferedImage.getWidth();
-        int h = bufferedImage.getHeight();
+		try {
+			if (li.vanilla) {
+				bufferedImage = ImageIO.read(MojamComponent.class
+						.getResource(li.getPath()));
+			} else {
+				bufferedImage = ImageIO.read(new File(li.getPath()));
+			}
 
-        int[] rgbs = new int[w * h];
+			int w = bufferedImage.getWidth();
+			int h = bufferedImage.getHeight();
 
-        bufferedImage.getRGB(0, 0, w, h, rgbs, 0, w);
+			int[] rgbs = new int[w * h];
 
-        newLevel();
-        
-	removeText(levelName);
-        levelName = new Text(1, li.levelName, 120, 5);
-        addText(levelName);
-        
-        for (int y = 0; y < h; y++) {
-            for (int x = 0; x < w; x++) {
-                int col = rgbs[x + y * w] & 0xffffffff;
+			bufferedImage.getRGB(0, 0, w, h, rgbs, 0, w);
 
-                IEditable tile = LevelUtils.getNewTileFromColor(col);
-                draw(tile, x, y);
+			newLevel();
 
-                if (tile instanceof FloorTile) {
-                    Entity entity = LevelUtils.getNewEntityFromColor(col, x, y);
-                    if (entity instanceof IEditable) {
-                        draw((IEditable) entity, x, y);
-                    }
-                }
-            }
-        }
-    }
+			removeText(levelName);
+			levelName = new Text(1, li.levelName, 120, 5);
+			addText(levelName);
+
+			for (int y = 0; y < h; y++) {
+				for (int x = 0; x < w; x++) {
+					int col = rgbs[x + y * w] & 0xffffffff;
+
+					IEditable tile = LevelUtils.getNewTileFromColor(col);
+					draw(tile, x, y);
+
+					if (tile instanceof FloorTile) {
+						Entity entity = LevelUtils.getNewEntityFromColor(col,
+								x, y);
+						if (entity instanceof IEditable) {
+							draw((IEditable) entity, x, y);
+						}
+					}
+				}
+			}
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+	}
     
     private boolean saveLevel(String name) {
 

@@ -153,7 +153,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private byte sShotCounter = 0;
 
 	private int createServerState = 0;
-	private static File mojamDir = null;
+	private static volatile File mojamDir = null;
 	
 	private TitleMenu menu = null;
 	private LocaleMenu localemenu = null;

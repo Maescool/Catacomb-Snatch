@@ -1,6 +1,6 @@
 package com.mojang.mojam.math;
 
-public class Vec2 {
+public class Vec2 implements Cloneable {
 
 	public double x, y;
 
@@ -18,8 +18,22 @@ public class Vec2 {
 		return new Vec2(Math.floor(x), Math.floor(y));
 	}
 
-	public boolean equals(Vec2 p) {
-		return p.x == x && p.y == y;
+	@Override
+	public boolean equals(Object obj) {
+		if ( obj instanceof Vec2 ) {
+			Vec2 p = (Vec2) obj;
+			return p.x == x && p.y == y;
+		} else {
+			return false;
+		}
+	}
+	
+	@Override
+	public int hashCode() {
+		int res = 17;
+		res = res * 17 + ((Double)x).hashCode();
+		res = res * 17 + ((Double)y).hashCode();
+		return res;
 	}
 
 	public double distSqr(Vec2 to) {
@@ -32,6 +46,7 @@ public class Vec2 {
 		return Math.sqrt(distSqr(pos));
 	}
 
+	@Override
 	public Vec2 clone() {
 		return new Vec2(x, y);
 	}
@@ -65,8 +80,8 @@ public class Vec2 {
 	}
 
 	public void addSelf(double x, double y) {
-		x += x;
-		y += y;
+		this.x += x;
+		this.y += y;
 		validate();
 	}
 
