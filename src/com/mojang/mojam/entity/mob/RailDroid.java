@@ -2,8 +2,10 @@ package com.mojang.mojam.entity.mob;
 
 
 import com.mojang.mojam.entity.Bullet;
+import com.mojang.mojam.entity.IUsable;
 import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.building.TreasurePile;
 import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.level.tile.*;
@@ -61,8 +63,13 @@ public class RailDroid extends Mob {
 
     public void tick() {
         xBump = yBump = 0;
-        super.tick();
 
+        super.tick();
+        
+        if (isCarrying()) {
+            handleCarrying();
+        }
+        
         boolean hadPaused = pauseTime > 0;
 
         if (freezeTime > 0)
@@ -142,6 +149,14 @@ public class RailDroid extends Mob {
         return dir != Direction.UNKNOWN && oldPos.distSqr(pos) < 0.1 * 0.1;
     }
 
+    /**
+     * Handle object carrying
+     */
+    private void handleCarrying() {
+        carrying.setPos(pos.x, pos.y - 20);
+        carrying.tick();
+    }
+    
     private boolean decreaseTimers() {
         boolean shouldReturnFromTick = false;
         if (swapTime > 0) {
@@ -266,16 +281,20 @@ public class RailDroid extends Mob {
     }
 
     private void pickUpTreasure() {
-        if (!carrying && swapTime == 0) {
+    	//TODO: setup a BuildingTreasure so we can pick it up
+    	/*
+    	 * if (carrying && swapTime == 0) {
             if (level.getEntities(getBB().grow(32), TreasurePile.class).size() > 0) {
                 swapTime = 30;
                 carrying = true;
             }
-        }
+        }*/
     }
 
     private void increaseScoreAtBase() {
-        if (carrying && swapTime == 0) {
+    	//TODO: only increase score if carrying is BuldingTreasure
+        /*
+         * if (carrying && swapTime == 0) {
             if (pos.y < 8 * Tile.HEIGHT) {
                 carrying = false;
                 level.player2Score += 2;
@@ -284,7 +303,7 @@ public class RailDroid extends Mob {
                 carrying = false;
                 level.player1Score += 2;
             }
-        }
+        }*/
     }
 	
 	@Override
@@ -304,7 +323,7 @@ public class RailDroid extends Mob {
 		super.handleCollision(entity, xa, ya);
 		if (entity instanceof RailDroid) {
 			RailDroid other = (RailDroid) entity;
-			if (other.carrying != carrying && carrying) {
+			if (other.carrying.getClass() != carrying.getClass() && isCarrying()) {
 				if (lDir == Direction.LEFT && other.pos.x > pos.x - 4)
 					return;
 				if (lDir == Direction.UP && other.pos.y > pos.y - 4)
@@ -326,7 +345,7 @@ public class RailDroid extends Mob {
 				if (other.swapTime == 0 && swapTime == 0) {
 					other.swapTime = swapTime = 15;
 
-					boolean tmp = other.carrying;
+					Building tmp = other.carrying;
 					other.carrying = carrying;
 					carrying = tmp;
 				}
@@ -343,11 +362,13 @@ public class RailDroid extends Mob {
 
 	public void render(Screen screen) {
 		super.render(screen);
-		if (carrying) {
-			screen.blit(Art.bullets[0][0], pos.x - 8, pos.y - 20 - yOffs);
+		renderCarrying(screen, 16);
+		/*
+		if (carrying!=null) {
+			//screen.blit(Art.bullets[0][0], pos.x - 8, pos.y - 20 - yOffs);
 		} else {
 			screen.blit(Art.bullets[1][1], pos.x - 8, pos.y - 20 - yOffs);
-		}
+		}*/
 	}
 
 }
