@@ -36,7 +36,6 @@ public class RailDroid extends Mob {
 	private Direction lDir = Direction.DOWN;
 	private int waitForTurnTime = 0;
 	private int pauseTime = 0;
-	public boolean carrying = false;
 	public int swapTime = 0;
 	public int team;
 	public static boolean creative = Options.getAsBoolean(Options.CREATIVE);
