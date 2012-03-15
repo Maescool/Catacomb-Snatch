@@ -16,40 +16,96 @@ import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.*;
 
 /**
- * @author Morgan
+ * Extends HostileMob and ands 1. a* path finding 2. local object avoidance
+ * Simply put the Pather uses a* to find its way to a target anywhere on the
+ * Level it plots a path via the most direct route by building a list of Nodes.
+ * <p>
+ * While moving towards a Node it runs Local Object Avoidance, 1. collect a list
+ * of Mobs and Tiles (walls) that need ot be avoided 2. store them in a generic
+ * 'AvoidableObject' List 3. iterate though the list and based on its distance,
+ * danger, radius and current angle rotate slightly the direction the Pather is
+ * moving (think steering a car) 4. cap the maximum turn rate 5. recalculate the
+ * movement vector based on the resulting direction angle.
+ * <p>
+ * When extending you must provide Vec2 getPathTarget() which the Pather uses to
+ * get the initial a* based target.
  * 
+ * @author Morgan Gilroy
+ * @see HostileMob
+ * @see Soldier
  */
 public abstract class Pather extends HostileMob {
+
 	public int facing;
-	
 	public double stepTime;
 
+	/**
+	 * Stores the a* object for caching
+	 */
 	private AStar aStar;
+
+	/**
+	 * Stores a Path that the Pather needs to walk down, generated from AStart
+	 */
 	private Path path;
 
+	/**
+	 * Used to stop the expensive a* path finding from running too often. when
+	 * resetting the path set this to the number of ticks before it tries to
+	 * find a new path
+	 */
 	private int pathTime;
 
+	/**
+	 * Distance at which it takes notice of Entities to avoid
+	 */
 	private double objectAvoidanceRadius = Tile.HEIGHT * 3;
+
+	/**
+	 * The maximum angle it can turn in a single tick
+	 * 
+	 * @see lastDirection
+	 */
 	private double maxTurnRate = Math.PI / 10;
 	private double lastDirection = 0;
 
-	// private ArrayList<AvoidableObject> aObjectArray;
-
-	// private Vec2 dPosNew;
-	// private Vec2 dPos;
-
+	/**
+	 * Keeps a timer of how long the Pather has NOT been moving towards its
+	 * target, if this gets too high it triggers a path reset to find another
+	 * route.
+	 * 
+	 * @see lastGoalDistance
+	 * @see goalTimeout
+	 * @see maxGoalTimeout
+	 */
 	private double lastGoalDistance;
 	private int goalTimeout;
 	private int maxGoalTimeout = 100;
 
-	private double avoidWallsModifier;
-	private double randomDistanceModifier;
-	private double pathNodeSkipRadius;
-	
-
 	/**
-	 * @param x
-	 * @param y
+	 * Passed to the a* function to increase the 'cost' of waking down a tile
+	 * next to a wall, used to give a more natural movement.
+	 */
+	private double avoidWallsModifier;
+	/**
+	 * Passed to the a* function to increase the 'cost' of walking over a tile
+	 * randomly, it makes the path of the Pather more natural/erratic so it is
+	 * less likely to take the shortest route.
+	 */
+	private double randomDistanceModifier;
+	/**
+	 * If a path node is within the radius it is a candidate for skipping
+	 */
+	private double pathNodeSkipRadius;
+
+	/*
+	 * // Used for debugging the local object avoidance code
+	 * // stores the AvoidableObjects array so we can render pointers private
+	 * ArrayList<AvoidableObject> aObjectArray;
+	 * // store the vector pointer of where the Pather is trying to go
+	 * private Vec2 dPosNew;
+	 * // store the vector pointer of where the Pather is actually going to go
+	 * private Vec2 * dPos;
 	 */
 
 	public Pather(double x, double y, int team) {
@@ -60,35 +116,36 @@ public abstract class Pather extends HostileMob {
 
 		physicsSlide = true;
 
-		// dPosNew = new Vec2();
-		// dPos = new Vec2();
-		// ePosArray = new ArrayList<Vec2>();
-		// aObjectArray = new ArrayList<AvoidableObject>();
-
+		/*
+		 * // Used for debugging the local object avoidance code 
+		 * dPosNew = new Vec2(); dPos = new Vec2();
+		 * aObjectArray = new ArrayList<AvoidableObject>();
+		 */
 		lastGoalDistance = 0;
 		goalTimeout = 0;
-		avoidWallsModifier=0;
-		randomDistanceModifier=0;
-		pathNodeSkipRadius=0;
+		avoidWallsModifier = 0;
+		randomDistanceModifier = 0;
+		pathNodeSkipRadius = 0;
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see com.mojang.mojam.entity.mob.Mob#tick()
 	 */
-
 	public void tick() {
-
-		// ePosArray.clear();
-		// aObjectArray.clear();
+		/*
+		 * // Used for debugging the local object avoidance code
+		 * ePosArray.clear(); aObjectArray.clear();
+		 */
 
 		super.tick();
-		xBump*=0.8;
-		yBump*=0.8;
+
+		xBump *= 0.8;
+		yBump *= 0.8;
+
 		if (freezeTime > 0)
 			return;
-
 
 		Vec2 moveToPos = getMoveToPos();
 
@@ -98,10 +155,13 @@ public abstract class Pather extends HostileMob {
 
 	}
 
+	/**
+	 * Pather uses this to get the initial a* based target. from child classes.
+	 */
 	protected abstract Vec2 getPathTarget();
 
 	/**
-	 * 
+	 * Resets the a* path so it will be recalculated
 	 */
 	protected void resetPath() {
 		path = null;
@@ -110,7 +170,15 @@ public abstract class Pather extends HostileMob {
 	}
 
 	/**
-	 * @return
+	 * checks if aStar is set if not creates it, then checks if path is set if
+	 * not creates it. It then does some simple checks if the Next node is
+	 * visible and within a set range so it can skip over the current Node. this
+	 * leads to a more natural way of moving when combined with the local object
+	 * avoidance.
+	 * 
+	 * @see aStart
+	 * @see path
+	 * @return Point to which the Pather should move to
 	 */
 	protected Vec2 getMoveToPos() {
 
@@ -125,16 +193,17 @@ public abstract class Pather extends HostileMob {
 
 		if (aStar != null && path == null) {
 			Tile tileFrom = level.getTile(pos);
-			
-			Vec2 pathTarget=getPathTarget();
-			
+
+			Vec2 pathTarget = getPathTarget();
+
 			if (pathTarget == null) {
 				pathTime = 100;
 				return null;
 			}
-			
+
 			this.path = this.aStar.getPathMods(
-					new Vec2(tileFrom.x, tileFrom.y), pathTarget, avoidWallsModifier, randomDistanceModifier);
+					new Vec2(tileFrom.x, tileFrom.y), pathTarget,
+					avoidWallsModifier, randomDistanceModifier);
 		}
 
 		if (path == null) {
@@ -158,8 +227,6 @@ public abstract class Pather extends HostileMob {
 				}
 			}
 		}
-		// System.out.println("dDistance: " + dDistance + " lastGoalDistance: "
-		// + lastGoalDistance + " goalTimeout: " + goalTimeout);
 
 		if (dDistance >= lastGoalDistance - 0.01) {
 			goalTimeout += 2;
@@ -186,6 +253,15 @@ public abstract class Pather extends HostileMob {
 		return path.getCurrentWorldPos();
 	}
 
+	/**
+	 * Look around the local area for Entities within objectAvoidanceRadius and
+	 * add the details to an ArrayList of AvoidableObject
+	 * 
+	 * @see AvoidableObject
+	 * @see objectAvoidanceRadius
+	 * @return List of AvoidableObjects containing Entities that it needs to
+	 *         avoid.
+	 */
 	protected ArrayList<AvoidableObject> getAvoidableEntities() {
 		ArrayList<AvoidableObject> r = new ArrayList<AvoidableObject>();
 
@@ -208,11 +284,20 @@ public abstract class Pather extends HostileMob {
 				continue;
 			}
 
-			r.add(new AvoidableObject(e.pos, eDanger, e, ((Mob) e).radius,objectAvoidanceRadius));
+			r.add(new AvoidableObject(e.pos, eDanger, e, ((Mob) e).radius,
+					objectAvoidanceRadius));
 		}
 		return r;
 	}
 
+	/**
+	 * Look around the local area for Tiles within the surrounding 3x3 square
+	 * and add the details to an ArrayList of AvoidableObject
+	 * 
+	 * @see AvoidableObject
+	 * @see objectAvoidanceRadius
+	 * @return List of AvoidableObjects containing Tiles that it needs to avoid.
+	 */
 	protected ArrayList<AvoidableObject> getAvoidableTiles() {
 		ArrayList<AvoidableObject> r = new ArrayList<AvoidableObject>();
 
@@ -231,7 +316,8 @@ public abstract class Pather extends HostileMob {
 
 				r.add(new AvoidableObject(level.getPositionFromTile(
 						(int) (x + cTilePos.x), (int) (y + cTilePos.y)),
-						tDanger, tile, new Vec2(Tile.WIDTH/2, Tile.HEIGHT/2),Tile.WIDTH));
+						tDanger, tile,
+						new Vec2(Tile.WIDTH / 2, Tile.HEIGHT / 2), Tile.WIDTH));
 			}
 		}
 
@@ -239,7 +325,16 @@ public abstract class Pather extends HostileMob {
 	}
 
 	/**
+	 * This is the local Object Avoidance, while moving towards a Node it runs
+	 * Local Object Avoidance, 1. collect a list of Mobs and Tiles (walls) that
+	 * need to be avoided 2. store them in a generic 'AvoidableObject' List 3.
+	 * iterate though the list and based on its distance, danger, radius and
+	 * current angle rotate slightly the direction the Pather is moving (think
+	 * steering a car) 4. cap the maximum turn rate 5. recalculate the movement
+	 * vector based on the resulting direction angle.
+	 * 
 	 * @param goal
+	 *            the point to which the Pather is trying to move.
 	 */
 	protected void tryToMove(Vec2 goal) {
 		Vec2 dPos = goal.sub(pos);
@@ -272,10 +367,6 @@ public abstract class Pather extends HostileMob {
 			eDanger = o.getDanger();
 			eDistance = ePos.length() - o.radius;
 
-			//if (eDistance > objectAvoidanceRadius) {
-			//	continue;
-			//}
-
 			ePosRads = Math.atan2(ePos.x, ePos.y);
 			ePosRads -= dPosRads;
 			ePosRads += Math.PI;
@@ -286,8 +377,12 @@ public abstract class Pather extends HostileMob {
 
 			eDanger *= (eInverseDistanceSquared)
 					/ (o.avoidDistance * o.avoidDistance);
-			// this.ePosArray.add(ePos.normal().scale((32 * (eDanger + 1))));
-			// this.aObjectArray.add(o);
+			/*
+			 * // Used for debugging the local object avoidance code
+			 * this.ePosArray.add(ePos.normal().scale((32 * (eDanger + 1))));
+			 * this.aObjectArray.add(o);
+			 */
+
 			dPosRadsNew += (eDanger * ePosRads);
 		}
 
@@ -303,8 +398,11 @@ public abstract class Pather extends HostileMob {
 
 		dPosNew = new Vec2(Math.sin(dPosRadsNew), Math.cos(dPosRadsNew));
 
-		// this.dPosNew = dPosNew.normal().scale(32);
-		// this.dPos = dPos.normal().scale(dDistance);
+		/*
+		 * // Used for debugging the local object avoidance code this.dPosNew =
+		 * dPosNew.normal().scale(32); this.dPos =
+		 * dPos.normal().scale(dDistance);
+		 */
 
 		moveBy = dPosNew.scale(tSpeed);
 
@@ -313,7 +411,6 @@ public abstract class Pather extends HostileMob {
 		} else {
 			facing = (int) ((Math.atan2(-moveBy.x, moveBy.y) * 8
 					/ (Math.PI * 2) - 8.5)) & 7;
-			
 
 			stepTime += getSpeed() / 4;
 			if (stepTime > 6)
@@ -322,7 +419,7 @@ public abstract class Pather extends HostileMob {
 
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see com.mojang.mojam.entity.mob.Mob#getDeatchSound()
@@ -332,12 +429,28 @@ public abstract class Pather extends HostileMob {
 		return "/sound/Enemy Death 2.wav";
 	}
 
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.mojang.mojam.entity.mob.Mob#die()
+	 */
 	public void die() {
 		super.die();
 	}
 
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.mojang.mojam.entity.mob.Mob#getSprite()
+	 */
 	public abstract Bitmap getSprite();
 
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.mojang.mojam.entity.mob.HostileMob#collide(com.mojang.mojam.entity.Entity,
+	 *      double, double)
+	 */
 	@Override
 	public void collide(Entity entity, double xa, double ya) {
 		super.collide(entity, xa, ya);
@@ -345,39 +458,6 @@ public abstract class Pather extends HostileMob {
 		if (TurnSynchronizer.synchedRandom.nextInt(10) > 5)
 			resetPath();
 	}
-
-/*	public void render(Screen screen) {
-		super.render(screen);
-		
-		 * for (AvoidableObject aO : aObjectArray) { screen.line((int) pos.x,
-		 * (int) pos.y, (int) (aO.getPos().x), (int) (aO.getPos().y),
-		 * 0x80FF0000); } screen.line((int) pos.x, (int) pos.y, (int) (dPosNew.x
-		 * + pos.x), (int) (dPosNew.y + pos.y), 0x8000FF00); screen.line((int)
-		 * pos.x, (int) pos.y, (int) (dPos.x + pos.x), (int) (dPos.y + pos.y),
-		 * 0x800000FF);
-		 
-		// render the path ahead of the pather...
-
-		if (path != null) {
-
-			int pathOriginalIndex = path.getIndex();
-			int pathMaxIndex = path.size();
-			Vec2 previousNodePos = pos.clone();
-			Vec2 thisNodePos = new Vec2();
-			int i;
-
-			for (i = pathOriginalIndex; i < (pathOriginalIndex + 5)
-					&& (i < pathMaxIndex); i++) {
-				thisNodePos = path.getWorldPos(i);
-				screen.line((int) previousNodePos.x, (int) previousNodePos.y,
-						(int) (thisNodePos.x), (int) (thisNodePos.y),
-						0x800000FF);
-				previousNodePos = thisNodePos.clone();
-			}
-		}
-		
-	}*/
-
 
 	public double getAvoidWallsModifier() {
 		return avoidWallsModifier;
