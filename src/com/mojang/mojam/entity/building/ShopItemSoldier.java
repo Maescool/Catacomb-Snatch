@@ -9,15 +9,20 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.IRemoveEntityNotify;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Team;
-import com.mojang.mojam.entity.mob.pather.AvoidableObject;
 import com.mojang.mojam.entity.mob.pather.Soldier;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 
+/**
+ * Used to buy Soldiers
+ * 
+ * @see Soldier
+ * @author Morgan Gilroy
+ */
 public class ShopItemSoldier extends ShopItem implements IRemoveEntityNotify{
 
-	Bitmap baseSprite;
-	List<Soldier> soldiers=new ArrayList<Soldier>();
+	Bitmap baseSprite; //cache the sprite locally  
+	List<Soldier> soldiers=new ArrayList<Soldier>(); //keep a list of soldiers so we can count them 
 	
 	public ShopItemSoldier(double x, double y, int team) {
 		super("soldier", x, y, team, 1000, 8);
@@ -36,11 +41,14 @@ public class ShopItemSoldier extends ShopItem implements IRemoveEntityNotify{
 		if (player.getTeam() == team && checkPlayerLevel(player)) {
 			Soldier soldier = new Soldier(player.pos.x, player.pos.y, team,	player);
 			soldiers.add(soldier);
-			soldier.setSpawnSource(this);
+			soldier.setSpawnSource(this); //set the spawnSource to this so when the soldier dies it can call back here
 			level.addEntity(soldier);
 		}
 	}
 	
+	/**
+	 * Check if the Player can buy from this shop if not Gray it out with a fluctuating gray 
+	 */
 	public void tick() {
 		if (!( this.team == MojamComponent.localTeam && checkPlayerLevel(MojamComponent.localPlayer))) {
 			Bitmap sprite=new Bitmap(baseSprite.w,baseSprite.h);
@@ -58,6 +66,10 @@ public class ShopItemSoldier extends ShopItem implements IRemoveEntityNotify{
 		return true;
 	}
 	
+	/**
+	 * Very basic observer setup, when the Soldier dies
+	 * it calls back to the here so we can remove it from the list
+	 */
 	@Override
 	public void removeEntityNotice(Entity e) {
 		soldiers.remove(e);
