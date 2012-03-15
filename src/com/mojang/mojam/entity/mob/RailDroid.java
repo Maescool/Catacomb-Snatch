@@ -51,7 +51,6 @@ public class RailDroid extends Mob implements IUsable{
 	
     double xOffsetToTileCenter;
     double yOffsetToTileCenter;
-	private boolean highlight;
     
 	public RailDroid(double x, double y, int team) {
 		super(x, y, team);
