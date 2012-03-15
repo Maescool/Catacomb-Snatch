@@ -26,6 +26,9 @@ diffselect.normal = NORMAL
 diffselect.hard = SVÅR
 diffselect.nightmare = OMÖJLIG
 
+download.downloading = LADDAR NER..
+download.unpacking = PACKAR UPP..
+
 exitmenu.headline = VILL DU VERKLIGEN SLUTA SPELA?
 exitmenu.cancel = NEJ
 exitmenu.exit = JA
@@ -115,7 +118,7 @@ options.showfps = VISA FPS
 options.music = MUSIK
 options.sounds = LJUD
 options.volume = VOLYM
-options.sound_and_video = VIDEO OCH LJUD
+options.sound_and_video = LJUD OCH BILD
 options.locale_selection = VÄLJ SPRÅK
 options.mute = TYST
 options.creative = KREAKTIVT LÄGE
@@ -161,6 +164,7 @@ titlemenu.host = SKAPA SRV
 titlemenu.join = ANSLUT SRV
 titlemenu.help = HUR MAN SPELAR
 titlemenu.options = INSTÄLLNINGAR
+titlemenu.sound_and_video = LJUD OCH BILD
 titlemenu.levelEditor = KARTREDIGERAREN
 titlemenu.exit = AVSLUTA
 

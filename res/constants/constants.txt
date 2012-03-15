@@ -1,4 +1,6 @@
-﻿options.locale_af = AFRIKAANS
+﻿# Do not delete this line
+
+options.locale_af = AFRIKAANS
 options.locale_de = DEUTSCH
 options.locale_en = ENGLISH
 options.locale_es = ESPAÑOL
