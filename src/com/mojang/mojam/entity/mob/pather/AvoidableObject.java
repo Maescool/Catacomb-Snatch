@@ -2,13 +2,25 @@ package com.mojang.mojam.entity.mob.pather;
 
 import com.mojang.mojam.math.Vec2;
 
+/**
+ * Used a generic store for Avoidance data used by Pather
+ * so we can iterate though a generic list of Entities and Tiles 
+ * and maybe later Projectiles.
+ * 
+ * @author Morgan Gilroy
+ * @see Pather
+ */
 public class AvoidableObject {
 	Vec2 pos;
 	double danger;
 	double radius;
 	double avoidDistance;
 	Vec2 bounds;
-
+	/*
+	 * generic pointer to the Object that this Avoidance data is related to just in case
+	 * other parts of the code need to gather further information.
+	 * 
+	 */
 	Object object;
 
 	public AvoidableObject(Vec2 pos, double danger, Object object, double radius, double avoidDistance) {
