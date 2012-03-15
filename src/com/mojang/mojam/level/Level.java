@@ -804,7 +804,36 @@ public class Level {
 	
 		return checkLineOfSight(eSource, eTarget.pos);
 	}
-
+	/**
+	 * simple quick line drawing algorithm based off Bresenham's line algorithm
+	 *  {@link http://en.wikipedia.org/wiki/Bresenham's_line_algorithm#Simplification}
+	 *  
+	 *Plot moved out for the usual position to account for seeing though diagonal walls
+	 * [ ] = Empty, [E] = eSource, [T] = vTarget, [X] = Wall,
+	 * [.] = Line Plot, [Z] = Plot collision with wall
+	 * 
+	 * Original following Bresenham's line algorithm, which allows 'viewing' through walls
+	 * 
+	 * [E][ ][ ][X][ ][ ]
+	 * [ ][.][ ][X][ ][ ]
+	 * [ ][ ][.][X][ ][ ]
+	 * [ ][ ][X][.][ ][ ]
+	 * [ ][ ][X][ ][.][ ]
+	 * [ ][ ][X][ ][ ][T]
+	 * 
+	 * Modified version used here, notice the double thick line.
+	 * 
+	 * [E][.][ ][X][ ][ ]
+	 * [ ][.][.][X][ ][ ]
+	 * [ ][ ][.][Z][ ][ ]
+	 * [ ][ ][X][ ][ ][ ]
+	 * [ ][ ][X][ ][ ][ ]
+	 * [ ][ ][X][ ][ ][T]
+	 *  
+	 * @param eSource the source Entity ie this entity wants to see...
+	 * @param vTarget the target the eSource is looking at
+	 * @return boolean true if eSource can see vTarget
+	 */
 	public boolean checkLineOfSight(Entity eSource, Vec2 vTarget) {
 		Vec2 tP;
 		tP = getTileFromPosition(eSource.pos);
@@ -831,7 +860,7 @@ public class Level {
 	
 		int dff = dx - dy;
 		int d2;
-	
+		
 		if (!getTile(x1, y1).canPass(eSource))
 			return false;
 	
@@ -856,12 +885,21 @@ public class Level {
 		return true;
 	}
 
+	/**
+	 * @param pos The World Space position of the tile you want. 
+	 * @return Position of the Tile in Tile Space
+	 */
 	public Vec2 getTileFromPosition(Vec2 pos) {
 		int x = (int) pos.x / Tile.WIDTH;
 		int y = (int) pos.y / Tile.HEIGHT;
 		return new Vec2(x, y);
 	}
 
+	/**
+	 * @param x The x-coordinate of the Tile in Tile Space
+	 * @param y The y-coordinate of the Tile in Tile Space
+	 * @return Position of the tile in World Space
+	 */
 	public Vec2 getPositionFromTile(int x, int y) {
 		return new Vec2(x * Tile.WIDTH + (Tile.WIDTH / 2), y * Tile.HEIGHT
 				+ (Tile.HEIGHT / 2));
