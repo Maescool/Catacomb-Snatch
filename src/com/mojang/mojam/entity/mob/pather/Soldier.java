@@ -1,8 +1,6 @@
 package com.mojang.mojam.entity.mob.pather;
 
 import java.util.Random;
-import java.util.Set;
-
 import com.mojang.mojam.GameCharacter;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
@@ -16,33 +14,73 @@ import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.entity.particle.Sparkle;
 import com.mojang.mojam.entity.weapon.IWeapon;
 import com.mojang.mojam.entity.weapon.Raygun;
-import com.mojang.mojam.entity.weapon.Rifle;
 import com.mojang.mojam.entity.weapon.Shotgun;
 import com.mojang.mojam.entity.weapon.SoldierRifle;
 import com.mojang.mojam.gui.components.Font;
-
 import com.mojang.mojam.level.tile.Tile;
-import com.mojang.mojam.math.BB;
 import com.mojang.mojam.math.Mth;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.*;
 
 /**
- * @author Morgan
+ * - Added AI controlled Soldiers that can be bought at the players base.
+ * - Players can have as many Soldiers as they have levels, if a soldier dies or the
+ * player gains a level the Player can buy another soldier.
+ * - Soldiers shoot any enemy Mobs, Players, Spawners or Soldiers.
+ * - Soldiers collect any Coins close by, they have a carry limit of 500.
+ * - Soldiers do NOT regenerate health (see below).
+ * - Soldiers have a small communications device on their helmet.
+ * - While moving around soldiers actively try to avoid Mobs by turning away from them.
+ * - Soldiers have 3 modes
+ *      1. Patrol – they move around the level randomly, killing and collecting, 
+ *      when The Soldier is full of Coins or heavily damaged they switch to mode
+ *      2. Return Home – in this mode the soldier uses the fastest route to get to the 
+ *      Players base. Once at 'Home' they drop off their Coins (its added directly to player score)
+ *      and they are instantly healed.
+ *      3. Follow – in this mode they roughly follow the player around shooting Mobs
+ *      and collecting Coins, they will NOT automatically Return Home,
+ *      the player will have to order them to do so.
+ *     
+ * - When a player is close and looking at them they stop moving and display their status, 
+ * Health, Coin capacity, Mod, and Upgrade costs.
+ * - The Player can select a Soldiers mode by walking up to them and pressing the Use key (e).
+ * - The Player can upgrade a Soldier by walking up to them and pressing the Upgrade key (f).
+ * - Soldiers have 3 levels
+ *      1. initially they use a downgraded version of the players Rifle.
+ *      2. their health, collection radius are upgraded and they are given a Shotgun.
+ *      3. their health, collection radius are upgraded to Max and they are given a Raygun.
+ *
+ * - Soldier Shops are added at the Players base, they look just like Soldiers!
+ * - When the Player is unable to buy a Soldier due to level limits the Shop is grayed out.
  * 
+ * @author Morgan Gilroy
  */
+
 public class Soldier extends Pather implements IUsable, LootCollector {
 
+	/**
+	 * Modes used by the Soldier see class description.
+	 * should this be an enum?
+	 */
 	static final int Mode_Patrol = 0;
 	static final int Mode_Follow = 1;
 	static final int Mode_ReturnHome = 2;
 
+	/**
+	 * String names used for display.
+	 * should move to translations
+	 */
 	private String[] modeNames = new String[] { "Patrol", "Follow",
 			"Return Home" };
-
+	/**
+	 * The current mode the Soldier is in
+	 */
 	private int mode;
 
+	/**
+	 * When in follow mode it uses this entity as its target
+	 */
 	private Entity followEntity;
 
 	private double suckPower;
@@ -63,10 +101,11 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	private int nextWalkSmokeTick = 0;
 
 	/**
-	 * @param x
-	 * @param y
+	 * @param x 			Stating x position
+	 * @param y				Stating y position
+	 * @param team			Stating team
+	 * @param followEntity	Who bought this soldier/who to follow when in Mone_Follow
 	 */
-
 	public Soldier(double x, double y, int team, Entity followEntity) {
 		super(x, y, team);
 		setPos(x, y);
@@ -78,19 +117,24 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 		setDoShowMoneyBar(false);
 		makeUpgradeableWithCosts(upgradeCosts);
 
-		// damageEffectType = Mob.DamageEffectBlood;
 		setFollowEntity(followEntity);
 		setMode(Mode_Patrol);
 		setShootRadius(4 * 32);
 
+		//stop Soldier from regenerating health
 		this.REGEN_INTERVAL = 0;
 		this.REGEN_HEALTH = false;
 	}
 
+	
+	/* (non-Javadoc)
+	 * @see com.mojang.mojam.entity.mob.pather.Pather#tick()
+	 */
 	public void tick() {
 		super.tick();
 		tryToShoot();
 
+		// Show a small smoke puff when they walk around
 		Random random = TurnSynchronizer.synchedRandom;
 		if (stepTime >= nextWalkSmokeTick) {
 			level.addEntity(new SmokePuffAnimation(pos.x, pos.y, 0, -1,
@@ -103,6 +147,12 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 		}
 	}
 
+	/**
+	 * On collision with Friendly Player Bump a small amount.
+	 * On all collisions randomly choose to reset the path ~ 50/50.
+	 * 
+	 * @see com.mojang.mojam.entity.mob.pather.Pather#collide(com.mojang.mojam.entity.Entity, double, double)
+	 */
 	public void collide(Entity entity, double xa, double ya) {
 		super.collide(entity, xa, ya);
 
@@ -117,17 +167,19 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 			resetPath();
 	}
 
+	/**
+	 * this is a basic state machine that returns a single Vec2 which is the position it is aiming for.
+	 * the target is chosen based on its current Mode and position, it may also switch between modes.
+	 * @return Vec2 the world position the Soldier should move towards using a*
+	 */
 	protected Vec2 getPathTarget() {
 		Tile tileTo = null;
-
 		switch (mode) {
-
 		case Mode_Follow:
 			if (followEntity != null)
 				tileTo = level.getTile(followEntity.pos);
 			break;
 		case Mode_ReturnHome:
-
 			if ((pos.y < (8 * Tile.HEIGHT) && getTeam() == Team.Team2)
 					|| (pos.y > ((level.height - 9) * Tile.HEIGHT) && getTeam() == Team.Team1)) {
 				setMode(Mode_Patrol);
@@ -152,7 +204,6 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 			}
 			int tileX;
 			int tileY;
-
 			do {
 				tileX = TurnSynchronizer.synchedRandom.nextInt(level.width);
 				tileY = TurnSynchronizer.synchedRandom.nextInt(level.height);
@@ -171,7 +222,8 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	}
 
 	/**
-	 * 
+	 * Find the closest enemy and fire its gun. 
+	 * also change facing so it looks at it.
 	 */
 	private void tryToShoot() {
 
@@ -190,6 +242,9 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 		}
 	}
 
+	/**
+	 * Get the sprite from followEntity so looks the same as the Player
+	 */
 	public Bitmap getSprite() {
 		Bitmap[][] sheet = null;
 		if (followEntity instanceof Player) {
@@ -204,6 +259,12 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 		return null;
 	}
 
+	/**
+	 * Default render + add a little dish on top of its head
+	 * bounces up and down as it moves.
+	 * 
+	 * @param Screen screen the screen to render to
+	 */
 	public void render(Screen screen) {
 		super.render(screen);
 		int yy=0;
@@ -215,6 +276,11 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 		screen.blit(Art.dish[ (int)( (System.currentTimeMillis()*0.02) % 6 ) ][0], pos.x-3, (pos.y - 32 - yy ));
 	}
 
+	/**
+	 * Draw the mode and upgrade costs above the Soldier
+	 * 
+	 * @param Screen screen the screen to render to
+	 */
 	protected void renderMarker(Screen screen) {
 		super.renderMarker(screen);
 
@@ -252,14 +318,11 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 
 	@Override
 	public double getSuckPower() {
-		// TODO Auto-generated method stub
 		return suckPower;
 	}
 
 	@Override
 	public void notifySucking() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -272,13 +335,18 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 		setFlashTime(5);
 	}
 
+	/**
+	 * When used by the player rotate mode and reset followEntity
+	 */
 	@Override
 	public void use(Entity user) {
 		rotateMode();
-
 		setFollowEntity(user);
 	}
 
+	/**
+	 * when highlightet set freezTime to stop it moving
+	 */
 	@Override
 	public void setHighlighted(boolean hl) {
 		if (this.highlight && !hl) {
@@ -294,16 +362,19 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 
 	@Override
 	public boolean isHighlightable() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isAllowedToCancel() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/**
+	 * Attempt to upgrade the Soldier
+	 * 
+	 * @param Player player The player trying to iupgrade the Soldier
+	 */
 	public boolean upgrade(Player p) {
 		if (upgradeLevel >= maxUpgradeLevel)
 			return false;
@@ -325,7 +396,6 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 		maxUpgradeLevel = 0;
 		if (costs == null)
 			return;
-
 		upgradeCosts = costs;
 		maxUpgradeLevel = costs.length - 1;
 		upgradeComplete(0);
@@ -367,9 +437,15 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 		return mode;
 	}
 
+	/**
+	 * sets the mode to the requested mode and also sets PathNodeSkipRadius, AvoidWallsModifier and RandomDistanceModifier
+	 * so it behaves differently depending on mode ie on Patrol move more randomly around but when returning home go via
+	 * a more direct route.
+	 * 
+	 * @param int mode One of the Modes to use
+	 */
 	public void setMode(int mode) {
 		switch (mode) {
-
 		case Mode_Patrol:
 			setAvoidWallsModifier(1.5);
 			setRandomDistanceModifier(1);
@@ -385,7 +461,6 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 			setRandomDistanceModifier(0);
 			setPathNodeSkipRadius(5 * Tile.WIDTH);
 			break;
-
 		default:
 			setAvoidWallsModifier(0);
 			setRandomDistanceModifier(0);
@@ -396,6 +471,11 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 		this.mode = mode;
 	}
 
+	/**
+	 * Rotates the Mode through all that are available
+	 * 
+	 * @return int mode the mode it has rotated to
+	 */
 	public int rotateMode() {
 		int tMode = mode;
 		tMode++;
@@ -421,25 +501,21 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 
 	@Override
 	public int getColor() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int getMiniMapColor() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Bitmap getBitMapForEditor() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -449,7 +525,6 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 
 	public void setShootRadius(int shootRadius) {
 		this.shootRadius = shootRadius;
-
 	}
 
 	public double getReloadTime() {
