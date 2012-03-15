@@ -76,6 +76,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Sound+Graphics Libraries" level="project" />
   </component>
 </module>
 
