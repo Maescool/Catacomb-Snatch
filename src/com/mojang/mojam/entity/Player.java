@@ -109,7 +109,7 @@ public class Player extends Mob implements LootCollector {
         psprint = 1.5;
         maxTimeSprint = 100;
         aimVector = new Vec2(0, 1);
-        score = 0;
+        score = 5000;
         
         weaponInventory.add(new Rifle(this));
         weapon = weaponInventory.get(weaponSlot);
