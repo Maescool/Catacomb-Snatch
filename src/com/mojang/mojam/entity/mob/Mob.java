@@ -526,4 +526,12 @@ public abstract class Mob extends Entity {
     	if(weapon != null)
         weapon.weapontick();
     }
+
+	public boolean isHighlight() {
+		return highlight;
+	}
+
+	public void setHighlight(boolean highlight) {
+		this.highlight = highlight;
+	}
 }
