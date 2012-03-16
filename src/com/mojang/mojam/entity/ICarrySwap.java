@@ -18,7 +18,7 @@ public interface ICarrySwap {
 	
 	public boolean canPickup(Building b);
 	
-	public Building getCarrying(Entity e);
+	public Building getCarrying();
 		
 	public void pickup(Building b);
 	
