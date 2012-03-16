@@ -383,7 +383,7 @@ public class RailDroid extends Mob implements IUsable{
 
 	@Override
 	public void setHighlighted(boolean hl) {
-		this.highlight = hl;
+		this.setHighlight(hl);
 		this.freezeTime = 10;
 	}
 
