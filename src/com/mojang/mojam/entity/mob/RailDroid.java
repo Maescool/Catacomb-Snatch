@@ -2,6 +2,7 @@ package com.mojang.mojam.entity.mob;
 
 
 import com.mojang.mojam.entity.Bullet;
+import com.mojang.mojam.entity.ICarrySwap;
 import com.mojang.mojam.entity.IUsable;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.Options;
@@ -14,7 +15,7 @@ import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.*;
 
-public class RailDroid extends Mob implements IUsable{
+public class RailDroid extends Mob implements IUsable, ICarrySwap{
 	private enum Direction {
 		UNKNOWN, LEFT, UP, RIGHT, DOWN;
 
@@ -396,6 +397,33 @@ public class RailDroid extends Mob implements IUsable{
 	public boolean isAllowedToCancel() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public boolean canCarry(Building b) {
+		return true;
+	}
+
+	@Override
+	public boolean canPickup(Building b) {
+		if (!isCarrying())	
+			return true;
+		return false;
+	}
+
+	@Override
+	public Building getCarrying() {
+		return carrying; 
+	}
+
+	@Override
+	public Building tryToSwap(Building b) {	
+		Building tmpBuilding = null;
+		if ( canCarry(b) ) {
+			tmpBuilding = getCarrying();
+			pickup(b);
+		}
+		return tmpBuilding;
 	}
 
 }
