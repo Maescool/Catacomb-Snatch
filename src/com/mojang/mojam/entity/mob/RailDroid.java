@@ -325,7 +325,7 @@ public class RailDroid extends Mob implements IUsable, ICarrySwap{
 		super.handleCollision(entity, xa, ya);
 		if (entity instanceof RailDroid) {
 			RailDroid other = (RailDroid) entity;
-			if (other.carrying.getClass() != carrying.getClass() && isCarrying()) {
+			if (other.carrying != null && other.carrying.getClass() != carrying.getClass() && isCarrying()) {
 				if (lDir == Direction.LEFT && other.pos.x > pos.x - 4)
 					return;
 				if (lDir == Direction.UP && other.pos.y > pos.y - 4)
@@ -420,7 +420,7 @@ public class RailDroid extends Mob implements IUsable, ICarrySwap{
 	public Building tryToSwap(Building b) {	
 		Building tmpBuilding = null;
 		if ( canCarry(b) ) {
-			tmpBuilding = getCarrying();
+			tmpBuilding = carrying;
 			carrying=b;
 		}
 		return tmpBuilding;
