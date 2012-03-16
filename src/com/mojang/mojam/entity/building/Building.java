@@ -54,7 +54,6 @@ public abstract class Building extends Mob implements IUsable {
 	@Override
 	public void render(Screen screen) {
 		super.render(screen);
-		renderMarker(screen);
 	}
 
 	/**
@@ -64,25 +63,7 @@ public abstract class Building extends Mob implements IUsable {
 	 *            Screen
 	 */
 	protected void renderMarker(Screen screen) {
-		if (isHighlight() && !isCarried()) {
-			BB bb = getBB();
-			bb = bb.grow((getSprite().w - (bb.x1 - bb.x0))
-					/ (3 + Math.sin(System.currentTimeMillis() * .01)));
-			int width = (int) (bb.x1 - bb.x0);
-			int height = (int) (bb.y1 - bb.y0);
-			Bitmap marker = new Bitmap(width, height);
-			for (int y = 0; y < height; y++) {
-				for (int x = 0; x < width; x++) {
-					if ((x < 2 || x > width - 3 || y < 2 || y > height - 3)
-							&& (x < 5 || x > width - 6)
-							&& (y < 5 || y > height - 6)) {
-						int i = x + y * width;
-						marker.pixels[i] = 0xffffffff;
-					}
-				}
-			}
-			screen.blit(marker, bb.x0, bb.y0 - 4);
-		}
+		super.renderMarker(screen);
 	}
 
 	@Override
