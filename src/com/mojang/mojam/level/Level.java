@@ -160,56 +160,56 @@ public class Level {
 		}
 	}
 
-    public Set<Entity> getEntities(BB bb) {
-        return getEntities(bb.x0, bb.y0, bb.x1, bb.y1);
-    }
+	public Set<Entity> getEntities(BB bb) {
+		return getEntities(bb.x0, bb.y0, bb.x1, bb.y1);
+	}
 
-    public Set<Entity> getEntities(double x0, double y0, double x1, double y1) {
-        return getEntities(x0, y0, x1, y1, EntityIntersectsBB.INSTANCE);
-    }
+	public Set<Entity> getEntities(double x0, double y0, double x1, double y1) {
+		return getEntities(x0, y0, x1, y1, EntityIntersectsBB.INSTANCE);
+	}
 
-    public Set<Entity> getEntities(BB bb, Class<? extends Entity> c) {
-        return getEntities(bb.x0, bb.y0, bb.x1, bb.y1, c);
-    }
+	public Set<Entity> getEntities(BB bb, Class<? extends Entity> c) {
+		return getEntities(bb.x0, bb.y0, bb.x1, bb.y1, c);
+	}
 
-    public Set<Entity> getEntities(double x0, double y0, double x1, double y1,
-            Class<? extends Entity> c) {
-        return getEntities(x0, y0, x1, y1, new EntityIntersectsBBAndInstanceOf(c));
-    }
+	public Set<Entity> getEntities(double x0, double y0, double x1, double y1,
+			Class<? extends Entity> c) {
+		return getEntities(x0, y0, x1, y1, new EntityIntersectsBBAndInstanceOf(c));
+	}
 
-    public Set<Entity> getEntities(double xx0, double yy0, double xx1,
-            double yy1, BBPredicate<Entity> predicate) {
-        final int x0 = Math.max((int) (xx0) / Tile.WIDTH, 0);
-        final int x1 = Math.min((int) (xx1) / Tile.WIDTH, width - 1);
-        final int y0 = Math.max((int) (yy0) / Tile.HEIGHT, 0);
-        final int y1 = Math.min((int) (yy1) / Tile.HEIGHT, height - 1);
+	public Set<Entity> getEntities(double xx0, double yy0, double xx1,
+			double yy1, BBPredicate<Entity> predicate) {
+		final int x0 = Math.max((int) (xx0) / Tile.WIDTH, 0);
+		final int x1 = Math.min((int) (xx1) / Tile.WIDTH, width - 1);
+		final int y0 = Math.max((int) (yy0) / Tile.HEIGHT, 0);
+		final int y1 = Math.min((int) (yy1) / Tile.HEIGHT, height - 1);
 
-        final Set<Entity> result = new TreeSet<Entity>(new EntityComparator());
+		final Set<Entity> result = new TreeSet<Entity>(new EntityComparator());
 
-        for (int y = y0; y <= y1; y++) {
-            for (int x = x0; x <= x1; x++) {
-                for (Entity e : entityMap[x + y * width]) {
-                    if (predicate.appliesTo(e, xx0, yy0, xx1, yy1)) {
-                        result.add(e);
-                    }
-                }
-            }
-        }
+		for (int y = y0; y <= y1; y++) {
+			for (int x = x0; x <= x1; x++) {
+				for (Entity e : entityMap[x + y * width]) {
+					if (predicate.appliesTo(e, xx0, yy0, xx1, yy1)) {
+						result.add(e);
+					}
+				}
+			}
+		}
 
-        return result;
-    }
+		return result;
+	}
 
 	public Set<Entity> getEntitiesSlower(double xx0, double yy0, double xx1,
 			double yy1, Class<? extends Entity> c) {
 		final Set<Entity> result = new TreeSet<Entity>(new EntityComparator());
-        final BBPredicate<Entity> predicate =
-                new EntityIntersectsBBAndInstanceOf(c);
+		final BBPredicate<Entity> predicate =
+				new EntityIntersectsBBAndInstanceOf(c);
 
-        for (Entity e : this.entities) {
-            if (predicate.appliesTo(e, xx0, yy0, xx1, yy1)) {
-                result.add(e);
-            }
-        }
+		for (Entity e : this.entities) {
+			if (predicate.appliesTo(e, xx0, yy0, xx1, yy1)) {
+				result.add(e);
+			}
+		}
 
 		return result;
 	}
