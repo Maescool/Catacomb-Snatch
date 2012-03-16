@@ -18,10 +18,16 @@
           </value>
         </option>
         <option name="RIGHT_MARGIN" value="80" />
+        <XML>
+          <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
+        </XML>
         <codeStyleSettings language="JAVA">
           <option name="BLANK_LINES_AFTER_CLASS_HEADER" value="1" />
           <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
           <option name="METHOD_PARAMETERS_WRAP" value="1" />
+          <indentOptions>
+            <option name="USE_TAB_CHARACTER" value="true" />
+          </indentOptions>
         </codeStyleSettings>
       </value>
     </option>
