@@ -32,7 +32,6 @@ public abstract class Mob extends Entity {
 
 	// private double speed = 0.82;
 	protected double speed = 1.0;
-	public int team;
 	protected boolean doShowHealthBar = true;
     protected int healthBarOffset = 10;
 	double dir = 0;
