@@ -289,12 +289,8 @@ public class Player extends Mob implements LootCollector {
             handleRailBuilding(x, y);
         }
 
-        // Removed this limitation so we can still select RailDroids while carrying.
-       // if (carrying != null) {
-            handleCarrying();
-      //  } else {
-            handleEntityInteraction();
-       // }
+        handleEntityInteraction();
+        handleCarrying();
 
         if (isSeeing) {
             level.reveal(x, y, 5);
@@ -555,17 +551,29 @@ public class Player extends Mob implements LootCollector {
      * Handle object carrying
      */
     private void handleCarrying() {
-    	if (!isCarrying())
-    		return;
-        carrying.setPos(pos.x, pos.y - 20);
-        carrying.tick();
+
         if (keys.use.wasPressed() || mouseButtons.isDown(mouseUseButton)) {
             mouseButtons.setNextState(mouseUseButton, false);
 
-            if (((IUsable) carrying).isAllowedToCancel()) {
-                drop();
+            if(selected != null) {
+            	if (selected instanceof ICarrySwap) {
+            		carrying=((ICarrySwap)selected).tryToSwap(carrying);
+            	}
+            } else {
+            	if (!isCarrying())
+            		return;
+            	
+            	if (((IUsable) carrying).isAllowedToCancel()) {
+            		drop();
+            	}
             }
         }
+        
+    	if (!isCarrying())
+    		return;
+    	
+        carrying.setPos(pos.x, pos.y - 20);
+        carrying.tick();
     }
 
     /**
