@@ -64,7 +64,7 @@ public abstract class Building extends Mob implements IUsable {
 	 *            Screen
 	 */
 	protected void renderMarker(Screen screen) {
-		if (highlight && !isCarried()) {
+		if (isHighlight() && !isCarried()) {
 			BB bb = getBB();
 			bb = bb.grow((getSprite().w - (bb.x1 - bb.x0))
 					/ (3 + Math.sin(System.currentTimeMillis() * .01)));
@@ -217,7 +217,7 @@ public abstract class Building extends Mob implements IUsable {
 
 	@Override
 	public void setHighlighted(boolean hl) {
-		highlight = hl;
+		setHighlight(hl);
 		justDroppedTicks = 80;
 	}
 
