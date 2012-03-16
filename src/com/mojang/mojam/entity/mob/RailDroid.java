@@ -347,8 +347,9 @@ public class RailDroid extends Mob implements IUsable, ICarrySwap{
 				if (other.swapTime == 0 && swapTime == 0) {
 					other.swapTime = swapTime = 15;
 
-					if (other instanceof ICarrySwap)
-						((ICarrySwap)other).tryToSwap(carrying);
+					if (other instanceof ICarrySwap) {
+						carrying=((ICarrySwap)other).tryToSwap(carrying);
+					}
 				}
 			}
 		}
@@ -420,7 +421,7 @@ public class RailDroid extends Mob implements IUsable, ICarrySwap{
 		Building tmpBuilding = null;
 		if ( canCarry(b) ) {
 			tmpBuilding = getCarrying();
-			pickup(b);
+			carrying=b;
 		}
 		return tmpBuilding;
 	}
