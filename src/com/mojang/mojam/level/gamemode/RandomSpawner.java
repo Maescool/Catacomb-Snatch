@@ -23,7 +23,7 @@ public class RandomSpawner implements ILevelTickItem {
 		final Tile tile = level.getTile((int) (x / Tile.WIDTH),
 				(int) (y / Tile.HEIGHT));
 		if (tile instanceof FloorTile
-				&& SpawnSurroundingsChecker.isClear(level, x, y)) {
+				&& SpawnerSurroundingsChecker.isClear(level, x, y)) {
 			level.addEntity(SpawnerEntity.getRandomSpawner(x, y));
 		}
 	}
