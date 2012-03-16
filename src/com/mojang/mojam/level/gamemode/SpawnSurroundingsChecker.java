@@ -5,6 +5,7 @@ import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.building.Turret;
+import com.mojang.mojam.entity.mob.SpikeTrap;
 import com.mojang.mojam.entity.predicates.EntityIntersectsBBAndInstanceOf;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.math.BBPredicate;
@@ -18,6 +19,7 @@ class SpawnSurroundingsChecker {
 	private final double centerX;
 	private final double centerY;
 	private final BBPredicate<Entity> playerOrSpawnerPredicate;
+	private final BBPredicate<Entity> buildingOrSpikeTrapPredicate;
 
 	SpawnSurroundingsChecker(Level level, double centerX, double centerY) {
 		this.level = level;
@@ -25,12 +27,14 @@ class SpawnSurroundingsChecker {
 		this.centerY = centerY;
 		playerOrSpawnerPredicate = new EntityIntersectsBBAndInstanceOf(
 				Player.class, SpawnerEntity.class);
+		buildingOrSpikeTrapPredicate = new EntityIntersectsBBAndInstanceOf(
+				Building.class, SpikeTrap.class);
 	}
 
 	public boolean isSurroundingsClear() {
 		return hasNoEntitiesInRadius(32 * 8, playerOrSpawnerPredicate)
 				&& hasNoEntitiesInRadius(32 * 4, Turret.class)
-				&& hasNoEntitiesInRadius(32, Building.class);
+				&& hasNoEntitiesInRadius(32 * 0.5, buildingOrSpikeTrapPredicate);
 	}
 
 	private boolean hasNoEntitiesInRadius(double r,
