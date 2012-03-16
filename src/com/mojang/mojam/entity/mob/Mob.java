@@ -231,6 +231,8 @@ public abstract class Mob extends Entity {
 		if (doShowHealthBar && health < maxHealth) {
             addHealthBar(screen);
         }
+		
+		renderMarker(screen);
 	}
 
 	/**
