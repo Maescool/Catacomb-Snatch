@@ -101,6 +101,7 @@ public class Art {
 	public static Bitmap gameOverScreen = load("/art/screen/game_over.png");
 	public static Bitmap pauseScreen = load("/art/screen/pause_screen.png");
 	public static Bitmap mojangLogo = load("/art/logo/mojang.png");
+	public static Bitmap downloadScreen = load("/art/screen/download_screen.png");
 	
 	// UI elements
 	public static Bitmap[][] button = cut("/art/screen/button.png", 128, 24);
@@ -124,6 +125,8 @@ public class Art {
 	public static Bitmap bomb = load("/art/building/bomb.png");
 	public static Bitmap[][] small_chest = cut("/art/building/chest_small.png", 32, 53);
 	public static Bitmap[][] large_chest = cut("/art/building/chest_large.png", 64, 53);
+	public static Bitmap[][] teamTurret1 = cut("/art/building/turretTeam1.png", 32, 32);
+	public static Bitmap[][] teamTurret2 = cut("/art/building/turretTeam2.png", 32, 32);
 
 	//Weapons
 	public static Bitmap[][] weaponList = cut("/art/weapons/weapon_list.png", 32, 32);
@@ -165,6 +168,7 @@ public class Art {
 	public static Bitmap[][] bullets = cut("/art/effects/bullets.png", 16, 16);
 	public static Bitmap[][] bullet = cut("/art/effects/bullet.png", 16, 16);
 	public static Bitmap buckShot = load("/art/effects/bullet_buckshot.png");
+	public static Bitmap[][] bulletflame = cut("/art/effects/bullet_flame.png", 16, 16);
 	public static Bitmap[][] plasmaBall = cut("/art/effects/plasmaball.png", 16, 16);
 	public static Bitmap[][] bulletpoison = cut("/art/effects/bullet_poison.png", 16, 16);
 	public static Bitmap[][] muzzle = cut("/art/effects/muzzle.png", 16, 16);
@@ -183,6 +187,9 @@ public class Art {
 	// Icons
 	public static BufferedImage icon32 = loadBufferedImage("/art/icon/icon32.png");
 	public static BufferedImage icon64 = loadBufferedImage("/art/icon/icon64.png");
+	
+	
+
 	
     /**
      * Return the bitmaps for a given piece of art, cut out from a sheet
