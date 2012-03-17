@@ -47,6 +47,7 @@ public class SoundPlayer implements ISoundPlayer {
 			wavPlaybackSupport = false;
 		}
 
+
         boolean isOPenAL = Options.getAsBoolean(Options.OPEN_AL, Options.VALUE_TRUE);
         if (isOPenAL) {
             boolean aLCompatible = SoundSystem.libraryCompatible(LibraryLWJGLOpenAL.class);

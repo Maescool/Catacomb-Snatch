@@ -2,16 +2,12 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="res"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/CodecJOrbis.jar"/>
 	<classpathentry kind="lib" path="lib/CodecWav.jar"/>
 	<classpathentry kind="lib" path="lib/LibraryJavaSound.jar"/>
-	<classpathentry kind="lib" path="lib/SoundSystem.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/LibraryLWJGLOpenAL.jar"/>
-	<classpathentry kind="lib" path="lib/lwjgl.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Catacomb-Snatch/lib/native/windows"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="lib/lwjgl.jar"/>
+	<classpathentry kind="lib" path="lib/SoundSystem.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
