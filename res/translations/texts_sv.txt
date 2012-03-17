@@ -124,6 +124,8 @@ options.mute = TYST
 options.creative = KREAKTIVT LÄGE
 options.alternative = ALTERNATIVT SPELARHUD
 options.credits = MEDVERKANDE
+options.openal = OPENAL (LJUD)
+options.opengl = OPENGL (GRAFIK)
 
 pausemenu.help = HJÄLP
 pausemenu.backtomain = HUVUDMENY
