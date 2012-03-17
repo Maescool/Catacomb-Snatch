@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="48" height="48" tilewidth="32" tileheight="32">
+<map version="1.0" orientation="orthogonal" width="64" height="64" tilewidth="32" tileheight="32">
  <tileset firstgid="1" source="tilesets/Tileset-Floor.tsx"/>
- <tileset firstgid="17" source="tilesets/Tileset-Overlay.tsx"/>
- <tileset firstgid="41" source="tilesets/Tileset-Wall.tsx"/>
- <tileset firstgid="49" source="tilesets/Tileset-Player1.tsx"/>
- <tileset firstgid="89" source="tilesets/Tileset-Player2.tsx"/>
- <layer name="floor" width="48" height="48">
+ <tileset firstgid="65" source="tilesets/Tileset-Overlay.tsx"/>
+ <tileset firstgid="129" source="tilesets/Tileset-Wall.tsx"/>
+ <tileset firstgid="193" source="tilesets/Tileset-Player1.tsx"/>
+ <tileset firstgid="257" source="tilesets/Tileset-Player2.tsx"/>
+ <layer name="floor" width="64" height="64">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3BAQ0AAADCoPdPbQ43oAAAAAAAAAAAgFcDEWH4ywAkAAA=
+   H4sIAAAAAAAAC+3PsQ0AMAgEsYf9h06bBaII5OL6cydpSZKkqxoePz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8///9/fn5+fn5+fn5+fn5+fn7+935JkrSvAx2LxG8AQAAA
   </data>
  </layer>
- <layer name="overlay" width="48" height="48">
+ <layer name="overlay" width="64" height="64">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3BAQ0AAADCoPdPbQ43oAAAAAAAAAAAgFcDEWH4ywAkAAA=
+   H4sIAAAAAAAAC+3BMQEAAADCoPVPbQwfoAAAAAAAAAAAAAAAAAAAAIC3AYbSVKsAQAAA
   </data>
  </layer>
- <layer name="wall" width="48" height="48">
+ <layer name="wall" width="64" height="64">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3BAQ0AAADCoPdPbQ43oAAAAAAAAAAAgFcDEWH4ywAkAAA=
+   H4sIAAAAAAAAC+3BMQEAAADCoPVPbQwfoAAAAAAAAAAAAAAAAAAAAIC3AYbSVKsAQAAA
   </data>
  </layer>
 </map>

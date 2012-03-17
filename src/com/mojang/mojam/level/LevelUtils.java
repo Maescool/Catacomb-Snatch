@@ -118,6 +118,36 @@ public class LevelUtils {
 		case TILESET_OVERLAY_BASE_ID + 3:
 			obj = new SpikeTrap(x * Tile.WIDTH,y * Tile.HEIGHT);
 			break;
+		case TILESET_OVERLAY_BASE_ID + 4:
+			obj = new TreasureChest(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2 -5, Team.Neutral, 800);
+			break;
+		case TILESET_OVERLAY_BASE_ID + 8:
+			obj = new Bat(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
+			break;
+		case TILESET_OVERLAY_BASE_ID + 9:
+			obj = new Snake(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
+			break;
+		case TILESET_OVERLAY_BASE_ID + 10:
+			obj = new Scarab(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
+			break;
+		case TILESET_OVERLAY_BASE_ID + 11:
+			obj = new Mummy(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
+			break;
+		case TILESET_OVERLAY_BASE_ID + 12:
+			obj = new Pharao(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
+			break;
+		case TILESET_OVERLAY_BASE_ID + 16:
+			obj = new SpawnerForBat(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
+			break;
+		case TILESET_OVERLAY_BASE_ID + 17:
+			obj = new SpawnerForSnake(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
+			break;
+		case TILESET_OVERLAY_BASE_ID + 18:
+			obj = new SpawnerForScarab(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
+			break;
+		case TILESET_OVERLAY_BASE_ID + 19:
+			obj = new SpawnerForMummy(x * Tile.WIDTH+Tile.WIDTH/2,y * Tile.HEIGHT+Tile.HEIGHT/2);
+			break;
 		case TILESET_OVERLAY_BASE_ID + 24:
 			//Do not darken this tile
 			obj = (int)32;

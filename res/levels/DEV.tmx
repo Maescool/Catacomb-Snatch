@@ -12,7 +12,7 @@
  </layer>
  <layer name="overlay" width="64" height="64">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3X10rEQBhA4cTee9cb3SdxV9HXtvfey436Ih4vAiFszKImOMv54JAhsDA/M7nYKJIkSZIkSZIkSZIkSZIkNbP+i99u0GaTtcLQSPWd7jiKeqhGMXVQJ3XRIvVSX1zBhv9YI/PMM8xsI7RC/TRAgzRECzRKY20w/1rmmZhmthlapnGaoEmaonmapblA50/f/7z505bi5usQFZ3/arXbqdxPzr+d1FN9yZt/j/bpjbZom3Zol57ogA7L3mwJ6pln3vxndE7vdETHdEKn9EwXdFnqTsvR6vnf0T190BVd0w3d0gs90GPZmy1Bq+efvt+vqffJOvk+QpOdP0/R/U6+j9Bk73+eovudfB8Kj/9/JUmSpP/jE+lYTg4AQAAA
+   H4sIAAAAAAAAC+3Xx07DQBRGYZsWeu+wAZ6EJAg2LCgvTO+9lw3wIhwWlkZXHmwwmWDp/6SjsSJFmasZLxJFIiIiIiIiIiIiIiIiIiIiIiIikmapwHeXaSXlWcqh5vSd9jiKOmiBYmqhVmqjGapQZxxgw3+sZlafPmbrp3nqom7qoV6apgEaLDj/mllDsPPXzZoYY7ZxmqMhGqYRGqUpmqDJkp6/e/9987tm4/TnotbNGkLW+S8G3Esz/Ob8f2rV5LNh1hCqTl988+/RPr3RFm3TDu3SEx3Qoec38s7fDFWz+uY/o3N6pyM6phM6pWe6oMuCe9k0awh5z/+O7umDruiabuiWXuiBHhu92QbIe/7u/X51Pk+ek/ejbOz8Pln3O3k/ysbef5+s+528H1I++v8rIiIiIvJ/fAIRbsx3AEAAAA==
   </data>
  </layer>
  <layer name="wall" width="64" height="64">

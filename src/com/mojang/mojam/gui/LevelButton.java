@@ -65,7 +65,7 @@ public class LevelButton extends ClickableComponent {
 		this.id = id;
 		this.levelName = levelInfo.levelName;
 
-		//buildMinimap(levelInfo);
+		buildMinimap(levelInfo);
 		redrawDisplaymap();
 	}
 

@@ -97,6 +97,7 @@ public class Level {
 	private void initializeTileMap() {
 		tiles = new LinkedList[width * height];
 		
+		//All of the lists need to be setup before adding the tiles
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				tiles[x + y * width] = new LinkedList<Tile>();
@@ -110,6 +111,15 @@ public class Level {
 		}
 	}	
 
+	/**
+	 * Changes the current active tile at xy to the given tile
+	 * and updates the surrounding tiles
+	 * 
+	 * @param x
+	 * @param y
+	 * @param tile
+	 */
+	
 	public void setTile(int x, int y, Tile tile) {
 		tiles[x + y * width].addLast(tile);
 		tile.init(this, x, y);		
@@ -155,6 +165,14 @@ public class Level {
 			}
 		}
 	}
+	
+	/**
+	 * Add a player spawn point for the given team
+	 * 
+	 * @param x
+	 * @param y
+	 * @param team
+	 */
 	
 	public void addSpawnPoint(int x, int y, int team) {
 		if (team == Team.Team1) {
@@ -691,6 +709,9 @@ public class Level {
 				continue;
 			}
 			for (int x = x0; x <= x1; x++) {
+				if (x < 0 || x >= width) {
+					continue;
+				}
 				getTile(x, y).addClipBBs(result, e);
 			}
 		}

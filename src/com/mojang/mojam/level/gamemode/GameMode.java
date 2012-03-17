@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.LevelUtils;
@@ -39,6 +40,8 @@ public class GameMode {
 		newLevel = new Level(w, h);
 		
 		processLevelMap(w, h, layers);
+		
+		setupPlayerSpawnArea();
 		setTickItems();
 		setVictoryCondition();
 		setTargetScore();
@@ -63,8 +66,7 @@ public class GameMode {
 					} else if (obj instanceof Entity) {
 						newLevel.addEntity((Entity)obj);
 					} else if ((int)obj == 32) {
-						//TODO Clean up this area and if statement
-						System.out.println("light!");
+						//TODO Clean up this if statement
 						newLevel.getSeen()[x + y * (w + 1)] = true;
 					}
 				}
@@ -73,7 +75,7 @@ public class GameMode {
 	}
 	
 	protected void setupPlayerSpawnArea() {
-		
+		newLevel.maxMonsters = 1500 + (int)TitleMenu.difficulty.calculateStrength(500);
 	}
 	
 	protected void setTickItems() {
