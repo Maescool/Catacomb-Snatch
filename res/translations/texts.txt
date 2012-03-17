@@ -113,6 +113,7 @@ options.mute = MUTE
 options.creative = CREATIVE MODE
 options.alternative = ALTERNATIVE PLAYER SKIN
 options.credits = CREDITS
+options.openal = Sound system OpenAL
 
 pausemenu.help = HELP
 pausemenu.backtomain = MAIN
