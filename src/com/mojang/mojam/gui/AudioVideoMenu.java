@@ -26,6 +26,7 @@ public class AudioVideoMenu extends GuiMenu {
 	private float volume;
 	private int gameWidth;
 	private int gameHeight;
+    private boolean openAL;
 
     private boolean inGame;
 	private int textY;
@@ -38,6 +39,7 @@ public class AudioVideoMenu extends GuiMenu {
 	private ClickableComponent soundVol;
 	private ClickableComponent musicVol;
 	private ClickableComponent soundsVol;
+    private ClickableComponent soundOpenALBtn;
 
 	public AudioVideoMenu(boolean inGame) {
 
@@ -77,6 +79,12 @@ public class AudioVideoMenu extends GuiMenu {
 						yOffset += offset, Options.getAsBoolean(Options.DRAW_FPS,
 						Options.VALUE_FALSE))
 				);
+        soundOpenALBtn = addButton(
+                    new Checkbox(TitleMenu.OPEN_AL_ID,
+                        MojamComponent.texts.getStatic("options.openal"), xOffset,
+                        yOffset += offset, Options.getAsBoolean(Options.OPEN_AL,
+                        Options.VALUE_TRUE))
+                );
 		soundVol = addButton(
 					new Slider(TitleMenu.VOLUME,
 						MojamComponent.texts.getStatic("options.volume"), xOffset,
@@ -97,7 +105,7 @@ public class AudioVideoMenu extends GuiMenu {
 							xOffset, (yOffset += offset) + 20)
 				);
 
-		fullscreenBtn.addListener(new ButtonListener() {
+        fullscreenBtn.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
 				fullscreen = !fullscreen;
@@ -188,6 +196,17 @@ public class AudioVideoMenu extends GuiMenu {
 			public void buttonHovered(ClickableComponent clickableComponent) {
 			}
 		});
+        soundOpenALBtn.addListener(new ButtonListener() {
+            @Override
+            public void buttonPressed(ClickableComponent button) {
+                openAL = !openAL;
+                Options.set(Options.OPEN_AL, openAL);
+            }
+
+            @Override
+            public void buttonHovered(ClickableComponent clickableComponent) {
+            }
+        });
 		back.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
@@ -204,6 +223,7 @@ public class AudioVideoMenu extends GuiMenu {
 		trapMouse = Options.getAsBoolean(Options.TRAP_MOUSE, Options.VALUE_FALSE);
 		opengl = Options.getAsBoolean(Options.OPENGL, Options.VALUE_FALSE);
 		fps = Options.getAsBoolean(Options.DRAW_FPS, Options.VALUE_FALSE);
+        openAL = Options.getAsBoolean(Options.OPEN_AL, Options.VALUE_TRUE);
 		musicVolume = Options.getAsFloat(Options.MUSIC, "1.0f");
 		soundsVolume = Options.getAsFloat(Options.SOUND, "1.0f");
 		volume = Options.getAsFloat(Options.VOLUME, "1.0f");
