@@ -917,6 +917,12 @@ public class Player extends Mob implements LootCollector {
         facing = (int) ((Math.atan2(-aimVector.x, aimVector.y) * 8 / (Math.PI * 2) + 8.5)) & 7;
     }
 
-
+    public int getTimeSprint() {
+    	return this.timeSprint;
+    }
+    
+    public int getMaxTimeSprint() {
+    	return this.maxTimeSprint;
+    }
 
 }

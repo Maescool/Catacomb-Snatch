@@ -550,8 +550,8 @@ public class Level {
             displaymap = minimap;
         }
         
-        screen.blit(Art.panel, 0, screen.h - 80);
-        screen.blit(displaymap, 429, screen.h - 80 + 5);
+        screen.blit(Art.panel, 0, screen.h - 97);
+        screen.blit(displaymap, 429, screen.h - 81);
 	}
 	
 	private Bitmap calculateLargeMapDisplay(int x0, int y0) {
@@ -631,8 +631,8 @@ public class Level {
 	private void renderPlayerScores(Screen screen){
 	    
 	    String player1score =  MojamComponent.texts.scoreCharacter(getPlayerCharacter(0), player1Score * 100 / TARGET_SCORE);
-        Font.defaultFont().draw(screen, player1score, 280-player1score.length()*10, screen.h - 20); //adjust so it fits in the box
-        screen.blit(Art.getPlayer(getPlayerCharacter(0))[0][2], 262, screen.h-42);
+        Font.defaultFont().draw(screen, player1score, 280-player1score.length()*10, screen.h - 24); //adjust so it fits in the box
+        screen.blit(Art.getPlayer(getPlayerCharacter(0))[0][2], 262, screen.h-46);
 
         if (MojamComponent.instance.players[1] != null && getPlayerCharacter(1) != GameCharacter.None) {
             Font.defaultFont().draw(screen, MojamComponent.texts.scoreCharacter(getPlayerCharacter(1), player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
