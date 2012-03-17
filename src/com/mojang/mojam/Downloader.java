@@ -115,7 +115,7 @@ public class Downloader {
 			    // TODO Auto-generated catch block
 			    e.printStackTrace();
 			}
-			if (md5 == "" || md5.equals(hash)) {
+			if (md5.equals("") || md5.equals(hash)) {
 			    System.out.println("MD5 OK: " + hash);
 			    notfoundorok = false;
 			    break;
@@ -344,7 +344,7 @@ public class Downloader {
 			    // TODO Auto-generated catch block
 			    e.printStackTrace();
 			}
-			if (md5 == "" || md5.equals(hash)) {
+			if (md5.equals("") || md5.equals(hash)) {
 			    System.out.println("MD5 OK: " + hash);
 			    notfoundorok = false;
 			    break;

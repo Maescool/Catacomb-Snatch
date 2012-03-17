@@ -122,10 +122,15 @@ public class Rifle implements IWeapon {
 
 	@Override
 	public boolean equals(Object other) {
-		if (other.getClass() == this.getClass()) {
+		if (other != null && other.getClass() == this.getClass()) {
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Rifle.class.hashCode();
 	}
 
 }
