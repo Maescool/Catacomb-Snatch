@@ -14,8 +14,6 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Robot;
 import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -42,7 +40,6 @@ import com.mojang.mojam.gui.CreditsScreen;
 import com.mojang.mojam.gui.DifficultySelect;
 import com.mojang.mojam.gui.ExitMenu;
 import com.mojang.mojam.gui.GuiError;
-import com.mojang.mojam.gui.GuiMenu;
 import com.mojang.mojam.gui.HostingWaitMenu;
 import com.mojang.mojam.gui.HowToPlayMenu;
 import com.mojang.mojam.gui.JoinGameMenu;
@@ -84,7 +81,7 @@ import com.mojang.mojam.sound.ISoundPlayer;
 import com.mojang.mojam.sound.NoSoundPlayer;
 import com.mojang.mojam.sound.SoundPlayer;
 
-public class MojamComponent extends Canvas implements Runnable, MouseMotionListener, MouseListener, ButtonListener, KeyListener {
+public class MojamComponent extends Canvas implements Runnable, MouseMotionListener, MouseListener, ButtonListener {
 
 	public static final String GAME_TITLE = "Catacomb Snatch";
 	public static final String GAME_VERSION = "1.0.0-SNAPSHOT";
@@ -1061,44 +1058,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			localemenu = new LocaleMenu(level != null);
 			menuStack.add(localemenu);
 			break;
-		}
-	}
-
-	private void clearMenus() {
-		while (!menuStack.isEmpty()) {
-			menuStack.pop();
-		}
-	}
-
-	public void addMenu(GuiMenu menu) {
-		menuStack.add(menu);
-		menu.addButtonListener(this);
-	}
-
-	public void popMenu() {
-		if (!menuStack.isEmpty()) {
-			menuStack.pop();
-		}
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (!menuStack.isEmpty()) {
-			menuStack.peek().keyPressed(e);
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		if (!menuStack.isEmpty()) {
-			menuStack.peek().keyReleased(e);
-		}
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		if (!menuStack.isEmpty()) {
-			menuStack.peek().keyTyped(e);
 		}
 	}
 

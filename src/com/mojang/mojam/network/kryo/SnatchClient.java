@@ -141,7 +141,7 @@ public class SnatchClient {
 			if (pm.paused) {
 				mojamComponent.menuStack.add(new PauseMenu(MojamComponent.GAME_WIDTH, MojamComponent.GAME_HEIGHT));
 			} else {
-				mojamComponent.popMenu();
+				mojamComponent.menuStack.pop();
 			}
 		}
 		
