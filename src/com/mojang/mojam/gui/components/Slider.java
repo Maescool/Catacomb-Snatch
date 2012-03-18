@@ -49,7 +49,7 @@ public class Slider extends ClickableComponent {
 				float newValue = 1.0f / (float) (getX() + getWidth() - SLIDER_WIDTH - getX())
 						* (float) (pos - getX());
 
-				if (Math.abs(newValue - value) < .0000001) {
+				if (Math.abs(newValue - value) > .0000001) {
 					value = newValue;
 					performClick = true;
 				}
