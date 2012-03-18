@@ -104,8 +104,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private Level level;
 	public Chat chat = new Chat();
 	public Console console = new Console();
-	
-	//public LatencyCache latencyCache = new LatencyCache();
+
 	public int latency;
 	
 	public MenuStack menuStack = new MenuStack();
@@ -122,8 +121,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public Player[] players = new Player[2];
 	public Player player;
 	public TurnSynchronizer synchronizer;
-	
-	//private PacketLink packetLink;
 	
 	private boolean isMultiplayer;
 	public boolean isServer;
@@ -334,7 +331,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 	private synchronized void createLevel(LevelInformation li, GameMode mode, GameCharacter character) {
 		try {
-			//level = Level.fromFile(li);
 			level = mode.generateLevel(li);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -348,7 +344,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private synchronized void initLevel(GameCharacter character) {
 		if (level == null)
 			return;
-		// level.init();
 		players[0] = new Player(synchedKeys[0], synchedMouseButtons[0], level.width * Tile.WIDTH
 				/ 2 - 16, (level.height - 5 - 1) * Tile.HEIGHT - 16, Team.Team1, character);
 		players[0].setFacing(4);
@@ -378,10 +373,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			return;
 		}
 
-		// if (!isMultiplayer) {
-		// createLevel();
-		// }
-
 		int toTick = 0;
 
 		long lastRenderTime = System.nanoTime();
@@ -410,14 +401,9 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 			for (int i = 0; i < tickCount; i++) {
 				toTick--;
-				// long before = System.nanoTime();
 				tick();
-				// long after = System.nanoTime();
-				// System.out.println("Tick time took " + (after - before) *
-				// 100.0 / nsPerTick + "% of the max time");
 				shouldRender = true;
 			}
-			// shouldRender = true;
 
 			BufferStrategy bs = getBufferStrategy();
 			if (bs == null) {
@@ -430,7 +416,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 				Graphics g = bs.getDrawGraphics();
 
 				Random lastRandom = TurnSynchronizer.synchedRandom;
-				//TurnSynchronizer.synchedRandom = null;
 
 				render(g);
 
@@ -935,12 +920,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		case TitleMenu.SELECT_HOST_LEVEL_ID:
 			menuStack.add(new LevelSelect(true));
 			break;
-		/*
-		 * case TitleMenu.UPDATE_LEVELS: GuiMenu menu = menuStack.pop(); if
-		 * (menu instanceof LevelSelect) { menuStack.add(new
-		 * LevelSelect(((LevelSelect) menu).bHosting)); } else { menuStack.add(new
-		 * LevelSelect(false)); } }
-		 */
 		case TitleMenu.HOST_GAME_ID:
 			menuStack.add(new HostingWaitMenu());
 			isMultiplayer = true;
@@ -991,13 +970,10 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	
 				snatchClient.setComponent(MojamComponent.this);
 				snatchClient.connect(ip, port);
-				
-				//packetLink = new ClientSidePacketLink(ip, port);
+
 				synchronizer = new TurnSynchronizer(snatchClient, localId, 2);
-				//packetLink.setPacketListener(this);
 			} catch (Exception e) {
 				e.printStackTrace();
-				// System.exit(1);
 				menuStack.add(new TitleMenu(GAME_WIDTH, GAME_HEIGHT));
 			}
 			break;

@@ -62,8 +62,7 @@ public class SnatchClient {
 			public void disconnected (Connection connection) {
 				EventQueue.invokeLater(new Runnable() {
 					public void run () {
-						// Closing the frame calls the close listener which will stop the client's update thread.
-						//chatFrame.dispose();
+						//do disconnect stuff here...
 					}
 				});
 			}
@@ -84,9 +83,7 @@ public class SnatchClient {
 	}
 
 	public void tick() {
-
 		// nothing to do
-	
 	}
 
 	public void sendMessage(Object message) {
@@ -144,9 +141,6 @@ public class SnatchClient {
 				mojamComponent.menuStack.pop();
 			}
 		}
-		
-		
-		//packet listener
 
 		if (message instanceof StartGameMessage) {
 			if (!mojamComponent.isServer) {
