@@ -21,7 +21,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
-import com.mojang.mojam.console.Console;
+import com.mojang.mojam.Console;
 
 @Deprecated
 public class ModConsole implements Runnable, KeyListener

@@ -49,6 +49,7 @@ public class TitleMenu extends GuiMenu {
 	public static final int ALTERNATIVE_ID = 2006;
 	public static final int MOUSE_TRAP_ID = 2007;
 	public static final int OPEN_GL_ID = 2008;
+    public static final int OPEN_AL_ID = 2009;
 
 	public static final int KEY_BINDINGS_ID = 3000;
 	public static final int KEY_UP_ID = 3001;

@@ -2,28 +2,31 @@ package com.mojang.mojam;
 
 import javax.swing.*;
 
-import com.mojang.mojam.gui.DownloadScreen;
-import com.mojang.mojam.gui.GuiMenu;
-import com.mojang.mojam.gui.components.Button;
-import com.mojang.mojam.gui.components.ButtonListener;
-import com.mojang.mojam.gui.components.ClickableComponent;
-import com.mojang.mojam.resources.Constants;
-import com.mojang.mojam.resources.Texts;
-import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
-import com.mojang.mojam.sound.NoSoundPlayer;
-import com.mojang.mojam.sound.SoundPlayer;
-
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Stack;
 
-public class MojamStartup extends Canvas implements Runnable, KeyListener,
-	ButtonListener {
+import com.mojang.mojam.gui.DownloadScreen;
+import com.mojang.mojam.gui.components.Button;
+import com.mojang.mojam.gui.components.ButtonListener;
+import com.mojang.mojam.gui.components.ClickableComponent;
+import com.mojang.mojam.gui.MenuStack;
+import com.mojang.mojam.resources.Constants;
+import com.mojang.mojam.resources.Texts;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Screen;
+
+
+public class MojamStartup extends Canvas implements Runnable, ButtonListener {
     /**
      * 
      */
@@ -39,7 +42,7 @@ public class MojamStartup extends Canvas implements Runnable, KeyListener,
 
     public static Screen screen = new Screen(GAME_WIDTH, GAME_HEIGHT);
 
-    private Stack<GuiMenu> menuStack = new Stack<GuiMenu>();
+    private MenuStack menuStack = new MenuStack();
 
     private boolean running = true;
     private double framerate = 60;
@@ -48,7 +51,6 @@ public class MojamStartup extends Canvas implements Runnable, KeyListener,
     public MouseButtons mouseButtons = new MouseButtons();
     public Keys keys = new Keys();
 
-    private Downloader dl;
     private DownloadScreen ds;
 
     public MojamStartup() {
@@ -64,7 +66,7 @@ public class MojamStartup extends Canvas implements Runnable, KeyListener,
 		* SCALE));
 
 	ds = new DownloadScreen();
-	addMenu(ds);
+	menuStack.add(ds);
 
 	instance = this;
 
@@ -238,44 +240,6 @@ public class MojamStartup extends Canvas implements Runnable, KeyListener,
 	sl.start();
 	Downloader dl = new Downloader();
 	dl.CheckFiles();
-    }
-
-    private void clearMenus() {
-	while (!menuStack.isEmpty()) {
-	    menuStack.pop();
-	}
-    }
-
-    private void addMenu(GuiMenu menu) {
-	menuStack.add(menu);
-	menu.addButtonListener(this);
-    }
-
-    private void popMenu() {
-	if (!menuStack.isEmpty()) {
-	    menuStack.pop();
-	}
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-	if (!menuStack.isEmpty()) {
-	    menuStack.peek().keyPressed(e);
-	}
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-	if (!menuStack.isEmpty()) {
-	    menuStack.peek().keyReleased(e);
-	}
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-	if (!menuStack.isEmpty()) {
-	    menuStack.peek().keyTyped(e);
-	}
     }
 
     @Override
