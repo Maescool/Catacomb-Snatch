@@ -14,6 +14,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Robot;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -38,7 +40,9 @@ import com.mojang.mojam.gui.AudioVideoMenu;
 import com.mojang.mojam.gui.CharacterSelectionMenu;
 import com.mojang.mojam.gui.CreditsScreen;
 import com.mojang.mojam.gui.DifficultySelect;
+import com.mojang.mojam.gui.ExitMenu;
 import com.mojang.mojam.gui.GuiError;
+import com.mojang.mojam.gui.GuiMenu;
 import com.mojang.mojam.gui.HostingWaitMenu;
 import com.mojang.mojam.gui.HowToPlayMenu;
 import com.mojang.mojam.gui.JoinGameMenu;
@@ -106,7 +110,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	
 	public LatencyCache latencyCache = new LatencyCache();
 
-	private MenuStack menuStack = new MenuStack();
+	public MenuStack menuStack = new MenuStack();
 
 	private InputHandler inputHandler;
 	private int lastX = 0;

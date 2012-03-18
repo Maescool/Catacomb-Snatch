@@ -139,7 +139,7 @@ public class SnatchClient {
 			PauseMessage pm = (PauseMessage) message;
 			mojamComponent.paused = pm.paused;
 			if (pm.paused) {
-				mojamComponent.addMenu(new PauseMenu(MojamComponent.GAME_WIDTH, MojamComponent.GAME_HEIGHT));
+				mojamComponent.menuStack.add(new PauseMenu(MojamComponent.GAME_WIDTH, MojamComponent.GAME_HEIGHT));
 			} else {
 				mojamComponent.popMenu();
 			}
