@@ -105,8 +105,9 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public Chat chat = new Chat();
 	public Console console = new Console();
 	
-	public LatencyCache latencyCache = new LatencyCache();
-
+	//public LatencyCache latencyCache = new LatencyCache();
+	public int latency;
+	
 	public MenuStack menuStack = new MenuStack();
 
 	private InputHandler inputHandler;
@@ -493,7 +494,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 			Font font = Font.defaultFont();
 			if (isMultiplayer) {
-				font.draw(screen, texts.latency(latencyCache.latencyCacheReady() ? "" + latencyCache.avgLatency() : "-"), GAME_WIDTH - 105, 20);
+				font.draw(screen, texts.latency(latency), GAME_WIDTH - 105, 20);
 			}
 		}
 

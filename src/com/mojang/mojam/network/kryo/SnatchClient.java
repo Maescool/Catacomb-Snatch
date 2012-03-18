@@ -52,7 +52,7 @@ public class SnatchClient {
 				if (object instanceof Ping) {
 					Ping ping = (Ping) object;
 					if (ping.isReply)
-						mojamComponent.latencyCache.addToLatencyCache(latency);	
+						mojamComponent.latency = latency;	
 				}  
 				
 				handleMessage(mojamComponent.localId, object);
