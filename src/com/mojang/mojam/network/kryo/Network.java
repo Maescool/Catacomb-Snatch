@@ -89,6 +89,9 @@ public class Network {
 		public PauseMessage() {
 			paused=true;
 		}
+		public PauseMessage(boolean paused) {
+			this.paused=paused;
+		}
 		
 	}
 	

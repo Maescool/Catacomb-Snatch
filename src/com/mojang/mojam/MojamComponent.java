@@ -1037,7 +1037,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			break;
 
 		case TitleMenu.RETURN_ID:
-			synchronizer.addMessage(new PauseMessage());
+			synchronizer.addMessage(new PauseMessage(false));
 			keys.tick();
 			break;
 
