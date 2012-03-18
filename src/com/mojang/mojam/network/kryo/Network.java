@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
+import com.esotericsoftware.kryonet.FrameworkMessage.Ping;
 import com.mojang.mojam.level.Level;
 
 public class Network {
@@ -24,8 +25,8 @@ public class Network {
 		kryo.register(ChangeMouseCoordinateMessage.class);
 		kryo.register(ChangeKeyMessage.class);
 		kryo.register(ChatMessage.class);
-		kryo.register(PingMessage.class);
 		kryo.register(ArrayList.class);
+		kryo.register(Ping.class);
 	}
 	
 	static public class RegisterName {
@@ -98,7 +99,7 @@ public class Network {
 		public CharacterMessage(){}
 		public CharacterMessage(int localId, int ordinal) {
 			this.localId = localId;
-			this.localId = ordinal;
+			this.ordinal = ordinal;
 		}
 		
 	}
@@ -149,42 +150,5 @@ public class Network {
 		}
 
 	}
-	
-	static public class PingMessage {
-		public int ping;
-	
-		public static final int TYPE_SYN = 1;
-		public static final int TYPE_ACK = 2;
 
-		public int type;
-		public long sourceSendTime;
-		public long sourceReceiveTime;
-		public long destinationReceiveTime;
-		public long destinationSendTime;
-
-		public PingMessage() {
-			this.type = TYPE_SYN;
-		}
-
-		public static PingMessage ack(PingMessage syn) {
-			if (syn.type == TYPE_ACK) {
-				throw new IllegalArgumentException("Cannot ACK an ACK");
-			}
-			PingMessage ack = new PingMessage();
-			ack.type = TYPE_ACK;
-			ack.sourceSendTime = syn.sourceSendTime;
-			ack.destinationReceiveTime = syn.destinationReceiveTime;
-			return ack;
-		}
-
-		public int getType() {
-			return type;
-		}
-
-		public int getLatency() {
-			return (int) (sourceReceiveTime - sourceSendTime);
-		}
-	}
-	
-	
 }

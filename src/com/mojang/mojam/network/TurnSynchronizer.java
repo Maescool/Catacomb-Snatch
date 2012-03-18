@@ -4,11 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.mojang.mojam.network.kryo.Network.PingMessage;
 import com.mojang.mojam.network.kryo.Network.TurnMessage;
 import com.mojang.mojam.network.kryo.SnatchClient;
-import com.mojang.mojam.network.packet.StartGamePacket;
-import com.mojang.mojam.network.packet.TurnPacket;
 
 public class TurnSynchronizer {
 
@@ -33,14 +30,14 @@ public class TurnSynchronizer {
 	private int turnSequence = 0;
 	private int currentTurnTickCount;
 
-	private final SnatchClient client;
+	private final SnatchClient snatchClient;
 	private int localId;
 
 	private boolean isStarted;
 
 	public TurnSynchronizer(SnatchClient client, int localId, int numPlayers) {
 
-		this.client = client;
+		this.snatchClient = client;
 		this.localId = localId;
 		this.numPlayers = numPlayers;
 		this.playerCommands = new PlayerTurnCommands(numPlayers);
@@ -80,7 +77,7 @@ public class TurnSynchronizer {
 							.popPlayerCommands(i, turnSequence);
 					if (commands != null) {
 						for (Object command : commands) {
-							client.handleMessage(i, command);
+							snatchClient.handleMessage(i, command);
 						}
 					}
 				}
@@ -110,7 +107,9 @@ public class TurnSynchronizer {
 			commandSequence++;
 			nextTurnMessages = null;
 		}
-		if (turnSequence%50 == 0) sendPingPacket();
+		if (turnSequence%50 == 0) {
+			snatchClient.ping();
+		}
 	}
 
 //	public synchronized void addCommand(NetworkCommand command) {
@@ -131,17 +130,12 @@ public class TurnSynchronizer {
 
 	private void sendLocalTurn(TurnInfo turnInfo) {
 
-		if (client != null) {
-			client.sendMessage((turnInfo.getLocalPacket(nextTurnMessages)));
+		if (snatchClient != null) {
+			snatchClient.sendMessage((turnInfo.getLocalPacket(nextTurnMessages)));
 		}
 
 	}
 	
-	private void sendPingPacket() {
-	    if (client != null) {
-	    	client.sendMessage(new PingMessage());
-	    }
-	}
 
 	public void setStarted(boolean isStarted) {
 		this.isStarted = isStarted;
@@ -152,18 +146,18 @@ public class TurnSynchronizer {
 				message.turnNumber,message.list);
 	}
 	
-	public synchronized void startGame(long seed) {
-		setStarted(true);
+	
+
+	public synchronized void setSeed(long seed) {
 		synchedSeed = seed;
 		synchedRandom.setSeed(seed);
 	}
 	
-
-	public synchronized void onPingPacket(PingMessage packet) {
-	    if (packet.getType() == PingMessage.TYPE_SYN && client != null) {
-	        client.sendMessage(PingMessage.ack(packet));
-	    }
+	public synchronized void startGame(long seed) {
+		setStarted(true);
+		//setSeed(seed);
 	}
+	
 	
 	private class TurnInfo {
 

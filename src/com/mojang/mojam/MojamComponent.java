@@ -63,7 +63,6 @@ import com.mojang.mojam.level.gamemode.GameMode;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.mc.EnumOS2;
 import com.mojang.mojam.mc.EnumOSMappingHelper;
-import com.mojang.mojam.network.PauseCommand;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.network.kryo.Network.ChangeKeyMessage;
 import com.mojang.mojam.network.kryo.Network.ChangeMouseButtonMessage;
@@ -71,10 +70,10 @@ import com.mojang.mojam.network.kryo.Network.ChangeMouseCoordinateMessage;
 import com.mojang.mojam.network.kryo.Network.CharacterMessage;
 import com.mojang.mojam.network.kryo.Network.ChatMessage;
 import com.mojang.mojam.network.kryo.Network.PauseMessage;
+import com.mojang.mojam.network.kryo.Network.StartGameCustomMessage;
 import com.mojang.mojam.network.kryo.Network.StartGameMessage;
 import com.mojang.mojam.network.kryo.SnatchClient;
 import com.mojang.mojam.network.kryo.SnatchServer;
-import com.mojang.mojam.network.packet.StartGamePacketCustom;
 import com.mojang.mojam.resources.Constants;
 import com.mojang.mojam.resources.Texts;
 import com.mojang.mojam.screen.Art;
@@ -146,7 +145,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	
 	private TitleMenu menu = null;
 	private LocaleMenu localemenu = null;
-	private SnatchClient client;
+	private SnatchClient snatchClient;
 	private SnatchServer server;
 
 	public MojamComponent() {
@@ -176,7 +175,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		addKeyListener(this);
 		addKeyListener(chat);
 		addKeyListener(console);
-		client = new SnatchClient();
+		snatchClient = new SnatchClient();
+		snatchClient.setComponent(this);
 		instance = this;
 	}
 
@@ -430,7 +430,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 				Graphics g = bs.getDrawGraphics();
 
 				Random lastRandom = TurnSynchronizer.synchedRandom;
-				TurnSynchronizer.synchedRandom = null;
+				//TurnSynchronizer.synchedRandom = null;
 
 				render(g);
 
@@ -665,8 +665,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
             }
         }
 		
-		if (client != null) {
-			client.tick();
+		if (snatchClient != null) {
+			snatchClient.tick();
 		}
 
 		// Store virtual position of mouse (pre-scaled)
@@ -756,7 +756,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		if (createServerState == 1) {
 			createServerState = 2;
 
-			synchronizer = new TurnSynchronizer(client, localId, 2);
+			synchronizer = new TurnSynchronizer(snatchClient, localId, 2);
 
 			clearMenus();
 			createLevel(TitleMenu.level, TitleMenu.defaultGameMode, playerCharacter);
@@ -765,12 +765,12 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			if (TitleMenu.level.vanilla) {
 				
 				
-				client.sendMessage(new StartGameMessage(TurnSynchronizer.synchedSeed,
+				snatchClient.sendMessage(new StartGameMessage(TurnSynchronizer.synchedSeed,
 						TitleMenu.level.getUniversalPath(), TitleMenu.difficulty.ordinal(), playerCharacter.ordinal()));
 				
 			
 			} else {
-				client.sendMessage(new StartGamePacketCustom(TurnSynchronizer.synchedSeed,
+				snatchClient.sendMessage(new StartGameCustomMessage(TurnSynchronizer.synchedSeed,
 						level, TitleMenu.difficulty.ordinal(),
 						playerCharacter.ordinal()));
 			}
@@ -921,7 +921,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 			localId = 0;
 			MojamComponent.localTeam = Team.Team1;
-			synchronizer = new TurnSynchronizer(client, 0, 1);
+			synchronizer = new TurnSynchronizer(snatchClient, 0, 1);
 			synchronizer.setStarted(true);
 
 			createLevel(TitleMenu.level, TitleMenu.defaultGameMode, playerCharacter);
@@ -954,8 +954,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 					server = new SnatchServer();
 					
 					
-					client.setComponent(MojamComponent.this);
-					client.connectLocal();				
+					snatchClient.setComponent(MojamComponent.this);
+					snatchClient.connectLocal();				
 				
 				}
 			} catch (Exception e) {
@@ -989,11 +989,11 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 				localId = 1;
 				MojamComponent.localTeam = Team.Team2;
 	
-				client.setComponent(MojamComponent.this);
-				client.connect(ip, port);
+				snatchClient.setComponent(MojamComponent.this);
+				snatchClient.connect(ip, port);
 				
 				//packetLink = new ClientSidePacketLink(ip, port);
-				synchronizer = new TurnSynchronizer(client, localId, 2);
+				synchronizer = new TurnSynchronizer(snatchClient, localId, 2);
 				//packetLink.setPacketListener(this);
 			} catch (Exception e) {
 				e.printStackTrace();

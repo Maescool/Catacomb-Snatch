@@ -1,8 +1,6 @@
 package com.mojang.mojam.network;
 
-import java.net.*;
-
-import com.mojang.mojam.network.packet.TurnPacket;
+import java.net.ServerSocket;
 
 public class TestSynchronizer {
 
@@ -12,7 +10,7 @@ public class TestSynchronizer {
 	 * @param args
 	 */
 	public static void main(String[] args) throws Exception {
-
+/*
 		PacketLink packetLink = null;
 		int localId = 0;
 		if (args.length > 0 && args[0].equals("server")) {
@@ -40,7 +38,7 @@ public class TestSynchronizer {
 
 	}
 
-	private static class PlayThread extends Thread implements PacketListener {
+	private static class PlayThread extends Thread{
 
 		private TurnSynchronizer turnSynchronizer;
 		private final int localId;
@@ -51,7 +49,7 @@ public class TestSynchronizer {
 			this.packetLink = packetLink;
 			//turnSynchronizer = new TurnSynchronizer(null, packetLink, localId,
 			//		2);
-			packetLink.setPacketListener(this);
+			//packetLink.setPacketListener(this);
 		}
 
 		@Override
@@ -106,6 +104,6 @@ public class TestSynchronizer {
 	// packetQueue.clear();
 	// }
 	//
-	// }
+	*/ }
 
 }

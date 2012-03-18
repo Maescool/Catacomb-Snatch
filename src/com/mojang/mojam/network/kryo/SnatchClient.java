@@ -6,31 +6,28 @@ import java.io.IOException;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.FrameworkMessage.Ping;
 import com.esotericsoftware.kryonet.Listener;
 import com.mojang.mojam.GameCharacter;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.gui.PauseMenu;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.DifficultyInformation;
-import com.mojang.mojam.network.MessageListener;
 import com.mojang.mojam.network.kryo.Network.ChangeKeyMessage;
 import com.mojang.mojam.network.kryo.Network.ChangeMouseButtonMessage;
 import com.mojang.mojam.network.kryo.Network.ChangeMouseCoordinateMessage;
 import com.mojang.mojam.network.kryo.Network.CharacterMessage;
 import com.mojang.mojam.network.kryo.Network.ChatMessage;
 import com.mojang.mojam.network.kryo.Network.PauseMessage;
-import com.mojang.mojam.network.kryo.Network.PingMessage;
 import com.mojang.mojam.network.kryo.Network.RegisterName;
 import com.mojang.mojam.network.kryo.Network.StartGameCustomMessage;
 import com.mojang.mojam.network.kryo.Network.StartGameMessage;
 import com.mojang.mojam.network.kryo.Network.TurnMessage;
-import com.mojang.mojam.network.packet.PingPacket;
-import com.mojang.mojam.network.packet.StartGamePacket;
-import com.mojang.mojam.network.packet.StartGamePacketCustom;
-import com.mojang.mojam.network.packet.TurnPacket;
 
-public class SnatchClient implements MessageListener {
+public class SnatchClient {
 
+	public int latency;
+	
 	Client client;
 	private MojamComponent mojamComponent;
 
@@ -47,16 +44,17 @@ public class SnatchClient implements MessageListener {
 				RegisterName registerName = new RegisterName();
 				registerName.name = "USER"+Math.random();
 				client.sendTCP(registerName);
+				client.updateReturnTripTime();
 			}
 
 			public void received (Connection connection, Object object) {
+			
+				if (object instanceof Ping) {
+					Ping ping = (Ping) object;
+					if (ping.isReply)
+						mojamComponent.latencyCache.addToLatencyCache(latency);	
+				}  
 				
-				//if (object instanceof UpdateNames) {
-				//	UpdateNames updateNames = (UpdateNames)object;
-				//	chatFrame.setNames(updateNames.names);
-				//	return;
-				//}
-
 				handleMessage(mojamComponent.localId, object);
 				
 			}
@@ -87,13 +85,7 @@ public class SnatchClient implements MessageListener {
 
 	public void tick() {
 
-	//		int max = 1000;
-	//		while (!incoming.isEmpty() && max-- >= 0) {
-	//			Packet packet = incoming.remove(0);
-	//			if (packetListener != null) {
-	//				packet.handle(packetListener);
-	//			}
-	//		}
+		// nothing to do
 	
 	}
 
@@ -105,8 +97,9 @@ public class SnatchClient implements MessageListener {
 		this.mojamComponent = mojamComponent;
 	}
 
-	@Override
+
 	public void handleMessage(int playerId, Object message) {
+
 
 		if (message instanceof RegisterName) {
 			RegisterName registerNamemessage = (RegisterName)message;
@@ -138,6 +131,7 @@ public class SnatchClient implements MessageListener {
 
 		if (message instanceof CharacterMessage) {
 			CharacterMessage charMessage = (CharacterMessage) message;
+			System.out.println(charMessage.localId);
 			mojamComponent.players[charMessage.localId].setCharacter(GameCharacter.values()[charMessage.ordinal]);
 		}
 
@@ -158,7 +152,7 @@ public class SnatchClient implements MessageListener {
 			if (!mojamComponent.isServer) {
 				mojamComponent.sendCharacter = true;
 				StartGameMessage sgMessage = (StartGameMessage) message;
-				
+				mojamComponent.synchronizer.setSeed(sgMessage.gameSeed);
 				mojamComponent.createLevel(sgMessage.levelFile, TitleMenu.defaultGameMode,
 						GameCharacter.values()[sgMessage.opponentCharacterID]);
 				TitleMenu.difficulty = DifficultyInformation.getByInt(sgMessage.difficulty);
@@ -179,14 +173,12 @@ public class SnatchClient implements MessageListener {
 				mojamComponent.createLevel(sgMessage.levelFile, TitleMenu.defaultGameMode,
 						GameCharacter.values()[sgMessage.opponentCharacterID]);
 			}
-		} else if (message instanceof PingMessage) {
-			PingMessage pp = (PingMessage) message;
-			//synchronizer.onPingPacket(pp);
-			if (pp.getType() == PingPacket.TYPE_ACK) {
-				mojamComponent.latencyCache.addToLatencyCache(pp.getLatency());
-			}
-		}
-	
+		} 
+        
+	}
+
+	public void ping() {
+		this.client.updateReturnTripTime();		
 	}
 
 	
