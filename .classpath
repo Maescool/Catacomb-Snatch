@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="lib/LibraryLWJGLOpenAL.jar"/>
 	<classpathentry kind="lib" path="lib/lwjgl.jar"/>
 	<classpathentry kind="lib" path="lib/SoundSystem.jar"/>
+	<classpathentry kind="lib" path="lib/kryonet-1.04-all.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
