@@ -1,8 +1,11 @@
 package com.mojang.mojam.network;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
-import com.mojang.mojam.network.packet.*;
+import com.mojang.mojam.network.kryo.Network.TurnMessage;
+import com.mojang.mojam.network.kryo.SnatchClient;
 
 public class TurnSynchronizer {
 
@@ -14,7 +17,11 @@ public class TurnSynchronizer {
 
 	private int currentTurnLength = TICKS_PER_TURN;
 
-	private List<NetworkCommand> nextTurnCommands = new ArrayList<NetworkCommand>();
+	//private List<NetworkCommand> nextTurnCommands = new ArrayList<NetworkCommand>();
+	
+	private List<Object> nextTurnMessages = new ArrayList<Object>();
+	
+	
 	private PlayerTurnCommands playerCommands;
 	private final int numPlayers;
 
@@ -23,17 +30,14 @@ public class TurnSynchronizer {
 	private int turnSequence = 0;
 	private int currentTurnTickCount;
 
-	private final PacketLink packetLink;
+	private final SnatchClient snatchClient;
 	private int localId;
-	private final CommandListener commandListener;
 
 	private boolean isStarted;
 
-	public TurnSynchronizer(CommandListener commandListener,
-			PacketLink packetLink, int localId, int numPlayers) {
+	public TurnSynchronizer(SnatchClient client, int localId, int numPlayers) {
 
-		this.commandListener = commandListener;
-		this.packetLink = packetLink;
+		this.snatchClient = client;
 		this.localId = localId;
 		this.numPlayers = numPlayers;
 		this.playerCommands = new PlayerTurnCommands(numPlayers);
@@ -48,6 +52,7 @@ public class TurnSynchronizer {
 		synchedRandom.setSeed(synchedSeed);
 
 	}
+
 
 	public int getLocalTick() {
 		return turnSequence;
@@ -68,11 +73,11 @@ public class TurnSynchronizer {
 				turnInfo[currentTurn].isCommandsPopped = true;
 
 				for (int i = 0; i < numPlayers; i++) {
-					List<NetworkCommand> commands = playerCommands
+					List<Object> commands = playerCommands
 							.popPlayerCommands(i, turnSequence);
 					if (commands != null) {
-						for (NetworkCommand command : commands) {
-							commandListener.handle(i, command);
+						for (Object command : commands) {
+							snatchClient.handleMessage(i, command);
 						}
 					}
 				}
@@ -97,57 +102,62 @@ public class TurnSynchronizer {
 			currentTurnTickCount = 0;
 
 			playerCommands.addPlayerCommands(localId, commandSequence,
-					nextTurnCommands);
+					nextTurnMessages);
 			sendLocalTurn(turnInfo[commandSequence % turnInfo.length]);
 			commandSequence++;
-			nextTurnCommands = null;
+			nextTurnMessages = null;
 		}
-		if (turnSequence%50 == 0) sendPingPacket();
+		if (turnSequence%50 == 0) {
+			snatchClient.ping();
+		}
 	}
 
-	public synchronized void addCommand(NetworkCommand command) {
+//	public synchronized void addCommand(NetworkCommand command) {
+//
+	//	if (nextTurnCommands == null) {
+		//	nextTurnCommands = new ArrayList<NetworkCommand>();
+		//}
+		//nextTurnCommands.add(command);
 
-		if (nextTurnCommands == null) {
-			nextTurnCommands = new ArrayList<NetworkCommand>();
+	//}
+	
+	public void addMessage(Object message) {
+		if (nextTurnMessages == null) {
+			nextTurnMessages = new ArrayList<Object>();
 		}
-		nextTurnCommands.add(command);
-
+		nextTurnMessages.add(message);
 	}
 
 	private void sendLocalTurn(TurnInfo turnInfo) {
 
-		if (packetLink != null) {
-			packetLink.sendPacket(turnInfo.getLocalPacket(nextTurnCommands));
+		if (snatchClient != null) {
+			snatchClient.sendMessage((turnInfo.getLocalPacket(nextTurnMessages)));
 		}
 
 	}
 	
-	private void sendPingPacket() {
-	    if (packetLink != null) {
-	        packetLink.sendPacket(new PingPacket());
-	    }
-	}
 
 	public void setStarted(boolean isStarted) {
 		this.isStarted = isStarted;
 	}
 
-	public synchronized void onTurnPacket(TurnPacket packet) {
-		playerCommands.addPlayerCommands(packet.getPlayerId(),
-				packet.getTurnNumber(), packet.getPlayerCommandList());
+	public synchronized void onTurnMessage(TurnMessage message) {
+		playerCommands.addPlayerCommands(message.playerId,
+				message.turnNumber,message.list);
 	}
+	
+	
 
-	public synchronized void onStartGamePacket(StartGamePacket packet) {
+	public synchronized void setSeed(long seed) {
+		synchedSeed = seed;
+		synchedRandom.setSeed(seed);
+	}
+	
+	public synchronized void startGame(long seed) {
 		setStarted(true);
-		synchedSeed = packet.getGameSeed();
-		synchedRandom.setSeed(synchedSeed);
+		//setSeed(seed);
 	}
-
-	public synchronized void onPingPacket(PingPacket packet) {
-	    if (packet.getType() == PingPacket.TYPE_SYN && packetLink != null) {
-	        packetLink.sendPacket(PingPacket.ack(packet));
-	    }
-	}
+	
 	
 	private class TurnInfo {
 
@@ -164,28 +174,11 @@ public class TurnSynchronizer {
 			isCommandsPopped = false;
 		}
 
-		public TurnPacket getLocalPacket(
-				List<NetworkCommand> localPlayerCommands) {
-			return new TurnPacket(localId, turnNumber, localPlayerCommands);
+		public TurnMessage getLocalPacket(
+				List<Object> localPlayerMessages) {
+			return new TurnMessage(localId, turnNumber, localPlayerMessages);
 		}
-
-		// public void onReceivedCommands(int playerId, List<NetworkCommand>
-		// list) {
-		// playerDone[playerId] = true;
-		// playerCommands.set(playerId, list);
-		//
-		// checkDone();
-		// }
-		//
-		// private void checkDone() {
-		// isDone = true;
-		// for (int i = 0; i < playerDone.length; i++) {
-		// if (!playerDone[i]) {
-		// isDone = false;
-		// break;
-		// }
-		// }
-		// }
+		
 	}
 
 }

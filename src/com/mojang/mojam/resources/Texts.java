@@ -82,7 +82,7 @@ public class Texts {
 		return MessageFormat.format(getStatic("gameplay.FPS"), fps);
 	}
 
-	public String latency(String ms) {
+	public String latency(int ms) {
 		return MessageFormat.format(getStatic("gameplay.latency"), ms);
 	}
 

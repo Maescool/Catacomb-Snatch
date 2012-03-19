@@ -17,6 +17,8 @@ import com.mojang.mojam.entity.weapon.Shotgun;
 import com.mojang.mojam.entity.weapon.VenomShooter;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.gui.components.Font;
+import com.mojang.mojam.network.kryo.Network.ChatMessage;
+import com.mojang.mojam.network.kryo.Network.PauseMessage;
 import com.mojang.mojam.screen.Screen;
 
 public class Console implements KeyListener {
@@ -288,7 +290,7 @@ public class Console implements KeyListener {
 	private Command pause = new Command("pause", 0, "Pauses the game") {
 		public void doCommand(String[] args) {
 			close();
-			MojamComponent.instance.synchronizer.addCommand(new com.mojang.mojam.network.PauseCommand(true));
+			MojamComponent.instance.synchronizer.addMessage(new PauseMessage());
 		}
 	};
 
@@ -308,7 +310,7 @@ public class Console implements KeyListener {
 				msg += args[i] + " ";
 			}
 			msg += args[args.length-1];
-			MojamComponent.instance.synchronizer.addCommand(new com.mojang.mojam.network.packet.ChatCommand(msg));
+			MojamComponent.instance.synchronizer.addMessage(new ChatMessage(msg));
 		}
 	};
 
