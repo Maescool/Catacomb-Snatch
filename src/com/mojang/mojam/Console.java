@@ -17,6 +17,8 @@ import com.mojang.mojam.entity.weapon.Shotgun;
 import com.mojang.mojam.entity.weapon.VenomShooter;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.gui.components.Font;
+import com.mojang.mojam.network.kryo.Network.ChatMessage;
+import com.mojang.mojam.network.kryo.Network.PauseMessage;
 import com.mojang.mojam.screen.Screen;
 
 public class Console implements KeyListener {
@@ -288,7 +290,7 @@ public class Console implements KeyListener {
 	private Command pause = new Command("pause", 0, "Pauses the game") {
 		public void doCommand(String[] args) {
 			close();
-			MojamComponent.instance.synchronizer.addCommand(new com.mojang.mojam.network.PauseCommand(true));
+			MojamComponent.instance.synchronizer.addMessage(new PauseMessage());
 		}
 	};
 
@@ -308,7 +310,7 @@ public class Console implements KeyListener {
 				msg += args[i] + " ";
 			}
 			msg += args[args.length-1];
-			MojamComponent.instance.synchronizer.addCommand(new com.mojang.mojam.network.packet.ChatCommand(msg));
+			MojamComponent.instance.synchronizer.addMessage(new ChatMessage(msg));
 		}
 	};
 
@@ -353,54 +355,52 @@ public class Console implements KeyListener {
 		@Override
 		public void doCommand(String[] args)
 		{
-			args[0].trim();
 			Player player = MojamComponent.instance.player;
-			int i;
 		
-				log("Giving player a shotgun");
-				if(!player.weaponInventory.add(new Shotgun(player))) {
-		        	log("You already have this item.");
-		    	}
-		
-				log("Giving player a rifle");
-				if(!player.weaponInventory.add(new Rifle(player))) {
-		        	log("You already have this item.");
-		    	}
-		
-				log("Giving player a veonomshooter");
-				if(!player.weaponInventory.add(new VenomShooter(player))) {
-		        	log("You already have this item.");
-		    	}
-		
-				log("Giving player an elephant gun");
-				if(!player.weaponInventory.add(new ElephantGun(player))) {
-		        	log("You already have this item.");
-		    	}
-		
-				log("Giving player a lesson in boxing");
-				if(!player.weaponInventory.add(new Melee(player))) {
-		        	log("You already have this item.");
-		    	}
-		
-				log("Giving player a raygun");
-				if(!player.weaponInventory.add(new Raygun(player))) {
-		        	log("You already have this item.");
-		    	}
-		
-				log("Giving player a machete");
-				if(!player.weaponInventory.add(new Machete(player))) {
-		        	log("You already have this item.");
-		    	}
-		
-				log("Giving player a cannon!");
-				if(!player.weaponInventory.add(new Cannon(player))) {
-		        	log("You already have this item.");
-		    	}
-				
-				log("Giving player a flamethrower!");
-				if(!player.weaponInventory.add(new Flamethrower(player))) {
-		        	log("You already have this item.");
-		    	}
+			log("Giving player a shotgun");
+			if(!player.weaponInventory.add(new Shotgun(player))) {
+	        	log("You already have this item.");
+	    	}
+	
+			log("Giving player a rifle");
+			if(!player.weaponInventory.add(new Rifle(player))) {
+	        	log("You already have this item.");
+	    	}
+	
+			log("Giving player a veonomshooter");
+			if(!player.weaponInventory.add(new VenomShooter(player))) {
+	        	log("You already have this item.");
+	    	}
+	
+			log("Giving player an elephant gun");
+			if(!player.weaponInventory.add(new ElephantGun(player))) {
+	        	log("You already have this item.");
+	    	}
+	
+			log("Giving player a lesson in boxing");
+			if(!player.weaponInventory.add(new Melee(player))) {
+	        	log("You already have this item.");
+	    	}
+	
+			log("Giving player a raygun");
+			if(!player.weaponInventory.add(new Raygun(player))) {
+	        	log("You already have this item.");
+	    	}
+	
+			log("Giving player a machete");
+			if(!player.weaponInventory.add(new Machete(player))) {
+	        	log("You already have this item.");
+	    	}
+	
+			log("Giving player a cannon!");
+			if(!player.weaponInventory.add(new Cannon(player))) {
+	        	log("You already have this item.");
+	    	}
+			
+			log("Giving player a flamethrower!");
+			if(!player.weaponInventory.add(new Flamethrower(player))) {
+	        	log("You already have this item.");
+	    	}
 		}
 	};
 
@@ -410,73 +410,73 @@ public class Console implements KeyListener {
 		@Override
 		public void doCommand(String[] args)
 		{
-			args[0].trim();
+			args[0] = args[0].trim().toLowerCase();
 			Player player = MojamComponent.instance.player;
-			int i;
-			if(args[0].toLowerCase().equals("shotgun"))
+			
+			if(args[0].equals("shotgun"))
 			{
 				log("Giving player a shotgun");
 				if(!player.weaponInventory.add(new Shotgun(player))) {
 		        	log("You already have this item.");
 		    	}
 			}
-			else if(args[0].toLowerCase().equals("rifle"))
+			else if(args[0].equals("rifle"))
 			{
 				log("Giving player a rifle");
 				if(!player.weaponInventory.add(new Rifle(player))) {
 		        	log("You already have this item.");
 		    	}
 			}
-			else if(args[0].toLowerCase().equals("venom"))
+			else if(args[0].equals("venom"))
 			{
 				log("Giving player a veonomshooter");
 				if(!player.weaponInventory.add(new VenomShooter(player))) {
 		        	log("You already have this item.");
 		    	}
 			}
-			else if(args[0].toLowerCase().equals("elephant"))
+			else if(args[0].equals("elephant"))
 			{
 				log("Giving player an elephant gun");
 				if(!player.weaponInventory.add(new ElephantGun(player))) {
 		        	log("You already have this item.");
 		    	}
 			}
-			else if(args[0].toLowerCase().equals("fist"))
+			else if(args[0].equals("fist"))
 			{
 				log("Giving player a lesson in boxing");
 				if(!player.weaponInventory.add(new Melee(player))) {
 		        	log("You already have this item.");
 		    	}
 			}
-			else if(args[0].toLowerCase().equals("raygun"))
+			else if(args[0].equals("raygun"))
 			{
 				log("Giving player a raygun");
 				if(!player.weaponInventory.add(new Raygun(player))) {
 		        	log("You already have this item.");
 		    	}
 			}
-			else if(args[0].toLowerCase().equals("machete"))
+			else if(args[0].equals("machete"))
 			{
 				log("Giving player a machete");
 				if(!player.weaponInventory.add(new Machete(player))) {
 		        	log("You already have this item.");
 		    	}
 			}
-			else if(args[0].toLowerCase().equals("cannon"))
+			else if(args[0].equals("cannon"))
 			{
 				log("Giving player a cannon!");
 				if(!player.weaponInventory.add(new Cannon(player))) {
 		        	log("You already have this item.");
 		    	}
 			}
-			else if(args[0].toLowerCase().equals("flamethrower"))
+			else if(args[0].equals("flamethrower"))
 			{
 				log("Giving player a flamethrower!");
 				if(!player.weaponInventory.add(new Flamethrower(player))) {
 		        	log("You already have this item.");
 		    	}
 			}
-			else if(args[0].toLowerCase().equals("help"))
+			else if(args[0].equals("help"))
 			{
 				log("Options:");
 				log(">rifle (Rifle)");

@@ -44,7 +44,7 @@ public abstract class ClickableComponent extends VisibleComponent {
 			performClick = false;
 		}
 		if (performHover) {
-			if (listeners != null) {
+			if (listeners != null && !mouseButtons.mouseHidden) {
 				for (ButtonListener listener : listeners) {
 					listener.buttonHovered(this);
 				}

@@ -125,6 +125,8 @@ public class Art {
 	public static Bitmap bomb = load("/art/building/bomb.png");
 	public static Bitmap[][] small_chest = cut("/art/building/chest_small.png", 32, 53);
 	public static Bitmap[][] large_chest = cut("/art/building/chest_large.png", 64, 53);
+	public static Bitmap[][] teamTurret1 = cut("/art/building/turretTeam1.png", 32, 32);
+	public static Bitmap[][] teamTurret2 = cut("/art/building/turretTeam2.png", 32, 32);
 
 	//Weapons
 	public static Bitmap[][] weaponList = cut("/art/weapons/weapon_list.png", 32, 32);
@@ -181,13 +183,11 @@ public class Art {
 	public static Bitmap[][] healthBar = cut("/art/effects/bar_green.png", 32, 4);
 	public static Bitmap[][] healthBar_Outline = cut("/art/effects/bar_outline.png", 32, 4);
 	public static Bitmap[][] healthBar_Underlay = cut("/art/effects/bar_green_underlay.png", 32, 4);
+	public static Bitmap[][] sprintBar = cut("/art/effects/sprint_bar.png", 32, 4);
 		
 	// Icons
 	public static BufferedImage icon32 = loadBufferedImage("/art/icon/icon32.png");
 	public static BufferedImage icon64 = loadBufferedImage("/art/icon/icon64.png");
-	
-	
-
 	
     /**
      * Return the bitmaps for a given piece of art, cut out from a sheet

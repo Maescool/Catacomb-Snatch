@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 public class WeaponInventory {
 
-	private LinkedList<IWeapon> weaponList;
+	public LinkedList<IWeapon> weaponList;
 	/**
 	 * A list of the players current weapon(s). Can contain only one instance of each weapon
 	 */

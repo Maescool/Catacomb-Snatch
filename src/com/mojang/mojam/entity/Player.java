@@ -119,7 +119,7 @@ public class Player extends Mob implements LootCollector {
     /**
      * Handle creative mode
      */
-    private void setRailPricesAndImmortality(){
+    public void setRailPricesAndImmortality(){
     	if (Options.getAsBoolean(Options.CREATIVE)){
     		COST_RAIL = 0;
     		COST_DROID = 0;
@@ -723,7 +723,17 @@ public class Player extends Mob implements LootCollector {
         if (muzzleTicks > 0 && !behind) {
             screen.blit(Art.muzzle[muzzleImage][0], xmuzzle, ymuzzle);
         }
+        
+        addSprintBar(screen);
 	}
+    
+    private void addSprintBar(Screen screen) {
+    	if (this.timeSprint <= 0) { 
+    		return; 
+    	}
+    	int start = (int) (this.timeSprint * 20 / this.maxTimeSprint);
+        screen.blit(Art.sprintBar[start][0], pos.x - 16, pos.y + 8);
+    }
     
     public void setCharacter(GameCharacter character) {
 		this.character = character;
