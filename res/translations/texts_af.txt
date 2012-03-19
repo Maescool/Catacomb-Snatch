@@ -24,6 +24,10 @@ diffselect.normal = NORMAAL
 diffselect.hard = MOEILIK
 diffselect.nightmare = NAGMERRIE
 
+exitmenu.headline = WILL JY REGTIG DIE SPEL VERLAAT?
+exitmenu.cancel = NEE 
+exitmenu.exit = JA
+
 gameplay.player1Win = {0} WEN WOOHOO
 gameplay.player2Win = {0} WEN YAY
 gameplay.player1Name = LORD LARD
@@ -98,6 +102,7 @@ options.keyBindings = SLEUTELBORD
 options.characterSelect = KARAKTER KEUSE
 options.trapmouse = HOU MUIS IN VENSTER
 options.fullscreen = VOLSKERM
+options.opengl = OPENGL
 options.showfps = WYS FPS
 options.music = MUSIEK
 options.sounds = KLANKE
@@ -108,7 +113,7 @@ options.mute = DEMP
 options.creative = KREATIEWE MODUS
 options.alternative = ALTERNATIEWE SPELER VEL
 options.credits = KREDIETE
-
+options.openal = KLANK SYSTEEM: OPENAL
 
 
 
