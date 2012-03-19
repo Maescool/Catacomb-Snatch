@@ -350,7 +350,7 @@ public class Console implements KeyListener {
 		}
 	};
 
-	public Command allweapons = new Command("allweapons", 1, "Gives all weapons")
+	public Command allweapons = new Command("allweapons", 0, "Gives all weapons")
 	{
 		@Override
 		public void doCommand(String[] args)
@@ -405,7 +405,7 @@ public class Console implements KeyListener {
 	};
 
 	
-	public Command give = new Command("give", 1, "Gives a weapon")
+	public Command give = new Command("give", 1, "Gives a weapon or money")
 	{
 		@Override
 		public void doCommand(String[] args)
