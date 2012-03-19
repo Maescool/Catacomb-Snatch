@@ -84,7 +84,7 @@ import com.mojang.mojam.sound.SoundPlayer;
 public class MojamComponent extends Canvas implements Runnable, MouseMotionListener, MouseListener, ButtonListener {
 
 	public static final String GAME_TITLE = "Catacomb Snatch";
-	public static final String GAME_VERSION = "1.0.0-SNAPSHOT";
+	public static final String GAME_VERSION = "1.1.0-SNAPSHOT";
 
 	public static MojamComponent instance;
 	public static Locale locale;
@@ -659,7 +659,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		if (mousePosition != null) {
 			mouseButtons.setPosition(mousePosition.x / SCALE, mousePosition.y / SCALE);
 		}
-		if (!menuStack.isEmpty()) {
+		if (!menuStack.isEmpty() && !mouseButtons.mouseHidden) {
 			menuStack.peek().tick(mouseButtons);
 		}
 		if (mouseMoved) {
