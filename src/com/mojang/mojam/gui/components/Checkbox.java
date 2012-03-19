@@ -17,14 +17,14 @@ public class Checkbox extends ClickableComponent {
 		this(id, label, x, y, false);
 	}
 
-    public int getId()
-    {
-        return id;
-    }
-    
-    public void setLabel(String label){
-    	this.label = label;
-    }
+	public int getId() {
+		return id;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
 	public Checkbox(int id, String label, int x, int y, boolean checked) {
 		super(x, y, 128, 24);
 		this.id = id;
