@@ -2,6 +2,7 @@ package com.mojang.mojam.level;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -11,6 +12,7 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
+import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.entity.predicates.EntityIntersectsBB;
 import com.mojang.mojam.entity.predicates.EntityIntersectsBBAndInstanceOf;
 import com.mojang.mojam.gui.Notifications;
@@ -25,23 +27,26 @@ import com.mojang.mojam.level.tile.WallTile;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.math.BBPredicate;
 import com.mojang.mojam.math.Vec2;
+import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
 public class Level {
-	public int TARGET_SCORE = 100;
 
-	public final int width, height;
-
-	public Tile[] tiles;
-	public List<Entity>[] entityMap;
-	public List<Entity> entities = new ArrayList<Entity>();
+	private LinkedList<Tile>[] tiles;
+	private List<Vec2> spawnPointsP1;
+	private List<Vec2> spawnPointsP2;
 	private Bitmap minimap;
 	private boolean largeMap = false, smallMap = false;
 	private boolean seen[];
+
 	final int[] neighbourOffsets;
 
+	public int TARGET_SCORE = 100;
+	public final int width, height;
+	public List<Entity>[] entityMap;
+	public List<Entity> entities = new ArrayList<Entity>();
 	public List<ILevelTickItem> tickItems = new ArrayList<ILevelTickItem>();;
 	public int maxMonsters;
 	
@@ -55,7 +60,7 @@ public class Level {
 
 	@SuppressWarnings("unchecked")
 	public Level(int width, int height) {
-		neighbourOffsets = new int[] { -1, 1, -width, width };
+		neighbourOffsets = new int[] { -1, 1, -width, -width + 1, -width - 1, width, width + 1, width - 1};
 		this.width = width;
 		this.height = height;
 		
@@ -78,8 +83,11 @@ public class Level {
 		largeMap = height > 64 || width > 64;
 		smallMap = height < 64 && width < 64;
 		
-		initializeTiles();
+		initializeTileMap();
 
+		spawnPointsP1 = new ArrayList<Vec2>();
+		spawnPointsP2 = new ArrayList<Vec2>();
+		
 		entityMap = new List[width * height];
 		for (int i = 0; i < width * height; i++) {
 			entityMap[i] = new ArrayList<Entity>();
@@ -88,28 +96,39 @@ public class Level {
 		setSeen(new boolean[(width + 1) * (height + 1)]);
 	}
 
-	private void initializeTiles(){
-	    tiles = new Tile[width * height];
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                Tile tile = new FloorTile();
-                setTile(x, y, tile);
-            }
-        }
-	}
-
-	public void setTile(int x, int y, Tile tile) {
-		final int index = x + (y * width);
-		tiles[index] = tile;
-		tile.init(this, x, y);
-		for (int of : neighbourOffsets) {
-			final int nbIndex = index + of;
-			if (nbIndex >= 0 && nbIndex < width * height) {
-				final Tile neighbour = tiles[nbIndex];
-				if (neighbour != null)
-					neighbour.neighbourChanged(tile);
+	@SuppressWarnings("unchecked")
+	private void initializeTileMap() {
+		tiles = new LinkedList[width * height];
+		
+		//All of the lists need to be setup before adding the tiles
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				tiles[x + y * width] = new LinkedList<Tile>();
 			}
 		}
+		
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				setTile(x, y, new FloorTile());
+			}
+		}
+	}	
+
+	/**
+	 * Changes the current active tile at xy to the given tile
+	 * and updates the surrounding tiles
+	 * 
+	 * @param x
+	 * @param y
+	 * @param tile
+	 */
+	
+	public void setTile(int x, int y, Tile tile) {
+		tiles[x + y * width].addLast(tile);
+		tile.init(this, x, y);		
+
+		updateTiles(x, y, tile);
+		
 		if(tile instanceof AnimatedTile) { 
 			tickItems.add((ILevelTickItem) tile);
 		}
@@ -118,13 +137,70 @@ public class Level {
 	public Tile getTile(int x, int y) {
 		if (x < 0 || y < 0 || x >= width || y >= height)
 			return null;
-		return tiles[x + y * width];
+		return tiles[x + y * width].peekLast();
 	}
 
 	public Tile getTile(Vec2 pos) {
 		int x = (int) pos.x / Tile.WIDTH;
 		int y = (int) pos.y / Tile.HEIGHT;
 		return getTile(x, y);
+	}
+	
+	
+	public void removeTile(int x, int y) {
+		int index = x + y * width;
+		if ( tiles[index].size() > 1) {
+			tiles[index].removeLast();
+			updateTiles(x, y, tiles[index].peekLast());
+		}
+		
+		
+	}
+	
+	private void updateTiles(int x, int y, Tile tile) {
+		for (int offset : neighbourOffsets) {
+			final int nbIndex = x + (y * width) + offset;
+			if (nbIndex >= 0 && nbIndex < width * height) {
+				final Tile neighbour = tiles[nbIndex].peekLast();
+				if (neighbour != null) {
+					neighbour.neighbourChanged(tile);
+				}				
+			}
+		}
+	}
+	
+	/**
+	 * Add a player spawn point for the given team
+	 * 
+	 * @param x
+	 * @param y
+	 * @param team
+	 */
+	
+	public void addSpawnPoint(int x, int y, int team) {
+		if (team == Team.Team1) {
+			spawnPointsP1.add(new Vec2(x, y));
+		} else if (team == Team.Team2) {
+			spawnPointsP2.add(new Vec2(x, y));
+		} else {
+			return;
+		}
+		
+	}
+	
+	public Vec2 getRandomSpawnPoint(int team) {
+		int index;
+		if (team == Team.Team1) {
+			index = TurnSynchronizer.synchedRandom.nextInt(spawnPointsP1.size() - 1);
+			return spawnPointsP1.get(index);
+		} else if (team == Team.Team2) {
+			index = TurnSynchronizer.synchedRandom.nextInt(spawnPointsP2.size() - 1);
+			return spawnPointsP2.get(index);
+		} else {
+			return null;
+		}
+		
+
 	}
 
 	public void insertToEntityMap(Entity e) {
@@ -294,7 +370,7 @@ public class Level {
 
 		screen.setOffset(-xScroll, -yScroll);
 
-		renderTilesAndBases(screen, x0, y0, x1, y1);
+		renderTiles(screen, x0, y0, x1, y1);
 
 		for (Entity e : visibleEntities) {
 			e.render(screen);
@@ -314,57 +390,22 @@ public class Level {
 		Notifications.getInstance().render(screen);
 	}
 
-	private void renderTilesAndBases(Screen screen, int x0, int y0, int x1, int y1){
+	private void renderTiles(Screen screen, int x0, int y0, int x1, int y1){
 	    // go through each currently visible cell
 	    for (int y = y0; y <= y1; y++) {
 	        for (int x = x0; x <= x1; x++) {
 
 	            // draw sand outside the level
 	            if (x < 0 || x >= width || y < 0 || y >= height) {
-	                screen.blit(Art.floorTiles[5][0], x * Tile.WIDTH, y
-	                        * Tile.HEIGHT);
-	                continue;
-	            }
-
-	            Bitmap[][] playerBaseZero = Art.getPlayerBase(getPlayerCharacter(0));
-	            Bitmap[][] playerBaseOne = Art.getPlayerBase(getPlayerCharacter(1));
-	            int baseOneTileHeight = playerBaseOne[0].length;
-	            int baseOneTileWidth = playerBaseOne.length;
-	            int baseZeroTileHeight = playerBaseZero[0].length;
-	            int baseZeroTileWidth = playerBaseZero.length;
-	            
-	            
-	            // if we are in the center area (4*7 Tiles): draw player bases
-				int xt = x - (width / 2) + ((baseOneTileWidth-(baseOneTileWidth%2))/2) + (baseOneTileWidth%2);
-				int yt = y - baseOneTileHeight;
-
-	            if (xt >= 0 && yt >= 0 && xt < baseOneTileWidth && yt < baseOneTileHeight && (isNotBaseRailTile(x) || yt < baseOneTileHeight-1)) {
-	                screen.blit(playerBaseOne[xt][yt], x * Tile.WIDTH, y
-	                        * Tile.HEIGHT);
-	                continue;
-	            }
-	            
-	            // if we are in the center area (4*7 Tiles): draw player bases
-				xt = x - (width / 2) + ((baseZeroTileWidth-(baseZeroTileWidth%2))/2) + (baseZeroTileWidth%2);
-				
-				
-	            yt = y - (height - 8);
-	            if (xt >= 0 && yt >= 0 && xt < baseZeroTileWidth && yt < baseZeroTileHeight && (isNotBaseRailTile(x) || yt > 0)) {       
-					screen.blit(playerBaseZero[xt][yt], x * Tile.WIDTH, y * Tile.HEIGHT);
-	                if (yt == 0 && ((xt <=(baseZeroTileWidth-3)/2) || (xt >=((baseZeroTileWidth-3)/2)+3 ))) {
-	                    screen.blit(Art.shadow_north, x * Tile.WIDTH, y * Tile.HEIGHT);
-	                }
-	                if ((xt == 2) && yt == 0) {
-	                    screen.blit(Art.shadow_north_west, x * Tile.WIDTH, y * Tile.HEIGHT);
-	                }
-	                if ((xt == 4) && yt == 0) {
-	                    screen.blit(Art.shadow_north_east, x * Tile.WIDTH + Tile.WIDTH - Art.shadow_east.w, y * Tile.HEIGHT);
-	                }
+	                screen.blit(Art.floorTiles[5][0], x * Tile.WIDTH, y * Tile.HEIGHT);
 	                continue;
 	            }
 
 	            if (canSee(x, y)) {
-	                tiles[x + y * width].render(screen);
+	                for(int i = 0; i < tiles[x + y * width].size(); i++) {
+	                	tiles[x + y * width].get(i).render(screen);
+	                }
+	                
 	            }
 	        }
 	    }
@@ -375,11 +416,6 @@ public class Level {
 	    if (player == null) return GameCharacter.None;
 	    else return player.getCharacter();
 	}
-	
-	private boolean isNotBaseRailTile(int x){
-	    return (x < (width/2 - 2) || x > (width/2));
-	}
-	
 
 	private void renderTopOfWalls(Screen screen, int x0, int y0, int x1, int y1){
 	    for (int y = y0; y <= y1; y++) {
@@ -387,9 +423,11 @@ public class Level {
                 if (x < 0 || x >= width || y < 0 || y >= height) {
                     continue;
                 }
-                if (canSee(x, y)) {
-                    tiles[x + y * width].renderTop(screen);
-                }
+	            if (canSee(x, y)) {
+	                for(int i = 0; i < tiles[x + y * width].size(); i++) {
+	                	tiles[x + y * width].get(i).renderTop(screen);
+	                }
+	            }
             }
         }
 	}
@@ -478,7 +516,7 @@ public class Level {
             for (int x = 0; x < width; x++) {
                 int i = x + y * width;
                 if (hasSeen(x, y)) {
-                    minimap.pixels[i] = tiles[i].minimapColor;
+                    minimap.pixels[i] = getTile(x, y).minimapColor;
                 } else {
                     minimap.pixels[i] = 0xff000000;
                 }
@@ -639,9 +677,10 @@ public class Level {
 				continue;
 			}
 			for (int x = x0; x <= x1; x++) {
-				if (x < 0 || x >= width)
+				if (x < 0 || x >= width) {
 					continue;
-				tiles[x + y * width].addClipBBs(result, e);
+				}
+				getTile(x, y).addClipBBs(result, e);
 			}
 		}
 

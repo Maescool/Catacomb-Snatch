@@ -81,7 +81,7 @@ public class LevelEditorMenu extends GuiMenu {
         new DestroyableWallTile(),
         new TreasurePile(0, 0),
         new TreasureChest(0, 0, 0, 0),
-        new UnbreakableRailTile(new FloorTile()),
+        new UnbreakableRailTile(),
         new Turret(0, 0, 0),
         new TurretTeamOne(0, 0),
         new TurretTeamTwo(0, 0),

@@ -17,6 +17,8 @@ public class TileID {
 		registerTile((short) 4, UnbreakableRailTile.class);
 		registerTile((short) 5, UnpassableSandTile.class);
 		registerTile((short) 6, WallTile.class);
+		registerTile((short) 7, DropTrap.class);
+		registerTile((short) 8, PlayerRailTile.class);
 	}
 
 	/**

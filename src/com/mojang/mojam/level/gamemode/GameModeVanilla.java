@@ -15,9 +15,9 @@ public class GameModeVanilla extends GameMode {
 		
 		Random random = TurnSynchronizer.synchedRandom;		
 		for (int i = 0; i < 11; i++) {
-			double x = (random.nextInt(newLevel.width - 16) + 8) * Tile.WIDTH
+			double x = random.nextInt(newLevel.width) * Tile.WIDTH
 					+ Tile.WIDTH / 2;
-			double y = (random.nextInt(newLevel.height - 16) + 8) * Tile.HEIGHT
+			double y = random.nextInt(newLevel.height) * Tile.HEIGHT
 					+ Tile.HEIGHT / 2 - 4;
 			final Tile tile = newLevel.getTile((int) (x / Tile.WIDTH),
 					(int) (y / Tile.HEIGHT));
@@ -26,11 +26,6 @@ public class GameModeVanilla extends GameMode {
 				newLevel.addEntity(new SpawnerForBat(x, y));
 			}
 		}
-	}
-	
-	@Override
-	protected void loadColorTile(int color, int x, int y) {
-		super.loadColorTile(color, x, y);
 	}
 	
 	@Override

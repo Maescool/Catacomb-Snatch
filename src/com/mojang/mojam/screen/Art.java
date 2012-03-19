@@ -65,13 +65,13 @@ public class Art {
     public static Bitmap exclamation_mark = load ("/art/effects/exclamation_mark.png");
 	
 	// Player starting points
-	private static Bitmap[][] startLordLard = cut("/art/player/start_lordlard_big.png", 32, 32);
+	private static Bitmap[][] startLordLard = cut("/art/player/start_lordlard.png", 32, 32);
 	private static Bitmap[][] startHerrSpeck = cut("/art/player/start_herrspeck.png", 32, 32);
-	private static Bitmap[][] startDuchessDonut = startLordLard;
+	private static Bitmap[][] startDuchessDonut = cut("/art/player/start_donut.png", 32, 32);
 	private static Bitmap[][] startCountessCruller = cut("/art/player/start_cruller.png", 32, 32);
-	private static Bitmap[][] startNoOpponent = cut("/art/player/start_no_opponent_big.png", 32, 32);
+	private static Bitmap[][] startNoOpponent = cut("/art/player/start_no_opponent.png", 32, 32);
 	
-	public static Bitmap[][] getPlayerBase(GameCharacter character) {
+	public static Bitmap[][] getPlayerSpawn(GameCharacter character) {
 		switch (character) {
 		case None:
 			return startNoOpponent;
@@ -87,6 +87,56 @@ public class Art {
 			return startLordLard;
 		}
 	}
+	
+	
+	// Player base left
+	private static Bitmap[][] baseLeftLordLard = cut("/art/player/start_lordlard_left.png", 32, 32);
+	private static Bitmap[][] baseLeftHerrSpeck = cut("/art/player/start_herrspeck_left.png", 32, 32);
+	private static Bitmap[][] baseLeftDuchessDonut = cut("/art/player/start_donut_left.png", 32, 32);
+	private static Bitmap[][] baseLeftCountessCruller = cut("/art/player/start_cruller_left.png", 32, 32);
+	private static Bitmap[][] baseLeftNoOpponent = cut("/art/player/start_no_opponent_left.png", 32, 32);
+	
+	public static Bitmap[][] getPlayerBaseLeft(GameCharacter character) {
+		switch (character) {
+		case None:
+			return baseLeftNoOpponent;
+		case LordLard:
+			return baseLeftLordLard;
+		case HerrVonSpeck:
+			return baseLeftHerrSpeck;
+		case DuchessDonut:
+			return baseLeftDuchessDonut;
+		case CountessCruller:
+			return baseLeftCountessCruller;
+		default:
+			return baseLeftLordLard;
+		}
+	}
+	
+	// Player base left
+	private static Bitmap[][] baseRightLordLard = cut("/art/player/start_lordlard_right.png", 32, 32);
+	private static Bitmap[][] baseRightHerrSpeck = cut("/art/player/start_herrspeck_right.png", 32, 32);
+	private static Bitmap[][] baseRightDuchessDonut = cut("/art/player/start_donut_right.png", 32, 32);
+	private static Bitmap[][] baseRightCountessCruller = cut("/art/player/start_cruller_right.png", 32, 32);
+	private static Bitmap[][] baseRightNoOpponent = cut("/art/player/start_no_opponent_right.png", 32, 32);
+	
+	public static Bitmap[][] getPlayerBaseRight(GameCharacter character) {
+		switch (character) {
+		case None:
+			return baseRightNoOpponent;
+		case LordLard:
+			return baseRightLordLard;
+		case HerrVonSpeck:
+			return baseRightHerrSpeck;
+		case DuchessDonut:
+			return baseRightDuchessDonut;
+		case CountessCruller:
+			return baseRightCountessCruller;
+		default:
+			return baseRightLordLard;
+		}
+	}
+	
 	
 	// Tooltips
 	public static Bitmap tooltipBackground = load("/art/screen/tooltipBackground.png");

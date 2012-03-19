@@ -59,6 +59,7 @@ import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.gamemode.GameMode;
 import com.mojang.mojam.level.tile.Tile;
+import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.mc.EnumOS2;
 import com.mojang.mojam.mc.EnumOSMappingHelper;
 import com.mojang.mojam.network.TurnSynchronizer;
@@ -344,13 +345,15 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private synchronized void initLevel(GameCharacter character) {
 		if (level == null)
 			return;
-		players[0] = new Player(synchedKeys[0], synchedMouseButtons[0], level.width * Tile.WIDTH
-				/ 2 - 16, (level.height - 5 - 1) * Tile.HEIGHT - 16, Team.Team1, character);
+		
+		Vec2 spawnPoint = level.getRandomSpawnPoint(Team.Team1);
+		
+		players[0] = new Player(synchedKeys[0], synchedMouseButtons[0], (int)spawnPoint.x, (int)spawnPoint.y, Team.Team1, character);
 		players[0].setFacing(4);
 		level.addEntity(players[0]);
 		if (isMultiplayer) {
-			players[1] = new Player(synchedKeys[1], synchedMouseButtons[1], level.width
-					* Tile.WIDTH / 2 - 16, 7 * Tile.HEIGHT - 16, Team.Team2, character);
+			spawnPoint = level.getRandomSpawnPoint(Team.Team2);
+			players[1] = new Player(synchedKeys[1], synchedMouseButtons[1], (int)spawnPoint.x, (int)spawnPoint.y, Team.Team2, character);
 			level.addEntity(players[1]);
 		} else {
 			players[1] = null;

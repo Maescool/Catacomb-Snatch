@@ -1,0 +1,77 @@
+package com.mojang.mojam.level.tile;
+
+import com.mojang.mojam.GameCharacter;
+import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.Player;
+import com.mojang.mojam.entity.mob.Team;
+import com.mojang.mojam.level.Level;
+import com.mojang.mojam.screen.Art;
+import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.Screen;
+
+public class PlayerSpawn extends Tile {
+	public static final int COLOR = 0xFFFF1111;
+	private static final String NAME = "PLAYER SPAWN";
+	private Bitmap[][] art;
+	private int team;
+	private int playerID;	
+
+	public PlayerSpawn(int img, int team) {
+		if (img > 11) {
+			img = 11;
+		}
+		this.team = team;
+		
+		if(team == Team.Team1) playerID = 0;
+		if(team == Team.Team2) playerID = 1;
+		
+		this.img = img;
+		minimapColor = Art.floorTileColors[img & 7][img / 8];
+	}
+	
+	public void init(Level level, int x, int y) {
+		super.init(level, x, y);
+		level.addSpawnPoint(x * Tile.WIDTH + Tile.WIDTH / 2, y * Tile.HEIGHT + Tile.HEIGHT / 2, team);
+	}
+
+	@Override
+	public void render(Screen screen) {
+		//We need to determine the art here because the level is initialized before the player
+		art = Art.getPlayerSpawn(getPlayerCharacter(playerID));
+	    screen.blit(art[img % 4][img / 4], x * Tile.WIDTH, y * Tile.HEIGHT);
+	}
+	
+	private GameCharacter getPlayerCharacter(int playerID){
+	    Player player = MojamComponent.instance.players[playerID];
+	    if (player == null) return GameCharacter.None;
+	    else return player.getCharacter();
+	}
+	
+	public boolean canPass(Entity e) {
+		return true;
+	}
+
+	public int getColor() {
+		return PlayerSpawn.COLOR;
+	}
+
+	public String getName() {
+		return PlayerSpawn.NAME;
+	}
+	
+	@Override
+	public boolean isBuildable() {
+		return true;
+	}
+	
+	@Override
+	public int getMiniMapColor() {
+		return minimapColor;
+	}
+
+	@Override
+	public Bitmap getBitMapForEditor() {
+		return art[img % 4][img / 4];
+	}
+}

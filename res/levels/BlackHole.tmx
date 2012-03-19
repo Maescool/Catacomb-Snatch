@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="64" height="64" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" source="../tiled/tilesets/Tileset-Floor.tsx"/>
+ <tileset firstgid="65" source="../tiled/tilesets/Tileset-Overlay.tsx"/>
+ <tileset firstgid="129" source="../tiled/tilesets/Tileset-Wall.tsx"/>
+ <tileset firstgid="193" source="../tiled/tilesets/Tileset-Player1.tsx"/>
+ <tileset firstgid="257" source="../tiled/tilesets/Tileset-Player2.tsx"/>
+ <layer name="floor" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2byY4CMQxEG4b//2auaOSOtyrHAR9Kgl4iP8dLEqmf13U9R6MRXX9G7bZzNBrhpeV3x/x/HK7h783/EnQCf8ZOjRfpCwZ/xLYIE8IPaH7NHkYcr8bT8ofBrzEz8tjCKtnH5L+zI5Mbd+oU/xpnhN/rox381nn21rhoLlTye+PcGseIProaD8mPsF2qlVF+yQf//7P5M/GL7pHSbyY/gyM6/i5+KaZ3+OBu7VHBv7JxVQc9Pc3D/3md2f+snBaejA9WaxIkP1uMtcBJ/BEfaM8PP5bfUgOy/NYxLM+x+VH7NC+Xde/B5Gf1fFQvqOBHzacnljz3OvBLbN71wun8mVzoHP9sH3jzoJKf7YNIDazgt+xzIjwev+6Kfy9H5L1o/5OuncgfHecX+LX8Y/Nn6h2K33OdXf+9fJlznsi9Kn5rXJzMj+ptaPZK/szcau9Gfbt6t2r+M/yZtU6385/KuO9w/qPNSXbf243f6oNsTGTyogO/90wjwr6LPzuvVexsfut6x/ss0pcsfinOPXWtKqaY/FXx/u38TA1/H534/cNoNMJovn8cjXrpDSdlBE8AQAAA
+  </data>
+ </layer>
+ <layer name="overlay" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3ay04CQRgF4RnuqCgoiLeN8iTGJ1fxAigoKAiyQV/E2kFYO+lkpr6k0tvz7zuKJCl5xTiKSnROMeUoTwXqUJkqceiVyalx2z6dUZV2aJf26IoOqJ7i+1vcdkyn1KBDOqImXVKbTlJ8/6aLeF0W3Wy9kiRJkiRJktLlOvQASZIkSZIkSZIk6Z9k/f/7cqOseKBHmtMt3dE9dWlFT/QcbF3yXmlIC+pRnwb0Qj80ordg65L3SVP6pnca04Q+6Jdm9BVsnaSs+QPiXj+bAEAAAA==
+  </data>
+ </layer>
+ <layer name="wall" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3aMQrDQBAEQX3dP3dsh8anHkEVXDpLo1TXBQDw6XXo3XHj+86v/U+lf2Ojon9jo6J/Y6Oif2Ojon9jo6J/Y6Oif2Ojon9jo6J/Y6Oif2Ojon9jo6J/Y6Oif2Ojon9jo6J/Y6Oif2Ojon9jo6J/Y6Oif2Ojon9jo6J/Y6Oif2Ojov8/G6f/Sz9148nfDgA45w2Y7AZJAEAAAA==
+  </data>
+ </layer>
+ <layer name="seen tiles" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3PQQ0AAAgDsdmcfyN8sUDoJSegTVLbtu319fj5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fnvx8/Pz8/Pz8/Pz8/Pz8/Pb9u2Pz5cEbc6AEAAAA==
+  </data>
+ </layer>
+</map>
