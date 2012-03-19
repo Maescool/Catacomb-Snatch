@@ -659,7 +659,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		if (mousePosition != null) {
 			mouseButtons.setPosition(mousePosition.x / SCALE, mousePosition.y / SCALE);
 		}
-		if (!menuStack.isEmpty() && !mouseButtons.mouseHidden) {
+		if (!menuStack.isEmpty()) {
 			menuStack.peek().tick(mouseButtons);
 		}
 		if (mouseMoved) {
