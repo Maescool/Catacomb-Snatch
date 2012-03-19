@@ -27,6 +27,7 @@ public class Network {
 		kryo.register(ChatMessage.class);
 		kryo.register(ArrayList.class);
 		kryo.register(Ping.class);
+		kryo.register(EndGameMessage.class);
 	}
 	
 	static public class RegisterName {
@@ -154,4 +155,8 @@ public class Network {
 
 	}
 
+	static public class EndGameMessage {
+		public int end;
+	}
+	
 }

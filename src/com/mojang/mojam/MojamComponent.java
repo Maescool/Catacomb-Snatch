@@ -890,6 +890,12 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			setLocale("af");
 			break;
 		case TitleMenu.RETURN_TO_TITLESCREEN:
+			if(isMultiplayer) {
+				snatchClient.shutdown();
+				if(isServer) {
+					server.shutdown();
+				}
+			}
 			menuStack.clear();
 			level = null;
 			TitleMenu menu = new TitleMenu(GAME_WIDTH, GAME_HEIGHT);
@@ -931,7 +937,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 					MojamComponent.localTeam = Team.Team1;
 
 					server = new SnatchServer();
-					
 					
 					snatchClient.setComponent(MojamComponent.this);
 					snatchClient.connectLocal();				

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.mojang.mojam.network.kryo.Network.ChatMessage;
+import com.mojang.mojam.network.kryo.Network.EndGameMessage;
 import com.mojang.mojam.network.kryo.Network.TurnMessage;
 import com.mojang.mojam.network.kryo.SnatchClient;
 
@@ -34,6 +36,7 @@ public class TurnSynchronizer {
 	private int localId;
 
 	private boolean isStarted;
+	private int stalled;
 
 	public TurnSynchronizer(SnatchClient client, int localId, int numPlayers) {
 
@@ -82,9 +85,21 @@ public class TurnSynchronizer {
 					}
 				}
 			}
+			stalled = 0; //reset stall count
 			return true;
 		} else {
-			// System.out.println("Stalled");
+			//this happens if the server is not responding. If the server is gone, eventually the game will end.
+			stalled++;
+			if(stalled == 25) {
+				snatchClient.handleMessage(0,new ChatMessage("Server Not Responding..."));
+			}
+			//give it a small amount of time to recover, but it probably won't
+			if(stalled > 180) {
+				//dead game
+				snatchClient.sendMessage(new EndGameMessage());
+				snatchClient.handleMessage(0,new EndGameMessage());
+			}
+		
 		}
 		return false;
 	}
