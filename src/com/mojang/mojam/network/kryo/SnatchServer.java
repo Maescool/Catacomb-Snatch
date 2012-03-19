@@ -7,6 +7,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mojang.mojam.network.kryo.Network.ChatMessage;
+import com.mojang.mojam.network.kryo.Network.EndGameMessage;
 import com.mojang.mojam.network.kryo.Network.RegisterName;
 import com.mojang.mojam.network.kryo.Network.StartGameCustomMessage;
 import com.mojang.mojam.network.kryo.Network.StartGameMessage;
@@ -77,51 +78,33 @@ public class SnatchServer {
 	
 					server.sendToAllExceptTCP(connection.getID(),startGameMessage);
 				}
-				/*
-				if(object instanceof PauseMessage) {
-					PauseMessage pauseMessage = (PauseMessage) object;
-	
-					server.sendToAllExceptTCP(connection.getID(),pauseMessage);
+				
+				if(object instanceof EndGameMessage) {
+					EndGameMessage endGameMessage = (EndGameMessage) object;
+					server.sendToAllExceptTCP(connection.getID(),endGameMessage);
+					return;
 				}
 				
-				if(object instanceof CharacterMessage) {
-					CharacterMessage characterMessage = (CharacterMessage) object;
-	
-					server.sendToAllExceptTCP(connection.getID(),characterMessage);
-				}
 				
-				if(object instanceof ChangeMouseButtonMessage) {
-					ChangeMouseButtonMessage changeMouseButtonMessage = (ChangeMouseButtonMessage) object;
-	
-					server.sendToAllExceptTCP(connection.getID(),changeMouseButtonMessage);
-				}
-				
-				if(object instanceof ChangeMouseCoordinateMessage) {
-					ChangeMouseCoordinateMessage changeMouseCoordinateMessage = (ChangeMouseCoordinateMessage) object;
-	
-					server.sendToAllExceptTCP(connection.getID(),changeMouseCoordinateMessage);
-				}
-				
-				if(object instanceof ChangeKeyMesasge) {
-					ChangeKeyMesasge changeKeyMessage = (ChangeKeyMesasge) object;
-	
-					server.sendToAllExceptTCP(connection.getID(),changeKeyMessage);
-				}
-				
-				if(object instanceof ChatMessage) {
-					ChatMessage chatMessage = (ChatMessage) object;
-	
-					server.sendToAllExceptTCP(connection.getID(),chatMessage);
-				}
-				
-				if(object instanceof PingMessage) {
-					PingMessage pingMessage = (PingMessage) object;
-	
-					server.sendToAllExceptTCP(connection.getID(),pingMessage);
-				}
-		     */
 			}
-
+			
+			public void disconnected (Connection c) {
+				SnatchConnection connection = (SnatchConnection)c;
+				if (connection.name != null) {
+					// Announce to everyone that someone has left.
+					ChatMessage chatMessage = new ChatMessage();
+					chatMessage.message =  connection.name + " disconnected.";
+					server.sendToAllExceptTCP(connection.getID(), chatMessage);
+					
+					if(server.getConnections().length < 2) { //less than two players? dead game
+						System.out.println("Ending Game");
+						EndGameMessage endGameMessage = new EndGameMessage();
+						server.sendToAllExceptTCP(connection.getID(), endGameMessage);
+					}
+					
+					//updateNames();
+				}
+			}
 		});
 		
 		server.bind(Network.port);
@@ -141,6 +124,12 @@ public class SnatchServer {
 	public static void main(String[] args) throws IOException {
 		Log.set(Log.LEVEL_DEBUG);
 		new SnatchServer();
+	}
+
+
+	public void shutdown() {
+		server.close();
+		server.stop();
 	}
 
 }

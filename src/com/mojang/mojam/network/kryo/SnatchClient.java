@@ -18,6 +18,7 @@ import com.mojang.mojam.network.kryo.Network.ChangeMouseButtonMessage;
 import com.mojang.mojam.network.kryo.Network.ChangeMouseCoordinateMessage;
 import com.mojang.mojam.network.kryo.Network.CharacterMessage;
 import com.mojang.mojam.network.kryo.Network.ChatMessage;
+import com.mojang.mojam.network.kryo.Network.EndGameMessage;
 import com.mojang.mojam.network.kryo.Network.PauseMessage;
 import com.mojang.mojam.network.kryo.Network.RegisterName;
 import com.mojang.mojam.network.kryo.Network.StartGameCustomMessage;
@@ -87,7 +88,9 @@ public class SnatchClient {
 	}
 
 	public void sendMessage(Object message) {
-		client.sendTCP(message);	
+		if (client.isConnected()) {
+			client.sendTCP(message);
+		}
 	}
 
 	public void setComponent(MojamComponent mojamComponent) {
@@ -97,42 +100,30 @@ public class SnatchClient {
 
 	public void handleMessage(int playerId, Object message) {
 
-
-		if (message instanceof RegisterName) {
-			RegisterName registerNamemessage = (RegisterName)message;
+		if (message instanceof TurnMessage) {
+			mojamComponent.synchronizer.onTurnMessage((TurnMessage) message);
+		} else if (message instanceof RegisterName) {
+			RegisterName registerNamemessage = (RegisterName) message;
 			mojamComponent.createServerState = 1;
 			return;
-		}
-		
-
-		if (message instanceof ChangeKeyMessage) {
+		} else if (message instanceof ChangeKeyMessage) {
 			ChangeKeyMessage ckc = (ChangeKeyMessage) message;
 			mojamComponent.synchedKeys[playerId].getAll().get(ckc.key).nextState = ckc.nextState;
-		}
-
-		if (message instanceof ChangeMouseButtonMessage) {
+		} else if (message instanceof ChangeMouseButtonMessage) {
 			ChangeMouseButtonMessage ckc = (ChangeMouseButtonMessage) message;
 			mojamComponent.synchedMouseButtons[playerId].nextState[ckc.button] = ckc.nextState;
-		}
-
-		if (message instanceof ChangeMouseCoordinateMessage) {
+		} else if (message instanceof ChangeMouseCoordinateMessage) {
 			ChangeMouseCoordinateMessage ccc = (ChangeMouseCoordinateMessage) message;
 			mojamComponent.synchedMouseButtons[playerId].setPosition(new Point(ccc.x, ccc.y));
 			mojamComponent.synchedMouseButtons[playerId].mouseHidden = ccc.mouseHidden;
-		}
-
-		if (message instanceof ChatMessage) {
+		} else if (message instanceof ChatMessage) {
 			ChatMessage cc = (ChatMessage) message;
 			mojamComponent.chat.addMessage(cc.message);
-		}
-
-		if (message instanceof CharacterMessage) {
+		} else if (message instanceof CharacterMessage) {
 			CharacterMessage charMessage = (CharacterMessage) message;
 			System.out.println(charMessage.localId);
 			mojamComponent.players[charMessage.localId].setCharacter(GameCharacter.values()[charMessage.ordinal]);
-		}
-
-		if (message instanceof PauseMessage) {
+		} else if (message instanceof PauseMessage) {
 			PauseMessage pm = (PauseMessage) message;
 			mojamComponent.paused = pm.paused;
 			if (pm.paused) {
@@ -140,40 +131,43 @@ public class SnatchClient {
 			} else {
 				mojamComponent.menuStack.pop();
 			}
-		}
-
-		if (message instanceof StartGameMessage) {
+		} else if (message instanceof StartGameMessage) {
 			if (!mojamComponent.isServer) {
 				mojamComponent.sendCharacter = true;
 				StartGameMessage sgMessage = (StartGameMessage) message;
 				mojamComponent.synchronizer.setSeed(sgMessage.gameSeed);
-				mojamComponent.createLevel(sgMessage.levelFile, TitleMenu.defaultGameMode,
+				mojamComponent.createLevel(sgMessage.levelFile,
+						TitleMenu.defaultGameMode,
 						GameCharacter.values()[sgMessage.opponentCharacterID]);
-				TitleMenu.difficulty = DifficultyInformation.getByInt(sgMessage.difficulty);
+				TitleMenu.difficulty = DifficultyInformation
+						.getByInt(sgMessage.difficulty);
 				mojamComponent.synchronizer.startGame(sgMessage.gameSeed);
-				
 			}
-		} else if (message instanceof TurnMessage) {
-			
-			mojamComponent.synchronizer.onTurnMessage((TurnMessage)message);
-			
 		} else if (message instanceof StartGameCustomMessage) {
 			if (!mojamComponent.isServer) {
 				mojamComponent.sendCharacter = true;
 				StartGameCustomMessage sgMessage = (StartGameCustomMessage) message;
 				mojamComponent.synchronizer.startGame(sgMessage.gameSeed);
-				TitleMenu.difficulty = DifficultyInformation.getByInt(
-						sgMessage.difficulty);
-				mojamComponent.createLevel(sgMessage.levelFile, TitleMenu.defaultGameMode,
+				TitleMenu.difficulty = DifficultyInformation
+						.getByInt(sgMessage.difficulty);
+				mojamComponent.createLevel(sgMessage.levelFile,
+						TitleMenu.defaultGameMode,
 						GameCharacter.values()[sgMessage.opponentCharacterID]);
 			}
-		} 
-        
+		} else if (message instanceof EndGameMessage) {
+			
+			mojamComponent.handleAction(TitleMenu.RETURN_TO_TITLESCREEN);
+
+		}
+
 	}
 
 	public void ping() {
 		this.client.updateReturnTripTime();		
 	}
 
-	
+	public void shutdown() {
+		client.close();
+	}
+
 }

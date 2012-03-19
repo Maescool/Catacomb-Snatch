@@ -25,6 +25,7 @@ public class Chat implements KeyListener {
 
 	public void clear() {
 		messages.clear();
+		displayedMessage = -1;
 	}
 
 	public boolean isOpen() {
