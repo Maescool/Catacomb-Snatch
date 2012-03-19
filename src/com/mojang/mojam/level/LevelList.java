@@ -12,6 +12,9 @@ public class LevelList {
 	public static void createLevelList() {
 		levels = new ArrayList<LevelInformation>();
 		levels.add(new LevelInformation("Mojam", "/levels/level1.tmx",true));
+		levels.add(new LevelInformation("AsymeTrical", "/levels/AsymeTrical.tmx",true));
+		levels.add(new LevelInformation("BlackHole", "/levels/BlackHole.tmx",true));
+		levels.add(new LevelInformation("CataBOMB", "/levels/CataBOMB.tmx",true));
 		levels.add(new LevelInformation("Dev TMX", "/levels/DEV.tmx",true));
 		
 		File levels = getBaseDir();
