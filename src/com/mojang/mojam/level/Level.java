@@ -11,6 +11,8 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
+import com.mojang.mojam.entity.predicates.EntityIntersectsBB;
+import com.mojang.mojam.entity.predicates.EntityIntersectsBBAndInstanceOf;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.gui.components.Font;
@@ -21,6 +23,7 @@ import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.level.tile.AnimatedTile;
 import com.mojang.mojam.level.tile.WallTile;
 import com.mojang.mojam.math.BB;
+import com.mojang.mojam.math.BBPredicate;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
@@ -161,63 +164,32 @@ public class Level {
 		return getEntities(bb.x0, bb.y0, bb.x1, bb.y1);
 	}
 
-	public Set<Entity> getEntities(double xx0, double yy0, double xx1,
-			double yy1) {
-		int x0 = (int) (xx0) / Tile.WIDTH;
-		int x1 = (int) (xx1) / Tile.WIDTH;
-		int y0 = (int) (yy0) / Tile.HEIGHT;
-		int y1 = (int) (yy1) / Tile.HEIGHT;
-
-		Set<Entity> result = new TreeSet<Entity>(new EntityComparator());
-
-		for (int y = y0; y <= y1; y++) {
-			if (y < 0 || y >= height)
-				continue;
-			for (int x = x0; x <= x1; x++) {
-				if (x < 0 || x >= width)
-					continue;
-				List<Entity> entities = entityMap[x + y * width];
-				for (int i = 0; i < entities.size(); i++) {
-					Entity e = entities.get(i);
-					if (e.removed)
-						continue;
-					if (e.intersects(xx0, yy0, xx1, yy1)) {
-						result.add(e);
-					}
-				}
-			}
-		}
-
-		return result;
+	public Set<Entity> getEntities(double x0, double y0, double x1, double y1) {
+		return getEntities(x0, y0, x1, y1, EntityIntersectsBB.INSTANCE);
 	}
 
 	public Set<Entity> getEntities(BB bb, Class<? extends Entity> c) {
 		return getEntities(bb.x0, bb.y0, bb.x1, bb.y1, c);
 	}
 
-	public Set<Entity> getEntities(double xx0, double yy0, double xx1,
-			double yy1, Class<? extends Entity> c) {
-		int x0 = (int) (xx0) / Tile.WIDTH;
-		int x1 = (int) (xx1) / Tile.WIDTH;
-		int y0 = (int) (yy0) / Tile.HEIGHT;
-		int y1 = (int) (yy1) / Tile.HEIGHT;
+	public Set<Entity> getEntities(double x0, double y0, double x1, double y1,
+			Class<? extends Entity> c) {
+		return getEntities(x0, y0, x1, y1, new EntityIntersectsBBAndInstanceOf(c));
+	}
 
-		Set<Entity> result = new TreeSet<Entity>(new EntityComparator());
+	public Set<Entity> getEntities(double xx0, double yy0, double xx1,
+			double yy1, BBPredicate<Entity> predicate) {
+		final int x0 = Math.max((int) (xx0) / Tile.WIDTH, 0);
+		final int x1 = Math.min((int) (xx1) / Tile.WIDTH, width - 1);
+		final int y0 = Math.max((int) (yy0) / Tile.HEIGHT, 0);
+		final int y1 = Math.min((int) (yy1) / Tile.HEIGHT, height - 1);
+
+		final Set<Entity> result = new TreeSet<Entity>(new EntityComparator());
 
 		for (int y = y0; y <= y1; y++) {
-			if (y < 0 || y >= height)
-				continue;
 			for (int x = x0; x <= x1; x++) {
-				if (x < 0 || x >= width)
-					continue;
-				List<Entity> entities = entityMap[x + y * width];
-				for (int i = 0; i < entities.size(); i++) {
-					Entity e = entities.get(i);
-					if (!c.isInstance(e))
-						continue;
-					if (e.removed)
-						continue;
-					if (e.intersects(xx0, yy0, xx1, yy1)) {
+				for (Entity e : entityMap[x + y * width]) {
+					if (predicate.appliesTo(e, xx0, yy0, xx1, yy1)) {
 						result.add(e);
 					}
 				}
@@ -229,16 +201,12 @@ public class Level {
 
 	public Set<Entity> getEntitiesSlower(double xx0, double yy0, double xx1,
 			double yy1, Class<? extends Entity> c) {
-		Set<Entity> result = new TreeSet<Entity>(new EntityComparator());
+		final Set<Entity> result = new TreeSet<Entity>(new EntityComparator());
+		final BBPredicate<Entity> predicate =
+				new EntityIntersectsBBAndInstanceOf(c);
 
-		List<Entity> entities = this.entities;
-		for (int i = 0; i < entities.size(); i++) {
-			Entity e = entities.get(i);
-			if (!c.isInstance(e))
-				continue;
-			if (e.removed)
-				continue;
-			if (e.intersects(xx0, yy0, xx1, yy1)) {
+		for (Entity e : this.entities) {
+			if (predicate.appliesTo(e, xx0, yy0, xx1, yy1)) {
 				result.add(e);
 			}
 		}
