@@ -4,6 +4,7 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.building.Harvester;
+import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.tile.HoleTile;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
@@ -64,7 +65,14 @@ public class Loot extends Entity {
 		this.setSize(2, 2);
 		this.disappears=disappears;
 		physicsSlide = false;
-		life = TurnSynchronizer.synchedRandom.nextInt(100) + 600;
+		life = 60 * (TitleMenu.difficulty.ordinal() == 0 ? 30
+			: TitleMenu.difficulty.ordinal() == 1 ? 20
+			: TitleMenu.difficulty.ordinal() == 2 ? 15
+			: TitleMenu.difficulty.ordinal() == 3 ? 10
+			: 20/*
+			    * Default, should never be reached
+			    * beyond testing
+			    */);
 
 		animationTime = TurnSynchronizer.synchedRandom.nextInt(animationArt[value].length * 3);
 	}
