@@ -14,7 +14,7 @@ import com.mojang.mojam.screen.Bitmap;
 import com.mojang.mojam.screen.Screen;
 
 public class PlayerBaseLeft extends Tile {
-	public static final int COLOR = 0xFFFF1111;
+	public static final int COLOR = 0xFF777777;
 	private static final String NAME = "PLAYER BASE LEFT";
 	private Bitmap[][] art;
 	private int playerID;
@@ -23,11 +23,16 @@ public class PlayerBaseLeft extends Tile {
 		if (img > 5 || img < 0) {
 			img = 5;
 		}
-		if (team == Team.Team1) playerID = 0;
-		if (team == Team.Team2) playerID = 1;
+		if(team == Team.Team1) {
+			playerID = 0;
+			minimapColor = 0xFF770000;
+		}
+		if(team == Team.Team2) {
+			playerID = 1;
+			minimapColor = 0xFF000077;
+		}
 		
 		this.img = img;
-		minimapColor = Art.floorTileColors[img & 7][img / 8];
 	}
 	
 	public void init(Level level, int x, int y) {
