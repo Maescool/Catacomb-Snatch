@@ -65,14 +65,7 @@ public class Loot extends Entity {
 		this.setSize(2, 2);
 		this.disappears=disappears;
 		physicsSlide = false;
-		life = 60 * (TitleMenu.difficulty.ordinal() == 0 ? 30
-			: TitleMenu.difficulty.ordinal() == 1 ? 20
-			: TitleMenu.difficulty.ordinal() == 2 ? 15
-			: TitleMenu.difficulty.ordinal() == 3 ? 10
-			: 20/*
-			    * Default, should never be reached
-			    * beyond testing
-			    */);
+		life = 60 * TitleMenu.difficulty.getCoinLifespan();
 
 		animationTime = TurnSynchronizer.synchedRandom.nextInt(animationArt[value].length * 3);
 	}
