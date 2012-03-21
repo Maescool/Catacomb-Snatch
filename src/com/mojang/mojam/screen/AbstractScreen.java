@@ -1,19 +1,6 @@
 package com.mojang.mojam.screen;
 
 public interface AbstractScreen {
-//
-//	public int w, h;
-//
-//	public AbstractScreen(int w, int h) {
-//		this.w = w;
-//		this.h = h;
-//	}
-//
-//	protected int xOffset, yOffset;
-//	public void setOffset(int xOffset, int yOffset) {
-//		this.xOffset = xOffset;
-//		this.yOffset = yOffset;
-//	}
 
 	public boolean createWindow();
 
@@ -23,12 +10,23 @@ public interface AbstractScreen {
 
 	public AbstractBitmap createBitmap(int w, int h);
 
+	public void blit(AbstractBitmap bitmap, int x, int y);
+
+	public void blit(AbstractBitmap bitmap, int x, int y, int width, int height);
+
+	public void fill(int x, int y, int width, int height, int color);
+
 	public AbstractBitmap load(String pathFile);
+
 	public AbstractBitmap[][] cut(String pathFile, int w, int h);
+
 	public AbstractBitmap[][] cut(String pathFile, int w, int h, int bx, int by);
-	public int[][] getColors(AbstractBitmap[][] tiles) ;
+
+	public int[][] getColors(AbstractBitmap[][] tiles);
+
 	public int getColor(AbstractBitmap bitmap);
-	public MojamBitmap[][] cutv(String string, int h);
+
+	public AbstractBitmap[][] cutv(String string, int h);
 
 	public AbstractBitmap shrink(AbstractBitmap bitmap);
 

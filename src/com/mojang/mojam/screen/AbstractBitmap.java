@@ -1,22 +1,18 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mojang.mojam.screen;
 
-/**
- *
- * @author Jorge
- */
 public interface AbstractBitmap {
+
+	public int getWidth();
+
+	public int getHeight();
 
 	public AbstractBitmap copy();
 
 	public void clear(int color);
 
-	public void blit(AbstractBitmap bitmap, int x, int y);
-
 	public int blendPixels(int backgroundColor, int pixelToBlendColor);
+
+	public void blit(AbstractBitmap bitmap, int x, int y);
 
 	public void blit(AbstractBitmap bitmap, int x, int y, int width, int height);
 
@@ -33,9 +29,4 @@ public interface AbstractBitmap {
 	public AbstractBitmap shrink();
 
 	public AbstractBitmap scaleBitmap(int width, int height);
-//	private void adjustBlitArea(Rect blitArea);
-//	private void setPixel(int x, int y, int color);
-//	private void circle(int centerX, int centerY, int radius, int color);
-//	private void circleFill(int centerX, int centerY, int radius, int color);
-//	private void horizonalLine(int x1, int x2, int y, int color);
 }

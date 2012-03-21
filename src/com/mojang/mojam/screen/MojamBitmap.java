@@ -2,10 +2,10 @@ package com.mojang.mojam.screen;
 
 import java.util.Arrays;
 
-public class MojamBitmap /**/ implements AbstractBitmap/**/ {
+public class MojamBitmap implements AbstractBitmap {
 
-	public int[] pixels;
-	public int w, h;
+	protected int[] pixels;
+	protected int w, h;
 
 	public MojamBitmap(int w, int h) {
 		this.w = w;
@@ -117,13 +117,6 @@ public class MojamBitmap /**/ implements AbstractBitmap/**/ {
 		}
 	}
 
-	/**
-	 * Draws a Bitmap semi-transparent
-	 * @param bitmap image to draw
-	 * @param x position on screen
-	 * @param y position on screen
-	 * @param alpha range from 0x00 (transparent) to 0xff (opaque)
-	 */
 	@Override
 	public void alphaBlit(AbstractBitmap bitmap, int x, int y, int alpha) {
 		MojamBitmap mb = (MojamBitmap) bitmap;
@@ -189,15 +182,6 @@ public class MojamBitmap /**/ implements AbstractBitmap/**/ {
 		}
 	}
 
-	/**
-	 * Fills semi-transparent region on screen
-	 * @param x position on screen
-	 * @param y position on screen
-	 * @param width of the region
-	 * @param height of the region
-	 * @param color to fill the region
-	 * @param alpha range from 0x00 (transparent) to 0xff (opaque)
-	 */
 	@Override
 	public void alphaFill(int x, int y, int width, int height, int color, int alpha) {
 
@@ -375,4 +359,13 @@ public class MojamBitmap /**/ implements AbstractBitmap/**/ {
 		return scaledBitmap;
 	}
 
+	@Override
+	public int getWidth() {
+		return w;
+	}
+
+	@Override
+	public int getHeight() {
+		return h;
+	}
 }
