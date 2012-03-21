@@ -10,26 +10,23 @@ import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 /**
  * Generic building class
  */
 public abstract class Building extends Mob implements IUsable {
+
 	public static final int SPAWN_INTERVAL = 60;
 	public static final int MIN_BUILDING_DISTANCE = 1700; // Sqr
-
 	public int REGEN_INTERVAL = 15;
 	public float REGEN_AMOUNT = 1;
 	public boolean REGEN_HEALTH = true;
 	public int healingTime = REGEN_INTERVAL;
-	
-
 	public int spawnTime = 0;
 	public boolean highlight = false;
 	public Mob carriedBy = null;
-
 	protected int upgradeLevel = 0;
 	private int maxUpgradeLevel = 0;
 	private int[] upgradeCosts = null;
@@ -53,7 +50,7 @@ public abstract class Building extends Mob implements IUsable {
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		super.render(screen);
 		renderMarker(screen);
 	}
@@ -64,25 +61,25 @@ public abstract class Building extends Mob implements IUsable {
 	 * @param screen
 	 *            Screen
 	 */
-	protected void renderMarker(Screen screen) {
+	protected void renderMarker(AbstractScreen screen) {
 		if (highlight && !isCarried()) {
 			BB bb = getBB();
-			bb = bb.grow((getSprite().w - (bb.x1 - bb.x0))
-					/ (3 + Math.sin(System.currentTimeMillis() * .01)));
+			bb = bb.grow((getSprite().getWidth() - (bb.x1 - bb.x0))
+				/ (3 + Math.sin(System.currentTimeMillis() * .01)));
 			int width = (int) (bb.x1 - bb.x0);
 			int height = (int) (bb.y1 - bb.y0);
-			Bitmap marker = new Bitmap(width, height);
+			AbstractBitmap marker = screen.createBitmap(width, height);
 			for (int y = 0; y < height; y++) {
 				for (int x = 0; x < width; x++) {
 					if ((x < 2 || x > width - 3 || y < 2 || y > height - 3)
-							&& (x < 5 || x > width - 6)
-							&& (y < 5 || y > height - 6)) {
+						&& (x < 5 || x > width - 6)
+						&& (y < 5 || y > height - 6)) {
 						int i = x + y * width;
-						marker.pixels[i] = 0xffffffff;
+						marker.setPixel(i, 0xffffffff);
 					}
 				}
 			}
-			screen.blit(marker, bb.x0, bb.y0 - 4);
+			screen.blit(marker, (int) bb.x0, (int) bb.y0 - 4);
 		}
 	}
 
@@ -95,7 +92,7 @@ public abstract class Building extends Mob implements IUsable {
 		xd = 0.0;
 		yd = 0.0;
 	}
-	
+
 	public void doRegenTime() {
 		if (freezeTime <= 0) {
 			super.doRegenTime();
@@ -103,35 +100,34 @@ public abstract class Building extends Mob implements IUsable {
 			// DO NOTHING
 		}
 	}
-	
+
 	/**
 	 * Called if this building is picked up
 	 * 
 	 * @param mob Reference to the mob object carrying this building
 	 */
 	public void onPickup(Mob mob) {
-	    carriedBy = mob;
+		carriedBy = mob;
 	}
-	
+
 	/**
 	 * Called if this building is dropped by its carrier
 	 */
 	public void onDrop() {
-	    carriedBy = null;
+		carriedBy = null;
 	}
-	
+
 	/**
 	 * Check if this building is being carried
 	 * 
 	 * @return True if carried, false if not
 	 */
 	public boolean isCarried() {
-	    return carriedBy != null;
+		return carriedBy != null;
 	}
 
-
 	@Override
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		return Art.floorTiles[3][2];
 	}
 
@@ -144,7 +140,7 @@ public abstract class Building extends Mob implements IUsable {
 	public void slideMove(double xa, double ya) {
 		super.move(xa, ya);
 	}
-	
+
 	/**
 	 * Called if building upgrade is complete
 	 */
@@ -155,10 +151,10 @@ public abstract class Building extends Mob implements IUsable {
 	public boolean upgrade(Player p) {
 		if (upgradeLevel >= maxUpgradeLevel) {
 			MojamComponent.soundPlayer.playSound("/sound/Fail.wav",
-					(float) pos.x, (float) pos.y, true);
+				(float) pos.x, (float) pos.y, true);
 			if (this.team == MojamComponent.localTeam) {
 				Notifications.getInstance().add(
-						MojamComponent.texts.getStatic("upgrade.full"));
+					MojamComponent.texts.getStatic("upgrade.full"));
 			}
 			return false;
 		}
@@ -166,16 +162,16 @@ public abstract class Building extends Mob implements IUsable {
 		final int cost = upgradeCosts[upgradeLevel];
 		if (cost > p.getScore() && !Options.getAsBoolean(Options.CREATIVE)) {
 			MojamComponent.soundPlayer.playSound("/sound/Fail.wav",
-					(float) pos.x, (float) pos.y, true);
+				(float) pos.x, (float) pos.y, true);
 			if (this.team == MojamComponent.localTeam) {
 				Notifications.getInstance().add(
-						MojamComponent.texts.upgradeNotEnoughMoney(cost));
+					MojamComponent.texts.upgradeNotEnoughMoney(cost));
 			}
 			return false;
 		}
 
 		MojamComponent.soundPlayer.playSound("/sound/Upgrade.wav",
-				(float) pos.x, (float) pos.y, true);
+			(float) pos.x, (float) pos.y, true);
 
 		++upgradeLevel;
 		p.useMoney(cost);
@@ -183,7 +179,7 @@ public abstract class Building extends Mob implements IUsable {
 
 		if (this.team == MojamComponent.localTeam) {
 			Notifications.getInstance().add(
-					MojamComponent.texts.upgradeTo(upgradeLevel + 1));
+				MojamComponent.texts.upgradeTo(upgradeLevel + 1));
 		}
 		return true;
 	}
@@ -226,5 +222,4 @@ public abstract class Building extends Mob implements IUsable {
 	public boolean isAllowedToCancel() {
 		return true;
 	}
-	
 }

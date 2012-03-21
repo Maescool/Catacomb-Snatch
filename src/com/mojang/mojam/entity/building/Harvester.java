@@ -12,13 +12,14 @@ import com.mojang.mojam.entity.loot.LootCollector;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 /**
  * Harvester building. Automatically collects all coins within a given radius around itself
  */
 public class Harvester extends Building implements LootCollector {
+
 	private int capacity = 1500;
 	private int money = 0;
 	private int time = 0;
@@ -28,14 +29,13 @@ public class Harvester extends Building implements LootCollector {
 	private Player emptyingPlayer = null;
 	private int emptyingSpeed = 50;
 	public int radius;
-	private int[] upgradeRadius = new int[] { (int) (1.5 * Tile.WIDTH),
-			2 * Tile.WIDTH, (int) (2.5 * Tile.WIDTH) };
-	private int[] upgradeCapacities = new int[] { 1500, 2500, 3500 };
-	
-	
-	private Bitmap areaBitmap;
+	private int[] upgradeRadius = new int[]{(int) (1.5 * Tile.WIDTH),
+		2 * Tile.WIDTH, (int) (2.5 * Tile.WIDTH)};
+	private int[] upgradeCapacities = new int[]{1500, 2500, 3500};
+	private AbstractBitmap areaBitmap;
+	private boolean updateAreaBitmap = false;
 	private static final int RADIUS_COLOR = new Color(240, 210, 190).getRGB();
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -49,11 +49,11 @@ public class Harvester extends Building implements LootCollector {
 		freezeTime = 10;
 		yOffs = 20;
 		//TODO should this upgrade cost change with Difficulty like Turret?
-		makeUpgradeableWithCosts(new int[] { 500, 1000, 5000 });
+		makeUpgradeableWithCosts(new int[]{500, 1000, 5000});
 		healthBarOffset = 13;
-		areaBitmap = Bitmap.rangeBitmap(radius,RADIUS_COLOR);
+		updateAreaBitmap = true;
 	}
-	
+
 	@Override
 	public void notifySucking() {
 		harvestingTicks = 30;
@@ -94,14 +94,14 @@ public class Harvester extends Building implements LootCollector {
 		if (isHarvesting) {
 			if (random.nextDouble() < 0.050f) {
 				level.addEntity(new SmokeAnimation(pos.x - 6
-						+ random.nextInt(8) - random.nextInt(8), pos.y - 16,
-						Art.fxSteam12, 30));
+					+ random.nextInt(8) - random.nextInt(8), pos.y - 16,
+					Art.fxSteam12, 30));
 			}
 		} else {
 			if (random.nextDouble() < 0.002f) {
 				level.addEntity(new SmokeAnimation(pos.x - 6
-						+ random.nextInt(8) - random.nextInt(8), pos.y - 16,
-						Art.fxSteam12, 30));
+					+ random.nextInt(8) - random.nextInt(8), pos.y - 16,
+					Art.fxSteam12, 30));
 			}
 		}
 		if (health == 0) {
@@ -110,26 +110,28 @@ public class Harvester extends Building implements LootCollector {
 	}
 
 	@Override
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		int frame = isHarvesting ? (4 + ((time >> 3) % 5)) : (time >> 3) % 4;
 		switch (upgradeLevel) {
-        case 1:
-            return Art.harvester2[frame][0];
-        case 2:
-            return Art.harvester3[frame][0];
-        default:
-            return Art.harvester[frame][0];
-        }
+			case 1:
+				return Art.harvester2[frame][0];
+			case 2:
+				return Art.harvester3[frame][0];
+			default:
+				return Art.harvester[frame][0];
+		}
 	}
 
 	@Override
 	protected void upgradeComplete() {
-	    maxHealth += 10;
-	    health += 10;
-	    radius = upgradeRadius[upgradeLevel];
-	    capacity = upgradeCapacities[upgradeLevel];
-	    areaBitmap = Bitmap.rangeBitmap(radius,RADIUS_COLOR);
-	    if (upgradeLevel != 0) justDroppedTicks = 80; //show the radius for a brief time
+		maxHealth += 10;
+		health += 10;
+		radius = upgradeRadius[upgradeLevel];
+		capacity = upgradeCapacities[upgradeLevel];
+		updateAreaBitmap = true;
+		if (upgradeLevel != 0) {
+			justDroppedTicks = 80; //show the radius for a brief time
+		}
 	}
 
 	/**
@@ -142,35 +144,35 @@ public class Harvester extends Building implements LootCollector {
 	}
 
 	@Override
-	public void render(Screen screen) {
-		
-		if((justDroppedTicks-- > 0 || highlight) && MojamComponent.localTeam==team) {
+	public void render(AbstractScreen screen) {
+
+		if ((justDroppedTicks-- > 0 || highlight) && MojamComponent.localTeam == team) {
 			drawRadius(screen);
 		}
-		
+
 		super.render(screen);
 
-		Bitmap image = getSprite();
+		AbstractBitmap image = getSprite();
 		if (capacity - money < 500) {
-			screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h / 2 - yOffs, 0x77ff7200);
+			screen.colorBlit(image, (int) (pos.x - image.getWidth() / 2), (int) (pos.y - image.getHeight() / 2 - yOffs), 0x77ff7200);
 		}
-		
-		if(team ==MojamComponent.localTeam && !isCarried()) {
+
+		if (team == MojamComponent.localTeam && !isCarried()) {
 			addMoneyBar(screen);
 		}
-		
+
 	}
-	
+
 	/**
 	 * Draw the money bar onto the given screen
 	 * 
 	 * @param screen Screen
 	 */
-	private void addMoneyBar(Screen screen) {
-	    int start = (int) (money * 20 / capacity);
-        screen.blit(Art.moneyBar[start][0], pos.x - 16, pos.y + 8);
-    }
-	
+	private void addMoneyBar(AbstractScreen screen) {
+		int start = (int) (money * 20 / capacity);
+		screen.blit(Art.moneyBar[start][0], (int) pos.x - 16, (int) pos.y + 8);
+	}
+
 	@Override
 	public void take(Loot loot) {
 		loot.remove();
@@ -200,9 +202,9 @@ public class Harvester extends Building implements LootCollector {
 	public void dropAllMoney() {
 		while (money > 0) {
 			double dir = TurnSynchronizer.synchedRandom.nextDouble() * Math.PI
-					* 2;
+				* 2;
 			Loot loot = new Loot(pos.x, pos.y, Math.cos(dir), Math.sin(dir),
-					money / 2);
+				money / 2);
 			level.addEntity(loot);
 
 			money -= loot.getScoreValue();
@@ -212,7 +214,7 @@ public class Harvester extends Building implements LootCollector {
 
 	@Override
 	public void use(Entity user) {
-		if(money > 0) {
+		if (money > 0) {
 			isEmptying = true;
 			if (user instanceof Player) {
 				emptyingPlayer = (Player) user;
@@ -221,8 +223,11 @@ public class Harvester extends Building implements LootCollector {
 			super.use(user);
 		}
 	}
-	
-	public void drawRadius(Screen screen) {
-		screen.alphaBlit(areaBitmap, (int) pos.x-radius, (int) pos.y-radius - yOffs + Tile.HEIGHT/2, 0x22);	
+
+	public void drawRadius(AbstractScreen screen) {
+		if (updateAreaBitmap) {
+			areaBitmap = screen.rangeBitmap(radius, RADIUS_COLOR);
+		}
+		screen.alphaBlit(areaBitmap, (int) pos.x - radius, (int) pos.y - radius - yOffs + Tile.HEIGHT / 2, 0x22);
 	}
 }

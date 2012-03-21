@@ -45,4 +45,7 @@ public interface AbstractScreen {
 	public AbstractBitmap shrink(AbstractBitmap bitmap);
 
 	public AbstractBitmap scaleBitmap(AbstractBitmap bitmap, int width, int height);
+	public AbstractBitmap rectangleBitmap(int x, int y, int x2, int y2, int color) ;
+	public AbstractBitmap rangeBitmap(int radius, int color);
+	public AbstractBitmap tooltipBitmap(int width, int height);
 }

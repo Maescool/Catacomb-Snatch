@@ -2,7 +2,7 @@ package com.mojang.mojam.entity.building;
 
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.AbstractBitmap;
 
 public class TurretTeamOne extends Turret {
 
@@ -28,7 +28,7 @@ public class TurretTeamOne extends Turret {
 	}
 
 	@Override
-	public Bitmap getBitMapForEditor() {
+	public AbstractBitmap getBitMapForEditor() {
 		return Art.teamTurret1[0][0];
 	}
 	
