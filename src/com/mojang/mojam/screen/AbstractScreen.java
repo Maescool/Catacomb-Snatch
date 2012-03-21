@@ -22,6 +22,8 @@ public interface AbstractScreen {
 
 	public void blit(AbstractBitmap bitmap, int x, int y, int width, int height);
 
+	public void colorBlit(AbstractBitmap bitmap, int x, int y, int color);
+
 	public void fill(int x, int y, int width, int height, int color);
 
 	public void alphaBlit(AbstractBitmap bitmap, int x, int y, int alpha);

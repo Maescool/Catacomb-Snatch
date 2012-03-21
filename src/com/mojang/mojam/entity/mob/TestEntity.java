@@ -4,6 +4,7 @@ import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.*;
 
 public class TestEntity extends Mob {
+
 	public TestEntity(double x, double y) {
 		super(x, y, Team.Neutral);
 		setPos(x, y);
@@ -15,16 +16,15 @@ public class TestEntity extends Mob {
 
 	public void tick() {
 		super.tick();
-		if (freezeTime > 0)
+		if (freezeTime > 0) {
 			return;
+		}
 
-		dir += (TurnSynchronizer.synchedRandom.nextDouble() - TurnSynchronizer.synchedRandom
-				.nextDouble()) * 0.2;
+		dir += (TurnSynchronizer.synchedRandom.nextDouble() - TurnSynchronizer.synchedRandom.nextDouble()) * 0.2;
 		xd += Math.cos(dir) * 1;
 		yd += Math.sin(dir) * 1;
 		if (!move(xd, yd)) {
-			dir += (TurnSynchronizer.synchedRandom.nextDouble() - TurnSynchronizer.synchedRandom
-					.nextDouble()) * 0.8;
+			dir += (TurnSynchronizer.synchedRandom.nextDouble() - TurnSynchronizer.synchedRandom.nextDouble()) * 0.8;
 		}
 		xd *= 0.2;
 		yd *= 0.2;
@@ -34,7 +34,7 @@ public class TestEntity extends Mob {
 		super.die();
 	}
 
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		int facing = (int) ((Math.atan2(xd, -yd) * 4 / (Math.PI * 2) + 2.5)) & 3;
 
 		return Art.mummy[facing][0];

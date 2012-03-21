@@ -4,14 +4,14 @@ import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.weapon.VenomShooter;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.AbstractBitmap;
 
 public class Snake extends HostileMob {
 
 	private int tick = 0;
 	public static final int COLOR = 0xffff9900;
 	public static double ATTACK_RADIUS = 128.0;
-	
+
 	public Snake(double x, double y) {
 		super(x, y, Team.Neutral);
 		setPos(x, y);
@@ -23,28 +23,28 @@ public class Snake extends HostileMob {
 	}
 
 	public void tick() {
-        super.tick();
-        if (freezeTime > 0) {
-            return;
-        }
-        tick++;
-        if (tick >= 20) {
-            tick = 0;
+		super.tick();
+		if (freezeTime > 0) {
+			return;
+		}
+		tick++;
+		if (tick >= 20) {
+			tick = 0;
 
-	        if(TurnSynchronizer.synchedRandom.nextInt(5) == 0 && checkIfInFront(ATTACK_RADIUS, Player.class) != null) {
-	            aimVector.set(xd, yd);
-	            aimVector.normalizeSelf();
-	            weapon.primaryFire(xd, yd);
-	        }
-        }
-        walk();
+			if (TurnSynchronizer.synchedRandom.nextInt(5) == 0 && checkIfInFront(ATTACK_RADIUS, Player.class) != null) {
+				aimVector.set(xd, yd);
+				aimVector.normalizeSelf();
+				weapon.primaryFire(xd, yd);
+			}
+		}
+		walk();
 	}
 
 	public void die() {
 		super.die();
 	}
 
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		return Art.snake[((stepTime / 6) & 3)][(facing + 1) & 3];
 	}
 
@@ -69,7 +69,7 @@ public class Snake extends HostileMob {
 	}
 
 	@Override
-	public Bitmap getBitMapForEditor() {
+	public AbstractBitmap getBitMapForEditor() {
 		return Art.snake[0][0];
 	}
 }

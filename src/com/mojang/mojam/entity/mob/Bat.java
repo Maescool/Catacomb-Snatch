@@ -2,10 +2,11 @@ package com.mojang.mojam.entity.mob;
 
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
-public class Bat extends HostileMob  {
+public class Bat extends HostileMob {
+
 	public static final int COLOR = 0xffff6600;
 	private int tick = 0;
 
@@ -19,24 +20,23 @@ public class Bat extends HostileMob  {
 
 	public void tick() {
 		super.tick();
-		if (freezeTime > 0)
+		if (freezeTime > 0) {
 			return;
+		}
 
 		tick++;
 
-		dir += (TurnSynchronizer.synchedRandom.nextDouble() - TurnSynchronizer.synchedRandom
-				.nextDouble()) * 0.2;
+		dir += (TurnSynchronizer.synchedRandom.nextDouble() - TurnSynchronizer.synchedRandom.nextDouble()) * 0.2;
 		xd += Math.cos(dir) * 1;
 		yd += Math.sin(dir) * 1;
-		
-		if (shouldBounceOffWall(xd, yd)){
+
+		if (shouldBounceOffWall(xd, yd)) {
 			xd = -xd;
 			yd = -yd;
 		}
-		
+
 		if (!move(xd, yd)) {
-			dir += (TurnSynchronizer.synchedRandom.nextDouble() - TurnSynchronizer.synchedRandom
-					.nextDouble()) * 0.8;
+			dir += (TurnSynchronizer.synchedRandom.nextDouble() - TurnSynchronizer.synchedRandom.nextDouble()) * 0.8;
 		}
 		xd *= 0.2;
 		yd *= 0.2;
@@ -46,13 +46,13 @@ public class Bat extends HostileMob  {
 		super.die();
 	}
 
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		return Art.bat[(tick / 3) & 3][0];
 	}
 
 	@Override
-	public void render(Screen screen) {
-		screen.alphaBlit(Art.batShadow, (int)(pos.x - Art.batShadow.w / 2), (int)(pos.y - Art.batShadow.h / 2 - yOffs + 16), 0x45);
+	public void render(AbstractScreen screen) {
+		screen.alphaBlit(Art.batShadow, (int) (pos.x - Art.batShadow.getWidth() / 2), (int) (pos.y - Art.batShadow.getHeight() / 2 - yOffs + 16), 0x45);
 		super.render(screen);
 	}
 
@@ -72,7 +72,7 @@ public class Bat extends HostileMob  {
 	}
 
 	@Override
-	public Bitmap getBitMapForEditor() {
+	public AbstractBitmap getBitMapForEditor() {
 		return Art.bat[0][0];
 	}
 }

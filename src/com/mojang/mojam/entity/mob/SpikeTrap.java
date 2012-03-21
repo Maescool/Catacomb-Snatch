@@ -7,11 +7,12 @@ import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class SpikeTrap extends Mob implements IEditable {
-    public static final int COLOR = 0xff0000ff;
+
+	public static final int COLOR = 0xff0000ff;
 	public static final int COLOR1 = 0xff0000fe;
 	public static final int COLOR2 = 0xff0000fd;
 	private int spike = 0;
@@ -23,7 +24,7 @@ public class SpikeTrap extends Mob implements IEditable {
 		this.isBlocking = false;
 		this.yOffs = 0;
 	}
-	
+
 	public SpikeTrap(double x, double y, int offset) {
 		this(x, y);
 		this.freezeTime = offset;
@@ -51,14 +52,14 @@ public class SpikeTrap extends Mob implements IEditable {
 			spike++;
 		}
 	}
-    
+
 	@Override
-	public void render(Screen screen) {
-		screen.blit(Art.spikes[spike][0], pos.x, pos.y);
+	public void render(AbstractScreen screen) {
+		screen.blit(Art.spikes[spike][0], (int) pos.x, (int) pos.y);
 	}
-    
+
 	@Override
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		return Art.floorTiles[4][2];
 	}
 
@@ -68,7 +69,7 @@ public class SpikeTrap extends Mob implements IEditable {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Position of spike with 0 being  completely in the floor and 3 max out.
 	 * @return the spike phase
@@ -101,7 +102,7 @@ public class SpikeTrap extends Mob implements IEditable {
 	}
 
 	@Override
-	public Bitmap getBitMapForEditor() {
+	public AbstractBitmap getBitMapForEditor() {
 		return Art.spikes[1][0];
 	}
 }

@@ -2,11 +2,12 @@ package com.mojang.mojam.entity.mob;
 
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.AbstractBitmap;
 
 public class Scarab extends HostileMob {
+
 	public static final int COLOR = 0xffccff00;
-	
+
 	public Scarab(double x, double y) {
 		super(x, y, Team.Neutral);
 		setPos(x, y);
@@ -18,8 +19,9 @@ public class Scarab extends HostileMob {
 
 	public void tick() {
 		super.tick();
-		if (freezeTime > 0)
+		if (freezeTime > 0) {
 			return;
+		}
 		walk();
 	}
 
@@ -27,7 +29,7 @@ public class Scarab extends HostileMob {
 		super.die();
 	}
 
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		return Art.scarab[((stepTime / 6) & 3)][(facing + 1) & 3];
 	}
 
@@ -52,7 +54,7 @@ public class Scarab extends HostileMob {
 	}
 
 	@Override
-	public Bitmap getBitMapForEditor() {
+	public AbstractBitmap getBitMapForEditor() {
 		return Art.scarab[0][0];
 	}
 }
