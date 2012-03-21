@@ -368,4 +368,20 @@ public class MojamBitmap implements AbstractBitmap {
 	public int getHeight() {
 		return h;
 	}
+
+	@Override
+	public int getPixel(int pos) {
+		return pixels[pos];
+	}
+
+	@Override
+	public void setPixel(int pos, int color) {
+		if (pos>=0 && pos<pixels.length)
+			pixels[pos]=color;
+	}
+
+	@Override
+	public int getPixelSize() {
+		return pixels.length;
+	}
 }

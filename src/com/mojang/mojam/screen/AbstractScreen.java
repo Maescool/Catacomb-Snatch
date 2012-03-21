@@ -2,6 +2,10 @@ package com.mojang.mojam.screen;
 
 public interface AbstractScreen {
 
+	public int getWidth();
+
+	public int getHeight();
+
 	public boolean createWindow();
 
 	public void loadResources();
