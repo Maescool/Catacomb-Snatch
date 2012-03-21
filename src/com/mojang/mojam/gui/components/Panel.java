@@ -2,8 +2,8 @@ package com.mojang.mojam.gui.components;
 
 import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 /**
  * 
@@ -12,21 +12,19 @@ import com.mojang.mojam.screen.Screen;
  */
 public class Panel extends ClickableComponent {
 
-    public static final int BUTTON_WIDTH = 128;
-    public static final int BUTTON_HEIGHT = 24;
-    
+	public static final int BUTTON_WIDTH = 128;
+	public static final int BUTTON_HEIGHT = 24;
 	private String label;
+	private AbstractBitmap mainBitmap = null;
+	private AbstractBitmap trCorner = null;
+	private AbstractBitmap dlCorner = null;
+	private AbstractBitmap drCorner = null;
+	private AbstractBitmap tBand = null;
+	private AbstractBitmap lBand = null;
+	private AbstractBitmap rBand = null;
+	private AbstractBitmap dBand = null;
+	private int centerColor;
 
-    private Bitmap mainBitmap = null;
-    private Bitmap trCorner = null;
-    private Bitmap dlCorner = null;
-    private Bitmap drCorner = null;
-    private Bitmap tBand = null;
-    private Bitmap lBand = null;
-    private Bitmap rBand = null;
-    private Bitmap dBand = null;
-    private int centerColor;
-    
 	public Panel(int x, int y, int w, int h) {
 		super(x, y, w, h);
 	}
@@ -45,60 +43,59 @@ public class Panel extends ClickableComponent {
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 
-	    // Cut panel textures
-	    if (mainBitmap != Art.button[0][0]) {
-	        mainBitmap = Art.button[0][0];
-	        trCorner = new Bitmap(5, 5);
-	        trCorner.blit(mainBitmap, - BUTTON_WIDTH + 5, 0);
-	        dlCorner = new Bitmap(5, 5);
-	        dlCorner.blit(mainBitmap, 0, - BUTTON_HEIGHT + 5);
-	        drCorner = new Bitmap(5, 5);
-	        drCorner.blit(mainBitmap, - BUTTON_WIDTH + 5, - BUTTON_HEIGHT + 5);
-	        
-	        int bandWidth = Math.min(getWidth(), mainBitmap.w) - 10;
-	        tBand = new Bitmap(bandWidth, 5);
-	        tBand.blit(mainBitmap, -5, 0);
-	        dBand = new Bitmap(bandWidth, 5);
-		    dBand.blit(mainBitmap, -5, - BUTTON_HEIGHT + 5);
-	        
-	        int bandHeight = Math.min(getHeight(), mainBitmap.h) - 10;
-	        lBand = new Bitmap(5, bandHeight);
-	        lBand.blit(mainBitmap, 0, -5);
-	        rBand = new Bitmap(5, bandHeight);
-	        rBand.blit(mainBitmap, - BUTTON_WIDTH + 5, -5);
-	        
-	        centerColor = mainBitmap.pixels[BUTTON_HEIGHT * 10 + BUTTON_WIDTH];
-	    }
-	    
-	    // ==========
-	    // Draw panel
-	    // ==========
-	    
+		// Cut panel textures
+		if (mainBitmap != Art.button[0][0]) {
+			mainBitmap = Art.button[0][0];
+			trCorner = screen.createBitmap(5, 5);
+			trCorner.blit(mainBitmap, -BUTTON_WIDTH + 5, 0);
+			dlCorner = screen.createBitmap(5, 5);
+			dlCorner.blit(mainBitmap, 0, -BUTTON_HEIGHT + 5);
+			drCorner = screen.createBitmap(5, 5);
+			drCorner.blit(mainBitmap, -BUTTON_WIDTH + 5, -BUTTON_HEIGHT + 5);
+
+			int bandWidth = Math.min(getWidth(), mainBitmap.getWidth()) - 10;
+			tBand = screen.createBitmap(bandWidth, 5);
+			tBand.blit(mainBitmap, -5, 0);
+			dBand = screen.createBitmap(bandWidth, 5);
+			dBand.blit(mainBitmap, -5, -BUTTON_HEIGHT + 5);
+
+			int bandHeight = Math.min(getHeight(), mainBitmap.getHeight()) - 10;
+			lBand = screen.createBitmap(5, bandHeight);
+			lBand.blit(mainBitmap, 0, -5);
+			rBand = screen.createBitmap(5, bandHeight);
+			rBand.blit(mainBitmap, -BUTTON_WIDTH + 5, -5);
+
+			centerColor = mainBitmap.getPixel(BUTTON_HEIGHT * 10 + BUTTON_WIDTH);
+		}
+
+		// ==========
+		// Draw panel
+		// ==========
+
 		// Center
 		screen.fill(getX() + 5, getY() + 5, getWidth() - 10, getHeight() - 10, centerColor);
-	    
-	    // Corners
-        screen.blit(mainBitmap, getX(), getY(), 5, 5);
-        screen.blit(trCorner, getX() + getWidth() - 5, getY());
-        screen.blit(dlCorner, getX(), getY() + getHeight() - 5);
-        screen.blit(drCorner, getX() + getWidth() - 5, getY() + getHeight() - 5);
 
-        // Sides
-		int xLimit = getX() + getWidth() - 5 - tBand.w;
-		for (int x = getX() + 5; x != xLimit + tBand.w; x += tBand.w) {
+		// Corners
+		screen.blit(mainBitmap, getX(), getY(), 5, 5);
+		screen.blit(trCorner, getX() + getWidth() - 5, getY());
+		screen.blit(dlCorner, getX(), getY() + getHeight() - 5);
+		screen.blit(drCorner, getX() + getWidth() - 5, getY() + getHeight() - 5);
+
+		// Sides
+		int xLimit = getX() + getWidth() - 5 - tBand.getWidth();
+		for (int x = getX() + 5; x != xLimit + tBand.getWidth(); x += tBand.getWidth()) {
 			x = (x > xLimit) ? xLimit : x;
 			screen.blit(tBand, x, getY());
 			screen.blit(dBand, x, getY() + getHeight() - 5);
 		}
-		int yLimit = getY() + getHeight() - 5 - lBand.h;
-		for (int y = getY() + 5; y != yLimit + lBand.h; y += lBand.h) {
+		int yLimit = getY() + getHeight() - 5 - lBand.getHeight();
+		for (int y = getY() + 5; y != yLimit + lBand.getHeight(); y += lBand.getHeight()) {
 			y = (y > yLimit) ? yLimit : y;
 			screen.blit(lBand, getX(), y);
 			screen.blit(rBand, getX() + getWidth() - 5, y);
 		}
-		
+
 	}
-	
 }

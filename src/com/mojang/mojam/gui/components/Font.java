@@ -6,17 +6,16 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class Font {
 
 	public enum Align {
+
 		LEFT, CENTERED, RIGHT
 	}
-
 	public static final Font FONT_BLUE, FONT_GOLD, FONT_GRAY, FONT_RED, FONT_BLACK_SMALL, FONT_GOLD_SMALL, FONT_WHITE_SMALL;
-
 	private static Font defaultFont;
 
 	/**
@@ -34,7 +33,7 @@ public class Font {
 		try {
 			InputStream fontStream = Font.class.getResourceAsStream("/art/fonts/ubuntu-font-family-0.80/Ubuntu-B.ttf");
 			systemFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, fontStream);
-			systemFont = systemFont.deriveFont((float)systemFontHeight);
+			systemFont = systemFont.deriveFont((float) systemFontHeight);
 		} catch (FontFormatException e) {
 			e.printStackTrace();
 			systemFont = fallbackFont;
@@ -45,52 +44,52 @@ public class Font {
 
 		Color shadowColor = Color.BLACK;
 		Color[] blueGradient = {
-				new Color(0x91aaf1),
-				new Color(0x9a9ef2),
-				new Color(0xd7d6fa),
-				new Color(0xffffff),
-				new Color(0xafadf5),
-				new Color(0x5c66ea),
-				new Color(0x8ab5f0)
+			new Color(0x91aaf1),
+			new Color(0x9a9ef2),
+			new Color(0xd7d6fa),
+			new Color(0xffffff),
+			new Color(0xafadf5),
+			new Color(0x5c66ea),
+			new Color(0x8ab5f0)
 		};
 		FontCharacterFactory characterFactory;
 		characterFactory = new FontCharacterFactory(systemFont, fallbackFont, blueGradient, shadowColor, heightOffset);
-		FONT_BLUE = new Font(Art.font_blue, letters, glyphHeight,spacing, characterFactory);
+		FONT_BLUE = new Font(Art.font_blue, letters, glyphHeight, spacing, characterFactory);
 
 		Color[] goldGradient = {
-				new Color(241, 216, 145),
-				new Color(242, 236, 153),
-				new Color(250, 250, 214),
-				new Color(255, 255, 255),
-				new Color(250, 250, 214),
-				new Color(234, 221, 91),
-				new Color(240, 195, 137)};
+			new Color(241, 216, 145),
+			new Color(242, 236, 153),
+			new Color(250, 250, 214),
+			new Color(255, 255, 255),
+			new Color(250, 250, 214),
+			new Color(234, 221, 91),
+			new Color(240, 195, 137)};
 		characterFactory = new FontCharacterFactory(systemFont, fallbackFont, goldGradient, shadowColor, heightOffset);
 		FONT_GOLD = new Font(Art.font_gold, letters, glyphHeight, spacing, characterFactory);
 
 		Color[] grayGradient = {
-				new Color(0xb2b2b2),
-				new Color(0xb7b7b7),
-				new Color(0xd6d6d6),
-				new Color(0xececec),
-				new Color(0xc1c1c1),
-				new Color(0x969696),
-				new Color(0xaeaeae)
+			new Color(0xb2b2b2),
+			new Color(0xb7b7b7),
+			new Color(0xd6d6d6),
+			new Color(0xececec),
+			new Color(0xc1c1c1),
+			new Color(0x969696),
+			new Color(0xaeaeae)
 		};
 		characterFactory = new FontCharacterFactory(systemFont, fallbackFont, grayGradient, shadowColor, heightOffset);
 		FONT_GRAY = new Font(Art.font_gray, letters, glyphHeight, spacing, characterFactory);
 
 		Color[] redGradient = {
-				new Color(0xff657b),
-				new Color(0xff796f),
-				new Color(0xffbbad),
-				new Color(0xececec),
-				new Color(0xff9583),
-				new Color(0xff372d),
-				new Color(0xff5d8f)
+			new Color(0xff657b),
+			new Color(0xff796f),
+			new Color(0xffbbad),
+			new Color(0xececec),
+			new Color(0xff9583),
+			new Color(0xff372d),
+			new Color(0xff5d8f)
 		};
 		characterFactory = new FontCharacterFactory(systemFont, fallbackFont, redGradient, shadowColor, heightOffset);
-		FONT_RED  = new Font(Art.font_red, letters, glyphHeight, spacing, characterFactory);
+		FONT_RED = new Font(Art.font_red, letters, glyphHeight, spacing, characterFactory);
 
 		letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ    " + "abcdefghijklmnopqrstuvwxyz    " + "0123456789-.!?/%$\\=*+,;:()&#\"'";
 
@@ -103,7 +102,7 @@ public class Font {
 		try {
 			InputStream fontStream = Font.class.getResourceAsStream("/art/fonts/ubuntu-font-family-0.80/Ubuntu-L.ttf");
 			systemFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, fontStream);
-			systemFont = systemFont.deriveFont((float)systemFontHeight);
+			systemFont = systemFont.deriveFont((float) systemFontHeight);
 		} catch (FontFormatException e) {
 			e.printStackTrace();
 			systemFont = fallbackFont;
@@ -118,13 +117,13 @@ public class Font {
 		FONT_BLACK_SMALL = new Font(Art.font_small_black, letters, glyphHeight, spacing, characterFactory);
 
 		Color[] smallGoldGradient = {
-				new Color(0xf0c389),
-				new Color(0xf0d289),
-				new Color(0xfbf5de),
-				new Color(0xfbf3df),
-				new Color(0xf1d891)};
+			new Color(0xf0c389),
+			new Color(0xf0d289),
+			new Color(0xfbf5de),
+			new Color(0xfbf3df),
+			new Color(0xf1d891)};
 		characterFactory = new FontCharacterFactory(systemFont, fallbackFont, smallGoldGradient, shadowColor, heightOffset);
-		FONT_GOLD_SMALL  = new Font(Art.font_small_gold,  letters, glyphHeight, spacing, characterFactory);
+		FONT_GOLD_SMALL = new Font(Art.font_small_gold, letters, glyphHeight, spacing, characterFactory);
 
 		Color[] smallWhiteGradient = {new Color(0xffffff)};
 		characterFactory = new FontCharacterFactory(systemFont, fallbackFont, smallWhiteGradient, shadowColor, heightOffset);
@@ -148,17 +147,13 @@ public class Font {
 	public static void setDefaultFont(Font defaultFont) {
 		Font.defaultFont = defaultFont;
 	}
-
-
-
-	private Bitmap[][] bitmapData;
+	private AbstractBitmap[][] bitmapData;
 	private String letters;
 	private int glyphHeight;
 	private int letterSpacing;
-
 	protected FontCharacterFactory fontCharacterFactory;
 
-	protected Font(Bitmap[][] bitmapData, String letters, int glyphHeight, int letterSpacing, FontCharacterFactory characterFactory) {
+	protected Font(AbstractBitmap[][] bitmapData, String letters, int glyphHeight, int letterSpacing, FontCharacterFactory characterFactory) {
 		this.bitmapData = bitmapData;
 		this.letters = letters;
 		this.glyphHeight = glyphHeight;
@@ -171,12 +166,12 @@ public class Font {
 	 * 
 	 * @param text
 	 */
-	public int calculateStringWidth(String text) {
+	public int calculateStringWidth(AbstractScreen screen, String text) {
 		int w = 0;
 		for (int i = 0; i < text.length(); i++) {
 			char character = text.charAt(i);
-			Bitmap image = getCharacterBitmap(character);
-			w += image.w + letterSpacing;
+			AbstractBitmap image = getCharacterBitmap(screen, character);
+			w += image.getWidth() + letterSpacing;
 		}
 		w -= letterSpacing;
 		return w;
@@ -200,19 +195,19 @@ public class Font {
 	 * @param y Y coordinate
 	 * @param width Maximum line width in pixels
 	 */
-	public void draw(Screen screen, String msg, int x, int y, int width) {
+	public void draw(AbstractScreen screen, String msg, int x, int y, int width) {
 		int startX = x;
 		int length = msg.length();
 		for (int i = 0; i < length; i++) {
 			char character = msg.charAt(i);
-			Bitmap bitmap = getCharacterBitmap(character);
+			AbstractBitmap bitmap = getCharacterBitmap(screen,character);
 			int heightOffset = 0;
 			if (letters.indexOf(character) < 0) {
-				heightOffset = fontCharacterFactory.getHeightOffset(character);
+				heightOffset = fontCharacterFactory.getHeightOffset(screen, character);
 			}
-			screen.blit(bitmap, x, y+heightOffset);
-			x += bitmap.w + letterSpacing;
-			if(x > width - bitmap.w){
+			screen.blit(bitmap, x, y + heightOffset);
+			x += bitmap.getWidth() + letterSpacing;
+			if (x > width - bitmap.getWidth()) {
 				x = startX;
 				y += glyphHeight + 2;
 			}
@@ -229,31 +224,31 @@ public class Font {
 	 * @param width Maximum line width in pixels
 	 * @param opaque Opacity of text. Range from 0x00 (transparent) to 0xff (opaque)
 	 */
-	public void drawOpaque(Screen screen, String msg, int x, int y, int width, int opaque) {
+	public void drawOpaque(AbstractScreen screen, String msg, int x, int y, int width, int opaque) {
 		int startX = x;
 		int length = msg.length();
 		for (int i = 0; i < length; i++) {
 			char character = msg.charAt(i);
-			Bitmap bitmap = getCharacterBitmap(character);
+			AbstractBitmap bitmap = getCharacterBitmap(screen, character);
 			int heightOffset = 0;
 			if (letters.indexOf(character) < 0) {
-				heightOffset = fontCharacterFactory.getHeightOffset(character);
+				heightOffset = fontCharacterFactory.getHeightOffset(screen, character);
 			}
 			screen.alphaBlit(bitmap, x, y + heightOffset, opaque);
-			x += bitmap.w + letterSpacing;
-			if (x > width - bitmap.w) {
+			x += bitmap.getWidth() + letterSpacing;
+			if (x > width - bitmap.getWidth()) {
 				x = startX;
 				y += glyphHeight + 2;
 			}
 		}
 	}
-  	 
-	private Bitmap getCharacterBitmap(char character) {
+
+	private AbstractBitmap getCharacterBitmap(AbstractScreen screen, char character) {
 		int charPosition = letters.indexOf(character);
 		if (charPosition >= 0) {
 			return bitmapData[charPosition % 30][charPosition / 30];
 		} else {
-			return fontCharacterFactory.getFontCharacter(character);
+			return fontCharacterFactory.getFontCharacter(screen, character);
 		}
 	}
 
@@ -267,7 +262,7 @@ public class Font {
 	 * @param y Y coordinate
 	 * @param opaque Opacity of text. Range from 0x00 (transparent) to 0xff (opaque)
 	 */
-	public void drawOpaque(Screen screen, String msg, int x, int y, int opaque) {
+	public void drawOpaque(AbstractScreen screen, String msg, int x, int y, int opaque) {
 		drawOpaque(screen, msg, x, y, Integer.MAX_VALUE, opaque);
 	}
 
@@ -279,7 +274,7 @@ public class Font {
 	 * @param x X coordinate
 	 * @param y Y coordinate
 	 */
-	public void draw(Screen screen, String msg, int x, int y) {
+	public void draw(AbstractScreen screen, String msg, int x, int y) {
 		draw(screen, msg, x, y, Integer.MAX_VALUE);
 	}
 
@@ -296,11 +291,11 @@ public class Font {
 	 * @param y 
 	 */
 	@Deprecated
-	public void drawCentered(Screen screen, String msg, int x, int y) {
-		int width = calculateStringWidth(msg);
+	public void drawCentered(AbstractScreen screen, String msg, int x, int y) {
+		int width = calculateStringWidth(screen,msg);
 		draw(screen, msg, x - width / 2, y - 4);
 	}
-	
+
 	/**
 	 * Draw the given text onto the given screen, aligned to the right.
 	 * 
@@ -312,17 +307,16 @@ public class Font {
 	 * @param y
 	 * @param align
 	 */
-	public void draw(Screen screen, String msg, int x, int y, Font.Align align) {
+	public void draw(AbstractScreen screen, String msg, int x, int y, Font.Align align) {
 		if (Font.Align.LEFT.equals(align)) {
 			draw(screen, msg, x, y, Integer.MAX_VALUE);
-		}
-		else {
-			int width = calculateStringWidth(msg);
+		} else {
+			int width = calculateStringWidth(screen, msg);
 			if (Font.Align.CENTERED.equals(align)) {
 				draw(screen, msg, x - width / 2, y - 4);
 			} else {
 				draw(screen, msg, x - width, y);
-			}	
+			}
 		}
 	}
 }

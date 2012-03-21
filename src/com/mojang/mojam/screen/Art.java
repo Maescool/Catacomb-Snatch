@@ -7,6 +7,10 @@ import javax.imageio.ImageIO;
 
 import com.mojang.mojam.GameCharacter;
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.gui.CharacterButton;
+import com.mojang.mojam.gui.LevelButton;
+import com.mojang.mojam.gui.LevelEditorButton;
+import com.mojang.mojam.gui.components.Button;
 
 /**
  * Art management class
@@ -169,6 +173,10 @@ public class Art {
 	public static AbstractBitmap[][] healthBar_Outline;
 	public static AbstractBitmap[][] healthBar_Underlay;
 	public static AbstractBitmap[][] sprintBar;
+	// Backgrounds
+	public static AbstractBitmap backCharacterButton[];
+	public static AbstractBitmap backLevelEditorButton[];
+	public static AbstractBitmap backLevelButton[];
 	// Icons
 	public static BufferedImage icon32 = loadBufferedImage("/art/icon/icon32.png");
 	public static BufferedImage icon64 = loadBufferedImage("/art/icon/icon64.png");
@@ -293,82 +301,45 @@ public class Art {
 		healthBar_Outline = screen.cut("/art/effects/bar_outline.png", 32, 4);
 		healthBar_Underlay = screen.cut("/art/effects/bar_green_underlay.png", 32, 4);
 		sprintBar = screen.cut("/art/effects/sprint_bar.png", 32, 4);
+		// different backgrounds
+		int w, h;
+		w = CharacterButton.BUTTON_WIDTH;
+		h = CharacterButton.BUTTON_HEIGHT;
+		backCharacterButton = new AbstractBitmap[3];
+		backCharacterButton[0] = screen.createBitmap(w, h);
+		backCharacterButton[0].fill(0, 0, w, h, 0xff522d16);
+		backCharacterButton[0].fill(1, 1, w - 2, h - 2, 0);
+		backCharacterButton[1] = screen.createBitmap(w, h);
+		backCharacterButton[1].fill(0, 0, w, h, 0xff26150a);
+		backCharacterButton[1].fill(1, 1, w - 2, h - 2, 0);
+		backCharacterButton[2] = screen.createBitmap(w, h);
+		backCharacterButton[2].fill(0, 0, w, h, 0xff26150a);
+		backCharacterButton[2].fill(1, 1, w - 2, h - 2, 0xff3a210f);
+		w = LevelEditorButton.WIDTH;
+		h = LevelEditorButton.HEIGHT;
+		backLevelEditorButton = new AbstractBitmap[3];
+		backLevelEditorButton[0] = screen.createBitmap(w, h);
+		backLevelEditorButton[0].fill(0, 0, w, h, 0xff522d16);
+		backLevelEditorButton[0].fill(1, 1, w - 2, h - 2, 0);
+		backLevelEditorButton[1] = screen.createBitmap(w, h);
+		backLevelEditorButton[1].fill(0, 0, w, h, 0xff26150a);
+		backLevelEditorButton[1].fill(1, 1, w - 2, h - 2, 0);
+		backLevelEditorButton[2] = screen.createBitmap(w, h);
+		backLevelEditorButton[2].fill(0, 0, w, h, 0xff26150a);
+		backLevelEditorButton[2].fill(1, 1, w - 2, h - 2, 0xff3a210f);
+		w = LevelButton.WIDTH;
+		h = LevelButton.HEIGHT;
+		backLevelButton = new AbstractBitmap[3];
+		backLevelButton[0] = screen.createBitmap(w, h);
+		backLevelButton[0].fill(0, 0, w, h, 0xff522d16);
+		backLevelButton[0].fill(1, 1, w - 2, h - 2, 0);
+		backLevelButton[1] = screen.createBitmap(w, h);
+		backLevelButton[1].fill(0, 0, w, h, 0xff26150a);
+		backLevelButton[1].fill(1, 1, w - 2, h - 2, 0);
+		backLevelButton[2] = screen.createBitmap(w, h);
+		backLevelButton[2].fill(0, 0, w, h, 0xff26150a);
+		backLevelButton[2].fill(1, 1, w - 2, h - 2, 0xff3a210f);
 	}
-//	private static MojamBitmap[][] cutv(String string, int h) {
-//		try {
-//			BufferedImage bi = ImageIO.read(MojamComponent.class.getResource(string));
-//
-//			int yTiles = bi.getHeight() / h;
-//
-//			int xTiles = 0;
-//			MojamBitmap[][] result = new MojamBitmap[yTiles][];
-//			for (int y = 0; y < yTiles; y++) {
-//				List<MojamBitmap> row = new ArrayList<MojamBitmap>();
-//				int xCursor = 0;
-//				while (xCursor < bi.getWidth()) {
-//					int w = 0;
-//					while (xCursor + w < bi.getWidth() && bi.getRGB(xCursor + w, y * h) != 0xffed1c24) {
-//						w++;
-//					}
-//					if (w > 0) {
-//						MojamBitmap bitmap = new MojamBitmap(w, h);
-//						bi.getRGB(xCursor, y * h, w, h, bitmap.pixels, 0, w);
-//						row.add(bitmap);
-//					}
-//					xCursor += w + 1;
-//				}
-//				if (xTiles < row.size()) {
-//					xTiles = row.size();
-//				}
-//				result[y] = row.toArray(new MojamBitmap[0]);
-//			}
-//
-//			MojamBitmap[][] resultT = new MojamBitmap[xTiles][yTiles];
-//			for (int x = 0; x < xTiles; x++) {
-//				for (int y = 0; y < yTiles; y++) {
-//					try {
-//						resultT[x][y] = result[y][x];
-//					} catch (IndexOutOfBoundsException e) {
-//						resultT[x][y] = null;
-//					}
-//				}
-//			}
-//
-//			return resultT;
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		return null;
-//	}
-//
-//	private static int[][] getColors(AbstractBitmap[][] tiles) {
-//		int[][] result = new int[tiles.length][tiles[0].length];
-//		for (int y = 0; y < tiles[0].length; y++) {
-//			for (int x = 0; x < tiles.length; x++) {
-//				result[x][y] = getColor(tiles[x][y]);
-//			}
-//		}
-//		return result;
-//	}
-//
-//	private static int getColor(AbstractBitmap bitmap) {
-//		MojamBitmap mb = (MojamBitmap) bitmap;
-//		int r = 0;
-//		int g = 0;
-//		int b = 0;
-//		for (int i = 0; i < mb.pixels.length; i++) {
-//			int col = mb.pixels[i];
-//			r += (col >> 16) & 0xff;
-//			g += (col >> 8) & 0xff;
-//			b += (col) & 0xff;
-//		}
-//
-//		r /= mb.pixels.length;
-//		g /= mb.pixels.length;
-//		b /= mb.pixels.length;
-//
-//		return 0xff000000 | r << 16 | g << 8 | b;
-//	}
 
 	/**
 	 * Load a bitmap resource by name

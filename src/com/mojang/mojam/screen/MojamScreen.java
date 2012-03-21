@@ -107,6 +107,11 @@ public class MojamScreen extends MojamBitmap implements AbstractScreen {
 	}
 
 	@Override
+	public AbstractBitmap createBitmap(int[][] pixels2D) {
+		return new MojamBitmap(pixels2D);
+	}
+
+	@Override
 	public AbstractBitmap shrink(AbstractBitmap bitmap) {
 		return bitmap.shrink();
 	}

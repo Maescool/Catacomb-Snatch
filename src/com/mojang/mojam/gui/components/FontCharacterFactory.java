@@ -6,7 +6,8 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
-import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class FontCharacterFactory {
 
@@ -15,10 +16,9 @@ public class FontCharacterFactory {
 	private Color[] gradient;
 	private Color shadowColor;
 	private int heightOffset;
-	
-	private HashMap<Character, Bitmap> characterCache = new HashMap<Character, Bitmap>();
+	private HashMap<Character, AbstractBitmap> characterCache = new HashMap<Character, AbstractBitmap>();
 	private HashMap<Character, Integer> characterHeightOffset = new HashMap<Character, Integer>();
-	
+
 	public FontCharacterFactory(java.awt.Font systemFont, java.awt.Font fallbackFont, Color[] gradient, Color shadowColor, int heightOffset) {
 		this.systemFont = systemFont;
 		this.fallbackFont = fallbackFont;
@@ -27,24 +27,24 @@ public class FontCharacterFactory {
 		this.heightOffset = heightOffset;
 	}
 
-	public Bitmap getFontCharacter(char character) {
+	public AbstractBitmap getFontCharacter(AbstractScreen screen, char character) {
 		if (characterCache.containsKey(character)) {
 			return characterCache.get(character);
 		}
-		
+
 		java.awt.Font font;
 		if (systemFont.canDisplay(character)) {
 			font = systemFont;
 		} else {
 			font = fallbackFont;
 		}
-		
+
 		int fontSize = font.getSize();
-		int width = 3*fontSize;
-		int height = 3*fontSize;
+		int width = 3 * fontSize;
+		int height = 3 * fontSize;
 		int positionX = fontSize;
-		int positionY = 2*fontSize;
-		
+		int positionY = 2 * fontSize;
+
 		BufferedImage mainImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D mainGraphics = mainImage.createGraphics();
 		mainGraphics.setFont(font);
@@ -52,14 +52,14 @@ public class FontCharacterFactory {
 		Color mainLetterColor = Color.MAGENTA;
 		mainGraphics.setColor(mainLetterColor);
 		mainGraphics.drawString(Character.toString(character), positionX, positionY);
-		
+
 		int[][] pixels = new int[width][height];
 		int gradientRow = gradient.length - 1;
-		for (int y = height-1; y >= 0; y--) {
-			for (int x = width-1; x >= 0 ; x--) {
-				if (mainImage.getRGB(x, y)!=0) {
+		for (int y = height - 1; y >= 0; y--) {
+			for (int x = width - 1; x >= 0; x--) {
+				if (mainImage.getRGB(x, y) != 0) {
 					pixels[x][y] = gradient[gradientRow].getRGB();
-				} else if (x>0 && y>0 && mainImage.getRGB(x-1, y-1)!=0) {
+				} else if (x > 0 && y > 0 && mainImage.getRGB(x - 1, y - 1) != 0) {
 					pixels[x][y] = shadowColor.getRGB();
 				}
 			}
@@ -70,7 +70,8 @@ public class FontCharacterFactory {
 
 
 		int emptyRowsTop = 0;
-		FindTop: for (int y = 0; y < height; y++) {
+		FindTop:
+		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				if (pixels[x][y] != 0) {
 					break FindTop;
@@ -78,25 +79,25 @@ public class FontCharacterFactory {
 			}
 			emptyRowsTop++;
 		}
-		characterHeightOffset.put(character, emptyRowsTop-fontSize-heightOffset);
-		
+		characterHeightOffset.put(character, emptyRowsTop - fontSize - heightOffset);
+
 		pixels = automaticCrop(pixels);
-		
+
 		width = pixels.length;
 		if (width == 0) {
-			return new Bitmap(pixels);
+			return screen.createBitmap(pixels);
 		}
 		height = pixels[0].length;
 
-		Bitmap characterBitmap = new Bitmap(pixels);
+		AbstractBitmap characterBitmap = screen.createBitmap(pixels);
 		characterCache.put(character, characterBitmap);
-		
+
 		return characterBitmap;
 	}
 
-	public int getHeightOffset(char character) {
+	public int getHeightOffset(AbstractScreen screen, char character) {
 		if (!characterHeightOffset.containsKey(character)) {
-			getFontCharacter(character);
+			getFontCharacter(screen, character);
 		}
 		return characterHeightOffset.get(character);
 	}
@@ -106,7 +107,8 @@ public class FontCharacterFactory {
 		int height = pixels[0].length;
 		int emptyRowsTop = 0;
 
-		FindTop: for (int y = 0; y < height; y++) {
+		FindTop:
+		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				if (pixels[x][y] != 0) {
 					break FindTop;
@@ -116,7 +118,8 @@ public class FontCharacterFactory {
 		}
 
 		int emptyRowsBottom = 0;
-		FindBottom: for (int y = height - 1; y >= 0; y--) {
+		FindBottom:
+		for (int y = height - 1; y >= 0; y--) {
 			for (int x = 0; x < width; x++) {
 				if (pixels[x][y] != 0) {
 					break FindBottom;
@@ -126,7 +129,8 @@ public class FontCharacterFactory {
 		}
 
 		int emptyRowsLeft = 0;
-		FindLeft: for (int x = 0; x < width; x++) {
+		FindLeft:
+		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				if (pixels[x][y] != 0) {
 					break FindLeft;
@@ -136,7 +140,8 @@ public class FontCharacterFactory {
 		}
 
 		int emptyRowsRight = 0;
-		FindRight: for (int x = width - 1; x >= 0; x--) {
+		FindRight:
+		for (int x = width - 1; x >= 0; x--) {
 			for (int y = 0; y < height; y++) {
 				if (pixels[x][y] != 0) {
 					break FindRight;
@@ -149,7 +154,7 @@ public class FontCharacterFactory {
 			return new int[0][0];
 		}
 		int[][] pixelsCropped = new int[width - emptyRowsLeft - emptyRowsRight][height
-				- emptyRowsTop - emptyRowsBottom];
+			- emptyRowsTop - emptyRowsBottom];
 		for (int y = emptyRowsTop; y < height - emptyRowsBottom; y++) {
 			for (int x = emptyRowsLeft; x < width - emptyRowsRight; x++) {
 				pixelsCropped[x - emptyRowsLeft][y - emptyRowsTop] = pixels[x][y];
