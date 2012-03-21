@@ -3,9 +3,10 @@ package com.mojang.mojam.entity.particle;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class Particle extends Entity {
+
 	public double xa, ya, za;
 	public double z;
 	public Entity owner;
@@ -36,11 +37,12 @@ public class Particle extends Entity {
 
 		}
 		za -= 0.2;
-		if (--life < 0)
+		if (--life < 0) {
 			remove();
+		}
 	}
 
-	public void render(Screen screen) {
-		screen.blit(Art.bullets[1][0], pos.x - 8, pos.y - 8 - z);
+	public void render(AbstractScreen screen) {
+		screen.blit(Art.bullets[1][0], (int) (pos.x - 8), (int) (pos.y - 8 - z));
 	}
 }
