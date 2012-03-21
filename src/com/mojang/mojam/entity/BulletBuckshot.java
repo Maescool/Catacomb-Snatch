@@ -1,7 +1,8 @@
 package com.mojang.mojam.entity;
 
 import com.mojang.mojam.entity.mob.*;
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.screen.AbstractScreen;
+import com.mojang.mojam.screen.Art;
 
 public class BulletBuckshot extends Bullet {
 	
@@ -34,7 +35,7 @@ public class BulletBuckshot extends Bullet {
 	}
 
 	@Override
-	public void render(Screen screen) {
-		screen.blit(Art.buckShot, pos.x - 8, pos.y - 8);
+	public void render(AbstractScreen screen) {
+		screen.blit(Art.buckShot, (int)(pos.x - 8), (int)(pos.y - 8));
 	}
 }

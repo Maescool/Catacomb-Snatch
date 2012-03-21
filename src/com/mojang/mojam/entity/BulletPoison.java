@@ -4,7 +4,7 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class BulletPoison extends Bullet {
 
@@ -17,8 +17,8 @@ public class BulletPoison extends Bullet {
 	}
 
 	@Override
-	public void render(Screen screen) {
-		screen.blit(Art.bulletpoison[facing][0], pos.x - 8, pos.y - 10);
+	public void render(AbstractScreen screen) {
+		screen.blit(Art.bulletpoison[facing][0], (int)(pos.x - 8), (int)(pos.y - 10));
 	}
 	
 	@Override
