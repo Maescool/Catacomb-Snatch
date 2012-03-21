@@ -181,8 +181,8 @@ public class Player extends Mob implements LootCollector {
 		if (!mouseButtons.mouseHidden) {
 			// Update player mouse, in world pixels relative to player
 			setAimByMouse(
-				(mouseButtons.getX() - (MojamComponent.screen.w / 2)),
-				((mouseButtons.getY() + 24) - (MojamComponent.screen.h / 2)));
+				(mouseButtons.getX() - (MojamComponent.screen.getWidth() / 2)),
+				((mouseButtons.getY() + 24) - (MojamComponent.screen.getHeight() / 2)));
 		} else {
 			setAimByKeyboard();
 		}
