@@ -8,7 +8,7 @@ import com.mojang.mojam.gui.components.ClickableComponent;
 import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.resources.Constants;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class LocaleMenu extends GuiMenu {
 
@@ -17,7 +17,6 @@ public class LocaleMenu extends GuiMenu {
 	private int gameHeight;
 	private int textY;
 	private String confirm = MojamComponent.texts.getStatic("back");
-
 	private boolean inGame;
 	private Button enBtn = null;
 	private Button deBtn = null;
@@ -60,7 +59,7 @@ public class LocaleMenu extends GuiMenu {
 		yOffset += offset;
 		back = (Button) addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"), xOffset, (yOffset += offset) + 20));
 	}
-	
+
 	public LocaleMenu(String s) {
 		this(false);
 		confirm = MojamComponent.texts.getStatic(s);
@@ -72,7 +71,7 @@ public class LocaleMenu extends GuiMenu {
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 
 		if (!inGame) {
 			screen.blit(Art.background, 0, 0);
@@ -92,10 +91,10 @@ public class LocaleMenu extends GuiMenu {
 	@Override
 	public void keyTyped(KeyEvent e) {
 	}
-	
+
 	@Override
-	public void keyPressed(KeyEvent e){
-		if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			back.postClick();
 		} else {
 			super.keyPressed(e);

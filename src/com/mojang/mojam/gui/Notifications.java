@@ -2,7 +2,7 @@ package com.mojang.mojam.gui;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.gui.components.Font;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -10,6 +10,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Notifications {
 
 	public class Note {
+
 		public String message;
 		public int life;
 
@@ -24,9 +25,7 @@ public class Notifications {
 			}
 		}
 	}
-
 	private static Notifications instance = null;
-
 	private List<Note> notes = new CopyOnWriteArrayList<Note>();
 
 	public void add(String message) {
@@ -37,20 +36,19 @@ public class Notifications {
 		notes.add(new Note(message, life));
 	}
 
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		Iterator<Note> it = notes.iterator();
 		int i = 0;
 		while (it.hasNext()) {
 			i += 1;
 			Note note = it.next();
-			int stringWidth = Font.defaultFont().calculateStringWidth(note.message);
+			int stringWidth = Font.defaultFont().calculateStringWidth(screen, note.message);
 			Font.defaultFont().draw(screen, note.message, (MojamComponent.GAME_WIDTH / 2) - (stringWidth / 2), MojamComponent.GAME_HEIGHT / 5 + (i * 8 * MojamComponent.SCALE));
 		}
 	}
 
 	public void tick() {
 		for (int i = 0; i < notes.size(); i++) {
-
 		}
 		for (Note n : notes) {
 			n.tick();
@@ -67,5 +65,4 @@ public class Notifications {
 
 		return instance;
 	}
-
 }
