@@ -9,13 +9,13 @@ import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.resources.Constants;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.AbstractBitmap;
 
 public class Rifle implements IWeapon {
 
 	protected Mob owner;
 	protected float bulletDamage;
-	protected Bitmap image;
+	protected AbstractBitmap image;
 	protected int upgradeIndex = 1;
 	protected double accuracy;
 	protected int shootDelay;
@@ -54,10 +54,11 @@ public class Rifle implements IWeapon {
 	public void primaryFire(double xDir, double yDir) {
 		if (readyToShoot) {
 			double dir;
-			if (owner.isSprint)
+			if (owner.isSprint) {
 				dir = getBulletDirection(accuracy * 2);
-			else
+			} else {
 				dir = getBulletDirection(accuracy);
+			}
 			xDir = Math.cos(dir);
 			yDir = Math.sin(dir);
 			applyImpuls(xDir, yDir, 1);
@@ -76,8 +77,8 @@ public class Rifle implements IWeapon {
 			currentShootDelay = shootDelay;
 			readyToShoot = false;
 			MojamComponent.soundPlayer.playSound("/sound/Shot 1.wav",
-					(float) owner.getPosition().x,
-					(float) owner.getPosition().y);
+				(float) owner.getPosition().x,
+				(float) owner.getPosition().y);
 		}
 	}
 
@@ -99,8 +100,7 @@ public class Rifle implements IWeapon {
 
 	private double getBulletDirection(double accuracy) {
 		double dir = Math.atan2(owner.aimVector.y, owner.aimVector.x)
-				+ (TurnSynchronizer.synchedRandom.nextFloat() - TurnSynchronizer.synchedRandom
-						.nextFloat()) * accuracy;
+			+ (TurnSynchronizer.synchedRandom.nextFloat() - TurnSynchronizer.synchedRandom.nextFloat()) * accuracy;
 
 		return dir;
 	}
@@ -111,7 +111,7 @@ public class Rifle implements IWeapon {
 	}
 
 	@Override
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		return image;
 	}
 
@@ -127,10 +127,9 @@ public class Rifle implements IWeapon {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return Rifle.class.hashCode();
 	}
-
 }
