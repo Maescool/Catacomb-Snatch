@@ -2,8 +2,6 @@ package com.mojang.mojam.screen;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -14,326 +12,364 @@ import com.mojang.mojam.MojamComponent;
  * Art management class
  */
 public class Art {
-	
-	public static Bitmap[][] floorTiles = cut("/art/map/floortiles.png", 32, 32);
-	public static Bitmap shadow_north = load("/art/shadows/shadow_north.png");
-	public static Bitmap shadow_north_east = load("/art/shadows/shadow_north_east.png");
-	public static Bitmap shadow_north_west = load("/art/shadows/shadow_north_west.png");
-    public static Bitmap shadow_east = load("/art/shadows/shadow_east.png");
-	public static Bitmap shadow_west = load("/art/shadows/shadow_west.png");
-	public static int[][] floorTileColors = getColors(floorTiles);
-	public static Bitmap[][] wallTiles = cut("/art/map/walltiles.png", 32, 56, 0, 0);
-	public static int[][] wallTileColors = getColors(wallTiles);
-	public static Bitmap[][] treasureTiles = cut("/art/map/treasure.png", 32, 56);
-	public static int treasureTileColor = getColor(treasureTiles[0][0]);
-	public static Bitmap[][] mobSpawner = cut("/art/map/spawner.png", 32, 40);
-	public static Bitmap mobSpawnerShadow = load("/art/shadows/shadow_spawner.png");
-	public static Bitmap[][] darkness = cut("/art/map/dark.png", 32, 32);
-	public static Bitmap[][] mapIcons = cut("/art/map/mapicons.png", 5, 5);
-	public static Bitmap shadow = load("/art/shadows/shadow_coin.png");
-	public static Bitmap[][] rails = cut("/art/map/rails.png", 32, 38);
-    public static Bitmap[][] spikes = cut("/art/map/spiketrap.png", 32, 32);
-    public static Bitmap[][] dropFloor = cut("/art/map/droptrap.png", 32, 32);
-    
-    // Player sheets
-	private static Bitmap[][] lordLard = cut("/art/player/lord_lard_sheet.png", 32, 32);
-	private static Bitmap[][] herrSpeck = cut("/art/player/herr_von_speck_sheet.png", 32, 32);
-	private static Bitmap[][] duchessDonut = cut("/art/player/duchess_donut_sheet.png", 32, 32);
-	private static Bitmap[][] countessCruller = cut("/art/player/countess_cruller_sheet.png", 32, 32);
-	
-	public static Bitmap[][] getPlayer(GameCharacter character) {
+
+	public static AbstractBitmap[][] floorTiles;
+	public static AbstractBitmap shadow_north;
+	public static AbstractBitmap shadow_north_east;
+	public static AbstractBitmap shadow_north_west;
+	public static AbstractBitmap shadow_east;
+	public static AbstractBitmap shadow_west;
+	public static int[][] floorTileColors;
+	public static AbstractBitmap[][] wallTiles;
+	public static int[][] wallTileColors;
+	public static AbstractBitmap[][] treasureTiles;
+	public static int treasureTileColor;
+	public static AbstractBitmap[][] mobSpawner;
+	public static AbstractBitmap mobSpawnerShadow;
+	public static AbstractBitmap[][] darkness;
+	public static AbstractBitmap[][] mapIcons;
+	public static AbstractBitmap shadow;
+	public static AbstractBitmap[][] rails;
+	public static AbstractBitmap[][] spikes;
+	public static AbstractBitmap[][] dropFloor;
+	// Player sheets
+	private static AbstractBitmap[][] lordLard;
+	private static AbstractBitmap[][] herrSpeck;
+	private static AbstractBitmap[][] duchessDonut;
+	private static AbstractBitmap[][] countessCruller;
+
+	public static AbstractBitmap[][] getPlayer(GameCharacter character) {
 		switch (character) {
-		case None:
-			return null;
-		case LordLard:
-			return lordLard;
-		case HerrVonSpeck:
-			return herrSpeck;
-		case DuchessDonut:
-			return duchessDonut;
-		case CountessCruller:
-			return countessCruller;
-		default:
-			return lordLard;
+			case None:
+				return null;
+			case LordLard:
+				return lordLard;
+			case HerrVonSpeck:
+				return herrSpeck;
+			case DuchessDonut:
+				return duchessDonut;
+			case CountessCruller:
+				return countessCruller;
+			default:
+				return lordLard;
 		}
 	}
-	
-	public static Bitmap[][] getLocalPlayerArt() {
+
+	public static AbstractBitmap[][] getLocalPlayerArt() {
 		return getPlayer(MojamComponent.instance.playerCharacter);
 	}
-	
-    public static Bitmap exclamation_mark = load ("/art/effects/exclamation_mark.png");
-	
+	public static AbstractBitmap exclamation_mark;
 	// Player starting points
-	private static Bitmap[][] startLordLard = cut("/art/player/start_lordlard_big.png", 32, 32);
-	private static Bitmap[][] startHerrSpeck = cut("/art/player/start_herrspeck.png", 32, 32);
-	private static Bitmap[][] startDuchessDonut = startLordLard;
-	private static Bitmap[][] startCountessCruller = cut("/art/player/start_cruller.png", 32, 32);
-	private static Bitmap[][] startNoOpponent = cut("/art/player/start_no_opponent_big.png", 32, 32);
-	
-	public static Bitmap[][] getPlayerBase(GameCharacter character) {
+	private static AbstractBitmap[][] startLordLard;
+	private static AbstractBitmap[][] startHerrSpeck;
+	private static AbstractBitmap[][] startDuchessDonut;
+	private static AbstractBitmap[][] startCountessCruller;
+	private static AbstractBitmap[][] startNoOpponent;
+
+	public static AbstractBitmap[][] getPlayerBase(GameCharacter character) {
 		switch (character) {
-		case None:
-			return startNoOpponent;
-		case LordLard:
-			return startLordLard;
-		case HerrVonSpeck:
-			return startHerrSpeck;
-		case DuchessDonut:
-			return startDuchessDonut;
-		case CountessCruller:
-			return startCountessCruller;
-		default:
-			return startLordLard;
+			case None:
+				return startNoOpponent;
+			case LordLard:
+				return startLordLard;
+			case HerrVonSpeck:
+				return startHerrSpeck;
+			case DuchessDonut:
+				return startDuchessDonut;
+			case CountessCruller:
+				return startCountessCruller;
+			default:
+				return startLordLard;
 		}
 	}
-	
 	// Tooltips
-	public static Bitmap tooltipBackground = load("/art/screen/tooltipBackground.png");
-    public static Bitmap turretText = load("/art/screen/atlasTurretText.png");
-    public static Bitmap harvesterText = load("/art/screen/atlasHarvesterText.png");
-    public static Bitmap bombText = load("/art/screen/atlasBombText.png");
-
+	public static AbstractBitmap tooltipBackground;
+	public static AbstractBitmap turretText;
+	public static AbstractBitmap harvesterText;
+	public static AbstractBitmap bombText;
 	// Screens
-	public static Bitmap titleScreen = load("/art/screen/TITLESCREEN.png");
-	public static Bitmap howToPlayScreen = load("/art/screen/how_to_play.png");
-	public static Bitmap emptyBackground = load("/art/screen/empty_background.png");
-	public static Bitmap gameOverScreen = load("/art/screen/game_over.png");
-	public static Bitmap pauseScreen = load("/art/screen/pause_screen.png");
-	public static Bitmap mojangLogo = load("/art/logo/mojang.png");
-	public static Bitmap downloadScreen = load("/art/screen/download_screen.png");
-	
+	public static AbstractBitmap titleScreen;
+	public static AbstractBitmap howToPlayScreen;
+	public static AbstractBitmap emptyBackground;
+	public static AbstractBitmap gameOverScreen;
+	public static AbstractBitmap pauseScreen;
+	public static AbstractBitmap mojangLogo;
+	public static AbstractBitmap downloadScreen;
 	// UI elements
-	public static Bitmap[][] button = cut("/art/screen/button.png", 128, 24);
-    public static Bitmap[][] checkbox = cut("/art/screen/checkbox.png", 24, 24);
-	public static Bitmap panel = load("/art/screen/panel/panel.png");
-	public static Bitmap[][] panel_healthBar = cut("/art/screen/panel/panel_healthbar.png", 100, 6);
-	public static Bitmap panel_heart = load("/art/screen/panel/p_heart.png");
-	public static Bitmap panel_coin = load("/art/screen/panel/p_coin.png");
-	public static Bitmap panel_star = load("/art/screen/panel/p_level.png");
-    public static Bitmap[][] panel_xpBar = cut("/art/screen/panel/panel_xpbar.png", 100, 6);
-	public static Bitmap background = load("/art/screen/BACKGROUND.png");
-    public static Bitmap[][] slider = cut("/art/screen/slider.png", 16, 24);
-	
-    // Buildings
-	public static Bitmap[][] harvester = cut("/art/building/bot_vacuum.png", 32, 56);
-	public static Bitmap[][] harvester2 = cut("/art/building/bot_vacuum2.png", 32, 56);
-	public static Bitmap[][] harvester3 = cut("/art/building/bot_vacuum3.png", 32, 56);
-	public static Bitmap[][] turret = cut("/art/building/turret.png", 32, 32);
-	public static Bitmap[][] turret2 = cut("/art/building/turret2.png", 32, 32);
-	public static Bitmap[][] turret3 = cut("/art/building/turret3.png", 32, 32);
-	public static Bitmap bomb = load("/art/building/bomb.png");
-	public static Bitmap[][] small_chest = cut("/art/building/chest_small.png", 32, 53);
-	public static Bitmap[][] large_chest = cut("/art/building/chest_large.png", 64, 53);
-	public static Bitmap[][] teamTurret1 = cut("/art/building/turretTeam1.png", 32, 32);
-	public static Bitmap[][] teamTurret2 = cut("/art/building/turretTeam2.png", 32, 32);
-
+	public static AbstractBitmap[][] button;
+	public static AbstractBitmap[][] checkbox;
+	public static AbstractBitmap panel;
+	public static AbstractBitmap[][] panel_healthBar;
+	public static AbstractBitmap panel_heart;
+	public static AbstractBitmap panel_coin;
+	public static AbstractBitmap panel_star;
+	public static AbstractBitmap[][] panel_xpBar;
+	public static AbstractBitmap background;
+	public static AbstractBitmap[][] slider;
+	// Buildings
+	public static AbstractBitmap[][] harvester;
+	public static AbstractBitmap[][] harvester2;
+	public static AbstractBitmap[][] harvester3;
+	public static AbstractBitmap[][] turret;
+	public static AbstractBitmap[][] turret2;
+	public static AbstractBitmap[][] turret3;
+	public static AbstractBitmap bomb;
+	public static AbstractBitmap[][] small_chest;
+	public static AbstractBitmap[][] large_chest;
+	public static AbstractBitmap[][] teamTurret1;
+	public static AbstractBitmap[][] teamTurret2;
 	//Weapons
-	public static Bitmap[][] weaponList = cut("/art/weapons/weapon_list.png", 32, 32);
-	
+	public static AbstractBitmap[][] weaponList;
 	// Fonts
-	public static Bitmap[][] font_default = cut("/art/fonts/font_default.png", 8, 8);
-	public static Bitmap[][] font_blue = cut("/art/fonts/font_blue.png", 8, 8);
-	public static Bitmap[][] font_gray = cut("/art/fonts/font_gray.png", 8, 8);
-	public static Bitmap[][] font_red = cut("/art/fonts/font_red.png", 8, 8);
-	public static Bitmap[][] font_gold = cut("/art/fonts/font_gold.png", 8, 8);
-	
-	public static Bitmap[][] font_small_black = cutv("/art/fonts/font_small_black.png", 7);
-    public static Bitmap[][] font_small_white = cutv("/art/fonts/font_small_white.png", 7);
-    public static Bitmap[][] font_small_gold = cutv("/art/fonts/font_small_gold.png", 7);
-
+	public static AbstractBitmap[][] font_default;
+	public static AbstractBitmap[][] font_blue;
+	public static AbstractBitmap[][] font_gray;
+	public static AbstractBitmap[][] font_red;
+	public static AbstractBitmap[][] font_gold;
+	public static AbstractBitmap[][] font_small_black;
+	public static AbstractBitmap[][] font_small_white;
+	public static AbstractBitmap[][] font_small_gold;
 	// Mob
-    public static Bitmap[][] raildroid = cut("/art/mob/raildroid.png", 32, 32);
-	public static Bitmap[][] mummy = cut("/art/mob/enemy_mummy_anim_48.png", 48, 48);
-	public static Bitmap[][] pharao = cut("/art/mob/enemy_pharao_anim_48.png", 48, 48);
-    public static Bitmap[][] snake = cut("/art/mob/enemy_snake_anim_48.png", 48, 48);
-	public static Bitmap[][] scarab = cut("/art/mob/enemy_scarab_anim_48.png", 48, 48);
-	public static Bitmap[][] bat = cut("/art/mob/enemy_bat_32.png", 32, 32);
-	public static Bitmap batShadow = load("/art/shadows/shadow_bat.png");
-
+	public static AbstractBitmap[][] raildroid;
+	public static AbstractBitmap[][] mummy;
+	public static AbstractBitmap[][] pharao;
+	public static AbstractBitmap[][] snake;
+	public static AbstractBitmap[][] scarab;
+	public static AbstractBitmap[][] bat;
+	public static AbstractBitmap batShadow;
 	// Coins
-	public static Bitmap[][] pickupCoinBronzeSmall = cut("/art/pickup/pickup_coin_bronze_small_8.png", 8, 8);
-	public static Bitmap[][] pickupCoinBronze = cut("/art/pickup/pickup_coin_bronze_16.png", 16, 16);
-	public static Bitmap[][] pickupCoinSilverSmall = cut("/art/pickup/pickup_coin_silver_small_8.png", 8, 8);
-	public static Bitmap[][] pickupCoinSilver = cut("/art/pickup/pickup_coin_silver_16.png", 16, 16);
-	public static Bitmap[][] pickupCoinGoldSmall = cut("/art/pickup/pickup_coin_gold_small_8.png", 8, 8);
-	public static Bitmap[][] pickupCoinGold = cut("/art/pickup/pickup_coin_gold_16.png", 16, 16);
-	public static Bitmap[][] pickupGemEmerald = cut("/art/pickup/pickup_gem_emerald_12.png", 16, 16);
-	public static Bitmap[][] pickupGemRuby = cut("/art/pickup/pickup_gem_ruby_12.png", 16, 16);
-	public static Bitmap[][] pickupGemDiamond = cut("/art/pickup/pickup_gem_diamond_24.png", 24, 24);
-	public static Bitmap[][] shineSmall = cut("/art/pickup/effect_shine_small_13.png", 13, 13);
-	public static Bitmap[][] shineBig = cut("/art/pickup/effect_shine_big_13.png", 13, 13);
-
+	public static AbstractBitmap[][] pickupCoinBronzeSmall;
+	public static AbstractBitmap[][] pickupCoinBronze;
+	public static AbstractBitmap[][] pickupCoinSilverSmall;
+	public static AbstractBitmap[][] pickupCoinSilver;
+	public static AbstractBitmap[][] pickupCoinGoldSmall;
+	public static AbstractBitmap[][] pickupCoinGold;
+	public static AbstractBitmap[][] pickupGemEmerald;
+	public static AbstractBitmap[][] pickupGemRuby;
+	public static AbstractBitmap[][] pickupGemDiamond;
+	public static AbstractBitmap[][] shineSmall;
+	public static AbstractBitmap[][] shineBig;
 	// Bullets and special effects
-	public static Bitmap[][] bullets = cut("/art/effects/bullets.png", 16, 16);
-	public static Bitmap[][] bullet = cut("/art/effects/bullet.png", 16, 16);
-	public static Bitmap buckShot = load("/art/effects/bullet_buckshot.png");
-	public static Bitmap[][] bulletflame = cut("/art/effects/bullet_flame.png", 16, 16);
-	public static Bitmap[][] plasmaBall = cut("/art/effects/plasmaball.png", 16, 16);
-	public static Bitmap[][] bulletpoison = cut("/art/effects/bullet_poison.png", 16, 16);
-	public static Bitmap[][] muzzle = cut("/art/effects/muzzle.png", 16, 16);
-	public static Bitmap[][] fxEnemyDie = cut("/art/effects/fx_enemydie_64.png", 64, 64);
-	public static Bitmap[][] fxSteam24 = cut("/art/effects/fx_steam1_24.png", 24, 24);
-	public static Bitmap[][] fxSteam12 = cut("/art/effects/fx_steam2_12.png", 12, 12);
-	public static Bitmap[][] fxBombSplosion = cut("/art/effects/fx_bombsplosion_big_32.png", 32, 32);
-	public static Bitmap[][] fxBombSplosionSmall = cut("/art/effects/fx_bombsplosion_small_32.png", 32, 32);
-	public static Bitmap[][] fxDust12 = cut("/art/effects/fx_dust2_12.png", 12, 12);
-	public static Bitmap[][] fxDust24 = cut("/art/effects/fx_dust1_24.png", 24, 24);
-	public static Bitmap[][] moneyBar = cut("/art/effects/bar_blue.png", 32, 4);
-	public static Bitmap[][] healthBar = cut("/art/effects/bar_green.png", 32, 4);
-	public static Bitmap[][] healthBar_Outline = cut("/art/effects/bar_outline.png", 32, 4);
-	public static Bitmap[][] healthBar_Underlay = cut("/art/effects/bar_green_underlay.png", 32, 4);
-	public static Bitmap[][] sprintBar = cut("/art/effects/sprint_bar.png", 32, 4);
-		
+	public static AbstractBitmap[][] bullets;
+	public static AbstractBitmap[][] bullet;
+	public static AbstractBitmap buckShot;
+	public static AbstractBitmap[][] bulletflame;
+	public static AbstractBitmap[][] plasmaBall;
+	public static AbstractBitmap[][] bulletpoison;
+	public static AbstractBitmap[][] muzzle;
+	public static AbstractBitmap[][] fxEnemyDie;
+	public static AbstractBitmap[][] fxSteam24;
+	public static AbstractBitmap[][] fxSteam12;
+	public static AbstractBitmap[][] fxBombSplosion;
+	public static AbstractBitmap[][] fxBombSplosionSmall;
+	public static AbstractBitmap[][] fxDust12;
+	public static AbstractBitmap[][] fxDust24;
+	public static AbstractBitmap[][] moneyBar;
+	public static AbstractBitmap[][] healthBar;
+	public static AbstractBitmap[][] healthBar_Outline;
+	public static AbstractBitmap[][] healthBar_Underlay;
+	public static AbstractBitmap[][] sprintBar;
 	// Icons
 	public static BufferedImage icon32 = loadBufferedImage("/art/icon/icon32.png");
 	public static BufferedImage icon64 = loadBufferedImage("/art/icon/icon64.png");
-	
-    /**
-     * Return the bitmaps for a given piece of art, cut out from a sheet
-     * 
-     * @param string Art piece name
-     * @param w Width of a single bitmap
-     * @param h Height of a single bitmap
-     * @return Bitmap array
-     */
-	public static Bitmap[][] cut(String string, int w, int h) {
-	    return cut(string, w, h, 0, 0);
+
+	public static void loadAllResources(AbstractScreen screen) {
+		floorTiles = screen.cut("/art/map/floortiles.png", 32, 32);
+		shadow_north = screen.load("/art/shadows/shadow_north.png");
+		shadow_north_east = screen.load("/art/shadows/shadow_north_east.png");
+		shadow_north_west = screen.load("/art/shadows/shadow_north_west.png");
+		shadow_east = screen.load("/art/shadows/shadow_east.png");
+		shadow_west = screen.load("/art/shadows/shadow_west.png");
+		floorTileColors = screen.getColors(floorTiles);
+		wallTiles = screen.cut("/art/map/walltiles.png", 32, 56, 0, 0);
+		wallTileColors = screen.getColors(wallTiles);
+		treasureTiles = screen.cut("/art/map/treasure.png", 32, 56);
+		treasureTileColor = screen.getColor(treasureTiles[0][0]);
+		mobSpawner = screen.cut("/art/map/spawner.png", 32, 40);
+		mobSpawnerShadow = screen.load("/art/shadows/shadow_spawner.png");
+		darkness = screen.cut("/art/map/dark.png", 32, 32);
+		mapIcons = screen.cut("/art/map/mapicons.png", 5, 5);
+		shadow = screen.load("/art/shadows/shadow_coin.png");
+		rails = screen.cut("/art/map/rails.png", 32, 38);
+		spikes = screen.cut("/art/map/spiketrap.png", 32, 32);
+		dropFloor = screen.cut("/art/map/droptrap.png", 32, 32);
+		// Player sheets
+		lordLard = screen.cut("/art/player/lord_lard_sheet.png", 32, 32);
+		herrSpeck = screen.cut("/art/player/herr_von_speck_sheet.png", 32, 32);
+		duchessDonut = screen.cut("/art/player/duchess_donut_sheet.png", 32, 32);
+		countessCruller = screen.cut("/art/player/countess_cruller_sheet.png", 32, 32);
+		exclamation_mark = screen.load("/art/effects/exclamation_mark.png");
+		// Player starting points
+		startLordLard = screen.cut("/art/player/start_lordlard_big.png", 32, 32);
+		startHerrSpeck = screen.cut("/art/player/start_herrspeck.png", 32, 32);
+		startDuchessDonut = startLordLard;
+		startCountessCruller = screen.cut("/art/player/start_cruller.png", 32, 32);
+		startNoOpponent = screen.cut("/art/player/start_no_opponent_big.png", 32, 32);
+
+		// Tooltips
+		tooltipBackground = screen.load("/art/screen/tooltipBackground.png");
+		turretText = screen.load("/art/screen/atlasTurretText.png");
+		harvesterText = screen.load("/art/screen/atlasHarvesterText.png");
+		bombText = screen.load("/art/screen/atlasBombText.png");
+		// Screens
+		titleScreen = screen.load("/art/screen/TITLESCREEN.png");
+		howToPlayScreen = screen.load("/art/screen/how_to_play.png");
+		emptyBackground = screen.load("/art/screen/empty_background.png");
+		gameOverScreen = screen.load("/art/screen/game_over.png");
+		pauseScreen = screen.load("/art/screen/pause_screen.png");
+		mojangLogo = screen.load("/art/logo/mojang.png");
+		downloadScreen = screen.load("/art/screen/download_screen.png");
+		// UI elements
+		button = screen.cut("/art/screen/button.png", 128, 24);
+		checkbox = screen.cut("/art/screen/checkbox.png", 24, 24);
+		panel = screen.load("/art/screen/panel/panel.png");
+		panel_healthBar = screen.cut("/art/screen/panel/panel_healthbar.png", 100, 6);
+		panel_heart = screen.load("/art/screen/panel/p_heart.png");
+		panel_coin = screen.load("/art/screen/panel/p_coin.png");
+		panel_star = screen.load("/art/screen/panel/p_level.png");
+		panel_xpBar = screen.cut("/art/screen/panel/panel_xpbar.png", 100, 6);
+		background = screen.load("/art/screen/BACKGROUND.png");
+		slider = screen.cut("/art/screen/slider.png", 16, 24);
+		// Buildings
+		harvester = screen.cut("/art/building/bot_vacuum.png", 32, 56);
+		harvester2 = screen.cut("/art/building/bot_vacuum2.png", 32, 56);
+		harvester3 = screen.cut("/art/building/bot_vacuum3.png", 32, 56);
+		turret = screen.cut("/art/building/turret.png", 32, 32);
+		turret2 = screen.cut("/art/building/turret2.png", 32, 32);
+		turret3 = screen.cut("/art/building/turret3.png", 32, 32);
+		bomb = screen.load("/art/building/bomb.png");
+		small_chest = screen.cut("/art/building/chest_small.png", 32, 53);
+		large_chest = screen.cut("/art/building/chest_large.png", 64, 53);
+		teamTurret1 = screen.cut("/art/building/turretTeam1.png", 32, 32);
+		teamTurret2 = screen.cut("/art/building/turretTeam2.png", 32, 32);
+		//Weapons
+		weaponList = screen.cut("/art/weapons/weapon_list.png", 32, 32);
+		// Fonts
+		font_default = screen.cut("/art/fonts/font_default.png", 8, 8);
+		font_blue = screen.cut("/art/fonts/font_blue.png", 8, 8);
+		font_gray = screen.cut("/art/fonts/font_gray.png", 8, 8);
+		font_red = screen.cut("/art/fonts/font_red.png", 8, 8);
+		font_gold = screen.cut("/art/fonts/font_gold.png", 8, 8);
+		font_small_black = screen.cutv("/art/fonts/font_small_black.png", 7);
+		font_small_white = screen.cutv("/art/fonts/font_small_white.png", 7);
+		font_small_gold = screen.cutv("/art/fonts/font_small_gold.png", 7);
+		// Mob
+		raildroid = screen.cut("/art/mob/raildroid.png", 32, 32);
+		mummy = screen.cut("/art/mob/enemy_mummy_anim_48.png", 48, 48);
+		pharao = screen.cut("/art/mob/enemy_pharao_anim_48.png", 48, 48);
+		snake = screen.cut("/art/mob/enemy_snake_anim_48.png", 48, 48);
+		scarab = screen.cut("/art/mob/enemy_scarab_anim_48.png", 48, 48);
+		bat = screen.cut("/art/mob/enemy_bat_32.png", 32, 32);
+		batShadow = screen.load("/art/shadows/shadow_bat.png");
+		// Coins
+		pickupCoinBronzeSmall = screen.cut("/art/pickup/pickup_coin_bronze_small_8.png", 8, 8);
+		pickupCoinBronze = screen.cut("/art/pickup/pickup_coin_bronze_16.png", 16, 16);
+		pickupCoinSilverSmall = screen.cut("/art/pickup/pickup_coin_silver_small_8.png", 8, 8);
+		pickupCoinSilver = screen.cut("/art/pickup/pickup_coin_silver_16.png", 16, 16);
+		pickupCoinGoldSmall = screen.cut("/art/pickup/pickup_coin_gold_small_8.png", 8, 8);
+		pickupCoinGold = screen.cut("/art/pickup/pickup_coin_gold_16.png", 16, 16);
+		pickupGemEmerald = screen.cut("/art/pickup/pickup_gem_emerald_12.png", 16, 16);
+		pickupGemRuby = screen.cut("/art/pickup/pickup_gem_ruby_12.png", 16, 16);
+		pickupGemDiamond = screen.cut("/art/pickup/pickup_gem_diamond_24.png", 24, 24);
+		shineSmall = screen.cut("/art/pickup/effect_shine_small_13.png", 13, 13);
+		shineBig = screen.cut("/art/pickup/effect_shine_big_13.png", 13, 13);
+		// Bullets and special effects
+		bullets = screen.cut("/art/effects/bullets.png", 16, 16);
+		bullet = screen.cut("/art/effects/bullet.png", 16, 16);
+		buckShot = screen.load("/art/effects/bullet_buckshot.png");
+		bulletflame = screen.cut("/art/effects/bullet_flame.png", 16, 16);
+		plasmaBall = screen.cut("/art/effects/plasmaball.png", 16, 16);
+		bulletpoison = screen.cut("/art/effects/bullet_poison.png", 16, 16);
+		muzzle = screen.cut("/art/effects/muzzle.png", 16, 16);
+		fxEnemyDie = screen.cut("/art/effects/fx_enemydie_64.png", 64, 64);
+		fxSteam24 = screen.cut("/art/effects/fx_steam1_24.png", 24, 24);
+		fxSteam12 = screen.cut("/art/effects/fx_steam2_12.png", 12, 12);
+		fxBombSplosion = screen.cut("/art/effects/fx_bombsplosion_big_32.png", 32, 32);
+		fxBombSplosionSmall = screen.cut("/art/effects/fx_bombsplosion_small_32.png", 32, 32);
+		fxDust12 = screen.cut("/art/effects/fx_dust2_12.png", 12, 12);
+		fxDust24 = screen.cut("/art/effects/fx_dust1_24.png", 24, 24);
+		moneyBar = screen.cut("/art/effects/bar_blue.png", 32, 4);
+		healthBar = screen.cut("/art/effects/bar_green.png", 32, 4);
+		healthBar_Outline = screen.cut("/art/effects/bar_outline.png", 32, 4);
+		healthBar_Underlay = screen.cut("/art/effects/bar_green_underlay.png", 32, 4);
+		sprintBar = screen.cut("/art/effects/sprint_bar.png", 32, 4);
 	}
+//	private static MojamBitmap[][] cutv(String string, int h) {
+//		try {
+//			BufferedImage bi = ImageIO.read(MojamComponent.class.getResource(string));
+//
+//			int yTiles = bi.getHeight() / h;
+//
+//			int xTiles = 0;
+//			MojamBitmap[][] result = new MojamBitmap[yTiles][];
+//			for (int y = 0; y < yTiles; y++) {
+//				List<MojamBitmap> row = new ArrayList<MojamBitmap>();
+//				int xCursor = 0;
+//				while (xCursor < bi.getWidth()) {
+//					int w = 0;
+//					while (xCursor + w < bi.getWidth() && bi.getRGB(xCursor + w, y * h) != 0xffed1c24) {
+//						w++;
+//					}
+//					if (w > 0) {
+//						MojamBitmap bitmap = new MojamBitmap(w, h);
+//						bi.getRGB(xCursor, y * h, w, h, bitmap.pixels, 0, w);
+//						row.add(bitmap);
+//					}
+//					xCursor += w + 1;
+//				}
+//				if (xTiles < row.size()) {
+//					xTiles = row.size();
+//				}
+//				result[y] = row.toArray(new MojamBitmap[0]);
+//			}
+//
+//			MojamBitmap[][] resultT = new MojamBitmap[xTiles][yTiles];
+//			for (int x = 0; x < xTiles; x++) {
+//				for (int y = 0; y < yTiles; y++) {
+//					try {
+//						resultT[x][y] = result[y][x];
+//					} catch (IndexOutOfBoundsException e) {
+//						resultT[x][y] = null;
+//					}
+//				}
+//			}
+//
+//			return resultT;
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		return null;
+//	}
+//
+//	private static int[][] getColors(AbstractBitmap[][] tiles) {
+//		int[][] result = new int[tiles.length][tiles[0].length];
+//		for (int y = 0; y < tiles[0].length; y++) {
+//			for (int x = 0; x < tiles.length; x++) {
+//				result[x][y] = getColor(tiles[x][y]);
+//			}
+//		}
+//		return result;
+//	}
+//
+//	private static int getColor(AbstractBitmap bitmap) {
+//		MojamBitmap mb = (MojamBitmap) bitmap;
+//		int r = 0;
+//		int g = 0;
+//		int b = 0;
+//		for (int i = 0; i < mb.pixels.length; i++) {
+//			int col = mb.pixels[i];
+//			r += (col >> 16) & 0xff;
+//			g += (col >> 8) & 0xff;
+//			b += (col) & 0xff;
+//		}
+//
+//		r /= mb.pixels.length;
+//		g /= mb.pixels.length;
+//		b /= mb.pixels.length;
+//
+//		return 0xff000000 | r << 16 | g << 8 | b;
+//	}
 
-    /**
-     * Return the bitmaps for a given piece of art, cut out from a sheet
-     * 
-     * @param string Art piece name
-     * @param w Width of a single bitmap
-     * @param h Height of a single bitmap
-     * @param bx
-     * @param by
-     * @return Bitmap array
-     */
-	private static Bitmap[][] cut(String string, int w, int h, int bx, int by) {
-		try {
-			BufferedImage bi = ImageIO.read(MojamComponent.class
-					.getResource(string));
-
-			int xTiles = (bi.getWidth() - bx) / w;
-			int yTiles = (bi.getHeight() - by) / h;
-
-			Bitmap[][] result = new Bitmap[xTiles][yTiles];
-
-			for (int x = 0; x < xTiles; x++) {
-				for (int y = 0; y < yTiles; y++) {
-				    result[x][y] = new Bitmap(w, h);
-					bi.getRGB(bx + x * w, by + y * h, w, h,
-							result[x][y].pixels, 0, w);
-				}
-			}
-
-			return result;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-    private static Bitmap[][] cutv(String string, int h) {
-        try {
-            BufferedImage bi = ImageIO.read(MojamComponent.class.getResource(string));
-
-            int yTiles = bi.getHeight() / h;
-
-            int xTiles = 0;
-            Bitmap[][] result = new Bitmap[yTiles][];
-            for (int y = 0; y < yTiles; y++) {
-                List<Bitmap> row = new ArrayList<Bitmap>();
-                int xCursor=0;
-                while (xCursor < bi.getWidth()) {
-                    int w = 0;
-                    while (xCursor + w < bi.getWidth() && bi.getRGB(xCursor + w, y * h) != 0xffed1c24) {
-                        w++;
-                    }
-                    if (w > 0) {
-                        Bitmap bitmap = new Bitmap(w, h);
-                        bi.getRGB(xCursor, y * h, w, h, bitmap.pixels, 0, w );
-                        row.add(bitmap);
-                    }
-                    xCursor += w+1;
-                }
-                if (xTiles < row.size()) xTiles = row.size();
-                result[y] = row.toArray(new Bitmap[0]);
-            }
-
-            Bitmap[][] resultT = new Bitmap[xTiles][yTiles];
-            for (int x = 0; x < xTiles; x++) {
-                for (int y = 0; y < yTiles; y++) {
-                    try {
-                        resultT[x][y] = result[y][x];
-                    } catch (IndexOutOfBoundsException e) {
-                        resultT[x][y] = null;
-                    }
-                }
-            }
-
-            return resultT;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-	
-	private static int[][] getColors(Bitmap[][] tiles) {
-		int[][] result = new int[tiles.length][tiles[0].length];
-		for (int y = 0; y < tiles[0].length; y++) {
-			for (int x = 0; x < tiles.length; x++) {
-				result[x][y] = getColor(tiles[x][y]);
-			}
-		}
-		return result;
-	}
-
-	private static int getColor(Bitmap bitmap) {
-		int r = 0;
-		int g = 0;
-		int b = 0;
-		for (int i = 0; i < bitmap.pixels.length; i++) {
-			int col = bitmap.pixels[i];
-			r += (col >> 16) & 0xff;
-			g += (col >> 8) & 0xff;
-			b += (col) & 0xff;
-		}
-
-		r /= bitmap.pixels.length;
-		g /= bitmap.pixels.length;
-		b /= bitmap.pixels.length;
-
-		return 0xff000000 | r << 16 | g << 8 | b;
-	}
-
-	/**
-	 * Load a bitmap resource by name
-	 * 
-	 * @param string Resource name
-	 * @return Bitmap on success, null on error
-	 */
-	private static Bitmap load(String string) {
-		try {
-			BufferedImage bi = ImageIO.read(MojamComponent.class
-					.getResource(string));
-
-			int w = bi.getWidth();
-			int h = bi.getHeight();
-
-			Bitmap result = new Bitmap(w, h);
-			bi.getRGB(0, 0, w, h, result.pixels, 0, w);
-
-			return result;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return null;
-	}
-	
 	/**
 	 * Load a bitmap resource by name
 	 * 
@@ -342,13 +378,11 @@ public class Art {
 	 */
 	private static BufferedImage loadBufferedImage(String string) {
 		try {
-			BufferedImage bi = ImageIO.read(MojamComponent.class
-					.getResource(string));
+			BufferedImage bi = ImageIO.read(MojamComponent.class.getResource(string));
 			return bi;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		return null;
 	}
 }
