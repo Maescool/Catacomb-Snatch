@@ -4,10 +4,12 @@ import java.util.Random;
 import com.mojang.mojam.GameCharacter;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.mob.HostileMob;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.IUsable;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.animation.SmokePuffAnimation;
+import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.loot.LootCollector;
 import com.mojang.mojam.entity.mob.Team;
@@ -176,6 +178,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	 * @return Vec2 the world position the Soldier should move towards using a*
 	 */
 	protected Vec2 getPathTarget() {
+
 		Tile tileTo = null;
 		switch (mode) {
 		case Mode_Follow:
@@ -234,7 +237,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 		if (target != null) {
 			posDiff = (target.pos.sub(pos));
 
-			if (posDiff.length() > getShootRadius()) {
+			if (posDiff.length() > getShootRadius() || target.removed) {
 				target = null;
 			}
 		}
@@ -245,11 +248,18 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 			
 			if (target == null) {
 				target = closest;
+				return;
+			}
+			
+			if (target instanceof Building && closest instanceof HostileMob) {
+				target = closest;
+				return;
 			}
 			
 			posDiff = (closest.pos.sub(pos));
 			if (posDiff.length() < ( radius.length() + closest.radius.length() + 16 ) ) {
 				target=closest;
+				return;
 			}
 		}
 	}
@@ -262,7 +272,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 
 		Vec2 posDiff;
 
-		if (target != null) {
+		if (target != null && (!(target.removed)) ) {
 			posDiff = (target.pos.sub(pos));
 
 			if (posDiff.length() < getShootRadius()) {
