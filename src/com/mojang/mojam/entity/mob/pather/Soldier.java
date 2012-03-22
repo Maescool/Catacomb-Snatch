@@ -99,6 +99,8 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 
 	private int shootRadius;
 	private int nextWalkSmokeTick = 0;
+	
+	private Entity target = null;
 
 	/**
 	 * @param x 			Stating x position
@@ -132,6 +134,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	 */
 	public void tick() {
 		super.tick();
+		aquireTarget();
 		tryToShoot();
 
 		// Show a small smoke puff when they walk around
@@ -222,24 +225,54 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	}
 
 	/**
-	 * Find the closest enemy and fire its gun. 
-	 * also change facing so it looks at it.
+	 * decide on a target to shoot at
+	 */
+	private void aquireTarget() {
+
+		Vec2 posDiff = null;
+
+		if (target != null) {
+			posDiff = (target.pos.sub(pos));
+
+			if (posDiff.length() > getShootRadius()) {
+				target = null;
+			}
+		}
+
+		Entity closest = checkIfEnemyNear(getShootRadius(), Mob.class, true);
+
+		if (closest != null) {
+			
+			if (target == null) {
+				target = closest;
+			}
+			
+			posDiff = (closest.pos.sub(pos));
+			if (posDiff.length() < ( radius.length() + closest.radius.length() + 16 ) ) {
+				target=closest;
+			}
+		}
+	}
+	
+	/**
+	 * Find the closest enemy and fire its gun. also change facing so it looks
+	 * at it.
 	 */
 	private void tryToShoot() {
 
-		int shootRadius = getShootRadius();
+		Vec2 posDiff;
 
-		Entity closest = checkIfEnemyNear(shootRadius, Mob.class, true);
+		if (target != null) {
+			posDiff = (target.pos.sub(pos));
 
-		if (closest != null) {
-			double yDir = closest.pos.y - pos.y;
-			double xDir = closest.pos.x - pos.x;
-			aimVector = (closest.pos.sub(pos));
-			weapon.primaryFire(xDir, yDir);
-			
-			facing = (int) ((Math.atan2(-aimVector.x, aimVector.y) * 8
-					/ (Mth.PI2) - 8.5)) & 7;
+			if (posDiff.length() < getShootRadius()) {
+				aimVector = posDiff.normal();
+				weapon.primaryFire(posDiff.x, posDiff.y);
+				facing = (int) ((Math.atan2(-aimVector.x, aimVector.y) * 8
+						/ (Mth.PI2) - 8.5)) & 7;
+			}
 		}
+
 	}
 
 	/**
@@ -533,5 +566,15 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 
 	public void setReloadTime(double reloadTime) {
 		this.reloadTime = reloadTime;
+	}
+
+
+	public Entity getTarget() {
+		return target;
+	}
+
+
+	public void setTarget(Entity target) {
+		this.target = target;
 	}
 }
