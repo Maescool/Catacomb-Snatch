@@ -9,17 +9,15 @@ import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.resources.Constants;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.AbstractBitmap;
 
 public class ElephantGun implements IWeapon {
 
 	protected Mob owner;
 	protected static float BULLET_DAMAGE;
-
 	private int upgradeIndex = 1;
 	private double accuracy;
 	private int shootDelay = 120;
-
 	private boolean readyToShoot = true;
 	private int currentShootDelay = 0;
 
@@ -54,13 +52,13 @@ public class ElephantGun implements IWeapon {
 	public void primaryFire(double xDir, double yDir) {
 		if (readyToShoot) {
 			double dir;
-			
+
 			if (owner.isSprint) {
 				dir = getBulletDirection(accuracy * 2);
 			} else {
 				dir = getBulletDirection(accuracy);
 			}
-			
+
 			Entity bullet = null;
 
 			xDir = Math.cos(dir);
@@ -81,8 +79,8 @@ public class ElephantGun implements IWeapon {
 			currentShootDelay = shootDelay;
 			readyToShoot = false;
 			MojamComponent.soundPlayer.playSound("/sound/Shot 1.wav",
-					(float) owner.getPosition().x,
-					(float) owner.getPosition().y);
+				(float) owner.getPosition().x,
+				(float) owner.getPosition().y);
 		}
 	}
 
@@ -104,8 +102,7 @@ public class ElephantGun implements IWeapon {
 
 	private double getBulletDirection(double accuracy) {
 		double dir = Math.atan2(owner.aimVector.y, owner.aimVector.x)
-				+ (TurnSynchronizer.synchedRandom.nextFloat() - TurnSynchronizer.synchedRandom
-						.nextFloat()) * accuracy;
+			+ (TurnSynchronizer.synchedRandom.nextFloat() - TurnSynchronizer.synchedRandom.nextFloat()) * accuracy;
 
 		return dir;
 	}
@@ -121,9 +118,8 @@ public class ElephantGun implements IWeapon {
 	}
 
 	@Override
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		// TODO Auto-generated method stub
 		return Art.weaponList[2][1];
 	}
-
 }

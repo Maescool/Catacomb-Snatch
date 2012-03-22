@@ -4,26 +4,24 @@ import com.mojang.mojam.level.Level;
 import com.mojang.mojam.math.Facing;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class RailTile extends Tile {
+
 	protected static final String NAME = "RAIL";
-
 	private static final int COLOR = -1;
-
 	Tile parent;
-
 	public int numConnections = 0;
 	private boolean[] connections = new boolean[4];
 
 	// private boolean[] exits = new boolean[4];
-
 	public RailTile(Tile parent) {
 		this.parent = parent;
 		minimapColor = Art.floorTileColors[4][1];
 	}
 
+	@Override
 	public void init(Level level, int x, int y) {
 		parent.init(level, x, y);
 		super.init(level, x, y);
@@ -31,20 +29,24 @@ public class RailTile extends Tile {
 		parent.neighbourChanged(null);
 	}
 
-	public void render(Screen screen) {
+	@Override
+	public void render(AbstractScreen screen) {
 		parent.render(screen);
 		screen.blit(Art.rails[img][0], x * Tile.WIDTH, y * Tile.HEIGHT - 6);
 	}
 
+	@Override
 	public boolean isBuildable() {
 		return false;
 	}
 
+	@Override
 	public void neighbourChanged(Tile tile) {
 		// We check for <null> since we use it from the constructor (instead of
 		// redirecting)
-		if (tile != null && !(tile instanceof RailTile))
+		if (tile != null && !(tile instanceof RailTile)) {
 			return;
+		}
 
 		boolean n = connections[Facing.NORTH] = level.getTile(x, y - 1) instanceof RailTile;
 		boolean s = connections[Facing.SOUTH] = level.getTile(x, y + 1) instanceof RailTile;
@@ -55,11 +57,11 @@ public class RailTile extends Tile {
 		if (c <= 1) {
 			img = (n || s) ? 1 : 0; // default is horizontal
 		} else if (c == 2) { // ...
-			if (n && s)
+			if (n && s) {
 				img = 1;
-			else if (w && e)
+			} else if (w && e) {
 				img = 0;
-			else {
+			} else {
 				img = n ? 4 : 2;
 				img += e ? 0 : 1;
 			}
@@ -73,6 +75,7 @@ public class RailTile extends Tile {
 		return connections[facing];
 	}
 
+	@Override
 	public int getCost() {
 		return 50;
 	}
@@ -84,42 +87,51 @@ public class RailTile extends Tile {
 	public int getRandomDirection(int except) {
 		int connCount = 0;
 		int[] tmp = new int[4];
-		for (int i = 0; i < 4; ++i)
+		for (int i = 0; i < 4; ++i) {
 			if (i != except && connections[i]) {
 				tmp[connCount++] = i;
 			}
-		return connCount > 0 ? tmp[TurnSynchronizer.synchedRandom
-				.nextInt(connCount)] : -1;
+		}
+		return connCount > 0 ? tmp[TurnSynchronizer.synchedRandom.nextInt(connCount)] : -1;
 	}
 
 	public boolean remove() {
 		level.setTile(x, y, parent);
-		
+
 		// trigger neighbours checks
-		if ( connections[Facing.NORTH] ) ( (RailTile) level.getTile(x, y - 1) ).neighbourChanged( null );
-		if ( connections[Facing.SOUTH] ) ( (RailTile) level.getTile(x, y + 1) ).neighbourChanged( null );
-		if ( connections[Facing.WEST] ) ( (RailTile) level.getTile(x - 1, y) ).neighbourChanged( null );
-		if ( connections[Facing.EAST] ) ( (RailTile) level.getTile(x + 1, y) ).neighbourChanged( null );
-		
+		if (connections[Facing.NORTH]) {
+			((RailTile) level.getTile(x, y - 1)).neighbourChanged(null);
+		}
+		if (connections[Facing.SOUTH]) {
+			((RailTile) level.getTile(x, y + 1)).neighbourChanged(null);
+		}
+		if (connections[Facing.WEST]) {
+			((RailTile) level.getTile(x - 1, y)).neighbourChanged(null);
+		}
+		if (connections[Facing.EAST]) {
+			((RailTile) level.getTile(x + 1, y)).neighbourChanged(null);
+		}
+
 		return true;
 	}
 
+	@Override
 	public int getColor() {
 		return RailTile.COLOR;
 	}
 
+	@Override
 	public String getName() {
 		return RailTile.NAME;
 	}
 
 	@Override
-	public Bitmap getBitMapForEditor() {
+	public AbstractBitmap getBitMapForEditor() {
 		return Art.rails[1][0];
 	}
-	
+
 	@Override
 	public int getMiniMapColor() {
 		return minimapColor;
 	}
-
 }

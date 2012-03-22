@@ -9,21 +9,20 @@ import com.mojang.mojam.gui.components.Button;
 import com.mojang.mojam.gui.components.ClickableComponent;
 import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class CreditsScreen extends GuiMenu {
+
 	private final int gameWidth;
 	private final int gameHeight;
-
 	private ClickableComponent back;
-	
-	public String officialGame   = "Mojang AB";
-	public String[] leadDev      = {"Maescool"};
-	public String[] officialDev  = {"Borsty", "danielduner", "flet", "judgedead53", "Maescool",
-			"master-lincoln", "mkalam-alami", "Scorpion1122", "Ankkah", "yofreke"};
+	public String officialGame = "Mojang AB";
+	public String[] leadDev = {"Maescool"};
+	public String[] officialDev = {"Borsty", "danielduner", "flet", "judgedead53", "Maescool",
+		"master-lincoln", "mkalam-alami", "Scorpion1122", "Ankkah", "yofreke"};
 	public String[] communityMan = {"Austin01", "", "zorro300"};
-	public String[] others = {"xPaw", "BubblegumBalloon", "Elosanda", "GreenLightning", "Mebibyte", "Hammy55", 
-		"skyrick", "RaXaR", "LordofMaps", "KyleBrodie", "ervilsoft", "Stuessy", "xdreamcoding", "eirthepriest", 
+	public String[] others = {"xPaw", "BubblegumBalloon", "Elosanda", "GreenLightning", "Mebibyte", "Hammy55",
+		"skyrick", "RaXaR", "LordofMaps", "KyleBrodie", "ervilsoft", "Stuessy", "xdreamcoding", "eirthepriest",
 		"spidernetlabs", "..."};
 
 	public CreditsScreen(int gameWidth, int gameHeight) {
@@ -32,30 +31,30 @@ public class CreditsScreen extends GuiMenu {
 		this.gameHeight = gameHeight;
 
 		back = addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"),
-				(gameWidth - 128) / 2, gameHeight - 50 - 10));
+			(gameWidth - 128) / 2, gameHeight - 50 - 10));
 	}
 
-	public void render(Screen screen) {
-		
+	public void render(AbstractScreen screen) {
+
 		screen.clear(0);
 		screen.blit(Art.emptyBackground, 0, 0);
 
 		super.render(screen);
 
 		// Mojang logo
-		screen.blit(Art.mojangLogo, (gameWidth - Art.mojangLogo.w) / 2, 30);
-		
+		screen.blit(Art.mojangLogo, (gameWidth - Art.mojangLogo.getWidth()) / 2, 30);
+
 		Font font = Font.defaultFont();
 		font.draw(screen, "* " + MojamComponent.texts.getStatic("credits.note"),
-				(gameWidth - 512) / 2 + 30, 80);
+			(gameWidth - 512) / 2 + 30, 80);
 		font.draw(screen, MojamComponent.texts.getStatic("credits.leadDev"),
-				(gameWidth - 512) / 2 + 30, 110);
+			(gameWidth - 512) / 2 + 30, 110);
 		font.draw(screen, MojamComponent.texts.getStatic("credits.maintainers"),
-				(gameWidth - 512) / 2 + 30, 140);
+			(gameWidth - 512) / 2 + 30, 140);
 		font.draw(screen, MojamComponent.texts.getStatic("credits.communityMan"),
-				(gameWidth - 512) / 2 + 30, 200);
+			(gameWidth - 512) / 2 + 30, 200);
 		font.draw(screen, MojamComponent.texts.getStatic("credits.others"),
-				(gameWidth - 512) / 2 + 30, 230);
+			(gameWidth - 512) / 2 + 30, 230);
 
 		font = Font.FONT_GRAY;
 		drawNames(leadDev, screen, 120);
@@ -65,11 +64,11 @@ public class CreditsScreen extends GuiMenu {
 
 		// Back button character
 		screen.blit(Art.getLocalPlayerArt()[0][6], (gameWidth - 128) / 2 - 40,
-				gameHeight - 50 - 20);
-	
+			gameHeight - 50 - 20);
+
 	}
-	
-	public int drawNames(String[] names, Screen screen, Integer y) {
+
+	public int drawNames(String[] names, AbstractScreen screen, Integer y) {
 		List<Vector<String>> data = new Vector<Vector<String>>();
 		data.add(new Vector<String>());
 		data.add(new Vector<String>());
@@ -85,13 +84,13 @@ public class CreditsScreen extends GuiMenu {
 				data.set(1, tmp);
 			}
 		}
-		int groupId  = 0;
-		int drawY    = y;
-		int drawX    = 50;
-		int xOffset  = 200;
-		int yOffset  = 10;
+		int groupId = 0;
+		int drawY = y;
+		int drawX = 50;
+		int xOffset = 200;
+		int yOffset = 10;
 		int highestY = drawY;
-		for (Vector<String> group: data) {
+		for (Vector<String> group : data) {
 			drawX += xOffset * groupId;
 			for (String name : group) {
 				Font.defaultFont().draw(screen, name, drawX, drawY);
@@ -112,7 +111,7 @@ public class CreditsScreen extends GuiMenu {
 			back.postClick();
 		} else {
 			super.keyPressed(e);
-		}		
+		}
 	}
 
 	public void keyReleased(KeyEvent arg0) {
@@ -124,5 +123,4 @@ public class CreditsScreen extends GuiMenu {
 	@Override
 	public void buttonPressed(ClickableComponent button) {
 	}
-
 }

@@ -12,17 +12,15 @@ import com.mojang.mojam.gui.components.Checkbox;
 import com.mojang.mojam.gui.components.ClickableComponent;
 import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class OptionsMenu extends GuiMenu {
 
 	private boolean creative;
-    private boolean inGame;
-    private int gameWidth;
-    private int gameHeight;
-
+	private boolean inGame;
+	private int gameWidth;
+	private int gameHeight;
 	private int textY;
-
 	private Button key_bindings;
 	private Button character_select;
 	private Button sound_and_video;
@@ -45,7 +43,7 @@ public class OptionsMenu extends GuiMenu {
 
 	public OptionsMenu(boolean inGame) {
 		loadOptions();
-		
+
 		this.inGame = inGame;
 
 		gameWidth = MojamComponent.GAME_WIDTH;
@@ -67,21 +65,25 @@ public class OptionsMenu extends GuiMenu {
 		back = (Button) addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"), xOffset, (yOffset += offset) + 20));
 
 		creativeModeBtn.addListener(new ButtonListener() {
+
 			@Override
 			public void buttonPressed(ClickableComponent button) {
 				creative = !creative;
 				Options.set(Options.CREATIVE, creative);
 				setPrices();
 			}
+
 			@Override
 			public void buttonHovered(ClickableComponent clickableComponent) {
 			}
 		});
 		back.addListener(new ButtonListener() {
+
 			@Override
 			public void buttonPressed(ClickableComponent button) {
 				Options.saveProperties();
 			}
+
 			@Override
 			public void buttonHovered(ClickableComponent clickableComponent) {
 			}
@@ -91,37 +93,38 @@ public class OptionsMenu extends GuiMenu {
 	private void loadOptions() {
 		creative = Options.getAsBoolean(Options.CREATIVE, Options.VALUE_FALSE);
 	}
-	
-	public void setPrices(){
-	    MojamComponent.instance.player.setRailPricesAndImmortality();
-	    ShopItem.updatePrices();
-	    for(IWeapon i:MojamComponent.instance.player.weaponInventory.weaponList){
-		i.setWeaponMode();
-	    }
+
+	public void setPrices() {
+		MojamComponent.instance.player.setRailPricesAndImmortality();
+		ShopItem.updatePrices();
+		for (IWeapon i : MojamComponent.instance.player.weaponInventory.weaponList) {
+			i.setWeaponMode();
+		}
 	}
 
 	@Override
-	public void render(Screen screen) {
-	    
-	    if( ! inGame) {
-	        screen.blit(Art.background, 0, 0);
-	    } else {
-	        screen.alphaFill(0, 0, gameWidth, gameHeight, 0xff000000, 0x30);
-	    }
-		
-		
+	public void render(AbstractScreen screen) {
+
+		if (!inGame) {
+			screen.blit(Art.background, 0, 0);
+		} else {
+			screen.alphaFill(0, 0, gameWidth, gameHeight, 0xff000000, 0x30);
+		}
+
+
 		super.render(screen);
 		Font.defaultFont().draw(screen, MojamComponent.texts.getStatic("titlemenu.options"),
-				MojamComponent.GAME_WIDTH / 2, textY, Font.Align.CENTERED);
-		screen.blit(Art.getLocalPlayerArt()[0][6], buttons.get(selectedItem).getX() - 40, buttons
-				.get(selectedItem).getY() - 8);
+			MojamComponent.GAME_WIDTH / 2, textY, Font.Align.CENTERED);
+		screen.blit(Art.getLocalPlayerArt()[0][6], buttons.get(selectedItem).getX() - 40, buttons.get(selectedItem).getY() - 8);
 	}
 
 	@Override
-	public void buttonPressed(ClickableComponent button) {}
-	
+	public void buttonPressed(ClickableComponent button) {
+	}
+
 	@Override
-	public void keyTyped(KeyEvent e) {}
+	public void keyTyped(KeyEvent e) {
+	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -129,9 +132,10 @@ public class OptionsMenu extends GuiMenu {
 			back.postClick();
 		} else {
 			super.keyPressed(e);
-		}		
+		}
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e) {}
+	public void keyReleased(KeyEvent e) {
+	}
 }

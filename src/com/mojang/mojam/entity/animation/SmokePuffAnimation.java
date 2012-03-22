@@ -2,16 +2,16 @@ package com.mojang.mojam.entity.animation;
 
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.math.Mth;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class SmokePuffAnimation extends Animation {
-	Bitmap[][] bitmap;
+	AbstractBitmap[][] bitmap;
 	int width;
 	int numFrames;
 	double xa, ya;
 
-	public SmokePuffAnimation(Mob mob, Bitmap[][] bitmap, int duration) {
+	public SmokePuffAnimation(Mob mob, AbstractBitmap[][] bitmap, int duration) {
 		super(mob.pos.x, mob.pos.y, duration);
 		xa = mob.xd * 0.5f;
 		ya = mob.yd * 0.5f;
@@ -29,9 +29,9 @@ public class SmokePuffAnimation extends Animation {
 		ya *= 0.9f;
 	}
 
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		int frame = Mth.clamp(numFrames - life * numFrames / duration - 1, 0,
 				numFrames);
-		screen.blit(bitmap[frame % width][frame / width], pos.x, pos.y);
+		screen.blit(bitmap[frame % width][frame / width], (int)pos.x, (int)pos.y);
 	}
 }

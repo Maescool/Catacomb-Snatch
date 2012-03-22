@@ -10,17 +10,15 @@ import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.resources.Constants;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.AbstractBitmap;
 
 public class Melee implements IWeapon {
 
 	protected Mob owner;
 	protected static float BULLET_DAMAGE;
-
 	private int upgradeIndex = 1;
 	private double accuracy;
 	protected int shootDelay = 30;
-
 	private boolean readyToShoot = true;
 	private int currentShootDelay = 0;
 
@@ -55,22 +53,22 @@ public class Melee implements IWeapon {
 	public void primaryFire(double xDir, double yDir) {
 		if (readyToShoot) {
 			double dir;
-			
+
 			if (owner.isSprint) {
 				dir = getBulletDirection(accuracy * 2);
 			} else {
 				dir = getBulletDirection(accuracy);
 			}
-			
+
 			Entity bullet = null;
 			final float spread = 0.8F;
 			final int pellets = 21;
-			
+
 			for (int i = 0; i < pellets; i++) {
 				xDir = Math.cos(dir - (spread / pellets * ((pellets / 2) - 1))
-						+ (i * spread / pellets));
+					+ (i * spread / pellets));
 				yDir = Math.sin(dir - (spread / pellets * ((pellets / 2) - 1))
-						+ (i * spread / pellets));
+					+ (i * spread / pellets));
 
 				bullet = getAmmo(xDir, yDir);
 
@@ -92,8 +90,8 @@ public class Melee implements IWeapon {
 			}
 			readyToShoot = false;
 			MojamComponent.soundPlayer.playSound("/sound/Shot 1.wav",
-					(float) owner.getPosition().x,
-					(float) owner.getPosition().y);
+				(float) owner.getPosition().x,
+				(float) owner.getPosition().y);
 		}
 	}
 
@@ -115,8 +113,7 @@ public class Melee implements IWeapon {
 
 	private double getBulletDirection(double accuracy) {
 		double dir = Math.atan2(owner.aimVector.y, owner.aimVector.x)
-				+ (TurnSynchronizer.synchedRandom.nextFloat() - TurnSynchronizer.synchedRandom
-						.nextFloat()) * accuracy;
+			+ (TurnSynchronizer.synchedRandom.nextFloat() - TurnSynchronizer.synchedRandom.nextFloat()) * accuracy;
 
 		return dir;
 	}
@@ -132,9 +129,8 @@ public class Melee implements IWeapon {
 	}
 
 	@Override
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		// TODO Auto-generated method stub
 		return Art.weaponList[0][1];
 	}
-
 }

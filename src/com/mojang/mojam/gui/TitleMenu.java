@@ -11,7 +11,7 @@ import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.gamemode.GameMode;
 import com.mojang.mojam.level.gamemode.GameModeVanilla;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class TitleMenu extends GuiMenu {
 
@@ -20,7 +20,6 @@ public class TitleMenu extends GuiMenu {
 	public static final int JOIN_GAME_ID = 1003;
 	public static final int EXIT_GAME_ID = 1001;
 	public static final int REALLY_EXIT_GAME_ID = 1022;
-
 	public static final int CANCEL_JOIN_ID = 1004;
 	public static final int PERFORM_JOIN_ID = 1005;
 	public static final int RETURN_TO_TITLESCREEN = 1006;
@@ -39,7 +38,6 @@ public class TitleMenu extends GuiMenu {
 	public static final int LEVEL_EDITOR_ID = 1019;
 	public static final int AUDIO_VIDEO_ID = 1020;
 	public static final int LOCALE_ID = 1021;
-
 	public static final int FULLSCREEN_ID = 2000;
 	public static final int FPS_ID = 2001;
 	public static final int VOLUME = 2002;
@@ -49,8 +47,7 @@ public class TitleMenu extends GuiMenu {
 	public static final int ALTERNATIVE_ID = 2006;
 	public static final int MOUSE_TRAP_ID = 2007;
 	public static final int OPEN_GL_ID = 2008;
-    public static final int OPEN_AL_ID = 2009;
-
+	public static final int OPEN_AL_ID = 2009;
 	public static final int KEY_BINDINGS_ID = 3000;
 	public static final int KEY_UP_ID = 3001;
 	public static final int KEY_DOWN_ID = 3002;
@@ -71,16 +68,12 @@ public class TitleMenu extends GuiMenu {
 	public static final int KEY_WEAPON_SLOT_1_ID = 3017;
 	public static final int KEY_WEAPON_SLOT_2_ID = 3018;
 	public static final int KEY_WEAPON_SLOT_3_ID = 3019;
-	
 	public static final int KEY_CONSOLE_ID = 3020;
-	
 	public static final int CREDITS_ID = 4000;
 	public static final int CREDITS_TITLE_ID = 4001;
 	public static final int CREDITS_TEXT_ID = 4002;
-
 	public static final int CHARACTER_ID = 5000;
 	public static final int CHARACTER_BUTTON_ID = 5001;
-
 	public static final int LOCALE_EN_ID = 6001;
 	public static final int LOCALE_DE_ID = 6002;
 	public static final int LOCALE_ES_ID = 6003;
@@ -93,16 +86,12 @@ public class TitleMenu extends GuiMenu {
 	public static final int LOCALE_SL_ID = 6010;
 	public static final int LOCALE_SV_ID = 6011;
 	public static final int LOCALE_AF_ID = 6012;
-
 	public static LevelInformation level = null;
 	public static GameMode defaultGameMode = new GameModeVanilla();
 	public static DifficultyInformation difficulty = DifficultyInformation.NORMAL;
-
 	public static String ip = "";
-
 	private final int gameWidth;
 	private final int gameHeight;
-
 	private Button select_lvl_btn = null;
 	private Button select_host_lvl = null;
 	private Button join_host = null;
@@ -130,7 +119,7 @@ public class TitleMenu extends GuiMenu {
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 
 		screen.clear(0);
 		// screen.blit(Art.titles[1], 0, 10);

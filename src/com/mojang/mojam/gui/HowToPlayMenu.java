@@ -8,7 +8,7 @@ import com.mojang.mojam.gui.components.ClickableComponent;
 import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.gui.components.Panel;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class HowToPlayMenu extends GuiMenu {
 
@@ -31,7 +31,7 @@ public class HowToPlayMenu extends GuiMenu {
 		addButton(new Panel(imgTab - 67, goalTopMargin + 55 + 10, 189, 235));
 	}
 
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 	    
 	    if( ! inGame) {
 	        screen.blit(Art.background, 0, 0);
@@ -44,7 +44,7 @@ public class HowToPlayMenu extends GuiMenu {
 		printHelpText(screen);
 	}
 
-	private void printHelpText(Screen screen) {
+	private void printHelpText(AbstractScreen screen) {
 
 		// Game goal
 		Font font = Font.defaultFont();

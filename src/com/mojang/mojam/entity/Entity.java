@@ -9,7 +9,7 @@ import com.mojang.mojam.math.BB;
 import com.mojang.mojam.math.BBOwner;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public abstract class Entity implements BBOwner {
 
@@ -60,11 +60,11 @@ public abstract class Entity implements BBOwner {
 		return new BB(this, pos.x - radius.x, pos.y - radius.y, pos.x + radius.x, pos.y + radius.y);
 	}
 
-	public void render(Screen screen) {
-		screen.blit(Art.floorTiles[3][0], pos.x - Tile.WIDTH / 2, pos.y - Tile.HEIGHT / 2 - 8);
+	public void render(AbstractScreen screen) {
+		screen.blit(Art.floorTiles[3][0], (int)(pos.x - Tile.WIDTH / 2), (int)(pos.y - Tile.HEIGHT / 2 - 8));
 	}
 	
-	public void renderTop(Screen screen) {
+	public void renderTop(AbstractScreen screen) {
 	}
 	
 	protected boolean move(double xa, double ya) {

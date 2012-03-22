@@ -6,12 +6,12 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.gui.components.Button;
 import com.mojang.mojam.gui.components.ClickableComponent;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class PauseMenu extends GuiMenu {
-	private final int gameWidth;
-    private final int gameHeight;
 
+	private final int gameWidth;
+	private final int gameHeight;
 	private Button resumeButton;
 	private Button how_to = null;
 	private Button options = null;
@@ -39,29 +39,28 @@ public class PauseMenu extends GuiMenu {
 
 	}
 
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 
 		//screen.clear(0);
 		//screen.blit(Art.emptyBackground, 0, 0);
-	    screen.alphaFill(0, 0, gameWidth, gameHeight, 0xff000000, 0x30);
+		screen.alphaFill(0, 0, gameWidth, gameHeight, 0xff000000, 0x30);
 		screen.blit(Art.pauseScreen, 0, 0);
 
 		super.render(screen);
 
 		screen.blit(Art.getLocalPlayerArt()[0][6], (gameWidth - 128) / 2 - 40,
-				130 + selectedItem * 30);
+			130 + selectedItem * 30);
 	}
-	
-	
+
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			resumeButton.postClick();
 		} else {
 			super.keyPressed(e);
-		}		
+		}
 	}
-	
+
 	public void keyReleased(KeyEvent arg0) {
 	}
 
@@ -71,6 +70,5 @@ public class PauseMenu extends GuiMenu {
 	@Override
 	public void buttonPressed(ClickableComponent button) {
 		// TODO Auto-generated method stub
-
 	}
 }
