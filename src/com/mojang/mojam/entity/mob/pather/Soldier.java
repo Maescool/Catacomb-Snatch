@@ -102,6 +102,8 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	private int shootRadius;
 	private int nextWalkSmokeTick = 0;
 	
+	private double focusHealthRatio;
+	
 	private Entity target = null;
 
 	/**
@@ -163,13 +165,13 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	protected Vec2 getMoveToPos() {
 		Vec2 posDiff = null;
 
-		if (target != null) {
+		if (target != null && ( mode != Soldier.Mode_ReturnHome ) && ( (health/maxHealth) > 0.5 ) ) {
 			posDiff = target.pos.sub(pos);
 			
 			if (posDiff.length() < getShootRadius() && (!target.removed)) {
 				Mob mob = (Mob) target;
 		
-				if ((mob.health / mob.maxHealth) < 0.5) {
+				if ((mob.health / mob.maxHealth) < focusHealthRatio) {
 
 					// invert the difference so we get a difference from the
 					// target
@@ -219,7 +221,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 		Tile tileTo = null;
 		switch (mode) {
 		case Mode_Follow:
-			if (followEntity != null)
+			if (followEntity != null) 
 				tileTo = level.getTile(followEntity.pos);
 			break;
 		case Mode_ReturnHome:
@@ -531,21 +533,25 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 			setAvoidWallsModifier(1.5);
 			setRandomDistanceModifier(1);
 			setPathNodeSkipRadius(5 * Tile.WIDTH);
+			setFocusHealthRatio(0.7);
 			break;
 		case Mode_Follow:
 			setAvoidWallsModifier(0);
 			setRandomDistanceModifier(10);
 			setPathNodeSkipRadius(2 * Tile.WIDTH);
+			setFocusHealthRatio(0.4);
 			break;
 		case Mode_ReturnHome:
 			setAvoidWallsModifier(0);
 			setRandomDistanceModifier(0);
 			setPathNodeSkipRadius(5 * Tile.WIDTH);
+			setFocusHealthRatio(0);
 			break;
 		default:
 			setAvoidWallsModifier(0);
 			setRandomDistanceModifier(0);
 			setPathNodeSkipRadius(0);
+			setFocusHealthRatio(0);
 			break;
 		}
 
@@ -624,5 +630,15 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 
 	public void setTarget(Entity target) {
 		this.target = target;
+	}
+
+
+	public double getFocusHealthRatio() {
+		return focusHealthRatio;
+	}
+
+
+	public void setFocusHealthRatio(double focusHealthRatio) {
+		this.focusHealthRatio = focusHealthRatio;
 	}
 }
