@@ -130,7 +130,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public GameCharacter playerCharacter;
 	public boolean sendCharacter = false;
 
-	private Thread hostThread;
 	private static boolean fullscreen = false;
 	public static ISoundPlayer soundPlayer;
 	private long nextMusicInterval = 0;
@@ -953,9 +952,11 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 		case TitleMenu.CANCEL_JOIN_ID:
 			menuStack.safePop();
-			if (hostThread != null) {
-				hostThread.interrupt();
-				hostThread = null;
+			if(isMultiplayer) {
+				snatchClient.shutdown();
+				if(isServer) {
+					server.shutdown();
+				}
 			}
 			break;
 
