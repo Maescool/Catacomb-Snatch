@@ -153,6 +153,44 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	}
 
 	/**
+	 * Check if we have a target, if we do and its low on health move towards it
+	 * but stay at least Tile.WIDTH away from it
+	 * 
+	 * if not use super.getMoveToPos();
+	 * 
+	 * @see com.mojang.mojam.entity.mob.pather.Pather#getMoveToPos()
+	 */
+	protected Vec2 getMoveToPos() {
+		Vec2 posDiff = null;
+
+		if (target != null) {
+			posDiff = target.pos.sub(pos);
+			
+			if (posDiff.length() < getShootRadius() && (!target.removed)) {
+				Mob mob = (Mob) target;
+		
+				if ((mob.health / mob.maxHealth) < 0.5) {
+
+					// invert the difference so we get a difference from the
+					// target
+					posDiff.scaleSelf(-1);
+
+					posDiff.normalizeSelf();
+
+					// work out a point one tile away from the mob so we dont
+					// run into it!
+					posDiff.scaleSelf((radius.length()
+							+ mob.radius.length() + Tile.WIDTH));
+
+					return mob.pos.add(posDiff);
+				}
+			}
+		}
+		
+		return super.getMoveToPos();
+	}
+	
+	/**
 	 * On collision with Friendly Player Bump a small amount.
 	 * On all collisions randomly choose to reset the path ~ 50/50.
 	 * 
@@ -178,7 +216,6 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	 * @return Vec2 the world position the Soldier should move towards using a*
 	 */
 	protected Vec2 getPathTarget() {
-
 		Tile tileTo = null;
 		switch (mode) {
 		case Mode_Follow:
@@ -221,10 +258,11 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 			break;
 		}
 
-		if (tileTo != null)
+		if (tileTo != null) {
 			return new Vec2(tileTo.x, tileTo.y);
-		else
+		} else {
 			return null;
+		}
 	}
 
 	/**
@@ -236,7 +274,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 
 		if (target != null) {
 			posDiff = (target.pos.sub(pos));
-
+			
 			if (posDiff.length() > getShootRadius() || target.removed) {
 				target = null;
 			}
