@@ -124,7 +124,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public static int localTeam; //local team is the team of the client. This can be used to check if something should be only rendered on one person's screen
 	public GameCharacter playerCharacter;
 	public boolean sendCharacter = false;
-	private Thread hostThread;
 	private static boolean fullscreen = false;
 	public static ISoundPlayer soundPlayer;
 	private long nextMusicInterval = 0;
@@ -947,21 +946,19 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 			case TitleMenu.CANCEL_JOIN_ID:
 				menuStack.safePop();
-				if (hostThread != null) {
-					hostThread.interrupt();
-					hostThread = null;
+			if(isMultiplayer) {
+				snatchClient.shutdown();
+				if(isServer) {
+					server.shutdown();
 				}
-				break;
+			}
+			break;
 
 			case TitleMenu.PERFORM_JOIN_ID:
 				menuStack.clear();
 				isMultiplayer = true;
 				isServer = false;
 				chat.clear();
-
-				String[] data = TitleMenu.ip.trim().split(":");
-				String ip = data[0];
-				Integer port = (data.length > 1) ? Integer.parseInt(data[1]) : Options.getAsInteger(Options.MP_PORT, 3000);
 
 				try {
 					localId = 1;

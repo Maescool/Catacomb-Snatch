@@ -63,12 +63,14 @@ public class MojamScreen extends MojamBitmap implements AbstractScreen {
 		super.rectangle(x + xOffset, y + yOffset, width, height, color);
 	}
 
+	@Override
 	public AbstractBitmap rectangleBitmap(int x, int y, int x2, int y2, int color) {
 		MojamBitmap rect = new MojamBitmap(x2, y2);
 		rect.rectangle(x, y, x2, y2, color);
 		return rect;
 	}
 
+	@Override
 	public AbstractBitmap rangeBitmap(int radius, int color) {
 		MojamBitmap circle = new MojamBitmap(radius * 2 + 100, radius * 2 + 100);
 
@@ -76,6 +78,7 @@ public class MojamScreen extends MojamBitmap implements AbstractScreen {
 		return circle;
 	}
 
+	@Override
 	public AbstractBitmap tooltipBitmap(int width, int height) {
 		int cRadius = 3;
 		int color = Color.black.getRGB();
