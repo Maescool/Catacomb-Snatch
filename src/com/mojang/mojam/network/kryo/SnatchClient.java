@@ -163,7 +163,9 @@ public class SnatchClient {
 	}
 
 	public void ping() {
-		this.client.updateReturnTripTime();		
+		if (client.isConnected()) {
+			this.client.updateReturnTripTime();		
+		}
 	}
 
 	public void shutdown() {
