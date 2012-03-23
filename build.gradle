@@ -3,7 +3,7 @@ apply plugin: 'idea'
 
 archivesBaseName = "Catacomb-Snatch"
 project.group = "com.mojang.mojam"
-project.version = "1.1.0-BETA"
+project.version = "1.1.1-SNAPSHOT"
 
 sourceSets {
   main {
