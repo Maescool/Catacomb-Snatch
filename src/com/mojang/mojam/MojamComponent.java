@@ -84,7 +84,7 @@ import com.mojang.mojam.sound.SoundPlayer;
 public class MojamComponent extends Canvas implements Runnable, MouseMotionListener, MouseListener, ButtonListener {
 
 	public static final String GAME_TITLE = "Catacomb Snatch";
-	public static final String GAME_VERSION = "1.1.0-SNAPSHOT";
+	public static final String GAME_VERSION = "1.1.0-BETA";
 
 	public static MojamComponent instance;
 	public static Locale locale;
