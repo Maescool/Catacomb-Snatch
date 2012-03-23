@@ -288,7 +288,9 @@ public class RailDroid extends Mob implements IUsable, ICarrySwap{
     	  if ( (carrying == null) && (swapTime == 0) ) {
             if (level.getEntities(getBB().grow(32), TreasurePile.class).size() > 0) {
                 swapTime = 30;
-                carrying = new CatacombTreasure(pos.x,pos.y);
+                CatacombTreasure treasure = new CatacombTreasure(pos.x,pos.y);
+                level.addEntity(treasure);
+                pickup(treasure);
             }
         }
     	  
@@ -365,7 +367,7 @@ public class RailDroid extends Mob implements IUsable, ICarrySwap{
 
 	public void render(Screen screen) {
 		super.render(screen);
-		renderCarrying(screen, 16);
+		renderCarrying(screen, 0 );
 	}
 
 	@Override
