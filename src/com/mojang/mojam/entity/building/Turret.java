@@ -65,7 +65,7 @@ public class Turret extends Building implements IEditable {
 		if (--delayTicks > 0)
 			return;
 
-		if (!isCarried()) {
+		//if (!isCarried()) {
 		    // find target
     		Set<Entity> entities = level.getEntities(pos.x - radius, pos.y - radius, pos.x + radius, pos.y + radius);
     
@@ -106,13 +106,13 @@ public class Turret extends Building implements IEditable {
         
         		delayTicks = delay;
     		}
-		}
+		//}
 	}
 
 	@Override
 	public void render(Screen screen) {
 		
-		if((justDroppedTicks-- > 0 || highlight) && MojamComponent.localTeam==team) {
+		if((justDroppedTicks-- > 0 || isHighlight()) && MojamComponent.localTeam==team) {
 				drawRadius(screen);
 		}
 		

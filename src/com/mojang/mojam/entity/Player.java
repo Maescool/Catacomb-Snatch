@@ -60,7 +60,7 @@ public class Player extends Mob implements LootCollector {
     private int facing = 0;
     private int time = 0;
     private int walkTime = 0;
-    private Building selected = null;
+    private Entity selected = null;
     static final int RailDelayTicks = 15;
     private int lastRailTick = -999;
     private final static int INTERACT_DISTANCE = 20 * 20; // Sqr
@@ -109,7 +109,7 @@ public class Player extends Mob implements LootCollector {
         psprint = 1.5;
         maxTimeSprint = 100;
         aimVector = new Vec2(0, 1);
-        score = 0;
+        score = 5000;
         
         weaponInventory.add(new Rifle(this));
         weapon = weaponInventory.get(weaponSlot);
@@ -289,11 +289,8 @@ public class Player extends Mob implements LootCollector {
             handleRailBuilding(x, y);
         }
 
-        if (carrying != null) {
-            handleCarrying();
-        } else {
-            handleEntityInteraction();
-        }
+        handleEntityInteraction();
+        handleCarrying();
 
         if (isSeeing) {
             level.reveal(x, y, 5);
@@ -555,15 +552,28 @@ public class Player extends Mob implements LootCollector {
      */
     private void handleCarrying() {
 
-        carrying.setPos(pos.x, pos.y - 20);
-        carrying.tick();
         if (keys.use.wasPressed() || mouseButtons.isDown(mouseUseButton)) {
             mouseButtons.setNextState(mouseUseButton, false);
 
-            if (((IUsable) carrying).isAllowedToCancel()) {
-                drop();
+            if(selected != null) {
+            	if (selected instanceof ICarrySwap) {
+            		carrying=((ICarrySwap)selected).tryToSwap(carrying);
+            	}
+            } else {
+            	if (!isCarrying())
+            		return;
+            	
+            	if (((IUsable) carrying).isAllowedToCancel()) {
+            		drop();
+            	}
             }
         }
+        
+    	if (!isCarrying())
+    		return;
+    	
+        carrying.setPos(pos.x, pos.y - 20);
+        carrying.tick();
     }
 
     /**
@@ -571,75 +581,76 @@ public class Player extends Mob implements LootCollector {
      */
     private void handleEntityInteraction() {
         // Unhighlight previously selected building
-        if (selected != null) {
-            selected.setHighlighted(false);
+    	if (selected != null && selected instanceof IUsable) {
+    		((IUsable)selected).setHighlighted(false);
             selected = null;
         }
 
-        // Find the closest Building within interation
+        // Find the closest Entity within interaction
         // distance
-        Building closest = null;
+        Entity closest = null;
         double closestDist = Double.MAX_VALUE;
-        for (Entity e : level.getEntitiesSlower(pos.x - INTERACT_DISTANCE, pos.y - INTERACT_DISTANCE, pos.x + INTERACT_DISTANCE, pos.y + INTERACT_DISTANCE, Building.class)) {
-            Building b = (Building)e;
+        for (Entity e : level.getEntitiesSlower(pos.x - INTERACT_DISTANCE, pos.y - INTERACT_DISTANCE, pos.x + INTERACT_DISTANCE, pos.y + INTERACT_DISTANCE, Mob.class)) {
             double dist = e.pos.distSqr(getInteractPosition());
-            if (dist <= INTERACT_DISTANCE && dist < closestDist) {
+            if (dist <= INTERACT_DISTANCE && dist < closestDist && e instanceof IUsable) {
                 closestDist = dist;
-                closest = b;
+                closest = e;
             }
         }
 
-        // If we found a building close enough to interact with...
+        // If we found a entity close enough to interact with...
         if (closest != null) {
             // Perform any allowed interactions if the correct
             // keys have been pressed
             if (keys.use.wasPressed() || mouseButtons.isDown(mouseUseButton)) {
 
-                if (canUseBuilding(closest)) {
-                    closest.use(this);
+                if (canUseEntity(closest)) {
+                	((IUsable)closest).use(this);
                     mouseButtons.setNextState(mouseUseButton, false);
                 }
             } else if (keys.upgrade.wasPressed()) {
                 
-                if (canUpgradeBuilding(closest)) {
-                    closest.upgrade(this);
+                if (canUpgradeEntity(closest)) {
+                	((IUsable)closest).upgrade(this);
                 }
             }
             
             // If it is a building we should highlight on this game
             // client, then highlight the building (also, remember the
             // highlighted building, so we can unhighlight it again later)
-            if (shouldHighlightBuildingOnThisGameClient(closest)) {
+            if (shouldHighlightEntityOnThisGameClient(closest)) {
                 selected = closest;
-                selected.setHighlighted(true);
+                ((IUsable)selected).setHighlighted(true);
             }
         }
     }
     
-    // Whether this Player should see the building in question
+    // Whether this Player should see the Entity in question
     // highlighted on their game client - this indicates that
-    // they can interact with the building
-    private boolean shouldHighlightBuildingOnThisGameClient(Building building) {
-        return building.isHighlightable() && canInteractWithBuilding(building) && this.team == MojamComponent.localTeam; 
+    // they can interact with the Entity
+    private boolean shouldHighlightEntityOnThisGameClient(Entity entity) {
+    	if (!(entity instanceof IUsable))
+    		return false;
+    	return ((IUsable)entity).isHighlightable() && canInteractWithEntity(entity) && this.team == MojamComponent.localTeam; 
     }
     
-    // Whether this Player is allowed to use the building in 
+    // Whether this Player is allowed to use the Entity in 
     // question
-    private boolean canUseBuilding(Building building) {
+    private boolean canUseEntity(Entity entity) {
         //return building.team == this.team || building.team == Team.Neutral; // Players can only use their own and neutral buildings
-        return !(building instanceof ShopItem && building.team != this.team); // Players can only use their own shops, but can use any other building regardless of ownership
+    	return !(entity instanceof ShopItem && entity.team != this.team); // Players can only use their own shops, but can use any other building regardless of ownership
     }
     
-    // Whether this Player is allowed to upgrade the building
+    // Whether this Player is allowed to upgrade the Entity
     // in question
-    private boolean canUpgradeBuilding(Building building) {
-        return building.team == this.team; // Players can only upgrade their own buildings
+    private boolean canUpgradeEntity(Entity entity) {
+    	return entity.team == this.team; // Players can only upgrade their own Entities
     }
     
-    // Whether this Player is allowed to interact with the building in 
+    // Whether this Player is allowed to interact with the Entity in 
     // question
-    private boolean canInteractWithBuilding(Building building) {
-        return canUseBuilding(building) || canUpgradeBuilding(building);
+    private boolean canInteractWithEntity(Entity entity) {
+    	return canUseEntity(entity) || canUpgradeEntity(entity);
     }
 
     /**
