@@ -31,7 +31,7 @@ exitmenu.exit = TAK
 gameplay.player1Win = {0} WYGRAŁ! WOOHOO!
 gameplay.player2Win = {0} WYGRAŁ! YAY!
 gameplay.player1Name = LORD LARD
-gameplay.player2Name = HERR von SPECK
+gameplay.player2Name = HERR VON SPECK
 gameplay.player3Name = DUCHESS DONUT
 gameplay.player4Name = COUNTESS CRULLER
 gameplay.FPS = FPS: {0}
@@ -91,7 +91,7 @@ levelselect.title = WYBIERZ PLANSZĘ
 levelselect.start = START
 levelselect.update = AKTUALIZUJ PLANSZE
 
-mp.waitingForClient = OCZEKiWANIE NA DRUGIEGO GRACZA...
+mp.waitingForClient = OCZEKIWANIE NA DRUGIEGO GRACZA...
 mp.enterIP = WPISZ IP HOSTA:
 mp.localIP = TWOJE WEWNĘTRZNE IP:
 mp.externalIP = TWOJE ZEWNĘTRZENE IP:
@@ -166,4 +166,4 @@ upgrade.notEnoughMoney = NIE MASZ WYSTARCZAJĄCO PIENIĘDZY ({0})
 upgrade.to = ULEPSZONO DO POZIOMU {0}
 
 download.downloading = ŚCIĄGANIE...
-download.unpacking = ROZPAKOWYWANIE..
+download.unpacking = ROZPAKOWYWANIE...
