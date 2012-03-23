@@ -90,7 +90,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	private int maxUpgradeLevel;
 	private int upgradeLevel;
 
-	private int[] upgradeCosts = new int[] { 20, 50, 100 };
+	private int[] upgradeCosts = new int[] { 4000, 6000, 8000 };
 	private int[] upgradeShootRadius = new int[] { 3 * Tile.WIDTH,
 			5 * Tile.WIDTH, 7 * Tile.WIDTH };
 	private int[] upgradeReloadTime = new int[] { 24, 21, 18 };

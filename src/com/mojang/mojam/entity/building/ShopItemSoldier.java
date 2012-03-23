@@ -25,7 +25,7 @@ public class ShopItemSoldier extends ShopItem implements IRemoveEntityNotify{
 	List<Soldier> soldiers=new ArrayList<Soldier>(); //keep a list of soldiers so we can count them 
 	
 	public ShopItemSoldier(double x, double y, int team) {
-		super("soldier", x, y, team, 1000, 8);
+		super("soldier", x, y, team, 2000, 8);
 
 		int facing = (team == 2) ? 0 : 4;
 
