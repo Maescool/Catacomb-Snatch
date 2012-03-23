@@ -8,6 +8,7 @@ import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.building.Building;
+import com.mojang.mojam.entity.building.CatacombTreasure;
 import com.mojang.mojam.entity.building.TreasurePile;
 import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.level.tile.*;
@@ -283,29 +284,29 @@ public class RailDroid extends Mob implements IUsable, ICarrySwap{
     }
 
     private void pickUpTreasure() {
-    	//TODO: setup a BuildingTreasure so we can pick it up
-    	/*
-    	 * if (carrying && swapTime == 0) {
+    	
+    	  if ( (carrying == null) && (swapTime == 0) ) {
             if (level.getEntities(getBB().grow(32), TreasurePile.class).size() > 0) {
                 swapTime = 30;
-                carrying = true;
+                carrying = new CatacombTreasure(pos.x,pos.y);
             }
-        }*/
+        }
+    	  
     }
 
     private void increaseScoreAtBase() {
-    	//TODO: only increase score if carrying is BuldingTreasure
-        /*
-         * if (carrying && swapTime == 0) {
+    	if ( (carrying != null) && (carrying instanceof CatacombTreasure ) && (swapTime == 0) ) {
             if (pos.y < 8 * Tile.HEIGHT) {
-                carrying = false;
+            	carrying.die();
+                carrying = null;
                 level.player2Score += 2;
             }
             if (pos.y > (level.height - 7 - 1) * Tile.HEIGHT) {
-                carrying = false;
+            	carrying.die();
+                carrying = null;
                 level.player1Score += 2;
             }
-        }*/
+        }
     }
 	
 	@Override
@@ -365,12 +366,6 @@ public class RailDroid extends Mob implements IUsable, ICarrySwap{
 	public void render(Screen screen) {
 		super.render(screen);
 		renderCarrying(screen, 16);
-		/*
-		if (carrying!=null) {
-			//screen.blit(Art.bullets[0][0], pos.x - 8, pos.y - 20 - yOffs);
-		} else {
-			screen.blit(Art.bullets[1][1], pos.x - 8, pos.y - 20 - yOffs);
-		}*/
 	}
 
 	@Override
