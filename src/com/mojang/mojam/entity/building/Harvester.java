@@ -144,7 +144,7 @@ public class Harvester extends Building implements LootCollector {
 	@Override
 	public void render(Screen screen) {
 		
-		if((justDroppedTicks-- > 0 || highlight) && MojamComponent.localTeam==team) {
+		if((justDroppedTicks-- > 0 || isHighlight()) && MojamComponent.localTeam==team) {
 			drawRadius(screen);
 		}
 		

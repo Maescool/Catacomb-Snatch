@@ -69,7 +69,7 @@ public abstract class ShopItem extends Building {
      */
     protected void renderInfo(Screen screen) {
 	// Draw iiAtlas' shop item info graphics, thanks whoever re-wrote this!
-	if (highlight) {
+	if (isHighlight()) {
 	    Bitmap image = getSprite();
 
 	    String[] tooltip = this.getTooltip();
