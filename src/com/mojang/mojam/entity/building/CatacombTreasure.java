@@ -22,6 +22,10 @@ public class CatacombTreasure extends Building {
 	public CatacombTreasure(double x, double y) {
 		//always Neutral
 		super(x, y, Team.Neutral);
+		setStartHealth(20);
+		freezeTime=20;
+		isImmortal = true;
+		yOffs=-8;
 	}
 
 	@Override
