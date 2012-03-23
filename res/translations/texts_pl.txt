@@ -1,0 +1,169 @@
+﻿# Game texts encoded in UTF-8
+
+build.rail = POTRZEBUJESZ {0} ABY WYBUDOWAĆ ODCINEK TORÓW
+build.droid = POTRZEBUJESZ {0} ABY POSTAWIĆ ROBOTA
+build.removeRail = POTRZEBUJESZ {0} ABY USUNĄĆ ODCINEK TORÓW
+
+back = WRÓĆ
+cancel = ANULUJ
+select = WYBIERZ
+
+character.text = WYBIERZ POSTAĆ KTÓRĄ CHCESZ GRAĆ!
+character.select = WYBIERZ
+
+credits.leadDev = GŁÓWNY PROGRAMISTA:
+credits.maintainers = PRZY WPÓŁPRACY:
+credits.communityMan = ORAZ CZŁONKAMI SPOŁECZNOŚCI:
+credits.others = I WIELOMA INNYMI OSOBAMI, W TYM:
+credits.note = TĄ GRA JEST W TEJ CHWILI ROZWIJANA JAKO PROJEKT SPOŁECZNOŚCIOWY
+
+diffselect.title = WYBIERZ POZIOM TRUDNOŚCI
+diffselect.start = ROZPOCZNIJ GRĘ!
+diffselect.easy = ŁATWY
+diffselect.normal = NORMALNY
+diffselect.hard = TRUDNY
+diffselect.nightmare = KOSZMAR!!!
+
+exitmenu.headline = CZY NA PEWNO CHCESZ OPÓŚCIĆ GRĘ?
+exitmenu.cancel = NIE 
+exitmenu.exit = TAK
+
+gameplay.player1Win = {0} WYGRAŁ! WOOHOO!
+gameplay.player2Win = {0} WYGRAŁ! YAY!
+gameplay.player1Name = LORD LARD
+gameplay.player2Name = HERR von SPECK
+gameplay.player3Name = DUCHESS DONUT
+gameplay.player4Name = COUNTESS CRULLER
+gameplay.FPS = FPS: {0}
+gameplay.latency = OPÓŹNIENIE: {0}
+gameplay.cantPickup = NIE MOŻESZ TEGO PODNIEŚĆ!
+gameplay.weaponAlready = MASZ JUŻ TĄ BROŃ!
+
+help.goal = GŁÓWNY CEL
+help.help1 = ZBIERZ 50 PORCJI SKARBU
+help.help2 = ZE SKARBCA ZNAJDUJĄCEGO SIĘ
+help.help3 = NA ŚRODKU MAPY
+help.help4 = PRZED TWOIMI PRZECIWNIKAMI.
+help.turret = WIEŻYCZKA
+help.turret1 = POMAGA CI W WALCE
+help.turret2 = OSTRZELIWUJĄC WROGÓW
+help.turret3 =
+help.collector = KOLEKTOR
+help.collector1 = ZBIERA POBLISKIE MONETY
+help.collector2= NAWET JEŚLI NIE MA
+help.collector3= CIEBIE OBOK ;-)
+help.bomb = BOMBA
+
+help.bomb1 = SŁUŻY DO ZBURZENIA USZKODZONYCH ŚCIAN
+help.bomb2 = OSTRZELAJ BY ZDETONOWAĆ.
+help.bomb3 =
+help.rails = TORY
+help.rails1 = PO NICH JEŻDŻĄ ROBOTY PRZYWOŻĄCE
+help.rails2 = SKARB NACIŚNIJ PRZYCISK BUDOWANIA (R)
+help.rails3 = NA PIERWSZYM SEGMENCIE TORÓW ABY 
+help.rails4 = POSTAWIĆ ROBOTA (KOSZT 50 ZŁOTA)
+keys.up = RUCH DO GÓRY
+keys.down = RUCH DO DOŁU
+keys.left = RUCH W LEWO
+keys.right=  RUCH W PRAWO
+keys.sprint = SPRINT
+keys.fire = STRZAŁ
+keys.fireUp = STRZAŁY DO GÓRY
+keys.fireDown = STRZAŁY W DÓŁ
+keys.fireLeft = STRZAŁY W LEWO
+keys.fireRight = STRZAŁY W PRAWO
+keys.use = UŻYJ
+keys.build = BUDOWANIE
+keys.upgrade = ULEPSZ
+keys.chat = CZAT
+keys.weaponSlot = SLOT BRONI {0}
+keys.cycleLeft = NASTĘPNA BROŃ
+keys.cycleRight = POPRZEDNIA BROŃ
+keys.console = KONSOLA
+
+leveleditor.title = EDYTOR POZIOMÓW
+leveleditor.new = NOWA MAPA
+leveleditor.open = OTWÓRZ MAPĘ
+leveleditor.save = ZAPISZ MAPĘ
+leveleditor.enterLevelName = WPISZ NAZWĘ MAPY:
+
+levelselect.title = WYBIERZ PLANSZĘ
+levelselect.start = START
+levelselect.update = AKTUALIZUJ PLANSZE
+
+mp.waitingForClient = CZEKANIE NA DRUGIEGO GRACZA...
+mp.enterIP = WPISZ IP HOSTA:
+mp.localIP = TWOJE WEWNĘTRZNE IP:
+mp.externalIP = TWOJE ZEWNĘTRZENE IP:
+mp.join = DOŁĄCZ
+
+options.on = WLĄCZONE
+options.off = WYŁĄCZONE
+options.keyBindings = KONTROLERY
+options.characterSelect = WYBÓR POSTACI
+options.trapmouse = TRZYMAJ WSKAŹNIK MYSZY W OKNIE GRY
+options.fullscreen = TRYB PEŁNOEKRANOWY
+options.opengl = OPENGL
+options.showfps = POKAZUJ FPS
+options.music = MUZYKA
+options.sounds = DŹWIĘKI
+options.volume = GŁOŚNOŚĆ
+options.sound_and_video = DŹWIĘKI I GRAFIKA
+options.locale_selection = WYBIERZ JĘZYK
+options.mute = WYCISZONY
+options.creative = TRYB BOGA
+options.alternative = ALTERNATYWNY SKIN
+options.credits = TWÓRCY
+options.openal = System dźwiękowy OpenAL
+
+pausemenu.help = POMOC
+pausemenu.backtomain = MENU GŁÓWNE
+pausemenu.resume = WRÓĆ DO GRY 
+pausemenu.exit = WYJDŹ Z GRY
+
+player.hasDied = {0} POŻEGNAŁ TEN ŚWIAT!
+player.score = {0}: {1}%
+player.cost = {0}
+player.health = {0}%
+player.money = {0}
+player.nextLevel = {0}
+player.exp = {0}
+player.level = {0}
+player.weaponSlot = {0}
+
+shop.turretTooltipTitle = WIEŻYCZKA
+shop.turretTooltipLine1 = Używana do obrony.
+shop.turretTooltipLine2 = Atakuje pobliskich wrogów.
+shop.harvesterTooltipTitle = KOLEKTOR
+shop.harvesterTooltipLine1 = Zbiera pobliskie monety.
+shop.harvesterTooltipLine2 = Podnieś aby opróżnić.
+shop.bombTooltipTitle = BOMBA
+shop.bombTooltipLine1 = Wysadza słabsze ściany.
+shop.bombTooltipLine2 = Używana do tworzenia skrótów.
+
+shop.rifleTooltipTitle = MUSZKIECIK
+shop.rifleTooltipLine1 = Domyślna broń
+shop.rifleTooltipLine2 = Dobra na wszystko co się rusza i nie rusza
+shop.shotgunTooltipTitle = STRZELBA
+shop.shotgunTooltipLine1 = Ostrzeliwuje duży obszar.
+shop.shotgunTooltipLine2 = Duże obrażenia, krótki zasięg.
+shop.raygunTooltipTitle = DZIAŁKO ENERGETYCZNE
+shop.raygunTooltipLine1 = Pociski odbijają się od ścian.
+shop.raygunTooltipLine2 = Każde odbicie od ściany zwiększa obrażenia.
+
+titlemenu.start = ROZPOCZNIJ GRĘ
+titlemenu.host = POSTAW SERWER
+titlemenu.join = DOŁĄCZ DO GRY
+titlemenu.help = POMOC
+titlemenu.options = OPCJE
+titlemenu.sound_and_video = DŹWIĘKI I GRAFIKA
+titlemenu.levelEditor = EDYTOR POZIOMÓW
+titlemenu.exit = wYJŚCIE
+
+upgrade.full = W PEŁNI POLEPSZONE!
+upgrade.shopItem = NIE MOŻESZ ULEPSZAĆ SKLEPÓW!
+upgrade.notEnoughMoney = NIE MASZ WYSTARCZAJĄCO PIENIĘDZY ({0})
+upgrade.to = ULEPSZONO DO POZIOMU {0}
+
+download.downloading = ŚCIĄGANIE..
+download.unpacking = ROZPAKOWYWANIE..

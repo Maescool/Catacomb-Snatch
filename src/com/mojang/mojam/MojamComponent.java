@@ -874,6 +874,9 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		case TitleMenu.LOCALE_NL_ID:
 			setLocale("nl");
 			break;
+		case TitleMenu.LOCALE_PL_ID:
+			setLocale("pl");
+			break;
 		case TitleMenu.LOCALE_PT_BR_ID:
 			setLocale("pt_br");
 			break;
