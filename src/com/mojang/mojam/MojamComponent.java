@@ -49,6 +49,7 @@ import com.mojang.mojam.gui.LevelSelect;
 import com.mojang.mojam.gui.LocaleMenu;
 import com.mojang.mojam.gui.MenuStack;
 import com.mojang.mojam.gui.OptionsMenu;
+import com.mojang.mojam.gui.PauseMenu;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.gui.WinMenu;
 import com.mojang.mojam.gui.components.Button;
@@ -260,14 +261,20 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	}
 
 	public void stop(boolean exit) {
-		if (exit) {		
-			running = false;
-			soundPlayer.stopBackgroundMusic();
-			soundPlayer.shutdown();
-			System.exit(0);
-		} else if(!(menuStack.peek() instanceof ExitMenu)){
-			menuStack.add(new ExitMenu(GAME_WIDTH, GAME_HEIGHT));
+	    if (exit) {		
+		running = false;
+		soundPlayer.stopBackgroundMusic();
+		soundPlayer.shutdown();
+		System.exit(0);
+	    } else if (menuStack.empty()){
+		if (level != null && !isMultiplayer && !paused) {
+		    paused = true;
+		    menuStack.add(new PauseMenu(GAME_WIDTH, GAME_HEIGHT));
 		}
+		menuStack.add(new ExitMenu(GAME_WIDTH, GAME_HEIGHT));
+	    } else if(!(menuStack.peek() instanceof ExitMenu)){
+		menuStack.add(new ExitMenu(GAME_WIDTH, GAME_HEIGHT));
+	    }
 	}
 
 	private void init() {
