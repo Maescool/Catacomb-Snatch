@@ -45,7 +45,7 @@ task run() {
 apply plugin: 'macAppBundle'
 
 macAppBundle {
-    mainClassName = "com.mojang.mojam.MojamComponent"
+    mainClassName = "com.mojang.mojam.MojamStartup"
     icon = "res/art/icon/cs_icons.icns"
 }
 
