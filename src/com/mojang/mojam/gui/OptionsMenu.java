@@ -93,11 +93,13 @@ public class OptionsMenu extends GuiMenu {
 	}
 	
 	public void setPrices(){
-	    MojamComponent.instance.player.setRailPricesAndImmortality();
-	    ShopItem.updatePrices();
-	    for(IWeapon i:MojamComponent.instance.player.weaponInventory.weaponList){
-		i.setWeaponMode();
-	    }
+		if (MojamComponent.instance.player != null) {
+			MojamComponent.instance.player.setRailPricesAndImmortality();
+			ShopItem.updatePrices();
+			for(IWeapon i:MojamComponent.instance.player.weaponInventory.weaponList){
+				i.setWeaponMode();
+			}
+		}
 	}
 
 	@Override
