@@ -149,7 +149,7 @@ shop.shotgunTooltipLine1 = Ostrzeliwuje szeroki obszar.
 shop.shotgunTooltipLine2 = Duże obrażenia, krótki zasięg.
 shop.raygunTooltipTitle = DZIAŁKO ENERGETYCZNE
 shop.raygunTooltipLine1 = Pociski odbijają się od ścian.
-shop.raygunTooltipLine2 = Każde odbicie si pocisku od ściany zwiększa obrażenia.
+shop.raygunTooltipLine2 = Każde odbicie się pocisku od ściany zwiększa obrażenia.
 
 titlemenu.start = ROZPOCZNIJ GRĘ
 titlemenu.host = POSTAW SERWER
