@@ -57,6 +57,6 @@ buildscript {
     }
 
     dependencies {
-        classpath 'edu.sc.seis:gradle-macappbundle:1.0.4'
+        classpath 'edu.sc.seis:gradle-macappbundle:1.0.3'
     }
 }
