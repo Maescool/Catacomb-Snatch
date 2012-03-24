@@ -36,7 +36,7 @@ public class HowToPlayMenu extends GuiMenu {
 	    if( ! inGame) {
 	        screen.blit(Art.background, 0, 0);
 	    } else {
-            screen.alphaFill(0, 0, MojamComponent.GAME_WIDTH, MojamComponent.GAME_HEIGHT, 0xff000000, 0x30);
+            screen.alphaFill(0, 0, MojamComponent.GAME_WIDTH, MojamComponent.GAME_HEIGHT, 0xff000000, 0xC0);
 	    }
 		
 		

@@ -79,7 +79,7 @@ public class LocaleMenu extends GuiMenu {
 		if (!inGame) {
 			screen.blit(Art.background, 0, 0);
 		} else {
-			screen.alphaFill(0, 0, gameWidth, gameHeight, 0xff000000, 0x30);
+			screen.alphaFill(0, 0, gameWidth, gameHeight, 0xff000000, 0xC0);
 		}
 
 		super.render(screen);
