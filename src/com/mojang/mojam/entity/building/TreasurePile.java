@@ -5,7 +5,7 @@ import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.AbstractBitmap;
 
 /**
  * Treasure pile. The player has to harvest 50 batches from this using raildroids to win.
@@ -45,7 +45,7 @@ public class TreasurePile extends Building implements IEditable {
 	}
 
 	@Override
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		return Art.treasureTiles[0][0];
 	}
 
@@ -79,7 +79,7 @@ public class TreasurePile extends Building implements IEditable {
 	}
 
 	@Override
-	public Bitmap getBitMapForEditor() {
+	public AbstractBitmap getBitMapForEditor() {
 		return Art.treasureTiles[0][0];
 	}
 	

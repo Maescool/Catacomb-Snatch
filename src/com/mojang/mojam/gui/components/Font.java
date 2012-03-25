@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class Font {
 
@@ -151,14 +151,14 @@ public class Font {
 
 
 
-	private Bitmap[][] bitmapData;
+	private AbstractBitmap[][] bitmapData;
 	private String letters;
 	private int glyphHeight;
 	private int letterSpacing;
 
 	protected FontCharacterFactory fontCharacterFactory;
 
-	protected Font(Bitmap[][] bitmapData, String letters, int glyphHeight, int letterSpacing, FontCharacterFactory characterFactory) {
+	protected Font(AbstractBitmap[][] bitmapData, String letters, int glyphHeight, int letterSpacing, FontCharacterFactory characterFactory) {
 		this.bitmapData = bitmapData;
 		this.letters = letters;
 		this.glyphHeight = glyphHeight;
@@ -175,8 +175,8 @@ public class Font {
 		int w = 0;
 		for (int i = 0; i < text.length(); i++) {
 			char character = text.charAt(i);
-			Bitmap image = getCharacterBitmap(character);
-			w += image.w + letterSpacing;
+			AbstractBitmap image = getCharacterBitmap(character);
+			w += image.getWidth() + letterSpacing;
 		}
 		w -= letterSpacing;
 		return w;
@@ -194,25 +194,25 @@ public class Font {
 	/**
 	 * Draw the given text onto the given screen at the given position
 	 * 
-	 * @param screen Screen
+	 * @param screen AbstractScreen
 	 * @param msg Message
 	 * @param x X coordinate
 	 * @param y Y coordinate
 	 * @param width Maximum line width in pixels
 	 */
-	public void draw(Screen screen, String msg, int x, int y, int width) {
+	public void draw(AbstractScreen screen, String msg, int x, int y, int width) {
 		int startX = x;
 		int length = msg.length();
 		for (int i = 0; i < length; i++) {
 			char character = msg.charAt(i);
-			Bitmap bitmap = getCharacterBitmap(character);
+			AbstractBitmap bitmap = getCharacterBitmap(character);
 			int heightOffset = 0;
 			if (letters.indexOf(character) < 0) {
 				heightOffset = fontCharacterFactory.getHeightOffset(character);
 			}
 			screen.blit(bitmap, x, y+heightOffset);
-			x += bitmap.w + letterSpacing;
-			if(x > width - bitmap.w){
+			x += bitmap.getWidth() + letterSpacing;
+			if(x > width - bitmap.getWidth()){
 				x = startX;
 				y += glyphHeight + 2;
 			}
@@ -222,33 +222,33 @@ public class Font {
 	/**
 	 * Draw the given text onto the given screen at the given position with given opacity
 	 * 
-	 * @param screen Screen
+	 * @param screen AbstractScreen
 	 * @param msg Message
 	 * @param x X coordinate
 	 * @param y Y coordinate
 	 * @param width Maximum line width in pixels
 	 * @param opaque Opacity of text. Range from 0x00 (transparent) to 0xff (opaque)
 	 */
-	public void drawOpaque(Screen screen, String msg, int x, int y, int width, int opaque) {
+	public void drawOpaque(AbstractScreen screen, String msg, int x, int y, int width, int opaque) {
 		int startX = x;
 		int length = msg.length();
 		for (int i = 0; i < length; i++) {
 			char character = msg.charAt(i);
-			Bitmap bitmap = getCharacterBitmap(character);
+			AbstractBitmap bitmap = getCharacterBitmap(character);
 			int heightOffset = 0;
 			if (letters.indexOf(character) < 0) {
 				heightOffset = fontCharacterFactory.getHeightOffset(character);
 			}
 			screen.alphaBlit(bitmap, x, y + heightOffset, opaque);
-			x += bitmap.w + letterSpacing;
-			if (x > width - bitmap.w) {
+			x += bitmap.getWidth() + letterSpacing;
+			if (x > width - bitmap.getWidth()) {
 				x = startX;
 				y += glyphHeight + 2;
 			}
 		}
 	}
   	 
-	private Bitmap getCharacterBitmap(char character) {
+	private AbstractBitmap getCharacterBitmap(char character) {
 		int charPosition = letters.indexOf(character);
 		if (charPosition >= 0) {
 			return bitmapData[charPosition % 30][charPosition / 30];
@@ -261,25 +261,25 @@ public class Font {
 	 * 
 	 * * Draw the given text onto the given screen at the given position with given opacity
 	 * 
-	 * @param screen Screen
+	 * @param screen AbstractScreen
 	 * @param msg Message
 	 * @param x X coordinate
 	 * @param y Y coordinate
 	 * @param opaque Opacity of text. Range from 0x00 (transparent) to 0xff (opaque)
 	 */
-	public void drawOpaque(Screen screen, String msg, int x, int y, int opaque) {
+	public void drawOpaque(AbstractScreen screen, String msg, int x, int y, int opaque) {
 		drawOpaque(screen, msg, x, y, Integer.MAX_VALUE, opaque);
 	}
 
 	/**
 	 * Draw the given text onto the given screen at the given position
 	 * 
-	 * @param screen Screen
+	 * @param screen AbstractScreen
 	 * @param msg Message
 	 * @param x X coordinate
 	 * @param y Y coordinate
 	 */
-	public void draw(Screen screen, String msg, int x, int y) {
+	public void draw(AbstractScreen screen, String msg, int x, int y) {
 		draw(screen, msg, x, y, Integer.MAX_VALUE);
 	}
 
@@ -288,7 +288,7 @@ public class Font {
 	 * 
 	 * Will never be split into several lines of text
 	 * 
-	 * @Deprecated use draw(Screen screen, String msg, int x, int y, Font.Align align) instead
+	 * @Deprecated use draw(AbstractScreen screen, String msg, int x, int y, Font.Align align) instead
 	 * 
 	 * @param screen 
 	 * @param msg 
@@ -296,7 +296,7 @@ public class Font {
 	 * @param y 
 	 */
 	@Deprecated
-	public void drawCentered(Screen screen, String msg, int x, int y) {
+	public void drawCentered(AbstractScreen screen, String msg, int x, int y) {
 		int width = calculateStringWidth(msg);
 		draw(screen, msg, x - width / 2, y - 4);
 	}
@@ -312,7 +312,7 @@ public class Font {
 	 * @param y
 	 * @param align
 	 */
-	public void draw(Screen screen, String msg, int x, int y, Font.Align align) {
+	public void draw(AbstractScreen screen, String msg, int x, int y, Font.Align align) {
 		if (Font.Align.LEFT.equals(align)) {
 			draw(screen, msg, x, y, Integer.MAX_VALUE);
 		}

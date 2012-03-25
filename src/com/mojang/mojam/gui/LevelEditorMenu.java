@@ -46,8 +46,8 @@ import com.mojang.mojam.level.tile.UnbreakableRailTile;
 import com.mojang.mojam.level.tile.UnpassableSandTile;
 import com.mojang.mojam.level.tile.WallTile;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class LevelEditorMenu extends GuiMenu {
 
@@ -63,11 +63,11 @@ public class LevelEditorMenu extends GuiMenu {
     private int mapY;
     
     private int[][] mapTile = new int[LEVEL_HEIGHT][LEVEL_WIDTH];
-    private Bitmap[][] map = new Bitmap[LEVEL_HEIGHT][LEVEL_WIDTH];
-    private Bitmap mapFloor = new Bitmap(mapW, mapH);
-    private Bitmap minimap = new Bitmap(LEVEL_WIDTH, LEVEL_HEIGHT);
+    private AbstractBitmap[][] map = new AbstractBitmap[LEVEL_HEIGHT][LEVEL_WIDTH];
+    private AbstractBitmap mapFloor;
+    private AbstractBitmap minimap;
         
-    private Bitmap pencil = new Bitmap(TILE_WIDTH, TILE_HEIGHT);
+    private AbstractBitmap pencil;
     private int pencilX;
     private int pencilY;
     private boolean drawing;
@@ -135,13 +135,17 @@ public class LevelEditorMenu extends GuiMenu {
     
     public LevelEditorMenu() {
         super();
+	
+      mapFloor = MojamComponent.screen.createBitmap(mapW, mapH);
+      minimap = MojamComponent.screen.createBitmap(LEVEL_WIDTH, LEVEL_HEIGHT);
+      pencil = MojamComponent.screen.createBitmap(TILE_WIDTH, TILE_HEIGHT);
     	
         createGUI();
         setCurrentPage(0);
         
         // setup pencil
-        pencil.fill(0, 0, pencil.w, pencil.h, 0xffcfac02);
-        pencil.fill(1, 1, pencil.w - 2, pencil.h - 2, 0);
+        pencil.fill(0, 0, pencil.getWidth(), pencil.getHeight(), 0xffcfac02);
+        pencil.fill(1, 1, pencil.getWidth() - 2, pencil.getHeight() - 2, 0);
 
         // setup map
         for (int x = 0; x < LEVEL_HEIGHT; x++) {
@@ -209,7 +213,7 @@ public class LevelEditorMenu extends GuiMenu {
     }
 
     @Override
-    public void render(Screen screen) {
+    public void render(AbstractScreen screen) {
         screen.clear(0);
 
         // level floor
@@ -221,7 +225,7 @@ public class LevelEditorMenu extends GuiMenu {
 
                 if (map[x][y] == null) continue;
    
-                Bitmap tile = map[x][y];
+                AbstractBitmap tile = map[x][y];
 
                 // change tiles that requires some sort of drawing modification
                 switch (mapTile[x][y]) {
@@ -263,8 +267,8 @@ public class LevelEditorMenu extends GuiMenu {
                 // draw the tile or fill with black if it's null
                 if (tile != null) {
                     screen.blit(tile,
-                            x * TILE_WIDTH - (tile.w - TILE_WIDTH) / 2 + mapX,
-                            y * TILE_HEIGHT - (tile.h - TILE_HEIGHT) + mapY);
+                            x * TILE_WIDTH - (tile.getWidth() - TILE_WIDTH) / 2 + mapX,
+                            y * TILE_HEIGHT - (tile.getHeight() - TILE_HEIGHT) + mapY);
                 } else {
                     screen.fill(x * TILE_WIDTH + mapX, y * TILE_HEIGHT + mapY, TILE_WIDTH, TILE_HEIGHT, 0);
                 }
@@ -284,7 +288,7 @@ public class LevelEditorMenu extends GuiMenu {
         super.render(screen);
         
         // minimap
-        screen.blit(minimap, screen.w - minimap.w - 6, 6);
+        screen.blit(minimap, screen.getWidth() - minimap.getWidth() - 6, 6);
         
         // selected tile name
         Font.defaultFont().draw(screen, selectedButton != null ? selectedButton.getTile().getName() : "",
@@ -382,7 +386,7 @@ public class LevelEditorMenu extends GuiMenu {
 				map[x][y] = null;
 			}
 		}
-		minimap.fill(0, 0, minimap.w, minimap.h,
+		minimap.fill(0, 0, minimap.getWidth(), minimap.getHeight(),
 				editableTiles[0].getMiniMapColor());
 		removeText(levelName);
 		levelName = new Text(1, "<New Level>", 120, 5);
@@ -475,13 +479,13 @@ public class LevelEditorMenu extends GuiMenu {
         addButton(new Panel(0, 0, MENU_WIDTH, MojamComponent.GAME_HEIGHT));
         
         // minimap panel
-        addButton(new Panel(MojamComponent.GAME_WIDTH - minimap.w - 11, 1, minimap.w + 10, minimap.w + 10));
+        addButton(new Panel(MojamComponent.GAME_WIDTH - minimap.getWidth() - 11, 1, minimap.getWidth() + 10, minimap.getWidth() + 10));
         
         // save menu panel
         savePanel = new Panel(180, 120, 298, 105) {
 
             @Override
-            public void render(Screen screen) {
+            public void render(AbstractScreen screen) {
                 super.render(screen);
                 Font.defaultFont().draw(screen, MojamComponent.texts.getStatic("leveleditor.enterLevelName"),
                         getX() + getWidth() / 2, getY() + 20, Font.Align.CENTERED);

@@ -2,8 +2,8 @@ package com.mojang.mojam.entity.mob;
 
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class Bat extends HostileMob  {
 	public static final int COLOR = 0xffff6600;
@@ -46,13 +46,13 @@ public class Bat extends HostileMob  {
 		super.die();
 	}
 
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		return Art.bat[(tick / 3) & 3][0];
 	}
 
 	@Override
-	public void render(Screen screen) {
-		screen.alphaBlit(Art.batShadow, (int)(pos.x - Art.batShadow.w / 2), (int)(pos.y - Art.batShadow.h / 2 - yOffs + 16), 0x45);
+	public void render(AbstractScreen screen) {
+		screen.alphaBlit(Art.batShadow, (int)(pos.x - Art.batShadow.getWidth() / 2), (int)(pos.y - Art.batShadow.getHeight() / 2 - yOffs + 16), 0x45);
 		super.render(screen);
 	}
 
@@ -72,7 +72,7 @@ public class Bat extends HostileMob  {
 	}
 
 	@Override
-	public Bitmap getBitMapForEditor() {
+	public AbstractBitmap getBitMapForEditor() {
 		return Art.bat[0][0];
 	}
 }

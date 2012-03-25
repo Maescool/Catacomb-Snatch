@@ -12,7 +12,7 @@ import com.mojang.mojam.gui.components.ClickableComponent;
 import com.mojang.mojam.gui.components.GuiComponent;
 import com.mojang.mojam.gui.components.Slider;
 import com.mojang.mojam.gui.components.Text;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public abstract class GuiMenu extends GuiComponent implements ButtonListener, KeyListener {
 
@@ -53,7 +53,7 @@ public abstract class GuiMenu extends GuiComponent implements ButtonListener, Ke
     }
     
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		super.render(screen);
 
 		for (ClickableComponent button : buttons) {

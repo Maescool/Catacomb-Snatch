@@ -8,7 +8,7 @@ import com.mojang.mojam.MojamStartup;
 import com.mojang.mojam.gui.components.ClickableComponent;
 import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class DownloadScreen extends GuiMenu {
 
@@ -53,7 +53,7 @@ public class DownloadScreen extends GuiMenu {
     }
 
     @Override
-    public void render(Screen screen) {
+    public void render(AbstractScreen screen) {
 	screen.clear(0);
 	screen.blit(Art.downloadScreen, 0, 0);
 	super.render(screen);
@@ -73,12 +73,12 @@ public class DownloadScreen extends GuiMenu {
 	    else if (index > maxIndex)
 		index = maxIndex;
 
-	    screen.blit(Art.panel_xpBar[0][index], (screen.w / 2) - 35,
-		    screen.h / 2);
+	    screen.blit(Art.panel_xpBar[0][index], (screen.getWidth() / 2) - 35,
+		    screen.getHeight() / 2);
 
 	    int dlp = Math.round(downloaded * 100 / total);
-	    Font.defaultFont().draw(screen, dlp + "%", (screen.w / 2),
-		    (screen.h / 2) + 15);
+	    Font.defaultFont().draw(screen, dlp + "%", (screen.getWidth() / 2),
+		    (screen.getHeight() / 2) + 15);
 	}
 	if (unpacking) {
 	    screen.alphaFill(125, 150, 300, 50, 0xff000000, 0x90);

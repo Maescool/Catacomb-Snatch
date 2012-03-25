@@ -2,7 +2,7 @@ package com.mojang.mojam.gui.components;
 
 import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class Checkbox extends ClickableComponent {
 	private final int id;
@@ -36,7 +36,7 @@ public class Checkbox extends ClickableComponent {
 		checked = !checked;
 	}
 
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		if (isPressed()) {
 			if (checked)
 				screen.blit(Art.checkbox[1][1], getX(), getY());

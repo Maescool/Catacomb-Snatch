@@ -1,12 +1,13 @@
 package com.mojang.mojam.gui.components;
 
+import com.mojang.mojam.MojamComponent;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
-import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.AbstractBitmap;
 
 public class FontCharacterFactory {
 
@@ -16,7 +17,7 @@ public class FontCharacterFactory {
 	private Color shadowColor;
 	private int heightOffset;
 	
-	private HashMap<Character, Bitmap> characterCache = new HashMap<Character, Bitmap>();
+	private HashMap<Character, AbstractBitmap> characterCache = new HashMap<Character, AbstractBitmap>();
 	private HashMap<Character, Integer> characterHeightOffset = new HashMap<Character, Integer>();
 	
 	public FontCharacterFactory(java.awt.Font systemFont, java.awt.Font fallbackFont, Color[] gradient, Color shadowColor, int heightOffset) {
@@ -27,7 +28,7 @@ public class FontCharacterFactory {
 		this.heightOffset = heightOffset;
 	}
 
-	public Bitmap getFontCharacter(char character) {
+	public AbstractBitmap getFontCharacter(char character) {
 		if (characterCache.containsKey(character)) {
 			return characterCache.get(character);
 		}
@@ -84,11 +85,11 @@ public class FontCharacterFactory {
 		
 		width = pixels.length;
 		if (width == 0) {
-			return new Bitmap(pixels);
+			return MojamComponent.screen.createBitmap(pixels);
 		}
 		height = pixels[0].length;
 
-		Bitmap characterBitmap = new Bitmap(pixels);
+		AbstractBitmap characterBitmap = MojamComponent.screen.createBitmap(pixels);
 		characterCache.put(character, characterBitmap);
 		
 		return characterBitmap;
