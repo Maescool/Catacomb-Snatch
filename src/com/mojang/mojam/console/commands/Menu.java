@@ -1,0 +1,17 @@
+package com.mojang.mojam.console.commands;
+
+import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.console.Console.Command;
+import com.mojang.mojam.gui.TitleMenu;
+
+public class Menu extends Command {
+
+    public Menu() {
+	super("menu", 0, "Return to menu");
+    }
+
+    public void doCommand(String[] args) {
+	MojamComponent.instance.handleAction(TitleMenu.RETURN_TO_TITLESCREEN);
+    }
+
+}

@@ -36,11 +36,11 @@ import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import com.mojang.mojam.Console;
 import com.mojang.mojam.InputHandler;
 import com.mojang.mojam.Keys;
 import com.mojang.mojam.Keys.Key;
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.console.Console;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.gui.components.Font;
