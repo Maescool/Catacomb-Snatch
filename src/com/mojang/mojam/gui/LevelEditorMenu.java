@@ -187,7 +187,7 @@ public class LevelEditorMenu extends GuiMenu {
         pencilY = mouseButtons.getY() - (TILE_HEIGHT / 2);
 
         // move level x with mouse
-        if (mouseButtons.getX() - MENU_WIDTH > MENU_WIDTH) {
+        if (mouseButtons.getX() > MENU_WIDTH) {
             if (pencilX + TILE_WIDTH > MojamComponent.GAME_WIDTH
                     && -(mapX - MENU_WIDTH) < mapW - (MojamComponent.GAME_WIDTH - MENU_WIDTH) + TILE_HEIGHT) {
                 mapX -= TILE_WIDTH / 2;
