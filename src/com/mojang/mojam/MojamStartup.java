@@ -41,7 +41,7 @@ public class MojamStartup extends Canvas implements Runnable, ButtonListener {
     public static final int GAME_HEIGHT = GAME_WIDTH * 3 / 4;
     public static final int SCALE = 2;
 
-    public static MojamScreen screen = new MojamScreen(GAME_WIDTH, GAME_HEIGHT);
+    public static MojamScreen screen;
 
     private MenuStack menuStack = new MenuStack();
 
@@ -55,6 +55,8 @@ public class MojamStartup extends Canvas implements Runnable, ButtonListener {
     private DownloadScreen ds;
 
     public MojamStartup() {
+		screen = new MojamScreen(GAME_WIDTH, GAME_HEIGHT);
+		Art.loadAllResources(screen);
 
 	MojamComponent.constants = new Constants();
 	MojamComponent.texts = new Texts(new Locale("en"));

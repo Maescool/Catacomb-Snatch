@@ -102,7 +102,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private Cursor emptyCursor;
 	private double framerate = 60;
 	private int fps;
-	public static MojamScreen screen = new MojamScreen(GAME_WIDTH, GAME_HEIGHT);
+	public static MojamScreen screen;
 	private Level level;
 	public Chat chat = new Chat();
 	public Console console = new Console();
@@ -146,6 +146,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private SnatchServer server;
 
 	public MojamComponent() {
+		screen = new MojamScreen(GAME_WIDTH, GAME_HEIGHT);
+		Art.loadAllResources(screen);
 	    final String nativeLibDir = MojamComponent.getMojamDir()
 			.getAbsolutePath().toString()
 			+ File.separator
