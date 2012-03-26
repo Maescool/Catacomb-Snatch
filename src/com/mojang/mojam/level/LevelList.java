@@ -16,6 +16,8 @@ public class LevelList {
 		levels.add(new LevelInformation("BlackHole", "/levels/BlackHole.tmx",true));
 		levels.add(new LevelInformation("CataBOMB", "/levels/CataBOMB.tmx",true));
 		levels.add(new LevelInformation("RailRoads", "/levels/RailRoads.tmx",true));
+		levels.add(new LevelInformation("Siege", "/levels/Siege.tmx",true));
+		levels.add(new LevelInformation("TheMaze", "/levels/TheMaze.tmx",true));
 		levels.add(new LevelInformation("Dev TMX", "/levels/DEV.tmx",true));
 		
 		File levels = getBaseDir();
