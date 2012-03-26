@@ -2,19 +2,19 @@ package com.mojang.mojam.entity.animation;
 
 import com.mojang.mojam.level.tile.HoleTile;
 import com.mojang.mojam.level.tile.Tile;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class ItemFallAnimation extends Animation {
-    Bitmap fallingImage;
+    AbstractBitmap fallingImage;
     boolean isHarvester = false;
     
-    public ItemFallAnimation(double x, double y, Bitmap fallingImage) {
+    public ItemFallAnimation(double x, double y, AbstractBitmap fallingImage) {
         super(x, y, 60); // @random
         this.fallingImage = fallingImage;
     }
 
-    public void render(Screen screen) {
+    public void render(AbstractScreen screen) {
    
         int anim;
         anim = life * 12 / duration;

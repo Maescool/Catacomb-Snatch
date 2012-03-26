@@ -4,7 +4,7 @@ import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.weapon.VenomShooter;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.AbstractBitmap;
 
 public class Snake extends HostileMob {
 
@@ -44,7 +44,7 @@ public class Snake extends HostileMob {
 		super.die();
 	}
 
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		return Art.snake[((stepTime / 6) & 3)][(facing + 1) & 3];
 	}
 
@@ -69,7 +69,7 @@ public class Snake extends HostileMob {
 	}
 
 	@Override
-	public Bitmap getBitMapForEditor() {
+	public AbstractBitmap getBitMapForEditor() {
 		return Art.snake[0][0];
 	}
 }

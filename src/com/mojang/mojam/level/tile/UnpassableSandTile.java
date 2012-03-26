@@ -3,8 +3,8 @@ package com.mojang.mojam.level.tile;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class UnpassableSandTile extends Tile {
 	public static final int COLOR = 0xff888800;
@@ -20,7 +20,7 @@ public class UnpassableSandTile extends Tile {
 
 	}
 
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		super.render(screen);
 	}
 
@@ -37,7 +37,7 @@ public class UnpassableSandTile extends Tile {
 	}
 	
 	@Override
-	public Bitmap getBitMapForEditor() {
+	public AbstractBitmap getBitMapForEditor() {
 		return Art.floorTiles[6][0];
 	}
 	

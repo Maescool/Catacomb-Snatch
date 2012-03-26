@@ -13,7 +13,7 @@ import com.mojang.mojam.gui.components.ClickableComponent;
 import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.gui.components.Slider;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 import com.mojang.mojam.sound.ISoundPlayer;
 
 public class AudioVideoMenu extends GuiMenu {
@@ -230,7 +230,7 @@ public class AudioVideoMenu extends GuiMenu {
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 
 		if (!inGame) {
 			screen.blit(Art.background, 0, 0);

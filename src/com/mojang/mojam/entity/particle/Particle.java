@@ -3,7 +3,7 @@ package com.mojang.mojam.entity.particle;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class Particle extends Entity {
 	public double xa, ya, za;
@@ -40,7 +40,7 @@ public class Particle extends Entity {
 			remove();
 	}
 
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		screen.blit(Art.bullets[1][0], pos.x - 8, pos.y - 8 - z);
 	}
 }

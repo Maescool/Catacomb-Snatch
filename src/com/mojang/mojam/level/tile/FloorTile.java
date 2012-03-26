@@ -3,8 +3,8 @@ package com.mojang.mojam.level.tile;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class FloorTile extends Tile {
 
@@ -32,7 +32,7 @@ public class FloorTile extends Tile {
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		super.render(screen);
 	}
 
@@ -103,7 +103,7 @@ public class FloorTile extends Tile {
 
 
 	@Override
-	public Bitmap getBitMapForEditor() {
+	public AbstractBitmap getBitMapForEditor() {
 		return Art.floorTiles[0][0];
 	}
 

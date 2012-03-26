@@ -4,7 +4,7 @@ import com.mojang.mojam.GameCharacter;
 import com.mojang.mojam.level.tile.HoleTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class PlayerFallingAnimation extends Animation {
     GameCharacter character;
@@ -14,7 +14,7 @@ public class PlayerFallingAnimation extends Animation {
         this.character = character;
     }
 
-    public void render(Screen screen) {
+    public void render(AbstractScreen screen) {
         
         int anim = life * 8 * 2 / duration;
         

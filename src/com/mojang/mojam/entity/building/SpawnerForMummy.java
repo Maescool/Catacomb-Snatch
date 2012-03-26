@@ -3,7 +3,7 @@ package com.mojang.mojam.entity.building;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.mob.Mummy;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.AbstractBitmap;
 
 public class SpawnerForMummy extends SpawnerEntity {
 
@@ -35,9 +35,9 @@ public class SpawnerForMummy extends SpawnerEntity {
 	}
 	
 	@Override
-	public Bitmap getBitMapForEditor() {
-		Bitmap shrink = Bitmap.shrink(Art.mummy[0][3].copy());
-		Bitmap bitmap = blitMobOnTop(shrink);
+	public AbstractBitmap getBitMapForEditor() {
+		AbstractBitmap shrink = Art.mummy[0][3].shrink();
+		AbstractBitmap bitmap = blitMobOnTop(shrink);
 		return bitmap;
 	}
 }

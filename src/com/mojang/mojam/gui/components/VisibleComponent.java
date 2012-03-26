@@ -1,7 +1,7 @@
 package com.mojang.mojam.gui.components;
 
 import com.mojang.mojam.MouseButtons;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class VisibleComponent extends GuiComponent {
 
@@ -11,7 +11,7 @@ public class VisibleComponent extends GuiComponent {
 	private int h;
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		super.render(screen);
 	}
 
