@@ -344,8 +344,13 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			showError("Unable to load map.");
 			return;
 		}
-		initLevel(character);
-		paused = false;
+		if(level.canPlayerSpawn()) {
+			initLevel(character);
+			paused = false;
+		} else {
+			showError("The Map must have spawn points for each player");
+			return;
+		}
 	}
 
 	private synchronized void initLevel(GameCharacter character) {

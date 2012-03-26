@@ -24,8 +24,8 @@ public class GameMode {
 		try {
 			map = new TiledMap(MojamComponent.class.getResourceAsStream(li.getPath()));
 			layers = map.getLayerCount();
-			if(layers < 3) {
-				throw new IOException();
+			if(layers < 1) {
+				throw new IOException("The Map has no layers");
 			}
 			w = map.getWidth();
 			h = map.getHeight();
@@ -37,7 +37,7 @@ public class GameMode {
 			layers = 0;
 		}
 		
-		newLevel = new Level(w, h);
+		newLevel = new Level(w, h);		
 		
 		processLevelMap(w, h, layers);
 		

@@ -199,8 +199,15 @@ public class Level {
 		} else {
 			return null;
 		}
-		
-
+	}
+	
+	/**
+	 * Checks that there are spawn points for all players
+	 * @return true if all players can spawn
+	 */
+	
+	public boolean canPlayerSpawn() {
+		return !spawnPointsP1.isEmpty() && !spawnPointsP2.isEmpty();
 	}
 
 	public void insertToEntityMap(Entity e) {
