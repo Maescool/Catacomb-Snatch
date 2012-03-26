@@ -8,8 +8,6 @@ public interface AbstractScreen {
 
 	public int getHeight();
 
-	public boolean createWindow();
-
 	public void loadResources();
 
 	public void setOffset(int xOffset, int yOffset);

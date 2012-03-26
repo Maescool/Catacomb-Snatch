@@ -147,7 +147,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 	public MojamComponent() {
 		screen = new MojamScreen(GAME_WIDTH, GAME_HEIGHT);
-		Art.loadAllResources(screen);
+		screen.loadResources();
 	    final String nativeLibDir = MojamComponent.getMojamDir()
 			.getAbsolutePath().toString()
 			+ File.separator

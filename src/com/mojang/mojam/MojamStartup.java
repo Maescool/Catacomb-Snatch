@@ -56,7 +56,7 @@ public class MojamStartup extends Canvas implements Runnable, ButtonListener {
 
     public MojamStartup() {
 		screen = new MojamScreen(GAME_WIDTH, GAME_HEIGHT);
-		Art.loadAllResources(screen);
+		screen.loadResources();
 
 	MojamComponent.constants = new Constants();
 	MojamComponent.texts = new Texts(new Locale("en"));

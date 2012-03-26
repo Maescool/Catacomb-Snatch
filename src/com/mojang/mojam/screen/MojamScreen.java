@@ -97,13 +97,8 @@ public class MojamScreen extends MojamBitmap implements AbstractScreen {
 	}
 
 	@Override
-	public boolean createWindow() {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	@Override
 	public void loadResources() {
-		throw new UnsupportedOperationException("Not supported yet.");
+		Art.loadAllResources(this);
 	}
 
 	@Override
