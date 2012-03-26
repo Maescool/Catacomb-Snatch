@@ -60,6 +60,7 @@ help.rails = RAILS
 help.rails1 = FOR RAIL-DROIDS TO COLLECT TREASURE.
 help.rails2 = PRESS 'BUILD' ON THE FIRST RAIL
 help.rails3 = TO BUY A RAIL-DROID (50 GOLD)
+help.rails4 =
 
 keys.up = UP
 keys.down = DOWN

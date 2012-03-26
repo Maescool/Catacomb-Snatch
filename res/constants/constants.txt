@@ -8,6 +8,7 @@ options.locale_fr = FRANÇAIS
 options.locale_ind = INDONESIA
 options.locale_it = ITALIANO
 options.locale_nl = NEDERLANDS
+options.locale_pl = POLSKI
 options.locale_pt_br = PORTUGUÊS
 options.locale_ru = РУССКИЙ
 options.locale_sl = SLOVENSKI

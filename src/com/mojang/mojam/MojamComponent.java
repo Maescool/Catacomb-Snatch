@@ -49,6 +49,7 @@ import com.mojang.mojam.gui.LevelSelect;
 import com.mojang.mojam.gui.LocaleMenu;
 import com.mojang.mojam.gui.MenuStack;
 import com.mojang.mojam.gui.OptionsMenu;
+import com.mojang.mojam.gui.PauseMenu;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.gui.WinMenu;
 import com.mojang.mojam.gui.components.Button;
@@ -85,7 +86,7 @@ import com.mojang.mojam.sound.SoundPlayer;
 public class MojamComponent extends Canvas implements Runnable, MouseMotionListener, MouseListener, ButtonListener {
 
 	public static final String GAME_TITLE = "Catacomb Snatch";
-	public static final String GAME_VERSION = "1.1.0-SNAPSHOT";
+	public static final String GAME_VERSION = "1.1.1-SNAPSHOT";
 
 	public static MojamComponent instance;
 	public static Locale locale;
@@ -131,7 +132,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public GameCharacter playerCharacter;
 	public boolean sendCharacter = false;
 
-	private Thread hostThread;
 	private static boolean fullscreen = false;
 	public static ISoundPlayer soundPlayer;
 	private long nextMusicInterval = 0;
@@ -262,14 +262,20 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	}
 
 	public void stop(boolean exit) {
-		if (exit) {		
-			running = false;
-			soundPlayer.stopBackgroundMusic();
-			soundPlayer.shutdown();
-			System.exit(0);
-		} else {
-			menuStack.add(new ExitMenu(GAME_WIDTH, GAME_HEIGHT));
+	    if (exit) {		
+		running = false;
+		soundPlayer.stopBackgroundMusic();
+		soundPlayer.shutdown();
+		System.exit(0);
+	    } else if (menuStack.empty()){
+		if (level != null && !isMultiplayer && !paused) {
+		    paused = true;
+		    menuStack.add(new PauseMenu(GAME_WIDTH, GAME_HEIGHT));
 		}
+		menuStack.add(new ExitMenu(GAME_WIDTH, GAME_HEIGHT));
+	    } else if(!(menuStack.peek() instanceof ExitMenu)){
+		menuStack.add(new ExitMenu(GAME_WIDTH, GAME_HEIGHT));
+	    }
 	}
 
 	private void init() {
@@ -877,6 +883,9 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		case TitleMenu.LOCALE_NL_ID:
 			setLocale("nl");
 			break;
+		case TitleMenu.LOCALE_PL_ID:
+			setLocale("pl");
+			break;
 		case TitleMenu.LOCALE_PT_BR_ID:
 			setLocale("pt_br");
 			break;
@@ -956,9 +965,11 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 		case TitleMenu.CANCEL_JOIN_ID:
 			menuStack.safePop();
-			if (hostThread != null) {
-				hostThread.interrupt();
-				hostThread = null;
+			if(isMultiplayer) {
+				snatchClient.shutdown();
+				if(isServer) {
+					server.shutdown();
+				}
 			}
 			break;
 

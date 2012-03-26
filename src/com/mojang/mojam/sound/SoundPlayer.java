@@ -99,8 +99,11 @@ public class SoundPlayer implements ISoundPlayer {
 
 		String backgroundTrack = "/resources/sound/ThemeTitle.ogg";
 		try {
-		    URL backgroundURL = new File(MojamComponent.getMojamDir(), backgroundTrack).toURI().toURL();
-		    getSoundSystem().backgroundMusic(BACKGROUND_TRACK, backgroundURL, backgroundTrack, true);
+		    File backgroundFile = new File(MojamComponent.getMojamDir(), backgroundTrack);
+		    URL backgroundURL = backgroundFile.toURI().toURL();
+		    if (backgroundFile.exists()){
+			getSoundSystem().backgroundMusic(BACKGROUND_TRACK, backgroundURL, backgroundTrack, true);
+		    }
 		} catch (MalformedURLException e) {
 		    // TODO Auto-generated catch block
 		    e.printStackTrace();
@@ -122,8 +125,11 @@ public class SoundPlayer implements ISoundPlayer {
 
 		String backgroundTrack = "/resources/sound/ThemeEnd.ogg";
 		try {
-		    URL backgroundURL = new File(MojamComponent.getMojamDir(), backgroundTrack).toURI().toURL();
-		    getSoundSystem().backgroundMusic(BACKGROUND_TRACK, backgroundURL, backgroundTrack, true);
+		    File backgroundFile = new File(MojamComponent.getMojamDir(), backgroundTrack);
+		    URL backgroundURL = backgroundFile.toURI().toURL();
+		    if (backgroundFile.exists()){
+			getSoundSystem().backgroundMusic(BACKGROUND_TRACK, backgroundURL, backgroundTrack, true);
+		    }
 		} catch (MalformedURLException e) {
 		    // TODO Auto-generated catch block
 		    e.printStackTrace();
@@ -152,8 +158,11 @@ public class SoundPlayer implements ISoundPlayer {
 		String backgroundTrack = "/resources/sound/Background " + nextSong + ".ogg";
 		System.out.println("next song: " + backgroundTrack);
 		try {
-		    URL backgroundURL = new File(MojamComponent.getMojamDir(), backgroundTrack).toURI().toURL();
-		    getSoundSystem().backgroundMusic(BACKGROUND_TRACK, backgroundURL, backgroundTrack, true);
+		    File backgroundFile = new File(MojamComponent.getMojamDir(), backgroundTrack);
+		    URL backgroundURL = backgroundFile.toURI().toURL();
+		    if (backgroundFile.exists()){
+			getSoundSystem().backgroundMusic(BACKGROUND_TRACK, backgroundURL, backgroundTrack, true);
+		    }
 		} catch (MalformedURLException e) {
 		    // TODO Auto-generated catch block
 		    e.printStackTrace();

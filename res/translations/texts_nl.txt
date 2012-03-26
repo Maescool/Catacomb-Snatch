@@ -8,6 +8,15 @@ back = TERUG
 cancel = ANNULEER
 select = KIES
 
+character.text = KIES JE PERSONAGE!
+character.select = SELECTEER
+
+credits.leadDev = HOOFD ONTWIKKELAAR:
+credits.maintainers = PROJECT ONDERHOUDERS:
+credits.communityMan = COMMUNITY ONDERHOUDERS:
+credits.others = EN DAN AAN ALLE MEDEWERKERS, INCLUSIEF:
+credits.note = DIT PROJECT IS NU ONDERHOUDEN ALS EEN COMMUNITY PROJECT
+
 diffselect.title = KIES EEN MOEILIJKHEIDSGRAAD
 diffselect.start = BEGIN HET SPEL
 diffselect.easy = MAKKELIJK
@@ -15,14 +24,20 @@ diffselect.normal = NORMAAL
 diffselect.hard = MOEILIJK
 diffselect.nightmare = HARDCORE
 
-gameplay.player1Name = LORD LARD
-gameplay.player1NameAlt = DUCHESS DONUT
+exitmenu.headline = BEN JE ZEKER DAT JE HET SPEL WILT VERLATEN?
+exitmenu.cancel = NEE 
+exitmenu.exit = JA
+
 gameplay.player1Win = {0} HEEFT GEWONNEN!
-gameplay.player2Name = HERR VON SPECK
 gameplay.player2Win = {0} HEEFT GEWONNEN
+gameplay.player1Name = LORD LARD
+gameplay.player2Name = HERR VON SPECK
+gameplay.player3Name = DUCHESS DONUT
+gameplay.player4Name = COUNTESS CRULLER
 gameplay.FPS = FPS: {0}
 gameplay.latency = WACHTTIJD: {0}
 gameplay.cantPickup = DAT KUN JE NIET OPRAPEN!
+gameplay.weaponAlready = JE HEBT DIT WAPEN AL!
 
 help.goal1 = OBJECTIEF
 help.help1 = VERZAMEL 50 STUKKEN SHAT
@@ -31,16 +46,20 @@ help.help3 = IN HET MIDDEN VAN DE KAART
 help.help4 = VOOR JE TEGENSTANDER
 help.turret = SCHIETKANON
 help.turret1 = SCHIET OP DE VIJANDEN RONDOM ZICH
+help.turret2 =
+help.turret3 =
 help.collector = COLLECTER
 help.collector1 = ZUIGT GELD ROND ZICH OP, NEEM HEM OP
 help.collector2= OM HET GELD ERUIT TE HALEN
+help.collector3 = 
 help.bomb = BOM
 help.bomb1 = VERNIETIGT BREEKBARE MUREN, SCHIET
-help.bomb2 = EROP OM DE BOM TOT ONTPLOFFING TE BRENGEN
+help.bomb2 = EROP OM DE BOM TOT ONTPLOFFING TE
+help.bomb3 = BRENGEN
 help.rails = RAILS
-help.rails1 = WAAROP ROBOTS RIJDEN
-help.rails2 = DRUK DE BOUW KNOP OP HET EERSTE STUK RAIL
-help.rails3 = OM EEN ROBOT TE KOPEN (50 GOUD)
+help.rails1 = WAAROP ROBOTS RIJDEN DRUK OP
+help.rails2 = DE BOUW KNOP, OP HET EERSTE STUK
+help.rails3 = RAIL OM EEN ROBOT TE KOPEN (50 GOUD)
 
 keys.up = OMHOOG
 keys.down = BENEDEN
@@ -48,9 +67,24 @@ keys.left = LINKS
 keys.right=  RECHTS
 keys.sprint = SPRINT
 keys.fire = SCHIETEN
+keys.fireUp = SHIET BOVEN
+keys.fireDown = SCHIET NEER
+keys.fireLeft = SCHIET LINKS
+keys.fireRight = SCHIET RECHTS
 keys.use = GEBRUIKEN
 keys.build = BOUWEN
 keys.upgrade = UPGRADEN
+keys.chat = CHAT
+keys.weaponSlot = WAPEN SLOT {0}
+keys.cycleLeft = VOLG. WAPEN
+keys.cycleRight = VORIG WAPEN
+keys.console = CONSOLE
+
+leveleditor.title = LEVEL EDITOR
+leveleditor.new = NIEUW
+leveleditor.open = OPENEN
+leveleditor.save = OPSLAAN
+leveleditor.enterLevelName = GEEF LEVEL NAAM IN:
 
 levelselect.title = KIES EEN LEVEL
 levelselect.start = BEGIN
@@ -64,28 +98,71 @@ mp.join = JOINEN
 
 options.on = AAN
 options.off = AF
-options.keyBindings = KEY BINDINGS
+options.keyBindings = TOESENBORD
+options.characterSelect = KIES PERSONAGE
+options.trapmouse = TRAP MOUSE IN WINDOW
 options.fullscreen = VOLLEDIG SCHERM
+options.opengl = OPENGL
 options.showfps = TOON FPS
+options.music = MUZIEK
+options.sounds = GELUIDEN
 options.volume = VOLUME
-options.mute = MUTE
+options.sound_and_video = BEELD EN GELUID
+options.locale_selection = SELECTEER TAAL
+options.mute = DEMPEN
 options.creative = CREATIEVE MODUS
-options.alternative = ALTERNATIVE MODUS
+options.alternative = ALTERNATIEF KARAKTER
+options.credits = CREDITS
+options.openal = Sound system OpenAL
 
 pausemenu.help = HELP
 pausemenu.main = HOOFDMENU
 pausemenu.resume = VERDER SPELEN
 pausemenu.exit = SPEL VERLATEN
 
+player.hasDied = {0} IS GESTORVEN!
+player.score = {0}: {1}%
+player.cost = {0}
+player.health = {0}%
+player.money = {0}
+player.nextLevel = {0}
+player.exp = {0}
+player.level = {0}
+player.weaponSlot = {0}
+
+shop.turretTooltipTitle = TURRET
+shop.turretTooltipLine1 = Gebruikt voor verdediging.
+shop.turretTooltipLine2 = Valt dichtbijzijnde vijanden aan.
+shop.harvesterTooltipTitle = HARVESTER
+shop.harvesterTooltipLine1 = Raapt geld op.
+shop.harvesterTooltipLine2 = Gebruik om geld te krijgen.
+shop.bombTooltipTitle = BOM
+shop.bombTooltipLine1 = Vernietigd gebarsten muren.
+shop.bombTooltipLine2 = Gebruik dit om binnenwegen te maken.
+
+shop.rifleTooltipTitle = GEWEER
+shop.rifleTooltipLine1 = Standaard start wapen.
+shop.rifleTooltipLine2 = Goed in het algemeen.
+shop.shotgunTooltipTitle = SHOTGUN
+shop.shotgunTooltipLine1 = Shoten dekken een groot gebied.
+shop.shotgunTooltipLine2 = Hoge schade, korte afstand.
+shop.raygunTooltipTitle = ENERGIE GEWEER
+shop.raygunTooltipLine1 = Kogels kaatsen langs muren.
+shop.raygunTooltipLine2 = Elke kaats verhoogd schade.
+
 titlemenu.start = SPELEN
 titlemenu.host = HOSTEN
 titlemenu.join = JOINEN
 titlemenu.help = HELP
+titlemenu.options = OPTIES
+titlemenu.sound_and_video = BEELD EN GELUID
+titlemenu.levelEditor = LEVEL EDITOR
 titlemenu.exit = EXIT
 
 upgrade.full = AL OP HET MAXIMALE LEVEL
+upgrade.shopItem = JE KAN GEEN WINKEL ONDERDELEN UPGRADEN!
 upgrade.notEnoughMoney = U HEBT NIET GENOEG GELD ({0})
 upgrade.to = UPGRADDE NAAR LEVEL {0}
 
-player.hasDied = {0} IS GESTORVEN
-
+download.downloading = DOWNLOADEN..
+download.unpacking = UITPAKKEN..
