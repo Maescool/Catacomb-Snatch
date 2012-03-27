@@ -826,7 +826,6 @@ while (running) {
 	}
 
 	public static void startgame() {
-		Options.loadProperties();
 		MojamComponent mc = new MojamComponent();
 		System.out.println("Starting "+(Options.getAsBoolean(Options.OPENGL,Options.VALUE_FALSE)?"with":"without")+" OpenGL support");
 		System.setProperty("sun.java2d.opengl", Options.get(Options.OPENGL,Options.VALUE_FALSE));

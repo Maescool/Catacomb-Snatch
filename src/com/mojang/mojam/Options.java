@@ -32,6 +32,9 @@ public class Options {
 
     public static final String LOCALE = "locale";
     
+    public static final String DLSYSTEM = "dlsystem";
+    public static final String DLBUFFERSIZE = "dlbuffer";
+    
 	private static Properties properties = new Properties();
 	
 	public static int getCharacterID() {

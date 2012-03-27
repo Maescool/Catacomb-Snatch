@@ -1,5 +1,6 @@
-package com.mojang.mojam;
+package com.mojang.mojam.downloader;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.*;
 import java.io.*;
 import java.security.MessageDigest;
@@ -11,6 +12,9 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
+import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.MojamStartup;
+import com.mojang.mojam.Options;
 import com.mojang.mojam.mc.EnumOSMappingHelper;
 
 import com.mojang.mojam.gui.DownloadScreen;
@@ -18,6 +22,8 @@ import com.mojang.mojam.gui.DownloadScreen;
 public class Downloader {
 
     // private static DownloadScreen dScreen = null;
+
+    private static IDownloader downloadAgent = null;
 
     private static String baseURL = "http://assets.catacombsnatch.net/";
 
@@ -71,9 +77,41 @@ public class Downloader {
     public void CheckFiles() {
 	// DownloadScreen ds = new DownloadScreen();
 	// checkBinDir();
+	boolean debug = true;
+	if (debug) {
+	    downloadAgent = new ChannelDownloader();//Faster, less control
+	    //testSpeeds();
+	} else {
+	    downloadAgent = new DefaultDownloader();
+	}
 	checkNativeDir();
 	checkSoundDir();
 	MojamStartup.instance.startgame();
+    }
+    
+    private static void testSpeeds()
+    {
+	/* 
+	 * 0: DownloadAgent
+	 * 1: Default
+	 * 2: Channel
+	 */
+	IDownloader old = downloadAgent;
+	downloadAgent = new DefaultDownloader();
+	long startDefault = System.nanoTime();
+	downloadNative();
+	downloadAllSound(getSoundDir());
+	long endDefault = System.nanoTime();
+	downloadAgent = new ChannelDownloader();
+	long startChannel = System.nanoTime();
+	downloadNative();
+	downloadAllSound(getSoundDir());
+	long endChannel = System.nanoTime();
+	System.out.println("Times: ");
+	System.out.println(endDefault-startDefault);
+	System.out.println(endChannel-startChannel);
+	downloadAgent = old;
+	
     }
 
     // bindir
@@ -427,24 +465,28 @@ public class Downloader {
     public static void unpackJar(String jarFile, String destDir) {
 	DownloadScreen.unpackStart(new File(jarFile).getName().toString());
 	try {
-	    java.util.jar.JarFile jar = new java.util.jar.JarFile(jarFile);
+	    JarFile jar = new JarFile(jarFile);
 	    Enumeration<JarEntry> enumi = jar.entries();
 
 	    while (enumi.hasMoreElements()) {
-		java.util.jar.JarEntry file = (java.util.jar.JarEntry) enumi
+		JarEntry file = (JarEntry) enumi
 			.nextElement();
-		java.io.File f = new java.io.File(destDir
-			+ java.io.File.separator + file.getName());
+		File f = new File(destDir
+			+ File.separator + file.getName());
 		if (file.isDirectory()) { // if its a directory, create it
 		    f.mkdir();
 		    continue;
 		}
-		java.io.InputStream is = jar.getInputStream(file); // get the
+		InputStream is = jar.getInputStream(file); // get the
 		// input
 		// stream
-		java.io.FileOutputStream fos = new java.io.FileOutputStream(f);
-		while (is.available() > 0) { // write contents of 'is' to 'fos'
-		    fos.write(is.read());
+		FileOutputStream fos = new FileOutputStream(f);
+		byte[] buffer = new byte[1<<Options.getAsInteger(Options.DLBUFFERSIZE, 13)];
+		System.out.println(buffer.length);
+		int read;
+
+		while ((read = is.read(buffer)) != -1){
+		    fos.write(buffer, 0, read);
 		}
 		fos.close();
 		is.close();
@@ -470,46 +512,7 @@ public class Downloader {
 	try {
 	    DownloadScreen.downLoadStarted(new File(toFile).getName()
 		    .toString());
-	    url = url.replace(" ", "%20");
-	    URL urll = new URL(url);
-	    System.out.println("Opening connection to " + url + "...");
-	    URLConnection urlC = urll.openConnection();
-	    // allow both GZip and Deflate (ZLib) encodings
-	    urlC.setRequestProperty("Accept-Encoding", "gzip, deflate");
-	    // set the user agent to pass Cloud-Flare
-	    urlC.setRequestProperty("User-agent",
-		    "Mozilla/4.0 (compatible; Catacomb-Snatch; UnKnown)");
-	    // Print info about resource
-	    Date date = new Date(urlC.getLastModified());
-	    int fileSize = urlC.getContentLength();
-	    System.out
-		    .print("Copying resource (type: " + urlC.getContentType());
-	    System.out.println(", modified on: " + date.toString() + ")...");
-	    System.out.flush();
-	    String encoding = urlC.getContentEncoding();
-
-	    InputStream is = null;
-
-	    if (encoding != null && encoding.equalsIgnoreCase("gzip")) {
-		is = new GZIPInputStream(urlC.getInputStream());
-	    } else if (encoding != null && encoding.equalsIgnoreCase("deflate")) {
-		is = new InflaterInputStream(urlC.getInputStream(),
-			new Inflater(true));
-	    } else {
-		is = urlC.getInputStream();
-	    }
-
-	    FileOutputStream fos = null;
-	    fos = new FileOutputStream(toFile);
-	    int oneChar, count = 0;
-	    while ((oneChar = is.read()) != -1) {
-		fos.write(oneChar);
-		count++;
-		DownloadScreen.drawGraph(count, fileSize);
-	    }
-	    is.close();
-	    fos.close();
-	    System.out.println(count + " byte(s) of " + fileSize + " copied");
+	    downloadAgent.downloadTo(url, toFile);
 	    DownloadScreen.downloadEnd();
 	    return true;
 	} catch (MalformedURLException e) {

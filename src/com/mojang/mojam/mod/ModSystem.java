@@ -42,6 +42,7 @@ import com.mojang.mojam.Keys.Key;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.console.Console;
 import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.weapon.IWeapon;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.level.Level;
@@ -472,9 +473,9 @@ public final class ModSystem {
 	return i;
     }
 
-    public void registerWeapon(Class weapon, String text) {
-	//mojam.console.give.addWeapon(weapon.getClass().getSimpleName()
-	//	.toLowerCase(), text, weapon);
+    public void registerWeapon(Class<? extends IWeapon> weapon, String name,
+	    String text) {
+	mojam.console.give.registerWeapon(weapon, name, text);
     }
 
     /**

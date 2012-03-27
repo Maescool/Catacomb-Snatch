@@ -15,6 +15,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import com.mojang.mojam.downloader.Downloader;
 import com.mojang.mojam.gui.DownloadScreen;
 import com.mojang.mojam.gui.components.Button;
 import com.mojang.mojam.gui.components.ButtonListener;
@@ -54,7 +55,6 @@ public class MojamStartup extends Canvas implements Runnable, ButtonListener {
     private DownloadScreen ds;
 
     public MojamStartup() {
-
 	MojamComponent.constants = new Constants();
 	MojamComponent.texts = new Texts(new Locale("en"));
 
@@ -223,6 +223,7 @@ public class MojamStartup extends Canvas implements Runnable, ButtonListener {
     public static void main(String[] args) {
 	//
 	MojamStartup sl = new MojamStartup();
+	Options.loadProperties();
 	guiFrame = new JFrame(MojamComponent.GAME_TITLE);
 	JPanel panel = new JPanel(new BorderLayout());
 	panel.add(sl);

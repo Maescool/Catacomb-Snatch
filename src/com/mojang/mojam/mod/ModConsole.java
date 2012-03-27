@@ -21,8 +21,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
-import com.mojang.mojam.console.Console;
-
 @Deprecated
 public class ModConsole implements Runnable, KeyListener
 {
@@ -99,7 +97,7 @@ public class ModConsole implements Runnable, KeyListener
 
 	public static JFrame main(String[] args)
 	{
-		textField.addKeyListener(new Console());
+		textField.addKeyListener(new ModConsole());
 		scrollPane.setMinimumSize(new Dimension(30, 400));
 
 		JFrame frame = new JFrame("Console Window");
