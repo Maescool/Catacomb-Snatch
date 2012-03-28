@@ -8,11 +8,10 @@ import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.gamemode.RandomSpawner;
-import com.mojang.mojam.network.Packet;
 
 /**
  * @author Edmund Smith
- * @since 2-3-2012
+ * @since 28-3-2012
  */
 public abstract class Mod implements IMod
 {
@@ -78,7 +77,7 @@ public abstract class Mod implements IMod
 	 *            The {@link Packet} being sent over the network
 	 * @see Packet
 	 */
-	public void OnSendPacket(Packet packet)
+	public void OnSendPacket(Object packet)
 	{
 	}
 
@@ -116,7 +115,7 @@ public abstract class Mod implements IMod
 	 *            The {@link Packet} being received over the network
 	 * @see Packet
 	 */
-	public void OnReceivePacket(Packet packet)
+	public void OnReceivePacket(Object packet)
 	{
 	}
 
@@ -128,7 +127,7 @@ public abstract class Mod implements IMod
 	 *            The {@link Packet} being sent over the network
 	 * @see Packet
 	 */
-	public void HandlePacket(Packet packet)
+	public void HandlePacket(Object packet)
 	{
 	}
 

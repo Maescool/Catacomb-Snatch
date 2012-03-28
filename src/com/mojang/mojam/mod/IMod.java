@@ -8,7 +8,6 @@ import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.gamemode.RandomSpawner;
-import com.mojang.mojam.network.Packet;
 
 public interface IMod
 {
@@ -63,7 +62,7 @@ public interface IMod
 	 *            The {@link Packet} being sent over the network
 	 * @see Packet
 	 */
-	public void OnSendPacket(Packet packet);
+	public void OnSendPacket(Object packet);
 
 	/**
 	 * Called upon the victory of one player or team, so that fanfare
@@ -95,7 +94,7 @@ public interface IMod
 	 *            The {@link Packet} being received over the network
 	 * @see Packet
 	 */
-	public void OnReceivePacket(Packet packet);
+	public void OnReceivePacket(Object packet);
 	/**
 	 * Called whenever a packet is sent or received. Can not be
 	 * intercepted, but can be recorded.
@@ -104,7 +103,7 @@ public interface IMod
 	 *            The {@link Packet} being sent over the network
 	 * @see Packet
 	 */
-	public void HandlePacket(Packet packet);
+	public void HandlePacket(Object packet);
 
 	/**
 	 * Called upon the level being created. This can change fields

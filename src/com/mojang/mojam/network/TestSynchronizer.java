@@ -1,12 +1,7 @@
 package com.mojang.mojam.network;
 
 import java.net.ServerSocket;
-<<<<<<< HEAD
-import java.net.Socket;
 
-import com.mojang.mojam.network.packet.TurnPacket;
-=======
->>>>>>> d3ba3f6622a984bde2bae1d27ed151c5b6c09ab5
 
 public class TestSynchronizer {
 

@@ -4,16 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-<<<<<<< HEAD
-import com.mojang.mojam.network.packet.PingPacket;
-import com.mojang.mojam.network.packet.StartGamePacket;
-import com.mojang.mojam.network.packet.TurnPacket;
-=======
 import com.mojang.mojam.network.kryo.Network.ChatMessage;
 import com.mojang.mojam.network.kryo.Network.EndGameMessage;
 import com.mojang.mojam.network.kryo.Network.TurnMessage;
 import com.mojang.mojam.network.kryo.SnatchClient;
->>>>>>> d3ba3f6622a984bde2bae1d27ed151c5b6c09ab5
 
 public class TurnSynchronizer {
 

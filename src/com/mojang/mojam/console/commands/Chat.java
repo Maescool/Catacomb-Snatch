@@ -2,6 +2,7 @@ package com.mojang.mojam.console.commands;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.console.Console.Command;
+import com.mojang.mojam.network.kryo.Network.ChatMessage;
 
 public class Chat extends Command{
 
@@ -15,7 +16,7 @@ public class Chat extends Command{
 		msg += args[i] + " ";
 	}
 	msg += args[args.length-1];
-	MojamComponent.instance.synchronizer.addCommand(new com.mojang.mojam.network.packet.ChatCommand(msg));
+	MojamComponent.instance.synchronizer.addMessage(new ChatMessage(msg));
 }
     
 }

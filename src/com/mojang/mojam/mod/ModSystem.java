@@ -47,9 +47,8 @@ import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.gamemode.GameMode;
-import com.mojang.mojam.network.NetworkCommand;
-import com.mojang.mojam.network.Packet;
-import com.mojang.mojam.network.packet.ChangeKeyCommand;
+import com.mojang.mojam.network.kryo.Network;
+import com.mojang.mojam.network.kryo.Network.ChangeKeyMessage;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.Bitmap;
 
@@ -841,21 +840,21 @@ public final class ModSystem {
 	return i != 0;
     }
 
-    public static void sendPacket(Packet packet) {
+    public static void sendPacket(Object packet) {
 	for (IMod m : modList) {
 	    m.OnSendPacket(packet);
 	}
 	invoke("OnSendPacket", packet);
     }
 
-    public static void receivePacket(Packet packet) {
+    public static void receivePacket(Object packet) {
 	for (IMod m : modList) {
 	    m.OnReceivePacket(packet);
 	}
 	invoke("OnReceivePacket", packet);
     }
 
-    public static void handlePacket(Packet packet) {
+    public static void handlePacket(Object packet) {
 	for (IMod m : modList) {
 	    m.HandlePacket(packet);
 	}
@@ -1138,10 +1137,10 @@ public final class ModSystem {
 	}
     }
 
-    public static void handleNetworkCommand(int playerId, NetworkCommand packet) {
-	if (packet instanceof ChangeKeyCommand) {
-	    ChangeKeyCommand ckc = (ChangeKeyCommand) packet;
-	    Key key = mojam.synchedKeys[playerId].getAll().get(ckc.getKey());
+    public static void handleNetworkCommand(int playerId, Object packet) {
+	if (packet instanceof Network.ChangeKeyMessage) {
+	    ChangeKeyMessage ckc = (ChangeKeyMessage) packet;
+	    Key key = mojam.synchedKeys[playerId].getAll().get(ckc.key);
 	    if (key.isDown) {
 		for (IMod m : modList) {
 		    m.IfKeyDown(key);
