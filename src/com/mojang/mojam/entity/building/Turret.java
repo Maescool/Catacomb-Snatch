@@ -25,7 +25,6 @@ public class Turret extends Building implements IEditable {
 	
 	private int delayTicks = 0;
 	private int delay;
-	public int team;
 	public int radius;
 	public int radiusSqr;
 
