@@ -616,15 +616,28 @@ public class Player extends Mob implements LootCollector {
                 	((IUsable)closest).upgrade(this);
                 }
             }
-            
-            // If it is a building we should highlight on this game
-            // client, then highlight the building (also, remember the
-            // highlighted building, so we can unhighlight it again later)
-            if (shouldHighlightEntityOnThisGameClient(closest)) {
+
+			/**
+			 * If it is a building we should highlight on this game
+			 * client, then highlight the building (also, remember the
+			 * highlighted building, so we can unhighlight it again later)
+			 */
+            if (shouldHighlightEntity(closest)) {
                 selected = closest;
                 ((IUsable)selected).setHighlighted(true);
             }
         }
+    }
+  
+    /**
+     *  Whether this Player should highlight the entity in question, Multi player safe.
+     * @param entity the entity this player is trying to highlight
+     * @return true if this player can highlight the given entity
+     */
+    private boolean shouldHighlightEntity(Entity entity) {
+    	if (!(entity instanceof IUsable))
+    		return false;
+    	return ((IUsable)entity).isHighlightable() && canInteractWithEntity(entity) && this.team == entity.team; 
     }
     
     // Whether this Player should see the Entity in question
