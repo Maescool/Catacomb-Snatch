@@ -180,7 +180,6 @@ public class Console implements KeyListener {
 	public void doCommand(String command, String input) {
 		if(command.charAt(0) == '/')
 			command = command.substring(1); //remove forward slash
-		System.out.println(command+":"+input);
 		for(Command c : Command.commands) {
 			if(c != null && c.name.equals(command) && 
 				((c.canRunInGame()&&ingame)||

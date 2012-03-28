@@ -505,7 +505,7 @@ while (running) {
 		if (isMultiplayer && menuStack.isEmpty()) {
 			chat.render(screen);
 		}
-		if(console.isOpen() && menuStack.isEmpty()) {
+		if(console.isOpen()) {
 			console.render(screen);
 		}
 
@@ -636,8 +636,9 @@ while (running) {
 		if(this.isFocusOwner()) {
 			keys.console.tick();
 			if(keys.console.wasPressed()) {
-				console.toggle(level != null);
+				console.toggle(player!=null);
 				paused = !paused;
+				System.out.println("console");
 			}
 			if(console.isOpen()) {
 				if(menuStack.isEmpty()) {
@@ -660,7 +661,7 @@ while (running) {
 			setFullscreen(!fullscreen);
 		}
 
-		if (level != null && level.victoryConditions != null) {
+		if (level != null && level.victoryConditions != null && !console.isOpen()) {
 			if (level.victoryConditions.isVictoryConditionAchieved()) {
 				int winner = level.victoryConditions.playerVictorious();
 				GameCharacter winningCharacter = winner == players[0].getTeam() ? players[0].getCharacter()
@@ -731,7 +732,7 @@ while (running) {
 					}
 
 					keys.tick();
-					//TODO: Keyloading from Snatch
+					
 					for (Keys skeys : synchedKeys) {
 						skeys.tick();
 					}
@@ -1046,7 +1047,7 @@ while (running) {
 
 		case TitleMenu.RETURN_ID:
 			synchronizer.addMessage(new PauseMessage(false));
-			keys.tick();
+			if(!console.isOpen())keys.tick();
 			break;
 
 		case TitleMenu.BACK_ID:

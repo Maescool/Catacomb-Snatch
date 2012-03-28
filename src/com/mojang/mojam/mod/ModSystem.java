@@ -104,6 +104,7 @@ public final class ModSystem {
 	// ConsoleCommands.load.getClass();//.doCommand(new String[]{"Siege"});
     }
 
+    @Deprecated
     private static void loadLibs() {
 	// Placeholder for anything later on as necessary
 	if (isDebug)
@@ -541,6 +542,7 @@ public final class ModSystem {
 	for (Keys k : mojam.synchedKeys) {
 	    k.getAll().add(key);
 	}
+	mojam.keys.getAll().add(key);
 	reflectMethod(InputHandler.class, inputHandler, "initKey",
 		new Object[] { key, code });
 	System.out.println("Added key: " + key.name + " with keycode: " + code);

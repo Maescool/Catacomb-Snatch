@@ -79,7 +79,6 @@ public class mod_TestSpawners extends Mod
 	public void RunOnce()
 	{
 		ModSystem.addKey(placeBomb, ModSystem.keycode("b"));
-		//Snatch.addKey(placeBomb, );
 	}
 
 	@Override

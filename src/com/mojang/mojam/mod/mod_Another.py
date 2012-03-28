@@ -1,9 +1,9 @@
 
 def OnTick():
-    print 'Tick - Python!'
+    return
     
 def OnLevelTick(level):
-    print level.getClass().getName()
+    
     
 
     
