@@ -1,9 +1,12 @@
 package com.mojang.mojam.network;
 
 import java.net.ServerSocket;
+<<<<<<< HEAD
 import java.net.Socket;
 
 import com.mojang.mojam.network.packet.TurnPacket;
+=======
+>>>>>>> d3ba3f6622a984bde2bae1d27ed151c5b6c09ab5
 
 public class TestSynchronizer {
 
@@ -13,17 +16,17 @@ public class TestSynchronizer {
 	 * @param args
 	 */
 	public static void main(String[] args) throws Exception {
-
+/*
 		PacketLink packetLink = null;
 		int localId = 0;
 		if (args.length > 0 && args[0].equals("server")) {
 
 			serverSocket = new ServerSocket(3000);
 			Socket socket = serverSocket.accept();
-			packetLink = new NetworkPacketLink(socket);
+			//packetLink = new NetworkPacketLink(socket);
 
 		} else {
-			packetLink = new ClientSidePacketLink("localhost", 3000);
+			//packetLink = new ClientSidePacketLink("localhost", 3000);
 			localId = 1;
 		}
 
@@ -41,7 +44,7 @@ public class TestSynchronizer {
 
 	}
 
-	private static class PlayThread extends Thread implements PacketListener {
+	private static class PlayThread extends Thread{
 
 		private TurnSynchronizer turnSynchronizer;
 		private final int localId;
@@ -50,9 +53,9 @@ public class TestSynchronizer {
 		public PlayThread(int localId, PacketLink packetLink) {
 			this.localId = localId;
 			this.packetLink = packetLink;
-			turnSynchronizer = new TurnSynchronizer(null, packetLink, localId,
-					2);
-			packetLink.setPacketListener(this);
+			//turnSynchronizer = new TurnSynchronizer(null, packetLink, localId,
+			//		2);
+			//packetLink.setPacketListener(this);
 		}
 
 		@Override
@@ -77,7 +80,7 @@ public class TestSynchronizer {
 
 		public void handle(Packet packet) {
 			if (packet instanceof TurnPacket) {
-				turnSynchronizer.onTurnPacket((TurnPacket) packet);
+				//turnSynchronizer.onTurnPacket((TurnPacket) packet);
 			}
 		}
 	}
@@ -107,6 +110,6 @@ public class TestSynchronizer {
 	// packetQueue.clear();
 	// }
 	//
-	// }
+	*/ }
 
 }

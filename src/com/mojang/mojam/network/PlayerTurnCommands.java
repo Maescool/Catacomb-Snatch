@@ -31,16 +31,16 @@ public class PlayerTurnCommands {
 	}
 
 	public void addPlayerCommands(int playerId, int turnNumber,
-			List<NetworkCommand> commands) {
+			List<Object> commands) {
 		playerCommands.get(playerId).add(
 				new PlayerCommands(turnNumber, commands));
 	}
 
-	public List<NetworkCommand> popPlayerCommands(int playerId, int turnNumber) {
+	public List<Object> popPlayerCommands(int playerId, int turnNumber) {
 		for (PlayerCommands commands : playerCommands.get(playerId)) {
 			if (commands.turnNumber == turnNumber) {
 				playerCommands.get(playerId).remove(commands);
-				return commands.commands;
+				return commands.messages;
 			}
 		}
 		return null;
@@ -48,11 +48,11 @@ public class PlayerTurnCommands {
 
 	private class PlayerCommands {
 		private int turnNumber;
-		private List<NetworkCommand> commands;
+		private List<Object> messages;
 
-		public PlayerCommands(int turnNumber, List<NetworkCommand> commands) {
+		public PlayerCommands(int turnNumber, List<Object> messages) {
 			this.turnNumber = turnNumber;
-			this.commands = commands;
+			this.messages = messages;
 		}
 	}
 

@@ -18,6 +18,7 @@ import com.mojang.mojam.entity.weapon.IWeapon;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.tile.HoleTile;
 import com.mojang.mojam.level.tile.Tile;
+import com.mojang.mojam.math.BB;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
@@ -31,7 +32,6 @@ public abstract class Mob extends Entity {
 
 	// private double speed = 0.82;
 	protected double speed = 1.0;
-	public int team;
 	protected boolean doShowHealthBar = true;
     protected int healthBarOffset = 10;
 	double dir = 0;
@@ -62,6 +62,7 @@ public abstract class Mob extends Entity {
     public Vec2 aimVector;
     public IWeapon weapon;
 	protected Buffs buffs = new Buffs();
+	private boolean highlight;
 	
 	public Mob(double x, double y, int team) {
 		super();
@@ -229,8 +230,38 @@ public abstract class Mob extends Entity {
 		if (doShowHealthBar && health < maxHealth) {
             addHealthBar(screen);
         }
+		
+		renderMarker(screen);
 	}
 
+	/**
+	 * Render the marker onto the given screen
+	 * 
+	 * @param screen
+	 *            Screen
+	 */
+	protected void renderMarker(Screen screen) {
+		if (highlight) {
+			BB bb = getBB();
+			bb = bb.grow((getSprite().w - (bb.x1 - bb.x0))
+					/ (3 + Math.sin(System.currentTimeMillis() * .01)));
+			int width = (int) (bb.x1 - bb.x0);
+			int height = (int) (bb.y1 - bb.y0);
+			Bitmap marker = new Bitmap(width, height);
+			for (int y = 0; y < height; y++) {
+				for (int x = 0; x < width; x++) {
+					if ((x < 2 || x > width - 3 || y < 2 || y > height - 3)
+							&& (x < 5 || x > width - 6)
+							&& (y < 5 || y > height - 6)) {
+						int i = x + y * width;
+						marker.pixels[i] = 0xffffffff;
+					}
+				}
+			}
+			screen.blit(marker, bb.x0, bb.y0 - 4);
+		}
+	}
+	
 	protected void addHealthBar(Screen screen) {
         
         int start = (int) (health * 21 / maxHealth);
@@ -496,4 +527,12 @@ public abstract class Mob extends Entity {
     	if(weapon != null)
         weapon.weapontick();
     }
+
+	public boolean isHighlight() {
+		return highlight;
+	}
+
+	public void setHighlight(boolean highlight) {
+		this.highlight = highlight;
+	}
 }

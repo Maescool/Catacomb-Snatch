@@ -24,9 +24,6 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
@@ -60,7 +57,6 @@ import com.mojang.mojam.gui.components.Button;
 import com.mojang.mojam.gui.components.ButtonListener;
 import com.mojang.mojam.gui.components.ClickableComponent;
 import com.mojang.mojam.gui.components.Font;
-import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.gamemode.GameMode;
@@ -68,24 +64,17 @@ import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.mc.EnumOS2;
 import com.mojang.mojam.mc.EnumOSMappingHelper;
 import com.mojang.mojam.mod.ModSystem;
-import com.mojang.mojam.network.ClientSidePacketLink;
-import com.mojang.mojam.network.CommandListener;
-import com.mojang.mojam.network.NetworkCommand;
-import com.mojang.mojam.network.NetworkPacketLink;
-import com.mojang.mojam.network.Packet;
-import com.mojang.mojam.network.PacketLink;
-import com.mojang.mojam.network.PacketListener;
-import com.mojang.mojam.network.PauseCommand;
 import com.mojang.mojam.network.TurnSynchronizer;
-import com.mojang.mojam.network.packet.ChangeKeyCommand;
-import com.mojang.mojam.network.packet.ChangeMouseButtonCommand;
-import com.mojang.mojam.network.packet.ChangeMouseCoordinateCommand;
-import com.mojang.mojam.network.packet.CharacterCommand;
-import com.mojang.mojam.network.packet.ChatCommand;
-import com.mojang.mojam.network.packet.PingPacket;
-import com.mojang.mojam.network.packet.StartGamePacket;
-import com.mojang.mojam.network.packet.StartGamePacketCustom;
-import com.mojang.mojam.network.packet.TurnPacket;
+import com.mojang.mojam.network.kryo.Network.ChangeKeyMessage;
+import com.mojang.mojam.network.kryo.Network.ChangeMouseButtonMessage;
+import com.mojang.mojam.network.kryo.Network.ChangeMouseCoordinateMessage;
+import com.mojang.mojam.network.kryo.Network.CharacterMessage;
+import com.mojang.mojam.network.kryo.Network.ChatMessage;
+import com.mojang.mojam.network.kryo.Network.PauseMessage;
+import com.mojang.mojam.network.kryo.Network.StartGameCustomMessage;
+import com.mojang.mojam.network.kryo.Network.StartGameMessage;
+import com.mojang.mojam.network.kryo.SnatchClient;
+import com.mojang.mojam.network.kryo.SnatchServer;
 import com.mojang.mojam.resources.Constants;
 import com.mojang.mojam.resources.Texts;
 import com.mojang.mojam.screen.Art;
@@ -95,10 +84,10 @@ import com.mojang.mojam.sound.ISoundPlayer;
 import com.mojang.mojam.sound.NoSoundPlayer;
 import com.mojang.mojam.sound.SoundPlayer;
 
-public class MojamComponent extends Canvas implements Runnable, MouseMotionListener, CommandListener, PacketListener, MouseListener, ButtonListener {
+public class MojamComponent extends Canvas implements Runnable, MouseMotionListener, MouseListener, ButtonListener {
 
 	public static final String GAME_TITLE = "Catacomb Snatch";
-	public static final String GAME_VERSION = "1.0.0-SNAPSHOT";
+	public static final String GAME_VERSION = "1.1.1-SNAPSHOT";
 
 	public static MojamComponent instance;
 	public static Locale locale;
@@ -110,18 +99,18 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public static final int SCALE = 2;
 	private static JFrame guiFrame;
 	private boolean running = true;
-	private boolean paused;
+	public boolean paused;
 	private Cursor emptyCursor;
 	private double framerate = 60;
 	private int fps;
 	public static Screen screen = new Screen(GAME_WIDTH, GAME_HEIGHT);
 	private Level level;
-	private Chat chat = new Chat();
+	public Chat chat = new Chat();
 	public Console console = new Console();
-	
-	private LatencyCache latencyCache = new LatencyCache();
 
-	private MenuStack menuStack = new MenuStack();
+	public int latency;
+	
+	public MenuStack menuStack = new MenuStack();
 
 	private InputHandler inputHandler;
 	private int lastX = 0;
@@ -135,27 +124,27 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public Player[] players = new Player[2];
 	public Player player;
 	public TurnSynchronizer synchronizer;
-	private PacketLink packetLink;
-	private ServerSocket serverSocket;
+	
 	private boolean isMultiplayer;
-	private boolean isServer;
-	private int localId;
+	public boolean isServer;
+	public int localId;
 	public static int localTeam; //local team is the team of the client. This can be used to check if something should be only rendered on one person's screen
 
 	public GameCharacter playerCharacter;
-	private boolean sendCharacter = false;
+	public boolean sendCharacter = false;
 
-	private Thread hostThread;
 	private static boolean fullscreen = false;
 	public static ISoundPlayer soundPlayer;
 	private long nextMusicInterval = 0;
 	private byte sShotCounter = 0;
 
-	private int createServerState = 0;
+	public int createServerState = 0;
 	private static volatile File mojamDir = null;
 	
 	private TitleMenu menu = null;
 	private LocaleMenu localemenu = null;
+	private SnatchClient snatchClient;
+	private SnatchServer server;
 
 	public MojamComponent() {
 	    final String nativeLibDir = MojamComponent.getMojamDir()
@@ -186,7 +175,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		addKeyListener(menuStack);
 		addKeyListener(chat);
 		addKeyListener(console);
-
+		snatchClient = new SnatchClient();
+		snatchClient.setComponent(this);
 		instance = this;
 	}
 
@@ -274,14 +264,20 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	}
 
 	public void stop(boolean exit) {
-		if (exit) {		
-			running = false;
-			soundPlayer.stopBackgroundMusic();
-			soundPlayer.shutdown();
-			System.exit(0);
-		} else {
-			menuStack.add(new ExitMenu(GAME_WIDTH, GAME_HEIGHT));
+	    if (exit) {		
+		running = false;
+		soundPlayer.stopBackgroundMusic();
+		soundPlayer.shutdown();
+		System.exit(0);
+	    } else if (menuStack.empty()){
+		if (level != null && !isMultiplayer && !paused) {
+		    paused = true;
+		    menuStack.add(new PauseMenu(GAME_WIDTH, GAME_HEIGHT));
 		}
+		menuStack.add(new ExitMenu(GAME_WIDTH, GAME_HEIGHT));
+	    } else if(!(menuStack.peek() instanceof ExitMenu)){
+		menuStack.add(new ExitMenu(GAME_WIDTH, GAME_HEIGHT));
+	    }
 	}
 
 	private void init() {
@@ -330,7 +326,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		menuStack.add(new GuiError(s));
 	}
 
-	private synchronized void createLevel(String levelPath, GameMode mode, GameCharacter character) {
+	public synchronized void createLevel(String levelPath, GameMode mode, GameCharacter character) {
 		System.out.println("Creating level: "+levelPath);
 		LevelInformation li = LevelInformation.getInfoForPath(levelPath);
 		if (li != null) {
@@ -344,7 +340,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 	private synchronized void createLevel(LevelInformation li, GameMode mode, GameCharacter character) {
 		try {
-			//level = Level.fromFile(li);
 			level = mode.generateLevel(li);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -358,7 +353,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private synchronized void initLevel(GameCharacter character) {
 		if (level == null)
 			return;
-		// level.init();
 		players[0] = new Player(synchedKeys[0], synchedMouseButtons[0], level.width * Tile.WIDTH
 				/ 2 - 16, (level.height - 5 - 1) * Tile.HEIGHT - 16, Team.Team1, character);
 		players[0].setFacing(4);
@@ -388,10 +382,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			e.printStackTrace();
 			return;
 		}
-
-		// if (!isMultiplayer) {
-		// createLevel();
-		// }
 
 		int toTick = 0;
 
@@ -425,14 +415,9 @@ while (running) {
 
 			for (int i = 0; i < tickCount; i++) {
 				toTick--;
-				// long before = System.nanoTime();
 				tick();
-				// long after = System.nanoTime();
-				// System.out.println("Tick time took " + (after - before) *
-				// 100.0 / nsPerTick + "% of the max time");
 				shouldRender = true;
 			}
-			// shouldRender = true;
 
 			BufferStrategy bs = getBufferStrategy();
 			if (bs == null) {
@@ -445,7 +430,6 @@ while (running) {
 				Graphics g = bs.getDrawGraphics();
 
 				Random lastRandom = TurnSynchronizer.synchedRandom;
-				TurnSynchronizer.synchedRandom = null;
 
 				render(g);
 
@@ -514,7 +498,7 @@ while (running) {
 
 			Font font = Font.defaultFont();
 			if (isMultiplayer) {
-				font.draw(screen, texts.latency(latencyCache.latencyCacheReady() ? "" + latencyCache.avgLatency() : "-"), GAME_WIDTH - 105, 20);
+				font.draw(screen, texts.latency(latency), GAME_WIDTH - 105, 20);
 			}
 		}
 
@@ -667,8 +651,7 @@ while (running) {
 		if (level != null && !isMultiplayer && !paused && !this.isFocusOwner()) {
 			keys.release();
 			mouseButtons.releaseAll();
-			PauseCommand pauseCommand = new PauseCommand(true);
-			synchronizer.addCommand(pauseCommand);
+			synchronizer.addMessage(new PauseMessage());
 			paused = true;
 		}
 
@@ -689,8 +672,8 @@ while (running) {
             }
         }
 		
-		if (packetLink != null) {
-			packetLink.tick();
+		if (snatchClient != null) {
+			snatchClient.tick();
 		}
 
 		// Store virtual position of mouse (pre-scaled)
@@ -716,7 +699,7 @@ while (running) {
 		}
 
 		if (sendCharacter) {
-			synchronizer.addCommand(new CharacterCommand(localId, playerCharacter.ordinal()));
+			synchronizer.addMessage(new CharacterMessage(localId, playerCharacter.ordinal()));
 			sendCharacter = false;
 		}
 
@@ -729,12 +712,10 @@ while (running) {
 				for (int index = 0; index < mouseButtons.currentState.length; index++) {
 					boolean nextState = mouseButtons.nextState[index];
 					if (mouseButtons.isDown(index) != nextState) {
-						synchronizer.addCommand(new ChangeMouseButtonCommand(index, nextState));
+						synchronizer.addMessage(new ChangeMouseButtonMessage(index, nextState));
 					}
 				}
-
-				synchronizer.addCommand(new ChangeMouseCoordinateCommand(mouseButtons.getX(), mouseButtons.getY(), mouseButtons.mouseHidden));
-
+				synchronizer.addMessage(new ChangeMouseCoordinateMessage(mouseButtons.getX(), mouseButtons.getY(), mouseButtons.mouseHidden));
 				mouseButtons.tick();
 				for (MouseButtons sMouseButtons : synchedMouseButtons) {
 					sMouseButtons.tick();
@@ -745,7 +726,7 @@ while (running) {
 						Keys.Key key = keys.getAll().get(index);
 						boolean nextState = key.nextState;
 						if (key.isDown != nextState) {
-							synchronizer.addCommand(new ChangeKeyCommand(index, nextState));
+							synchronizer.addMessage(new ChangeKeyMessage(index, nextState));
 						}
 					}
 
@@ -758,7 +739,7 @@ while (running) {
 					if (keys.pause.wasPressed()) {
 						keys.release();
 						mouseButtons.releaseAll();
-						synchronizer.addCommand(new PauseCommand(true));
+						synchronizer.addMessage(new PauseMessage());
 					}
 
 					level.tick();
@@ -783,21 +764,25 @@ while (running) {
 		if (createServerState == 1) {
 			createServerState = 2;
 
-			synchronizer = new TurnSynchronizer(MojamComponent.this, packetLink, localId, 2);
+			synchronizer = new TurnSynchronizer(snatchClient, localId, 2);
 
 			menuStack.clear();
 			createLevel(TitleMenu.level, TitleMenu.defaultGameMode, playerCharacter);
 
 			synchronizer.setStarted(true);
 			if (TitleMenu.level.vanilla) {
-				packetLink.sendPacket(new StartGamePacket(TurnSynchronizer.synchedSeed,
+				
+				
+				snatchClient.sendMessage(new StartGameMessage(TurnSynchronizer.synchedSeed,
 						TitleMenu.level.getUniversalPath(), TitleMenu.difficulty.ordinal(), playerCharacter.ordinal()));
+				
+			
 			} else {
-				packetLink.sendPacket(new StartGamePacketCustom(TurnSynchronizer.synchedSeed,
+				snatchClient.sendMessage(new StartGameCustomMessage(TurnSynchronizer.synchedSeed,
 						level, TitleMenu.difficulty.ordinal(),
 						playerCharacter.ordinal()));
 			}
-			packetLink.setPacketListener(MojamComponent.this);
+			
 
 		}
 		ModSystem.afterTick();
@@ -816,7 +801,7 @@ while (running) {
 
 		String msg = chat.getWaitingMessage();
 		if (msg != null) {
-			synchronizer.addCommand(new ChatCommand(texts.playerNameCharacter(playerCharacter) + ": " + msg));
+			synchronizer.addMessage(new ChatMessage(texts.playerNameCharacter(playerCharacter) + ": " + msg));
 		}
 	}
 	
@@ -878,83 +863,6 @@ while (running) {
 	}
 
 	@Override
-	public void handle(int playerId, NetworkCommand packet) {
-
-		ModSystem.handleNetworkCommand(playerId,packet);
-		if (packet instanceof ChangeKeyCommand) {
-			ChangeKeyCommand ckc = (ChangeKeyCommand) packet;
-			synchedKeys[playerId].getAll().get(ckc.getKey()).nextState = ckc.getNextState();
-		}
-
-		if (packet instanceof ChangeMouseButtonCommand) {
-			ChangeMouseButtonCommand ckc = (ChangeMouseButtonCommand) packet;
-			synchedMouseButtons[playerId].nextState[ckc.getButton()] = ckc.getNextState();
-		}
-
-		if (packet instanceof ChangeMouseCoordinateCommand) {
-			ChangeMouseCoordinateCommand ccc = (ChangeMouseCoordinateCommand) packet;
-			synchedMouseButtons[playerId].setPosition(new Point(ccc.getX(), ccc.getY()));
-			synchedMouseButtons[playerId].mouseHidden = ccc.isMouseHidden();
-		}
-
-		if (packet instanceof ChatCommand) {
-			ChatCommand cc = (ChatCommand) packet;
-			chat.addMessage(cc.getMessage());
-		}
-
-		if (packet instanceof CharacterCommand) {
-			CharacterCommand charCommand = (CharacterCommand) packet;
-			players[charCommand.getPlayerID()].setCharacter(GameCharacter.values()[charCommand.getCharacterID()]);
-		}
-
-		if (packet instanceof PauseCommand) {
-			PauseCommand pc = (PauseCommand) packet;
-			paused = pc.isPause();
-			if (paused) {
-				menuStack.add(new PauseMenu(GAME_WIDTH, GAME_HEIGHT));
-			} else {
-				menuStack.safePop();
-			}
-		}
-	}
-
-	@Override
-	public void handle(Packet packet) {
-		if (packet instanceof StartGamePacket) {
-			if (!isServer) {
-				sendCharacter = true;
-				StartGamePacket sgPacker = (StartGamePacket) packet;
-				synchronizer.onStartGamePacket(sgPacker);
-				TitleMenu.difficulty = DifficultyInformation.getByInt(
-						sgPacker.getDifficulty());
-				createLevel(sgPacker.getLevelFile(), TitleMenu.defaultGameMode,
-						GameCharacter.values()[sgPacker.getOpponentCharacterID()]);
-			}
-		} else if (packet instanceof TurnPacket) {
-			synchronizer.onTurnPacket((TurnPacket) packet);
-		} else if (packet instanceof StartGamePacketCustom) {
-			if (!isServer) {
-				sendCharacter = true;
-				StartGamePacketCustom sgPacker = (StartGamePacketCustom) packet;
-				synchronizer.onStartGamePacket((StartGamePacket) packet);
-				TitleMenu.difficulty = DifficultyInformation.getByInt(
-						sgPacker.getDifficulty());
-				level = sgPacker.getLevel();
-				paused = false;
-				initLevel(GameCharacter.values()[sgPacker.getOpponentCharacterID()]);
-			}
-		} else if (packet instanceof PingPacket) {
-			PingPacket pp = (PingPacket) packet;
-			synchronizer.onPingPacket(pp);
-			if (pp.getType() == PingPacket.TYPE_ACK) {
-				latencyCache.addToLatencyCache(pp.getLatency());
-			}
-		}
-		ModSystem.handlePacket(packet);
-	}
-
-
-	@Override
 	public void buttonPressed(ClickableComponent component) {
 		if (component instanceof Button) {
 			final Button button = (Button) component;
@@ -989,6 +897,9 @@ while (running) {
 		case TitleMenu.LOCALE_NL_ID:
 			setLocale("nl");
 			break;
+		case TitleMenu.LOCALE_PL_ID:
+			setLocale("pl");
+			break;
 		case TitleMenu.LOCALE_PT_BR_ID:
 			setLocale("pt_br");
 			break;
@@ -1005,6 +916,12 @@ while (running) {
 			setLocale("af");
 			break;
 		case TitleMenu.RETURN_TO_TITLESCREEN:
+			if(isMultiplayer) {
+				snatchClient.shutdown();
+				if(isServer) {
+					server.shutdown();
+				}
+			}
 			menuStack.clear();
 			level = null;
 			TitleMenu menu = new TitleMenu(GAME_WIDTH, GAME_HEIGHT);
@@ -1021,7 +938,7 @@ while (running) {
 
 			localId = 0;
 			MojamComponent.localTeam = Team.Team1;
-			synchronizer = new TurnSynchronizer(this, null, 0, 1);
+			synchronizer = new TurnSynchronizer(snatchClient, 0, 1);
 			synchronizer.setStarted(true);
 
 			createLevel(TitleMenu.level, TitleMenu.defaultGameMode, playerCharacter);
@@ -1035,12 +952,6 @@ while (running) {
 		case TitleMenu.SELECT_HOST_LEVEL_ID:
 			menuStack.add(new LevelSelect(true));
 			break;
-		/*
-		 * case TitleMenu.UPDATE_LEVELS: GuiMenu menu = menuStack.pop(); if
-		 * (menu instanceof LevelSelect) { menuStack.add(new
-		 * LevelSelect(((LevelSelect) menu).bHosting)); } else { menuStack.add(new
-		 * LevelSelect(false)); } }
-		 */
 		case TitleMenu.HOST_GAME_ID:
 			menuStack.add(new HostingWaitMenu());
 			isMultiplayer = true;
@@ -1050,43 +961,12 @@ while (running) {
 				if (isServer) {
 					localId = 0;
 					MojamComponent.localTeam = Team.Team1;
-					serverSocket = new ServerSocket(Options.getAsInteger(Options.MP_PORT, 3000));
-					serverSocket.setSoTimeout(1000);
 
-					hostThread = new Thread() {
-
-						@Override
-						public void run() {
-							boolean fail = true;
-							try {
-								while (!isInterrupted()) {
-									Socket socket = null;
-									try {
-										socket = serverSocket.accept();
-										socket.setTcpNoDelay(true);
-									} catch (SocketTimeoutException e) {
-									}
-									if (socket == null) {
-										System.out.println("Waiting for player to connect");
-										continue;
-									}
-									fail = false;
-									packetLink = new NetworkPacketLink(socket);
-									createServerState = 1;
-									break;
-								}
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-							if (fail) {
-								try {
-									serverSocket.close();
-								} catch (IOException e) {
-								}
-							}
-						};
-					};
-					hostThread.start();
+					server = new SnatchServer();
+					
+					snatchClient.setComponent(MojamComponent.this);
+					snatchClient.connectLocal();				
+				
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -1099,9 +979,11 @@ while (running) {
 
 		case TitleMenu.CANCEL_JOIN_ID:
 			menuStack.safePop();
-			if (hostThread != null) {
-				hostThread.interrupt();
-				hostThread = null;
+			if(isMultiplayer) {
+				snatchClient.shutdown();
+				if(isServer) {
+					server.shutdown();
+				}
 			}
 			break;
 
@@ -1118,12 +1000,13 @@ while (running) {
 			try {
 				localId = 1;
 				MojamComponent.localTeam = Team.Team2;
-				packetLink = new ClientSidePacketLink(ip, port);
-				synchronizer = new TurnSynchronizer(this, packetLink, localId, 2);
-				packetLink.setPacketListener(this);
+	
+				snatchClient.setComponent(MojamComponent.this);
+				snatchClient.connect(ip, port);
+
+				synchronizer = new TurnSynchronizer(snatchClient, localId, 2);
 			} catch (Exception e) {
 				e.printStackTrace();
-				// System.exit(1);
 				menuStack.add(new TitleMenu(GAME_WIDTH, GAME_HEIGHT));
 			}
 			break;
@@ -1162,7 +1045,7 @@ while (running) {
 			break;
 
 		case TitleMenu.RETURN_ID:
-			synchronizer.addCommand(new PauseCommand(false));
+			synchronizer.addMessage(new PauseMessage(false));
 			keys.tick();
 			break;
 

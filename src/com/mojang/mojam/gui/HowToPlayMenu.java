@@ -36,7 +36,7 @@ public class HowToPlayMenu extends GuiMenu {
 	    if( ! inGame) {
 	        screen.blit(Art.background, 0, 0);
 	    } else {
-            screen.alphaFill(0, 0, MojamComponent.GAME_WIDTH, MojamComponent.GAME_HEIGHT, 0xff000000, 0x30);
+            screen.alphaFill(0, 0, MojamComponent.GAME_WIDTH, MojamComponent.GAME_HEIGHT, 0xff000000, 0xC0);
 	    }
 		
 		
@@ -99,6 +99,7 @@ public class HowToPlayMenu extends GuiMenu {
 		font.draw(screen, MojamComponent.texts.getStatic("help.rails1"), tab2, line);
 		font.draw(screen, MojamComponent.texts.getStatic("help.rails2"), tab2, line+10);
 		font.draw(screen, MojamComponent.texts.getStatic("help.rails3"), tab2, line+20);
+		font.draw(screen, MojamComponent.texts.getStatic("help.rails4"), tab2, line+30);
         
         // Panel separation lines
         for (int i = 0; i < 3; i++) {

@@ -26,6 +26,7 @@ public class LocaleMenu extends GuiMenu {
 	private Button idBtn = null;
 	private Button itBtn = null;
 	private Button nlBtn = null;
+	private Button plBtn = null;
 	private Button pt_brBtn = null;
 	private Button ruBtn = null;
 	private Button slBtn = null;
@@ -50,9 +51,10 @@ public class LocaleMenu extends GuiMenu {
 		frBtn = (Button) addButton(new Button(TitleMenu.LOCALE_FR_ID, Constants.getString("options.locale_fr"), left_xOffset, (yOffset += offset)));
 		idBtn = (Button) addButton(new Button(TitleMenu.LOCALE_IND_ID, Constants.getString("options.locale_ind"), left_xOffset, (yOffset += offset)));
 		svBtn = (Button) addButton(new Button(TitleMenu.LOCALE_SV_ID, Constants.getString("options.locale_sv"), left_xOffset, (yOffset += offset)));
+		itBtn = (Button) addButton(new Button(TitleMenu.LOCALE_IT_ID, Constants.getString("options.locale_it"), left_xOffset, (yOffset += offset)));
 		yOffset = TopYOffset;
-		itBtn = (Button) addButton(new Button(TitleMenu.LOCALE_IT_ID, Constants.getString("options.locale_it"), right_xOffset, (yOffset += offset)));
 		nlBtn = (Button) addButton(new Button(TitleMenu.LOCALE_NL_ID, Constants.getString("options.locale_nl"), right_xOffset, (yOffset += offset)));
+		plBtn = (Button) addButton(new Button(TitleMenu.LOCALE_PL_ID, Constants.getString("options.locale_pl"), right_xOffset, (yOffset += offset)));
 		pt_brBtn = (Button) addButton(new Button(TitleMenu.LOCALE_PT_BR_ID, Constants.getString("options.locale_pt_br"), right_xOffset, (yOffset += offset)));
 		ruBtn = (Button) addButton(new Button(TitleMenu.LOCALE_RU_ID, Constants.getString("options.locale_ru"), right_xOffset, (yOffset += offset)));
 		slBtn = (Button) addButton(new Button(TitleMenu.LOCALE_SL_ID, Constants.getString("options.locale_sl"), right_xOffset, (yOffset += offset)));
@@ -77,7 +79,7 @@ public class LocaleMenu extends GuiMenu {
 		if (!inGame) {
 			screen.blit(Art.background, 0, 0);
 		} else {
-			screen.alphaFill(0, 0, gameWidth, gameHeight, 0xff000000, 0x30);
+			screen.alphaFill(0, 0, gameWidth, gameHeight, 0xff000000, 0xC0);
 		}
 
 		super.render(screen);
@@ -111,6 +113,7 @@ public class LocaleMenu extends GuiMenu {
 		idBtn.setLabel(Constants.getString("options.locale_ind"));
 		itBtn.setLabel(Constants.getString("options.locale_it"));
 		nlBtn.setLabel(Constants.getString("options.locale_nl"));
+		plBtn.setLabel(Constants.getString("options.locale_pl"));
 		pt_brBtn.setLabel(Constants.getString("options.locale_pt_br"));
 		ruBtn.setLabel(Constants.getString("options.locale_ru"));
 		slBtn.setLabel(Constants.getString("options.locale_sl"));

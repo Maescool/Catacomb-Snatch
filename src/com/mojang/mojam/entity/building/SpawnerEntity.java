@@ -28,12 +28,17 @@ public abstract class SpawnerEntity extends Building implements IEditable
 	/**
 	 * Constructor
 	 * 
+<<<<<<< HEAD
 	 * @param x
 	 *            Initial X coordinate
 	 * @param y
 	 *            Initial Y coordinate
 	 * @param type
 	 *            Mob type
+=======
+	 * @param x Initial X coordinate
+	 * @param y Initial Y coordinate
+>>>>>>> d3ba3f6622a984bde2bae1d27ed151c5b6c09ab5
 	 */
 	public SpawnerEntity(double x, double y)
 	{
@@ -76,7 +81,10 @@ public abstract class SpawnerEntity extends Building implements IEditable
 		Tile spawntile = level.getTile(xin, yin);
 
 		Mob te = getMob(x,y);
-		if (level.countEntities(Mob.class) < level.maxMonsters && level.getEntities(te.getBB().grow(8), te.getClass()).size() == 0 && spawntile.canPass(te))
+		
+		if (level.countEntities(Mob.class) < level.maxMonsters
+				&& level.getEntities(te.getBB().grow(8), te.getClass()).isEmpty()
+				&& spawntile.canPass(te))
 			level.addMob(te,xin,yin);
 	}
 
