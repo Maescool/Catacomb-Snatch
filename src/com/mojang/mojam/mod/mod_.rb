@@ -1,25 +1,38 @@
-function OnRender(){}
+def OnRender()
+end
 
-function OnLevelTick(level){}
+def OnLevelTick(level)
+end
 
-function OnTick(){}
+def OnTick()
+end
     
-function AfterTick(){}
+def AfterTick()
+end
     
-function OnStartRender(){}
+def OnStartRender()
+end
     
-function RunOnce(){}
+def RunOnce()
+end
     
-function OnClose(){}
+def OnClose()
+end
     
-function OnSendPacket(packet){}
+def OnSendPacket(packet)
+end
     
-function OnStop(){}
+def OnStop()
+end
     
-function OnVictory(team){}
+def OnVictory(team)
+end
     
-function OnReceivePacket(packet){}
+def OnReceivePacket(packet)
+end
     
-function HandlePacket(packet){}
+def HandlePacket(packet)
+end
     
-function CreateLevel(level){}
+def CreateLevel(level)
+end
