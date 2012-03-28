@@ -33,6 +33,8 @@ public class Console implements KeyListener {
 	private boolean completedInput;
 
 	private boolean open;
+	
+	private boolean ingame = false;
 
 	/***
 	 * Left padding size when drawing console text
@@ -72,7 +74,7 @@ public class Console implements KeyListener {
 	/***
 	 * Closes the console and cancels current input
 	 */
-	public void close() {
+	private void close() {
 		typing = "";
 		input = null;
 		completedInput = false;
@@ -82,10 +84,22 @@ public class Console implements KeyListener {
 	/***
 	 * Opens the console
 	 */
-	public void open() {
+	private void open() {
 		open = true;
 	}
 
+	/***
+	 * Toggles between open and close.
+	 */
+	public void toggle(boolean inGame) {
+		if(open)
+			close();
+		else
+			open();
+		
+		ingame = inGame;
+	}
+	
 	/***
 	 * Toggles between open and close.
 	 */
@@ -168,8 +182,9 @@ public class Console implements KeyListener {
 			command = command.substring(1); //remove forward slash
 		System.out.println(command+":"+input);
 		for(Command c : Command.commands) {
-		    System.out.println(c.name);
-			if(c != null && c.name.equals(command)) {
+			if(c != null && c.name.equals(command) && 
+				((c.canRunInGame()&&ingame)||
+				(c.canRunInMenu()&&!ingame))) {
 
 				String[] args = getArgs(input,c.numberOfArgs);
 				c.doCommand(args);
@@ -300,6 +315,10 @@ public class Console implements KeyListener {
 			this.helpMessage = helpMessage;
 			commands.add(this);			
 		}
+		
+		public abstract boolean canRunInGame();
+		
+		public abstract boolean canRunInMenu();
 		
 		public void log(String s)
 		{

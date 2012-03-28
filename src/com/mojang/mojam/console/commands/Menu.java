@@ -13,5 +13,13 @@ public class Menu extends Command {
     public void doCommand(String[] args) {
 	MojamComponent.instance.handleAction(TitleMenu.RETURN_TO_TITLESCREEN);
     }
+    
+    public boolean canRunInGame() {
+	return true;
+    }
+
+    public boolean canRunInMenu() {
+	return true;
+    }
 
 }

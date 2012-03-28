@@ -14,4 +14,12 @@ public class Time extends Command {
     public void doCommand(String[] s) {
 	log(new Date(System.currentTimeMillis()).toString());
     }
+    
+    public boolean canRunInGame() {
+	return true;
+    }
+
+    public boolean canRunInMenu() {
+	return true;
+    }
 }

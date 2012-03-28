@@ -18,5 +18,13 @@ public class Chat extends Command{
 	msg += args[args.length-1];
 	MojamComponent.instance.synchronizer.addMessage(new ChatMessage(msg));
 }
+
+    public boolean canRunInGame() {
+	return true;
+    }
+
+    public boolean canRunInMenu() {
+	return false;
+    }
     
 }

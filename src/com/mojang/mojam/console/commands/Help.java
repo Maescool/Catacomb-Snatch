@@ -18,5 +18,13 @@ public class Help extends Console.Command {
 		log(c.name + " : " + c.helpMessage);
 	}
     }
+    
+    public boolean canRunInGame() {
+	return true;
+    }
+
+    public boolean canRunInMenu() {
+	return true;
+    }
 
 }

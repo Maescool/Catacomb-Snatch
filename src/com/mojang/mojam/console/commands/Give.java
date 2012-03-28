@@ -98,5 +98,13 @@ public class Give extends Command {
 
 	}
     }
+    
+    public boolean canRunInGame() {
+	return true;
+    }
+
+    public boolean canRunInMenu() {
+	return false;
+    }
 
 }

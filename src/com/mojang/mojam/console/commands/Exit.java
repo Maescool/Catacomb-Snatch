@@ -14,5 +14,13 @@ public class Exit extends Command{
 		System.exit(0);
 	else
 		MojamComponent.instance.stop(false);
-}
+    }
+    
+    public boolean canRunInGame() {
+	return true;
+    }
+
+    public boolean canRunInMenu() {
+	return true;
+    }
 }

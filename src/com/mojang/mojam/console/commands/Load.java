@@ -17,5 +17,13 @@ public class Load extends Command {
 	// TODO: Needs MUCH work
 	// MojamComponent.instance.handleAction(TitleMenu.START_GAME_ID);
     }
+    
+    public boolean canRunInGame() {
+	return true;
+    }
+
+    public boolean canRunInMenu() {
+	return true;
+    }
 
 }

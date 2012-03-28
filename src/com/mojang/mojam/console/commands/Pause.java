@@ -11,8 +11,16 @@ public class Pause extends Command{
     }
 
     public void doCommand(String[] args) {
-	MojamComponent.instance.console.close();
+	MojamComponent.instance.console.toggle();
 	MojamComponent.instance.synchronizer.addMessage(new PauseMessage(true));
+    }
+    
+    public boolean canRunInGame() {
+	return true;
+    }
+
+    public boolean canRunInMenu() {
+	return false;
     }
 
 }

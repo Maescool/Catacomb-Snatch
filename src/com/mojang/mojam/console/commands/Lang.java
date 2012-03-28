@@ -16,5 +16,13 @@ public class Lang extends Command {
 	    MojamComponent.instance.setLocale(args[0]);
 	}
     }
+    
+    public boolean canRunInGame() {
+	return true;
+    }
+
+    public boolean canRunInMenu() {
+	return true;
+    }
 
 }

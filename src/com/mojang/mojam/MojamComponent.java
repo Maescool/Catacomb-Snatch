@@ -633,10 +633,10 @@ while (running) {
 
 	private void tick() {
 		//Console open/close
-		if(this.isFocusOwner() && level != null) {
+		if(this.isFocusOwner()) {
 			keys.console.tick();
 			if(keys.console.wasPressed()) {
-				console.toggle();
+				console.toggle(level != null);
 				paused = !paused;
 			}
 			if(console.isOpen()) {
