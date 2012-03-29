@@ -9,8 +9,8 @@ import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.mod.ModSystem;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 /**
  * Spawner entity. A sarcophage which spawns enemies of a given type onto the
@@ -82,11 +82,9 @@ public abstract class SpawnerEntity extends Building implements IEditable
 	protected abstract Mob getMob(double x, double y);
 
 	@Override
-	public Bitmap getSprite()
-	{
-		int newIndex = (int) (3 - (3 * health) / maxHealth);
-		if(newIndex != lastIndex)
-		{
+	public AbstractBitmap getSprite() {
+		int newIndex = (int)(3 - (3 * health) / maxHealth);
+		if (newIndex != lastIndex) {
 			// if (newIndex > lastIndex) // means more hurt
 			// level.addEntity(new SmokeAnimation(pos.x - 12, pos.y - 20,
 			// Art.fxSteam24, 40));
@@ -109,20 +107,19 @@ public abstract class SpawnerEntity extends Building implements IEditable
 	}
 
 	@Override
-	public Bitmap getBitMapForEditor()
-	{
+	public AbstractBitmap getBitMapForEditor() {
 		return Art.mobSpawner[0][0];
 	}
 
 	@Override
-    public void render(Screen screen) {
+    public void render(AbstractScreen screen) {
 	    super.render(screen);
-	    screen.blit(Art.mobSpawnerShadow, pos.x - Art.mobSpawnerShadow.w / 2 - 1, pos.y - Art.mobSpawnerShadow.h / 2 + 7);
+	    screen.blit(Art.mobSpawnerShadow, pos.x - Art.mobSpawnerShadow.getWidth() / 2 - 1, pos.y - Art.mobSpawnerShadow.getHeight() / 2 + 7);
     }
 	
-	protected Bitmap blitMobOnTop(Bitmap mobicon) {
-		Bitmap bitmap = Art.mobSpawner[0][0].copy();
-		bitmap.blit(mobicon, (bitmap.w/2)-mobicon.w/2,(bitmap.h/2)-5-mobicon.h/2);
+	protected AbstractBitmap blitMobOnTop(AbstractBitmap mobicon) {
+		AbstractBitmap bitmap = Art.mobSpawner[0][0].copy();
+		bitmap.blit(mobicon, (bitmap.getWidth()/2)-mobicon.getWidth()/2,(bitmap.getHeight()/2)-5-mobicon.getHeight()/2);
 		return bitmap;
 	}
 	

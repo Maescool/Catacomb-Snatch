@@ -3,7 +3,7 @@ package com.mojang.mojam.entity.building;
 import com.mojang.mojam.entity.mob.Bat;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.AbstractBitmap;
 
 public class SpawnerForBat extends SpawnerEntity {
 
@@ -38,10 +38,10 @@ public class SpawnerForBat extends SpawnerEntity {
 	}
 
 	@Override
-	public Bitmap getBitMapForEditor() {
-		Bitmap bitmap = Art.mobSpawner[0][0].copy();
-		Bitmap shrink = Bitmap.shrink(Art.bat[0][0]);
-		bitmap.blit(shrink, (bitmap.w/2)-shrink.w/2,(bitmap.h/2)-5-shrink.h/2);
+	public AbstractBitmap getBitMapForEditor() {
+		AbstractBitmap bitmap = Art.mobSpawner[0][0].copy();
+		AbstractBitmap shrink = Art.bat[0][0].shrink();
+		bitmap.blit(shrink, (bitmap.getWidth()/2)-shrink.getWidth()/2,(bitmap.getHeight()/2)-5-shrink.getHeight()/2);
 		return bitmap;
 	}
 

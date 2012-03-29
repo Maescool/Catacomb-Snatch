@@ -1,8 +1,8 @@
 package com.mojang.mojam.entity.mob;
 
 import com.mojang.mojam.network.TurnSynchronizer;
+import com.mojang.mojam.screen.AbstractBitmap;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
 
 public class TestEntity extends Mob {
 	public TestEntity(double x, double y) {
@@ -35,7 +35,7 @@ public class TestEntity extends Mob {
 		super.die();
 	}
 
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		int facing = (int) ((Math.atan2(xd, -yd) * 4 / (Math.PI * 2) + 2.5)) & 3;
 
 		return Art.mummy[facing][0];

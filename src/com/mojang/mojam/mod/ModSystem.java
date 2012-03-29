@@ -50,8 +50,9 @@ import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.gamemode.GameMode;
 import com.mojang.mojam.network.kryo.Network;
 import com.mojang.mojam.network.kryo.Network.ChangeKeyMessage;
+import com.mojang.mojam.screen.AbstractBitmap;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.MojamBitmap;
 
 public final class ModSystem {
     private static boolean init = false;
@@ -582,8 +583,8 @@ public final class ModSystem {
      * return myBitmap[animationId][frameId];
 	 * }
      */
-    public static Bitmap[][] addAnimation(String src) {
-	return Art.cut(src, 32, 32);
+    public static AbstractBitmap[][] addAnimation(String src) {
+	return mojam.screen.cut(src, 32, 32);
     }
 
     /**
@@ -593,7 +594,7 @@ public final class ModSystem {
      *            The location of the bitmap file
      * @return A bitmap used for rendering
      */
-    public static Bitmap addArt(String src) {
+    public static AbstractBitmap addArt(String src) {
 	return load(src);
     }
 
@@ -739,7 +740,7 @@ public final class ModSystem {
      *            The bitmap to load
      * @return The bitmap
      */
-    private static Bitmap load(String string) {
+    private static AbstractBitmap load(String string) {
 	try {
 	    BufferedImage bi = ImageIO.read(MojamComponent.class
 		    .getResource(string));
@@ -747,8 +748,8 @@ public final class ModSystem {
 	    int w = bi.getWidth();
 	    int h = bi.getHeight();
 
-	    Bitmap result = new Bitmap(w, h);
-	    bi.getRGB(0, 0, w, h, result.pixels, 0, w);
+	    AbstractBitmap result = mojam.screen.createBitmap(w, h);
+	    bi.getRGB(0, 0, w, h, result.getPixels(), 0, w);
 
 	    return result;
 	} catch (IOException e) {

@@ -2,8 +2,8 @@ package com.mojang.mojam.level.tile;
 
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class SandTile extends Tile {
 	public static final int COLOR = 0xffA8A800;
@@ -17,7 +17,7 @@ public class SandTile extends Tile {
 		super.init(level, x, y);
 	}
 
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		super.render(screen);
 	}
 	
@@ -58,7 +58,7 @@ public class SandTile extends Tile {
 		return true;
 	}
 	
-	public Bitmap getBitMapForEditor() {
+	public AbstractBitmap getBitMapForEditor() {
 		return Art.floorTiles[5][0];
 	}
 	

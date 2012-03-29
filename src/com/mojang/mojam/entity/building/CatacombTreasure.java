@@ -2,8 +2,8 @@ package com.mojang.mojam.entity.building;
 
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 /**
  * this is the treasure from the center of the map, RailDroids carry
@@ -35,12 +35,12 @@ public class CatacombTreasure extends Building {
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		super.render(screen);
 	}
 
 	@Override
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		//bullets? really?
 		return Art.bullets[0][0];
 	}

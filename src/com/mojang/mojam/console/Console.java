@@ -3,15 +3,20 @@ package com.mojang.mojam.console;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.util.Date;
 
 import com.mojang.mojam.MojamComponent;
-import com.mojang.mojam.console.commands.*;
-import com.mojang.mojam.entity.Player;
-import com.mojang.mojam.entity.weapon.*;
-import com.mojang.mojam.gui.TitleMenu;
+import com.mojang.mojam.console.commands.Chat;
+import com.mojang.mojam.console.commands.Cooldown;
+import com.mojang.mojam.console.commands.Exit;
+import com.mojang.mojam.console.commands.Give;
+import com.mojang.mojam.console.commands.Help;
+import com.mojang.mojam.console.commands.Lang;
+import com.mojang.mojam.console.commands.Load;
+import com.mojang.mojam.console.commands.Menu;
+import com.mojang.mojam.console.commands.Pause;
+import com.mojang.mojam.console.commands.Time;
 import com.mojang.mojam.gui.components.Font;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class Console implements KeyListener {
 
@@ -124,12 +129,12 @@ public class Console implements KeyListener {
 	 * 
 	 * @param s screen to render to
 	 */
-	public void render(Screen s) {
+	public void render(AbstractScreen s) {
 		if(open) {
 			int fontHeight = Font.FONT_WHITE_SMALL.getFontHeight();
 			int consoleHeight = (MAX_LINES + 1) * fontHeight + yOffset; //+1 for the input line
 
-			s.alphaFill(0, 0, s.w, consoleHeight, 0xff000000, 0x80); //50% black,fixed from 0x50 (31.25%)
+			s.alphaFill(0, 0, s.getWidth(), consoleHeight, 0xff000000, 0x80); //50% black,fixed from 0x50 (31.25%)
 
 			Font.FONT_WHITE_SMALL.draw(s, typing + (((((int)(System.currentTimeMillis()/500))&1)==1)?"|":""), xOffset,(consoleHeight -= fontHeight)); //draws bottom up starting with typing
 

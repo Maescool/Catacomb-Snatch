@@ -9,7 +9,7 @@ import com.mojang.mojam.gui.components.Button;
 import com.mojang.mojam.gui.components.ClickableComponent;
 import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class CreditsScreen extends GuiMenu {
 	private final int gameWidth;
@@ -35,7 +35,7 @@ public class CreditsScreen extends GuiMenu {
 				(gameWidth - 128) / 2, gameHeight - 50 - 10));
 	}
 
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		
 		screen.clear(0);
 		screen.blit(Art.emptyBackground, 0, 0);
@@ -43,7 +43,7 @@ public class CreditsScreen extends GuiMenu {
 		super.render(screen);
 
 		// Mojang logo
-		screen.blit(Art.mojangLogo, (gameWidth - Art.mojangLogo.w) / 2, 30);
+		screen.blit(Art.mojangLogo, (gameWidth - Art.mojangLogo.getWidth()) / 2, 30);
 		
 		Font font = Font.defaultFont();
 		font.draw(screen, "* " + MojamComponent.texts.getStatic("credits.note"),
@@ -69,7 +69,7 @@ public class CreditsScreen extends GuiMenu {
 	
 	}
 	
-	public int drawNames(String[] names, Screen screen, Integer y) {
+	public int drawNames(String[] names, AbstractScreen screen, Integer y) {
 		List<Vector<String>> data = new Vector<Vector<String>>();
 		data.add(new Vector<String>());
 		data.add(new Vector<String>());

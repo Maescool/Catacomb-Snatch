@@ -5,8 +5,8 @@ import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.BulletMelee;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.resources.Constants;
+import com.mojang.mojam.screen.AbstractBitmap;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
 
 public class Machete extends Melee {
 
@@ -29,7 +29,7 @@ public class Machete extends Melee {
 	}
 
 	@Override
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		// TODO Auto-generated method stub
 		return Art.weaponList[1][1];
 	}

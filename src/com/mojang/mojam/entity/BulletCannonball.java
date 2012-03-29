@@ -6,7 +6,7 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.animation.LargeBombExplodeAnimation;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class BulletCannonball extends Bullet
 {
@@ -52,7 +52,7 @@ public class BulletCannonball extends Bullet
 	}
 	
 	@Override
-	public void render(Screen screen)
+	public void render(AbstractScreen screen)
 	{
 		screen.blit(Art.bomb, pos.x-16, pos.y-16);
 	}

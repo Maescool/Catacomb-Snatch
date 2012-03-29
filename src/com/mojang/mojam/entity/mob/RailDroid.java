@@ -1,13 +1,12 @@
 package com.mojang.mojam.entity.mob;
 
 
-import com.mojang.mojam.entity.Bullet;
-import com.mojang.mojam.entity.ICarrySwap;
-import com.mojang.mojam.entity.IUsable;
-import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.ICarrySwap;
+import com.mojang.mojam.entity.IUsable;
+import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.building.CatacombTreasure;
 import com.mojang.mojam.entity.building.TreasurePile;
@@ -16,9 +15,9 @@ import com.mojang.mojam.level.tile.RailTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.network.TurnSynchronizer;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
 
 public class RailDroid extends Mob implements IUsable, ICarrySwap{
 	private enum Direction {
@@ -316,7 +315,7 @@ public class RailDroid extends Mob implements IUsable, ICarrySwap{
     }
 	
 	@Override
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		if (lDir == Direction.LEFT)
 			return Art.raildroid[1][1];
 		if (lDir == Direction.UP)
@@ -369,7 +368,7 @@ public class RailDroid extends Mob implements IUsable, ICarrySwap{
 		return super.shouldBlock(e);
 	}
 
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		super.render(screen);
 		renderCarrying(screen, 0 );
 	}

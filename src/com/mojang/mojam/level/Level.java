@@ -27,8 +27,8 @@ import com.mojang.mojam.math.BBPredicate;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.mod.ModSystem;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class Level {
 	public int TARGET_SCORE = 100;
@@ -38,7 +38,7 @@ public class Level {
 	public Tile[] tiles;
 	public List<Entity>[] entityMap;
 	public List<Entity> entities = new ArrayList<Entity>();
-	private Bitmap minimap;
+	private AbstractBitmap minimap;
 	private boolean largeMap = false, smallMap = false;
 	private boolean seen[];
 	final int[] neighbourOffsets;
@@ -74,7 +74,7 @@ public class Level {
 		
 		monsterDensity = new int[denseTileArrayWidth][denseTileArrayHeight];
 
-		minimap = new Bitmap(width, height);
+		minimap = MojamComponent.screen.createBitmap(width, height);
 		
 		largeMap = height > 64 || width > 64;
 		smallMap = height < 64 && width < 64;
@@ -280,19 +280,19 @@ public class Level {
 				|| getSeen()[(x + 1) + (y + 1) * (width + 1)];
 	}
 
-	public void render(Screen screen, int xScroll, int yScroll) {
+	public void render(AbstractScreen screen, int xScroll, int yScroll) {
 		int x0 = xScroll / Tile.WIDTH;
 		int y0 = yScroll / Tile.HEIGHT;
-		int x1 = (xScroll + screen.w) / Tile.WIDTH;
-		int y1 = (yScroll + screen.h) / Tile.HEIGHT;
+		int x1 = (xScroll + screen.getWidth()) / Tile.WIDTH;
+		int y1 = (yScroll + screen.getHeight()) / Tile.HEIGHT;
 		if (xScroll < 0)
 			x0--;
 		if (yScroll < 0)
 			y0--;
 
 		Set<Entity> visibleEntities = getEntities(xScroll - Tile.WIDTH, yScroll
-				- Tile.HEIGHT, xScroll + screen.w + Tile.WIDTH, yScroll
-				+ screen.h + Tile.HEIGHT);
+				- Tile.HEIGHT, xScroll + screen.getWidth() + Tile.WIDTH, yScroll
+				+ screen.getHeight() + Tile.HEIGHT);
 
 		screen.setOffset(-xScroll, -yScroll);
 
@@ -316,7 +316,7 @@ public class Level {
 		Notifications.getInstance().render(screen);
 	}
 
-	private void renderTilesAndBases(Screen screen, int x0, int y0, int x1, int y1){
+	private void renderTilesAndBases(AbstractScreen screen, int x0, int y0, int x1, int y1){
 	    // go through each currently visible cell
 	    for (int y = y0; y <= y1; y++) {
 	        for (int x = x0; x <= x1; x++) {
@@ -328,8 +328,8 @@ public class Level {
 	                continue;
 	            }
 
-	            Bitmap[][] playerBaseZero = Art.getPlayerBase(getPlayerCharacter(0));
-	            Bitmap[][] playerBaseOne = Art.getPlayerBase(getPlayerCharacter(1));
+	            AbstractBitmap[][] playerBaseZero = Art.getPlayerBase(getPlayerCharacter(0));
+	            AbstractBitmap[][] playerBaseOne = Art.getPlayerBase(getPlayerCharacter(1));
 	            int baseOneTileHeight = playerBaseOne[0].length;
 	            int baseOneTileWidth = playerBaseOne.length;
 	            int baseZeroTileHeight = playerBaseZero[0].length;
@@ -360,7 +360,7 @@ public class Level {
 	                    screen.blit(Art.shadow_north_west, x * Tile.WIDTH, y * Tile.HEIGHT);
 	                }
 	                if ((xt == 4) && yt == 0) {
-	                    screen.blit(Art.shadow_north_east, x * Tile.WIDTH + Tile.WIDTH - Art.shadow_east.w, y * Tile.HEIGHT);
+	                    screen.blit(Art.shadow_north_east, x * Tile.WIDTH + Tile.WIDTH - Art.shadow_east.getWidth(), y * Tile.HEIGHT);
 	                }
 	                continue;
 	            }
@@ -383,7 +383,7 @@ public class Level {
 	}
 	
 
-	private void renderTopOfWalls(Screen screen, int x0, int y0, int x1, int y1){
+	private void renderTopOfWalls(AbstractScreen screen, int x0, int y0, int x1, int y1){
 	    for (int y = y0; y <= y1; y++) {
             for (int x = x0; x <= x1; x++) {
                 if (x < 0 || x >= width || y < 0 || y >= height) {
@@ -396,7 +396,7 @@ public class Level {
         }
 	}
 	
-	private void renderDarkness(Screen screen, int x0, int y0, int x1, int y1){
+	private void renderDarkness(AbstractScreen screen, int x0, int y0, int x1, int y1){
 	    for (int y = y0; y <= y1; y++) {
             if (y < 0 || y >= height)
                 continue;
@@ -480,9 +480,9 @@ public class Level {
             for (int x = 0; x < width; x++) {
                 int i = x + y * width;
                 if (hasSeen(x, y)) {
-                    minimap.pixels[i] = tiles[i].minimapColor;
+			minimap.setPixel(i, tiles[i].minimapColor);
                 } else {
-                    minimap.pixels[i] = 0xff000000;
+			minimap.setPixel(i, 0xff000000);
                 }
             }
         }
@@ -509,8 +509,8 @@ public class Level {
         }
     }
 	
-	private void renderPanelAndMinimap(Screen screen, int x0, int y0){
-	    Bitmap displaymap = new Bitmap(64, 64);
+	private void renderPanelAndMinimap(AbstractScreen screen, int x0, int y0){
+	    AbstractBitmap displaymap = screen.createBitmap(64, 64);
 	    
 	    if(largeMap){
             displaymap = calculateLargeMapDisplay(x0, y0);
@@ -520,13 +520,13 @@ public class Level {
             displaymap = minimap;
         }
         
-        screen.blit(Art.panel, 0, screen.h - 80);
-        screen.blit(displaymap, 429, screen.h - 80 + 5);
+        screen.blit(Art.panel, 0, screen.getHeight() - 80);
+        screen.blit(displaymap, 429, screen.getHeight() - 80 + 5);
 	}
 	
-	private Bitmap calculateLargeMapDisplay(int x0, int y0) {
+	private AbstractBitmap calculateLargeMapDisplay(int x0, int y0) {
 	    
-	    Bitmap largeMap = new Bitmap(64, 64);
+	    AbstractBitmap largeMap = MojamComponent.screen.createBitmap(64, 64);
 	    int locx = x0 + 8;
         int locy = y0 + 8;
         
@@ -556,16 +556,16 @@ public class Level {
         for (int y = 0; y < 64; y++) {
             if(y < diffy || y >= (64 - diffy)) {
                 for (int x = 0; x < 64; x++) {
-                    largeMap.pixels[x + (y * 64)] = Art.floorTileColors[5 & 7][5 / 8];
+                    largeMap.setPixel(x + (y * 64), Art.floorTileColors[5 & 7][5 / 8]);
                 }
             }
             else{
                 for (int x = 0; x < 64; x++) {
                     if(x < diffx || x > (64 - diffx)) 
-                        largeMap.pixels[x + (y * 64)] = Art.floorTileColors[5 & 7][5 / 8];
+                        largeMap.setPixel(x + (y * 64), Art.floorTileColors[5 & 7][5 / 8]);
                     else{
-                        if(((drawx + donex) + (drawy + doney) * width) < minimap.pixels.length -1) 
-                            largeMap.pixels[x + (y * 64)] = minimap.pixels[(drawx + donex) + (drawy + doney) * width];
+                        if(((drawx + donex) + (drawy + doney) * width) < minimap.getPixelSize() -1) 
+				largeMap.setPixel(x + (y * 64), minimap.getPixel((drawx + donex) + (drawy + doney) * width));
                             donex++;
                     }
                 }
@@ -577,18 +577,18 @@ public class Level {
         return largeMap;
 	}
 	
-	private Bitmap calculateSmallMapDisplay() {
+	private AbstractBitmap calculateSmallMapDisplay() {
 	    
-	    Bitmap smallMap = new Bitmap(64, 64);
+	    AbstractBitmap smallMap = MojamComponent.screen.createBitmap(64, 64);
         int smallx = 0, smally = 0;
         for (int y = 0; y < 64; y++) {
             for (int x = 0; x < 64; x++) {
                 if(x >= (32 - width/2) && x <= (32 + width/2) && y >= (32 - height/2) && y < (32 + height/2) - 1){
-                    smallMap.pixels[x + y * 64] = minimap.pixels[smallx + smally * width];
+                    smallMap.setPixel(x + y * 64, minimap.getPixel(smallx + smally * width));
                     smallx++;
                 }
                 else
-                    smallMap.pixels[x + y * 64] = Art.floorTileColors[5 & 7][5 / 8];
+                    smallMap.setPixel(x + y * 64, Art.floorTileColors[5 & 7][5 / 8]);
             }
             smallx = 0;
             
@@ -598,15 +598,15 @@ public class Level {
         return smallMap;
 	}
 	
-	private void renderPlayerScores(Screen screen){
+	private void renderPlayerScores(AbstractScreen screen){
 	    
 	    String player1score =  MojamComponent.texts.scoreCharacter(getPlayerCharacter(0), player1Score * 100 / TARGET_SCORE);
-        Font.defaultFont().draw(screen, player1score, 280-player1score.length()*10, screen.h - 20); //adjust so it fits in the box
-        screen.blit(Art.getPlayer(getPlayerCharacter(0))[0][2], 262, screen.h-42);
+        Font.defaultFont().draw(screen, player1score, 280-player1score.length()*10, screen.getHeight() - 20); //adjust so it fits in the box
+        screen.blit(Art.getPlayer(getPlayerCharacter(0))[0][2], 262, screen.getHeight()-42);
 
         if (MojamComponent.instance.players[1] != null && getPlayerCharacter(1) != GameCharacter.None) {
-            Font.defaultFont().draw(screen, MojamComponent.texts.scoreCharacter(getPlayerCharacter(1), player2Score * 100 / TARGET_SCORE), 56, screen.h - 36);
-            screen.blit(Art.getPlayer(getPlayerCharacter(1))[0][6], 19, screen.h-42);
+            Font.defaultFont().draw(screen, MojamComponent.texts.scoreCharacter(getPlayerCharacter(1), player2Score * 100 / TARGET_SCORE), 56, screen.getHeight() - 36);
+            screen.blit(Art.getPlayer(getPlayerCharacter(1))[0][6], 19, screen.getHeight()-42);
         }
 	}
 	

@@ -1,12 +1,13 @@
 package com.mojang.mojam.gui;
 
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.gui.components.Font;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class Notifications {
 
@@ -38,7 +39,7 @@ public class Notifications {
 		notes.add(new Note(message, life));
 	}
 
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		Iterator<Note> it = notes.iterator();
 		int i = 0;
 		while (it.hasNext()) {
