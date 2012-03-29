@@ -8,6 +8,7 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.network.TurnSynchronizer;
+import com.mojang.mojam.resources.Constants;
 import com.mojang.mojam.screen.Art;
 
 public class Flamethrower extends Rifle {
@@ -42,9 +43,9 @@ public class Flamethrower extends Rifle {
 	public void primaryFire(double xDirection, double yDirection) {
 		
 		
-		shootDelay = 2;  //Constants.getInt("shootDelay", this);
-		bulletDamage = 0.5f;  //Constants.getFloat("bulletDamage", this);
-		accuracy = 0.06; //Constants.getDouble("accuracy", this);
+		Constants.getInt("shootDelay", this);
+		Constants.getFloat("bulletDamage", this);
+		Constants.getDouble("accuracy", this);
 			
 		
 		if (readyToShoot) {

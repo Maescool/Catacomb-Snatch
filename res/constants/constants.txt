@@ -64,6 +64,10 @@ com.mojang.mojam.entity.weapon.Cannon.bulletDamage=30
 com.mojang.mojam.entity.weapon.Cannon.accuracy=0.0
 com.mojang.mojam.entity.weapon.Cannon.shootDelay=900
 
+com.mojang.mojam.entity.weapon.Flamethrower.bulletDamage=0.5
+com.mojang.mojam.entity.weapon.Flamethrower.accuracy=0.06
+com.mojang.mojam.entity.weapon.Flamethrower.shootDelay=2
+
 com.mojang.mojam.entity.weapon.ElephantGun.bulletDamage=15
 com.mojang.mojam.entity.weapon.ElephantGun.accuracy=0.05
 com.mojang.mojam.entity.weapon.ElephantGun.shootDelay=120
