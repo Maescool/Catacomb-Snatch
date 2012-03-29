@@ -625,7 +625,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			keys.console.tick();
 			if(keys.console.wasPressed()) {
 				console.toggle();
-				paused = !paused;
 			}
 			if(console.isOpen()) {
 				if(menuStack.isEmpty()) {

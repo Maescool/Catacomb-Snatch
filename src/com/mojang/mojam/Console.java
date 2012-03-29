@@ -18,6 +18,7 @@ import com.mojang.mojam.entity.weapon.VenomShooter;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.network.kryo.Network.ChatMessage;
+import com.mojang.mojam.network.kryo.Network.ConsoleMessage;
 import com.mojang.mojam.network.kryo.Network.PauseMessage;
 import com.mojang.mojam.screen.AbstractScreen;
 
@@ -145,18 +146,33 @@ public class Console implements KeyListener {
 
 	private void processInput(String input) {
 		log(">" + input);
-		String command = getCommand(input);
-
-		if(command.startsWith("/")) {
-			doCommand(command, input);
+		String cleanInput = scrubInput(input);
+		
+		if(cleanInput.startsWith("/")) {
+			Command command = findCommand(cleanInput, input);
+			
+			if(command.isSendToClients()) {
+				//send message to other client(s)
+				MojamComponent.instance.synchronizer.addMessage(new ConsoleMessage(input));
+			}
+			
+			command.execute();
+			
 		} else {
-			chat.doCommand(new String[]{input});
+			chat.execute(new String[]{input});
 		}
 
 		completedInput = false;
 	}
+	
+	public void processInputFromNetwork(String input) { //separate processor so message is not resent
+		String command = scrubInput(input);
+		if(command.startsWith("/")) {
+			findCommand(command, input).execute();
+		}
+	}
 
-	private String getCommand(String input) {
+	private String scrubInput(String input) {
 		if(!input.contains(" ")) {
 			return input;
 		} else {
@@ -171,7 +187,7 @@ public class Console implements KeyListener {
 	 * @param command command name
 	 * @param input arguments for the command separated by spaces
 	 */
-	public void doCommand(String command, String input) {
+	public Command findCommand(String command, String input) {
 		if(command.charAt(0) == '/')
 			command = command.substring(1); //remove forward slash
 
@@ -180,10 +196,11 @@ public class Console implements KeyListener {
 			if(c != null && c.name.equals(command)) {
 
 				String[] args = getArgs(input,c.numberOfArgs);
-				c.doCommand(args);
-				return;
+				c.args = args;
+				return c;
 			}
 		}
+		return null;
 	}
 
 	private String[] getArgs(String input, int numberOfArgs) {
@@ -275,8 +292,8 @@ public class Console implements KeyListener {
 	/***
 	 * List of possible commands
 	 */
-	private Command help = new Command("help", 0, "Displays all possible commands") {
-		public void doCommand(String[] args) {
+	private Command help = new Command("help", 0, "Displays all possible commands",false) {
+		public void execute() {
 			log("All Commands");
 			log("--------------");
 			for(int i = 0; i < Command.commands.size(); i++) {
@@ -287,15 +304,15 @@ public class Console implements KeyListener {
 		}
 	};
 
-	private Command pause = new Command("pause", 0, "Pauses the game") {
-		public void doCommand(String[] args) {
+	private Command pause = new Command("pause", 0, "Pauses the game",false) { //false because synchronizer will pass the msg
+		public void execute() {
 			close();
 			MojamComponent.instance.synchronizer.addMessage(new PauseMessage());
 		}
 	};
 
-	private Command exit = new Command("exit", 1, "exits the game. 0 force exit, 1 regular game exit") {
-		public void doCommand(String[] args) {
+	private Command exit = new Command("exit", 1, "exits the game. 0 force exit, 1 regular game exit",true) {
+		public void execute() {
 			if(args.length > 0 && args[0].equals("0"))
 				System.exit(0);
 			else
@@ -303,8 +320,8 @@ public class Console implements KeyListener {
 		}
 	};
 
-	private Command chat = new Command("chat", -1, "Does the same as pressing T and typing in the after /chat and pressing enter") {
-		public void doCommand(String[] args) {
+	private Command chat = new Command("chat", -1, "Does the same as pressing T and typing in the after /chat and pressing enter",false) { //false because synchronizer will pass the msg
+		public void execute() {
 			String msg = "";
 			for(int i = 0; i < args.length-1; i++) {
 				msg += args[i] + " ";
@@ -314,10 +331,10 @@ public class Console implements KeyListener {
 		}
 	};
 
-	public Command load = new Command("load", 1, "Loads a map by name")
+	public Command load = new Command("load", 1, "Loads a map by name",true)
 	{
 		@Override
-		public void doCommand(String[] args)
+		public void execute()
 		{
 			log("Loading map " + args[0]);
 			log("Incomplete");
@@ -326,10 +343,10 @@ public class Console implements KeyListener {
 			//MojamComponent.instance.handleAction(TitleMenu.START_GAME_ID);
 		}
 	};
-	public Command lang = new Command("lang", 1, "Sets the language")
+	public Command lang = new Command("lang", 1, "Sets the language",false)
 	{
 		@Override
-		public void doCommand(String[] args)
+		public void execute()
 		{
 			if(args[0].equals("help"))
 			{
@@ -341,179 +358,174 @@ public class Console implements KeyListener {
 			}
 		}
 	};
-	public Command menu = new Command("menu", 0, "Return to menu")
+	public Command menu = new Command("menu", 0, "Return to menu",true)
 	{
 		@Override
-		public void doCommand(String[] args)
+		public void execute()
 		{
 			MojamComponent.instance.handleAction(TitleMenu.RETURN_TO_TITLESCREEN);
 		}
 	};
 
-	public Command allweapons = new Command("allweapons", 0, "Gives all weapons")
+	public Command allweapons = new Command("allweapons", 0, "Gives all weapons",true)
 	{
 		@Override
-		public void doCommand(String[] args)
+		public void execute()
 		{
-			Player player = MojamComponent.instance.player;
-		
-			log("Giving player a shotgun");
-			if(!player.weaponInventory.add(new Shotgun(player))) {
-	        	log("You already have this item.");
-	    	}
-	
-			log("Giving player a rifle");
-			if(!player.weaponInventory.add(new Rifle(player))) {
-	        	log("You already have this item.");
-	    	}
-	
-			log("Giving player a veonomshooter");
-			if(!player.weaponInventory.add(new VenomShooter(player))) {
-	        	log("You already have this item.");
-	    	}
-	
-			log("Giving player an elephant gun");
-			if(!player.weaponInventory.add(new ElephantGun(player))) {
-	        	log("You already have this item.");
-	    	}
-	
-			log("Giving player a lesson in boxing");
-			if(!player.weaponInventory.add(new Melee(player))) {
-	        	log("You already have this item.");
-	    	}
-	
-			log("Giving player a raygun");
-			if(!player.weaponInventory.add(new Raygun(player))) {
-	        	log("You already have this item.");
-	    	}
-	
-			log("Giving player a machete");
-			if(!player.weaponInventory.add(new Machete(player))) {
-	        	log("You already have this item.");
-	    	}
-	
-			log("Giving player a cannon!");
-			if(!player.weaponInventory.add(new Cannon(player))) {
-	        	log("You already have this item.");
-	    	}
-			
-			log("Giving player a flamethrower!");
-			if(!player.weaponInventory.add(new Flamethrower(player))) {
-	        	log("You already have this item.");
-	    	}
-		}
-	};
+				
+			Player[] players = MojamComponent.instance.players;
 
-	
-	public Command give = new Command("give", 1, "Gives a weapon or money")
-	{
-		@Override
-		public void doCommand(String[] args)
-		{
-			args[0] = args[0].trim().toLowerCase();
-			Player player = MojamComponent.instance.player;
-			
-			if(args[0].equals("shotgun"))
-			{
+			//give to both players for now
+			for(Player player : players) {
+				
 				log("Giving player a shotgun");
 				if(!player.weaponInventory.add(new Shotgun(player))) {
 		        	log("You already have this item.");
 		    	}
-			}
-			else if(args[0].equals("rifle"))
-			{
+		
 				log("Giving player a rifle");
 				if(!player.weaponInventory.add(new Rifle(player))) {
 		        	log("You already have this item.");
 		    	}
-			}
-			else if(args[0].equals("venom"))
-			{
+		
 				log("Giving player a veonomshooter");
 				if(!player.weaponInventory.add(new VenomShooter(player))) {
 		        	log("You already have this item.");
 		    	}
-			}
-			else if(args[0].equals("elephant"))
-			{
+		
 				log("Giving player an elephant gun");
 				if(!player.weaponInventory.add(new ElephantGun(player))) {
 		        	log("You already have this item.");
 		    	}
-			}
-			else if(args[0].equals("fist"))
-			{
+		
 				log("Giving player a lesson in boxing");
 				if(!player.weaponInventory.add(new Melee(player))) {
 		        	log("You already have this item.");
 		    	}
-			}
-			else if(args[0].equals("raygun"))
-			{
+		
 				log("Giving player a raygun");
 				if(!player.weaponInventory.add(new Raygun(player))) {
 		        	log("You already have this item.");
 		    	}
-			}
-			else if(args[0].equals("machete"))
-			{
+		
 				log("Giving player a machete");
 				if(!player.weaponInventory.add(new Machete(player))) {
 		        	log("You already have this item.");
 		    	}
-			}
-			else if(args[0].equals("cannon"))
-			{
+		
 				log("Giving player a cannon!");
 				if(!player.weaponInventory.add(new Cannon(player))) {
 		        	log("You already have this item.");
 		    	}
-			}
-			else if(args[0].equals("flamethrower"))
-			{
+				
 				log("Giving player a flamethrower!");
 				if(!player.weaponInventory.add(new Flamethrower(player))) {
 		        	log("You already have this item.");
 		    	}
 			}
-			else if(args[0].equals("help"))
-			{
-				log("Options:");
-				log(">rifle (Rifle)");
-				log(">shotgun (Shotgun)");
-				log(">venom (VenomShooter)");
-				log(">elephant (Elephant Gun)");
-				log(">fist (Melee)");
-				log(">raygun (Raygun)");
-				log(">machete (Machete)");
-				log(">cannon (Cannon)");
-				log("Or you can use a numerical value to receive money.");
-			}
-			try{
-				player.score+=Integer.parseInt(args[0]);
-			}catch (NumberFormatException e)
-			{
+		}
+	};
 
+	
+	public Command give = new Command("give", 1, "Gives a weapon or money",true)
+	{
+		@Override
+		public void execute()
+		{
+		
+			args[0] = args[0].trim().toLowerCase();	
+			Player[] players = MojamComponent.instance.players;
+
+			// give to both players for now
+			for (Player player : players) {
+
+				if (args[0].equals("shotgun")) {
+					log("Giving player a shotgun");
+					if (!player.weaponInventory.add(new Shotgun(player))) {
+						log("You already have this item.");
+					}
+				} else if (args[0].equals("rifle")) {
+					log("Giving player a rifle");
+					if (!player.weaponInventory.add(new Rifle(player))) {
+						log("You already have this item.");
+					}
+				} else if (args[0].equals("venom")) {
+					log("Giving player a veonomshooter");
+					if (!player.weaponInventory.add(new VenomShooter(player))) {
+						log("You already have this item.");
+					}
+				} else if (args[0].equals("elephant")) {
+					log("Giving player an elephant gun");
+					if (!player.weaponInventory.add(new ElephantGun(player))) {
+						log("You already have this item.");
+					}
+				} else if (args[0].equals("fist")) {
+					log("Giving player a lesson in boxing");
+					if (!player.weaponInventory.add(new Melee(player))) {
+						log("You already have this item.");
+					}
+				} else if (args[0].equals("raygun")) {
+					log("Giving player a raygun");
+					if (!player.weaponInventory.add(new Raygun(player))) {
+						log("You already have this item.");
+					}
+				} else if (args[0].equals("machete")) {
+					log("Giving player a machete");
+					if (!player.weaponInventory.add(new Machete(player))) {
+						log("You already have this item.");
+					}
+				} else if (args[0].equals("cannon")) {
+					log("Giving player a cannon!");
+					if (!player.weaponInventory.add(new Cannon(player))) {
+						log("You already have this item.");
+					}
+				} else if (args[0].equals("flamethrower")) {
+					log("Giving player a flamethrower!");
+					if (!player.weaponInventory.add(new Flamethrower(player))) {
+						log("You already have this item.");
+					}
+				} else if (args[0].equals("help")) {
+					log("Options:");
+					log(">rifle (Rifle)");
+					log(">shotgun (Shotgun)");
+					log(">venom (VenomShooter)");
+					log(">elephant (Elephant Gun)");
+					log(">fist (Melee)");
+					log(">raygun (Raygun)");
+					log(">machete (Machete)");
+					log(">cannon (Cannon)");
+					log("Or you can use a numerical value to receive money.");
+				}
+				try {
+					player.score += Integer.parseInt(args[0]);
+				} catch (NumberFormatException e) {
+
+				}
 			}
 		}
 	};
-	Command time = new Command("time", 0, "Show the current time"){
+	Command time = new Command("time", 0, "Show the current time",false){
 		@Override
-		public void doCommand(String[] s)
+		public void execute()
 		{
 			log(new Date(System.currentTimeMillis()).toString());
 		}
 	};
-	Command cooldown = new Command("cool", 1, "Cools the currently held weapon to a certain value"){
+	Command cooldown = new Command("cool", 1, "Cools the currently held weapon to a certain value",true){
+		
 		@Override
-		public void doCommand(String[] s)
+		public void execute()
 		{
+		
+			Player[] players = MojamComponent.instance.players;
 			try	{
-				int i = Integer.parseInt(s[0].trim());
+				int i = Integer.parseInt(args[0].trim());
 				log("Cooling weapon from " + i + " centispecks.");
 				for(;i>0;i--)
 				{
-					MojamComponent.instance.player.weapon.weapontick();
+					for(Player player : players)
+						player.weapon.weapontick();
+					
 				}
 			} catch (NumberFormatException e)
 			{
@@ -521,7 +533,8 @@ public class Console implements KeyListener {
 				int i = 600;
 				for(;i>0;i--)
 				{
-					MojamComponent.instance.player.weapon.weapontick();
+					for(Player player : players)
+						player.weapon.weapontick();
 				}
 			}
 		}
@@ -532,16 +545,30 @@ public class Console implements KeyListener {
 		public String name;
 		public String helpMessage;
 		public int numberOfArgs; //-1 args means return raw input data minus the command
+		public String[] args;
+		
+		private boolean sendToClients;
+		
+		public boolean isSendToClients() {
+			return sendToClients;
+		}
+		
 		public static ArrayList<Command> commands = new ArrayList<Command>();
 
-		public Command(String name, int numberOfArgs, String helpMessage) {
+		public Command(String name, int numberOfArgs, String helpMessage, boolean sendToClients) {
 			this.name = name;
 			this.numberOfArgs = numberOfArgs;
 			this.helpMessage = helpMessage;
+			this.sendToClients = sendToClients;
 			commands.add(this);
 		}
 
-		public abstract void doCommand(String[] args);
+		public abstract void execute();
+		public void execute(String[] args) {
+			this.args = args;
+			execute();
+		}
+		
 	}
 
 }
