@@ -13,8 +13,8 @@ import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 /**
  * Defense turret. Automatically aims and shoots at the nearest monster.
@@ -34,7 +34,8 @@ public class Turret extends Building implements IEditable {
 
 	private int facing = 0;
 
-	private Bitmap areaBitmap;
+	private AbstractBitmap areaBitmap;
+	private boolean updateAreaBitmap;
 	private static final int RADIUS_COLOR = new Color(240, 210, 190).getRGB();
 
 	public static final int COLOR = 0xff990066;
@@ -51,7 +52,7 @@ public class Turret extends Building implements IEditable {
 		this.team = team;
 		setStartHealth(10);
 		freezeTime = 10;
-		areaBitmap = Bitmap.rangeBitmap(radius,RADIUS_COLOR);
+		updateAreaBitmap=true;
 		makeUpgradeableWithCosts(new int[] { TitleMenu.difficulty.calculateCosts(500), 
 				TitleMenu.difficulty.calculateCosts(1000), 
 				TitleMenu.difficulty.calculateCosts(5000)});
@@ -65,7 +66,7 @@ public class Turret extends Building implements IEditable {
 		if (--delayTicks > 0)
 			return;
 
-		if (!isCarried()) {
+		//if (!isCarried()) {
 		    // find target
     		Set<Entity> entities = level.getEntities(pos.x - radius, pos.y - radius, pos.x + radius, pos.y + radius);
     
@@ -106,13 +107,13 @@ public class Turret extends Building implements IEditable {
         
         		delayTicks = delay;
     		}
-		}
+		//}
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		
-		if((justDroppedTicks-- > 0 || highlight) && MojamComponent.localTeam==team) {
+		if((justDroppedTicks-- > 0 || isHighlight()) && MojamComponent.localTeam==team) {
 				drawRadius(screen);
 		}
 		
@@ -120,7 +121,7 @@ public class Turret extends Building implements IEditable {
 	}
 
 	@Override
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		switch (upgradeLevel) {
 		case 1:
 			return Art.turret2[facing][0];
@@ -138,11 +139,15 @@ public class Turret extends Building implements IEditable {
 		delay = upgradeDelay[upgradeLevel];
 		radius = upgradeRadius[upgradeLevel];
 		radiusSqr = radius * radius;
-		areaBitmap = Bitmap.rangeBitmap(radius,RADIUS_COLOR);
+		updateAreaBitmap=true;
 		if (upgradeLevel != 0) justDroppedTicks = 80; //show the radius for a brief time
 	}
 	
-	public void drawRadius(Screen screen) {
+	public void drawRadius(AbstractScreen screen) {
+		if (updateAreaBitmap) {
+		areaBitmap = screen.rangeBitmap(radius,RADIUS_COLOR);
+		updateAreaBitmap = false;
+		}
 		screen.alphaBlit(areaBitmap, (int) pos.x-radius, (int) pos.y-radius - yOffs, 0x22);	
 	}
 
@@ -162,7 +167,7 @@ public class Turret extends Building implements IEditable {
 	}
 
 	@Override
-	public Bitmap getBitMapForEditor() {
+	public AbstractBitmap getBitMapForEditor() {
 		return Art.turret[0][0];
 	}
 }

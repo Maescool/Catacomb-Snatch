@@ -3,8 +3,8 @@ package com.mojang.mojam.entity;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class BulletFlame extends Bullet {
 	
@@ -31,10 +31,10 @@ public class BulletFlame extends Bullet {
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		
 		if(shrink)
-			screen.blit(Bitmap.shrink(Art.bulletflame[facing][0]), pos.x - 8, pos.y - 10);
+			screen.blit(screen.shrink(Art.bulletflame[facing][0]), pos.x - 8, pos.y - 10);
 		else
 			screen.blit(Art.bulletflame[facing][0], pos.x - 8, pos.y - 10);
 		

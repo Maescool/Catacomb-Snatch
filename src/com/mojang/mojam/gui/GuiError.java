@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 import com.mojang.mojam.gui.components.Button;
 import com.mojang.mojam.gui.components.ClickableComponent;
 import com.mojang.mojam.gui.components.Font;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class GuiError extends GuiMenu {
 
@@ -17,7 +17,7 @@ public class GuiError extends GuiMenu {
 	}
 	
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		screen.clear(0);
 		Font.FONT_RED.draw(screen, "ERROR", 15, 30);
 		Font.defaultFont().draw(screen, message, 20, 40, 300);

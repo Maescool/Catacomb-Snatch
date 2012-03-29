@@ -11,7 +11,7 @@ import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.gamemode.GameMode;
 import com.mojang.mojam.level.gamemode.GameModeVanilla;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class TitleMenu extends GuiMenu {
 
@@ -88,11 +88,12 @@ public class TitleMenu extends GuiMenu {
 	public static final int LOCALE_IND_ID = 6005;
 	public static final int LOCALE_IT_ID = 6006;
 	public static final int LOCALE_NL_ID = 6007;
-	public static final int LOCALE_PT_BR_ID = 6008;
-	public static final int LOCALE_RU_ID = 6009;
-	public static final int LOCALE_SL_ID = 6010;
-	public static final int LOCALE_SV_ID = 6011;
-	public static final int LOCALE_AF_ID = 6012;
+	public static final int LOCALE_PL_ID = 6008;
+	public static final int LOCALE_PT_BR_ID = 6009;
+	public static final int LOCALE_RU_ID = 6010;
+	public static final int LOCALE_SL_ID = 6011;
+	public static final int LOCALE_SV_ID = 6012;
+	public static final int LOCALE_AF_ID = 6013;
 
 	public static LevelInformation level = null;
 	public static GameMode defaultGameMode = new GameModeVanilla();
@@ -130,7 +131,7 @@ public class TitleMenu extends GuiMenu {
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 
 		screen.clear(0);
 		// screen.blit(Art.titles[1], 0, 10);

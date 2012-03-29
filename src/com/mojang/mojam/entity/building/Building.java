@@ -10,8 +10,8 @@ import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 /**
  * Generic building class
@@ -27,7 +27,6 @@ public abstract class Building extends Mob implements IUsable {
 	
 
 	public int spawnTime = 0;
-	public boolean highlight = false;
 	public Mob carriedBy = null;
 
 	protected int upgradeLevel = 0;
@@ -53,37 +52,18 @@ public abstract class Building extends Mob implements IUsable {
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		super.render(screen);
-		renderMarker(screen);
 	}
 
 	/**
 	 * Render the marker onto the given screen
 	 * 
 	 * @param screen
-	 *            Screen
+	 *            AbstractScreen
 	 */
-	protected void renderMarker(Screen screen) {
-		if (highlight && !isCarried()) {
-			BB bb = getBB();
-			bb = bb.grow((getSprite().w - (bb.x1 - bb.x0))
-					/ (3 + Math.sin(System.currentTimeMillis() * .01)));
-			int width = (int) (bb.x1 - bb.x0);
-			int height = (int) (bb.y1 - bb.y0);
-			Bitmap marker = new Bitmap(width, height);
-			for (int y = 0; y < height; y++) {
-				for (int x = 0; x < width; x++) {
-					if ((x < 2 || x > width - 3 || y < 2 || y > height - 3)
-							&& (x < 5 || x > width - 6)
-							&& (y < 5 || y > height - 6)) {
-						int i = x + y * width;
-						marker.pixels[i] = 0xffffffff;
-					}
-				}
-			}
-			screen.blit(marker, bb.x0, bb.y0 - 4);
-		}
+	protected void renderMarker(AbstractScreen screen) {
+		super.renderMarker(screen);
 	}
 
 	@Override
@@ -131,7 +111,7 @@ public abstract class Building extends Mob implements IUsable {
 
 
 	@Override
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		return Art.floorTiles[3][2];
 	}
 
@@ -218,7 +198,7 @@ public abstract class Building extends Mob implements IUsable {
 
 	@Override
 	public void setHighlighted(boolean hl) {
-		highlight = hl;
+		setHighlight(hl);
 		justDroppedTicks = 80;
 	}
 

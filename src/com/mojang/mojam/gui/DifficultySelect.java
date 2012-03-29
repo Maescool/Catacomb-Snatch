@@ -9,7 +9,7 @@ import com.mojang.mojam.gui.components.ClickableComponent;
 import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.level.DifficultyInformation;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class DifficultySelect extends GuiMenu {
 	
@@ -63,7 +63,7 @@ public class DifficultySelect extends GuiMenu {
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		screen.blit(Art.emptyBackground, 0, 0);
 		super.render(screen);
 		Font.defaultFont().draw(screen, MojamComponent.texts.getStatic("diffselect.title"), 20, 20);

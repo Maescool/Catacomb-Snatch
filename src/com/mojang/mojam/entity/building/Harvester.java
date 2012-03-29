@@ -12,8 +12,8 @@ import com.mojang.mojam.entity.loot.LootCollector;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 /**
  * Harvester building. Automatically collects all coins within a given radius around itself
@@ -33,7 +33,8 @@ public class Harvester extends Building implements LootCollector {
 	private int[] upgradeCapacities = new int[] { 1500, 2500, 3500 };
 	
 	
-	private Bitmap areaBitmap;
+	private AbstractBitmap areaBitmap;
+	private boolean updateAreaBitmap;
 	private static final int RADIUS_COLOR = new Color(240, 210, 190).getRGB();
 	
 	/**
@@ -51,7 +52,7 @@ public class Harvester extends Building implements LootCollector {
 		//TODO should this upgrade cost change with Difficulty like Turret?
 		makeUpgradeableWithCosts(new int[] { 500, 1000, 5000 });
 		healthBarOffset = 13;
-		areaBitmap = Bitmap.rangeBitmap(radius,RADIUS_COLOR);
+		updateAreaBitmap=true;
 	}
 	
 	@Override
@@ -110,7 +111,7 @@ public class Harvester extends Building implements LootCollector {
 	}
 
 	@Override
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		int frame = isHarvesting ? (4 + ((time >> 3) % 5)) : (time >> 3) % 4;
 		switch (upgradeLevel) {
         case 1:
@@ -128,7 +129,7 @@ public class Harvester extends Building implements LootCollector {
 	    health += 10;
 	    radius = upgradeRadius[upgradeLevel];
 	    capacity = upgradeCapacities[upgradeLevel];
-	    areaBitmap = Bitmap.rangeBitmap(radius,RADIUS_COLOR);
+	    updateAreaBitmap = true;
 	    if (upgradeLevel != 0) justDroppedTicks = 80; //show the radius for a brief time
 	}
 
@@ -142,17 +143,17 @@ public class Harvester extends Building implements LootCollector {
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		
-		if((justDroppedTicks-- > 0 || highlight) && MojamComponent.localTeam==team) {
+		if((justDroppedTicks-- > 0 || isHighlight()) && MojamComponent.localTeam==team) {
 			drawRadius(screen);
 		}
 		
 		super.render(screen);
 
-		Bitmap image = getSprite();
+		AbstractBitmap image = getSprite();
 		if (capacity - money < 500) {
-			screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h / 2 - yOffs, 0x77ff7200);
+			screen.colorBlit(image, pos.x - image.getWidth() / 2, pos.y - image.getHeight() / 2 - yOffs, 0x77ff7200);
 		}
 		
 		if(team ==MojamComponent.localTeam && !isCarried()) {
@@ -164,9 +165,9 @@ public class Harvester extends Building implements LootCollector {
 	/**
 	 * Draw the money bar onto the given screen
 	 * 
-	 * @param screen Screen
+	 * @param screen AbstractScreen
 	 */
-	private void addMoneyBar(Screen screen) {
+	private void addMoneyBar(AbstractScreen screen) {
 	    int start = (int) (money * 20 / capacity);
         screen.blit(Art.moneyBar[start][0], pos.x - 16, pos.y + 8);
     }
@@ -222,7 +223,11 @@ public class Harvester extends Building implements LootCollector {
 		}
 	}
 	
-	public void drawRadius(Screen screen) {
+	public void drawRadius(AbstractScreen screen) {
+		if (updateAreaBitmap) {
+		areaBitmap = screen.rangeBitmap(radius,RADIUS_COLOR);
+		updateAreaBitmap = false;
+		}
 		screen.alphaBlit(areaBitmap, (int) pos.x-radius, (int) pos.y-radius - yOffs + Tile.HEIGHT/2, 0x22);	
 	}
 }

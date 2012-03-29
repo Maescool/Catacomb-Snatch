@@ -49,6 +49,7 @@ import com.mojang.mojam.gui.LevelSelect;
 import com.mojang.mojam.gui.LocaleMenu;
 import com.mojang.mojam.gui.MenuStack;
 import com.mojang.mojam.gui.OptionsMenu;
+import com.mojang.mojam.gui.PauseMenu;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.gui.WinMenu;
 import com.mojang.mojam.gui.components.Button;
@@ -75,8 +76,9 @@ import com.mojang.mojam.network.kryo.SnatchServer;
 import com.mojang.mojam.resources.Constants;
 import com.mojang.mojam.resources.Texts;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
+import com.mojang.mojam.screen.MojamScreen;
 import com.mojang.mojam.sound.ISoundPlayer;
 import com.mojang.mojam.sound.NoSoundPlayer;
 import com.mojang.mojam.sound.SoundPlayer;
@@ -84,7 +86,7 @@ import com.mojang.mojam.sound.SoundPlayer;
 public class MojamComponent extends Canvas implements Runnable, MouseMotionListener, MouseListener, ButtonListener {
 
 	public static final String GAME_TITLE = "Catacomb Snatch";
-	public static final String GAME_VERSION = "1.1.0-SNAPSHOT";
+	public static final String GAME_VERSION = "1.1.1-SNAPSHOT";
 
 	public static MojamComponent instance;
 	public static Locale locale;
@@ -100,7 +102,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private Cursor emptyCursor;
 	private double framerate = 60;
 	private int fps;
-	public static Screen screen = new Screen(GAME_WIDTH, GAME_HEIGHT);
+	public static MojamScreen screen;
 	private Level level;
 	public Chat chat = new Chat();
 	public Console console = new Console();
@@ -144,6 +146,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private SnatchServer server;
 
 	public MojamComponent() {
+		screen = new MojamScreen(GAME_WIDTH, GAME_HEIGHT);
+		screen.loadResources();
 	    final String nativeLibDir = MojamComponent.getMojamDir()
 			.getAbsolutePath().toString()
 			+ File.separator
@@ -260,14 +264,20 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	}
 
 	public void stop(boolean exit) {
-		if (exit) {		
-			running = false;
-			soundPlayer.stopBackgroundMusic();
-			soundPlayer.shutdown();
-			System.exit(0);
-		} else if(!(menuStack.peek() instanceof ExitMenu)){
-			menuStack.add(new ExitMenu(GAME_WIDTH, GAME_HEIGHT));
+	    if (exit) {		
+		running = false;
+		soundPlayer.stopBackgroundMusic();
+		soundPlayer.shutdown();
+		System.exit(0);
+	    } else if (menuStack.empty()){
+		if (level != null && !isMultiplayer && !paused) {
+		    paused = true;
+		    menuStack.add(new PauseMenu(GAME_WIDTH, GAME_HEIGHT));
 		}
+		menuStack.add(new ExitMenu(GAME_WIDTH, GAME_HEIGHT));
+	    } else if(!(menuStack.peek() instanceof ExitMenu)){
+		menuStack.add(new ExitMenu(GAME_WIDTH, GAME_HEIGHT));
+	    }
 	}
 
 	private void init() {
@@ -457,8 +467,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 	private synchronized void render(Graphics g) {
 		if (level != null) {
-			int xScroll = (int) (player.pos.x - screen.w / 2);
-			int yScroll = (int) (player.pos.y - (screen.h - 24) / 2);
+			int xScroll = (int) (player.pos.x - screen.getWidth() / 2);
+			int yScroll = (int) (player.pos.y - (screen.getHeight() - 24) / 2);
 			soundPlayer.setListenerPosition((float) player.pos.x, (float) player.pos.y);
 			level.render(screen, xScroll, yScroll);
 		}
@@ -535,7 +545,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	}
 
 
-	private void addHealthBar(Screen screen) {
+	private void addHealthBar(AbstractScreen screen) {
 		int maxIndex = Art.panel_healthBar[0].length - 1;
 		int index = maxIndex - Math.round(player.health * maxIndex / player.maxHealth);
 		if (index < 0)
@@ -543,13 +553,13 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		else if (index > maxIndex)
 			index = maxIndex;
 
-		screen.blit(Art.panel_healthBar[0][index], 311, screen.h - 17);
-		screen.blit(Art.panel_heart, 314, screen.h - 24);
+		screen.blit(Art.panel_healthBar[0][index], 311, screen.getHeight() - 17);
+		screen.blit(Art.panel_heart, 314, screen.getHeight() - 24);
 		Font font = Font.defaultFont();
-		font.draw(screen, texts.health(player.health, player.maxHealth), 335, screen.h - 21);
+		font.draw(screen, texts.health(player.health, player.maxHealth), 335, screen.getHeight() - 21);
 	}
 
-	private void addXpBar(Screen screen) {
+	private void addXpBar(AbstractScreen screen) {
 
 		int xpSinceLastLevelUp = (int) (player.xpSinceLastLevelUp());
 		int xpNeededForNextLevel = (int) (player.nettoXpNeededForLevel(player.plevel + 1));
@@ -561,13 +571,13 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		else if (index > maxIndex)
 			index = maxIndex;
 
-		screen.blit(Art.panel_xpBar[0][index], 311, screen.h - 32);
-		screen.blit(Art.panel_star, 314, screen.h - 40);
+		screen.blit(Art.panel_xpBar[0][index], 311, screen.getHeight() - 32);
+		screen.blit(Art.panel_star, 314, screen.getHeight() - 40);
 		Font font = Font.defaultFont();
-		font.draw(screen, texts.playerLevel(player.plevel + 1), 335, screen.h - 36);
+		font.draw(screen, texts.playerLevel(player.plevel + 1), 335, screen.getHeight() - 36);
 	}
 	
-	private void addWeaponSlots(Screen screen) {
+	private void addWeaponSlots(AbstractScreen screen) {
 		Font font = Font.FONT_GOLD;
 		for(int i = 0; i < 3 && i < player.weaponInventory.size(); i++) {
 			if(i == player.getActiveWeaponSlot()) {
@@ -581,13 +591,13 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		}
 	}
 
-	private void addScore(Screen screen) {
-		screen.blit(Art.panel_coin, 314, screen.h - 55);
+	private void addScore(AbstractScreen screen) {
+		screen.blit(Art.panel_coin, 314, screen.getHeight() - 55);
 		Font font = Font.defaultFont();
-		font.draw(screen, texts.money(player.score), 335, screen.h - 52);
+		font.draw(screen, texts.money(player.score), 335, screen.getHeight() - 52);
 	}
 
-	private void renderMouse(Screen screen, MouseButtons mouseButtons) {
+	private void renderMouse(AbstractScreen screen, MouseButtons mouseButtons) {
 
 		if (mouseButtons.mouseHidden)
 			return;
@@ -595,15 +605,15 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		int crosshairSize = 15;
 		int crosshairSizeHalf = crosshairSize / 2;
 
-		Bitmap marker = new Bitmap(crosshairSize, crosshairSize);
+		AbstractBitmap marker = screen.createBitmap(crosshairSize, crosshairSize);
 
 		// horizontal line
 		for (int i = 0; i < crosshairSize; i++) {
 			if (i >= crosshairSizeHalf - 1 && i <= crosshairSizeHalf + 1)
 				continue;
 
-			marker.pixels[crosshairSizeHalf + i * crosshairSize] = 0xffffffff;
-			marker.pixels[i + crosshairSizeHalf * crosshairSize] = 0xffffffff;
+			marker.setPixel(crosshairSizeHalf + i * crosshairSize, 0xffffffff);
+			marker.setPixel(i + crosshairSizeHalf * crosshairSize, 0xffffffff);
 		}
 
 		screen.blit(marker, mouseButtons.getX() - crosshairSizeHalf - 2, mouseButtons.getY() - crosshairSizeHalf - 2);
@@ -871,6 +881,9 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			break;
 		case TitleMenu.LOCALE_NL_ID:
 			setLocale("nl");
+			break;
+		case TitleMenu.LOCALE_PL_ID:
+			setLocale("pl");
 			break;
 		case TitleMenu.LOCALE_PT_BR_ID:
 			setLocale("pt_br");

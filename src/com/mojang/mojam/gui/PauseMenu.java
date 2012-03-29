@@ -6,7 +6,7 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.gui.components.Button;
 import com.mojang.mojam.gui.components.ClickableComponent;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class PauseMenu extends GuiMenu {
 	private final int gameWidth;
@@ -39,11 +39,11 @@ public class PauseMenu extends GuiMenu {
 
 	}
 
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 
 		//screen.clear(0);
 		//screen.blit(Art.emptyBackground, 0, 0);
-	    screen.alphaFill(0, 0, gameWidth, gameHeight, 0xff000000, 0x30);
+	    screen.alphaFill(0, 0, gameWidth, gameHeight, 0xff000000, 0xC0);
 		screen.blit(Art.pauseScreen, 0, 0);
 
 		super.render(screen);

@@ -2,8 +2,13 @@ package com.mojang.mojam.entity.mob;
 
 
 import com.mojang.mojam.entity.Bullet;
+import com.mojang.mojam.entity.ICarrySwap;
+import com.mojang.mojam.entity.IUsable;
+import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.building.Building;
+import com.mojang.mojam.entity.building.CatacombTreasure;
 import com.mojang.mojam.entity.building.TreasurePile;
 import com.mojang.mojam.entity.building.Turret;
 import com.mojang.mojam.level.tile.*;
@@ -11,7 +16,7 @@ import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.*;
 
-public class RailDroid extends Mob {
+public class RailDroid extends Mob implements IUsable, ICarrySwap{
 	private enum Direction {
 		UNKNOWN, LEFT, UP, RIGHT, DOWN;
 
@@ -36,7 +41,6 @@ public class RailDroid extends Mob {
 	private Direction lDir = Direction.DOWN;
 	private int waitForTurnTime = 0;
 	private int pauseTime = 0;
-	public boolean carrying = false;
 	public int swapTime = 0;
 	public int team;
 	public static boolean creative = Options.getAsBoolean(Options.CREATIVE);
@@ -62,8 +66,13 @@ public class RailDroid extends Mob {
 
     public void tick() {
         xBump = yBump = 0;
-        super.tick();
 
+        super.tick();
+        
+        if (isCarrying()) {
+            handleCarrying();
+        }
+        
         boolean hadPaused = pauseTime > 0;
 
         if (freezeTime > 0)
@@ -143,6 +152,14 @@ public class RailDroid extends Mob {
         return dir != Direction.UNKNOWN && oldPos.distSqr(pos) < 0.1 * 0.1;
     }
 
+    /**
+     * Handle object carrying
+     */
+    private void handleCarrying() {
+        carrying.setPos(pos.x, pos.y - 20);
+        carrying.tick();
+    }
+    
     private boolean decreaseTimers() {
         boolean shouldReturnFromTick = false;
         if (swapTime > 0) {
@@ -267,29 +284,35 @@ public class RailDroid extends Mob {
     }
 
     private void pickUpTreasure() {
-        if (!carrying && swapTime == 0) {
+    	
+    	  if ( (carrying == null) && (swapTime == 0) ) {
             if (level.getEntities(getBB().grow(32), TreasurePile.class).size() > 0) {
                 swapTime = 30;
-                carrying = true;
+                CatacombTreasure treasure = new CatacombTreasure(pos.x,pos.y);
+                level.addEntity(treasure);
+                pickup(treasure);
             }
         }
+    	  
     }
 
     private void increaseScoreAtBase() {
-        if (carrying && swapTime == 0) {
+    	if ( (carrying != null) && (carrying instanceof CatacombTreasure ) && (swapTime == 0) ) {
             if (pos.y < 8 * Tile.HEIGHT) {
-                carrying = false;
+            	carrying.die();
+                carrying = null;
                 level.player2Score += 2;
             }
             if (pos.y > (level.height - 7 - 1) * Tile.HEIGHT) {
-                carrying = false;
+            	carrying.die();
+                carrying = null;
                 level.player1Score += 2;
             }
         }
     }
 	
 	@Override
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		if (lDir == Direction.LEFT)
 			return Art.raildroid[1][1];
 		if (lDir == Direction.UP)
@@ -305,7 +328,7 @@ public class RailDroid extends Mob {
 		super.handleCollision(entity, xa, ya);
 		if (entity instanceof RailDroid) {
 			RailDroid other = (RailDroid) entity;
-			if (other.carrying != carrying && carrying) {
+			if (isCarrying()) {
 				if (lDir == Direction.LEFT && other.pos.x > pos.x - 4)
 					return;
 				if (lDir == Direction.UP && other.pos.y > pos.y - 4)
@@ -327,9 +350,9 @@ public class RailDroid extends Mob {
 				if (other.swapTime == 0 && swapTime == 0) {
 					other.swapTime = swapTime = 15;
 
-					boolean tmp = other.carrying;
-					other.carrying = carrying;
-					carrying = tmp;
+					if (other instanceof ICarrySwap) {
+						carrying=((ICarrySwap)other).tryToSwap(carrying);
+					}
 				}
 			}
 		}
@@ -342,13 +365,62 @@ public class RailDroid extends Mob {
 		return super.shouldBlock(e);
 	}
 
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		super.render(screen);
-		if (carrying) {
-			screen.blit(Art.bullets[0][0], pos.x - 8, pos.y - 20 - yOffs);
-		} else {
-			screen.blit(Art.bullets[1][1], pos.x - 8, pos.y - 20 - yOffs);
+		renderCarrying(screen, 0 );
+	}
+
+	@Override
+	public void use(Entity user) {
+	}
+
+	@Override
+	public boolean upgrade(Player player) {
+		return false;
+	}
+
+	@Override
+	public void setHighlighted(boolean hl) {
+		this.setHighlight(hl);
+		this.freezeTime = 10;
+	}
+
+	@Override
+	public boolean isHighlightable() {
+		return true;
+	}
+
+	@Override
+	public boolean isAllowedToCancel() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean canCarry(Building b) {
+		return true;
+	}
+
+	@Override
+	public boolean canPickup(Building b) {
+		if (!isCarrying())	
+			return true;
+		return false;
+	}
+
+	@Override
+	public Building getCarrying() {
+		return carrying; 
+	}
+
+	@Override
+	public Building tryToSwap(Building b) {	
+		Building tmpBuilding = null;
+		if ( canCarry(b) ) {
+			tmpBuilding = carrying;
+			carrying=b;
 		}
+		return tmpBuilding;
 	}
 
 }

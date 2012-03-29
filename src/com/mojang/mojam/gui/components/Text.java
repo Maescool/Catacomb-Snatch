@@ -1,6 +1,6 @@
 package com.mojang.mojam.gui.components;
 
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class Text extends VisibleComponent {
 	private final int id;
@@ -13,7 +13,7 @@ public class Text extends VisibleComponent {
 		this.label = label;
 	}
 
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		if (label.indexOf("\n") != -1) {
 			String[] strings = label.split("\n");
 			Integer amount = 0;

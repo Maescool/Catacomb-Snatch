@@ -4,11 +4,12 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.building.Harvester;
+import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.tile.HoleTile;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class Loot extends Entity {
 	public double xMovement, yMovement, accelerationDirectionDelta;
@@ -21,7 +22,7 @@ public class Loot extends Entity {
 	private boolean isTakeable;
 	private boolean disappears = true; 
 
-	public static Bitmap[][][] animationArt = {
+	public static AbstractBitmap[][][] animationArt = {
 		Art.pickupCoinBronzeSmall,
 		Art.pickupCoinSilverSmall,
 		Art.pickupCoinGoldSmall,
@@ -64,7 +65,7 @@ public class Loot extends Entity {
 		this.setSize(2, 2);
 		this.disappears=disappears;
 		physicsSlide = false;
-		life = TurnSynchronizer.synchedRandom.nextInt(100) + 600;
+		life = 60 * TitleMenu.difficulty.getCoinLifespan();
 
 		animationTime = TurnSynchronizer.synchedRandom.nextInt(animationArt[value].length * 3);
 	}
@@ -187,15 +188,15 @@ public class Loot extends Entity {
 		}
 	}
 
-	public void render(Screen screen) {
-		Bitmap[][] lootAnimation = animationArt[value];
+	public void render(AbstractScreen screen) {
+		AbstractBitmap[][] lootAnimation = animationArt[value];
 		if (life > 60 * 3 || life / 2 % 2 == 0) {
 			int frame = animationTime / 3 % lootAnimation.length;
-			Bitmap currentFrame = lootAnimation[frame][0];
+			AbstractBitmap currentFrame = lootAnimation[frame][0];
 			if (accelerationDirection > 0) {
 				screen.blit(Art.shadow, pos.x - 2, pos.y);
 			}
-			screen.blit(currentFrame, pos.x - currentFrame.w / 2, pos.y - currentFrame.h / 2 - 2 - accelerationDirection);
+			screen.blit(currentFrame, pos.x - currentFrame.getWidth() / 2, pos.y - currentFrame.getHeight() / 2 - 2 - accelerationDirection);
 		}
 	}
 

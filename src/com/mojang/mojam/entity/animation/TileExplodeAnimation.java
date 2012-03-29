@@ -1,7 +1,7 @@
 package com.mojang.mojam.entity.animation;
 
 import com.mojang.mojam.network.TurnSynchronizer;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class TileExplodeAnimation extends Animation {
 	public TileExplodeAnimation(double x, double y) {
@@ -21,6 +21,6 @@ public class TileExplodeAnimation extends Animation {
 		level.addEntity(new BombExplodeAnimationSmall(x, y, z));
 	}
 
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 	}
 }

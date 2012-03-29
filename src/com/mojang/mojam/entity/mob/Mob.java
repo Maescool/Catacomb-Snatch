@@ -18,11 +18,12 @@ import com.mojang.mojam.entity.weapon.IWeapon;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.tile.HoleTile;
 import com.mojang.mojam.level.tile.Tile;
+import com.mojang.mojam.math.BB;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public abstract class Mob extends Entity {
 
@@ -31,7 +32,6 @@ public abstract class Mob extends Entity {
 
 	// private double speed = 0.82;
 	protected double speed = 1.0;
-	public int team;
 	protected boolean doShowHealthBar = true;
     protected int healthBarOffset = 10;
 	double dir = 0;
@@ -62,6 +62,7 @@ public abstract class Mob extends Entity {
     public Vec2 aimVector;
     public IWeapon weapon;
 	protected Buffs buffs = new Buffs();
+	private boolean highlight;
 	
 	public Mob(double x, double y, int team) {
 		super();
@@ -208,30 +209,60 @@ public abstract class Mob extends Entity {
 		return re;
 	}
 
-	public void render(Screen screen) {
-		Bitmap image = getSprite();
+	public void render(AbstractScreen screen) {
+		AbstractBitmap image = getSprite();
 		if (hurtTime > 0) {
 			if (hurtTime > 40 - 6 && hurtTime / 2 % 2 == 0) {
-				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h / 2 - yOffs, 0xa0ffffff);
+				screen.colorBlit(image, pos.x - image.getWidth() / 2, pos.y - image.getHeight() / 2 - yOffs, 0xa0ffffff);
 			} else {
 				if (health < 0)
 					health = 0;
 				int col = (int) (180 - health * 180 / maxHealth);
 				if (hurtTime < 10)
 					col = col * hurtTime / 10;
-				screen.colorBlit(image, pos.x - image.w / 2, pos.y - image.h / 2 - yOffs, (col << 24) + 255 * 65536);
+				screen.colorBlit(image, pos.x - image.getWidth() / 2, pos.y - image.getHeight() / 2 - yOffs, (col << 24) + 255 * 65536);
 			}
 		} else {
 					
-			screen.blit(image, pos.x - image.w / 2, pos.y - image.h / 2 - yOffs);
+			screen.blit(image, pos.x - image.getWidth() / 2, pos.y - image.getHeight() / 2 - yOffs);
 		}
 
 		if (doShowHealthBar && health < maxHealth) {
             addHealthBar(screen);
         }
+		
+		renderMarker(screen);
 	}
 
-	protected void addHealthBar(Screen screen) {
+	/**
+	 * Render the marker onto the given screen
+	 * 
+	 * @param screen
+	 *            AbstractScreen
+	 */
+	protected void renderMarker(AbstractScreen screen) {
+		if (highlight) {
+			BB bb = getBB();
+			bb = bb.grow((getSprite().getWidth() - (bb.x1 - bb.x0))
+					/ (3 + Math.sin(System.currentTimeMillis() * .01)));
+			int width = (int) (bb.x1 - bb.x0);
+			int height = (int) (bb.y1 - bb.y0);
+			AbstractBitmap marker = screen.createBitmap(width, height);
+			for (int y = 0; y < height; y++) {
+				for (int x = 0; x < width; x++) {
+					if ((x < 2 || x > width - 3 || y < 2 || y > height - 3)
+							&& (x < 5 || x > width - 6)
+							&& (y < 5 || y > height - 6)) {
+						int i = x + y * width;
+						marker.setPixel(i, 0xffffffff);
+					}
+				}
+			}
+			screen.blit(marker, bb.x0, bb.y0 - 4);
+		}
+	}
+	
+	protected void addHealthBar(AbstractScreen screen) {
         
         int start = (int) (health * 21 / maxHealth);
         
@@ -257,7 +288,7 @@ public abstract class Mob extends Entity {
 		screen.blit(Art.healthBar_Outline[0][0], pos.x - 16, pos.y + healthBarOffset);
     }
 
-	protected void renderCarrying(Screen screen, int yOffs) {
+	protected void renderCarrying(AbstractScreen screen, int yOffs) {
 		if (carrying == null)
 			return;
 
@@ -266,7 +297,7 @@ public abstract class Mob extends Entity {
 		carrying.yOffs += yOffs;
 	}
 
-	public abstract Bitmap getSprite();
+	public abstract AbstractBitmap getSprite();
 
 	public void hurt(Entity source, float damage) {
 		if (isImmortal)
@@ -496,4 +527,12 @@ public abstract class Mob extends Entity {
     	if(weapon != null)
         weapon.weapontick();
     }
+
+	public boolean isHighlight() {
+		return highlight;
+	}
+
+	public void setHighlight(boolean highlight) {
+		this.highlight = highlight;
+	}
 }

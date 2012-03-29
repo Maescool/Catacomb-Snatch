@@ -8,7 +8,7 @@ import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.AbstractBitmap;
 
 public class TreasureChest extends Building implements IEditable {
 
@@ -25,7 +25,7 @@ public class TreasureChest extends Building implements IEditable {
         
     }
     
-    public Bitmap getSprite() {
+    public AbstractBitmap getSprite() {
         return Art.small_chest[status][0];
     }
     
@@ -81,7 +81,7 @@ public class TreasureChest extends Building implements IEditable {
     }
 
     @Override
-    public Bitmap getBitMapForEditor() {
+    public AbstractBitmap getBitMapForEditor() {
         return Art.small_chest[0][0];
     }
 } 

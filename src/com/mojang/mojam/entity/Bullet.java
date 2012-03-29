@@ -5,7 +5,7 @@ import com.mojang.mojam.entity.building.Bomb;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.mob.RailDroid;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class Bullet extends Entity {
 	public double xa, ya;
@@ -54,7 +54,7 @@ public class Bullet extends Entity {
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		screen.blit(Art.bullet[facing][0], pos.x - 8, pos.y - 10);
 	}
 
