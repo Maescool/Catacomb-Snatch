@@ -12,6 +12,5 @@
 	<classpathentry kind="lib" path="lib/lwjgl.jar"/>
 	<classpathentry kind="lib" path="lib/SoundSystem.jar"/>
 	<classpathentry kind="lib" path="lib/kryonet-1.04-all.jar"/>
->>>>>>> d3ba3f6622a984bde2bae1d27ed151c5b6c09ab5
 	<classpathentry kind="output" path="bin"/>
 </classpath>

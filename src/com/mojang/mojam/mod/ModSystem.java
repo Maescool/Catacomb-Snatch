@@ -40,6 +40,7 @@ import com.mojang.mojam.InputHandler;
 import com.mojang.mojam.Keys;
 import com.mojang.mojam.Keys.Key;
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.Options;
 import com.mojang.mojam.console.Console;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.weapon.IWeapon;
@@ -915,11 +916,21 @@ public final class ModSystem {
     /**
      * Gets an instance of Font to avoid static method semantics in scripts
      * 
-     * @return an instance of the class @see Font for non-statically calling
+     * @return an instance of the class {@link Font} for non-statically calling
      *         static code
      */
     public static Font getFont() {
 	return Font.defaultFont();
+    }
+    
+    /**
+     * Gets an instance of Options to avoid static method semantics in scripts
+     * 
+     * @return an instance of the class {@link Options} for non statically calling
+     * 		static code
+     */
+    public static Options getOptions(){
+	return new Options();
     }
 
     /**
@@ -1104,7 +1115,7 @@ public final class ModSystem {
      * @return The File once downloaded
      * @throws IOException
      */
-    private static File downloadFile(String path, String dest)
+    public static File downloadFile(String path, String dest)
 	    throws IOException {
 	File f, f1;
 	f = new File(path);

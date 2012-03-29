@@ -76,12 +76,12 @@ public class Downloader {
 
     public void CheckFiles() {
 	// DownloadScreen ds = new DownloadScreen();
-	// checkBinDir();
-	boolean debug = true;
-	if (debug) {
+	// checkBinDir(); 
+	// testSpeeds(); //<- Eye-opening
+	System.out.println(Options.getAsInteger(Options.DLSYSTEM));
+	if (Options.getAsInteger(Options.DLSYSTEM, 0)==1) {
 	    downloadAgent = new ChannelDownloader();//Faster, less control
-	    //testSpeeds();
-	} else {
+	} else if(Options.getAsInteger(Options.DLSYSTEM, 0)==0){
 	    downloadAgent = new DefaultDownloader();
 	}
 	checkNativeDir();
@@ -91,11 +91,6 @@ public class Downloader {
     
     private static void testSpeeds()
     {
-	/* 
-	 * 0: DownloadAgent
-	 * 1: Default
-	 * 2: Channel
-	 */
 	IDownloader old = downloadAgent;
 	downloadAgent = new DefaultDownloader();
 	long startDefault = System.nanoTime();

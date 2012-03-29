@@ -57,7 +57,8 @@ public class MojamStartup extends Canvas implements Runnable, ButtonListener {
     public MojamStartup() {
 	MojamComponent.constants = new Constants();
 	MojamComponent.texts = new Texts(new Locale("en"));
-
+	Options.loadProperties();
+	
 	this.setPreferredSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT
 		* SCALE));
 	this.setMinimumSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT
@@ -222,8 +223,7 @@ public class MojamStartup extends Canvas implements Runnable, ButtonListener {
 
     public static void main(String[] args) {
 	//
-	MojamStartup sl = new MojamStartup();
-	Options.loadProperties();
+	MojamStartup sl = new MojamStartup();	
 	guiFrame = new JFrame(MojamComponent.GAME_TITLE);
 	JPanel panel = new JPanel(new BorderLayout());
 	panel.add(sl);
