@@ -150,14 +150,16 @@ public class Console implements KeyListener {
 		
 		if(cleanInput.startsWith("/")) {
 			Command command = findCommand(cleanInput, input);
-			
-			if(command.isSendToClients()) {
+			if (null != command){
+			    if(command.isSendToClients()) {
 				//send message to other client(s)
 				MojamComponent.instance.synchronizer.addMessage(new ConsoleMessage(input));
+			    }
+
+			    command.execute();
+			}else{
+			    log("ERROR: Command "+input+" Not found! try /help for a list of commands.");
 			}
-			
-			command.execute();
-			
 		} else {
 			chat.execute(new String[]{input});
 		}
@@ -173,6 +175,7 @@ public class Console implements KeyListener {
 	}
 
 	private String scrubInput(String input) {
+	    	input = input.toLowerCase();
 		if(!input.contains(" ")) {
 			return input;
 		} else {
