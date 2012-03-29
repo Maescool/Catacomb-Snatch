@@ -28,17 +28,8 @@ public abstract class SpawnerEntity extends Building implements IEditable
 	/**
 	 * Constructor
 	 * 
-<<<<<<< HEAD
-	 * @param x
-	 *            Initial X coordinate
-	 * @param y
-	 *            Initial Y coordinate
-	 * @param type
-	 *            Mob type
-=======
 	 * @param x Initial X coordinate
 	 * @param y Initial Y coordinate
->>>>>>> d3ba3f6622a984bde2bae1d27ed151c5b6c09ab5
 	 */
 	public SpawnerEntity(double x, double y)
 	{
