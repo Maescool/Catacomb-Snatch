@@ -5,8 +5,8 @@ import java.io.IOException;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.esotericsoftware.minlog.Log;
 import com.mojang.mojam.network.kryo.Network.ChatMessage;
+import com.mojang.mojam.network.kryo.Network.ConsoleMessage;
 import com.mojang.mojam.network.kryo.Network.EndGameMessage;
 import com.mojang.mojam.network.kryo.Network.RegisterName;
 import com.mojang.mojam.network.kryo.Network.StartGameCustomMessage;
@@ -17,7 +17,7 @@ public class SnatchServer {
 	Server server;
 
 	public SnatchServer() throws IOException {
-		Log.set(Log.LEVEL_DEBUG);
+		//Log.set(Log.LEVEL_DEBUG);
 		server = new Server() {
 			protected Connection newConnection() {
 				// By providing our own connection implementation, we can store
@@ -64,6 +64,13 @@ public class SnatchServer {
 					TurnMessage turnMessage = (TurnMessage) object;
 					server.sendToAllExceptTCP(connection.getID(),turnMessage);
 					//synchronizer.onTurnPacket((TurnMessage) packet);
+					return;
+				}
+				
+
+				if(object instanceof ConsoleMessage) {
+					ConsoleMessage consoleMessage = (ConsoleMessage) object;
+					server.sendToAllExceptTCP(connection.getID(),consoleMessage);
 					return;
 				}
 				
@@ -120,12 +127,6 @@ public class SnatchServer {
 	static class SnatchConnection extends Connection {
 		public String name;
 	}
-
-	public static void main(String[] args) throws IOException {
-		Log.set(Log.LEVEL_DEBUG);
-		new SnatchServer();
-	}
-
 
 	public void shutdown() {
 		server.close();

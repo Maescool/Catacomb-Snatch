@@ -40,7 +40,7 @@ public class InputHandler implements KeyListener {
 		initKey(keys.cycleRight, KeyEvent.VK_X);
 		
 		//console
-		initKey(keys.console, KeyEvent.VK_TAB);
+		initKey(keys.console, KeyEvent.VK_BACK_QUOTE);
 	}
 
 	private void initKey(Key key, int defaultKeyCode) {
