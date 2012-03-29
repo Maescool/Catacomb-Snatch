@@ -23,7 +23,8 @@ import com.mojang.mojam.gui.MenuStack;
 import com.mojang.mojam.resources.Constants;
 import com.mojang.mojam.resources.Texts;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
+import com.mojang.mojam.screen.MojamScreen;
 
 
 public class MojamStartup extends Canvas implements Runnable, ButtonListener {
@@ -40,7 +41,7 @@ public class MojamStartup extends Canvas implements Runnable, ButtonListener {
     public static final int GAME_HEIGHT = GAME_WIDTH * 3 / 4;
     public static final int SCALE = 2;
 
-    public static Screen screen = new Screen(GAME_WIDTH, GAME_HEIGHT);
+    public static MojamScreen screen;
 
     private MenuStack menuStack = new MenuStack();
 
@@ -54,6 +55,8 @@ public class MojamStartup extends Canvas implements Runnable, ButtonListener {
     private DownloadScreen ds;
 
     public MojamStartup() {
+		screen = new MojamScreen(GAME_WIDTH, GAME_HEIGHT);
+		screen.loadResources();
 
 	MojamComponent.constants = new Constants();
 	MojamComponent.texts = new Texts(new Locale("en"));

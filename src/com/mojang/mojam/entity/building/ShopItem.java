@@ -7,8 +7,8 @@ import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.gui.components.Font;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 /**
  * Generic shop item, available from the players base
@@ -16,7 +16,7 @@ import com.mojang.mojam.screen.Screen;
 public abstract class ShopItem extends Building {
 
     private final String name;
-    private Bitmap image;
+    private AbstractBitmap image;
     private final int fullCost;
     private int cost;
     private int effectiveCost;
@@ -50,7 +50,7 @@ public abstract class ShopItem extends Building {
     }
 
     @Override
-    public void render(Screen screen) {
+    public void render(AbstractScreen screen) {
 	super.render(screen);
 	if (team == MojamComponent.localTeam) {
 	    // Render the Cost text
@@ -65,12 +65,12 @@ public abstract class ShopItem extends Building {
      * Render the shop info text onto the given screen
      * 
      * @param screen
-     *            Screen
+     *            AbstractScreen
      */
-    protected void renderInfo(Screen screen) {
+    protected void renderInfo(AbstractScreen screen) {
 	// Draw iiAtlas' shop item info graphics, thanks whoever re-wrote this!
 	if (isHighlight()) {
-	    Bitmap image = getSprite();
+	    AbstractBitmap image = getSprite();
 
 	    String[] tooltip = this.getTooltip();
 	    int width = getLongestWidth(tooltip, Font.FONT_WHITE_SMALL) + 4;
@@ -78,12 +78,12 @@ public abstract class ShopItem extends Building {
 		    * (Font.FONT_GOLD_SMALL.getFontHeight() + 3);
 
 	    Font font = Font.FONT_GOLD_SMALL;
-	    screen.blit(Bitmap.tooltipBitmap(width, height), (int) (pos.x
-		    - image.w / 2 - 10),
+	    screen.blit(screen.tooltipBitmap(width, height), (int) (pos.x
+		    - image.getWidth() / 2 - 10),
 		    (int) (pos.y + 20 - teamTooltipYOffset), width, height);
 
 	    for (int i = 0; i < tooltip.length; i++) {
-		font.draw(screen, tooltip[i], (int) (pos.x - image.w + 8),
+		font.draw(screen, tooltip[i], (int) (pos.x - image.getWidth() + 8),
 			(int) pos.y + 22 - teamTooltipYOffset
 				+ (i == 0 ? 0 : 1) + i
 				* (font.getFontHeight() + 2));
@@ -116,11 +116,11 @@ public abstract class ShopItem extends Building {
     }
 
     @Override
-    public Bitmap getSprite() {
+    public AbstractBitmap getSprite() {
 	return image;
     }
 
-    public void setSprite(Bitmap shopItemImage) {
+    public void setSprite(AbstractBitmap shopItemImage) {
 	image = shopItemImage;
     }
 

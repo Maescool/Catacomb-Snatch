@@ -27,8 +27,8 @@ import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 /**
  * Implements the player entity
@@ -183,8 +183,8 @@ public class Player extends Mob implements LootCollector {
         if (!mouseButtons.mouseHidden) {
             // Update player mouse, in world pixels relative to player
             setAimByMouse(
-                    (mouseButtons.getX() - (MojamComponent.screen.w / 2)),
-                    ((mouseButtons.getY() + 24) - (MojamComponent.screen.h / 2)));
+                    (mouseButtons.getX() - (MojamComponent.screen.getWidth() / 2)),
+                    ((mouseButtons.getY() + 24) - (MojamComponent.screen.getHeight() / 2)));
         } else {
             setAimByKeyboard();
         }
@@ -699,8 +699,8 @@ public class Player extends Mob implements LootCollector {
     }
 
     @Override
-    public void render(Screen screen) {
-		Bitmap[][] sheet = Art.getPlayer(getCharacter());
+    public void render(AbstractScreen screen) {
+		AbstractBitmap[][] sheet = Art.getPlayer(getCharacter());
     	
 		if(sheet == null){
 			return;
@@ -738,7 +738,7 @@ public class Player extends Mob implements LootCollector {
         addSprintBar(screen);
 	}
     
-    private void addSprintBar(Screen screen) {
+    private void addSprintBar(AbstractScreen screen) {
     	if (this.timeSprint <= 0) { 
     		return; 
     	}
@@ -755,13 +755,13 @@ public class Player extends Mob implements LootCollector {
     }
 
 	@Override
-	public void renderTop(Screen screen) {
+	public void renderTop(AbstractScreen screen) {
 		int frame = (walkTime / 4 % 6 + 6) % 6;
 		renderCarrying(screen, (frame == 0 || frame == 3) ? -1 : 0);
 	}
     
     @Override
-    protected void renderCarrying(Screen screen, int yOffs) {
+    protected void renderCarrying(AbstractScreen screen, int yOffs) {
     	if(carrying != null && carrying.team == MojamComponent.localTeam ) {
 			if(carrying instanceof Turret) {
 				Turret turret = (Turret)carrying;
@@ -814,7 +814,7 @@ public class Player extends Mob implements LootCollector {
     }
     
     @Override
-    public Bitmap getSprite() {
+    public AbstractBitmap getSprite() {
         return null;
     }
 

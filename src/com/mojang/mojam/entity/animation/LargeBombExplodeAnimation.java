@@ -4,7 +4,7 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.network.TurnSynchronizer;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class LargeBombExplodeAnimation extends Animation {
 	public LargeBombExplodeAnimation(double x, double y) {
@@ -50,6 +50,6 @@ public class LargeBombExplodeAnimation extends Animation {
 		}
 	}
 
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 	}
 }

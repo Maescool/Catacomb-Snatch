@@ -2,8 +2,8 @@ package com.mojang.mojam.gui.components;
 
 import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class Button extends ClickableComponent {
 
@@ -14,9 +14,9 @@ public class Button extends ClickableComponent {
 
 	private String label;
 
-    private Bitmap mainBitmap = null;
-    private Bitmap rightBorderBitmap = null;
-    private Bitmap middleBitmap = null;
+    private AbstractBitmap mainBitmap = null;
+    private AbstractBitmap rightBorderBitmap = null;
+    private AbstractBitmap middleBitmap = null;
 
 	public Button(int id, String label, int x, int y) {
 		super(x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -44,7 +44,7 @@ public class Button extends ClickableComponent {
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 
 		if(enabled){
 			if (isPressed()) {
@@ -58,7 +58,7 @@ public class Button extends ClickableComponent {
 		Font.defaultFont().draw(screen, label, getX() + getWidth() / 2, getY() + getHeight() / 2, Font.Align.CENTERED);
 	}
 	
-	private void blitBackground(Screen screen, int bitmapId) {
+	private void blitBackground(AbstractScreen screen, int bitmapId) {
 	    
 	    // Default width button
 	    if (getWidth() == BUTTON_WIDTH) {
@@ -70,9 +70,9 @@ public class Button extends ClickableComponent {
     	    // Cut button textures
     	    if (mainBitmap != Art.button[0][bitmapId]) {
     	        mainBitmap = Art.button[0][bitmapId];
-    	        rightBorderBitmap = new Bitmap(10, BUTTON_HEIGHT);
+    	        rightBorderBitmap = screen.createBitmap(10, BUTTON_HEIGHT);
     	        rightBorderBitmap.blit(mainBitmap, - BUTTON_WIDTH + 10, 0);
-                middleBitmap = new Bitmap(1, BUTTON_HEIGHT);
+                middleBitmap = screen.createBitmap(1, BUTTON_HEIGHT);
                 middleBitmap.blit(mainBitmap, -10, 0);
     	    }
     	    

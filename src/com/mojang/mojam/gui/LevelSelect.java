@@ -11,7 +11,7 @@ import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.LevelList;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class LevelSelect extends GuiMenu {
     
@@ -127,7 +127,7 @@ public class LevelSelect extends GuiMenu {
     }
     
     @Override
-    public void render(Screen screen) {
+    public void render(AbstractScreen screen) {
     	screen.blit(Art.emptyBackground, 0, 0);
     	
     	// Draw disabled page buttons

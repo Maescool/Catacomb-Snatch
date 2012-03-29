@@ -4,7 +4,7 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.math.Mth;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class Slider extends ClickableComponent {
 	private final int id;
@@ -58,7 +58,7 @@ public class Slider extends ClickableComponent {
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		screen.alphaFill(getX() + SLIDER_WIDTH, getY(), getWidth() - SLIDER_WIDTH * 2, getHeight(), 0xff000000, 0x80);
 	    screen.alphaBlit(Art.slider[1][0], getX(), getY(), 0x80);
 		screen.alphaBlit(Art.slider[1][1], getX() + getWidth() - SLIDER_WIDTH, getY(), 0x80);

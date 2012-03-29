@@ -11,7 +11,7 @@ import com.mojang.mojam.gui.components.ClickableComponent;
 import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.resources.Texts;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class KeyBindingsMenu extends GuiMenu {
 
@@ -159,7 +159,7 @@ public class KeyBindingsMenu extends GuiMenu {
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		screen.blit(Art.background, 0, 0);
 		Texts txts = MojamComponent.texts;
 		Font.defaultFont().draw(screen, txts.getStatic("options.keyBindings"), MojamComponent.GAME_WIDTH / 2, yOffset - 40, Font.Align.CENTERED);
@@ -194,7 +194,7 @@ public class KeyBindingsMenu extends GuiMenu {
 		}
 	}
 
-	private void write(Screen screen, String txt, int column, int row) {
+	private void write(AbstractScreen screen, String txt, int column, int row) {
 		Font.defaultFont().draw(screen, txt + ": ", BORDER + 32 + textWidth + column
 				* (Button.BUTTON_WIDTH + 32 + textWidth), yOffset
 				+ 8 + row * BUTTON_SPACING, Font.Align.RIGHT);

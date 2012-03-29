@@ -34,7 +34,7 @@ public class TestEntity extends Mob {
 		super.die();
 	}
 
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		int facing = (int) ((Math.atan2(xd, -yd) * 4 / (Math.PI * 2) + 2.5)) & 3;
 
 		return Art.mummy[facing][0];

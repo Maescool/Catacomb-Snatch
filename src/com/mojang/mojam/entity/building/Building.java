@@ -10,8 +10,8 @@ import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 /**
  * Generic building class
@@ -52,7 +52,7 @@ public abstract class Building extends Mob implements IUsable {
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		super.render(screen);
 	}
 
@@ -60,9 +60,9 @@ public abstract class Building extends Mob implements IUsable {
 	 * Render the marker onto the given screen
 	 * 
 	 * @param screen
-	 *            Screen
+	 *            AbstractScreen
 	 */
-	protected void renderMarker(Screen screen) {
+	protected void renderMarker(AbstractScreen screen) {
 		super.renderMarker(screen);
 	}
 
@@ -111,7 +111,7 @@ public abstract class Building extends Mob implements IUsable {
 
 
 	@Override
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		return Art.floorTiles[3][2];
 	}
 

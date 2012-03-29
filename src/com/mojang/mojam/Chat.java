@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import com.mojang.mojam.gui.components.Font;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class Chat implements KeyListener {
 
@@ -71,7 +71,7 @@ public class Chat implements KeyListener {
 		}
 	}
 
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		int xOffset = 5;
 		int yOffset = 312;
 		if (open) {
