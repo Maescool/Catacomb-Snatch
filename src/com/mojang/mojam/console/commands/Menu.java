@@ -7,10 +7,10 @@ import com.mojang.mojam.gui.TitleMenu;
 public class Menu extends Command {
 
     public Menu() {
-	super("menu", 0, "Return to menu");
+	super("menu", 0, "Return to menu",true);
     }
 
-    public void doCommand(String[] args) {
+    public void execute() {
 	MojamComponent.instance.handleAction(TitleMenu.RETURN_TO_TITLESCREEN);
     }
     

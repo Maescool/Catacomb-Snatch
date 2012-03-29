@@ -18,6 +18,7 @@ import com.mojang.mojam.network.kryo.Network.ChangeMouseButtonMessage;
 import com.mojang.mojam.network.kryo.Network.ChangeMouseCoordinateMessage;
 import com.mojang.mojam.network.kryo.Network.CharacterMessage;
 import com.mojang.mojam.network.kryo.Network.ChatMessage;
+import com.mojang.mojam.network.kryo.Network.ConsoleMessage;
 import com.mojang.mojam.network.kryo.Network.EndGameMessage;
 import com.mojang.mojam.network.kryo.Network.PauseMessage;
 import com.mojang.mojam.network.kryo.Network.RegisterName;
@@ -131,7 +132,10 @@ public class SnatchClient {
 			} else {
 				mojamComponent.menuStack.pop();
 			}
-		} else if (message instanceof StartGameMessage) {
+		} else if (message instanceof ConsoleMessage) {
+			ConsoleMessage cm = (ConsoleMessage) message;
+			mojamComponent.console.processInputFromNetwork(cm.message);
+	    } else if (message instanceof StartGameMessage) {
 			if (!mojamComponent.isServer) {
 				mojamComponent.sendCharacter = true;
 				StartGameMessage sgMessage = (StartGameMessage) message;

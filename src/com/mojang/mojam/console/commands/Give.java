@@ -24,7 +24,7 @@ public class Give extends Command {
     public Map<String, Class<? extends IWeapon>> weaponNames = new HashMap<String, Class<? extends IWeapon>>();
 
     public Give() {
-	super("give", 1, "Gives a weapon");
+	super("give", 1, "Gives a weapon or money", true);
 	init();
     }
 
@@ -53,52 +53,55 @@ public class Give extends Command {
 	weaponNames.put(name, weapon);
     }
 
-    public void doCommand(String[] args) {
+    public void execute() {
 	args[0] = args[0].trim().toLowerCase();
-	Player player = MojamComponent.instance.player;
+	for (Player player : MojamComponent.instance.players) {
 
-	if (weaponNames.containsKey(args[0])) {
-	    log(giveTexts.get(weaponNames.get(args[0])));
-	    try {
-		if (!player.weaponInventory.add(weaponNames.get(args[0])
-			.getDeclaredConstructor(Mob.class).newInstance(player))) {
-		    if (player.weaponInventory.weaponList.contains(weaponNames
-			    .get(args[0]))) {
-			log("You already have this item");
-		    } else {
-			log("You cannot hold more than "
-				+ player.weaponInventory.size() + " weapons.");
+	    if (weaponNames.containsKey(args[0])) {
+		log(giveTexts.get(weaponNames.get(args[0])));
+		try {
+		    if (!player.weaponInventory.add(weaponNames.get(args[0])
+			    .getDeclaredConstructor(Mob.class)
+			    .newInstance(player))) {
+			if (player.weaponInventory.weaponList
+				.contains(weaponNames.get(args[0]))) {
+			    log("You already have this item");
+			} else {
+			    log("You cannot hold more than "
+				    + player.weaponInventory.size()
+				    + " weapons.");
+			}
 		    }
+		} catch (Exception e) {
+		    e.printStackTrace();
 		}
-	    } catch (Exception e) {
-		e.printStackTrace();
-	    }
-	} else if (args[0].equals("all")) {
-	    for(String s:weaponNames.keySet())
-	    {
-		doCommand(new String[]{s});
-	    }
-	} else if (args[0].equals("help")) {
-	    log("Options:");
-	    for (String s : weaponNames.keySet()) {
-		log(">" + s + " (" + weaponNames.get(s).getSimpleName() + ")");
-	    }
+	    } else if (args[0].equals("all")) {
+		for (String s : weaponNames.keySet()) {
+		    execute(new String[] { s });
+		}
+	    } else if (args[0].equals("help")) {
+		log("Options:");
+		for (String s : weaponNames.keySet()) {
+		    log(">" + s + " (" + weaponNames.get(s).getSimpleName()
+			    + ")");
+		}
 
-	    /*
-	     * log(">shotgun (Shotgun)"); log(">venom (VenomShooter)");
-	     * log(">elephant (Elephant Gun)"); log(">fist (Melee)");
-	     * log(">raygun (Raygun)"); log(">machete (Machete)");
-	     * log(">cannon (Cannon)");
-	     */
-	    log("Or you can use a numerical value to receive money.");
-	}
-	try {
-	    player.score += Integer.parseInt(args[0]);
-	} catch (NumberFormatException e) {
+		/*
+		 * log(">shotgun (Shotgun)"); log(">venom (VenomShooter)");
+		 * log(">elephant (Elephant Gun)"); log(">fist (Melee)");
+		 * log(">raygun (Raygun)"); log(">machete (Machete)");
+		 * log(">cannon (Cannon)");
+		 */
+		log("Or you can use a numerical value to receive money.");
+	    }
+	    try {
+		player.score += Integer.parseInt(args[0]);
+	    } catch (NumberFormatException e) {
 
+	    }
 	}
     }
-    
+
     public boolean canRunInGame() {
 	return true;
     }

@@ -6,10 +6,10 @@ import com.mojang.mojam.console.Console.Command;
 public class Help extends Console.Command {
 
     public Help() {
-	super("help", 0, "Displays all possible commands");
+	super("help", 0, "Displays all possible commands",false);
     }
 
-    public void doCommand(String[] args) {
+    public void execute() {
 	log("All Commands");
 	log("--------------");
 	for (int i = 0; i < Command.commands.size(); i++) {

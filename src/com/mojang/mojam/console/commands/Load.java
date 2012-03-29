@@ -5,11 +5,11 @@ import com.mojang.mojam.console.Console.Command;
 public class Load extends Command {
 
     public Load() {
-	super("load", 1, "Loads a map by name");
+	super("load", 1, "Loads a map by name",false);
     }
 
     @Override
-    public void doCommand(String[] args) {
+    public void execute() {
 	log("Loading map " + args[0]);
 	log("Incomplete");
 	// TitleMenu.level = new LevelInformation(args[0], "/levels/" +

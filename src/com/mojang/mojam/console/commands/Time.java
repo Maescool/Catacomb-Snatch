@@ -7,11 +7,11 @@ import com.mojang.mojam.console.Console.Command;
 public class Time extends Command {
 
     public Time() {
-	super("time", 0, "Shows the current time");
+	super("time", 0, "Shows the current time",false);
     }
 
     @Override
-    public void doCommand(String[] s) {
+    public void execute() {
 	log(new Date(System.currentTimeMillis()).toString());
     }
     

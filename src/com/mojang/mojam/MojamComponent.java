@@ -639,8 +639,7 @@ while (running) {
 		if(this.isFocusOwner()) {
 			keys.console.tick();
 			if(keys.console.wasPressed()) {
-				console.toggle(player!=null);
-				paused = !paused;
+				console.toggle();
 			}
 			if(console.isOpen()) {
 				if(menuStack.isEmpty()) {

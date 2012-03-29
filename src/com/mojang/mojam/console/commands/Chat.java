@@ -7,10 +7,10 @@ import com.mojang.mojam.network.kryo.Network.ChatMessage;
 public class Chat extends Command{
 
     public Chat() {
-	super("chat", -1, "Does the same as pressing T and typing in the after /chat and pressing enter");
+	super("chat", -1, "Does the same as pressing T and typing in the after /chat and pressing enter",true);
     }
 
-    public void doCommand(String[] args) {
+    public void execute() {
 	String msg = "";
 	for(int i = 0; i < args.length-1; i++) {
 		msg += args[i] + " ";

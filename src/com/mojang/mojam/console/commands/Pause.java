@@ -7,10 +7,10 @@ import com.mojang.mojam.network.kryo.Network.PauseMessage;
 public class Pause extends Command{
 
     public Pause() {
-	super("pause", 0, "Pauses the game");
+	super("pause", 0, "Pauses the game",true);
     }
 
-    public void doCommand(String[] args) {
+    public void execute() {
 	MojamComponent.instance.console.toggle();
 	MojamComponent.instance.synchronizer.addMessage(new PauseMessage(true));
     }
