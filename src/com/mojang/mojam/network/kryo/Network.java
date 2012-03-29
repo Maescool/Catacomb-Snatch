@@ -28,6 +28,7 @@ public class Network {
 		kryo.register(ArrayList.class);
 		kryo.register(Ping.class);
 		kryo.register(EndGameMessage.class);
+		kryo.register(ConsoleMessage.class);
 	}
 	
 	static public class RegisterName {
@@ -154,6 +155,17 @@ public class Network {
 		}
 
 	}
+	
+	static public class ConsoleMessage {
+		public String message;
+		
+		public ConsoleMessage(){}
+		public ConsoleMessage(String message) {
+			this.message = message;
+		}
+
+	}
+	
 
 	static public class EndGameMessage {
 		public int end;
