@@ -316,7 +316,7 @@ public class RailDroid extends Mob implements IUsable, ICarrySwap{
     }
 	
 	@Override
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		if (lDir == Direction.LEFT)
 			return Art.raildroid[1][1];
 		if (lDir == Direction.UP)
@@ -369,7 +369,7 @@ public class RailDroid extends Mob implements IUsable, ICarrySwap{
 		return super.shouldBlock(e);
 	}
 
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		super.render(screen);
 		renderCarrying(screen, 0 );
 	}

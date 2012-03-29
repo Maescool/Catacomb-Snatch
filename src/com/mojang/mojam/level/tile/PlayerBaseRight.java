@@ -9,14 +9,14 @@ import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.math.BB;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
 
 public class PlayerBaseRight extends Tile {
 	public static final int COLOR = 0xFF707070;
 	private static final String NAME = "PLAYER BASE RIGHT";
-	private Bitmap[][] art;
+	private AbstractBitmap[][] art;
 	private int playerID;
 
 	public PlayerBaseRight(int img, int team) {
@@ -40,7 +40,7 @@ public class PlayerBaseRight extends Tile {
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		//We need to determine the art here because the level is initialized before the player
 		art = Art.getPlayerBaseRight(getPlayerCharacter(playerID));
 	    screen.blit(art[img % 2][img / 2], x * Tile.WIDTH, y * Tile.HEIGHT);
@@ -81,7 +81,7 @@ public class PlayerBaseRight extends Tile {
 	}
 
 	@Override
-	public Bitmap getBitMapForEditor() {
+	public AbstractBitmap getBitMapForEditor() {
 		return art[img % 2][img / 2];
 	}
 }

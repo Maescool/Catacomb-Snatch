@@ -11,7 +11,7 @@ import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.gamemode.GameMode;
 import com.mojang.mojam.level.gamemode.GameModeVanilla;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class TitleMenu extends GuiMenu {
 
@@ -132,7 +132,7 @@ public class TitleMenu extends GuiMenu {
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 
 		screen.clear(0);
 		// screen.blit(Art.titles[1], 0, 10);

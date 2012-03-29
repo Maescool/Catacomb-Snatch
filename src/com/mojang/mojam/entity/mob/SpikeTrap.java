@@ -7,8 +7,8 @@ import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class SpikeTrap extends Mob implements IEditable {
     public static final int COLOR = 0xff0000ff;
@@ -53,12 +53,12 @@ public class SpikeTrap extends Mob implements IEditable {
 	}
     
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		screen.blit(Art.spikes[spike][0], pos.x, pos.y);
 	}
     
 	@Override
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		return Art.floorTiles[4][2];
 	}
 
@@ -101,7 +101,7 @@ public class SpikeTrap extends Mob implements IEditable {
 	}
 
 	@Override
-	public Bitmap getBitMapForEditor() {
+	public AbstractBitmap getBitMapForEditor() {
 		return Art.spikes[1][0];
 	}
 }

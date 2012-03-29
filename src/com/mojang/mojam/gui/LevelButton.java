@@ -11,8 +11,9 @@ import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.gamemode.GameMode;
 import com.mojang.mojam.network.TurnSynchronizer;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
+import com.mojang.mojam.screen.Art;
 
 /**
  * A LevelButton is a button with a level minimap drawn on it.
@@ -24,7 +25,7 @@ public class LevelButton extends ClickableComponent {
 	public static final int MAXDIM = 64;
 
 	private int id;
-	private Bitmap minimap, displaymap;
+	private AbstractBitmap minimap, displaymap;
 
     private final int MAX_LABEL_LENGTH = 15;
     
@@ -34,22 +35,6 @@ public class LevelButton extends ClickableComponent {
 	private boolean isActive = false;
 	private int xScroll, yScroll;
 	private int renderWidth, renderHeight;
-	
-	// Background bitmaps for pressed/unpressed/inactive state
-	private static Bitmap background[] = new Bitmap[3];
-	
-	// Initialize background bitmaps
-	static {
-		background[0] = new Bitmap(WIDTH, HEIGHT);
-		background[0].fill(0, 0, WIDTH, HEIGHT, 0xff522d16);
-		background[0].fill(1, 1, WIDTH-2, HEIGHT-2, 0);
-		background[1] = new Bitmap(WIDTH, HEIGHT);
-		background[1].fill(0, 0, WIDTH, HEIGHT, 0xff26150a);
-		background[1].fill(1, 1, WIDTH-2, HEIGHT-2, 0);
-		background[2] = new Bitmap(WIDTH, HEIGHT);
-		background[2].fill(0, 0, WIDTH, HEIGHT, 0xff26150a);
-		background[2].fill(1, 1, WIDTH-2, HEIGHT-2, 0xff3a210f);
-	}
    
 	/**
 	 * Constructor
@@ -91,15 +76,15 @@ public class LevelButton extends ClickableComponent {
 		int h = l.height;
 		
 		// Render the level minimap into a bitmap
-		minimap = new Bitmap(w, h);
+		minimap = MojamComponent.screen.createBitmap(w, h);
 		largeMap = w > MAXDIM || h > MAXDIM;
 		renderWidth = w < MAXDIM ? w : MAXDIM;
 		renderHeight = h < MAXDIM ? h : MAXDIM;
-		displaymap = new Bitmap(MAXDIM, MAXDIM);
+		displaymap = MojamComponent.screen.createBitmap(MAXDIM, MAXDIM);
 		
 		for (int y = 0; y < h; y++) {
 			for (int x = 0; x < w; x++) {
-				minimap.pixels[x + (y * w)] = l.getTile(x, y).minimapColor;
+				minimap.setPixel(x + (y * w), l.getTile(x, y).minimapColor);
 			}
 		}
 
@@ -113,10 +98,10 @@ public class LevelButton extends ClickableComponent {
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 
 		// Render background
-		screen.blit(background[isPressed() ? 1 : (isActive ? 2 : 0)], getX(), getY());
+		screen.blit(Art.backLevelButton[isPressed() ? 1 : (isActive ? 2 : 0)], getX(), getY());
 		
 		// Render minimap
 		if (minimap != null) {
@@ -138,7 +123,7 @@ public class LevelButton extends ClickableComponent {
 		int i = Math.max(renderWidth, renderHeight);
 		for (int y = 0; y < renderHeight; y++) {
 			for (int x = 0; x < renderWidth; x++) {
-				displaymap.pixels[x + y * i] = minimap.pixels[(x + xScroll) + (y + yScroll) * minimap.w];
+				displaymap.setPixel(x + y * i, minimap.getPixel((x + xScroll) + (y + yScroll) * minimap.getWidth()));
 			}
 		}
 	}
@@ -168,8 +153,8 @@ public class LevelButton extends ClickableComponent {
 			}
 		}
 		if(changed) {
-			xScroll = MojamComponent.clampi(xScroll, 0, minimap.w-renderWidth);
-			yScroll = MojamComponent.clampi(yScroll, 0, minimap.h-renderHeight);
+			xScroll = MojamComponent.clampi(xScroll, 0, minimap.getWidth()-renderWidth);
+			yScroll = MojamComponent.clampi(yScroll, 0, minimap.getHeight()-renderHeight);
 			redrawDisplaymap();
 		}
 	}

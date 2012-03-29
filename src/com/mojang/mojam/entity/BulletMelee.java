@@ -1,7 +1,7 @@
 package com.mojang.mojam.entity;
 
 import com.mojang.mojam.entity.mob.Mob;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class BulletMelee extends Bullet
 {
@@ -32,7 +32,7 @@ public class BulletMelee extends Bullet
 	}
 
 	@Override
-	public void render(Screen screen)
+	public void render(AbstractScreen screen)
 	{
 		screen.rectangle((int) pos.x - 3, (int) pos.y - 3, 6, 6, color);
 		screen.rectangle((int) pos.x - 2, (int) pos.y - 2, 4, 4, color);

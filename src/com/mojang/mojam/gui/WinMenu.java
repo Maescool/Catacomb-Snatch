@@ -8,7 +8,7 @@ import com.mojang.mojam.gui.components.Button;
 import com.mojang.mojam.gui.components.ClickableComponent;
 import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class WinMenu extends GuiMenu {
 	private final int gameWidth;
@@ -25,7 +25,7 @@ public class WinMenu extends GuiMenu {
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		screen.clear(0);
 		screen.blit(Art.gameOverScreen, 0, 0);
 

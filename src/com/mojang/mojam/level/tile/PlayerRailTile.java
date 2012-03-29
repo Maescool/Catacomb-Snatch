@@ -1,7 +1,7 @@
 package com.mojang.mojam.level.tile;
 
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.AbstractBitmap;
 
 public class PlayerRailTile extends RailTile {
 	public static final int COLOR = 0xff969696;
@@ -26,7 +26,7 @@ public class PlayerRailTile extends RailTile {
 	}
 
 	@Override
-	public Bitmap getBitMapForEditor() {
+	public AbstractBitmap getBitMapForEditor() {
 		return Art.rails[1][0];
 	}
 	

@@ -6,14 +6,14 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.level.Level;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
 
 public class PlayerSpawn extends Tile {
 	public static final int COLOR = 0xFFA5A5A5;
-	private static final String NAME = "PLAYER SPAWN";
-	private Bitmap[][] art;
+	protected static final String NAME = "Player Spawn";
+	private AbstractBitmap[][] art;
 	private int team;
 	private int playerID;	
 
@@ -42,7 +42,7 @@ public class PlayerSpawn extends Tile {
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		//We need to determine the art here because the level is initialized before the player
 		art = Art.getPlayerSpawn(getPlayerCharacter(playerID));
 	    screen.blit(art[img % 4][img / 4], x * Tile.WIDTH, y * Tile.HEIGHT);
@@ -77,7 +77,7 @@ public class PlayerSpawn extends Tile {
 	}
 
 	@Override
-	public Bitmap getBitMapForEditor() {
+	public AbstractBitmap getBitMapForEditor() {
 		return art[img % 4][img / 4];
 	}
 }

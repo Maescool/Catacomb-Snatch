@@ -6,8 +6,8 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class DropTrap extends AnimatedTile {
 
@@ -25,7 +25,7 @@ public class DropTrap extends AnimatedTile {
 	}
 
 	@Override
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		if (level.getTile(x, y-1) instanceof HoleTile) {
 			screen.blit(Art.dropFloor[crumble][0], x * Tile.WIDTH, y * Tile.HEIGHT);
 		} else {
@@ -44,7 +44,7 @@ public class DropTrap extends AnimatedTile {
 	}
 
 	@Override
-	public Bitmap getBitMapForEditor() {
+	public AbstractBitmap getBitMapForEditor() {
 		return Art.dropFloor[3][0];
 	}
 

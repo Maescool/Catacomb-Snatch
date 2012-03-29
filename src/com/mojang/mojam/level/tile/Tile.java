@@ -10,8 +10,8 @@ import com.mojang.mojam.math.BB;
 import com.mojang.mojam.math.BBOwner;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
-import com.mojang.mojam.screen.Screen;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public abstract class Tile implements BBOwner, IEditable {
 	public static final int HEIGHT = 32;
@@ -43,29 +43,29 @@ public abstract class Tile implements BBOwner, IEditable {
 		return true;
 	}
 
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 	    
-	    Bitmap floorTile = (Art.floorTiles[img & 7][img / 8]).copy();
+	    AbstractBitmap floorTile = (Art.floorTiles[img & 7][img / 8]).copy();
 	    addShadows(floorTile);
 	    screen.blit(floorTile, x * Tile.WIDTH, y * Tile.HEIGHT);
 	    
 	    
 	}
 	
-	private void addShadows(Bitmap tile){
+	private void addShadows(AbstractBitmap tile){
 	    
 	    if (isShadowed_north) {
 	        tile.blit(Art.shadow_north, 0, 0);
 	    } else {
 	        if (isShadowed_north_east) {
-	            tile.blit(Art.shadow_north_east, Tile.WIDTH - Art.shadow_east.w, 0);
+	            tile.blit(Art.shadow_north_east, Tile.WIDTH - Art.shadow_east.getWidth(), 0);
 	        } 
 	        if (isShadowed_north_west) {
 	            tile.blit(Art.shadow_north_west, 0, 0);
 	        }
 	    }
 	    if (isShadowed_east) {
-            tile.blit(Art.shadow_east, Tile.WIDTH - Art.shadow_east.w , 0);
+            tile.blit(Art.shadow_east, Tile.WIDTH - Art.shadow_east.getWidth() , 0);
         }
         if (isShadowed_west) {
             tile.blit(Art.shadow_west, 0, 0);
@@ -98,7 +98,7 @@ public abstract class Tile implements BBOwner, IEditable {
 		return false;
 	}
 
-	public void renderTop(Screen screen) {
+	public void renderTop(AbstractScreen screen) {
 	}
 
 	public void bomb(LargeBombExplodeAnimation largeBombExplodeAnimation) {

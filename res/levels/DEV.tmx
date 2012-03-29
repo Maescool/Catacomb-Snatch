@@ -25,4 +25,9 @@
    H4sIAAAAAAAAC+3QAQ0AMAzDsNE8fyKHkf2ypQJIZwAAAAAAAAAAAAAA/nOWrFJ369evv1N31z/VPfr1l/0AALzvAoB4BxQAQAAA
   </data>
  </layer>
+ <objectgroup name="Test" width="64" height="64">
+  <object x="1214" y="1296" width="122" height="96"/>
+  <object x="1057" y="1247" width="193" height="124"/>
+  <object x="1123" y="1537" width="188" height="68"/>
+ </objectgroup>
 </map>
