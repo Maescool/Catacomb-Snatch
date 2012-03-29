@@ -1050,7 +1050,9 @@ while (running) {
 
 		case TitleMenu.RETURN_ID:
 			synchronizer.addMessage(new PauseMessage(false));
-			if(!console.isOpen())keys.tick();
+			if(!console.isOpen()) {
+			    keys.tick();
+			}
 			break;
 
 		case TitleMenu.BACK_ID:
