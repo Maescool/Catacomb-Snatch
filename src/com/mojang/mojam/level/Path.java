@@ -64,7 +64,6 @@ public class Path {
 	}
 	
 	public void render(){
-	    System.out.println("Rendering Path "+toString());
 	    for(Node n:nodes){
 		MojamComponent.screen.alphaFill((int)n.pos.x, (int)n.pos.y, Tile.WIDTH, Tile.HEIGHT, 0x00ccff, 0x10);
 	    }

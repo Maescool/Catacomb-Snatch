@@ -1,4 +1,4 @@
-from com.mojang.mojam.mod import ModSystem;
+from com.mojang.mojam.mod import ModSystem
 
 def OnRender():
     return

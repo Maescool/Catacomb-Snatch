@@ -641,7 +641,6 @@ while (running) {
 			if(keys.console.wasPressed()) {
 				console.toggle(player!=null);
 				paused = !paused;
-				System.out.println("console");
 			}
 			if(console.isOpen()) {
 				if(menuStack.isEmpty()) {
