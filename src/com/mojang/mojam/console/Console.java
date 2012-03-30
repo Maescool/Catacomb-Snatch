@@ -5,18 +5,9 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import com.mojang.mojam.MojamComponent;
-import com.mojang.mojam.Console.Command;
-import com.mojang.mojam.console.commands.Chat;
-import com.mojang.mojam.console.commands.Cooldown;
-import com.mojang.mojam.console.commands.Exit;
-import com.mojang.mojam.console.commands.Give;
-import com.mojang.mojam.console.commands.Help;
-import com.mojang.mojam.console.commands.Lang;
-import com.mojang.mojam.console.commands.Load;
-import com.mojang.mojam.console.commands.Menu;
-import com.mojang.mojam.console.commands.Pause;
-import com.mojang.mojam.console.commands.Time;
+import com.mojang.mojam.console.commands.*;
 import com.mojang.mojam.gui.components.Font;
+import com.mojang.mojam.mod.ModConsole;
 import com.mojang.mojam.network.kryo.Network.ConsoleMessage;
 import com.mojang.mojam.screen.AbstractScreen;
 
@@ -35,6 +26,7 @@ public class Console implements KeyListener {
 
     private ArrayList<String> verboseData = new ArrayList<String>(MAX_LINES);
 
+    private int line = 0;
     private String typing = "";
     private String input = null;
     private boolean completedInput;
@@ -54,12 +46,9 @@ public class Console implements KeyListener {
     public static final int yOffset = 5;
 
     public Console() {
-	log("------------------------------------------------------------");// Deep
-									    // magic
-									    // lining
-									    // it
-									    // up
-	log("|Catacomb Snatch Console v1.1                           |");
+	// Deep magic lining it up
+	log("------------------------------------------------------------");
+	log("|Catacomb Snatch Console v1.2                           |");
 	log("|Type commands with a slash in front, like /this        |");
 	log("|If in doubt, type /help                                  |");
 	log("------------------------------------------------------------");
@@ -157,15 +146,17 @@ public class Console implements KeyListener {
 			    typing
 				    + (((((int) (System.currentTimeMillis() / 500)) & 1) == 1) ? "|"
 					    : ""), xOffset,
-			    (consoleHeight -= fontHeight)); // draws bottom up
-							    // starting with
-							    // typing
+			    (consoleHeight -= fontHeight));
+	    // draws bottom up
+	    // starting with
+	    // typing
 
 	    for (int i = 0; i < verboseData.size(); i++) {
 		Font.FONT_WHITE_SMALL.draw(s, verboseData.get(i), xOffset,
 			(consoleHeight -= fontHeight)); // and then the verbose
 							// data in order of
 							// newest first
+
 	    }
 	}
     }
@@ -180,13 +171,17 @@ public class Console implements KeyListener {
 	}
     }
 
-    private void processInput(String input) {
+    public void processInput(String input) {
 	log(">" + input);
 	String cleanInput = scrubInput(input);
 
 	if (cleanInput.startsWith("/")) {
 	    Command command = findCommand(cleanInput, input);
-	    if (null != command) {
+	    if (command != null
+		    && ((MojamComponent.instance.player == null) && command
+			    .canRunInMenu())
+		    || ((MojamComponent.instance.player != null) && command
+			    .canRunInGame())) {
 		if (command.isSendToClients()) {
 		    // send message to other client(s)
 		    MojamComponent.instance.synchronizer
@@ -198,7 +193,7 @@ public class Console implements KeyListener {
 		log("ERROR: Command " + input
 			+ " Not found! try /help for a list of commands.");
 	    }
-	} else {
+	} else if (MojamComponent.instance.player != null) {
 	    chat.execute(new String[] { input });
 	}
 
@@ -312,25 +307,44 @@ public class Console implements KeyListener {
 	}
     }
 
-    public void keyReleased(KeyEvent e) {
+    public void keyReleased(KeyEvent event) {
 	if (open) {
-	    switch (e.getKeyCode()) {
-	    case KeyEvent.VK_ESCAPE:
+	    if (event.getKeyCode() == KeyEvent.VK_DOWN && 
+		    line > 0) { //Check to avoid get on a -1 value
+		// Lower down (closer to origin) in list
+		line--;
+		typing = verboseData.get(line).substring(1);
+		return;
+	    }
+	    if (event.getKeyCode() == KeyEvent.VK_UP
+		    && line < verboseData.size() //Check to avoid outofbounds
+		    && verboseData.get(line + 1).startsWith(">")) { 
+					//Only user input to look at
+		line++;
+		typing = verboseData.get(line).substring(1);
+		return;
+	    }
+	    if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
+		//Cancel line
 		typing = "";
 		input = null;
-		break;
-	    case KeyEvent.VK_ENTER:
+		return;
+	    }
+	    if (event.getKeyCode() == KeyEvent.VK_ENTER) {
+		//Submit line
 		typing = typing.trim();
 		if (!typing.equals("")) {
 		    input = typing;
 		    completedInput = true;
 		}
 		typing = "";
-		break;
-	    case KeyEvent.VK_BACK_SPACE:
-		if (typing.length() > 0)
+		line = -1;
+	    }
+	    if (event.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+		//Delete char
+		if (typing.length() > 0) {
 		    typing = typing.substring(0, typing.length() - 1);
-		break;
+		}
 	    }
 	}
     }
@@ -393,7 +407,7 @@ public class Console implements KeyListener {
 	    this.args = args;
 	    execute();
 	}
-	
+
 	public abstract void execute();
     }
 

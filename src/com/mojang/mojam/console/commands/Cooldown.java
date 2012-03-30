@@ -5,8 +5,7 @@ import com.mojang.mojam.console.Console.Command;
 import com.mojang.mojam.entity.Player;
 
 public class Cooldown extends Command {
-
-    Player[] players = MojamComponent.instance.players;
+   
 
     public Cooldown() {
 	super("cool", 1, "Cools the currently held weapon to a certain value",
@@ -14,6 +13,7 @@ public class Cooldown extends Command {
     }
 
     public void execute() {
+	Player[] players = MojamComponent.instance.players;
 	try {
 	    int i = Integer.parseInt(args[0].trim());
 	    log("Cooling weapon from " + i + " centispecks.");

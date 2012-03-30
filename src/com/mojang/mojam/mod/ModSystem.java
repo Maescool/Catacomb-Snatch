@@ -892,6 +892,8 @@ public final class ModSystem {
 			+ " line: " + e.getLineNumber() + " column: "
 			+ e.getColumnNumber());
 		e.printStackTrace();
+	    } catch (Exception e){
+		e.printStackTrace();
 	    }
 	}
     }

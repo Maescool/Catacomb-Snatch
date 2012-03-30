@@ -21,6 +21,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
+import com.mojang.mojam.MojamComponent;
+
 @Deprecated
 public class ModConsole implements Runnable, KeyListener {
     JTextArea displayPane;
@@ -125,26 +127,29 @@ public class ModConsole implements Runnable, KeyListener {
 		// command = "";
 		textField.setText("");
 		scroll = commands.size();
+		MojamComponent.instance.console.processInput(commands.get(commands.size()-1));
 		return;
-	    }
+	    } else
 	    if (event.getKeyCode() == KeyEvent.VK_UP && scroll > 0) {
 		scroll--;
 		textField.setText(commands.get(scroll));
 		return;
-	    }
+	    } else
 	    if (event.getKeyCode() == KeyEvent.VK_DOWN
-		    && scroll < commands.size() - 1) {
+		    && scroll < commands.size()) {
 		scroll++;
 		textField.setText(commands.get(scroll));
 		return;
-	    }
+	    } else
 	    if (event.getKeyCode() == KeyEvent.VK_DOWN
 		    && scroll < commands.size()) {
 		textField.setText(command);
 		return;
-	    }
+	    } else
 	    if (event.getKeyCode() != KeyEvent.VK_DOWN
 		    && event.getKeyCode() != KeyEvent.VK_UP) {
+		command = textField.getText();
+	    } else {
 		command = textField.getText();
 	    }
 
