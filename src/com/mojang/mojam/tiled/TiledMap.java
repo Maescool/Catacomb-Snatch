@@ -315,7 +315,7 @@ public class TiledMap {
 				objectGroups.add(objectGroup);
 			}
 		} catch (Exception e) {
-			throw new Exception("Failed to parse tilemap", e);
+			throw new Exception("Failed to parse tilemap - be sure it was saved with gzip compression", e);
 		}
 	}
 	

@@ -150,7 +150,7 @@ public class LevelUtils {
 			break;
 		case TILESET_OVERLAY_BASE_ID + 24:
 			//Do not darken this tile
-			obj = (int)32;
+			obj = new Integer(32);
 			break;	
 
 		//Wall IDs

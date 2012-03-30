@@ -65,7 +65,7 @@ public class GameMode {
 						newLevel.setTile(x, y, (Tile)obj);
 					} else if (obj instanceof Entity) {
 						newLevel.addEntity((Entity)obj);
-					} else if ((int)obj == 32) {
+					} else if (obj instanceof Integer && ((Integer)obj).equals(32)) {
 						//TODO Clean up this if statement
 						newLevel.getSeen()[x + y * (w + 1)] = true;
 					}
