@@ -70,7 +70,7 @@ public class Art {
 	private static AbstractBitmap[][] startCountessCruller;
 	private static AbstractBitmap[][] startNoOpponent;
 
-	public static AbstractBitmap[][] getPlayerBase(GameCharacter character) {
+	public static AbstractBitmap[][] getPlayerSpawn(GameCharacter character) {
 		switch (character) {
 			case None:
 				return startNoOpponent;
@@ -84,6 +84,52 @@ public class Art {
 				return startCountessCruller;
 			default:
 				return startLordLard;
+		}
+	}
+	// Player base, left
+	private static AbstractBitmap[][] startLordLardLeft;
+	private static AbstractBitmap[][] startHerrSpeckLeft;
+	private static AbstractBitmap[][] startDuchessDonutLeft;
+	private static AbstractBitmap[][] startCountessCrullerLeft;
+	private static AbstractBitmap[][] startNoOpponentLeft;
+
+	public static AbstractBitmap[][] getPlayerBaseLeft(GameCharacter character) {
+		switch (character) {
+			case None:
+				return startNoOpponentLeft;
+			case LordLard:
+				return startLordLardLeft;
+			case HerrVonSpeck:
+				return startHerrSpeckLeft;
+			case DuchessDonut:
+				return startDuchessDonutLeft;
+			case CountessCruller:
+				return startCountessCrullerLeft;
+			default:
+				return startLordLardLeft;
+		}
+	}
+	// Player base, right
+	private static AbstractBitmap[][] startLordLardRight;
+	private static AbstractBitmap[][] startHerrSpeckRight;
+	private static AbstractBitmap[][] startDuchessDonutRight;
+	private static AbstractBitmap[][] startCountessCrullerRight;
+	private static AbstractBitmap[][] startNoOpponentRight;
+
+	public static AbstractBitmap[][] getPlayerBaseRight(GameCharacter character) {
+		switch (character) {
+			case None:
+				return startNoOpponentRight;
+			case LordLard:
+				return startLordLardRight;
+			case HerrVonSpeck:
+				return startHerrSpeckRight;
+			case DuchessDonut:
+				return startDuchessDonutRight;
+			case CountessCruller:
+				return startCountessCrullerRight;
+			default:
+				return startLordLardRight;
 		}
 	}
 	// Tooltips
@@ -208,12 +254,23 @@ public class Art {
 		countessCruller = screen.cut("/art/player/countess_cruller_sheet.png", 32, 32);
 		exclamation_mark = screen.load("/art/effects/exclamation_mark.png");
 		// Player starting points
-		startLordLard = screen.cut("/art/player/start_lordlard_big.png", 32, 32);
+		startLordLard = screen.cut("/art/player/start_lordlard.png", 32, 32);
 		startHerrSpeck = screen.cut("/art/player/start_herrspeck.png", 32, 32);
-		startDuchessDonut = startLordLard;
+		startDuchessDonut = screen.cut("/art/player/start_donut.png", 32, 32);
 		startCountessCruller = screen.cut("/art/player/start_cruller.png", 32, 32);
-		startNoOpponent = screen.cut("/art/player/start_no_opponent_big.png", 32, 32);
-
+		startNoOpponent = screen.cut("/art/player/start_no_opponent.png", 32, 32);
+		// Player base, left
+		startLordLardLeft = screen.cut("/art/player/start_lordlard_left.png", 32, 32);
+		startHerrSpeckLeft = screen.cut("/art/player/start_herrspeck_left.png", 32, 32);
+		startDuchessDonutLeft = screen.cut("/art/player/start_donut_left.png", 32, 32);
+		startCountessCrullerLeft = screen.cut("/art/player/start_cruller_left.png", 32, 32);
+		startNoOpponentLeft = screen.cut("/art/player/start_no_opponent_left.png", 32, 32);
+		// Player base, right
+		startLordLardRight = screen.cut("/art/player/start_lordlard_right.png", 32, 32);
+		startHerrSpeckRight = screen.cut("/art/player/start_herrspeck_right.png", 32, 32);
+		startDuchessDonutRight = screen.cut("/art/player/start_donut_right.png", 32, 32);
+		startCountessCrullerRight = screen.cut("/art/player/start_cruller_right.png", 32, 32);
+		startNoOpponentRight = screen.cut("/art/player/start_no_opponent_right.png", 32, 32);
 		// Tooltips
 		tooltipBackground = screen.load("/art/screen/tooltipBackground.png");
 		turretText = screen.load("/art/screen/atlasTurretText.png");

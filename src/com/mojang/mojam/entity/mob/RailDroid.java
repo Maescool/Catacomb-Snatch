@@ -46,6 +46,7 @@ public class RailDroid extends Mob implements IUsable, ICarrySwap{
 	public static boolean creative = Options.getAsBoolean(Options.CREATIVE);
 
 	boolean isOnRailTile;
+	boolean isOnPlayerRailTile;
 	boolean canGoLeft;
     boolean canGoRight;
     boolean canGoUp;
@@ -85,6 +86,12 @@ public class RailDroid extends Mob implements IUsable, ICarrySwap{
         int yTile = (int) (pos.y / Tile.HEIGHT);
 
         isOnRailTile = level.getTile(xTile, yTile) instanceof RailTile;
+        if (isOnRailTile) {
+        	isOnPlayerRailTile = level.getTile(xTile, yTile) instanceof PlayerRailTile;
+        	if (isOnPlayerRailTile) {
+        		isOnPlayerRailTile = ((PlayerRailTile) level.getTile(xTile, yTile)).isTeam(team);
+        	}
+        }
         canGoLeft = level.getTile(xTile - 1, yTile) instanceof RailTile;
         canGoRight = level.getTile(xTile + 1, yTile) instanceof RailTile;
         canGoUp = level.getTile(xTile, yTile - 1) instanceof RailTile;
@@ -297,15 +304,12 @@ public class RailDroid extends Mob implements IUsable, ICarrySwap{
     }
 
     private void increaseScoreAtBase() {
-    	if ( (carrying != null) && (carrying instanceof CatacombTreasure ) && (swapTime == 0) ) {
-            if (pos.y < 8 * Tile.HEIGHT) {
-            	carrying.die();
-                carrying = null;
+    	if ( (carrying != null) && (carrying instanceof CatacombTreasure ) && (isOnPlayerRailTile) && (swapTime == 0) ) {
+	    	carrying.die();
+	        carrying = null;
+            if (team == Team.Team2) {
                 level.player2Score += 2;
-            }
-            if (pos.y > (level.height - 7 - 1) * Tile.HEIGHT) {
-            	carrying.die();
-                carrying = null;
+            } else if (team == Team.Team1) {
                 level.player1Score += 2;
             }
         }
