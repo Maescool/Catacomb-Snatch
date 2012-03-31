@@ -97,7 +97,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private static final long serialVersionUID = 1L;
 	public static final int GAME_WIDTH = 512;
 	public static final int GAME_HEIGHT = GAME_WIDTH * 3 / 4;
-	public static final int SCALE = 2;
+	public int scale = 2;
 	private static JFrame guiFrame;
 	private boolean running = true;
 	public boolean paused;
@@ -161,9 +161,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		// initialize the constants
 		MojamComponent.constants = new Constants();
 
-		this.setPreferredSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
-		this.setMinimumSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
-		this.setMaximumSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE));
+		this.setScale(Options.getAsInteger(Options.SCALE,2));
 
 		this.addMouseMotionListener(this);
 		this.addMouseListener(this);
@@ -183,6 +181,22 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		instance = this;
 	}
 
+	public void setScale(int i) {
+		this.scale = i;
+		Dimension dim = new Dimension(GAME_WIDTH * scale, GAME_HEIGHT * scale);
+
+		this.setMinimumSize(dim);
+		this.setMaximumSize(dim);
+		this.setPreferredSize(dim);
+		this.setSize(dim);		
+		
+		if(guiFrame != null) {
+			guiFrame.setSize(new Dimension(guiFrame.getInsets().left + guiFrame.getInsets().right + GAME_WIDTH * scale,
+					guiFrame.getInsets().top + guiFrame.getInsets().bottom + GAME_HEIGHT * scale));
+		}
+		
+	}
+	
 	public void setLocale(String locale) {
 		setLocale(new Locale(locale));
 		Options.set(Options.LOCALE, locale);
@@ -196,7 +210,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		Locale.setDefault(locale);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void notifyLocaleChange(){
 		MenuStack menuClone = (MenuStack) menuStack.clone();
 		
@@ -515,8 +528,8 @@ while (running) {
 		g.setColor(Color.BLACK);
 
 		g.fillRect(0, 0, getWidth(), getHeight());
-		g.translate((getWidth() - GAME_WIDTH * SCALE) / 2, (getHeight() - GAME_HEIGHT * SCALE) / 2);
-		g.clipRect(0, 0, GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE);
+		g.translate((getWidth() - GAME_WIDTH * scale) / 2, (getHeight() - GAME_HEIGHT * scale) / 2);
+		g.clipRect(0, 0, GAME_WIDTH * scale, GAME_HEIGHT * scale);
 
 		ModSystem.afterRender();
 		
@@ -525,7 +538,7 @@ while (running) {
 			// render mouse
 			renderMouse(screen, mouseButtons);
 			BufferedImage image = toCompatibleImage(screen.image);
-			g.drawImage(image, 0, 0, GAME_WIDTH * SCALE, GAME_HEIGHT * SCALE, null);
+			g.drawImage(image, 0, 0, GAME_WIDTH * scale, GAME_HEIGHT * scale, null);
 		}
 
 	}
@@ -681,7 +694,7 @@ while (running) {
 		// Store virtual position of mouse (pre-scaled)
 		Point mousePosition = getMousePosition();
 		if (mousePosition != null) {
-			mouseButtons.setPosition(mousePosition.x / SCALE, mousePosition.y / SCALE);
+			mouseButtons.setPosition(mousePosition.x / scale, mousePosition.y / scale);
 		}
 		if (!menuStack.isEmpty()) {
 			menuStack.peek().tick(mouseButtons);
@@ -823,6 +836,8 @@ while (running) {
 		guiFrame.setContentPane(panel);
 		guiFrame.pack();
 		guiFrame.setResizable(false);
+		guiFrame.setSize(new Dimension(guiFrame.getInsets().left + guiFrame.getInsets().right + GAME_WIDTH * mc.scale,
+				guiFrame.getInsets().top + guiFrame.getInsets().bottom + GAME_HEIGHT * mc.scale));
 		guiFrame.setLocationRelativeTo(null);
 		guiFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		guiFrame.addWindowListener(newWindowClosinglistener());
@@ -1170,4 +1185,5 @@ while (running) {
 			}
 		};
 	}
+
 }

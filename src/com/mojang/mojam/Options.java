@@ -31,6 +31,7 @@ public class Options {
     public static final String MP_PORT = "mpPort";
 
     public static final String LOCALE = "locale";
+	public static final String SCALE = "scale";
     
     public static final String DLSYSTEM = "dlsystem";
     public static final String DLBUFFERSIZE = "dlbuffer";

@@ -46,7 +46,7 @@ public class Notifications {
 			i += 1;
 			Note note = it.next();
 			int stringWidth = Font.defaultFont().calculateStringWidth(note.message);
-			Font.defaultFont().draw(screen, note.message, (MojamComponent.GAME_WIDTH / 2) - (stringWidth / 2), MojamComponent.GAME_HEIGHT / 5 + (i * 8 * MojamComponent.SCALE));
+			Font.defaultFont().draw(screen, note.message, (MojamComponent.GAME_WIDTH / 2) - (stringWidth / 2), MojamComponent.GAME_HEIGHT / 5 + (i * 8 * MojamComponent.instance.scale));
 		}
 	}
 

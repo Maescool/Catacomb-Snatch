@@ -18,6 +18,7 @@ import com.mojang.mojam.sound.ISoundPlayer;
 
 public class AudioVideoMenu extends GuiMenu {
 	private boolean fullscreen;
+	private boolean useSmallScale;
 	private boolean opengl;
 	private boolean trapMouse;
 	private boolean fps;
@@ -33,6 +34,7 @@ public class AudioVideoMenu extends GuiMenu {
 
 	private ClickableComponent back;
 	private ClickableComponent fullscreenBtn;
+	private ClickableComponent smallScale;
 	private ClickableComponent openGlBtn;
 	private ClickableComponent trapMouseBtn;
 	private ClickableComponent fpsBtn;
@@ -51,10 +53,18 @@ public class AudioVideoMenu extends GuiMenu {
 		gameHeight = MojamComponent.GAME_HEIGHT;
 		int offset = 32;
 		int xOffset = (gameWidth - Button.BUTTON_WIDTH) / 2;
-		int yOffset = (gameHeight - (7 * offset + 20 + (offset * 2))) / 2;
+		int yOffset = (gameHeight - (9 * offset + 20 + (offset * 2))) / 2;
 		textY = yOffset;
 		yOffset += offset;
 
+		useSmallScale =  Options.getAsInteger(Options.SCALE,2)<2;
+		
+		smallScale = addButton(
+				new Checkbox(TitleMenu.SMALL_SCALE_ID,
+					MojamComponent.texts.getStatic("options.smallscale"), xOffset,
+					yOffset += offset,useSmallScale )
+			);
+		
 		fullscreenBtn = addButton(
 					new Checkbox(TitleMenu.FULLSCREEN_ID,
 						MojamComponent.texts.getStatic("options.fullscreen"), xOffset,
@@ -105,6 +115,26 @@ public class AudioVideoMenu extends GuiMenu {
 							xOffset, (yOffset += offset) + 20)
 				);
 
+        smallScale.addListener(new ButtonListener() {
+			@Override
+			public void buttonPressed(ClickableComponent button) {
+				useSmallScale = !useSmallScale;
+				Options.set(Options.SCALE, useSmallScale ? 1 : 2);		
+				
+				if(useSmallScale) {
+					MojamComponent.instance.setScale(1);
+				} else {
+					MojamComponent.instance.setScale(2);
+				}
+				
+
+			}
+
+			@Override
+			public void buttonHovered(ClickableComponent clickableComponent) {
+			}
+		});
+		
         fullscreenBtn.addListener(new ButtonListener() {
 			@Override
 			public void buttonPressed(ClickableComponent button) {
