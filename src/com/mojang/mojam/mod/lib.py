@@ -1,6 +1,6 @@
-var ModSystem
-var MojamComponent
+mods = 0
+mojam = 0
 
 def log(s):
-	MojamComponent.console.log(s)
+	mojam.console.log(s)
 	return

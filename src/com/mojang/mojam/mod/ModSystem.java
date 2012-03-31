@@ -58,26 +58,54 @@ public final class ModSystem {
     private static boolean init = false;
     public static File modDir;
     public static File modsFolder;
-    public static List<IMod> modList = new ArrayList<IMod>();
-    public static List<ScriptEngine> scriptList = new ArrayList<ScriptEngine>();
+    public static List<IMod> modList;
+    public static List<ScriptEngine> scriptList;
     private static MojamComponent mojam;
     private static Level level;
     private static InputHandler inputHandler;
-    private static Keys keys = new Keys();
-    public static Map<Integer, Class> spawnList = new HashMap<Integer, Class>();
-    private static ScriptEngineManager lang = new ScriptEngineManager();
+    private static Keys keys;
+    public static Map<Integer, Class> spawnList;
+    private static ScriptEngineManager lang;
     public static boolean isJar;
     public static boolean isDebug;
     public static Console console;
 
+    /**
+     * Just in case
+     */
+    public static void reload() {
+	init = false;
+	modDir = null;
+	modsFolder = null;
+	modList.clear();
+	scriptList.clear();
+	level = null;
+	inputHandler = null;
+	keys = null;
+	spawnList.clear();
+	lang = null;
+	isJar = false;
+	isDebug = false;
+	console = null;
+	init(MojamComponent.instance);
+    }
+    
+    /**
+     * Entry point for the Mod System
+     * @param m The instance of MojamComponent
+     */
     public static void init(MojamComponent m) {
 	if (init)
 	    return;
 	init = true;
 	mojam = m;
 	console = mojam.console;
+	modList = new ArrayList<IMod>();
+	scriptList = new ArrayList<ScriptEngine>();
+	keys = new Keys();
+	spawnList = new HashMap<Integer, Class>();
+	lang = new ScriptEngineManager();
 	keys.getAll().removeAll(keys.getAll());
-	loadLibs();
 	try {
 	    modDir = new File(ModSystem.class.getProtectionDomain()
 		    .getCodeSource().getLocation().toURI());
@@ -87,36 +115,16 @@ public final class ModSystem {
 	} catch (URISyntaxException e1) {
 	    e1.printStackTrace();
 	}
-	// System.setOut(new PrintStream(new FileOutputStream(new
-	// File(m.getMojamDir(), "log.txt"))));
 
 	System.out.println("ModSystem starting up...");
-	System.out.println(modDir.getAbsolutePath());
 	addMod(ModSystem.class.getClassLoader(), "SnatchContent.class");
 	inputHandler = (InputHandler) reflectField(mojam, "inputHandler");
 	try {
 	    readLinksFromFile(new File(mojam.getMojamDir(), "mods.txt"));
-	    // readFromModFolder(new File(mojam.getMojamDir(), "/mods/"));
-	    // readFromModsFolder();
 	    readFromClassPath(modDir);
-	    // readLinksFromFile(new File(mojam.getMojamDir(),"mods.txt"));
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
-	// ConsoleCommands.load.getClass();//.doCommand(new String[]{"Siege"});
-    }
-
-    @Deprecated
-    private static void loadLibs() {
-	// Placeholder for anything later on as necessary
-	if (isDebug)
-	    for (ScriptEngineFactory factory : lang.getEngineFactories()) {
-		System.out.println(factory.getLanguageName() + ":"
-			+ factory.getEngineName());
-		for (String s1 : factory.getExtensions()) {
-		    System.out.println("|__> " + s1);
-		}
-	    }
     }
 
     /**
@@ -353,10 +361,9 @@ public final class ModSystem {
 	    FileReader library = new FileReader(modsFolder.getAbsolutePath()
 		    + "/lib." + s.substring(s.lastIndexOf('.') + 1));
 	    e.eval(library);
-	    e.eval("var ModSystem;");
 	    e.eval(fr);
-	    e.put("ModSystem", new ModSystem());
-	    e.put("MojamComponent", MojamComponent.instance);
+	    e.put("mod", new ModSystem());
+	    e.put("mojam", MojamComponent.instance);
 	    scriptList.add(e);
 	    System.out.println(e.getFactory().getExtensions().get(0)
 		    .toUpperCase()

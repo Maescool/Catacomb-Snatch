@@ -20,6 +20,7 @@ import com.mojang.mojam.gui.DownloadScreen;
 import com.mojang.mojam.gui.components.Button;
 import com.mojang.mojam.gui.components.ButtonListener;
 import com.mojang.mojam.gui.components.ClickableComponent;
+import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.gui.MenuStack;
 import com.mojang.mojam.resources.Constants;
 import com.mojang.mojam.resources.Texts;
@@ -82,7 +83,6 @@ public class MojamStartup extends Canvas implements Runnable, ButtonListener {
 
     @Override
     public void run() {
-	createBufferStrategy(3);
 	long lastTime = System.nanoTime();
 	double unprocessed = 0;
 	int frames = 0;
@@ -157,7 +157,6 @@ public class MojamStartup extends Canvas implements Runnable, ButtonListener {
 	    long now = System.nanoTime();
 	    unprocessed += (now - lastTime) / nsPerTick;
 	    lastTime = now;
-
 	    try {
 		Thread.sleep(1);
 	    } catch (InterruptedException e) {
@@ -165,8 +164,11 @@ public class MojamStartup extends Canvas implements Runnable, ButtonListener {
 	    }
 
 	    if (shouldRender) {
-		if (bs != null) {
-		    bs.show();
+		try {
+		    if (bs != null) {
+			bs.show();
+		    }
+		} catch (Exception e) {
 		}
 	    }
 
