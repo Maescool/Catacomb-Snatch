@@ -9,9 +9,11 @@ build
 *.class
 *.sw?
 lib/.tmp/
+lib/cachedir
 doc/
 *.db
 # idea related stuff
 .idea/workspace.xml
 .idea/misc.xml
 .idea/uiDesigner.xml
+.gitm*

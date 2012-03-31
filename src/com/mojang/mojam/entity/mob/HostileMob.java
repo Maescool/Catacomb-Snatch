@@ -47,8 +47,7 @@ public abstract class HostileMob extends Mob  implements IEditable {
                 closestDist = dist;
                 closest = e;
             }
-        }
-        
+        }        
         if(closest != null && !isTargetBehindWall(closest.pos.x, closest.pos.y, closest))
         	return closest;
         else 
@@ -102,8 +101,6 @@ public abstract class HostileMob extends Mob  implements IEditable {
         else 
         	return null;
 	}
-	
-	
 	
 	public void tick() {	
 		super.tick();

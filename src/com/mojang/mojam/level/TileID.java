@@ -2,7 +2,14 @@ package com.mojang.mojam.level;
 
 import java.util.HashMap;
 
-import com.mojang.mojam.level.tile.*;
+import com.mojang.mojam.level.tile.FloorTile;
+import com.mojang.mojam.level.tile.HoleTile;
+import com.mojang.mojam.level.tile.RailTile;
+import com.mojang.mojam.level.tile.SandTile;
+import com.mojang.mojam.level.tile.Tile;
+import com.mojang.mojam.level.tile.UnbreakableRailTile;
+import com.mojang.mojam.level.tile.UnpassableSandTile;
+import com.mojang.mojam.level.tile.WallTile;
 
 public class TileID {
 

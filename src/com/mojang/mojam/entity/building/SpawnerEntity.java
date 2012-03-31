@@ -6,16 +6,19 @@ import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.IEditable;
 import com.mojang.mojam.level.tile.Tile;
+import com.mojang.mojam.mod.ModSystem;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.AbstractBitmap;
 import com.mojang.mojam.screen.AbstractScreen;
 
 /**
- * Spawner entity. A sarcophage which spawns enemies of a given type onto the field.
+ * Spawner entity. A sarcophage which spawns enemies of a given type onto the
+ * field.
  */
-public abstract class SpawnerEntity extends Building implements IEditable {
-	/** Spawn interval in frames*/
+public abstract class SpawnerEntity extends Building implements IEditable
+{
+	/** Spawn interval in frames */
 	public static final int SPAWN_INTERVAL = 60 * 4;
 
 	public int spawnTime = 0;
@@ -28,7 +31,8 @@ public abstract class SpawnerEntity extends Building implements IEditable {
 	 * @param x Initial X coordinate
 	 * @param y Initial Y coordinate
 	 */
-	public SpawnerEntity(double x, double y) {
+	public SpawnerEntity(double x, double y)
+	{
 		super(x, y, Team.Neutral);
 
 		setStartHealth(20);
@@ -41,12 +45,13 @@ public abstract class SpawnerEntity extends Building implements IEditable {
 	}
 
 	@Override
-	public void tick() {
+	public void tick()
+	{
 		super.tick();
-		if (freezeTime > 0)
-			return;
+		if(freezeTime > 0) return;
 
-		if (--spawnTime <= 0) {
+		if(--spawnTime <= 0)
+		{
 			spawn();
 			spawnTime = TitleMenu.difficulty.calculateSpawntime(SPAWN_INTERVAL);
 		}
@@ -65,6 +70,7 @@ public abstract class SpawnerEntity extends Building implements IEditable {
 		int xin=(int)x/ Tile.WIDTH;
 		int yin=(int)y/ Tile.HEIGHT;
 		Tile spawntile = level.getTile(xin, yin);
+
 		Mob te = getMob(x,y);
 		
 		if (level.countEntities(Mob.class) < level.maxMonsters
@@ -72,7 +78,7 @@ public abstract class SpawnerEntity extends Building implements IEditable {
 				&& spawntile.canPass(te))
 			level.addMob(te,xin,yin);
 	}
-	
+
 	protected abstract Mob getMob(double x, double y);
 
 	@Override
@@ -87,22 +93,19 @@ public abstract class SpawnerEntity extends Building implements IEditable {
 		return Art.mobSpawner[newIndex][0];
 	}
 
-	public static Entity getRandomSpawner(double x, double y) {
-		
-		int nextInt =  TurnSynchronizer.synchedRandom.nextInt(4);
-		
-		if (nextInt == 0)
-			return new SpawnerForBat(x,y);
-		if (nextInt == 1)
-			return new SpawnerForSnake(x,y);
-		if (nextInt == 2)
-			return new SpawnerForMummy(x,y);
-		if (nextInt == 3)
-			return new SpawnerForScarab(x,y);
-		
-		return new SpawnerForBat(x,y); //should never reach this
+	public static Entity getRandomSpawner(double x, double y)
+	{
+
+		int nextInt = TurnSynchronizer.synchedRandom.nextInt(ModSystem.numEntitiesLoaded());
+
+		if(nextInt == 0) return new SpawnerForBat(x, y);
+		if(nextInt == 1) return new SpawnerForSnake(x, y);
+		if(nextInt == 2) return new SpawnerForMummy(x, y);
+		if(nextInt == 3) return new SpawnerForScarab(x, y);
+		return new SpawnerEntityMod(x,y,nextInt);
+		//return new SpawnerForBat(x, y); //should never reach this
 	}
-	
+
 	@Override
 	public AbstractBitmap getBitMapForEditor() {
 		return Art.mobSpawner[0][0];

@@ -15,6 +15,8 @@ import com.mojang.mojam.screen.AbstractScreen;
 
 public class TitleMenu extends GuiMenu {
 
+    	public static final int NOTHING = -0001;
+    
 	public static final int START_GAME_ID = 1000;
 	public static final int HOST_GAME_ID = 1002;
 	public static final int JOIN_GAME_ID = 1003;

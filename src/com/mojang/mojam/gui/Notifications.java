@@ -1,11 +1,13 @@
 package com.mojang.mojam.gui;
 
-import com.mojang.mojam.MojamComponent;
-import com.mojang.mojam.gui.components.Font;
-import com.mojang.mojam.screen.AbstractScreen;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.gui.components.Font;
+import com.mojang.mojam.screen.AbstractScreen;
 
 public class Notifications {
 

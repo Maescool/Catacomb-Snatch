@@ -15,17 +15,18 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import com.mojang.mojam.downloader.Downloader;
 import com.mojang.mojam.gui.DownloadScreen;
 import com.mojang.mojam.gui.components.Button;
 import com.mojang.mojam.gui.components.ButtonListener;
 import com.mojang.mojam.gui.components.ClickableComponent;
+import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.gui.MenuStack;
 import com.mojang.mojam.resources.Constants;
 import com.mojang.mojam.resources.Texts;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.AbstractScreen;
 import com.mojang.mojam.screen.MojamScreen;
-
 
 public class MojamStartup extends Canvas implements Runnable, ButtonListener {
     /**
@@ -55,11 +56,12 @@ public class MojamStartup extends Canvas implements Runnable, ButtonListener {
     private DownloadScreen ds;
 
     public MojamStartup() {
-		screen = new MojamScreen(GAME_WIDTH, GAME_HEIGHT);
-		screen.loadResources();
+	screen = new MojamScreen(GAME_WIDTH, GAME_HEIGHT);
+	screen.loadResources();
 
 	MojamComponent.constants = new Constants();
 	MojamComponent.texts = new Texts(new Locale("en"));
+	Options.loadProperties();
 
 	this.setPreferredSize(new Dimension(GAME_WIDTH * SCALE, GAME_HEIGHT
 		* SCALE));
@@ -155,7 +157,6 @@ public class MojamStartup extends Canvas implements Runnable, ButtonListener {
 	    long now = System.nanoTime();
 	    unprocessed += (now - lastTime) / nsPerTick;
 	    lastTime = now;
-
 	    try {
 		Thread.sleep(1);
 	    } catch (InterruptedException e) {
@@ -163,8 +164,11 @@ public class MojamStartup extends Canvas implements Runnable, ButtonListener {
 	    }
 
 	    if (shouldRender) {
-		if (bs != null) {
-		    bs.show();
+		try {
+		    if (bs != null) {
+			bs.show();
+		    }
+		} catch (Exception e) {
 		}
 	    }
 

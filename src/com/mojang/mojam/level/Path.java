@@ -1,7 +1,9 @@
 package com.mojang.mojam.level;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.Vec2;
 
@@ -59,6 +61,12 @@ public class Path {
 
 	public int getIndex() {
 		return index;
+	}
+	
+	public void render(){
+	    for(Node n:nodes){
+		MojamComponent.screen.alphaFill((int)n.pos.x, (int)n.pos.y, Tile.WIDTH, Tile.HEIGHT, 0x00ccff, 0x10);
+	    }
 	}
 
 	public String toString() {

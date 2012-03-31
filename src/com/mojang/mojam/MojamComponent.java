@@ -32,6 +32,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.mojang.mojam.console.Console;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.gui.AudioVideoMenu;
@@ -62,6 +63,7 @@ import com.mojang.mojam.level.gamemode.GameMode;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.mc.EnumOS2;
 import com.mojang.mojam.mc.EnumOSMappingHelper;
+import com.mojang.mojam.mod.ModSystem;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.network.kryo.Network.ChangeKeyMessage;
 import com.mojang.mojam.network.kryo.Network.ChangeMouseButtonMessage;
@@ -169,6 +171,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 		menuStack.setStackButtonListener(this);
 		menu = new TitleMenu(GAME_WIDTH, GAME_HEIGHT);
+		ModSystem.init(this);
 		menuStack.add(menu);
 		addKeyListener(menuStack);
 		addKeyListener(chat);
@@ -379,6 +382,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		}
 		player = players[localId];
 		player.setCanSee(true);
+		ModSystem.createLevel(level);
 	}
 
 	@Override
@@ -401,7 +405,11 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		int min = 999999999;
 		int max = 0;
 
-		while (running) {
+		ModSystem.runOnce();
+		
+
+while (running) {
+			ModSystem.updateTick();
 			if (!this.hasFocus()) {
 				keys.release();
 			}
@@ -475,10 +483,15 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 				fps = frames;
 				frames = 0;
 			}
+			ModSystem.afterTick();
 		}
+		ModSystem.onStop();
 	}
 
-	private synchronized void render(Graphics g) {
+	private synchronized void render(Graphics g)
+	{
+		ModSystem.startRender();
+
 		if (level != null) {
 			int xScroll = (int) (player.pos.x - screen.getWidth() / 2);
 			int yScroll = (int) (player.pos.y - (screen.getHeight() - 24) / 2);
@@ -508,7 +521,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		if (isMultiplayer && menuStack.isEmpty()) {
 			chat.render(screen);
 		}
-		if(console.isOpen() && menuStack.isEmpty()) {
+		if(console.isOpen()) {
 			console.render(screen);
 		}
 
@@ -518,6 +531,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		g.translate((getWidth() - GAME_WIDTH * scale) / 2, (getHeight() - GAME_HEIGHT * scale) / 2);
 		g.clipRect(0, 0, GAME_WIDTH * scale, GAME_HEIGHT * scale);
 
+		ModSystem.afterRender();
+		
 		if (!menuStack.isEmpty() || level != null) {
 
 			// render mouse
@@ -634,7 +649,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 	private void tick() {
 		//Console open/close
-		if(this.isFocusOwner() && level != null) {
+		if(this.isFocusOwner()) {
 			keys.console.tick();
 			if(keys.console.wasPressed()) {
 				console.toggle();
@@ -660,11 +675,12 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			setFullscreen(!fullscreen);
 		}
 
-		if (level != null && level.victoryConditions != null) {
+		if (level != null && level.victoryConditions != null && !console.isOpen()) {
 			if (level.victoryConditions.isVictoryConditionAchieved()) {
 				int winner = level.victoryConditions.playerVictorious();
 				GameCharacter winningCharacter = winner == players[0].getTeam() ? players[0].getCharacter()
 						: players[1].getCharacter();
+				ModSystem.onWin(winner);
 				menuStack.add(new WinMenu(GAME_WIDTH, GAME_HEIGHT, winner, winningCharacter));
                 level = null;
                 return;
@@ -730,6 +746,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 					}
 
 					keys.tick();
+					
 					for (Keys skeys : synchedKeys) {
 						skeys.tick();
 					}
@@ -783,6 +800,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			
 
 		}
+		ModSystem.afterTick();
 	}
 
 	private void tickChat() {
@@ -808,7 +826,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	}
 
 	public static void startgame() {
-		Options.loadProperties();
 		MojamComponent mc = new MojamComponent();
 		System.out.println("Starting "+(Options.getAsBoolean(Options.OPENGL,Options.VALUE_FALSE)?"with":"without")+" OpenGL support");
 		System.setProperty("sun.java2d.opengl", Options.get(Options.OPENGL,Options.VALUE_FALSE));
@@ -1040,12 +1057,15 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			break;
 
 		case TitleMenu.REALLY_EXIT_GAME_ID:
+			ModSystem.onStop();
 			stop(true);
 			break;
 
 		case TitleMenu.RETURN_ID:
 			synchronizer.addMessage(new PauseMessage(false));
-			keys.tick();
+			if(!console.isOpen()) {
+			    keys.tick();
+			}
 			break;
 
 		case TitleMenu.BACK_ID:

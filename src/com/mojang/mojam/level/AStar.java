@@ -1,6 +1,7 @@
 package com.mojang.mojam.level;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.PriorityQueue;
 
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.level.tile.Tile;
