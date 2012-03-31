@@ -38,3 +38,6 @@ def HandlePacket(packet):
     
 def CreateLevel(level):
     return
+
+def OnConsole(command, params):
+    return

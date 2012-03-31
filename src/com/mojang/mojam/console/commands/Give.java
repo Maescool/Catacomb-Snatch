@@ -56,7 +56,9 @@ public class Give extends Command {
     public void execute() {
 	args[0] = args[0].trim().toLowerCase();
 	for (Player player : MojamComponent.instance.players) {
-
+	    if(player == null){
+		continue;
+	    }
 	    if (weaponNames.containsKey(args[0])) {
 		log(giveTexts.get(weaponNames.get(args[0])));
 		try {
@@ -92,12 +94,14 @@ public class Give extends Command {
 		 * log(">raygun (Raygun)"); log(">machete (Machete)");
 		 * log(">cannon (Cannon)");
 		 */
-		log("Or you can use a numerical value to receive money.");
+		log("Or you can use a numerical value to receive money.");	
 	    }
 	    try {
 		player.score += Integer.parseInt(args[0]);
-	    } catch (NumberFormatException e) {
-
+		Integer i = null;
+		i.doubleValue();
+	    } catch (Exception e) {
+		e.printStackTrace();
 	    }
 	}
     }

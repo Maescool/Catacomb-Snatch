@@ -36,6 +36,8 @@ import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import org.jruby.embed.InvokeFailedException;
+
 import com.mojang.mojam.InputHandler;
 import com.mojang.mojam.Keys;
 import com.mojang.mojam.Keys.Key;
@@ -51,8 +53,6 @@ import com.mojang.mojam.level.gamemode.GameMode;
 import com.mojang.mojam.network.kryo.Network;
 import com.mojang.mojam.network.kryo.Network.ChangeKeyMessage;
 import com.mojang.mojam.screen.AbstractBitmap;
-import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.MojamBitmap;
 
 public final class ModSystem {
     private static boolean init = false;
@@ -350,8 +350,13 @@ public final class ModSystem {
 		.lastIndexOf('.') + 1));
 	try {
 	    FileReader fr = new FileReader(s);
+	    FileReader library = new FileReader(modsFolder.getAbsolutePath()
+		    + "/lib." + s.substring(s.lastIndexOf('.') + 1));
+	    e.eval(library);
+	    e.eval("var ModSystem;");
 	    e.eval(fr);
 	    e.put("ModSystem", new ModSystem());
+	    e.put("MojamComponent", MojamComponent.instance);
 	    scriptList.add(e);
 	    System.out.println(e.getFactory().getExtensions().get(0)
 		    .toUpperCase()
@@ -824,23 +829,22 @@ public final class ModSystem {
     }
 
     public static boolean runConsole(String command, String params) {
+	System.out.println(command + ":" + params);
 	int i = 0;
 	for (IMod m : modList) {
 	    i += m.OnConsole(command, params);
 	}
-	ScriptEngine engine = lang.getEngineByExtension(command);
+	ScriptEngine engine = lang.getEngineByExtension(command.substring(1));
 	if (engine != null) {
 	    try {
-		engine.eval(params);
+		engine.eval(params.substring(params.indexOf(" ")));
+		i++;
 	    } catch (ScriptException e) {
 		e.printStackTrace();
 		System.out.println(command + params);
 	    }
-	} else if (i == 0) {
-	    System.out.println("Error: Command " + command
-		    + " is unregistered.");
 	}
-	invoke("OnConsole");
+	invoke("OnConsole", command.substring(1), params);
 	return i != 0;
     }
 
@@ -886,14 +890,15 @@ public final class ModSystem {
 		Invocable i = (Invocable) sc;
 		i.invokeFunction(s, args);
 	    } catch (NoSuchMethodException e) {
+	    } catch (InvokeFailedException e) {
 	    } catch (ClassCastException e) {
 	    } catch (ScriptException e) {
 		System.out.println("Bad method in mod" + " at method " + s
 			+ " line: " + e.getLineNumber() + " column: "
 			+ e.getColumnNumber());
 		e.printStackTrace();
-	    } catch (Exception e){
-		e.printStackTrace();
+	    } catch (Exception e) {
+		// e.printStackTrace();
 	    }
 	}
     }
@@ -925,14 +930,14 @@ public final class ModSystem {
     public static Font getFont() {
 	return Font.defaultFont();
     }
-    
+
     /**
      * Gets an instance of Options to avoid static method semantics in scripts
      * 
-     * @return an instance of the class {@link Options} for non statically calling
-     * 		static code
+     * @return an instance of the class {@link Options} for non statically
+     *         calling static code
      */
-    public static Options getOptions(){
+    public static Options getOptions() {
 	return new Options();
     }
 

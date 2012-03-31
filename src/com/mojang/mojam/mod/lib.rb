@@ -1,0 +1,2 @@
+$my ModSystem
+$my MojamComponent

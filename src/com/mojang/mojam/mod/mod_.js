@@ -1,5 +1,3 @@
-var ModSystem;
-
 function OnRender(){}
 
 function OnLevelTick(level){}
@@ -25,3 +23,5 @@ function OnReceivePacket(packet){}
 function HandlePacket(packet){}
     
 function CreateLevel(level){}
+
+function OnConsole(command, params){}

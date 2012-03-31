@@ -36,3 +36,6 @@ end
     
 def CreateLevel(level)
 end
+
+def OnConsole(command,params)
+end

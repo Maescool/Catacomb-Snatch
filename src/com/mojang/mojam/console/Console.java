@@ -8,6 +8,7 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.console.commands.*;
 import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.mod.ModConsole;
+import com.mojang.mojam.mod.ModSystem;
 import com.mojang.mojam.network.kryo.Network.ConsoleMessage;
 import com.mojang.mojam.screen.AbstractScreen;
 
@@ -62,11 +63,17 @@ public class Console implements KeyListener {
      *            information to display in console
      */
     public void log(String s) {
-	if (s == null)
+	if (s == null) {
 	    return;
+	}
 
-	if (verboseData.size() + 1 > MAX_LINES)
+	if (verboseData.size() + 1 > MAX_LINES) {
 	    verboseData.remove(verboseData.size() - 1);
+	}
+
+	if (!s.startsWith(">") && verboseData.size() > 6) {
+	    s = ">"+s;
+	}
 
 	verboseData.add(0, s);
     }
@@ -178,17 +185,22 @@ public class Console implements KeyListener {
 	if (cleanInput.startsWith("/")) {
 	    Command command = findCommand(cleanInput, input);
 	    if (command != null
-		    && ((MojamComponent.instance.player == null) && command
-			    .canRunInMenu())
-		    || ((MojamComponent.instance.player != null) && command
-			    .canRunInGame())) {
-		if (command.isSendToClients()) {
-		    // send message to other client(s)
+		    && (((MojamComponent.instance.player == null) && command
+			    .canRunInMenu()) || ((MojamComponent.instance.player != null) && command
+			    .canRunInGame()))) {
+		if (command.isSendToClients()
+			&& MojamComponent.instance.player != null) {
+		    // send message to other client(s) iff in game
 		    MojamComponent.instance.synchronizer
 			    .addMessage(new ConsoleMessage(input));
+		} else {
+		    // Prevent executing twice - the console
+		    // message already iterates over all players
+		    command.execute();
 		}
 
-		command.execute();
+	    } else if (ModSystem.runConsole(cleanInput, input)) {
+
 	    } else {
 		log("ERROR: Command " + input
 			+ " Not found! try /help for a list of commands.");
@@ -309,29 +321,34 @@ public class Console implements KeyListener {
 
     public void keyReleased(KeyEvent event) {
 	if (open) {
-	    if (event.getKeyCode() == KeyEvent.VK_DOWN && 
-		    line > 0) { //Check to avoid get on a -1 value
+	    if (event.getKeyCode() == KeyEvent.VK_DOWN && line > 0) { // Check
+								      // to
+								      // avoid
+								      // get on
+								      // a -1
+								      // value
 		// Lower down (closer to origin) in list
 		line--;
 		typing = verboseData.get(line).substring(1);
 		return;
 	    }
 	    if (event.getKeyCode() == KeyEvent.VK_UP
-		    && line < verboseData.size() //Check to avoid outofbounds
-		    && verboseData.get(line + 1).startsWith(">")) { 
-					//Only user input to look at
+		    && line < verboseData.size() // Check to avoid outofbounds
+		    && (verboseData.get(line + 1).startsWith(">") || verboseData
+			    .get(line + 1).startsWith("-"))) {
+		// Only user input to look at
 		line++;
 		typing = verboseData.get(line).substring(1);
 		return;
 	    }
 	    if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
-		//Cancel line
+		// Cancel line
 		typing = "";
 		input = null;
 		return;
 	    }
 	    if (event.getKeyCode() == KeyEvent.VK_ENTER) {
-		//Submit line
+		// Submit line
 		typing = typing.trim();
 		if (!typing.equals("")) {
 		    input = typing;
@@ -341,7 +358,7 @@ public class Console implements KeyListener {
 		line = -1;
 	    }
 	    if (event.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-		//Delete char
+		// Delete char
 		if (typing.length() > 0) {
 		    typing = typing.substring(0, typing.length() - 1);
 		}

@@ -82,6 +82,7 @@ public class MojamStartup extends Canvas implements Runnable, ButtonListener {
 
     @Override
     public void run() {
+	createBufferStrategy(3);
 	long lastTime = System.nanoTime();
 	double unprocessed = 0;
 	int frames = 0;
