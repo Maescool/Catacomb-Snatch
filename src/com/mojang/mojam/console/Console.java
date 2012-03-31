@@ -72,7 +72,7 @@ public class Console implements KeyListener {
 	}
 
 	if (!s.startsWith(">") && verboseData.size() > 6) {
-	    s = ">"+s;
+	    s = ">" + s;
 	}
 
 	verboseData.add(0, s);
@@ -136,17 +136,11 @@ public class Console implements KeyListener {
     public void render(AbstractScreen s) {
 	if (open) {
 	    int fontHeight = Font.FONT_WHITE_SMALL.getFontHeight();
-	    int consoleHeight = (MAX_LINES + 1) * fontHeight + yOffset; // +1
-									// for
-									// the
-									// input
-									// line
+	    int consoleHeight = (MAX_LINES + 1) * fontHeight + yOffset;
+	    // +1 for the input line
 
-	    s.alphaFill(0, 0, s.getWidth(), consoleHeight, 0xff000000, 0x80); // 50%
-									      // black,fixed
-									      // from
-									      // 0x50
-									      // (31.25%)
+	    s.alphaFill(0, 0, s.getWidth(), consoleHeight, 0xff000000, 0x80);
+	    // 50% black,fixed from 0x50 (31.25%)
 
 	    Font.FONT_WHITE_SMALL
 		    .draw(s,
@@ -154,15 +148,12 @@ public class Console implements KeyListener {
 				    + (((((int) (System.currentTimeMillis() / 500)) & 1) == 1) ? "|"
 					    : ""), xOffset,
 			    (consoleHeight -= fontHeight));
-	    // draws bottom up
-	    // starting with
-	    // typing
+	    // draws bottom up starting with typing
 
 	    for (int i = 0; i < verboseData.size(); i++) {
 		Font.FONT_WHITE_SMALL.draw(s, verboseData.get(i), xOffset,
-			(consoleHeight -= fontHeight)); // and then the verbose
-							// data in order of
-							// newest first
+			(consoleHeight -= fontHeight));
+		// and then the verbose data in order of newest first
 
 	    }
 	}
@@ -213,7 +204,7 @@ public class Console implements KeyListener {
     }
 
     public void processInputFromNetwork(String input) { // separate processor so
-							// message is not resent
+	// message is not resent
 	String command = scrubInput(input);
 	if (command.startsWith("/")) {
 	    findCommand(command, input).execute();
@@ -322,11 +313,11 @@ public class Console implements KeyListener {
     public void keyReleased(KeyEvent event) {
 	if (open) {
 	    if (event.getKeyCode() == KeyEvent.VK_DOWN && line > 0) { // Check
-								      // to
-								      // avoid
-								      // get on
-								      // a -1
-								      // value
+		// to
+		// avoid
+		// get on
+		// a -1
+		// value
 		// Lower down (closer to origin) in list
 		line--;
 		typing = verboseData.get(line).substring(1);
@@ -394,7 +385,7 @@ public class Console implements KeyListener {
 	public String name;
 	public String helpMessage;
 	public int numberOfArgs; // -1 args means return raw input data minus
-				 // the command
+	// the command
 	public static ArrayList<Command> commands = new ArrayList<Command>();
 	public String[] args;
 	private boolean sendToClients;
