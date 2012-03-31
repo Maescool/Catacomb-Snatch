@@ -2,6 +2,7 @@ package com.mojang.mojam.entity.animation;
 
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.level.tile.FloorTile;
+import com.mojang.mojam.level.tile.SandTile;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.AbstractScreen;
@@ -43,8 +44,9 @@ public class LargeBombExplodeAnimation extends Animation {
 			// update shadows on FloorTiles after all DestroyableWallTiles have been removed
 			for (int yy = yt - r; yy <= yt + r; yy++) {
                 for (int xx = xt - r; xx <= xt + r; xx++) {
-                    if (level.getTile(xx, yy).getName() == FloorTile.NAME)
-                        level.getTile(xx, yy).updateShadows();
+                    if (level.getTile(xx, yy).getName() == FloorTile.NAME || level.getTile(xx, yy).getName() == SandTile.NAME) {
+                    	level.getTile(xx, yy).updateShadows();
+                    }
                 }
             }
 		}

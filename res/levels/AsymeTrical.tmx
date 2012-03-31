@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="64" height="64" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" source="../tiled/tilesets/Tileset-Floor.tsx"/>
+ <tileset firstgid="65" source="../tiled/tilesets/Tileset-Overlay.tsx"/>
+ <tileset firstgid="129" source="../tiled/tilesets/Tileset-Wall.tsx"/>
+ <tileset firstgid="193" source="../tiled/tilesets/Tileset-Player1.tsx"/>
+ <tileset firstgid="257" source="../tiled/tilesets/Tileset-Player2.tsx"/>
+ <layer name="floor" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3bsQ0AIAhFQdT9d3YELTBCcsXrueKXzIiYkp63Lvt9p6T8TvuuuP/RPH5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fv7/9/Pz8/Pz8/Pz8/Pz8/Pz87/3Z9bx/0FSTv4fpVptp7o/5gBAAAA=
+  </data>
+ </layer>
+ <layer name="overlay" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3auU4CYRhG4RlBQdwQFddGuRJDzUWruAJuoCzaCDfi6SQ0VJM/zn+e5GQy3fsV002SSFL2VtMkWaNTSmmFClSkBpWonIZemZ0tbtumE1qnCm3QJl3QDlVzfP8Bt9XpmHapRnu0T+d0SEc5vn/eWfpXjJoLT0mSJEmSJEnS/9da8q44XIYeoCD8/iVJkiRJkiTlWez/v3/PFYtbuqMxXdE13VCbfuieHoKty16PnmlCj/REHerSlF7oNdi67H3QJ33RG71TnwY0oyGNgq2TFJtfn7ZQFgBAAAA=
+  </data>
+ </layer>
+ <layer name="wall" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2aWQ6DMAxEuXo5ecUfjcAdrzFhnhQJVSaTyeJYqNtGCCGEEPLLJ6lVaIw6Vv8ZsR5QHfqv0zrYA/QidejfD/e/LhZt+6ll5fpV1x/VzvKfed9aqfbfjTf41+SVzPpvpv/MeLQPqd/s/O8du5arPqT6I3Nv0H9uPNoH6l/aw9Leln7XEOVfe5atOsizNm94qZpzZJ277P9/8ZZcvpJ/r343/13OXFUuQsZijUfrnzG+U/2Dxmv2B6LzBP/n2kBTOyDftLTf12bc/17/0l4ZdTre/yuuvzX+6t3Vz79Uu0r3lPRexFisRN3/mrGgc/ik+9/j/8n3/92z5CtiDi3x0ZpSTWfRnOU/+swh/u/mTZN3Zq8/GoNqSHH0bxuLR/Mu3nJm0KYZZ9f1zyDT/3m9PGuUSeX6z/Io8Rb/He6/2f4zYjV9aPJ1dP7v4D9LK1qn0n+3/74d0L8f7v86rWidyPovulVodKzTCCGEEDKfL5EGBKoAQAAA
+  </data>
+ </layer>
+ <layer name="seen tiles" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3PQQ0AAAgDsdmcfyO8kUDoJSegTVLbtr2+Hj8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/P//9+Pn5+fn5+fn5+fn5+fn5+W3b9r8H7D9/+gBAAAA=
+  </data>
+ </layer>
+</map>
