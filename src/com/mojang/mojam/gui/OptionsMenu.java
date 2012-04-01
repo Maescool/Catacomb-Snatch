@@ -71,7 +71,9 @@ public class OptionsMenu extends GuiMenu {
 			public void buttonPressed(ClickableComponent button) {
 				creative = !creative;
 				Options.set(Options.CREATIVE, creative);
-				setPrices();
+				if(MojamComponent.instance.player!= null){
+				    setPrices();
+				}
 			}
 			@Override
 			public void buttonHovered(ClickableComponent clickableComponent) {

@@ -384,4 +384,10 @@ public class MojamBitmap implements AbstractBitmap {
 	public int getPixelSize() {
 		return pixels.length;
 	}
+	
+	@Override
+	public int[] getPixels() {
+	    	return pixels;
+	}
+	
 }

@@ -1,4 +1,3 @@
-
 package com.mojang.mojam.entity.weapon;
 
 import com.mojang.mojam.MojamComponent;

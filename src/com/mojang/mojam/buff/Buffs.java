@@ -1,7 +1,6 @@
 package com.mojang.mojam.buff;
 
 import java.util.LinkedList;
-import com.mojang.mojam.buff.Buff;
 
 public class Buffs extends LinkedList<Buff> {
 	

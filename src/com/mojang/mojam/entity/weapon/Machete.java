@@ -5,9 +5,8 @@ import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.BulletMelee;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.resources.Constants;
-import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.AbstractBitmap;
-import com.mojang.mojam.screen.AbstractScreen;
+import com.mojang.mojam.screen.Art;
 
 public class Machete extends Melee {
 
