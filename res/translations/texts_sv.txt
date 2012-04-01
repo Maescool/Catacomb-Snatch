@@ -126,6 +126,7 @@ options.alternative = ALTERNATIVT SPELARHUD
 options.credits = MEDVERKANDE
 options.openal = OPENAL (LJUD)
 options.opengl = OPENGL (GRAFIK)
+options.smallscale = LÄGRE GRAFIK
 
 pausemenu.help = HJÄLP
 pausemenu.backtomain = HUVUDMENY
