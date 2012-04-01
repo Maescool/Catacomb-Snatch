@@ -98,8 +98,6 @@ public class Give extends Command {
 	    }
 	    try {
 		player.score += Integer.parseInt(args[0]);
-		Integer i = null;
-		i.doubleValue();
 	    } catch (Exception e) {
 		e.printStackTrace();
 	    }
