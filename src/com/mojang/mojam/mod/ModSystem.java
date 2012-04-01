@@ -10,7 +10,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -55,6 +57,7 @@ import com.mojang.mojam.network.kryo.Network.ChangeKeyMessage;
 import com.mojang.mojam.screen.AbstractBitmap;
 
 public final class ModSystem {
+
 	private static boolean init = false;
 	public static File modDir;
 	public static File modsFolder;
