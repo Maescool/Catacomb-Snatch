@@ -29,7 +29,7 @@ public class ChannelDownloader implements IDownloader {
 
 		// set the user agent to pass Cloud-Flare
 
-		urlC.setRequestProperty("User-agent", "Mozilla/4.0 (compatible; Catacomb-Snatch; UnKnown)");
+		urlC.setRequestProperty("User-agent", Downloader.getUserAgent());
 
 		// Print info about resource
 

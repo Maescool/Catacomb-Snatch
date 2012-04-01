@@ -1,16 +1,11 @@
 package com.mojang.mojam.downloader;
 
-import java.lang.reflect.InvocationTargetException;
 import java.net.*;
 import java.io.*;
 import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.jar.*;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.Inflater;
-import java.util.zip.InflaterInputStream;
 
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MojamStartup;
@@ -18,6 +13,7 @@ import com.mojang.mojam.Options;
 import com.mojang.mojam.mc.EnumOSMappingHelper;
 
 import com.mojang.mojam.gui.DownloadScreen;
+import com.sun.servicetag.SystemEnvironment;
 
 public class Downloader {
 
@@ -29,7 +25,10 @@ public class Downloader {
 	private static String baseURL = "http://assets.catacombsnatch.net/";
 
 	private static String[][] binFiles = { { "lwjgl.jar", "a9deb51bea77db85de26f7b2eb1ecbea" },
-			{ "LibraryLWJGLOpenAL.jar", "9f6d36c4e4c6e5252c245bd3c61def01" } };
+			{ "LibraryLWJGLOpenAL.jar", "9f6d36c4e4c6e5252c245bd3c61def01" },
+			{"jython.jar", "ac8b8066bf44cdc304b816179f0a96e3"},
+			{"jruby.jar", "23fcb8bdf2ac1d20b8cf247212e0310c"}
+	};
 
 	private static String[][] nativeFiles = { { "linux_native.jar", "6e05a97164478a1c0428179d78dc47ea" },
 			{ "solaris_native.jar", "f8d81693de7d8738b6adb94e022cddde" },
@@ -70,14 +69,13 @@ public class Downloader {
 			{ "ThemeTitle.ogg", "53c6d27b515e583a7922fd41c2a10b06" } };
 
 	public void CheckFiles() {
-		// DownloadScreen ds = new DownloadScreen();
-		// checkBinDir();
 		// testSpeeds(); //<- Eye-opening
 		if (Options.getAsInteger(Options.DLSYSTEM, 0) == 1) {
 			downloadAgent = new ChannelDownloader();// Faster, less control
 		} else if (Options.getAsInteger(Options.DLSYSTEM, 0) == 0) {
 			downloadAgent = new DefaultDownloader();
 		}
+		checkBinDir();
 		checkNativeDir();
 		checkSoundDir();
 		MojamStartup.instance.startgame();
@@ -163,11 +161,11 @@ public class Downloader {
 	}
 
 	private static void downloadBinFile(String binFile) {
-		String url = baseURL + binFile;
+		String url = baseURL + "libs/" + binFile;
 		File binDir = getBinDir();
-		String toPath = binDir.getAbsolutePath().toString() + "/" + binFile;
+		String toPath = binDir.getAbsolutePath().toString() + File.separator + binFile;
 
-		System.out.println("Downloading binfile to: " + toPath);
+		System.out.println("Downloading binfile to: " + toPath + " from: "+ url);
 
 		download(url, toPath);
 	}
@@ -392,7 +390,7 @@ public class Downloader {
 	private static void downloadSoundFile(String soundFile) {
 		String url = baseURL + "sound/" + soundFile;
 		File soundDir = getSoundDir();
-		String toPath = soundDir.getAbsolutePath().toString() + "/" + soundFile;
+		String toPath = soundDir.getAbsolutePath().toString() + File.separator + soundFile;
 
 		System.out.println("Downloading soundFile to: " + toPath);
 
@@ -478,9 +476,8 @@ public class Downloader {
 	 *            (path+)filename to write to.
 	 */
 	public static boolean download(String url, String toFile) {
-		// dScreen = new DownloadScreen();
 		try {
-			DownloadScreen.downLoadStarted(new File(toFile).getName().toString());
+			DownloadScreen.downLoadStarted(toFile);
 			downloadAgent.downloadTo(url, toFile);
 			DownloadScreen.downloadEnd();
 			return true;
@@ -495,5 +492,10 @@ public class Downloader {
 			System.err.println(e.toString());
 			return false;
 		}
+	}
+	
+	public static String getUserAgent(){
+		SystemEnvironment se = SystemEnvironment.getSystemEnvironment();
+		return "Mozilla/5.0 ("+se.getOsName()+"; Catacomb Snatch; "+se.getOsArchitecture()+ " "+se.getOsName()+ " "+se.getOsVersion()+") CatacombSnatch/"+MojamComponent.GAME_VERSION;
 	}
 }
