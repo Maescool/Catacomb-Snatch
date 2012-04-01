@@ -331,8 +331,8 @@ public final class ModSystem {
 		ScriptEngine e = lang.getEngineByExtension(s.substring(s.lastIndexOf('.') + 1));
 		try {
 			FileReader fr = new FileReader(s);
-			FileReader library = new FileReader(modsFolder.getAbsolutePath() + "/lib."
-					+ s.substring(s.lastIndexOf('.') + 1));
+			InputStreamReader library = new InputStreamReader(ModSystem.class.getResourceAsStream("lib."
+					+ s.substring(s.lastIndexOf('.') + 1)));
 			e.eval(library);
 			e.eval(fr);
 			e.put("mod", new ModSystem());
