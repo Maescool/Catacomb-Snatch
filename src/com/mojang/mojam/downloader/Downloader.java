@@ -21,6 +21,7 @@ import com.mojang.mojam.gui.DownloadScreen;
 
 public class Downloader {
 
+
 	// private static DownloadScreen dScreen = null;
 
 	private static IDownloader downloadAgent = null;
