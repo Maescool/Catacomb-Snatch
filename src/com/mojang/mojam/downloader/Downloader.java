@@ -78,7 +78,6 @@ public class Downloader {
 	// DownloadScreen ds = new DownloadScreen();
 	// checkBinDir(); 
 	// testSpeeds(); //<- Eye-opening
-	System.out.println(Options.getAsInteger(Options.DLSYSTEM));
 	if (Options.getAsInteger(Options.DLSYSTEM, 0)==1) {
 	    downloadAgent = new ChannelDownloader();//Faster, less control
 	} else if(Options.getAsInteger(Options.DLSYSTEM, 0)==0){
