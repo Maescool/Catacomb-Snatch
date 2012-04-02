@@ -156,7 +156,7 @@ public class Harvester extends Building implements LootCollector {
 			screen.colorBlit(image, pos.x - image.getWidth() / 2, pos.y - image.getHeight() / 2 - yOffs, 0x77ff7200);
 		}
 		
-		if(team ==MojamComponent.localTeam && !isCarried()) {
+		if( team == MojamComponent.localTeam ) {
 			addMoneyBar(screen);
 		}
 		
