@@ -477,7 +477,7 @@ public class Downloader {
 	 */
 	public static boolean download(String url, String toFile) {
 		try {
-			DownloadScreen.downLoadStarted(toFile);
+			DownloadScreen.downLoadStarted(new File(toFile).getName().toString());
 			downloadAgent.downloadTo(url, toFile);
 			DownloadScreen.downloadEnd();
 			return true;

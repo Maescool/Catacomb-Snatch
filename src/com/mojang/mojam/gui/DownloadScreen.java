@@ -57,7 +57,7 @@ public class DownloadScreen extends GuiMenu {
 			screen.alphaFill(125, 150, 300, 100, 0xff000000, 0x90);
 
 			Font.defaultFont().draw(screen, MojamComponent.texts.getStatic("download.downloading"), 215, 170);
-			//Font.FONT_BLUE.draw(screen, fileName, 210, 180);
+			Font.defaultFont().draw(screen, fileName, 215, 180);
 
 			int maxIndex = Art.panel_xpBar[0].length - 1;
 			int index = maxIndex - Math.round(downloaded * maxIndex / total);
@@ -75,7 +75,7 @@ public class DownloadScreen extends GuiMenu {
 			screen.alphaFill(125, 150, 300, 50, 0xff000000, 0x90);
 
 			Font.defaultFont().draw(screen, MojamComponent.texts.getStatic("download.unpacking"), 215, 170);
-			//Font.FONT_BLUE.draw(screen, fileName, 210, 180);
+			Font.defaultFont().draw(screen, fileName, 215, 180);
 		}
 	}
 
