@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="64" height="64" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" source="../tiled/tilesets/Tileset-Floor.tsx"/>
+ <tileset firstgid="65" source="../tiled/tilesets/Tileset-Overlay.tsx"/>
+ <tileset firstgid="129" source="../tiled/tilesets/Tileset-Wall.tsx"/>
+ <tileset firstgid="193" source="../tiled/tilesets/Tileset-Player1.tsx"/>
+ <tileset firstgid="257" source="../tiled/tilesets/Tileset-Player2.tsx"/>
+ <layer name="floor" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3byw6DIBRFUar9/2/u1BihSO5VzmEP9tR08dCWxq2UshFRentnb39OIorv3/6ecf9/xMOP393/xV8dgxX8xzE4j8Uq/vMYrOi/StHfup/hx+/sbz3L3P3RdkV/9DXx+/hH9oeSP2OdOPqPa6GVs99x/u+sa8f57/W77v8el/P9v+f5d/eaLv7R70Yu/tHw48ev4c9Izb/y+Qd+/Er+jPNKlfPf2v+Ns62DDH/tt/aMYxDtz/RmlOV/Yv5n9KuFHz9+/Pjx48eP/70U338goph4/5Forn6nnC+4AEAAAA==
+  </data>
+ </layer>
+ <layer name="overlay" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2W126EMBBFIb33nrwk+yXRfnl67728JPmR3DygIMvG44Zt7CsdwVqGmcOaUhQ5OTk57jNcFsUI2AQlGACDYAj0wCgYK3136S7TcJsBG2AcTIBJMAV2wCyY67D/MtxWwDqYBwtgESyBbbAK1jrsX89W+U+K6TPb1BKbf1+TpvMVkjkhhe2T1zfr3HQtTK9f22nqjdKz6DhZzVAi8+fts8fXz9M0l1fTd3Tvf9l6UantM7b+f9mYrL6v+Pbn9dBmTN95Nvx5/bQVE0/RuGn/IfnLnumu/Nu6BiHc/9TzukiI69/WOah1sj9t/bNzRNcrNn/eVjSPMh67v2wt8I6PNTb+fxfs6gopRsWfev/HlPz+529F8yjjXfL38f1r6xwqdbJ/c93U/EXrQHQ8Za5KQvj+pfTTBX/K71T9dcazv3l8+Mu+yWXHN42Z9OUy1Dpd9qfUyv708dj8TeZlf/1z6tSznZD8Ke8b21HxV0Gnj7ac2boq8yjfS6oevtyr2irzbPv7dK/Xp65pypqnvk99u1d9yPZ5v9lxFf8QvKvY9BfdIwUzJxT3v9jyr/ZFfqF5V1F9r5k8K1II735IKbJnQNeTuv9njVRyBI7BG9gD++AAHIIvcAJOvXXnPlfgGryDM3AOLsAl+AY34NZbd+7zBJ7BB7gD9+ABPIIf8AJevXWXk5OTWn4BBgsDFgBAAAA=
+  </data>
+ </layer>
+ <layer name="wall" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2YgQ6DIAxE/XX98mXJTBipeKWtrXqXGBzQKy8g4paFoiiKoijqX2vQdUWOPk9V/ih58lvj38oveb2VX/KMfnY9PCLma+3Ko3aPHFaPyPU64vfYe6zy5u+5zrwt+avxr8I94j07hkr8m+Dblsg4tt+libHKg1+Kn+Fv79F1Y1XUHmThR+Oezo/snVZV5UdiyW8X+Wvwa7zRdjRHFH/W2VrrkX0Gz8zN+efzT35b/Kie/P7eaDuaI5v/zEMbpxH5yU9+W/yonvx2D22cRuS3+4y+3d/A/5Xl/+8n8O9e/f2b+Hc/qURi0Hq0HVHEN3rrOcOP/ndQlX/3bUukL9p/pu/II4K/9Uf7aMeRxd+Ot1/rUh3i178/NOOwKJvfsv6y+RHPUd+Ic9eMxwz/aK7P+L32nKr8y0Gd9Nuiivyjd3nEOcPDI/v9l+ktzaXHdYWq7CFZusv8R+W489xRFEVRFBWnD65JtDQAQAAA
+  </data>
+ </layer>
+ <layer name="seen tiles" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3PQQ0AAAgDsdmcfyO8kUDoJSegTVLbtr2+Hj8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/P//9+Pn5+fn5+fn5+fn5+fn5+W3b9r8H7D9/+gBAAAA=
+  </data>
+ </layer>
+</map>

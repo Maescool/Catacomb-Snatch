@@ -126,7 +126,8 @@ public class TitleMenu extends GuiMenu {
 			join_host = (Button) addButton(new Button(JOIN_GAME_ID, MojamComponent.texts.getStatic("titlemenu.join"), (gameWidth - 128) / 2, (startY += 30)));
 			how_to = (Button) addButton(new Button(HOW_TO_PLAY, MojamComponent.texts.getStatic("titlemenu.help"), (gameWidth - 128) / 2, (startY += 30)));
 			options = (Button) addButton(new Button(OPTIONS_ID, MojamComponent.texts.getStatic("titlemenu.options"), (gameWidth - 128) / 2, (startY += 30)));
-			lvl_editor = (Button) addButton(new Button(LEVEL_EDITOR_ID, MojamComponent.texts.getStatic("titlemenu.levelEditor"), (gameWidth - 128) / 2, (startY += 30)));
+			//Should be removed completely once all of the level editor code is removed. 
+			//lvl_editor = (Button) addButton(new Button(LEVEL_EDITOR_ID, MojamComponent.texts.getStatic("titlemenu.levelEditor"), (gameWidth - 128) / 2, (startY += 30)));
 			exit_game = (Button) addButton(new Button(EXIT_GAME_ID, MojamComponent.texts.getStatic("titlemenu.exit"), (gameWidth - 128) / 2, (startY += 30)));
 		} catch (Exception e) {
 			e.printStackTrace();
