@@ -637,7 +637,7 @@ public class Player extends Mob implements LootCollector {
     private boolean shouldHighlightEntity(Entity entity) {
     	if (!(entity instanceof IUsable))
     		return false;
-    	return ((IUsable)entity).isHighlightable() && canInteractWithEntity(entity) && this.team == entity.team; 
+    	return ((IUsable)entity).isHighlightable() && canInteractWithEntity(entity);// && this.team == entity.team; 
     }
     
     // Whether this Player should see the Entity in question
