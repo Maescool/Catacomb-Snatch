@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.network.kryo.Network.ChatMessage;
 import com.mojang.mojam.network.kryo.Network.ConsoleMessage;
 import com.mojang.mojam.network.kryo.Network.EndGameMessage;
@@ -43,7 +44,23 @@ public class SnatchServer {
 					if (connection.name != null) return;
 					// Ignore the object if the name is invalid.
 					String name = ((RegisterName)object).name;
-					if (name == null) return;
+					
+					String version = ((RegisterName)object).version;
+					if(!version.equals(MojamComponent.GAME_VERSION)) {
+						//version mismatch - send message about it and end the game
+						server.sendToTCP(connection.getID(), new ChatMessage(MojamComponent.texts.getStatic("mp.mismatch")));
+						server.sendToTCP(connection.getID(), new ChatMessage(MojamComponent.texts.getStatic("mp.server") + ": " + MojamComponent.GAME_VERSION));
+						server.sendToTCP(connection.getID(), new ChatMessage(MojamComponent.texts.getStatic("mp.client") + ": " + version));
+						
+						server.sendToTCP(connection.getID(), new EndGameMessage());
+						connection.close();
+						return;
+					}
+					
+					if (name == null) {
+						return;
+					}
+					
 					name = name.trim();
 					if (name.length() == 0) return;
 					// Store the name on the connection.

@@ -45,6 +45,7 @@ public class SnatchClient {
 			public void connected (Connection connection) {
 				RegisterName registerName = new RegisterName();
 				registerName.name = "USER"+Math.random();
+				registerName.version = MojamComponent.GAME_VERSION;
 				client.sendTCP(registerName);
 				client.updateReturnTripTime();
 			}

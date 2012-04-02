@@ -33,6 +33,7 @@ public class Network {
 	
 	static public class RegisterName {
 		public String name;
+		public String version;
 	}
 
 	static public class StartGameMessage {

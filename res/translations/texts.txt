@@ -96,6 +96,9 @@ mp.enterIP = ENTER IP OF HOST:
 mp.localIP = YOUR LOCAL IP:
 mp.externalIP = YOUR EXTERNAL IP:
 mp.join = JOIN
+mp.mismatch = VERSION MISMATCH!
+mp.server = SERVER
+mp.client = CLIENT
 
 options.on = ON
 options.off = OFF
