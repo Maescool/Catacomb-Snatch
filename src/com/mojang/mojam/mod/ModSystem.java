@@ -718,18 +718,12 @@ public final class ModSystem {
 	private static AbstractBitmap load(String string) {
 		try {
 			BufferedImage bi = ImageIO.read(MojamComponent.class.getResource(string));
-
-			int w = bi.getWidth();
-			int h = bi.getHeight();
-
-			AbstractBitmap result = mojam.screen.createBitmap(w, h);
-			bi.getRGB(0, 0, w, h, result.getPixels(), 0, w);
-
-			return result;
+			if (bi != null) {
+				return  mojam.screen.load(bi);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		return null;
 	}
 

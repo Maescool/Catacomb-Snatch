@@ -1,5 +1,7 @@
 package com.mojang.mojam.screen;
 
+import java.awt.image.BufferedImage;
+
 public interface AbstractScreen {
 
 	public void clear(int color);
@@ -31,6 +33,7 @@ public interface AbstractScreen {
 	public void alphaFill(int x, int y, int width, int height, int color, int alpha);
 
 	public AbstractBitmap load(String pathFile);
+	public AbstractBitmap load(BufferedImage image);
 
 	public AbstractBitmap[][] cut(String pathFile, int w, int h);
 
