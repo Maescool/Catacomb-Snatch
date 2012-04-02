@@ -168,7 +168,7 @@ public class TitleMenu extends GuiMenu {
 		join_host.setLabel(MojamComponent.texts.getStatic(("titlemenu.join")));
 		how_to.setLabel(MojamComponent.texts.getStatic(("titlemenu.help")));
 		options.setLabel(MojamComponent.texts.getStatic(("titlemenu.options")));
-		lvl_editor.setLabel(MojamComponent.texts.getStatic(("titlemenu.levelEditor")));
+		//lvl_editor.setLabel(MojamComponent.texts.getStatic(("titlemenu.levelEditor")));
 		exit_game.setLabel(MojamComponent.texts.getStatic(("titlemenu.exit")));
 	}
 }
