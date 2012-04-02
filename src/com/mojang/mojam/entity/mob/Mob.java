@@ -243,7 +243,9 @@ public abstract class Mob extends Entity {
 	protected void renderMarker(AbstractScreen screen) {
 		
 		//Don't draw the marker if this doesn't belong to the local team
-		if (!(this.team == MojamComponent.localTeam)) {
+		//or is not Neutral
+		
+		if (!( team == Team.Neutral || team == MojamComponent.localTeam )) {
 			return;
 		}
 		
