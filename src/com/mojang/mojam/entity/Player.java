@@ -289,10 +289,10 @@ public class Player extends Mob implements LootCollector {
         if (keys.build.isDown && !keys.build.wasDown) {
             handleRailBuilding(x, y);
         }
-
-        handleEntityInteraction();
+        
         handleCarrying();
-
+        handleEntityInteraction();
+        
         if (isSeeing) {
             level.reveal(x, y, 5);
         }
