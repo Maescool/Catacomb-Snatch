@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="64" height="64" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" source="../tiled/tilesets/Tileset-Floor.tsx"/>
+ <tileset firstgid="65" source="../tiled/tilesets/Tileset-Overlay.tsx"/>
+ <tileset firstgid="129" source="../tiled/tilesets/Tileset-Wall.tsx"/>
+ <tileset firstgid="193" source="../tiled/tilesets/Tileset-Player1.tsx"/>
+ <tileset firstgid="257" source="../tiled/tilesets/Tileset-Player2.tsx"/>
+ <layer name="floor" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3Y0QqEIBCFYcm58f1feJGQZgcF3VXU/D8YlIroMDUXOQcAAAAAAAAAAAAAAAAAZxFVUVCV4xvv7yv2M7Xmf5tT86f3T8wazNriqqwV6O9PzLm39z4a0f+d0P/bif2PM8i7Zx6J+55PwdXPstxcs/vc+V/u24vOL2YNZm19zty+dM0K+Xv2v0evd+7/qBqZf1T/V8+vs6dK2VPNzk3+9fL7wvFS+Yr9zPw7FNbxz/8fAACAnj57XdC9AEAAAA==
+  </data>
+ </layer>
+ <layer name="overlay" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3Xx07DQBRGYZsWeu+wAZ6EJAg2LCgvTO+9lw3wIhwWlkZXHmwwmWDp/6SjsSJFmasZLxJFIiIiIiIiIiIiIiIiIiIiIiIikmapwHeXaSXlWcqh5vSd9jiKOmiBYmqhVmqjGapQZxxgw3+sZlafPmbrp3nqom7qoV6apgEaLDj/mllDsPPXzZoYY7ZxmqMhGqYRGqUpmqDJkp6/e/9987tm4/TnotbNGkLW+S8G3Esz/Ob8f2rV5LNh1hCqTl988+/RPr3RFm3TDu3SEx3Qoec38s7fDFWz+uY/o3N6pyM6phM6pWe6oMuCe9k0awh5z/+O7umDruiabuiWXuiBHhu92QbIe/7u/X51Pk+ek/ejbOz8Pln3O3k/ysbef5+s+528H1I++v8rIiIiIvJ/fAIRbsx3AEAAAA==
+  </data>
+ </layer>
+ <layer name="wall" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3XwQqAIBAFQH89v7xT5EVdSSJtBkSoDB+toSkBAAAAAAAAAADQcwy0lhwYn+dP/zNysLGn69u21k5vDa0sUtvy7ysXfe2/95f8tXvy70v9962UPzLX8hn572s77H9G87OmWeffGe+At82qfwCAJ07xK9bWAEAAAA==
+  </data>
+ </layer>
+ <layer name="view" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3QAQ0AMAzDsNE8fyKHkf2ypQJIZwAAAAAAAAAAAAAA/nOWrFJ369evv1N31z/VPfr1l/0AALzvAoB4BxQAQAAA
+  </data>
+ </layer>
+ <objectgroup name="Test" width="64" height="64">
+  <object x="1214" y="1296" width="122" height="96"/>
+  <object x="1057" y="1247" width="193" height="124"/>
+  <object x="1123" y="1537" width="188" height="68"/>
+ </objectgroup>
+</map>

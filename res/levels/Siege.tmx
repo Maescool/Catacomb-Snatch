@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="64" height="64" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" source="../tiled/tilesets/Tileset-Floor.tsx"/>
+ <tileset firstgid="65" source="../tiled/tilesets/Tileset-Overlay.tsx"/>
+ <tileset firstgid="129" source="../tiled/tilesets/Tileset-Wall.tsx"/>
+ <tileset firstgid="193" source="../tiled/tilesets/Tileset-Player1.tsx"/>
+ <tileset firstgid="257" source="../tiled/tilesets/Tileset-Player2.tsx"/>
+ <layer name="floor" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3bsQ7DIAwE0DTl/7+5S4cIRcTgM+HMDTdVIjxjAh1yHsdxKooSnq8xb89TURR8nvb3ivv/Q57V/OUf9Hh3WdGPrgGjf1YNVvYjalCqcdj8V4PWH2tf3Y/a//Lv7W/VQP78/t37n9WPqgGzP7oGDH5PDTLcfxF9kME/WgP2/e+twc7+lp3V31ODrP7atlP/I/uA3T/SK/Ln8XvPAma/9f2X0Y+6BzL6kXdg+bn8nv/B7H60nck/as/g99jf8veezVH2N9ffWwOEfaa/nuuOftScmf1Pc9nJX25+t5oy+EfXPqPfM3cWv2UuvT0R2QMov9U1+x1Qbp476/7XMlvXHX2WRvtbe63HP8Metf7XsetnWe8IM+yR/c8Urx8Zxu8fFEXBRN8/Kspa+QHLdZ02AEAAAA==
+  </data>
+ </layer>
+ <layer name="overlay" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3ayU4CQRRA0W5BRURBHAE36pcYvhwFnGdxZIP8iHcHcU2l7O57kpvavpdU7SpJJCm85TRJVqhDKS1Ricp0QqtUSWNPGc4Gu21Sm9aoSutUo2OqUyPH+++y2x61aIuatE07dET7dJDj/ecdprOKqPvn/M9OYw8g5YjvSZIkSZIkSZIkSZIkSZKURf5/U5Z4XxcvS//fQxjPVRQDGtIn9eiMzqlPE7qgy2jThXdH9/RFV3RNN3RLP/RAj9GmC29Eb/RNT/RML/RKU3qnj2jTSSqaX6SYr+4AQAAA
+  </data>
+ </layer>
+ <layer name="wall" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2a2w6DMAxD+XX48mkPlQqi0FE7DbOPVKFd5OB2XZNsy2KMMcYYs2cljYgYxzhP/dds1RjVYpPN/5kek2z+18OVDcr/1hgj9xIxB5n8t7SZZPL/5vVH8db9jwR1LvfGyqARocmKY/941Pwfzw0l/62zU+H8u8sTEDnUFTP99+ZIzDmY5f/X/JC1F2b4z9QbiPY/2hdg5Jpojboeql8brQlRNWUN0n9rfcrzI/femtNR0P6v3oPsh6HmAOW/R+cNe/epRnTf9kuW/pL9+/N/p/Xv33/lqnz+1Y8V858eFPLfO5Trn4Jy/VtQ7n8UlPtfBeX+Z0G5/x2lyYpj/3iU/Sv//q38/4ezOopNJv/R2ih9rz8O5f3P0mPHytaPio63kkZEjBl9e2OMMcbk5wM+YqhKAEAAAA==
+  </data>
+ </layer>
+ <layer name="seen tiles" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3PQQ0AAAgDsdmcfyO8kUDoJSegTVLbtr2+Hj8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/P//9+Pn5+fn5+fn5+fn5+fn5+W3b9r8H7D9/+gBAAAA=
+  </data>
+ </layer>
+</map>
