@@ -362,6 +362,9 @@ public class RailDroid extends Mob implements IUsable, ICarrySwap, LootCollector
 
 					if (other instanceof ICarrySwap) {
 						carrying=((ICarrySwap)other).tryToSwap(carrying);
+	            		if (carrying != null) {
+	            			carrying.onPickup(this);
+	            		}
 					}
 				}
 			}
@@ -429,6 +432,9 @@ public class RailDroid extends Mob implements IUsable, ICarrySwap, LootCollector
 		if ( canCarry(b) ) {
 			tmpBuilding = carrying;
 			carrying=b;
+			if (carrying != null) {
+				carrying.onPickup(this);
+			}
 		}
 		return tmpBuilding;
 	}

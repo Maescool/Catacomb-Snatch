@@ -179,7 +179,6 @@ public class Player extends Mob implements LootCollector {
     
     @Override
     public void tick() {
-
         // If the mouse is used, update player orientation before level tick
         if (!mouseButtons.mouseHidden) {
             // Update player mouse, in world pixels relative to player
@@ -560,6 +559,9 @@ public class Player extends Mob implements LootCollector {
             if(selected != null) {
             	if (selected instanceof ICarrySwap) {
             		carrying=((ICarrySwap)selected).tryToSwap(carrying);
+            		if (carrying != null) {
+            			carrying.onPickup(this);
+            		}
             	}
             } else {
             	if (!isCarrying())
