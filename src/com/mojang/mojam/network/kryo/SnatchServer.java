@@ -41,7 +41,9 @@ public class SnatchServer {
 				if (object instanceof RegisterName) {
 					// Ignore the object if a client has already registered a name. This is
 					// impossible with our client, but a hacker could send messages at any time.
-					if (connection.name != null) return;
+					if (connection.name != null) {
+						return;
+					}
 					// Ignore the object if the name is invalid.
 					String name = ((RegisterName)object).name;
 					
