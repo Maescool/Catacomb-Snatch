@@ -112,14 +112,14 @@ player.exp = {0}
 player.level = {0}
 
 shop.turretTooltipTitle = TORRETA
-shop.turretTooltipLine1 = UTILIZADO PARA DEFENDER.
-shop.turretTooltipLine2 = ATACA A LOS ENEMIGOS CERCANOS.
+shop.turretTooltipLine1 = Utilizado para defender.
+shop.turretTooltipLine2 = Ataca a los enemigos cercanos.
 shop.harvesterTooltipTitle = RECOLECTOR
-shop.harvesterTooltipLine1 = RECOLECTA EL DINERO.
-shop.harvesterTooltipLine2 = COGERLO PARA RECLAMAR EL DINERO.
+shop.harvesterTooltipLine1 = Recolecta el dinero.
+shop.harvesterTooltipLine2 = Cogerlo para reclamar el dinero.
 shop.bombTooltipTitle = BOMBA
-shop.bombTooltipLine1 = DESTRUYE LAS PARADAS FRACTURADAS.
-shop.bombTooltipLine2 = PARA ACCEDER AL TESORO.
+shop.bombTooltipLine1 = Destruye las paradas fracturadas.
+shop.bombTooltipLine2 = Para acceder al tesoro.
 
 titlemenu.start = COMENZAR
 titlemenu.host = HOST

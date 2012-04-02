@@ -115,17 +115,6 @@ options.alternative = ALTERNATIEWE SPELER VEL
 options.credits = KREDIETE
 options.openal = KLANK SYSTEEM: OPENAL
 
-
-
-
-
-
-
-
-
-
-
-
 pausemenu.help = HULP
 pausemenu.backtomain = HOOF
 pausemenu.resume = GAAN VOORT
@@ -149,14 +138,14 @@ local.en = ENGLISH
 local.de = GERMAN
 
 shop.turretTooltipTitle = GEWEER TORING
-shop.turretTooltipLine1 = GEBRUIK VIR VERDEDIGING.
-shop.turretTooltipLine2 = VAL NABY VYANDE AAN.
+shop.turretTooltipLine1 = Gebruik vir verdediging.
+shop.turretTooltipLine2 = Val naby vyande aan.
 shop.harvesterTooltipTitle = STROPER
-shop.harvesterTooltipLine1 = VERSAMEL SKATTE.
-shop.harvesterTooltipLine2 = GEBRUIK OM GOUD TE EIS.
+shop.harvesterTooltipLine1 = Versamel skatte.
+shop.harvesterTooltipLine2 = Gebruik om goud te eis.
 shop.bombTooltipTitle = BOM
-shop.bombTooltipLine1 = VERNIETIG GEKRAAKTE MURE.
-shop.bombTooltipLine2 = KAN KORTPAAIE SKEP.
+shop.bombTooltipLine1 = Vernietig gekraakte mure.
+shop.bombTooltipLine2 = Kan kortpaaie skep.
 
 shop.rifleTooltipTitle = GEWEER
 shop.rifleTooltipLine1 = Verstek wapen.

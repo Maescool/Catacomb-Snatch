@@ -102,24 +102,24 @@ exitmenu.exit = OUI
 player.hasDied = {0} EST MORT!
 
 shop.turretTooltipTitle = TOURELLE
-shop.turretTooltipLine1 = UTILISÉE POUR LA DÉFENSE.
-shop.turretTooltipLine2 = ATTAQUE LES ENNEMIES PROCHES.
+shop.turretTooltipLine1 = Utilisée pour la défense.
+shop.turretTooltipLine2 = Attaque les ennemies proches.
 shop.harvesterTooltipTitle = COLLECTEUR
-shop.harvesterTooltipLine1 = RAMASSE LE TRÉSOR.
-shop.harvesterTooltipLine2 = UTILISÉ POUR RÉCOLTER LE LOOT.
+shop.harvesterTooltipLine1 = Ramasse le trésor.
+shop.harvesterTooltipLine2 = Utilisé pour récolter le loot.
 shop.bombTooltipTitle = BOMBE
-shop.bombTooltipLine1 = DÉTRUIT LES MURS FISSURÉS.
-shop.bombTooltipLine2 = UTILISÉE POUR CRÉER DES RACCOURCIS.
+shop.bombTooltipLine1 = Détruit les murs fissurés.
+shop.bombTooltipLine2 = Utilisée pour créer des raccourcis.
 
 shop.rifleTooltipTitle = FUSIL
-shop.rifleTooltipLine1 = ARME DE DÉPART (PAR DÉFAUT).
+shop.rifleTooltipLine1 = Arme de départ (par défaut).
 shop.rifleTooltipLine2 = Good all-round.
 shop.shotgunTooltipTitle = CARABINE
-shop.shotgunTooltipLine1 = LES TIRS COUVRENT UNE LARGE ZONE.
-shop.shotgunTooltipLine2 = PORTÉE COURTE, DÉGATS IMPORTANTS.
+shop.shotgunTooltipLine1 = Les tirs couvrent une large zone.
+shop.shotgunTooltipLine2 = Portée courte, dégats importants.
 shop.raygunTooltipTitle = PISTOLET À ÉNERGIE
-shop.raygunTooltipLine1 = LES TIRS REBONDISSENT SUR LES MURS.
-shop.raygunTooltipLine2 = CHAQUE REBONDS ACCROÎT LES DÉGATS.
+shop.raygunTooltipLine1 = Les tirs rebondissent sur les murs.
+shop.raygunTooltipLine2 = Chaque rebonds accroît les dégats.
 
 titlemenu.start = JOUER
 titlemenu.host = NV. SERVEUR
