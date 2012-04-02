@@ -125,19 +125,21 @@ public class MojamScreen extends MojamBitmap implements AbstractScreen {
 	public AbstractBitmap load(String pathFile) {
 		try {
 			BufferedImage bi = ImageIO.read(MojamScreen.class.getResource(pathFile));
-
-			int width = bi.getWidth();
-			int height = bi.getHeight();
-
-			MojamBitmap result = new MojamBitmap(width, height);
-			bi.getRGB(0, 0, width, height, result.pixels, 0, width);
-
-			return result;
+			return load(bi);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		return null;
+	}
+
+	@Override
+	public AbstractBitmap load(BufferedImage image) {
+		if (image == null) return null;
+		int width = image.getWidth();
+		int height = image.getHeight();
+
+		return new MojamBitmap(width, height,image.getRGB(0, 0, width, height, null, 0, width));
 	}
 
 	@Override

@@ -30,8 +30,6 @@ public interface AbstractBitmap {
 
 	public AbstractBitmap scaleBitmap(int width, int height);
 	
-	public int[] getPixels();
-	
 	public int getPixel(int pos);
 	public int getPixelSize();
 	public void setPixel(int pos, int color);
