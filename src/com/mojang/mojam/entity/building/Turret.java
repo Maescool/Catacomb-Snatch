@@ -6,6 +6,7 @@ import java.util.Set;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.mob.RailDroid;
 import com.mojang.mojam.entity.mob.SpikeTrap;
@@ -65,7 +66,7 @@ public class Turret extends Building implements IEditable {
 		if (--delayTicks > 0)
 			return;
 
-		//if (!isCarried()) {
+		if (!(isCarried() && this.carriedBy instanceof Player)) {
 		    // find target
     		Set<Entity> entities = level.getEntities(pos.x - radius, pos.y - radius, pos.x + radius, pos.y + radius);
     
@@ -106,7 +107,7 @@ public class Turret extends Building implements IEditable {
         
         		delayTicks = delay;
     		}
-		//}
+		}
 	}
 
 	@Override
