@@ -3,6 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="res"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/jruby.jar"/>
+	<classpathentry kind="lib" path="lib/jython.jar"/>
 	<classpathentry kind="lib" path="lib/CodecJOrbis.jar"/>
 	<classpathentry kind="lib" path="lib/CodecWav.jar"/>
 	<classpathentry kind="lib" path="lib/LibraryJavaSound.jar"/>

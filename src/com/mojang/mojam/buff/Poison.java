@@ -1,6 +1,5 @@
 package com.mojang.mojam.buff;
 
-import com.mojang.mojam.buff.Buff;
 
 public class Poison extends Buff {
 	public BuffType buffType = BuffType.HEALTH_MODIF;

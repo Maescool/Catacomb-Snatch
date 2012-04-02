@@ -1,3 +1,4 @@
+﻿
 ﻿# Game texts encoded in UTF-8
 
 build.rail = Вам нужно {0} для постройки рельс
@@ -142,4 +143,5 @@ upgrade.to = Улучшен до уровня {0}
 
 exitmenu.headline = Вы действительно хотите выйти?
 exitmenu.cancel = Нет
+
 exitmenu.exit = Да

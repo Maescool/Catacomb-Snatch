@@ -12,6 +12,7 @@ import com.mojang.mojam.resources.Constants;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.AbstractBitmap;
 
+
 public class Melee implements IWeapon {
 
 	protected Mob owner;
@@ -20,6 +21,7 @@ public class Melee implements IWeapon {
 	private int upgradeIndex = 1;
 	private double accuracy;
 	protected int shootDelay = 30;
+
 
 	private boolean readyToShoot = true;
 	private int currentShootDelay = 0;

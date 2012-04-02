@@ -16,7 +16,6 @@ public class Bat extends HostileMob  {
 		minimapColor = 0xffff0000;
 		yOffs = 5;
 	}
-
 	public void tick() {
 		super.tick();
 		if (freezeTime > 0)

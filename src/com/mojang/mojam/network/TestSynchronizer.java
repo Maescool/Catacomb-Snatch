@@ -2,6 +2,7 @@ package com.mojang.mojam.network;
 
 import java.net.ServerSocket;
 
+
 public class TestSynchronizer {
 
 	private static ServerSocket serverSocket;

@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Stack;
 
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.gui.components.ButtonListener;
 
 public class MenuStack extends Stack<GuiMenu> implements KeyListener {
@@ -63,17 +64,17 @@ public class MenuStack extends Stack<GuiMenu> implements KeyListener {
 	}
 	
 	public void keyPressed(KeyEvent e) {
-		if(!empty())
+		if(!empty()&&!MojamComponent.instance.console.isOpen())
 			peek().keyPressed(e);
 	}
 	
 	public void keyReleased(KeyEvent e) {
-		if(!empty())
+		if(!empty()&&!MojamComponent.instance.console.isOpen())
 			peek().keyReleased(e);
 	}
 	
 	public void keyTyped(KeyEvent e) {
-		if(!empty())
+		if(!empty()&&!MojamComponent.instance.console.isOpen())
 			peek().keyTyped(e);
 	}
 }

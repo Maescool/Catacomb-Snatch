@@ -1,20 +1,24 @@
 package com.mojang.mojam.entity.mob;
 
 
+import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Bullet;
+import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.ICarrySwap;
 import com.mojang.mojam.entity.IUsable;
 import com.mojang.mojam.entity.Player;
-import com.mojang.mojam.Options;
-import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.building.CatacombTreasure;
 import com.mojang.mojam.entity.building.TreasurePile;
 import com.mojang.mojam.entity.building.Turret;
-import com.mojang.mojam.level.tile.*;
+import com.mojang.mojam.level.tile.PlayerRailTile;
+import com.mojang.mojam.level.tile.RailTile;
+import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.network.TurnSynchronizer;
-import com.mojang.mojam.screen.*;
+import com.mojang.mojam.screen.AbstractBitmap;
+import com.mojang.mojam.screen.AbstractScreen;
+import com.mojang.mojam.screen.Art;
 
 public class RailDroid extends Mob implements IUsable, ICarrySwap{
 	private enum Direction {

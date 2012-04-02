@@ -20,17 +20,18 @@ import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.level.gamemode.ILevelTickItem;
 import com.mojang.mojam.level.gamemode.IVictoryConditions;
+import com.mojang.mojam.level.tile.AnimatedTile;
 import com.mojang.mojam.level.tile.FloorTile;
 import com.mojang.mojam.level.tile.Tile;
-import com.mojang.mojam.level.tile.AnimatedTile;
 import com.mojang.mojam.level.tile.WallTile;
 import com.mojang.mojam.math.BB;
 import com.mojang.mojam.math.BBPredicate;
 import com.mojang.mojam.math.Vec2;
+import com.mojang.mojam.mod.ModSystem;
 import com.mojang.mojam.network.TurnSynchronizer;
-import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.AbstractBitmap;
 import com.mojang.mojam.screen.AbstractScreen;
+import com.mojang.mojam.screen.Art;
 
 public class Level {
 
@@ -353,6 +354,7 @@ public class Level {
 		if(victoryConditions != null)
 			victoryConditions.updateVictoryConditions(this);
 		Notifications.getInstance().tick();
+		ModSystem.levelTick(this);
 	}
 
 	private boolean hasSeen(int x, int y) {
