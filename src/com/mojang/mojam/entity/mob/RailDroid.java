@@ -11,6 +11,8 @@ import com.mojang.mojam.entity.building.Building;
 import com.mojang.mojam.entity.building.CatacombTreasure;
 import com.mojang.mojam.entity.building.TreasurePile;
 import com.mojang.mojam.entity.building.Turret;
+import com.mojang.mojam.entity.loot.Loot;
+import com.mojang.mojam.entity.loot.LootCollector;
 import com.mojang.mojam.level.tile.PlayerRailTile;
 import com.mojang.mojam.level.tile.RailTile;
 import com.mojang.mojam.level.tile.Tile;
@@ -20,7 +22,7 @@ import com.mojang.mojam.screen.AbstractBitmap;
 import com.mojang.mojam.screen.AbstractScreen;
 import com.mojang.mojam.screen.Art;
 
-public class RailDroid extends Mob implements IUsable, ICarrySwap{
+public class RailDroid extends Mob implements IUsable, ICarrySwap, LootCollector{
 	private enum Direction {
 		UNKNOWN, LEFT, UP, RIGHT, DOWN;
 
@@ -360,6 +362,9 @@ public class RailDroid extends Mob implements IUsable, ICarrySwap{
 
 					if (other instanceof ICarrySwap) {
 						carrying=((ICarrySwap)other).tryToSwap(carrying);
+	            		if (carrying != null) {
+	            			carrying.onPickup(this);
+	            		}
 					}
 				}
 			}
@@ -427,8 +432,74 @@ public class RailDroid extends Mob implements IUsable, ICarrySwap{
 		if ( canCarry(b) ) {
 			tmpBuilding = carrying;
 			carrying=b;
+			if (carrying != null) {
+				carrying.onPickup(this);
+			}
 		}
 		return tmpBuilding;
+	}
+
+	/**
+	 * Proxy all LootCollector methods to carrying so Harvesters work!
+	 */
+	@Override
+	public boolean canTake() {
+		if (carrying != null && carrying instanceof LootCollector) {
+			return ((LootCollector)carrying).canTake();
+		}
+		return false;
+	}
+
+	/**
+	 * Proxy all LootCollector methods to carrying so Harvesters work!
+	 */
+	@Override
+	public void take(Loot loot) {
+		if (carrying != null && carrying instanceof LootCollector) {
+			((LootCollector)carrying).take(loot);
+		}
+	}
+
+	/**
+	 * Proxy all LootCollector methods to carrying so Harvesters work!
+	 */
+	@Override
+	public double getSuckPower() {
+		if (carrying != null && carrying instanceof LootCollector) {
+			return ((LootCollector)carrying).getSuckPower();
+		}
+		return 0;
+	}
+
+	/**
+	 * Proxy all LootCollector methods to carrying so Harvesters work!
+	 */
+	@Override
+	public void notifySucking() {
+		if (carrying != null && carrying instanceof LootCollector) {
+			((LootCollector)carrying).notifySucking();
+		}
+	}
+
+	/**
+	 * Proxy all LootCollector methods to carrying so Harvesters work!
+	 */
+	@Override
+	public int getScore() {
+		if (carrying != null && carrying instanceof LootCollector) {
+			return ((LootCollector)carrying).getScore();
+		}
+		return 0;
+	}
+
+	/**
+	 * Proxy all LootCollector methods to carrying so Harvesters work!
+	 */
+	@Override
+	public void flash() {
+		if (carrying != null && carrying instanceof LootCollector) {
+			((LootCollector)carrying).flash();
+		}
 	}
 
 }

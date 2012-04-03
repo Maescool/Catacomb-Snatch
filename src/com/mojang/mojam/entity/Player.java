@@ -179,7 +179,6 @@ public class Player extends Mob implements LootCollector {
     
     @Override
     public void tick() {
-
         // If the mouse is used, update player orientation before level tick
         if (!mouseButtons.mouseHidden) {
             // Update player mouse, in world pixels relative to player
@@ -289,10 +288,10 @@ public class Player extends Mob implements LootCollector {
         if (keys.build.isDown && !keys.build.wasDown) {
             handleRailBuilding(x, y);
         }
-
-        handleEntityInteraction();
+        
         handleCarrying();
-
+        handleEntityInteraction();
+        
         if (isSeeing) {
             level.reveal(x, y, 5);
         }
@@ -560,6 +559,9 @@ public class Player extends Mob implements LootCollector {
             if(selected != null) {
             	if (selected instanceof ICarrySwap) {
             		carrying=((ICarrySwap)selected).tryToSwap(carrying);
+            		if (carrying != null) {
+            			carrying.onPickup(this);
+            		}
             	}
             } else {
             	if (!isCarrying())
@@ -616,15 +618,28 @@ public class Player extends Mob implements LootCollector {
                 	((IUsable)closest).upgrade(this);
                 }
             }
-            
-            // If it is a building we should highlight on this game
-            // client, then highlight the building (also, remember the
-            // highlighted building, so we can unhighlight it again later)
-            if (shouldHighlightEntityOnThisGameClient(closest)) {
+
+			/**
+			 * If it is a building we should highlight on this game
+			 * client, then highlight the building (also, remember the
+			 * highlighted building, so we can unhighlight it again later)
+			 */
+            if (shouldHighlightEntity(closest)) {
                 selected = closest;
                 ((IUsable)selected).setHighlighted(true);
             }
         }
+    }
+  
+    /**
+     *  Whether this Player should highlight the entity in question, Multi player safe.
+     * @param entity the entity this player is trying to highlight
+     * @return true if this player can highlight the given entity
+     */
+    private boolean shouldHighlightEntity(Entity entity) {
+    	if (!(entity instanceof IUsable))
+    		return false;
+    	return ((IUsable)entity).isHighlightable() && canInteractWithEntity(entity);// && this.team == entity.team; 
     }
     
     // Whether this Player should see the Entity in question
