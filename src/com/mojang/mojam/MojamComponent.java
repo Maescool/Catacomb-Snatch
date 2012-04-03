@@ -526,9 +526,9 @@ while (running) {
 			}
 		}
 
-		if (isMultiplayer && menuStack.isEmpty()) {
+
 			chat.render(screen);
-		}
+
 		if(console.isOpen()) {
 			console.render(screen);
 		}
@@ -766,9 +766,9 @@ while (running) {
 					}
 
 					level.tick();
-					if (isMultiplayer) {
+
 						tickChat();
-					}
+						
 				}
 
 				// every 4 minutes, start new background music :)
