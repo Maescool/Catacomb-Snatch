@@ -130,24 +130,24 @@ player.level = {0}
 player.weaponSlot = {0}
 
 shop.turretTooltipTitle = TURRET
-shop.turretTooltipLine1 = USADA PARA DEFESA.
-shop.turretTooltipLine2 = ATACA INIMIGOS PRÓXIMOS.
+shop.turretTooltipLine1 = Usada para defesa.
+shop.turretTooltipLine2 = Ataca inimigos próximos.
 shop.harvesterTooltipTitle = COLETOR
-shop.harvesterTooltipLine1 = PEGA TESOUROS.
-shop.harvesterTooltipLine2 = USE-O PARA PEGAR DINHEIRO.
+shop.harvesterTooltipLine1 = Pega tesouros.
+shop.harvesterTooltipLine2 = Use-o para pegar dinheiro.
 shop.bombTooltipTitle = BOMB
-shop.bombTooltipLine1 = DESTRÓI PAREDES RACHADAS.
-shop.bombTooltipLine2 = USE PARA CRIAR ATALHOS.
+shop.bombTooltipLine1 = Destrói paredes rachadas.
+shop.bombTooltipLine2 = Use para criar atalhos.
 
 shop.rifleTooltipTitle = RIFLE
-shop.rifleTooltipLine1 = ARMA INICIA
-shop.rifleTooltipLine2 = EQUILIBRADA
+shop.rifleTooltipLine1 = Arma inicia
+shop.rifleTooltipLine2 = Equilibrada
 shop.shotgunTooltipTitle = ESPINGARDA
-shop.shotgunTooltipLine1 = TIROS COBREM UMA GRANDE ÁREA 
-shop.shotgunTooltipLine2 = DANO ALTO,ALCANCE BAIXO
+shop.shotgunTooltipLine1 = Tiros cobrem uma grande área 
+shop.shotgunTooltipLine2 = Dano alto,alcance baixo
 shop.raygunTooltipTitle = ARMA DE ENERGIA
-shop.raygunTooltipLine1 = TIROS RICOCHETEIAM NA PAREDE.
-shop.raygunTooltipLine2 = CADA RICOCHETE AUMENTA O DANO.
+shop.raygunTooltipLine1 = Tiros ricocheteiam na parede.
+shop.raygunTooltipLine2 = Cada ricochete aumenta o dano.
 
 titlemenu.start = JOGAR
 titlemenu.host = HOST

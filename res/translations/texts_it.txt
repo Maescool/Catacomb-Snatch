@@ -123,14 +123,14 @@ player.exp = {0}
 player.level = {0}
 
 shop.turretTooltipTitle = TORRETTA
-shop.turretTooltipLine1 = USATA PER DIFENDERSI.
-shop.turretTooltipLine2 = ATTACA I NEMICI NELLE VICINANZE.
+shop.turretTooltipLine1 = Usata per difendersi.
+shop.turretTooltipLine2 = Attaca i nemici nelle vicinanze.
 shop.harvesterTooltipTitle = HARVESTER
-shop.harvesterTooltipLine1 = RACCOGLIE IL TESORO
-shop.harvesterTooltipLine2 = RECUPERA IL BOTTINO.
+shop.harvesterTooltipLine1 = Raccoglie il tesoro
+shop.harvesterTooltipLine2 = Recupera il bottino.
 shop.bombTooltipTitle = BOMBA
-shop.bombTooltipLine1 = DISTRUGGE I MURI.
-shop.bombTooltipLine2 = USATA PER CRARE SCORCIATOIE.
+shop.bombTooltipLine1 = Distrugge i muri.
+shop.bombTooltipLine2 = Usata per crare scorciatoie.
 
 shop.rifleTooltipTitle = FUCILE
 shop.rifleTooltipLine1 = L'arma predefinita.
@@ -154,3 +154,5 @@ upgrade.full = POTENZIATO AL MASSIMO!
 upgrade.notEnoughMoney = NON HAI ABBASTANZA MONETE ({0})
 upgrade.to = POTENZIATO AL LIVELLO {0}
 
+download.downloading = SCARICO..
+download.unpacking = SCOMPATTO..

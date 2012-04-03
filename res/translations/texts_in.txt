@@ -116,14 +116,14 @@ player.exp = {0}
 player.level = {0}
 
 shop.turretTooltipTitle = TURRET
-shop.turretTooltipLine1 = DIPAKAI UNTUK PERTAHANAN.
-shop.turretTooltipLine2 = MENYERANG MUSUH SEKITARNYA.
-shop.harvesterTooltipTitle = HARVESTER
-shop.harvesterTooltipLine1 = MENGUMPULKAN KOIN.
-shop.harvesterTooltipLine2 = GUNAKAN UNTUK MENGOLEKSI KOIN.
+shop.turretTooltipLine1 = Dipakai untuk pertahanan.
+shop.turretTooltipLine2 = Menyerang musuh sekitarnya.
+shop.harvesterTooltipTitle = harvester
+shop.harvesterTooltipLine1 = Mengumpulkan koin.
+shop.harvesterTooltipLine2 = Gunakan untuk mengoleksi koin.
 shop.bombTooltipTitle = BOMB
-shop.bombTooltipLine1 = MENGHANCURKAN TEMBOK RUSAK.
-shop.bombTooltipLine2 = PAKAI UNTUK MEMBUAT JALAN PINTAS.
+shop.bombTooltipLine1 = Menghancurkan tembok rusak.
+shop.bombTooltipLine2 = Pakai untuk membuat jalan pintas.
 
 titlemenu.start = MULAI BERMAIN
 titlemenu.host = HOST
