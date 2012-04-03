@@ -241,6 +241,14 @@ public abstract class Mob extends Entity {
 	 *            AbstractScreen
 	 */
 	protected void renderMarker(AbstractScreen screen) {
+		
+		//Don't draw the marker if this doesn't belong to the local team
+		//or is not Neutral
+		
+		if (!( team == Team.Neutral || team == MojamComponent.localTeam )) {
+			return;
+		}
+		
 		if (highlight) {
 			BB bb = getBB();
 			bb = bb.grow((getSprite().getWidth() - (bb.x1 - bb.x0))
