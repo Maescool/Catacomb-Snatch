@@ -87,11 +87,11 @@ public class MojamScreen extends MojamBitmap implements AbstractScreen {
 		MojamBitmap tooltip = new MojamBitmap(width + 3, height + 3);
 		tooltip.fill(0, cRadius, width, height - 2 * cRadius, color);
 		tooltip.fill(cRadius, 0, width - 2 * cRadius, height, color);
-		// draw corner circles
+		// draw corner circles (clockwise, starting at top-left) 
 		tooltip.circleFill(cRadius, cRadius, cRadius, color);
-		tooltip.circleFill(width - cRadius, cRadius, cRadius, color);
-		tooltip.circleFill(width - cRadius, height - cRadius, cRadius, color);
-		tooltip.circleFill(cRadius, height - cRadius, cRadius, color);
+		tooltip.circleFill(width - cRadius - 1, cRadius, cRadius, color);
+		tooltip.circleFill(width - cRadius - 1, height - cRadius - 1, cRadius, color);
+		tooltip.circleFill(cRadius, height - cRadius - 1, cRadius, color);
 
 		return tooltip;
 	}
