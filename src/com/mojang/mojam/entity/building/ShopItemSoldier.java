@@ -11,7 +11,7 @@ import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.entity.mob.pather.Soldier;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.AbstractBitmap;
 
 /**
  * Used to buy Soldiers
@@ -21,7 +21,7 @@ import com.mojang.mojam.screen.Bitmap;
  */
 public class ShopItemSoldier extends ShopItem implements IRemoveEntityNotify{
 
-	Bitmap baseSprite; //cache the sprite locally  
+	AbstractBitmap baseSprite; //cache the sprite locally  
 	List<Soldier> soldiers=new ArrayList<Soldier>(); //keep a list of soldiers so we can count them 
 	
 	public ShopItemSoldier(double x, double y, int team) {
@@ -51,7 +51,7 @@ public class ShopItemSoldier extends ShopItem implements IRemoveEntityNotify{
 	 */
 	public void tick() {
 		if (!( this.team == MojamComponent.localTeam && checkPlayerLevel(MojamComponent.localPlayer))) {
-			Bitmap sprite=new Bitmap(baseSprite.w,baseSprite.h);
+			AbstractBitmap sprite=baseSprite.copy();
 			int col=64+(int)(64*(Math.sin(System.currentTimeMillis() * .001)+1.5));
 			sprite.colorBlit(baseSprite, 0, 0, (0xAA<<24)|(col)|(col<<8)|(col<<16));
 			setSprite(sprite);
@@ -74,5 +74,11 @@ public class ShopItemSoldier extends ShopItem implements IRemoveEntityNotify{
 	public void removeEntityNotice(Entity e) {
 		soldiers.remove(e);
 		
+	}
+
+	@Override
+	boolean canBuy(Player player) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
