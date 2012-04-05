@@ -2,6 +2,7 @@ package com.mojang.mojam.level;
 
 import java.util.HashMap;
 import java.util.PriorityQueue;
+import java.util.Random;
 
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.level.tile.Tile;

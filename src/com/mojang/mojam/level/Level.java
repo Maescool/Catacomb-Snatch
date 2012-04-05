@@ -861,4 +861,9 @@ public class Level {
 		int y = (int) pos.y / Tile.HEIGHT;
 		return new Vec2(x, y);
 	}
+
+	public Vec2 getPositionFromTile(int x, int y) {
+		return new Vec2(x * Tile.WIDTH + (Tile.WIDTH / 2), y * Tile.HEIGHT
+				+ (Tile.HEIGHT / 2));
+	}
 }
