@@ -328,8 +328,8 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	/**
 	 * Get the sprite from followEntity so looks the same as the Player
 	 */
-	public Bitmap getSprite() {
-		Bitmap[][] sheet = null;
+	public AbstractBitmap getSprite() {
+		AbstractBitmap[][] sheet = null;
 		if (followEntity instanceof Player) {
 			sheet = Art.getPlayer(((Player) followEntity).getCharacter());
 		} else {
@@ -348,7 +348,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	 * 
 	 * @param Screen screen the screen to render to
 	 */
-	public void render(Screen screen) {
+	public void render(AbstractScreen screen) {
 		super.render(screen);
 		int yy=0;
 		switch( (int)(stepTime % 6) ) {
@@ -364,7 +364,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	 * 
 	 * @param Screen screen the screen to render to
 	 */
-	protected void renderMarker(Screen screen) {
+	protected void renderMarker(AbstractScreen screen) {
 		super.renderMarker(screen);
 
 		if (this.highlight) {
@@ -602,7 +602,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	}
 
 	@Override
-	public Bitmap getBitMapForEditor() {
+	public AbstractBitmap getBitMapForEditor() {
 		return null;
 	}
 
