@@ -6,6 +6,7 @@ import com.mojang.mojam.entity.building.ShopItemHarvester;
 import com.mojang.mojam.entity.building.ShopItemRaygun;
 import com.mojang.mojam.entity.building.ShopItemRifle;
 import com.mojang.mojam.entity.building.ShopItemShotgun;
+import com.mojang.mojam.entity.building.ShopItemSoldier;
 import com.mojang.mojam.entity.building.ShopItemTurret;
 import com.mojang.mojam.entity.building.SpawnerForBat;
 import com.mojang.mojam.entity.building.SpawnerForMummy;
@@ -263,7 +264,9 @@ public class LevelUtils {
 		case TILESET_PLAYER1_BASE_ID + 34:
 			obj =  new ShopItemRaygun(x * Tile.WIDTH+Tile.WIDTH/2, y * Tile.HEIGHT+Tile.HEIGHT/2, Team.Team1);
 			break;
-
+		case TILESET_PLAYER1_BASE_ID + 35:
+			obj =  new ShopItemSoldier(x * Tile.WIDTH+Tile.WIDTH/2, y * Tile.HEIGHT+Tile.HEIGHT/2, Team.Team1);
+			break;
 		//Player 2 IDs
 		
 		//Player 2 Spawn
@@ -366,7 +369,9 @@ public class LevelUtils {
 		case TILESET_PLAYER2_BASE_ID + 34:
 			obj =  new ShopItemRaygun(x * Tile.WIDTH+Tile.WIDTH/2, y * Tile.HEIGHT+Tile.HEIGHT/2, Team.Team2);
 			break;			
-		
+		case TILESET_PLAYER2_BASE_ID + 35:
+			obj =  new ShopItemSoldier(x * Tile.WIDTH+Tile.WIDTH/2, y * Tile.HEIGHT+Tile.HEIGHT/2, Team.Team1);
+			break;		
 
 		default:
 			break;	
