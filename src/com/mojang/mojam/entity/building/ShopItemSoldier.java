@@ -78,7 +78,6 @@ public class ShopItemSoldier extends ShopItem implements IRemoveEntityNotify{
 
 	@Override
 	boolean canBuy(Player player) {
-		// TODO Auto-generated method stub
-		return false;
+		return checkPlayerLevel(player);
 	}
 }
