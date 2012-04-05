@@ -3,6 +3,7 @@ package com.mojang.mojam.entity.mob.pather;
 import java.util.Random;
 import com.mojang.mojam.GameCharacter;
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.Options;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.mob.HostileMob;
 import com.mojang.mojam.entity.mob.Mob;
@@ -18,6 +19,7 @@ import com.mojang.mojam.entity.weapon.IWeapon;
 import com.mojang.mojam.entity.weapon.Raygun;
 import com.mojang.mojam.entity.weapon.Shotgun;
 import com.mojang.mojam.entity.weapon.SoldierRifle;
+import com.mojang.mojam.gui.Notifications;
 import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.Mth;
@@ -458,33 +460,53 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 	 * 
 	 * @param Player player The player trying to iupgrade the Soldier
 	 */
+	@Override
 	public boolean upgrade(Player p) {
-		if (upgradeLevel >= maxUpgradeLevel)
-			return false;
-
-		final int cost = upgradeCosts[upgradeLevel];
-		if (cost > p.getScore()) {
-			MojamComponent.soundPlayer.playSound("/sound/Enemy Death 2.wav",
-					(float) pos.x, (float) pos.y);
+		if (upgradeLevel >= maxUpgradeLevel) {
+			MojamComponent.soundPlayer.playSound("/sound/Fail.wav",
+					(float) pos.x, (float) pos.y, true);
+			if (this.team == MojamComponent.localTeam) {
+				Notifications.getInstance().add(
+						MojamComponent.texts.getStatic("upgrade.full"));
+			}
 			return false;
 		}
 
+		final int cost = upgradeCosts[upgradeLevel];
+		if (cost > p.getScore() && !Options.getAsBoolean(Options.CREATIVE)) {
+			MojamComponent.soundPlayer.playSound("/sound/Fail.wav",
+					(float) pos.x, (float) pos.y, true);
+			if (this.team == MojamComponent.localTeam) {
+				Notifications.getInstance().add(
+						MojamComponent.texts.upgradeNotEnoughMoney(cost));
+			}
+			return false;
+		}
+
+		MojamComponent.soundPlayer.playSound("/sound/Upgrade.wav",
+				(float) pos.x, (float) pos.y, true);
+
 		++upgradeLevel;
-		p.payCost(cost);
-		upgradeComplete(upgradeLevel);
+		p.useMoney(cost);
+		upgradeComplete();
+
+		if (this.team == MojamComponent.localTeam) {
+			Notifications.getInstance().add(
+					MojamComponent.texts.upgradeTo(upgradeLevel + 1));
+		}
 		return true;
 	}
-
+	
 	void makeUpgradeableWithCosts(int[] costs) {
 		maxUpgradeLevel = 0;
 		if (costs == null)
 			return;
 		upgradeCosts = costs;
 		maxUpgradeLevel = costs.length - 1;
-		upgradeComplete(0);
+		upgradeComplete();
 	}
 
-	private void upgradeComplete(int i) {
+	private void upgradeComplete() {
 		setReloadTime(getUpgradeReloadTime(upgradeLevel));
 		setShootRadius(getUpgradeShootRadius(upgradeLevel));
 		setSuckPower(getUpgradeSuckPower(upgradeLevel));
