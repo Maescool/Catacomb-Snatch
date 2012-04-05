@@ -54,7 +54,6 @@ public class Player extends Mob implements LootCollector {
     private boolean mouseAiming;
    
     public int takeDelay = 0;
-    public int flashTime = 0;
     public int suckRadius = 0;
     public boolean wasShooting;
     public int score = 0;

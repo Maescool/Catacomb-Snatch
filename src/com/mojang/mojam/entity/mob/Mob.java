@@ -63,6 +63,7 @@ public abstract class Mob extends Entity {
     public IWeapon weapon;
 	protected Buffs buffs = new Buffs();
 	private boolean highlight;
+	private int flashTime;
 	
 	public Mob(double x, double y, int team) {
 		super();
