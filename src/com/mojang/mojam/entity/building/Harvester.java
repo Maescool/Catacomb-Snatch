@@ -154,8 +154,6 @@ public class Harvester extends Building implements LootCollector {
 			setDoShowMoneyBar(true);
 		} else {
 			setDoShowMoneyBar(false);
-		} else {
-			setDoShowMoneyBar(true);
 		}
 		
 		super.render(screen);
