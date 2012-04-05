@@ -315,11 +315,11 @@ public abstract class Mob extends Entity {
 		
 		int color = 0;
 		
-		if(health < threeTenths){
+		if(value < threeTenths){
 			color = colourThreeTenths;
-		}else if (health < sixTenths){
+		}else if (value < sixTenths){
 			color = colourSixTenths;
-		}else if (health < eigthTenths){
+		}else if (value < eigthTenths){
 			color = colourEigthTenths;
 		}else {
 			color = colourBase;
