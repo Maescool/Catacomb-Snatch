@@ -355,18 +355,18 @@ public abstract class Pather extends HostileMob {
 			resetPath();
 	}
 
-	public void render(Screen screen) {
+/*	public void render(Screen screen) {
 		super.render(screen);
-		/*
+		
 		 * for (AvoidableObject aO : aObjectArray) { screen.line((int) pos.x,
 		 * (int) pos.y, (int) (aO.getPos().x), (int) (aO.getPos().y),
 		 * 0x80FF0000); } screen.line((int) pos.x, (int) pos.y, (int) (dPosNew.x
 		 * + pos.x), (int) (dPosNew.y + pos.y), 0x8000FF00); screen.line((int)
 		 * pos.x, (int) pos.y, (int) (dPos.x + pos.x), (int) (dPos.y + pos.y),
 		 * 0x800000FF);
-		 */
+		 
 		// render the path ahead of the pather...
-/*
+
 		if (path != null) {
 
 			int pathOriginalIndex = path.getIndex();
@@ -384,8 +384,9 @@ public abstract class Pather extends HostileMob {
 				previousNodePos = thisNodePos.clone();
 			}
 		}
-		*/
-	}
+		
+	}*/
+
 
 	public double getAvoidWallsModifier() {
 		return avoidWallsModifier;

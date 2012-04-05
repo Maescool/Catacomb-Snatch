@@ -243,6 +243,8 @@ public abstract class Mob extends Entity {
 					col = col * hurtTime / 10;
 				screen.colorBlit(image, pos.x - image.getWidth() / 2, pos.y - image.getHeight() / 2 - yOffs, (col << 24) + 255 * 65536);
 			}
+		} else if (flashTime > 0) {
+            screen.colorBlit(image, pos.x - image.getWidth() / 2, pos.y - image.getHeight() / 2 - yOffs, 0x80ffff80);
 		} else {
 					
 			screen.blit(image, pos.x - image.getWidth() / 2, pos.y - image.getHeight() / 2 - yOffs);
