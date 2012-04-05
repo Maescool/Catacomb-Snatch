@@ -303,6 +303,9 @@ public abstract class Mob extends Entity {
 
 	protected void addProgressBar(AbstractScreen screen,int value, int maxValue, int yOffs, int colourThreeTenths, int colourSixTenths, int colourEigthTenths, int colourBase ) {
         
+		if (maxValue <= 0)
+			return;
+		
         int start = (int) (value * 20 / maxValue);
         
         float oneTenth = (float) (maxValue / 10f);
