@@ -66,9 +66,9 @@ public abstract class Mob extends Entity {
     public Vec2 aimVector;
     public IWeapon weapon;
 	protected Buffs buffs = new Buffs();
-	private boolean highlight;
 	private int flashTime;
 	private int maxMoney;
+	private boolean highlight;
 	
 	public Mob(double x, double y, int team) {
 		super();
@@ -326,60 +326,17 @@ public abstract class Mob extends Entity {
 		screen.colorBlit(Art.healthBar[start][0], pos.x - 16, pos.y + yOffs, (0xff << 24) + color);
 		screen.blit(Art.healthBar_Outline[0][0], pos.x - 16, pos.y + yOffs);
     }
-	
-	protected void addHealthBar(AbstractScreen screen) {
-        
-        int start = (int) (health * 20 / maxHealth);
-        
-        float one_tenth_hp = (float) (maxHealth / 10f);
-		float three_tenths_hp = one_tenth_hp * 3;
-		float size_tenths_hp = one_tenth_hp * 6;
-		float eigth_tenths_hp = one_tenth_hp * 8;
-		
-		int color = 0;
-		
-		if(health < three_tenths_hp){
-			color = 0xf62800;
-		}else if (health < size_tenths_hp){
-			color = 0xfe7700;
-		}else if (health < eigth_tenths_hp){
-			color = 0xfef115;
-		}else {
-			color = 0x8af116;
-		}
 
-		screen.blit(Art.healthBar_Underlay[0][0], pos.x - 16, pos.y + healthBarOffset);
-		screen.colorBlit(Art.healthBar[start][0], pos.x - 16, pos.y + healthBarOffset, (0xff << 24) + color);
-		screen.blit(Art.healthBar_Outline[0][0], pos.x - 16, pos.y + healthBarOffset);
+	protected void addHealthBar(AbstractScreen screen) {
+		addProgressBar(screen,(int)health,(int)maxHealth,healthBarOffset,0xf62800,0xfe7700,0xfef115,0x8af116);
     }
 
 	protected void addMoneyBar(AbstractScreen screen) {
-        
-        int start = (int) (health * 20 / maxHealth);
-        
-        float one_tenth_hp = (float) (maxHealth / 10f);
-		float three_tenths_hp = one_tenth_hp * 3;
-		float size_tenths_hp = one_tenth_hp * 6;
-		float eigth_tenths_hp = one_tenth_hp * 8;
-		
-		int color = 0;
-		
-		if(health < three_tenths_hp){
-			color = 0xf62800;
-		}else if (health < size_tenths_hp){
-			color = 0xfe7700;
-		}else if (health < eigth_tenths_hp){
-			color = 0xfef115;
-		}else {
-			color = 0x8af116;
-		}
-
-		screen.blit(Art.healthBar_Underlay[0][0], pos.x - 16, pos.y + healthBarOffset);
-		screen.colorBlit(Art.healthBar[start][0], pos.x - 16, pos.y + healthBarOffset, (0xff << 24) + color);
-		screen.blit(Art.healthBar_Outline[0][0], pos.x - 16, pos.y + healthBarOffset);
+		addProgressBar(screen,money,maxMoney,moneyBarOffset,0xb4b1e0,0x9f9be0,0x8b84e0,0x756de0);
     }
     
 	protected void renderCarrying(AbstractScreen screen, int yOffs) {
+
 		if (carrying == null)
 			return;
 
@@ -622,14 +579,6 @@ public abstract class Mob extends Entity {
         weapon.weapontick();
     }
 
-	public boolean isHighlight() {
-		return highlight;
-	}
-
-	public void setHighlight(boolean highlight) {
-		this.highlight = highlight;
-	}
-
 	public IWeapon getWeapon() {
 		return weapon;
 	}
@@ -675,6 +624,14 @@ public abstract class Mob extends Entity {
 
 	public void setMaxMoney(int maxMoney) {
 		this.maxMoney = maxMoney;
+	}
+
+	public boolean isHighlight() {
+		return highlight;
+	}
+
+	public void setHighlight(boolean highlight) {
+		this.highlight = highlight;
 	}
     
 }
