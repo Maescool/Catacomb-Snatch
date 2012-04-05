@@ -1,7 +1,6 @@
 package com.mojang.mojam.entity.mob;
 
 import java.util.Set;
-
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.gui.TitleMenu;
 import com.mojang.mojam.level.IEditable;
@@ -37,23 +36,6 @@ public abstract class HostileMob extends Mob  implements IEditable {
         return facing;
 	}
 
-	public Entity checkIfNear(double radius, Class<? extends Entity> c) {
-		Set<Entity> entities = level.getEntities(pos.x - radius, pos.y - radius, pos.x + radius, pos.y + radius, c);
-        Entity closest = null;
-        double closestDist = 99999999.0f;
-        for (Entity e : entities) {
-            final double dist = e.pos.distSqr(pos);
-            if (dist < closestDist) {
-                closestDist = dist;
-                closest = e;
-            }
-        }        
-        if(closest != null && !isTargetBehindWall(closest.pos.x, closest.pos.y, closest))
-        	return closest;
-        else 
-        	return null;
-	}
-	
 	public Entity checkIfInFront(double radius, Class<? extends Entity> c) {
 		double x0 = 0, y0 = 0, x1 = 0, y1 = 0;
 		
@@ -117,6 +99,31 @@ public abstract class HostileMob extends Mob  implements IEditable {
 				mob.hurt(this, TitleMenu.difficulty.calculateStrength(strength));
 			}
 		}
+	}
+
+	//Look for the closest Entity optionally check if its an enemy Mob to maintain comparability with checkIfNear
+	public Entity checkIfEnemyNear(double radius, Class<? extends Entity> c, boolean isEnemyCheck) {
+		Set<Entity> entities = level.getEntities(pos.x - radius, pos.y - radius, pos.x + radius, pos.y + radius, c);
+	    Entity closest = null;
+	    double closestDist = 99999999.0f;
+	    for (Entity e : entities) {
+	        final double dist = e.pos.distSqr(pos);
+	        if (dist < closestDist && !isTargetBehindWall(e.pos.x, e.pos.y, e)) {
+	        	if (isEnemyCheck) {
+	        		if (!(e instanceof Mob))
+	        			continue;
+	        		if (!((Mob)e).isNotFriendOf(this))
+	        			continue;
+	        	}
+	            closestDist = dist;
+	            closest = e;
+	        }
+	    }
+	return closest;
+	}
+
+	public Entity checkIfNear(double radius, Class<? extends Entity> c) {
+		return checkIfEnemyNear( radius, c, false);
 	}
 
 }
