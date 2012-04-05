@@ -443,7 +443,7 @@ public abstract class Pather extends HostileMob {
 	 * 
 	 * @see com.mojang.mojam.entity.mob.Mob#getSprite()
 	 */
-	public abstract Bitmap getSprite();
+	public abstract AbstractBitmap getSprite();
 
 	/**
 	 * (non-Javadoc)
