@@ -9,13 +9,13 @@ import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.resources.Constants;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.Bitmap;
+import com.mojang.mojam.screen.AbstractBitmap;
 
 public class SoldierRifle implements IWeapon {
 
 	protected Mob owner;
 	protected float bulletDamage;
-	protected Bitmap image;
+	protected AbstractBitmap image;
 	protected int upgradeIndex = 1;
 	protected double accuracy;
 	protected int shootDelay;
@@ -111,7 +111,7 @@ public class SoldierRifle implements IWeapon {
 	}
 
 	@Override
-	public Bitmap getSprite() {
+	public AbstractBitmap getSprite() {
 		return image;
 	}
 
