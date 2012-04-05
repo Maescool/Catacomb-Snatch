@@ -151,6 +151,8 @@ public class Harvester extends Building implements LootCollector {
 		}
 		
 		if( team == MojamComponent.localTeam && !(isCarried() && this.carriedBy instanceof Player)) {
+			setDoShowMoneyBar(true);
+		} else {
 			setDoShowMoneyBar(false);
 		}
 		
