@@ -23,6 +23,7 @@ import com.mojang.mojam.gui.components.Font;
 
 import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.BB;
+import com.mojang.mojam.math.Mth;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.*;
@@ -183,6 +184,9 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 			double xDir = closest.pos.x - pos.x;
 			aimVector = (closest.pos.sub(pos));
 			weapon.primaryFire(xDir, yDir);
+			
+			facing = (int) ((Math.atan2(-aimVector.x, aimVector.y) * 8
+					/ (Mth.PI2) - 8.5)) & 7;
 		}
 	}
 
@@ -194,13 +198,21 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 			sheet = Art.getPlayer(GameCharacter.LordLard);
 		}
 
-		if (sheet != null)
+		if (sheet != null) {
 			return sheet[(int) stepTime % 6][facing];
+		}
 		return null;
 	}
 
 	public void render(Screen screen) {
 		super.render(screen);
+		int yy=0;
+		switch( (int)(stepTime % 6) ) {
+			case 0:
+			case 3:
+				yy=1;
+		}
+		screen.blit(Art.dish[ (int)( (System.currentTimeMillis()*0.02) % 6 ) ][0], pos.x-3, (pos.y - 32 - yy ));
 	}
 
 	protected void renderMarker(Screen screen) {
@@ -208,7 +220,7 @@ public class Soldier extends Pather implements IUsable, LootCollector {
 
 		if (this.highlight) {
 			Font.FONT_WHITE_SMALL.draw(screen, getCurrentModeName(),
-					(int) (pos.x), (int) (pos.y - yOffs - 16),
+					(int) (pos.x), (int) (pos.y - yOffs - 14),
 					Font.Align.CENTERED);
 
 			if (upgradeLevel < maxUpgradeLevel) {

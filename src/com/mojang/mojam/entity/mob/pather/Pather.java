@@ -313,6 +313,7 @@ public abstract class Pather extends HostileMob {
 		} else {
 			facing = (int) ((Math.atan2(-moveBy.x, moveBy.y) * 8
 					/ (Math.PI * 2) - 8.5)) & 7;
+			
 
 			stepTime += getSpeed() / 4;
 			if (stepTime > 6)
