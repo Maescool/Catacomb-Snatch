@@ -799,4 +799,66 @@ public class Level {
 	public void setSeen(boolean seen[]) {
 		this.seen = seen;
 	}
+
+	public boolean checkLineOfSight(Entity eSource, Entity eTarget) {
+	
+		return checkLineOfSight(eSource, eTarget.pos);
+	}
+
+	public boolean checkLineOfSight(Entity eSource, Vec2 vTarget) {
+		Vec2 tP;
+		tP = getTileFromPosition(eSource.pos);
+		int x1 = (int) tP.x;
+		int y1 = (int) tP.y;
+	
+		tP = getTileFromPosition(vTarget);
+		int x2 = (int) tP.x;
+		int y2 = (int) tP.y;
+	
+		if (x1 >= width || x1 <= 0 || x2 >= width || x2 <= 0 || y1 >= height
+				|| y1 <= 0 || y2 >= height || y2 <= 0) {
+			return false;
+		}
+		int dx = Math.abs(x2 - x1);
+		int dy = Math.abs(y2 - y1);
+		int sx = -1;
+		int sy = -1;
+	
+		if (x1 < x2)
+			sx = 1;
+		if (y1 < y2)
+			sy = 1;
+	
+		int dff = dx - dy;
+		int d2;
+	
+		if (!getTile(x1, y1).canPass(eSource))
+			return false;
+	
+		do {
+			if (x1 == x2 && y1 == y2)
+				break;
+			d2 = 2 * dff;
+			if (d2 > -dy) {
+				dff -= dy;
+				x1 += sx;
+				if (!getTile(x1, y1).canPass(eSource))
+					return false;
+			}
+			if (d2 < dx) {
+				dff += dx;
+				y1 += sy;
+				if (!getTile(x1, y1).canPass(eSource))
+					return false;
+			}
+		} while (true);
+	
+		return true;
+	}
+
+	public Vec2 getTileFromPosition(Vec2 pos) {
+		int x = (int) pos.x / Tile.WIDTH;
+		int y = (int) pos.y / Tile.HEIGHT;
+		return new Vec2(x, y);
+	}
 }
