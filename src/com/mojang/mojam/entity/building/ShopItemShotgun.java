@@ -11,17 +11,20 @@ public class ShopItemShotgun extends ShopItem {
     public ShopItemShotgun(double x, double y, int team) {
         super("shotgun",x, y, team, 300, 5);
         setSprite(Art.weaponList[1][0]);
-        teamTooltipYOffset = (team == 2) ? 153 : -63; 
     }
 
     public void useAction(Player player) {
-    	player.weaponInventory.add(new Shotgun(player));
+    	if (!player.weaponInventory.add(new Shotgun(player))) {
+        	if (this.team == MojamComponent.localTeam) {
+                Notifications.getInstance().add(MojamComponent.texts.getStatic("gameplay.weaponAlready"));
+        	}
+    	}
 	}
 
 	@Override
 	public boolean canBuy(Player player) {
 		boolean alreadyOwned = player.weaponInventory.hasWeapon(new Shotgun(player));
-		if( alreadyOwned && this.team == MojamComponent.localTeam ) {
+		if (alreadyOwned && this.team == MojamComponent.localTeam ) {
             Notifications.getInstance().add(MojamComponent.texts.getStatic("gameplay.weaponAlready"));
     	}
 		return !alreadyOwned;
