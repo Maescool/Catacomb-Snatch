@@ -55,7 +55,6 @@ public abstract class ShopItem extends Building {
 					MojamComponent.texts.cost(effectiveCost), (int) (pos.x),
 					(int) (pos.y + 10), Font.Align.CENTERED);
 		}
-		//renderInfo(screen);
 	}
 	
 	@Override
