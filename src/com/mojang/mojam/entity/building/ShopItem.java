@@ -55,6 +55,11 @@ public abstract class ShopItem extends Building {
 					MojamComponent.texts.cost(effectiveCost), (int) (pos.x),
 					(int) (pos.y + 10), Font.Align.CENTERED);
 		}
+		//renderInfo(screen);
+	}
+	
+	@Override
+	public void renderTop(AbstractScreen screen) {
 		renderInfo(screen);
 	}
 
@@ -75,11 +80,11 @@ public abstract class ShopItem extends Building {
 			int height = tooltip.length * (font.getFontHeight() + 3);
 
 			screen.alphaBlit(screen.tooltipBitmap(width, height), (int) (pos.x - image.getWidth() / 2 - 10),
-					(int) (pos.y + 20), 0x80);
+					(int) (pos.y - 50), 0x80);
 
 			for (int i = 0; i < tooltip.length; i++) {
 				font.draw(screen, tooltip[i], (int) (pos.x - image.getWidth() + 8),
-						(int) pos.y + 22
+						(int) pos.y - 48
 						+ (i == 0 ? 0 : 1) + i
 						* (font.getFontHeight() + 2));
 				font = Font.FONT_WHITE_SMALL;
