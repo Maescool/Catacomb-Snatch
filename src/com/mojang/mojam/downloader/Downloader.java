@@ -10,10 +10,10 @@ import java.util.jar.*;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MojamStartup;
 import com.mojang.mojam.Options;
+import com.mojang.mojam.mc.EnumOS2;
 import com.mojang.mojam.mc.EnumOSMappingHelper;
 
 import com.mojang.mojam.gui.DownloadScreen;
-import com.sun.servicetag.SystemEnvironment;
 
 public class Downloader {
 
@@ -495,7 +495,22 @@ public class Downloader {
 	}
 	
 	public static String getUserAgent(){
-		SystemEnvironment se = SystemEnvironment.getSystemEnvironment();
-		return "Mozilla/5.0 ("+se.getOsName()+"; Catacomb Snatch; "+se.getOsArchitecture()+ " "+se.getOsName()+ " "+se.getOsVersion()+") CatacombSnatch/"+MojamComponent.GAME_VERSION;
+		String osName = "Unknown";
+		switch (EnumOSMappingHelper.enumOSMappingArray[MojamComponent.getOs().ordinal()]){
+		case 1:
+			osName = "Linux";
+			break;
+		case 2:
+			osName = "Solaris";
+			break;
+		case 3:
+			osName = "Windows";
+			break;
+		case 4:
+			osName = "MacOSX";
+			default:
+				osName = "Unknown";
+		}
+		return "Mozilla/5.0 (Catacomb Snatch; "+osName+") CatacombSnatch/"+MojamComponent.GAME_VERSION;
 	}
 }
