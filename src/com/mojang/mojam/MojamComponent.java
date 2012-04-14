@@ -491,6 +491,7 @@ while (running) {
 				fps = frames;
 				frames = 0;
 			}
+			
 			ModSystem.afterTick();
 		}
 		ModSystem.onStop();
@@ -877,7 +878,7 @@ while (running) {
 	}
 
 	private static volatile boolean requestToggleFullscreen = false;
-
+	
 	public static void toggleFullscreen() {
 		requestToggleFullscreen = true; // only toggle fullscreen in the tick()
 										// loop
@@ -1193,5 +1194,4 @@ while (running) {
 			}
 		};
 	}
-
 }
