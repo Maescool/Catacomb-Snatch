@@ -148,10 +148,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private LocaleMenu localemenu = null;
 	private SnatchClient snatchClient;
 	private SnatchServer server;
-	
-	private long alchmi1 = 0;
-	private long alchmi2 = 0;
-	private long alchmil = alchmi1+3000;
 
 	public MojamComponent() {
 		screen = new MojamScreen(GAME_WIDTH, GAME_HEIGHT);
@@ -307,26 +303,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		initCharacters();
 		initLocale();
 		
-		boolean noal = !Options.getAsBoolean(Options.OPENALCHECK, "true");
-		
-		if (!Options.getAsBoolean(Options.OPEN_AL)) noal = true;
-		
-		alchmi1 = System.currentTimeMillis();
-		alchmi2 = alchmi1;
-		alchmil = alchmi1+3000;
-		
-		if (!noal) {
-			Options.set(Options.OPENALCHECK, false);
-			Options.saveProperties();
-		}
-		
-		if (noal) {
-			// Ask for downgrading will come later on - this is just an bugfix 
-			soundPlayer = new NoALPlayer();
-			System.out.println("Forced OpenAL off because of hardware failure");
-		} else {
-			soundPlayer = new SoundPlayer();
-		}
+		soundPlayer = new SoundPlayer();
 		if (soundPlayer.getSoundSystem() == null)
 			soundPlayer = new NoSoundPlayer();
 		
@@ -514,13 +491,6 @@ while (running) {
 				lastTimer1 += 1000;
 				fps = frames;
 				frames = 0;
-			}
-			
-			alchmi2 = System.currentTimeMillis();
-			
-			if (alchmi2 >= alchmil) {
-				Options.set(Options.OPENALCHECK, true);
-				Options.saveProperties();
 			}
 			
 			ModSystem.afterTick();
