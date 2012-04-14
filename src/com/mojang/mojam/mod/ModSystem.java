@@ -335,8 +335,6 @@ public final class ModSystem {
 					+ s.substring(s.lastIndexOf('.') + 1)));
 			e.eval(library);
 			e.eval(fr);
-			e.put("mod", new ModSystem());
-			e.put("mojam", MojamComponent.instance);
 			scriptList.add(e);
 			System.out.println(e.getFactory().getExtensions().get(0).toUpperCase() + " Script initialised: " + s);
 		} catch (FileNotFoundException e1) {

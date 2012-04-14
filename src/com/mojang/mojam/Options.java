@@ -13,6 +13,8 @@ import java.util.Properties;
 
 public class Options {
 
+	public static final String OPENALCHECK = "openalcheck";
+	
 	public static final String DRAW_FPS = "drawFps";
 	public static final String TRAP_MOUSE = "trapMouse";
 	public static final String FULLSCREEN = "fullscreen";

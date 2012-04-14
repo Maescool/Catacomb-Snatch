@@ -3,6 +3,7 @@ package com.mojang.mojam.gui.components;
 import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.AbstractScreen;
+import com.mojang.mojam.screen.MojamBitmap;
 
 public class Checkbox extends ClickableComponent {
 	private final int id;
@@ -51,5 +52,34 @@ public class Checkbox extends ClickableComponent {
 
 		Font.defaultFont().draw(screen, label, getX() + 24 + 4,
 				getY() + getHeight() / 2 - 4);
+	}
+	
+	public MojamBitmap getBitmap(int state) { 
+		MojamBitmap b = new MojamBitmap(getWidth(), getHeight());
+		if (state == 0 || state == 1) {
+			if (state == 1)
+				b.blit(Art.checkbox[1][1], 0, 0);
+			else
+				b.blit(Art.checkbox[0][1], 0, 0);
+		} else {
+			if (state == 2)
+				b.blit(Art.checkbox[1][0], 0, 0);
+			else
+				b.blit(Art.checkbox[0][0], 0, 0);
+		}
+		
+		Font.defaultFont().drawB(b, label, + 24 + 4,
+				getHeight() / 2 - 4);
+		
+		return b;
+	}
+
+	public MojamBitmap[] getBitmaps() {
+		MojamBitmap[] bmps = new MojamBitmap[4];
+		bmps[0] = getBitmap(0);
+		bmps[1] = getBitmap(1);
+		bmps[2] = getBitmap(2);
+		bmps[3] = getBitmap(3);
+		return bmps;
 	}
 }

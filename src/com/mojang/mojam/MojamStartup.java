@@ -44,6 +44,9 @@ public class MojamStartup extends Canvas implements Runnable, ButtonListener {
 
     public static MojamScreen screen;
 
+	public static String username = "Tester";
+	private static String password = "";
+
     private MenuStack menuStack = new MenuStack();
 
     private boolean running = true;
@@ -273,4 +276,8 @@ public class MojamStartup extends Canvas implements Runnable, ButtonListener {
 	    }
 	};
     }
+
+	public static void setPass(String pass) {
+		password = pass;
+	}
 }

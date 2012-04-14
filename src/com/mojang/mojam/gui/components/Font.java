@@ -5,9 +5,11 @@ import java.awt.FontFormatException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.mojang.mojam.gui.components.Font.Align;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.AbstractBitmap;
 import com.mojang.mojam.screen.AbstractScreen;
+import com.mojang.mojam.screen.MojamBitmap;
 
 public class Font {
 
@@ -218,6 +220,25 @@ public class Font {
 			}
 		}
 	}
+	
+	public void draw(AbstractBitmap screen, String msg, int x, int y, int width) {
+		int startX = x;
+		int length = msg.length();
+		for (int i = 0; i < length; i++) {
+			char character = msg.charAt(i);
+			AbstractBitmap bitmap = getCharacterBitmap(character);
+			int heightOffset = 0;
+			if (letters.indexOf(character) < 0) {
+				heightOffset = fontCharacterFactory.getHeightOffset(character);
+			}
+			screen.blit(bitmap, x, y+heightOffset);
+			x += bitmap.getWidth() + letterSpacing;
+			if(x > width - bitmap.getWidth()){
+				x = startX;
+				y += glyphHeight + 2;
+			}
+		}
+	}
 
 	/**
 	 * Draw the given text onto the given screen at the given position with given opacity
@@ -282,6 +303,10 @@ public class Font {
 	public void draw(AbstractScreen screen, String msg, int x, int y) {
 		draw(screen, msg, x, y, Integer.MAX_VALUE);
 	}
+	
+	public void drawB(AbstractBitmap b, String msg, int x, int y) {
+		draw(b, msg, x, y, Integer.MAX_VALUE);
+	}
 
 	/**
 	 * Draw the given text onto the given screen, centered.
@@ -322,6 +347,20 @@ public class Font {
 				draw(screen, msg, x - width / 2, y - 4);
 			} else {
 				draw(screen, msg, x - width, y);
+			}	
+		}
+	}
+
+	public void draw(AbstractBitmap b, String msg, int x, int y, Font.Align align) {
+		if (Font.Align.LEFT.equals(align)) {
+			draw(b, msg, x, y, Integer.MAX_VALUE);
+		}
+		else {
+			int width = calculateStringWidth(msg);
+			if (Font.Align.CENTERED.equals(align)) {
+				drawB(b, msg, x - width / 2, y - 4);
+			} else {
+				drawB(b, msg, x - width, y);
 			}	
 		}
 	}

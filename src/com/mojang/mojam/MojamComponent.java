@@ -83,6 +83,7 @@ import com.mojang.mojam.screen.AbstractBitmap;
 import com.mojang.mojam.screen.AbstractScreen;
 import com.mojang.mojam.screen.MojamScreen;
 import com.mojang.mojam.sound.ISoundPlayer;
+import com.mojang.mojam.sound.NoALPlayer;
 import com.mojang.mojam.sound.NoSoundPlayer;
 import com.mojang.mojam.sound.SoundPlayer;
 
@@ -147,6 +148,10 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private LocaleMenu localemenu = null;
 	private SnatchClient snatchClient;
 	private SnatchServer server;
+	
+	private long alchmi1 = 0;
+	private long alchmi2 = 0;
+	private long alchmil = alchmi1+3000;
 
 	public MojamComponent() {
 		screen = new MojamScreen(GAME_WIDTH, GAME_HEIGHT);
@@ -301,11 +306,30 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		initInput();
 		initCharacters();
 		initLocale();
-
-		soundPlayer = new SoundPlayer();
+		
+		boolean noal = !Options.getAsBoolean(Options.OPENALCHECK, "true");
+		
+		if (!Options.getAsBoolean(Options.OPEN_AL)) noal = true;
+		
+		alchmi1 = System.currentTimeMillis();
+		alchmi2 = alchmi1;
+		alchmil = alchmi1+3000;
+		
+		if (!noal) {
+			Options.set(Options.OPENALCHECK, false);
+			Options.saveProperties();
+		}
+		
+		if (noal) {
+			// Ask for downgrading will come later on - this is just an bugfix 
+			soundPlayer = new NoALPlayer();
+			System.out.println("Forced OpenAL off because of hardware failure");
+		} else {
+			soundPlayer = new SoundPlayer();
+		}
 		if (soundPlayer.getSoundSystem() == null)
 			soundPlayer = new NoSoundPlayer();
-
+		
 		soundPlayer.startTitleMusic();
 
 		try {
@@ -491,6 +515,14 @@ while (running) {
 				fps = frames;
 				frames = 0;
 			}
+			
+			alchmi2 = System.currentTimeMillis();
+			
+			if (alchmi2 >= alchmil) {
+				Options.set(Options.OPENALCHECK, true);
+				Options.saveProperties();
+			}
+			
 			ModSystem.afterTick();
 		}
 		ModSystem.onStop();
@@ -877,7 +909,10 @@ while (running) {
 	}
 
 	private static volatile boolean requestToggleFullscreen = false;
-
+	
+	public static String username = "Tester";
+	private static String password = "";
+	
 	public static void toggleFullscreen() {
 		requestToggleFullscreen = true; // only toggle fullscreen in the tick()
 										// loop
@@ -1192,6 +1227,10 @@ while (running) {
 				MojamComponent.instance.stop(false);
 			}
 		};
+	}
+
+	public static void setPass(String pass) {
+		password = pass;
 	}
 
 }
