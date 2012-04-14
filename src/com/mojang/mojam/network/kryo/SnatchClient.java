@@ -110,7 +110,8 @@ public class SnatchClient {
 			return;
 		} else if (message instanceof ChangeKeyMessage) {
 			ChangeKeyMessage ckc = (ChangeKeyMessage) message;
-			mojamComponent.synchedKeys[playerId].getAll().get(ckc.key).nextState = ckc.nextState;
+			if (ckc.key < mojamComponent.synchedKeys[playerId].getAll().size())
+				mojamComponent.synchedKeys[playerId].getAll().get(ckc.key).nextState = ckc.nextState;
 		} else if (message instanceof ChangeMouseButtonMessage) {
 			ChangeMouseButtonMessage ckc = (ChangeMouseButtonMessage) message;
 			mojamComponent.synchedMouseButtons[playerId].nextState[ckc.button] = ckc.nextState;

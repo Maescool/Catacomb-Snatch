@@ -73,4 +73,20 @@ public class Keys {
 	public List<Key> getAll() {
 		return all;
 	}
+	
+	public void addKey(Key k) {
+		addKey(k, all.size());
+	}
+	
+	public void addKey(Key k, int id) {
+		all.add(id, k);
+	}
+	
+	public void removeKey(int id) {
+		removeKey(all.get(id));
+	}
+	
+	public void removeKey(Key k) {
+		all.remove(k);
+	}
 }

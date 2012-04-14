@@ -518,9 +518,9 @@ public final class ModSystem {
 	public static Key addKey(Key key, int code) {
 		inputHandler = (InputHandler) reflectField(mojam, "inputHandler");
 		for (Keys k : mojam.synchedKeys) {
-			k.getAll().add(key);
+			k.addKey(key);
 		}
-		mojam.keys.getAll().add(key);
+		mojam.keys.addKey(key);
 		reflectMethod(InputHandler.class, inputHandler, "initKey", new Object[] { key, code });
 		System.out.println("Added key: " + key.name + " with keycode: " + code);
 		return key;
@@ -758,7 +758,7 @@ public final class ModSystem {
 			m.CreateLevel(l);
 		}
 		level = l;
-		invoke("CreateLevel");
+		invoke("CreateLevel", level);
 	}
 
 	public static void onStop() {
@@ -1123,6 +1123,18 @@ public final class ModSystem {
 				for (IMod m : modList) {
 					m.IfKeyUp(key);
 				}
+			}
+		}
+	}
+	
+	public static void keyEvent(Key key, boolean state) {
+		if (state) {
+			for (IMod m : modList) {
+				m.IfKeyDown(key);
+			}
+		} else {
+			for (IMod m : modList) {
+				m.IfKeyUp(key);
 			}
 		}
 	}
