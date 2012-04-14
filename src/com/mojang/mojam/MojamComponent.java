@@ -83,7 +83,6 @@ import com.mojang.mojam.screen.AbstractBitmap;
 import com.mojang.mojam.screen.AbstractScreen;
 import com.mojang.mojam.screen.MojamScreen;
 import com.mojang.mojam.sound.ISoundPlayer;
-import com.mojang.mojam.sound.NoALPlayer;
 import com.mojang.mojam.sound.NoSoundPlayer;
 import com.mojang.mojam.sound.SoundPlayer;
 
@@ -302,11 +301,11 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		initInput();
 		initCharacters();
 		initLocale();
-		
+
 		soundPlayer = new SoundPlayer();
 		if (soundPlayer.getSoundSystem() == null)
 			soundPlayer = new NoSoundPlayer();
-		
+
 		soundPlayer.startTitleMusic();
 
 		try {
@@ -880,9 +879,6 @@ while (running) {
 
 	private static volatile boolean requestToggleFullscreen = false;
 	
-	public static String username = "Tester";
-	private static String password = "";
-	
 	public static void toggleFullscreen() {
 		requestToggleFullscreen = true; // only toggle fullscreen in the tick()
 										// loop
@@ -1198,9 +1194,4 @@ while (running) {
 			}
 		};
 	}
-
-	public static void setPass(String pass) {
-		password = pass;
-	}
-
 }

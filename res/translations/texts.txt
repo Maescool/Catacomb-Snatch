@@ -171,16 +171,3 @@ upgrade.to = UPGRADED TO LEVEL {0}
 
 download.downloading = DOWNLOADING..
 download.unpacking = UNPACKING..
-
-launcher.login = Login
-launcher.register = Register
-launcher.loadingnews = Loading news ( always english ) ...
-launcher.username = Username
-launcher.password = Password
-launcher.failed = Login Failed
-launcher.notfound = Account not found
-launcher.loading = Logging in
-launcher.retry = Retry
-launcher.repeat = Repeat Password
-launcher.email = Email adress
-launcher.offline = Play Offline
