@@ -48,6 +48,7 @@ public class SoundPlayer implements ISoundPlayer {
 		}
 
         boolean isOPenAL = Options.getAsBoolean(Options.OPEN_AL, Options.VALUE_TRUE);
+        isOPenAL = false; //TODO : FIXME
         if (isOPenAL) {
             boolean aLCompatible = SoundSystem.libraryCompatible(LibraryLWJGLOpenAL.class);
             if (aLCompatible) {

@@ -54,6 +54,7 @@ public class DestroyableWallTile extends WallTile {
 		level.removeTile(x, y);
 		level.addEntity(new TileExplodeAnimation((x + 0.5) * Tile.WIDTH,
 				(y + 0.5) * Tile.HEIGHT));
+		level.setTile(x, y, new DestroyedWallTile(level.getTile(x, y)));
 	}
 	
 	@Override
