@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.mojang.mojam.Keys.Key;
+import com.mojang.mojam.mod.ModSystem;
 
 public class InputHandler implements KeyListener {
 
@@ -103,6 +104,7 @@ public class InputHandler implements KeyListener {
 		}
 		if (key != null) {
 			key.nextState = state;
+			ModSystem.keyEvent(key, state);
 		}
 	}
 }
