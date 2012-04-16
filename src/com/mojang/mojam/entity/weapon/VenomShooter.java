@@ -2,6 +2,7 @@ package com.mojang.mojam.entity.weapon;
 
 import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.BulletPoison;
+import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
 
 
