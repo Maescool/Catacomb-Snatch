@@ -69,7 +69,7 @@ public abstract class HostileMob extends Mob  implements IEditable {
 		
 		Set<Entity> entities = level.getEntities(x0,y0,x1,y1,c);
         Entity closest = null;
-        double closestDist = 99999999.0f;
+        double closestDist = Double.MAX_VALUE;
         for (Entity e : entities) {
             final double dist = e.pos.distSqr(pos);
             if (dist < closestDist) {
@@ -105,7 +105,7 @@ public abstract class HostileMob extends Mob  implements IEditable {
 	public Entity checkIfEnemyNear(double radius, Class<? extends Entity> c, boolean isEnemyCheck) {
 		Set<Entity> entities = level.getEntities(pos.x - radius, pos.y - radius, pos.x + radius, pos.y + radius, c);
 	    Entity closest = null;
-	    double closestDist = 99999999.0f;
+	    double closestDist = Double.MAX_VALUE;
 	    for (Entity e : entities) {
 	        final double dist = e.pos.distSqr(pos);
 	        if (dist < closestDist && !isTargetBehindWall(e.pos.x, e.pos.y, e)) {
