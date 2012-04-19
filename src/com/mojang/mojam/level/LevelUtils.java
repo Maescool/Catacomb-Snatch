@@ -255,6 +255,10 @@ public class LevelUtils {
 		case TILESET_PLAYER1_BASE_ID + 27:
 			obj =  new PlayerRailTile(Team.Team1);
 			break;
+		case TILESET_PLAYER1_BASE_ID + 28:
+			obj =  new ShopItemSoldier(x * Tile.WIDTH+Tile.WIDTH/2, y * Tile.HEIGHT+Tile.HEIGHT/2, Team.Team1);
+		break;
+		
 		case TILESET_PLAYER1_BASE_ID + 32:
 			obj =  new ShopItemRifle(x * Tile.WIDTH+Tile.WIDTH/2, y * Tile.HEIGHT+Tile.HEIGHT/2, Team.Team1);
 			break;
@@ -263,9 +267,6 @@ public class LevelUtils {
 			break;
 		case TILESET_PLAYER1_BASE_ID + 34:
 			obj =  new ShopItemRaygun(x * Tile.WIDTH+Tile.WIDTH/2, y * Tile.HEIGHT+Tile.HEIGHT/2, Team.Team1);
-			break;
-		case TILESET_PLAYER1_BASE_ID + 35:
-			obj =  new ShopItemSoldier(x * Tile.WIDTH+Tile.WIDTH/2, y * Tile.HEIGHT+Tile.HEIGHT/2, Team.Team1);
 			break;
 		//Player 2 IDs
 		
@@ -360,6 +361,10 @@ public class LevelUtils {
 		case TILESET_PLAYER2_BASE_ID + 27:
 			obj =  new PlayerRailTile(Team.Team2);
 			break;
+		case TILESET_PLAYER2_BASE_ID + 28:
+			obj =  new ShopItemSoldier(x * Tile.WIDTH+Tile.WIDTH/2, y * Tile.HEIGHT+Tile.HEIGHT/2, Team.Team2);
+		break;
+		
 		case TILESET_PLAYER2_BASE_ID + 32:
 			obj =  new ShopItemRifle(x * Tile.WIDTH+Tile.WIDTH/2, y * Tile.HEIGHT+Tile.HEIGHT/2, Team.Team2);
 			break;
@@ -369,9 +374,6 @@ public class LevelUtils {
 		case TILESET_PLAYER2_BASE_ID + 34:
 			obj =  new ShopItemRaygun(x * Tile.WIDTH+Tile.WIDTH/2, y * Tile.HEIGHT+Tile.HEIGHT/2, Team.Team2);
 			break;			
-		case TILESET_PLAYER2_BASE_ID + 35:
-			obj =  new ShopItemSoldier(x * Tile.WIDTH+Tile.WIDTH/2, y * Tile.HEIGHT+Tile.HEIGHT/2, Team.Team1);
-			break;		
 
 		default:
 			break;	
