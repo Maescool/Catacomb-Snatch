@@ -199,6 +199,7 @@ public class Art {
 	public static AbstractBitmap[][] pickupGemDiamond;
 	public static AbstractBitmap[][] shineSmall;
 	public static AbstractBitmap[][] shineBig;
+
 	// Bullets and special effects
 	public static AbstractBitmap[][] bullets;
 	public static AbstractBitmap[][] bullet;
@@ -219,10 +220,13 @@ public class Art {
 	public static AbstractBitmap[][] healthBar_Outline;
 	public static AbstractBitmap[][] healthBar_Underlay;
 	public static AbstractBitmap[][] sprintBar;
+	public static AbstractBitmap[][] dish;
+	
 	// Backgrounds
 	public static AbstractBitmap backCharacterButton[];
 	public static AbstractBitmap backLevelEditorButton[];
 	public static AbstractBitmap backLevelButton[];
+
 	// Icons
 	public static BufferedImage icon32 = loadBufferedImage("/art/icon/icon32.png");
 	public static BufferedImage icon64 = loadBufferedImage("/art/icon/icon64.png");
@@ -358,6 +362,7 @@ public class Art {
 		healthBar_Outline = screen.cut("/art/effects/bar_outline.png", 32, 4);
 		healthBar_Underlay = screen.cut("/art/effects/bar_green_underlay.png", 32, 4);
 		sprintBar = screen.cut("/art/effects/sprint_bar.png", 32, 4);
+		dish = screen.cut("/art/mob/dish001.png", 6, 12);
 		// different backgrounds
 		int w, h;
 		w = CharacterButton.BUTTON_WIDTH;

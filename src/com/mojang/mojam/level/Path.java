@@ -36,6 +36,9 @@ public class Path {
 	}
 
 	public Vec2 getWorldPos(int i) {
+		if (i >= nodes.size()) {
+			return null;
+		}
 		Vec2 wp = nodes.get(i).pos.mul(toWorld);
 		wp.x += Tile.WIDTH * 0.5;
 		wp.y += Tile.HEIGHT * 0.5;
@@ -75,5 +78,17 @@ public class Path {
 			s += n.pos.toString() + " ";
 		}
 		return s;
+	}
+
+	public Vec2 getCurrentWorldPos() {
+		return getWorldPos(index);
+	}
+
+	public void previous() {
+		index--;
+	
+		if (index <= 0) {
+			index = 0;
+		}
 	}
 }
