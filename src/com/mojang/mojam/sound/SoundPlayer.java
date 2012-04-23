@@ -46,14 +46,15 @@ public class SoundPlayer implements ISoundPlayer {
 		} catch (SoundSystemException ex) {
 			wavPlaybackSupport = false;
 		}
-	libraryType = LibraryJavaSound.class; // Java Sound
+	Class<? extends Library> temp = LibraryJavaSound.class; // Java Sound
         boolean isOPenAL = Options.getAsBoolean(Options.OPEN_AL, Options.VALUE_FALSE);
         if (isOPenAL) {
             boolean aLCompatible = SoundSystem.libraryCompatible(LibraryLWJGLOpenAL.class);
             if (aLCompatible) {
-                libraryType = LibraryLWJGLOpenAL.class; // OpenAL
+                temp = LibraryLWJGLOpenAL.class; // OpenAL
             }
         }
+        libraryType = temp;
 
 		try {
 			setSoundSystem(new SoundSystem(libraryType));
