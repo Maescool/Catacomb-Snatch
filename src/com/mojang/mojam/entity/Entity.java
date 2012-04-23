@@ -27,6 +27,8 @@ public abstract class Entity implements BBOwner {
 	public int minimapIcon = -1;
 	public int minimapColor = -1;
 	public int team;
+	
+	private Entity spawnSource;
 
 	public void setPos(double x, double y) {
 		pos.set(x, y);
@@ -163,6 +165,9 @@ public abstract class Entity implements BBOwner {
 
 	public void remove() {
 		removed = true;
+		if (spawnSource != null && spawnSource instanceof IRemoveEntityNotify) {
+			((IRemoveEntityNotify)spawnSource).removeEntityNotice(this);
+		}
 	}
 
 	@Override
@@ -180,5 +185,13 @@ public abstract class Entity implements BBOwner {
 	}
 
 	public void bomb(LargeBombExplodeAnimation largeBombExplodeAnimation) {
+	}
+
+	public Entity getSpawnSource() {
+		return spawnSource;
+	}
+
+	public void setSpawnSource(Entity spawnSource) {
+		this.spawnSource = spawnSource;
 	}
 }
