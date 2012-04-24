@@ -37,12 +37,12 @@ import com.mojang.mojam.screen.*;
  * - Soldiers have a small communications device on their helmet.
  * - While moving around soldiers actively try to avoid Mobs by turning away from them.
  * - Soldiers have 3 modes
- *      1. Patrol – they move around the level randomly, killing and collecting, 
+ *      1. Patrol - they move around the level randomly, killing and collecting,
  *      when The Soldier is full of Coins or heavily damaged they switch to mode
- *      2. Return Home – in this mode the soldier uses the fastest route to get to the 
+ *      2. Return Home - in this mode the soldier uses the fastest route to get to the
  *      Players base. Once at 'Home' they drop off their Coins (its added directly to player score)
  *      and they are instantly healed.
- *      3. Follow – in this mode they roughly follow the player around shooting Mobs
+ *      3. Follow - in this mode they roughly follow the player around shooting Mobs
  *      and collecting Coins, they will NOT automatically Return Home,
  *      the player will have to order them to do so.
  *     
