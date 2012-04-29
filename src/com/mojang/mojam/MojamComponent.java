@@ -1035,6 +1035,7 @@ while (running) {
 				synchronizer = new TurnSynchronizer(snatchClient, localId, 2);
 			} catch (Exception e) {
 				e.printStackTrace();
+				chat.addMessage(e.getClass().getSimpleName() + ": " + e.getLocalizedMessage());
 				menuStack.add(new TitleMenu(GAME_WIDTH, GAME_HEIGHT));
 			}
 			break;
