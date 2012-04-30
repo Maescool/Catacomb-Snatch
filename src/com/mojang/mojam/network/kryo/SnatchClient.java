@@ -73,16 +73,12 @@ public class SnatchClient {
 
 	}
 
-	public void connectLocal() {
+	public void connectLocal() throws IOException {
 		connect("localhost", Network.port);
 	}
-	
-	public void connect(String host, int port) {
-		try {
-			client.connect(5000,host, port);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
+	public void connect(String host, int port) throws IOException {
+		client.connect(5000, host, port);
 	}
 
 	public void tick() {

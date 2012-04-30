@@ -1035,7 +1035,8 @@ while (running) {
 				synchronizer = new TurnSynchronizer(snatchClient, localId, 2);
 			} catch (Exception e) {
 				e.printStackTrace();
-				menuStack.add(new TitleMenu(GAME_WIDTH, GAME_HEIGHT));
+				//menuStack.add(new TitleMenu(GAME_WIDTH, GAME_HEIGHT));
+				menuStack.add(new GuiError(e.getClass().getSimpleName() + ": " + e.getLocalizedMessage()));
 			}
 			break;
 
