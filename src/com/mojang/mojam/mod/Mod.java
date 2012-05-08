@@ -1,8 +1,7 @@
 package com.mojang.mojam.mod;
 
-import com.mojang.mojam.Keys;
-import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Keys.Key;
+import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.building.SpawnerEntity;
 import com.mojang.mojam.entity.mob.Team;

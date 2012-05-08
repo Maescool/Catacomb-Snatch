@@ -119,6 +119,7 @@ options.alternative = ALTERNATIVE PLAYER SKIN
 options.credits = CREDITS
 options.openal = Sound system OpenAL
 options.smallscale = SMALL GRAPHICS
+options.enableMods = ENABLE MODS (RESTART REQUIRED)
 
 pausemenu.help = HELP
 pausemenu.backtomain = MAIN
