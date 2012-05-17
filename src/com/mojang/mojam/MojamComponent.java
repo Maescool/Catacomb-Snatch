@@ -131,7 +131,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public boolean isServer;
 	public int localId;
 	public static int localTeam; //local team is the team of the client. This can be used to check if something should be only rendered on one person's screen
-
+	public static Player localPlayer; //local Player. can be used to interrogate the player for level etc for level specific effects from within other entities tick/render. TODO maybe make private and use method getLocalPlayer() instead
+	
 	public GameCharacter playerCharacter;
 	public boolean sendCharacter = false;
 
@@ -389,6 +390,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			players[1] = null;
 		}
 		player = players[localId];
+		MojamComponent.localPlayer=player;
 		player.setCanSee(true);
 		ModSystem.createLevel(level);
 	}
@@ -1033,7 +1035,7 @@ while (running) {
 				synchronizer = new TurnSynchronizer(snatchClient, localId, 2);
 			} catch (Exception e) {
 				e.printStackTrace();
-				menuStack.add(new TitleMenu(GAME_WIDTH, GAME_HEIGHT));
+				showError(e.getClass().getSimpleName() + ": " + e.getLocalizedMessage());
 			}
 			break;
 

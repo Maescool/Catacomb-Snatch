@@ -24,9 +24,9 @@ public abstract class Building extends Mob implements IUsable {
 	public float REGEN_AMOUNT = 1;
 	public boolean REGEN_HEALTH = true;
 	public int healingTime = REGEN_INTERVAL;
-	
 
 	public int spawnTime = 0;
+
 	public Mob carriedBy = null;
 
 	protected int upgradeLevel = 0;
@@ -63,6 +63,8 @@ public abstract class Building extends Mob implements IUsable {
 	 *            AbstractScreen
 	 */
 	protected void renderMarker(AbstractScreen screen) {
+		if (isCarried())
+			return;
 		super.renderMarker(screen);
 	}
 
