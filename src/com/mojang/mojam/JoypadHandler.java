@@ -29,6 +29,188 @@ import com.mojang.mojam.mod.ModSystem;
  */
 public class JoypadHandler {
 	
+	public final class DummyController implements Controller {
+
+		@Override
+		public int getAxisCount() {
+			//DUMMY
+			return 0;
+		}
+
+		@Override
+		public String getAxisName(int arg0) {
+			//DUMMY
+			return "DUMMY";
+		}
+
+		@Override
+		public float getAxisValue(int arg0) {
+			//DUMMY
+			return 0;
+		}
+
+		@Override
+		public int getButtonCount() {
+			//DUMMY
+			return 0;
+		}
+
+		@Override
+		public String getButtonName(int arg0) {
+			//DUMMY
+			return "DUMMY";
+		}
+
+		@Override
+		public float getDeadZone(int arg0) {
+			//DUMMY
+			return 0;
+		}
+
+		@Override
+		public int getIndex() {
+			//DUMMY
+			return -1;
+		}
+
+		@Override
+		public String getName() {
+			//DUMMY
+			return "DUMMY";
+		}
+
+		@Override
+		public float getPovX() {
+			//DUMMY
+			return 0;
+		}
+
+		@Override
+		public float getPovY() {
+			//DUMMY
+			return 0;
+		}
+
+		@Override
+		public float getRXAxisDeadZone() {
+			//DUMMY
+			return 0;
+		}
+
+		@Override
+		public float getRXAxisValue() {
+			//DUMMY
+			return 0;
+		}
+
+		@Override
+		public float getRYAxisDeadZone() {
+			//DUMMY
+			return 0;
+		}
+
+		@Override
+		public float getRYAxisValue() {
+			//DUMMY
+			return 0;
+		}
+
+		@Override
+		public float getRZAxisDeadZone() {
+			//DUMMY
+			return 0;
+		}
+
+		@Override
+		public float getRZAxisValue() {
+			//DUMMY
+			return 0;
+		}
+
+		@Override
+		public float getXAxisDeadZone() {
+			//DUMMY
+			return 0;
+		}
+
+		@Override
+		public float getXAxisValue() {
+			//DUMMY
+			return 0;
+		}
+
+		@Override
+		public float getYAxisDeadZone() {
+			//DUMMY
+			return 0;
+		}
+
+		@Override
+		public float getYAxisValue() {
+			//DUMMY
+			return 0;
+		}
+
+		@Override
+		public float getZAxisDeadZone() {
+			//DUMMY
+			return 0;
+		}
+
+		@Override
+		public float getZAxisValue() {
+			//DUMMY
+			return 0;
+		}
+
+		@Override
+		public boolean isButtonPressed(int arg0) {
+			//DUMMY
+			return false;
+		}
+
+		@Override
+		public void poll() {
+			//DUMMY
+		}
+
+		@Override
+		public void setDeadZone(int arg0, float arg1) {
+			//DUMMY
+		}
+
+		@Override
+		public void setRXAxisDeadZone(float arg0) {
+			//DUMMY
+		}
+
+		@Override
+		public void setRYAxisDeadZone(float arg0) {
+			//DUMMY
+		}
+
+		@Override
+		public void setRZAxisDeadZone(float arg0) {
+			//DUMMY
+		}
+
+		@Override
+		public void setXAxisDeadZone(float arg0) {
+			//DUMMY
+		}
+
+		@Override
+		public void setYAxisDeadZone(float arg0) {
+			//DUMMY
+		}
+
+		@Override
+		public void setZAxisDeadZone(float arg0) {
+			//DUMMY
+		}
+
+	}
+
 	public final static class Button {
 		public final String name;
 		public final Controller controller;
@@ -43,7 +225,7 @@ public class JoypadHandler {
 			this.controller = controller;
 			this.id = id;
 			
-			String skn = Options.get("joyb_"+name);
+			String skn = Options.get("joyb_"+controller.getIndex()+"_"+id);
 			if (skn != null) {
 				try {
 					Keys keys = MojamComponent.instance.keys;
@@ -139,6 +321,10 @@ public class JoypadHandler {
 		addAxis(new Axis("POV Y", controller, i));
 	}
 
+	public JoypadHandler() {
+		// DUMMY for using type-classes
+	}
+
 	public void updateDetails() {
 		for (int i=0;i<buttonCount;i++) {
 			if (controller.isButtonPressed(i)) {
@@ -227,14 +413,22 @@ public class JoypadHandler {
 		Keys keys = MojamComponent.instance.keys;
 		
 		//Check if axis is X or Y axis of any special axis>key/mouse port . If it is , handle axis seperately to counterpart ( X|y , x|Y ) 
-		if (a.name.equals(mouseXA.substring(mouseXA.indexOf(":")+1)) && !((a.controller.getIndex()+"").equals(mouseXA.substring(mouseXA.indexOf(":")+1)))) {
+		
+		String[] mxa = mouseXA.split(":");
+		String[] mya = mouseYA.split(":");
+		String[] sxa = shootXA.split(":");
+		String[] sya = shootYA.split(":");
+		String[] wxa = walkXA.split(":");
+		String[] wya = walkYA.split(":");
+		
+		if ((a.id+"").equals(mxa[1]) && ((a.controller.getIndex()+"").equals(mxa[0]))) {
 			int x = (int) (f*5);
 			MojamComponent.instance.mouseButtons.jx = x;
 			if (x != 0) {
 				MojamComponent.instance.joyMoved = true;
 			}
 		}
-		if (a.name.equals(mouseYA.substring(mouseXA.indexOf(":")+1)) && !((a.controller.getIndex()+"").equals(mouseYA.substring(mouseYA.indexOf(":")+1)))) {
+		if ((a.id+"").equals(mya[1]) && ((a.controller.getIndex()+"").equals(mya[0]))) {
 			int y = (int) (f*5);
 			MojamComponent.instance.mouseButtons.jy = y;
 			if (y != 0) {
@@ -242,7 +436,7 @@ public class JoypadHandler {
 			}
 		}
 		
-		if (a.name.equals(shootXA.substring(shootXA.indexOf(":")+1)) && !((a.controller.getIndex()+"").equals(shootXA.substring(shootXA.indexOf(":")+1)))) {
+		if ((a.id+"").equals(sxa[1]) && ((a.controller.getIndex()+"").equals(sxa[0]))) {
 			/*if (f > 0) {
 				ih.toggleJoypad(keys.fireRight, true);
 			} else {
@@ -263,7 +457,7 @@ public class JoypadHandler {
 				ih.toggleJoypad(keys.fire, false);
 			}
 		}
-		if (a.name.equals(shootYA.substring(shootYA.indexOf(":")+1)) && !((a.controller.getIndex()+"").equals(shootYA.substring(shootYA.indexOf(":")+1)))) {
+		if ((a.id+"").equals(sya[1]) && ((a.controller.getIndex()+"").equals(sya[0]))) {
 			/*if (f > 0) {
 				ih.toggleJoypad(keys.fireDown, true);
 			} else {
@@ -285,7 +479,7 @@ public class JoypadHandler {
 			}
 		}
 		
-		if (a.name.equals(walkXA.substring(walkXA.indexOf(":")+1)) && !((a.controller.getIndex()+"").equals(walkXA.substring(walkXA.indexOf(":")+1)))) {
+		if ((a.id+"").equals(wxa[1]) && ((a.controller.getIndex()+"").equals(wxa[0]))) {
 			if (f > 0) {
 				ih.toggleJoypad(keys.right, true);
 			} else {
@@ -297,7 +491,7 @@ public class JoypadHandler {
 				ih.toggleJoypad(keys.left, false);
 			}
 		}
-		if (a.name.equals(walkYA.substring(walkYA.indexOf(":")+1)) && !((a.controller.getIndex()+"").equals(walkYA.substring(walkYA.indexOf(":")+1)))) {
+		if ((a.id+"").equals(wya[1]) && ((a.controller.getIndex()+"").equals(wya[0]))) {
 			if (f > 0) {
 				ih.toggleJoypad(keys.down, true);
 			} else {
@@ -360,14 +554,14 @@ public class JoypadHandler {
 		walkXA = Options.get("joya_walkXA");
 		walkYA = Options.get("joya_walkYA");
 		
-		if (mouseXA == null) mouseXA = "-1:NONE";
-		if (mouseYA == null) mouseYA = "-1:NONE";
+		if (mouseXA == null) mouseXA = "-1:-1:NONE";
+		if (mouseYA == null) mouseYA = "-1:-1:NONE";
 		
-		if (shootXA == null) shootXA = "-1:NONE";
-		if (shootYA == null) shootYA = "-1:NONE";
+		if (shootXA == null) shootXA = "-1:-1:NONE";
+		if (shootYA == null) shootYA = "-1:-1:NONE";
 		
-		if (walkXA == null) walkXA = "-1:NONE";
-		if (walkYA == null) walkYA = "-1:NONE";
+		if (walkXA == null) walkXA = "-1:-1:NONE";
+		if (walkYA == null) walkYA = "-1:-1:NONE";
 	}
 	
 	public static void tick() {

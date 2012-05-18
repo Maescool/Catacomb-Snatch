@@ -83,14 +83,14 @@ public class AJoyBindingsMenu extends GuiMenu {
 		
 		public void updateAxis(Axis a) {
 			// TODO Auto-generated method stub
-			String text = a.controller.getIndex()+":"+a.name;
+			String text = a.controller.getIndex()+":"+a.id+":"+a.name;
 			updateAxis(text);
 		}
 		
 		public void updateAxis(String text) {
 			if (axisn.toUpperCase().equals("MOUSEX")) {
-				JoypadHandler.mouseXA = text; // TODO : DO FOR BUTTONS , TOO 
-				Options.set("joya_mouseXA", text);
+				JoypadHandler.mouseXA = text;
+				//Options.set("joya_mouseXA", text);
 			}
 			if (axisn.toUpperCase().equals("MOUSEY")) {
 				JoypadHandler.mouseYA = text;
@@ -205,7 +205,7 @@ public class AJoyBindingsMenu extends GuiMenu {
 		if (name.toUpperCase().equals("SHOOTX")) axisn = JoypadHandler.shootXA;
 		if (name.toUpperCase().equals("SHOOTY")) axisn = JoypadHandler.shootYA;
 		
-		axisn = axisn.substring(axisn.indexOf(":")+1);
+		axisn = axisn.substring(axisn.lastIndexOf(":")+1);
 		
 		return axisn;
 	}
@@ -252,7 +252,7 @@ public class AJoyBindingsMenu extends GuiMenu {
 	}
 	
 	public void axisUsed(Axis a) {
-		System.out.println(a.controller.getIndex()+":"+a.name);
+		System.out.println(a.controller.getIndex()+":"+a.id);
 		selectedKey.updateAxis(a);
 		selectedKey.setSelected(false);
 		selectedKey = null;

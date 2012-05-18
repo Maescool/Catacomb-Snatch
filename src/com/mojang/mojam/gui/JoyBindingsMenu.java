@@ -3,6 +3,8 @@ package com.mojang.mojam.gui;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import org.lwjgl.input.Controller;
+
 import com.mojang.mojam.InputHandler;
 import com.mojang.mojam.JoypadHandler;
 import com.mojang.mojam.Options;
@@ -223,7 +225,7 @@ public class JoyBindingsMenu extends GuiMenu {
 		for (JoypadHandler.Button b : joyButtonList) {
 			if (b.simulKey == key) return b;
 		}
-		return new JoypadHandler.Button("NONE", null, -1);
+		return new JoypadHandler.Button("NONE", new JoypadHandler().new DummyController(), -1);
 	}
 
 	@Override
@@ -286,7 +288,7 @@ public class JoyBindingsMenu extends GuiMenu {
 		if (selectedKey == null) return;
 		if (b == null) return;
 		b.simulKey = selectedKey.getKey();
-		Options.set("joyb_"+b.name, b.simulKey.name);
+		Options.set("joyb_"+b.controller.getIndex()+"_"+b.id, b.simulKey.name);
 		selectedKey.setLabel(b.name);
 		selectedKey.setSelected(false);
 		selectedKey = null;
@@ -299,7 +301,7 @@ public class JoyBindingsMenu extends GuiMenu {
 			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				JoypadHandler.Button b = getJoyButton(selectedKey.getKey());
 				b.simulKey = null;
-				Options.set("joyb_"+b.name, "");
+				Options.set("joyb_"+b.controller.getIndex()+"_"+b.id, "");
 				selectedKey.setLabel("NONE");
 				selectedKey.setSelected(false);
 				selectedKey = null;
