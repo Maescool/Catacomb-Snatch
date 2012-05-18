@@ -282,7 +282,7 @@ public class Font {
 	public void draw(AbstractScreen screen, String msg, int x, int y) {
 		draw(screen, msg, x, y, Integer.MAX_VALUE);
 	}
-
+	
 	/**
 	 * Draw the given text onto the given screen, centered.
 	 * 

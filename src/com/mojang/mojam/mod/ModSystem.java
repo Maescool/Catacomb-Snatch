@@ -120,15 +120,25 @@ public final class ModSystem {
 			e1.printStackTrace();
 		}
 
-		System.out.println("ModSystem starting up...");
-		addMod(ModSystem.class.getClassLoader(), "SnatchContent.class");
 		inputHandler = (InputHandler) reflectField(mojam, "inputHandler");
-		try {
-			readLinksFromFile(new File(mojam.getMojamDir(), "mods.txt"));
-			readFromClassPath(modDir);
-		} catch (Exception e) {
-			e.printStackTrace();
+		
+	
+			
+			addMod(ModSystem.class.getClassLoader(), "SnatchContent.class");
+			
+			
+		if (Options.getAsBoolean(Options.ENABLE_MODS, Options.VALUE_FALSE)) {
+			System.out.println("ModSystem starting up...");
+			try {
+				readLinksFromFile(new File(mojam.getMojamDir(), "mods.txt"));
+				readFromClassPath(modDir);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println("ModSystem disabled...");
 		}
+		
 	}
 
 	/**
@@ -335,8 +345,6 @@ public final class ModSystem {
 					+ s.substring(s.lastIndexOf('.') + 1)));
 			e.eval(library);
 			e.eval(fr);
-			e.put("mod", new ModSystem());
-			e.put("mojam", MojamComponent.instance);
 			scriptList.add(e);
 			System.out.println(e.getFactory().getExtensions().get(0).toUpperCase() + " Script initialised: " + s);
 		} catch (FileNotFoundException e1) {
@@ -520,9 +528,9 @@ public final class ModSystem {
 	public static Key addKey(Key key, int code) {
 		inputHandler = (InputHandler) reflectField(mojam, "inputHandler");
 		for (Keys k : mojam.synchedKeys) {
-			k.getAll().add(key);
+			k.addKey(key);
 		}
-		mojam.keys.getAll().add(key);
+		mojam.keys.addKey(key);
 		reflectMethod(InputHandler.class, inputHandler, "initKey", new Object[] { key, code });
 		System.out.println("Added key: " + key.name + " with keycode: " + code);
 		return key;
@@ -760,7 +768,7 @@ public final class ModSystem {
 			m.CreateLevel(l);
 		}
 		level = l;
-		invoke("CreateLevel");
+		invoke("CreateLevel", level);
 	}
 
 	public static void onStop() {
@@ -1125,6 +1133,18 @@ public final class ModSystem {
 				for (IMod m : modList) {
 					m.IfKeyUp(key);
 				}
+			}
+		}
+	}
+	
+	public static void keyEvent(Key key, boolean state) {
+		if (state) {
+			for (IMod m : modList) {
+				m.IfKeyDown(key);
+			}
+		} else {
+			for (IMod m : modList) {
+				m.IfKeyUp(key);
 			}
 		}
 	}

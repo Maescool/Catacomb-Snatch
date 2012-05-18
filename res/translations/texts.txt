@@ -119,6 +119,7 @@ options.alternative = ALTERNATIVE PLAYER SKIN
 options.credits = CREDITS
 options.openal = Sound system OpenAL
 options.smallscale = SMALL GRAPHICS
+options.enableMods = ENABLE MODS (RESTART REQUIRED)
 
 pausemenu.help = HELP
 pausemenu.backtomain = MAIN
@@ -144,6 +145,10 @@ shop.harvesterTooltipLine2 = Use to reclaim loot.
 shop.bombTooltipTitle = BOMB
 shop.bombTooltipLine1 = Destroys cracked walls.
 shop.bombTooltipLine2 = Use to create shortcuts.
+
+shop.soldierTooltipTitle = SOLDIER
+shop.soldierTooltipLine1 = Used for attack. Attacks
+shop.soldierTooltipLine2 = enemies, Collects coins.
 
 shop.rifleTooltipTitle = RIFLE
 shop.rifleTooltipLine1 = Default starting weapon.

@@ -34,6 +34,11 @@ public abstract class Mob extends Entity {
 	protected double speed = 1.0;
 	protected boolean doShowHealthBar = true;
     protected int healthBarOffset = 10;
+    private boolean doShowMoneyBar = true;
+	private int moneyBarOffset = 16;
+	private int money = 0;
+	private int maxMoney;
+	
 	double dir = 0;
 	public int hurtTime = 0;
 	public int freezeTime = 0;
@@ -62,7 +67,8 @@ public abstract class Mob extends Entity {
     public Vec2 aimVector;
     public IWeapon weapon;
 	protected Buffs buffs = new Buffs();
-	private boolean highlight;
+	private int flashTime;
+	public boolean highlight = false;
 	
 	public Mob(double x, double y, int team) {
 		super();
@@ -75,6 +81,14 @@ public abstract class Mob extends Entity {
 
 	public void init() {
 		super.init();
+	}
+
+	public int getFlashTime() {
+		return flashTime;
+	}
+
+	public void setFlashTime(int flashTime) {
+		this.flashTime = flashTime;
 	}
 
 	public void setStartHealth(float newHealth) {
@@ -104,17 +118,12 @@ public abstract class Mob extends Entity {
 	}
 
 	public void tick() {
+		
+        countdownTimers();
+        
 		this.buffs.tick();
 		if (TitleMenu.difficulty.isMobRegenerationAllowed() || this.team != Team.Neutral) {
 			this.doRegenTime();
-		}
-		
-		if (hurtTime > 0) {
-			hurtTime--;
-		}
-		
-		if (bounceWallTime > 0) {
-			bounceWallTime--;
 		}
 		
 		if (freezeTime > 0) {
@@ -125,7 +134,6 @@ public abstract class Mob extends Entity {
 			if (xBump != 0 || yBump != 0) {
 				move(xBump, yBump);
 			}
-			freezeTime--;
 			return;
 		} else {
 			xSlide = ySlide = 0;
@@ -139,6 +147,24 @@ public abstract class Mob extends Entity {
 		handleWeaponFire(xd, yd);
 	}
 	
+	   /**
+     * Count down the internal timers
+     */
+    protected void countdownTimers() {
+        if (flashTime > 0) {
+            flashTime--;
+        }
+        if (hurtTime > 0) {
+            hurtTime--;
+        }
+        if (freezeTime > 0) {
+            freezeTime--;
+        }
+		if (bounceWallTime > 0) {
+			bounceWallTime--;
+		}
+    }
+    
 	public void addBuff( Buff buff ) {
 		this.buffs.add(buff);
 	}
@@ -222,6 +248,8 @@ public abstract class Mob extends Entity {
 					col = col * hurtTime / 10;
 				screen.colorBlit(image, pos.x - image.getWidth() / 2, pos.y - image.getHeight() / 2 - yOffs, (col << 24) + 255 * 65536);
 			}
+		} else if (flashTime > 0) {
+            screen.colorBlit(image, pos.x - image.getWidth() / 2, pos.y - image.getHeight() / 2 - yOffs, 0x80ffff80);
 		} else {
 					
 			screen.blit(image, pos.x - image.getWidth() / 2, pos.y - image.getHeight() / 2 - yOffs);
@@ -230,7 +258,9 @@ public abstract class Mob extends Entity {
 		if (doShowHealthBar && health < maxHealth) {
             addHealthBar(screen);
         }
-		
+		if (doShowMoneyBar && money > 0 ) {
+            addMoneyBar(screen);
+        }
 		renderMarker(screen);
 	}
 
@@ -269,34 +299,46 @@ public abstract class Mob extends Entity {
 			screen.blit(marker, bb.x0, bb.y0 - 4);
 		}
 	}
-	
-	protected void addHealthBar(AbstractScreen screen) {
+
+	protected void addProgressBar(AbstractScreen screen,int value, int maxValue, int yOffs, int colourThreeTenths, int colourSixTenths, int colourEigthTenths, int colourBase ) {
         
-        int start = (int) (health * 21 / maxHealth);
+		if (maxValue <= 0)
+			return;
+		
+        int start = (int) (value * 20 / maxValue);
         
-        float one_tenth_hp = (float) (maxHealth / 10f);
-		float three_tenths_hp = one_tenth_hp * 3;
-		float size_tenths_hp = one_tenth_hp * 6;
-		float eigth_tenths_hp = one_tenth_hp * 8;
+        float oneTenth = (float) (maxValue / 10f);
+		float threeTenths = oneTenth * 3;
+		float sixTenths = oneTenth * 6;
+		float eigthTenths = oneTenth * 8;
 		
 		int color = 0;
 		
-		if(health < three_tenths_hp){
-			color = 0xf62800;
-		}else if (health < size_tenths_hp){
-			color = 0xfe7700;
-		}else if (health < eigth_tenths_hp){
-			color = 0xfef115;
+		if(value < threeTenths){
+			color = colourThreeTenths;
+		}else if (value < sixTenths){
+			color = colourSixTenths;
+		}else if (value < eigthTenths){
+			color = colourEigthTenths;
 		}else {
-			color = 0x8af116;
+			color = colourBase;
 		}
 
-		screen.blit(Art.healthBar_Underlay[0][0], pos.x - 16, pos.y + healthBarOffset);
-		screen.colorBlit(Art.healthBar[start][0], pos.x - 16, pos.y + healthBarOffset, (0xff << 24) + color);
-		screen.blit(Art.healthBar_Outline[0][0], pos.x - 16, pos.y + healthBarOffset);
+		screen.blit(Art.healthBar_Underlay[0][0], pos.x - 16, pos.y + yOffs);
+		screen.colorBlit(Art.healthBar[start][0], pos.x - 16, pos.y + yOffs, (0xff << 24) + color);
+		screen.blit(Art.healthBar_Outline[0][0], pos.x - 16, pos.y + yOffs);
     }
 
+	protected void addHealthBar(AbstractScreen screen) {
+		addProgressBar(screen,(int)health,(int)maxHealth,healthBarOffset,0xf62800,0xfe7700,0xfef115,0x8af116);
+    }
+
+	protected void addMoneyBar(AbstractScreen screen) {
+		addProgressBar(screen,money,maxMoney,moneyBarOffset,0xb4b1e0,0x9f9be0,0x8b84e0,0x756de0);
+    }
+    
 	protected void renderCarrying(AbstractScreen screen, int yOffs) {
+
 		if (carrying == null)
 			return;
 
@@ -382,6 +424,8 @@ public abstract class Mob extends Entity {
 	}
     
     public boolean isTargetBehindWall(double dx2, double dy2, Entity e) {
+    	return !level.checkLineOfSight(this, new Vec2(dx2,dy2));
+    	/*
         int x1 = (int) pos.x / Tile.WIDTH;
         int y1 = (int) pos.y / Tile.HEIGHT;
         int x2 = (int) dx2 / Tile.WIDTH;
@@ -447,6 +491,7 @@ public abstract class Mob extends Entity {
             return true;
         }
         return false;
+        */
     }
     
     public boolean fallDownHole() {
@@ -536,6 +581,53 @@ public abstract class Mob extends Entity {
         weapon.weapontick();
     }
 
+	public IWeapon getWeapon() {
+		return weapon;
+	}
+
+	public void setWeapon(IWeapon weapon) {
+		this.weapon = weapon;
+	}
+
+	public boolean isDoShowMoneyBar() {
+		return doShowMoneyBar;
+	}
+
+	public void setDoShowMoneyBar(boolean doShowMoneyBar) {
+		this.doShowMoneyBar = doShowMoneyBar;
+	}
+
+	public int getMoney() {
+		return money;
+	}
+
+	public void setMoney(int money) {
+		this.money = money;
+	}
+	
+	public void addMoney(int dMoney) {
+		this.money += dMoney;
+		if (money > maxMoney) {
+			money = maxMoney;
+		}
+	}
+	
+	public int getMoneyBarOffset() {
+		return moneyBarOffset;
+	}
+
+	public void setMoneyBarOffset(int moneyBarOffset) {
+		this.moneyBarOffset = moneyBarOffset;
+	}
+
+	public int getMaxMoney() {
+		return maxMoney;
+	}
+
+	public void setMaxMoney(int maxMoney) {
+		this.maxMoney = maxMoney;
+	}
+
 	public boolean isHighlight() {
 		return highlight;
 	}
@@ -543,4 +635,5 @@ public abstract class Mob extends Entity {
 	public void setHighlight(boolean highlight) {
 		this.highlight = highlight;
 	}
+    
 }

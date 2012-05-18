@@ -35,6 +35,7 @@ public class Options {
 
 	public static final String DLSYSTEM = "dlsystem";
 	public static final String DLBUFFERSIZE = "dlbuffer";
+	public static final String ENABLE_MODS = "enableMods";
 
 	private static Properties properties = new Properties();
 

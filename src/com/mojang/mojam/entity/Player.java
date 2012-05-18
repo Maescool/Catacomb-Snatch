@@ -54,7 +54,6 @@ public class Player extends Mob implements LootCollector {
     private boolean mouseAiming;
    
     public int takeDelay = 0;
-    public int flashTime = 0;
     public int suckRadius = 0;
     public boolean wasShooting;
     public int score = 0;
@@ -310,16 +309,9 @@ public class Player extends Mob implements LootCollector {
     /**
      * Count down the internal timers
      */
-    private void countdownTimers() {
-        if (flashTime > 0) {
-            flashTime = 0;
-        }
-        if (hurtTime > 0) {
-            hurtTime--;
-        }
-        if (freezeTime > 0) {
-            freezeTime--;
-        }
+    protected void countdownTimers() {
+    	super.countdownTimers();
+    	
         if (muzzleTicks > 0) {
             muzzleTicks--;
         }
@@ -753,7 +745,7 @@ public class Player extends Mob implements LootCollector {
 
         if (hurtTime % 2 != 0) {
             screen.colorBlit(sheet[frame][facing], pos.x - Tile.WIDTH / 2, pos.y - Tile.HEIGHT / 2 - 8, 0x80ff0000);
-        } else if (flashTime > 0) {
+        } else if (getFlashTime() > 0) {
             screen.colorBlit(sheet[frame][facing], pos.x - Tile.WIDTH / 2, pos.y - Tile.HEIGHT / 2 - 8, 0x80ffff80);
         } else {
             screen.blit(sheet[frame][facing], pos.x - Tile.WIDTH / 2, pos.y - Tile.HEIGHT / 2 - 8);
@@ -829,7 +821,7 @@ public class Player extends Mob implements LootCollector {
 
     @Override
     public void flash() {
-        flashTime = 20;
+        setFlashTime(5);
     }
 
     @Override
@@ -966,6 +958,14 @@ public class Player extends Mob implements LootCollector {
     public void updateFacing() {
         facing = (int) ((Math.atan2(-aimVector.x, aimVector.y) * 8 / (Math.PI * 2) + 8.5)) & 7;
     }
+
+	public int getPlevel() {
+		return plevel;
+	}
+
+	public void setPlevel(int plevel) {
+		this.plevel = plevel;
+	}
 
 
 

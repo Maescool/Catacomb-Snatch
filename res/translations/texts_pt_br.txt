@@ -60,6 +60,7 @@ help.rails = TRILHOS
 help.rails1 = O TRANSPORTE DOS DROIDS COLETORES.
 help.rails2 = PRESSIONE 'CONSTRUIR' NO PRIMEIRO TRILHO
 help.rails3 = PARA CONSTRUIR UM DROID COLETOR(50 GOLD).
+help.rails4 =
 
 keys.up = CIMA
 keys.down = BAIXO
@@ -95,6 +96,9 @@ mp.enterIP = COLOCAR IP DO HOSPEDEIRO:
 mp.localIP = SEU IP LOCAL:
 mp.externalIP = SEU IP EXTERNO:
 mp.join = ENTRAR
+mp.mismatch = VERSÕES DIFERENTES!
+mp.server = SERVIDOR
+mp.client = CLIENTE
 
 options.on = LIGADO
 options.off = DESLIGADO
@@ -113,6 +117,8 @@ options.mute = SEM SOM
 options.creative = MODO CRIATIVO
 options.alternative = SKIN ALTERNATIVA
 options.credits = CRÉDITOS
+options.openal = SISTEMA DE SOM OpenAL
+options.smallscale = GRÁFICOS PEQUENOS
 
 pausemenu.help = AJUDA
 pausemenu.backtomain = MENU

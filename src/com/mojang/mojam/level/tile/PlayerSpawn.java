@@ -2,8 +2,10 @@ package com.mojang.mojam.level.tile;
 
 import com.mojang.mojam.GameCharacter;
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.entity.Bullet;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
+import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.screen.AbstractBitmap;
@@ -54,8 +56,13 @@ public class PlayerSpawn extends Tile {
 	    else return player.getCharacter();
 	}
 	
-	public boolean canPass(Entity e) {
-		return true;
+	@Override
+	public boolean canPass(Entity e) { //only allow players/loot/bullets to pass the spawn flag
+		if ((e instanceof Player) || (e instanceof Loot) || (e instanceof Bullet)) {
+			return true;
+		}
+		
+		return false;
 	}
 
 	public int getColor() {
