@@ -309,12 +309,12 @@ public class JoypadHandler {
 	
 	//Index:AxisName
 	//3:X axis
-	public static String mouseXA = "-1:NONE";
-	public static String mouseYA = "-1:NONE";
-	public static String shootXA = "-1:NONE";
-	public static String shootYA = "-1:NONE";
-	public static String walkXA = "-1:NONE";
-	public static String walkYA = "-1:NONE";
+	public static String mouseXA = null;
+	public static String mouseYA = null;
+	public static String shootXA = null;
+	public static String shootYA = null;
+	public static String walkXA = null;
+	public static String walkYA = null;
 	
 	public static JoypadHandler handlers[];
 	public static int count;
@@ -346,26 +346,23 @@ public class JoypadHandler {
 			handlers[i] = new JoypadHandler(i);
 		}
 		
-		if (Options.get("joya_mouseXA") != null) {
-			mouseXA = Options.get("joya_mouseXA");
-		}
-		if (Options.get("joya_mouseYA") != null) {
-			mouseYA = Options.get("joya_mouseYA");
-		}
+		mouseXA = Options.get("joya_mouseXA");
+		mouseYA = Options.get("joya_mouseYA");
 		
-		if (Options.get("joya_shootXA") != null) {
-			shootXA = Options.get("joya_ shootXA");
-		}
-		if (Options.get("joya_shootYA") != null) {
-			shootYA = Options.get("joya_ shootYA");
-		}
+		shootXA = Options.get("joya_ shootXA");
+		shootYA = Options.get("joya_ shootYA");
 		
-		if (Options.get("joya_walkXA") != null) {
-			walkXA = Options.get("joya_walkXA");
-		}
-		if (Options.get("joya_walkYA") != null) {
-			walkYA = Options.get("joya_walkYA");
-		}
+		walkXA = Options.get("joya_walkXA");
+		walkYA = Options.get("joya_walkYA");
+		
+		if (mouseXA == null) mouseXA = "-1:NONE";
+		if (mouseYA == null) mouseYA = "-1:NONE";
+		
+		if (shootXA == null) shootXA = "-1:NONE";
+		if (shootYA == null) shootYA = "-1:NONE";
+		
+		if (walkXA == null) walkXA = "-1:NONE";
+		if (walkYA == null) walkYA = "-1:NONE";
 	}
 	
 	public static void tick() {
