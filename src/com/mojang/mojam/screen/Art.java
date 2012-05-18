@@ -36,7 +36,6 @@ public class Art {
 	public static AbstractBitmap[][] rails;
 	public static AbstractBitmap[][] spikes;
 	public static AbstractBitmap[][] dropFloor;
-	public static AbstractBitmap[][] destWalls;
 	// Player sheets
 	private static AbstractBitmap[][] lordLard;
 	private static AbstractBitmap[][] herrSpeck;
@@ -252,7 +251,6 @@ public class Art {
 		rails = screen.cut("/art/map/rails.png", 32, 38);
 		spikes = screen.cut("/art/map/spiketrap.png", 32, 32);
 		dropFloor = screen.cut("/art/map/droptrap.png", 32, 32);
-		destWalls = screen.cut("/art/map/destwalls.png", 32, 32);
 		// Player sheets
 		lordLard = screen.cut("/art/player/lord_lard_sheet.png", 32, 32);
 		herrSpeck = screen.cut("/art/player/herr_von_speck_sheet.png", 32, 32);
