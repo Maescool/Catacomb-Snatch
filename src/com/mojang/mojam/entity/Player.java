@@ -557,12 +557,12 @@ public class Player extends Mob implements LootCollector {
             mouseButtons.setNextState(mouseUseButton, false);
 
             if(selected != null) {
-            	if (selected instanceof ICarrySwap) {
+            	/*if (selected instanceof ICarrySwap) {
             		carrying=((ICarrySwap)selected).tryToSwap(carrying);
             		if (carrying != null) {
             			carrying.onPickup(this);
             		}
-            	}
+            	}*/
             } else {
             	if (!isCarrying())
             		return;
@@ -578,6 +578,17 @@ public class Player extends Mob implements LootCollector {
     	
         carrying.setPos(pos.x, pos.y - 20);
         carrying.tick();
+    }
+    
+    public void pickup(Building b) {
+    	if(isCarrying()) {
+    		if(carrying.isAllowedToCancel()) {
+    			drop();
+    		} else {
+    			return;
+    		}
+    	}
+    	super.pickup(b);
     }
 
     /**
