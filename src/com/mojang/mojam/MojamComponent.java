@@ -123,7 +123,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public boolean mouseMoved = false;
 	public boolean joyMoved = false;
 	public boolean shootMoved = false;
-	public boolean shootStopped = false;
 	private int mouseHideTime = 0;
 	public MouseButtons mouseButtons = new MouseButtons();
 	public Keys keys = new Keys();
@@ -830,37 +829,30 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		if (!menuStack.isEmpty()) {
 			menuStack.peek().tick(mouseButtons);
 		}
+		// Do joystick handling when replacing mouse handling 
 		if (!mouseMoved && joyMoved) {
 			joyMoved = false;
 			mouseHideTime = 0;
-			if (mouseButtons.mouseHidden) {
-				mouseButtons.mouseHidden = false;
-			}
+			mouseButtons.mouseHidden = false;
 			mouseButtons.renderMouse = true;
 		}
+		// Do mouse handling 
 		if (mouseMoved) {
 			mouseMoved = false;
 			mouseHideTime = 0;
-			if (mouseButtons.mouseHidden) {
-				mouseButtons.mouseHidden = false;
-			}
+			mouseButtons.mouseHidden = false;
 			mouseButtons.renderMouse = true;
 		}
-		if (mouseHideTime < 60) {
-			mouseHideTime++;
-			if (mouseHideTime == 60) {
-				mouseButtons.mouseHidden = true;
-				mouseButtons.renderMouse = false;
-			}
-		}
-		shootStopped = shootMoved;
+		// Do shoot handling 
 		if (shootMoved) {
 			shootMoved = false;
 			mouseButtons.mouseHidden = false;
 			mouseButtons.renderMouse = false;
+			mouseHideTime = 50;
 		}
-		if (shootStopped && !shootMoved) {
-			mouseHideTime = 60;
+		// Make the cursor go after a while 
+		mouseHideTime++;
+		if (mouseHideTime >= 60 && !shootMoved) {
 			mouseButtons.mouseHidden = true;
 			mouseButtons.renderMouse = false;
 		}

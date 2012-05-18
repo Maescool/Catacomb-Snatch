@@ -225,12 +225,16 @@ public class JoypadHandler {
 		if (a.name.equals(mouseXA.substring(mouseXA.indexOf(":")+1)) && !((a.controller.getIndex()+"").equals(mouseXA.substring(mouseXA.indexOf(":")+1)))) {
 			int x = (int) (f*5);
 			MojamComponent.instance.mouseButtons.jx = x;
-			MojamComponent.instance.joyMoved = true;
+			if (x != 0) {
+				MojamComponent.instance.joyMoved = true;
+			}
 		}
 		if (a.name.equals(mouseYA.substring(mouseXA.indexOf(":")+1)) && !((a.controller.getIndex()+"").equals(mouseYA.substring(mouseYA.indexOf(":")+1)))) {
 			int y = (int) (f*5);
 			MojamComponent.instance.mouseButtons.jy = y;
-			MojamComponent.instance.joyMoved = true;
+			if (y != 0) {
+				MojamComponent.instance.joyMoved = true;
+			}
 		}
 		
 		if (a.name.equals(shootXA.substring(shootXA.indexOf(":")+1)) && !((a.controller.getIndex()+"").equals(shootXA.substring(shootXA.indexOf(":")+1)))) {
