@@ -287,8 +287,15 @@ public class JoyBindingsMenu extends GuiMenu {
 	public void joyPressed(JoypadHandler.Button b) {
 		if (selectedKey == null) return;
 		if (b == null) return;
+		JoypadHandler.Button oldb = selectedKey.button;
+		if (oldb != null) {
+			System.out.println(oldb.name);
+			oldb.simulKey = null;
+		}
+		b.simulKey = null;
 		b.simulKey = selectedKey.getKey();
 		Options.set("joyb_"+b.controller.getIndex()+"_"+b.id, b.simulKey.name);
+		selectedKey.setLabel("NONE");
 		selectedKey.setLabel(b.name);
 		selectedKey.setSelected(false);
 		selectedKey = null;

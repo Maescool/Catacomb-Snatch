@@ -582,5 +582,18 @@ public class JoypadHandler {
 			handlers[i].updateDetails();
 		}
 	}
+
+	public static Button getButtonWithKey(Key key) {
+		for (int i = 0; i < count; i++) {
+			JoypadHandler h = handlers[i];
+			int buttons = h.buttonCount;
+			ArrayList<Object> butaxes = h.butaxes;
+			for (int id = 0; id < buttons; id++) {
+				Button b = (Button) butaxes.get(id);
+				if (b.name.equals(key.name)) return b;
+			}
+		}
+		return null;
+	}
 	
 }

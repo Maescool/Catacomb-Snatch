@@ -82,7 +82,6 @@ public class AJoyBindingsMenu extends GuiMenu {
 		}
 		
 		public void updateAxis(Axis a) {
-			// TODO Auto-generated method stub
 			String text = a.controller.getIndex()+":"+a.id+":"+a.name;
 			updateAxis(text);
 		}
