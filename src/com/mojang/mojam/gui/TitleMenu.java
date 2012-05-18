@@ -127,6 +127,8 @@ public class TitleMenu extends GuiMenu {
 	public static final int JOY_WEAPON_SLOT_1_ID = 7017;
 	public static final int JOY_WEAPON_SLOT_2_ID = 7018;
 	public static final int JOY_WEAPON_SLOT_3_ID = 7019;
+	public static final int JOY_CLICK_ID = 7020;
+	public static final int JOY_PAUSE_ID = 7021;
 	public static final int AXES_MENU = 8000;
 	public static final int JOY_MOUSEX_ID = 8001;
 	public static final int JOY_MOUSEY_ID = 8002;

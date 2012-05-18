@@ -123,6 +123,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public boolean mouseMoved = false;
 	public boolean joyMoved = false;
 	public boolean shootMoved = false;
+	public boolean shootStopped = false;
 	private int mouseHideTime = 0;
 	public MouseButtons mouseButtons = new MouseButtons();
 	public Keys keys = new Keys();
@@ -852,9 +853,15 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 				mouseButtons.renderMouse = false;
 			}
 		}
+		shootStopped = shootMoved;
 		if (shootMoved) {
 			shootMoved = false;
 			mouseButtons.mouseHidden = false;
+			mouseButtons.renderMouse = false;
+		}
+		if (shootStopped && !shootMoved) {
+			mouseHideTime = 60;
+			mouseButtons.mouseHidden = true;
 			mouseButtons.renderMouse = false;
 		}
 	}

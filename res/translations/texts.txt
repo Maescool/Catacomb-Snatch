@@ -83,25 +83,8 @@ keys.console = CONSOLE
 keys.mousea = MOUSE {0}-AXIS
 keys.walka = WALK {0}-AXIS
 keys.shoota = SHOOT {0}-AXIS
-
-keys.up = UP
-keys.down = DOWN
-keys.left = LEFT
-keys.right=  RIGHT
-keys.sprint = SPRINT
-keys.fire = FIRE
-keys.fireUp = FIRE UP
-keys.fireDown = FIRE DOWN
-keys.fireLeft = FIRE LEFT
-keys.fireRight = FIRE RIGHT
-keys.use = USE
-keys.build = BUILD
-keys.upgrade = UPGRADE
-keys.chat = CHAT
-keys.weaponSlot = WEAPON SLOT {0}
-keys.cycleLeft = NEXT WEAPON
-keys.cycleRight = PREV WEAPON
-keys.console = CONSOLE
+keys.click = CLICK
+keys.pause = PAUSE
 
 leveleditor.title = LEVEL EDITOR
 leveleditor.new = NEW

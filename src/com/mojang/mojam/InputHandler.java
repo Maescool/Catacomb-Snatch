@@ -42,6 +42,9 @@ public class InputHandler implements KeyListener {
 		
 		//console
 		initKey(keys.console, KeyEvent.VK_BACK_QUOTE);
+		
+		//joypad specials
+		initKey(keys.joy_click, -1);
 	}
 
 	private void initKey(Key key, int defaultKeyCode) {
@@ -116,6 +119,13 @@ public class InputHandler implements KeyListener {
 		//	return;
 		//}
 		//if (key.nextState && key.keybTick > 2) return;
+		
+		if (key.name == MojamComponent.instance.keys.joy_click.name) {
+			MouseButtons mb = MojamComponent.instance.mouseButtons;
+			MojamComponent.instance.mouseButtons.nextState[1] = (!mb.nextState2[1])?state:mb.nextState[1];
+			return;
+		}
+		
 		key.nextState = (!key.nextState2)?state:key.nextState;
 	}
 }

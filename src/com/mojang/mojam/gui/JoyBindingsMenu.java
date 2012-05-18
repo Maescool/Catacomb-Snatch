@@ -148,6 +148,8 @@ public class JoyBindingsMenu extends GuiMenu {
 				* BUTTON_SPACING));
 		addButton(new JoyBindingButton(TitleMenu.JOY_WEAPON_SLOT_3_ID, keys.weaponSlot3, tab1, yOffset + 8
 				* BUTTON_SPACING));	
+		addButton(new JoyBindingButton(TitleMenu.JOY_CLICK_ID, keys.joy_click, tab1, yOffset + 9
+				* BUTTON_SPACING));	
 				
 		addButton(new JoyBindingButton(TitleMenu.JOY_FIRE_UP_ID, keys.fireUp, tab2, yOffset + 0
 				* BUTTON_SPACING));
@@ -166,6 +168,8 @@ public class JoyBindingsMenu extends GuiMenu {
 		addButton(new JoyBindingButton(TitleMenu.JOY_CYCLE_LEFT_ID, keys.cycleLeft, tab2, yOffset + 7
 				* BUTTON_SPACING));
 		addButton(new JoyBindingButton(TitleMenu.JOY_CYCLE_RIGHT_ID, keys.cycleRight, tab2, yOffset + 8
+				* BUTTON_SPACING));
+		addButton(new JoyBindingButton(TitleMenu.JOY_PAUSE_ID, keys.pause, tab2, yOffset + 9
 				* BUTTON_SPACING));
 		
 
@@ -236,6 +240,7 @@ public class JoyBindingsMenu extends GuiMenu {
 		write(screen, txts.keyWeaponSlot(1), 0, 6);
 		write(screen, txts.keyWeaponSlot(2), 0, 7);
 		write(screen, txts.keyWeaponSlot(3), 0, 8);
+		write(screen, txts.getStatic("keys.click"), 0, 9);
 
 		write(screen, txts.getStatic("keys.fireUp"), 1, 0);
 		write(screen, txts.getStatic("keys.fireDown"), 1, 1);
@@ -246,6 +251,7 @@ public class JoyBindingsMenu extends GuiMenu {
 		write(screen, txts.getStatic("keys.upgrade"), 1, 6);
 		write(screen, txts.getStatic("keys.cycleLeft"), 1, 7);
 		write(screen, txts.getStatic("keys.cycleRight"), 1, 8);
+		write(screen, txts.getStatic("keys.pause"), 1, 9);
 		super.render(screen);
 		ClickableComponent button = buttons.get(selectedItem);
 		if (button == back) {

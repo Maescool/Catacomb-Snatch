@@ -64,6 +64,8 @@ public class Keys {
 	public Key cycleLeft = new Key("cycleLeft");
 	public Key cycleRight = new Key("cycleRight");
 	
+	public Key joy_click = new Key("joystickClick");
+	
 	public void tick() {
 		for (Key key : all)
 			key.tick();
