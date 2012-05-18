@@ -548,8 +548,8 @@ public class JoypadHandler {
 		mouseXA = Options.get("joya_mouseXA");
 		mouseYA = Options.get("joya_mouseYA");
 		
-		shootXA = Options.get("joya_ shootXA");
-		shootYA = Options.get("joya_ shootYA");
+		shootXA = Options.get("joya_shootXA");
+		shootYA = Options.get("joya_shootYA");
 		
 		walkXA = Options.get("joya_walkXA");
 		walkYA = Options.get("joya_walkYA");
