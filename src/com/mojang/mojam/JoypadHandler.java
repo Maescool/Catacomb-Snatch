@@ -45,11 +45,16 @@ public class JoypadHandler {
 			
 			String skn = Options.get("joyb_"+name);
 			if (skn != null) {
-				for (Keys.Key key : MojamComponent.instance.keys.getAll()) {
-					if (simulKey != null) continue;
-					if (key.name.equals(skn)) {
-						simulKey = key;
+				try {
+					Keys keys = MojamComponent.instance.keys;
+					for (Keys.Key key : keys.getAll()) {
+						if (simulKey != null) continue;
+						if (key.name.equals(skn)) {
+							simulKey = key;
+						}
 					}
+				} catch (NullPointerException e) {
+					e.printStackTrace();
 				}
 			}
 		}

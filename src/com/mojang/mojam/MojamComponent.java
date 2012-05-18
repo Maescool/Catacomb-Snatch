@@ -201,10 +201,10 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		addKeyListener(menuStack);
 		addKeyListener(chat);
 		addKeyListener(console);
-		JoypadHandler.init();
 		snatchClient = new SnatchClient();
 		snatchClient.setComponent(this);
 		instance = this;
+		JoypadHandler.init();
 	}
 
 	public void setScale(int i) {
