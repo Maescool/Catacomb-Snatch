@@ -171,7 +171,7 @@ public class JoyBindingsMenu extends GuiMenu {
 
 		
 		axes = addButton(new Button(TitleMenu.AXES_MENU, MojamComponent.texts.getStatic("options.axeBindings"),
-				0, yOffset + numRows * BUTTON_SPACING
+				gameWidth - Button.BUTTON_WIDTH, yOffset + numRows * BUTTON_SPACING
 						- Button.BUTTON_HEIGHT + 88));
 		
 		back = addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"),

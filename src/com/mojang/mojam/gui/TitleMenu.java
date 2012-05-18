@@ -97,7 +97,46 @@ public class TitleMenu extends GuiMenu {
 	public static final int LOCALE_SL_ID = 6011;
 	public static final int LOCALE_SV_ID = 6012;
 	public static final int LOCALE_AF_ID = 6013;
-
+	
+	/*
+	 * SMALL DOCUMENTATION FOR JOY_ IDS
+	 * 
+	 * 7000 - 7999 are used for joystick buttons 
+	 * 8000 is used for axis menu 
+	 * 8001 - 8998 is used for axes 
+	 * 8999 is used for joystick button menu 
+	 * 
+	 */
+	public static final int JOY_BINDINGS_ID = 7000;
+	public static final int JOY_UP_ID = 7001;
+	public static final int JOY_DOWN_ID = 7002;
+	public static final int JOY_LEFT_ID = 7003;
+	public static final int JOY_RIGHT_ID = 7004;
+	public static final int JOY_SPRINT_ID = 7005;
+	public static final int JOY_FIRE_ID = 7006;
+	public static final int JOY_USE_ID = 7007;
+	public static final int JOY_BUILD_ID = 7008;
+	public static final int JOY_UPGRADE_ID = 7009;
+	public static final int JOY_CHAT_ID = 7010;
+	public static final int JOY_FIRE_UP_ID = 7011;
+	public static final int JOY_FIRE_DOWN_ID = 7012;
+	public static final int JOY_FIRE_LEFT_ID = 7013;
+	public static final int JOY_FIRE_RIGHT_ID = 7014;
+	public static final int JOY_CYCLE_LEFT_ID = 7015;
+	public static final int JOY_CYCLE_RIGHT_ID = 7016;
+	public static final int JOY_WEAPON_SLOT_1_ID = 7017;
+	public static final int JOY_WEAPON_SLOT_2_ID = 7018;
+	public static final int JOY_WEAPON_SLOT_3_ID = 7019;
+	public static final int AXES_MENU = 8000;
+	public static final int JOY_MOUSEX_ID = 8001;
+	public static final int JOY_MOUSEY_ID = 8002;
+	public static final int JOY_MOVEX_ID = 8003;
+	public static final int JOY_MOVEY_ID = 8004;
+	public static final int JOY_SHOOTX_ID = 8005;
+	public static final int JOY_SHOOTY_ID = 8006;
+	public static final int JOY_MENU= 7999;
+	
+	
 	public static LevelInformation level = null;
 	public static GameMode defaultGameMode = new GameModeVanilla();
 	public static DifficultyInformation difficulty = DifficultyInformation.NORMAL;

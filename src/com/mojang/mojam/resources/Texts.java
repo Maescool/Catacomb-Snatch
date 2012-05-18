@@ -134,4 +134,8 @@ public class Texts {
 		return MessageFormat.format(getStatic("build.removeRail"), cost);
 	}
 
+	public String getFormated(String key, String arug) {
+		return MessageFormat.format(getStatic(key), arug);
+	}
+
 }

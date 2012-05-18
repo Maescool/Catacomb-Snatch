@@ -7,8 +7,10 @@ public class Keys {
 	public final class Key {
 		public final String name;
 		public boolean nextState = false;
+		public boolean nextState2 = false;
 		public boolean wasDown = false;
 		public boolean isDown = false;
+		public int keybTick = 0;
 
 		public Key(String name) {
 			this.name = name;
@@ -16,6 +18,8 @@ public class Keys {
 		}
 
 		public void tick() {
+			keybTick--;
+			if (keybTick < 0) keybTick = 0;
 			wasDown = isDown;
 			isDown = nextState;
 		}

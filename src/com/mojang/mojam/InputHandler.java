@@ -103,8 +103,19 @@ public class InputHandler implements KeyListener {
 				key = _key;
 		}
 		if (key != null) {
+			key.keybTick = 9;
 			key.nextState = state;
+			key.nextState2 = state;
 			ModSystem.keyEvent(key, state);
 		}
+	}
+
+	public void toggleJoypad(Key key, boolean state) {
+		//if (key.keybTick > 2) {
+		//	key.nextJoyState = false;
+		//	return;
+		//}
+		//if (key.nextState && key.keybTick > 2) return;
+		key.nextState = (!key.nextState2)?state:key.nextState;
 	}
 }

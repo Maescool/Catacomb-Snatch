@@ -199,6 +199,7 @@ public class JoypadHandler {
 	}
 	
 	public void toggleAxis(Axis a, float f) {
+		//Update axis status
 		if (a.firstState == -2) {
 			a.firstState = f;
 		}
@@ -220,19 +221,20 @@ public class JoypadHandler {
 		InputHandler ih = ((InputHandler)MojamComponent.instance.getInputHandler());
 		Keys keys = MojamComponent.instance.keys;
 		
-		if (a.name.equals(mouseXA.substring(shootXA.indexOf(":")+1)) && !((a.controller.getIndex()+"").equals(mouseXA.substring(mouseXA.indexOf(":")+1)))) {
-			int x = (int) (MojamComponent.instance.mouseButtons.getX() + f*2);
-			int y = MojamComponent.instance.mouseButtons.getY();
-			MojamComponent.instance.mouseButtons.setPosition(x, y);
+		//Check if axis is X or Y axis of any special axis>key/mouse port . If it is , handle axis seperately to counterpart ( X|y , x|Y ) 
+		if (a.name.equals(mouseXA.substring(mouseXA.indexOf(":")+1)) && !((a.controller.getIndex()+"").equals(mouseXA.substring(mouseXA.indexOf(":")+1)))) {
+			int x = (int) (f*5);
+			MojamComponent.instance.mouseButtons.jx = x;
+			MojamComponent.instance.joyMoved = true;
 		}
-		if (a.name.equals(mouseYA.substring(shootXA.indexOf(":")+1)) && !((a.controller.getIndex()+"").equals(mouseYA.substring(mouseYA.indexOf(":")+1)))) {
-			int x = MojamComponent.instance.mouseButtons.getX();
-			int y = (int) (MojamComponent.instance.mouseButtons.getY() + f*2);
-			MojamComponent.instance.mouseButtons.setPosition(x, y);
+		if (a.name.equals(mouseYA.substring(mouseXA.indexOf(":")+1)) && !((a.controller.getIndex()+"").equals(mouseYA.substring(mouseYA.indexOf(":")+1)))) {
+			int y = (int) (f*5);
+			MojamComponent.instance.mouseButtons.jy = y;
+			MojamComponent.instance.joyMoved = true;
 		}
 		
 		if (a.name.equals(shootXA.substring(shootXA.indexOf(":")+1)) && !((a.controller.getIndex()+"").equals(shootXA.substring(shootXA.indexOf(":")+1)))) {
-			if (f > 0) {
+			/*if (f > 0) {
 				ih.toggleJoypad(keys.fireRight, true);
 			} else {
 				ih.toggleJoypad(keys.fireRight, false);
@@ -241,10 +243,19 @@ public class JoypadHandler {
 				ih.toggleJoypad(keys.fireLeft, true);
 			} else {
 				ih.toggleJoypad(keys.fireLeft, false);
+			}*/
+			// Accuracy Implementation
+			int x = (int) (f*20);
+			MojamComponent.instance.mouseButtons.sx = x;
+			if (x != 0) {
+				MojamComponent.instance.shootMoved = true;
+				ih.toggleJoypad(keys.fire, true);
+			} else {
+				ih.toggleJoypad(keys.fire, false);
 			}
 		}
 		if (a.name.equals(shootYA.substring(shootYA.indexOf(":")+1)) && !((a.controller.getIndex()+"").equals(shootYA.substring(shootYA.indexOf(":")+1)))) {
-			if (f > 0) {
+			/*if (f > 0) {
 				ih.toggleJoypad(keys.fireDown, true);
 			} else {
 				ih.toggleJoypad(keys.fireDown, false);
@@ -253,6 +264,15 @@ public class JoypadHandler {
 				ih.toggleJoypad(keys.fireUp, true);
 			} else {
 				ih.toggleJoypad(keys.fireUp, false);
+			}*/
+			// Accuracy Implementation
+			int y = (int) (f*20);
+			MojamComponent.instance.mouseButtons.sy = y;
+			if (y != 0) {
+				MojamComponent.instance.shootMoved = true;
+				ih.toggleJoypad(keys.fire, true);
+			} else {
+				ih.toggleJoypad(keys.fire, false);
 			}
 		}
 		

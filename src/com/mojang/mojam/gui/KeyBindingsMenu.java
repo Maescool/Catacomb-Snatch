@@ -79,6 +79,8 @@ public class KeyBindingsMenu extends GuiMenu {
 	private int textWidth;
 	private int yOffset;
 
+	private ClickableComponent joystick;
+
 	private ClickableComponent back;
 	private KeyBindingButton selectedKey = null;
 
@@ -144,6 +146,10 @@ public class KeyBindingsMenu extends GuiMenu {
 				* BUTTON_SPACING));
 
 		
+		joystick = addButton(new Button(TitleMenu.JOY_MENU, MojamComponent.texts.getStatic("options.joyBindings"),
+				gameWidth - Button.BUTTON_WIDTH, yOffset + numRows * BUTTON_SPACING
+						- Button.BUTTON_HEIGHT + 88));
+
 		back = addButton(new Button(TitleMenu.BACK_ID, MojamComponent.texts.getStatic("back"),
 				(gameWidth - Button.BUTTON_WIDTH) / 2, yOffset + numRows * BUTTON_SPACING
 						- Button.BUTTON_HEIGHT + 88));
@@ -186,7 +192,7 @@ public class KeyBindingsMenu extends GuiMenu {
 		write(screen, txts.getStatic("keys.chat"), 1, 9);
 		super.render(screen);
 		ClickableComponent button = buttons.get(selectedItem);
-		if (button == back) {
+		if (button == back || button == joystick) {
 			screen.blit(Art.getLocalPlayerArt()[0][6], back.getX() - 64, back.getY() - 8);
 		} else {
 			screen.blit(Art.getLocalPlayerArt()[0][6], button.getX() - textWidth - 32,
@@ -207,7 +213,7 @@ public class KeyBindingsMenu extends GuiMenu {
 			selectedKey.setSelected(false);
 			selectedKey = null;
 		}
-		if (button == back || swapped) {
+		if (button == back || button == joystick || swapped) {
 			return;
 		}
 		selectedKey = (KeyBindingButton) button;
