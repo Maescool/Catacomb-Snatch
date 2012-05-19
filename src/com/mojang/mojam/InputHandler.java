@@ -114,12 +114,6 @@ public class InputHandler implements KeyListener {
 	}
 
 	public void toggleJoypad(Key key, boolean state) {
-		//if (key.keybTick > 2) {
-		//	key.nextJoyState = false;
-		//	return;
-		//}
-		//if (key.nextState && key.keybTick > 2) return;
-		
 		if (key.name == MojamComponent.instance.keys.joy_click.name) {
 			MouseButtons mb = MojamComponent.instance.mouseButtons;
 			MojamComponent.instance.mouseButtons.nextState[1] = (!mb.nextState2[1])?state:mb.nextState[1];

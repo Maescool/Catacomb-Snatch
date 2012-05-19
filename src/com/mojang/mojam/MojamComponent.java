@@ -164,7 +164,6 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			+ File.separator
 			+ "native"
 			+ File.separator;
-	    //IGM2E BUILD 1 BETA 1+ RIPPED CODE
 	    try {
 			Field field = ClassLoader.class.getDeclaredField("usr_paths");
 			field.setAccessible(true);

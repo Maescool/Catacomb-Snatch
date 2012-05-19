@@ -437,16 +437,6 @@ public class JoypadHandler {
 		}
 		
 		if ((a.id+"").equals(sxa[1]) && ((a.controller.getIndex()+"").equals(sxa[0]))) {
-			/*if (f > 0) {
-				ih.toggleJoypad(keys.fireRight, true);
-			} else {
-				ih.toggleJoypad(keys.fireRight, false);
-			}
-			if (f < 0) {
-				ih.toggleJoypad(keys.fireLeft, true);
-			} else {
-				ih.toggleJoypad(keys.fireLeft, false);
-			}*/
 			// Accuracy Implementation
 			int x = (int) (f*20);
 			MojamComponent.instance.mouseButtons.sx = x;
@@ -458,16 +448,6 @@ public class JoypadHandler {
 			}
 		}
 		if ((a.id+"").equals(sya[1]) && ((a.controller.getIndex()+"").equals(sya[0]))) {
-			/*if (f > 0) {
-				ih.toggleJoypad(keys.fireDown, true);
-			} else {
-				ih.toggleJoypad(keys.fireDown, false);
-			}
-			if (f < 0) {
-				ih.toggleJoypad(keys.fireUp, true);
-			} else {
-				ih.toggleJoypad(keys.fireUp, false);
-			}*/
 			// Accuracy Implementation
 			int y = (int) (f*20);
 			MojamComponent.instance.mouseButtons.sy = y;
