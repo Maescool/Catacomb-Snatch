@@ -549,17 +549,17 @@ public class Player extends Mob implements LootCollector {
             mouseButtons.setNextState(mouseUseButton, false);
 
             if(selected != null) {
-            	/*if (selected instanceof ICarrySwap) {
+            	if (selected instanceof ICarrySwap) {
             		carrying=((ICarrySwap)selected).tryToSwap(carrying);
             		if (carrying != null) {
             			carrying.onPickup(this);
             		}
-            	}*/
+            	}
             } else {
             	if (!isCarrying())
             		return;
             	
-            	if (((IUsable) carrying).isAllowedToCancel()) {
+            	if (carrying.isAllowedToCancel()) {
             		drop();
             	}
             }
