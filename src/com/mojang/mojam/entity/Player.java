@@ -559,7 +559,7 @@ public class Player extends Mob implements LootCollector {
             	if (!isCarrying())
             		return;
             	
-            	if (((IUsable) carrying).isAllowedToCancel()) {
+            	if (carrying.isAllowedToCancel()) {
             		drop();
             	}
             }
@@ -570,6 +570,17 @@ public class Player extends Mob implements LootCollector {
     	
         carrying.setPos(pos.x, pos.y - 20);
         carrying.tick();
+    }
+    
+    public void pickup(Building b) {
+    	if(isCarrying()) {
+    		if(carrying.isAllowedToCancel()) {
+    			drop();
+    		} else {
+    			return;
+    		}
+    	}
+    	super.pickup(b);
     }
 
     /**
