@@ -230,9 +230,9 @@ public class JoypadHandler {
 				try {
 					Keys keys = MojamComponent.instance.keys;
 					for (Keys.Key key : keys.getAll()) {
-						if (simulKey != null) continue;
 						if (key.name.equals(skn)) {
 							simulKey = key;
+							break;
 						}
 					}
 				} catch (NullPointerException e) {
@@ -307,18 +307,18 @@ public class JoypadHandler {
 		axisCount = controller.getAxisCount();
 		itemCount = controller.getButtonCount() + controller.getAxisCount() + 2;
 
-		for (int i=0;i<controller.getButtonCount();i++) {
-			addButton(new Button(controller.getButtonName(i), controller, i));
+		for (int i=0;i<buttonCount;i++) {
+			addButton(new Button(controller.getButtonName(i), controller, i), i);
 		}
-		for (int i=buttonCount;i<buttonCount+controller.getAxisCount();i++) {
-			addAxis(new Axis(controller.getAxisName(i-buttonCount), controller, i));
+		for (int i=buttonCount;i<buttonCount+axisCount;i++) {
+			addAxis(new Axis(controller.getAxisName(i-buttonCount), controller, i), i);
 		}
 
 		int i = itemCount - 2;
-		addAxis(new Axis("POV X", controller, i));
+		addAxis(new Axis("POV X", controller, i), i);
 
 		i = itemCount - 1;
-		addAxis(new Axis("POV Y", controller, i));
+		addAxis(new Axis("POV Y", controller, i), i);
 	}
 
 	public JoypadHandler() {
@@ -347,14 +347,11 @@ public class JoypadHandler {
 		toggleAxis((Axis)butaxes.get(itemCount-1), controller.getPovY());
 	}
 	
-	public void addButton(Button b) {
-		addButton(b, b.id);
-	}
-	
-	public void addButton(Button b, int i) {
+	private void addButton(Button b, int i) {
 		if (butaxes == null) {
 			butaxes = new ArrayList<Object>(itemCount);
 		}
+		if (i > butaxes.size() || i < 0) return;
 		butaxes.add(i, b);
 	}
 	
@@ -378,14 +375,11 @@ public class JoypadHandler {
 		}
 	}
 	
-	public void addAxis(Axis a) {
-		addAxis(a, a.id);
-	}
-	
-	public void addAxis(Axis a, int i) {
+	private void addAxis(Axis a, int i) {
 		if (butaxes == null) {
 			butaxes = new ArrayList<Object>(itemCount);
 		}
+		if (i > butaxes.size() || i < 0) return;
 		butaxes.add(i, a);
 	}
 	
@@ -550,13 +544,6 @@ public class JoypadHandler {
 		}
 		
 		Controllers.poll();
-
-		/*while (Controllers.next()) {
-			System.out.println("Event Fired: ");
-			System.out.println("\t"+Controllers.getEventNanoseconds());
-			System.out.println("\t"+Controllers.getEventSource()+":"+Controllers.getEventControlIndex()+":"+Controllers.isEventButton());
-			System.out.println("\t"+Controllers.isEventXAxis()+":"+Controllers.isEventYAxis());
-		}*/
 
 		for (int i=0;i<count;i++) {
 			handlers[i].updateDetails();
