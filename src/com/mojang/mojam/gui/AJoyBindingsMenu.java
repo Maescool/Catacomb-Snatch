@@ -74,7 +74,9 @@ public class AJoyBindingsMenu extends GuiMenu {
 			this.selected = selected;
 			setLabel(label);
 			
-			if (selected) JoypadHandler.askForAxis = instance;
+			if (selected) {
+				JoypadHandler.askForAxis = instance;
+			}
 		}
 		
 		public void refresh() {
@@ -89,7 +91,6 @@ public class AJoyBindingsMenu extends GuiMenu {
 		public void updateAxis(String text) {
 			if (axisn.toUpperCase().equals("MOUSEX")) {
 				JoypadHandler.mouseXA = text;
-				//Options.set("joya_mouseXA", text);
 			}
 			if (axisn.toUpperCase().equals("MOUSEY")) {
 				JoypadHandler.mouseYA = text;
@@ -195,14 +196,26 @@ public class AJoyBindingsMenu extends GuiMenu {
 	private String getMenuText(String name) {
 		String axisn = "NONE";
 		
-		if (name.toUpperCase().equals("MOUSEX")) axisn = JoypadHandler.mouseXA;
-		if (name.toUpperCase().equals("MOUSEY")) axisn = JoypadHandler.mouseYA;
+		if (name.toUpperCase().equals("MOUSEX")) {
+			axisn = JoypadHandler.mouseXA;
+		}
+		if (name.toUpperCase().equals("MOUSEY")) {
+			axisn = JoypadHandler.mouseYA;
+		}
 		
-		if (name.toUpperCase().equals("WALKX")) axisn = JoypadHandler.walkXA;
-		if (name.toUpperCase().equals("WALKY")) axisn = JoypadHandler.walkYA;
+		if (name.toUpperCase().equals("WALKX")) {
+			axisn = JoypadHandler.walkXA;
+		}
+		if (name.toUpperCase().equals("WALKY")) {
+			axisn = JoypadHandler.walkYA;
+		}
 		
-		if (name.toUpperCase().equals("SHOOTX")) axisn = JoypadHandler.shootXA;
-		if (name.toUpperCase().equals("SHOOTY")) axisn = JoypadHandler.shootYA;
+		if (name.toUpperCase().equals("SHOOTX")) {
+			axisn = JoypadHandler.shootXA;
+		}
+		if (name.toUpperCase().equals("SHOOTY")) {
+			axisn = JoypadHandler.shootYA;
+		}
 		
 		axisn = axisn.substring(axisn.lastIndexOf(":")+1);
 		
@@ -291,8 +304,9 @@ public class AJoyBindingsMenu extends GuiMenu {
 	
 	public void refreshKeys() {
 		for(ClickableComponent button : super.buttons) {
-			if(button instanceof JoyBindingButton)
+			if(button instanceof JoyBindingButton) {
 				((JoyBindingButton)button).refresh();
+			}
 		}
 	}
 	

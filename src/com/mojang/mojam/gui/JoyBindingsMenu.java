@@ -77,7 +77,9 @@ public class JoyBindingsMenu extends GuiMenu {
 			this.selected = selected;
 			setLabel(label);
 			
-			if (selected) JoypadHandler.askForButton = instance;
+			if (selected) {
+				JoypadHandler.askForButton = instance;
+			}
 		}
 		
 		public void refresh() {
@@ -223,7 +225,9 @@ public class JoyBindingsMenu extends GuiMenu {
 	
 	private JoypadHandler.Button getJoyButton(Key key) {
 		for (JoypadHandler.Button b : joyButtonList) {
-			if (b.simulKey == key) return b;
+			if (b.simulKey == key) {
+				return b;
+			}
 		}
 		return new JoypadHandler.Button("NONE", new JoypadHandler().new DummyController(), -1);
 	}
@@ -285,8 +289,12 @@ public class JoyBindingsMenu extends GuiMenu {
 	}
 	
 	public void joyPressed(JoypadHandler.Button b) {
-		if (selectedKey == null) return;
-		if (b == null) return;
+		if (selectedKey == null) {
+			return;
+		}
+		if (b == null) {
+			return;
+		}
 		JoypadHandler.Button oldb = selectedKey.button;
 		if (oldb != null) {
 			System.out.println(oldb.name);
@@ -337,8 +345,9 @@ public class JoyBindingsMenu extends GuiMenu {
 	
 	public void refreshKeys() {
 		for(ClickableComponent button : super.buttons) {
-			if(button instanceof JoyBindingButton)
+			if(button instanceof JoyBindingButton) {
 				((JoyBindingButton)button).refresh();
+			}
 		}
 	}
 	

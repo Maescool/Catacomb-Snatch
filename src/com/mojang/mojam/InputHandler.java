@@ -102,8 +102,9 @@ public class InputHandler implements KeyListener {
 		Key key = null;
 		Set<Key> keySet = mappings.keySet();
 		for (Key _key : keySet) {
-			if (mappings.get(_key) == ke.getKeyCode())
+			if (mappings.get(_key) == ke.getKeyCode()) {
 				key = _key;
+			}
 		}
 		if (key != null) {
 			key.keybTick = 9;

@@ -363,10 +363,12 @@ public class JoypadHandler {
 		}
 		b.nextState = s;
 		
-		InputHandler ih = ((InputHandler)MojamComponent.instance.getInputHandler());
+		InputHandler ih = MojamComponent.instance.getInputHandler();
 		Keys keys = MojamComponent.instance.keys;
 		
-		if (b.simulKey == null) return;
+		if (b.simulKey == null) {
+			return;
+		}
 		
 		if (s) {
 			ih.toggleJoypad(b.simulKey, true);
@@ -379,7 +381,9 @@ public class JoypadHandler {
 		if (butaxes == null) {
 			butaxes = new ArrayList<Object>(itemCount);
 		}
-		if (i > butaxes.size() || i < 0) return;
+		if (i > butaxes.size() || i < 0) {
+			return;
+		}
 		butaxes.add(i, a);
 	}
 	
@@ -528,14 +532,26 @@ public class JoypadHandler {
 		walkXA = Options.get("joya_walkXA");
 		walkYA = Options.get("joya_walkYA");
 		
-		if (mouseXA == null) mouseXA = "-1:-1:NONE";
-		if (mouseYA == null) mouseYA = "-1:-1:NONE";
+		if (mouseXA == null) {
+			mouseXA = "-1:-1:NONE";
+		}
+		if (mouseYA == null) {
+			mouseYA = "-1:-1:NONE";
+		}
 		
-		if (shootXA == null) shootXA = "-1:-1:NONE";
-		if (shootYA == null) shootYA = "-1:-1:NONE";
+		if (shootXA == null) {
+			shootXA = "-1:-1:NONE";
+		}
+		if (shootYA == null) {
+			shootYA = "-1:-1:NONE";
+		}
 		
-		if (walkXA == null) walkXA = "-1:-1:NONE";
-		if (walkYA == null) walkYA = "-1:-1:NONE";
+		if (walkXA == null) {
+			walkXA = "-1:-1:NONE";
+		}
+		if (walkYA == null) {
+			walkYA = "-1:-1:NONE";
+		}
 	}
 	
 	public static void tick() {
@@ -557,7 +573,9 @@ public class JoypadHandler {
 			ArrayList<Object> butaxes = h.butaxes;
 			for (int id = 0; id < buttons; id++) {
 				Button b = (Button) butaxes.get(id);
-				if (b.name.equals(key.name)) return b;
+				if (b.name.equals(key.name)) {
+					return b;
+				}
 			}
 		}
 		return null;
