@@ -1,28 +1,11 @@
 package com.mojang.mojam;
 
-import java.awt.AWTException;
-import java.awt.Dimension;
-import java.awt.Robot;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-
 import org.lwjgl.input.Controller;
 import org.lwjgl.input.Controllers;
 
 import com.mojang.mojam.Keys.Key;
 import com.mojang.mojam.gui.AJoyBindingsMenu;
 import com.mojang.mojam.gui.JoyBindingsMenu;
-import com.mojang.mojam.mod.ModSystem;
 
 /**
  * Class to change Gamepad / Joystick input to Keys .
@@ -294,7 +277,8 @@ public class JoypadHandler {
 	
 	public Controller controller;
 
-	public ArrayList<Object> butaxes;
+	public Button[] buttons;
+	public Axis[] axes;
 
 	public int buttonCount;
 	public int axisCount;
@@ -304,90 +288,76 @@ public class JoypadHandler {
 		controller = Controllers.getController(index);
 
 		buttonCount = controller.getButtonCount();
+		buttons = new Button[buttonCount];
+		
 		axisCount = controller.getAxisCount();
+		axes = new Axis[axisCount + 2]; //for the two POV axes (X & Y)
+		
 		itemCount = controller.getButtonCount() + controller.getAxisCount() + 2;
 
 		for (int i=0;i<buttonCount;i++) {
-			addButton(new Button(controller.getButtonName(i), controller, i), i);
+			buttons[i] = new Button(controller.getButtonName(i), controller, i);
 		}
-		for (int i=buttonCount;i<buttonCount+axisCount;i++) {
-			addAxis(new Axis(controller.getAxisName(i-buttonCount), controller, i), i);
+		for (int i=0;i<axisCount;i++) {
+			axes[i] = new Axis(controller.getAxisName(i), controller, i + buttonCount);
 		}
+		axes[axisCount] = new Axis("POV X", controller, axisCount + buttonCount);
 
-		int i = itemCount - 2;
-		addAxis(new Axis("POV X", controller, i), i);
-
-		i = itemCount - 1;
-		addAxis(new Axis("POV Y", controller, i), i);
+		axes[axisCount+1] = new Axis("POV Y", controller, axisCount + 1 + buttonCount);
 	}
 
 	public JoypadHandler() {
-		// DUMMY for using type-classes
+		controller = new DummyController();
+
+		buttonCount = controller.getButtonCount();
+		buttons = new Button[buttonCount];
+		
+		axisCount = controller.getAxisCount();
+		axes = new Axis[axisCount + 2]; //for the two POV axes (X & Y)
+		
+		itemCount = controller.getButtonCount() + controller.getAxisCount() + 2;
+
+		for (int i=0;i<buttonCount;i++) {
+			buttons[i] = new Button(controller.getButtonName(i), controller, i);
+		}
+		for (int i=0;i<axisCount;i++) {
+			axes[i] = new Axis(controller.getAxisName(i), controller, i + buttonCount);
+		}
+		axes[axisCount] = new Axis("POV X", controller, axisCount + buttonCount);
+
+		axes[axisCount+1] = new Axis("POV Y", controller, axisCount + 1 + buttonCount);
 	}
 
 	public void updateDetails() {
 		for (int i=0;i<buttonCount;i++) {
-			if (controller.isButtonPressed(i)) {
-				if (butaxes.get(i) instanceof Button) {
-					toggleButton((Button)butaxes.get(i), true);
-				}
-			} else if (!controller.isButtonPressed(i)) {
-				if (butaxes.get(i) instanceof Button) {
-					toggleButton((Button)butaxes.get(i), false);
-				}
-			}
+			toggleButton(buttons[i], controller.isButtonPressed(i));
 		}
-		for (int i=buttonCount;i<buttonCount+controller.getAxisCount();i++) {
-			if (butaxes.get(i) instanceof Axis) {
-				toggleAxis((Axis)butaxes.get(i), controller.getAxisValue(i-buttonCount));
-			}
+		
+		for (int i=0;i<axisCount;i++) {
+			toggleAxis(axes[i], controller.getAxisValue(i));
 		}
 
-		toggleAxis((Axis)butaxes.get(itemCount-2), controller.getPovX());
-		toggleAxis((Axis)butaxes.get(itemCount-1), controller.getPovY());
+		toggleAxis(axes[axisCount], controller.getPovX());
+		toggleAxis(axes[axisCount+1], controller.getPovY());
 	}
 	
-	private void addButton(Button b, int i) {
-		if (butaxes == null) {
-			butaxes = new ArrayList<Object>(itemCount);
-		}
-		if (i > butaxes.size() || i < 0) return;
-		butaxes.add(i, b);
-	}
-	
-	public void toggleButton(Button b, boolean s) {
-		if (askForButton != null && s) {
+	private void toggleButton(Button b, boolean state) {
+		if (askForButton != null && state) {
 			askForButton.joyPressed(b);
 			askForButton = null;
 			return;
 		}
-		b.nextState = s;
+		b.nextState = state;
 		
 		InputHandler ih = MojamComponent.instance.getInputHandler();
-		Keys keys = MojamComponent.instance.keys;
-		
 		if (b.simulKey == null) {
 			return;
 		}
 		
-		if (s) {
-			ih.toggleJoypad(b.simulKey, true);
-		} else {
-			ih.toggleJoypad(b.simulKey, false);
-		}
+		ih.toggleJoypad(b.simulKey, state);
 	}
 	
-	private void addAxis(Axis a, int i) {
-		if (butaxes == null) {
-			butaxes = new ArrayList<Object>(itemCount);
-		}
-		if (i > butaxes.size() || i < 0) {
-			return;
-		}
-		butaxes.add(i, a);
-	}
-	
-	public void toggleAxis(Axis a, float f) {
+	private void toggleAxis(Axis a, float f) {
 		//Update axis status
 		if (a.firstState == -2) {
 			a.firstState = f;
@@ -407,7 +377,7 @@ public class JoypadHandler {
 		
 		a.nextState = f;
 		
-		InputHandler ih = ((InputHandler)MojamComponent.instance.getInputHandler());
+		InputHandler ih = MojamComponent.instance.getInputHandler();
 		Keys keys = MojamComponent.instance.keys;
 		
 		//Check if axis is X or Y axis of any special axis>key/mouse port . If it is , handle axis seperately to counterpart ( X|y , x|Y ) 
@@ -493,11 +463,11 @@ public class JoypadHandler {
 	public static String walkXA = null;
 	public static String walkYA = null;
 	
-	public static JoypadHandler handlers[];
-	public static int count;
+	public static JoypadHandler[] handlers;
+	private static int controllerCount;
 	
-	public static JoyBindingsMenu askForButton;
-	public static AJoyBindingsMenu askForAxis;
+	private static JoyBindingsMenu askForButton;
+	private static AJoyBindingsMenu askForAxis;
 	
 	public static void init() {
 		try {
@@ -507,19 +477,20 @@ public class JoypadHandler {
 			return;
 		}
 
-		count = Controllers.getControllerCount();
-		System.out.println(count+" Controllers Found");
-		for (int i=0;i<count;i++) {
-			Controller controller = Controllers.getController(i);
-			System.out.println(controller.getIndex()+" : "+controller.getName());
-		}
-
-		if (count == 0) {
+		controllerCount = Controllers.getControllerCount();
+		if (controllerCount == 0) {
+			System.out.println("0 Controllers Found");
 			return;
 		}
+		
+		System.out.println(controllerCount+" Controllers Found");
+		for (int i=0;i<controllerCount;i++) {
+			Controller controller = Controllers.getController(i);
+			System.out.println(i+" : "+controller.getName());
+		}
 
-		handlers  = new JoypadHandler[count];
-		for (int i=0;i<count;i++) {
+		handlers = new JoypadHandler[controllerCount];
+		for (int i=0;i<controllerCount;i++) {
 			handlers[i] = new JoypadHandler(i);
 		}
 		
@@ -555,30 +526,36 @@ public class JoypadHandler {
 	}
 	
 	public static void tick() {
-		if (count == 0) {
+		if (controllerCount == 0) {
 			return;
 		}
 		
 		Controllers.poll();
 
-		for (int i=0;i<count;i++) {
+		for (int i=0;i<controllerCount;i++) {
 			handlers[i].updateDetails();
 		}
 	}
 
 	public static Button getButtonWithKey(Key key) {
-		for (int i = 0; i < count; i++) {
+		for (int i = 0; i < controllerCount; i++) {
 			JoypadHandler h = handlers[i];
-			int buttons = h.buttonCount;
-			ArrayList<Object> butaxes = h.butaxes;
-			for (int id = 0; id < buttons; id++) {
-				Button b = (Button) butaxes.get(id);
-				if (b.name.equals(key.name)) {
-					return b;
+			int buttonCount = h.buttonCount;
+			Button[] buttons = h.buttons;
+			for (int id = 0; id < buttonCount; id++) {
+				if (buttons[i].name.equals(key.name)) {
+					return buttons[i];
 				}
 			}
 		}
 		return null;
 	}
-	
+
+	public static void setAxisMenu(AJoyBindingsMenu askForAxis) {
+		JoypadHandler.askForAxis = askForAxis;
+	}
+
+	public static void setJoyBindingsMenu(JoyBindingsMenu askForButton) {
+		JoypadHandler.askForButton = askForButton;
+	}
 }

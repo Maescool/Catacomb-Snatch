@@ -3,12 +3,9 @@ package com.mojang.mojam.gui;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-import com.mojang.mojam.InputHandler;
 import com.mojang.mojam.JoypadHandler;
 import com.mojang.mojam.Options;
 import com.mojang.mojam.JoypadHandler.Axis;
-import com.mojang.mojam.Keys;
-import com.mojang.mojam.Keys.Key;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.gui.components.Button;
 import com.mojang.mojam.gui.components.ButtonListener;
@@ -75,7 +72,7 @@ public class AJoyBindingsMenu extends GuiMenu {
 			setLabel(label);
 			
 			if (selected) {
-				JoypadHandler.askForAxis = instance;
+				JoypadHandler.setAxisMenu(instance);
 			}
 		}
 		
@@ -132,10 +129,9 @@ public class AJoyBindingsMenu extends GuiMenu {
 	public AJoyBindingsMenu() {
 		super();
 		
-		for (JoypadHandler handler : JoypadHandler.handlers) {
-			for (Object o : handler.butaxes) {
-				if (o instanceof JoypadHandler.Button) {
-					JoypadHandler.Button b = (JoypadHandler.Button) o;
+		if(JoypadHandler.handlers != null) {
+			for (JoypadHandler handler : JoypadHandler.handlers) {
+				for (JoypadHandler.Button b : handler.buttons) {
 					joyButtonList.add(b);
 				}
 			}
@@ -144,7 +140,6 @@ public class AJoyBindingsMenu extends GuiMenu {
 		addButtons();
 		
 		instance = this;
-		
 	}
 
 	private void addButtons() {
@@ -182,8 +177,8 @@ public class AJoyBindingsMenu extends GuiMenu {
 
 			@Override
 			public void buttonPressed(ClickableComponent button) {
-				JoypadHandler.askForButton = null;
-				JoypadHandler.askForAxis = null;
+				JoypadHandler.setJoyBindingsMenu(null);
+				JoypadHandler.setAxisMenu(null);
 			}
 
 			@Override
@@ -194,7 +189,7 @@ public class AJoyBindingsMenu extends GuiMenu {
 	}
 
 	private String getMenuText(String name) {
-		String axisn = "NONE";
+		String axisn = null;
 		
 		if (name.toUpperCase().equals("MOUSEX")) {
 			axisn = JoypadHandler.mouseXA;
@@ -215,6 +210,10 @@ public class AJoyBindingsMenu extends GuiMenu {
 		}
 		if (name.toUpperCase().equals("SHOOTY")) {
 			axisn = JoypadHandler.shootYA;
+		}
+		
+		if(axisn == null) {
+			axisn = "-1:-1:NONE";
 		}
 		
 		axisn = axisn.substring(axisn.lastIndexOf(":")+1);
