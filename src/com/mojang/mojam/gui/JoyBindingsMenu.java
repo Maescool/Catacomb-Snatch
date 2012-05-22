@@ -3,12 +3,8 @@ package com.mojang.mojam.gui;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-import org.lwjgl.input.Controller;
-
-import com.mojang.mojam.InputHandler;
 import com.mojang.mojam.JoypadHandler;
 import com.mojang.mojam.Options;
-import com.mojang.mojam.JoypadHandler.Axis;
 import com.mojang.mojam.Keys;
 import com.mojang.mojam.Keys.Key;
 import com.mojang.mojam.MojamComponent;
@@ -78,7 +74,7 @@ public class JoyBindingsMenu extends GuiMenu {
 			setLabel(label);
 			
 			if (selected) {
-				JoypadHandler.askForButton = instance;
+				JoypadHandler.setJoyBindingsMenu(instance);
 			}
 		}
 		
@@ -99,21 +95,16 @@ public class JoyBindingsMenu extends GuiMenu {
 	private JoyBindingButton selectedKey = null;
 
 	private Keys keys;
-	private InputHandler inputHandler;
-	
 	private static JoyBindingsMenu instance;
 	
 	private ArrayList<JoypadHandler.Button> joyButtonList = new ArrayList<JoypadHandler.Button>();
 	
-	public JoyBindingsMenu(Keys keys, InputHandler inputHandler) {
+	public JoyBindingsMenu(Keys keys) {
 		super();
 		this.keys = keys;
-		this.inputHandler = inputHandler;
-		
-		for (JoypadHandler handler : JoypadHandler.handlers) {
-			for (Object o : handler.butaxes) {
-				if (o instanceof JoypadHandler.Button) {
-					JoypadHandler.Button b = (JoypadHandler.Button) o;
+		if(JoypadHandler.handlers != null) {
+			for (JoypadHandler handler : JoypadHandler.handlers) {
+				for (JoypadHandler.Button b : handler.buttons) {
 					joyButtonList.add(b);
 				}
 			}
@@ -122,7 +113,6 @@ public class JoyBindingsMenu extends GuiMenu {
 		addButtons();
 		
 		instance = this;
-		
 	}
 
 	private void addButtons() {
@@ -190,8 +180,8 @@ public class JoyBindingsMenu extends GuiMenu {
 
 			@Override
 			public void buttonPressed(ClickableComponent button) {
-				JoypadHandler.askForButton = null;
-				JoypadHandler.askForAxis = null;
+				JoypadHandler.setJoyBindingsMenu(null);
+				JoypadHandler.setAxisMenu(null);
 			}
 
 			@Override
@@ -204,8 +194,8 @@ public class JoyBindingsMenu extends GuiMenu {
 
 			@Override
 			public void buttonPressed(ClickableComponent button) {
-				JoypadHandler.askForButton = null;
-				JoypadHandler.askForAxis = null;
+				JoypadHandler.setJoyBindingsMenu(null);
+				JoypadHandler.setAxisMenu(null);
 			}
 
 			@Override
@@ -216,9 +206,7 @@ public class JoyBindingsMenu extends GuiMenu {
 	}
 
 	private String getMenuText(Key key) {
-		String joyButton = getJoyButton(key).name;
-		
-		return joyButton;
+		return getJoyButton(key).name;
 	}
 
 

@@ -1103,7 +1103,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			break;
 
 		case TitleMenu.JOY_MENU:
-			menuStack.add(new JoyBindingsMenu(keys, inputHandler));
+			menuStack.add(new JoyBindingsMenu(keys));
 			break;
 
 		case TitleMenu.AXES_MENU:
