@@ -119,6 +119,7 @@ options.alternative = SKIN ALTERNATIVA
 options.credits = CRÉDITOS
 options.openal = SISTEMA DE SOM OpenAL
 options.smallscale = GRÁFICOS PEQUENOS
+options.enableMods = ATIVAR MODS (NECESSÁRIO RESETAR)
 
 pausemenu.help = AJUDA
 pausemenu.backtomain = MENU
@@ -144,6 +145,10 @@ shop.harvesterTooltipLine2 = Use-o para pegar dinheiro.
 shop.bombTooltipTitle = BOMB
 shop.bombTooltipLine1 = Destrói paredes rachadas.
 shop.bombTooltipLine2 = Use para criar atalhos.
+
+shop.soldierTooltipTitle = SOLDADO
+shop.soldierTooltipLine1 = Usado para atacar,ataca
+shop.soldierTooltipLine2 = enemigos, coleta moedas.
 
 shop.rifleTooltipTitle = RIFLE
 shop.rifleTooltipLine1 = Arma inicia
