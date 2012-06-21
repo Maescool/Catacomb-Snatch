@@ -71,7 +71,7 @@ keys.use = USA
 keys.build = COSTRUISCI
 keys.upgrade = POTENZIA
 keys.chat = CHAT
-keys.weaponSlot = WEAPON SLOT {0}
+keys.weaponSlot = ARMA N. {0}
 keys.cycleLeft = ARMA SUCC.
 keys.cycleRight = ARMA PREC.
 
@@ -90,6 +90,9 @@ mp.enterIP = INSERISCI L'INDIRIZZO IP DELL'HOST:
 mp.localIP = IL TUO IP LOCALE:
 mp.externalIP = IL TUO IP ESTERNO:
 mp.join = UNISCITI
+mp.mismatch = VERSIONI NON CORRISPONDENTI!
+mp.server = SERVER
+mp.client = CLIENT
 
 options.on = ON
 options.off = OFF
@@ -97,16 +100,20 @@ options.keyBindings = CONTROLLI
 options.characterSelect = SEL. PERSONAGGIO
 options.trapmouse = INTRAPPOLA MOUSE NELLA FINESTRA
 options.fullscreen = SCHERMO INTERO
+options.opengl = OPENGL
 options.showfps = MOSTRA FPS
 options.music = MUSICA
 options.sounds = SUONI
 options.volume = VOLUME
-options.sound_and_video = VIDEO E SUONI
+options.sound_and_video = VIDEO AND SOUND
 options.locale_selection = LINGUA
 options.mute = DISATTIVATA
 options.creative = CREATIVE MODE
 options.alternative = PERSONAGGIO ALTERNATIVO
 options.credits = CREDITI
+options.openal = Sound system OpenAL
+options.smallscale = FINESTRA PICCOLA
+options.enableMods = ABILITA MOD (RICHIEDE RIAVVIO)
 
 pausemenu.help = AIUTO
 pausemenu.backtomain = MENU
@@ -131,6 +138,10 @@ shop.harvesterTooltipLine2 = Recupera il bottino.
 shop.bombTooltipTitle = BOMBA
 shop.bombTooltipLine1 = Distrugge i muri.
 shop.bombTooltipLine2 = Usata per crare scorciatoie.
+
+shop.soldierTooltipTitle = SOLDATO
+shop.soldierTooltipLine1 = Usato per attaccare. Attacca i
+shop.soldierTooltipLine2 = nemici, Raccoglie le monete.
 
 shop.rifleTooltipTitle = FUCILE
 shop.rifleTooltipLine1 = L'arma predefinita.
