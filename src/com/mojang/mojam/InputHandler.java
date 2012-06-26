@@ -42,6 +42,9 @@ public class InputHandler implements KeyListener {
 		
 		//console
 		initKey(keys.console, KeyEvent.VK_BACK_QUOTE);
+		
+		//joypad specials
+		initKey(keys.joy_click, -1);
 	}
 
 	private void initKey(Key key, int defaultKeyCode) {
@@ -99,12 +102,25 @@ public class InputHandler implements KeyListener {
 		Key key = null;
 		Set<Key> keySet = mappings.keySet();
 		for (Key _key : keySet) {
-			if (mappings.get(_key) == ke.getKeyCode())
+			if (mappings.get(_key) == ke.getKeyCode()) {
 				key = _key;
+			}
 		}
 		if (key != null) {
+			key.keybTick = 9;
 			key.nextState = state;
+			key.nextState2 = state;
 			ModSystem.keyEvent(key, state);
 		}
+	}
+
+	public void toggleJoypad(Key key, boolean state) {
+		if (key.name.equals(MojamComponent.instance.keys.joy_click.name)) {
+			MouseButtons mb = MojamComponent.instance.mouseButtons;
+			MojamComponent.instance.mouseButtons.nextState[1] = (!mb.nextState2[1])?state:mb.nextState[1];
+			return;
+		}
+		
+		key.nextState = (!key.nextState2)?state:key.nextState;
 	}
 }

@@ -16,6 +16,9 @@ public class VenomShooter extends Rifle {
 		Bullet bullet = new BulletPoison(owner, xDir, yDir, bulletDamage);
 		if (!(owner instanceof Player))
 			bullet.pos.y = bullet.pos.y-19; //this will make the bullet look like its coming out of the snakes mouth
+		else
+			bullet.pos.y = bullet.pos.y;
+		bullet.pos.x = bullet.pos.x;
 		return bullet;
 	}
 	

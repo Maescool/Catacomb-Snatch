@@ -7,8 +7,10 @@ public class Keys {
 	public final class Key {
 		public final String name;
 		public boolean nextState = false;
+		public boolean nextState2 = false;
 		public boolean wasDown = false;
 		public boolean isDown = false;
+		public int keybTick = 0;
 
 		public Key(String name) {
 			this.name = name;
@@ -16,6 +18,8 @@ public class Keys {
 		}
 
 		public void tick() {
+			keybTick--;
+			if (keybTick < 0) keybTick = 0;
 			wasDown = isDown;
 			isDown = nextState;
 		}
@@ -59,6 +63,8 @@ public class Keys {
 	public Key weaponSlot3 = new Key("weaponSlot3");
 	public Key cycleLeft = new Key("cycleLeft");
 	public Key cycleRight = new Key("cycleRight");
+	
+	public Key joy_click = new Key("joystickClick");
 	
 	public void tick() {
 		for (Key key : all)
