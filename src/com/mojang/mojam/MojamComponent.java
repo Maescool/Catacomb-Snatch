@@ -43,8 +43,10 @@ import com.mojang.mojam.gui.ExitMenu;
 import com.mojang.mojam.gui.GuiError;
 import com.mojang.mojam.gui.HostingWaitMenu;
 import com.mojang.mojam.gui.HowToPlayMenu;
+import com.mojang.mojam.gui.InternetLobbyMenu;
 import com.mojang.mojam.gui.JoinGameMenu;
 import com.mojang.mojam.gui.KeyBindingsMenu;
+import com.mojang.mojam.gui.LanMenu;
 import com.mojang.mojam.gui.LevelEditorMenu;
 import com.mojang.mojam.gui.LevelSelect;
 import com.mojang.mojam.gui.LocaleMenu;
@@ -76,6 +78,7 @@ import com.mojang.mojam.network.kryo.Network.StartGameCustomMessage;
 import com.mojang.mojam.network.kryo.Network.StartGameMessage;
 import com.mojang.mojam.network.kryo.SnatchClient;
 import com.mojang.mojam.network.kryo.SnatchServer;
+import com.mojang.mojam.network.sfs.SnatchSFSClient;
 import com.mojang.mojam.resources.Constants;
 import com.mojang.mojam.resources.Texts;
 import com.mojang.mojam.screen.Art;
@@ -148,6 +151,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private LocaleMenu localemenu = null;
 	private SnatchClient snatchClient;
 	private SnatchServer server;
+	private SnatchSFSClient snatchSFSClient;
 
 	public MojamComponent() {
 		screen = new MojamScreen(GAME_WIDTH, GAME_HEIGHT);
@@ -946,6 +950,7 @@ while (running) {
 		case TitleMenu.RETURN_TO_TITLESCREEN:
 			if(isMultiplayer) {
 				snatchClient.shutdown();
+				snatchSFSClient.shutdown();
 				if(isServer) {
 					server.shutdown();
 				}
@@ -979,7 +984,23 @@ while (running) {
 
 		case TitleMenu.SELECT_HOST_LEVEL_ID:
 			menuStack.add(new LevelSelect(true));
-			break;
+		break;
+		case TitleMenu.SELECT_INTERNET_ID:
+			menuStack.add(new InternetLobbyMenu());
+			isMultiplayer = true;
+			isServer = false;
+			chat.clear();
+			snatchSFSClient = new SnatchSFSClient();
+			snatchSFSClient.setComponent(MojamComponent.this);
+			snatchSFSClient.connect();
+		break;
+		case TitleMenu.CANCEL_INTERNET_ID:
+			snatchSFSClient.destroy();
+			menuStack.safePop();
+		break;
+		case TitleMenu.SELECT_LAN_ID:
+			menuStack.add(new LanMenu(GAME_WIDTH, GAME_HEIGHT));
+		break;
 		case TitleMenu.HOST_GAME_ID:
 			menuStack.add(new HostingWaitMenu());
 			isMultiplayer = true;
@@ -1009,6 +1030,7 @@ while (running) {
 			menuStack.safePop();
 			if(isMultiplayer) {
 				snatchClient.shutdown();
+				snatchSFSClient.shutdown();
 				if(isServer) {
 					server.shutdown();
 				}

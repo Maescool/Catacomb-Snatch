@@ -163,6 +163,8 @@ shop.raygunTooltipLine2 = Each bounce increases damage.
 titlemenu.start = START
 titlemenu.host = HOST
 titlemenu.join = JOIN
+titlemenu.internet = INTERNET
+titlemenu.lan = LAN
 titlemenu.help = HOW TO PLAY
 titlemenu.options = OPTIONS
 titlemenu.sound_and_video = VIDEO AND SOUND
@@ -176,3 +178,5 @@ upgrade.to = UPGRADED TO LEVEL {0}
 
 download.downloading = DOWNLOADING..
 download.unpacking = UNPACKING..
+
+lan.headline = CHOOSE TO HOST OR JOIN A LAN GAME

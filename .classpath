@@ -12,5 +12,12 @@
 	<classpathentry kind="lib" path="lib/lwjgl.jar"/>
 	<classpathentry kind="lib" path="lib/SoundSystem.jar"/>
 	<classpathentry kind="lib" path="lib/kryonet-1.04-all.jar"/>
+	<classpathentry kind="lib" path="lib/sfs/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="lib/sfs/jdom.jar"/>
+	<classpathentry kind="lib" path="lib/sfs/netty-3.2.2.Final.jar"/>
+	<classpathentry kind="lib" path="lib/sfs/SFS2X_API_Java.jar"/>
+	<classpathentry kind="lib" path="lib/sfs/sfs2x-client-core.jar"/>
+	<classpathentry kind="lib" path="lib/sfs/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/sfs/slf4j-simple-1.6.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
