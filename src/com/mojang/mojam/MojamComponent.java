@@ -139,6 +139,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private static boolean fullscreen = false;
 	public static ISoundPlayer soundPlayer;
 	private long nextMusicInterval = 0;
+	private long pausedMusicInterval = 0;
 	private byte sShotCounter = 0;
 
 	public int createServerState = 0;
@@ -770,16 +771,17 @@ while (running) {
 
 					level.tick();
 
-						tickChat();
+					tickChat();
 						
-				}
-
-				// every 4 minutes, start new background music :)
-				if (System.currentTimeMillis() / 1000 > nextMusicInterval) {
-					nextMusicInterval = (System.currentTimeMillis() / 1000) + 4 * 60;
-					soundPlayer.startBackgroundMusic();
-				}
-
+					// every 4 minutes, start new background music :)
+					System.out.println(nextMusicInterval);
+					if (System.currentTimeMillis() > nextMusicInterval) {
+						nextMusicInterval = (System.currentTimeMillis()) + (4 * 60 * 1000);
+						soundPlayer.startBackgroundMusic();
+					}
+				} 
+				
+				System.out.println("next interval: " + nextMusicInterval);
 				if (keys.screenShot.isDown) {
 					takeScreenShot();
 				}
@@ -1195,5 +1197,19 @@ while (running) {
 				MojamComponent.instance.stop(false);
 			}
 		};
+	}
+
+	public void pause(boolean paused) {
+		this.paused = paused;
+		if (paused) {
+			this.pausedMusicInterval =  this.nextMusicInterval - System.currentTimeMillis();
+			this.menuStack.add(new PauseMenu(MojamComponent.GAME_WIDTH, MojamComponent.GAME_HEIGHT));
+			MojamComponent.soundPlayer.pauseBackgroundMusic();
+		} else {
+			this.menuStack.pop();
+			this.nextMusicInterval = System.currentTimeMillis() + this.pausedMusicInterval;
+			MojamComponent.soundPlayer.resumeBackgroundMusic();
+		}
+		
 	}
 }
