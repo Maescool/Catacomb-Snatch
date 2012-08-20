@@ -127,8 +127,10 @@ public class SnatchClient {
 			mojamComponent.paused = pm.paused;
 			if (pm.paused) {
 				mojamComponent.menuStack.add(new PauseMenu(MojamComponent.GAME_WIDTH, MojamComponent.GAME_HEIGHT));
+				MojamComponent.soundPlayer.pauseBackgroundMusic();
 			} else {
 				mojamComponent.menuStack.pop();
+				MojamComponent.soundPlayer.resumeBackgroundMusic();
 			}
 		} else if (message instanceof ConsoleMessage) {
 			ConsoleMessage cm = (ConsoleMessage) message;

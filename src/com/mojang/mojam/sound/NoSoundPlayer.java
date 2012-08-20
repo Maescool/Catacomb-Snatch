@@ -68,4 +68,16 @@ public class NoSoundPlayer implements ISoundPlayer {
 		return null;
 	}
 
+	@Override
+	public void pauseBackgroundMusic() {
+		// Dummy method; no implementation needed
+		
+	}
+
+	@Override
+	public void resumeBackgroundMusic() {
+		// Dummy method; no implementation needed
+		
+	}
+
 }
