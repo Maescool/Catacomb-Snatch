@@ -365,7 +365,7 @@ public class Art {
 		dish = screen.cut("/art/mob/dish001.png", 6, 12);
 
 		//convert double array of vertical tiles to single array
-		AbstractBitmap[][] temp = screen.cut("/art/screen/back_char_button.png", CharacterButton.WIDTH, CharacterButton.BUTTON_HEIGHT);
+		AbstractBitmap[][] temp = screen.cut("/art/screen/back_char_button.png", CharacterButton.BUTTON_WIDTH, CharacterButton.BUTTON_HEIGHT);
 		backCharacterButton = new AbstractBitmap[]{temp[0][0], temp[0][1], temp[0][2]};
 		
 		temp = screen.cut("/art/screen/back_level_editor_button.png", LevelEditorButton.WIDTH, LevelEditorButton.HEIGHT);
