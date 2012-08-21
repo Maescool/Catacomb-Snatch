@@ -13,6 +13,10 @@ public interface ISoundPlayer {
 	public abstract void startBackgroundMusic();
 
 	public abstract void stopBackgroundMusic();
+	
+	public abstract void pauseBackgroundMusic();
+	
+	public abstract void resumeBackgroundMusic();
 
 	public abstract void setListenerPosition(float x, float y);
 
