@@ -774,14 +774,14 @@ while (running) {
 					tickChat();
 						
 					// every 4 minutes, start new background music :)
-					System.out.println(nextMusicInterval);
+					
 					if (System.currentTimeMillis() > nextMusicInterval) {
 						nextMusicInterval = (System.currentTimeMillis()) + (4 * 60 * 1000);
 						soundPlayer.startBackgroundMusic();
 					}
 				} 
 				
-				System.out.println("next interval: " + nextMusicInterval);
+				
 				if (keys.screenShot.isDown) {
 					takeScreenShot();
 				}
