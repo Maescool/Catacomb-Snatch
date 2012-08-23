@@ -16,7 +16,6 @@ import com.mojang.mojam.entity.loot.Loot;
 import com.mojang.mojam.entity.loot.LootCollector;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.mob.RailDroid;
-import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.entity.particle.Sparkle;
 import com.mojang.mojam.entity.weapon.IWeapon;
 import com.mojang.mojam.entity.weapon.Rifle;
@@ -66,8 +65,8 @@ public class Player extends Mob implements LootCollector {
     private final static int INTERACT_DISTANCE = 20 * 20; // Sqr
     private int steps = 0;
     private boolean isSeeing;
-    private int startX;
-    private int startY;
+    //private int startX;
+    //private int startY;
     public int muzzleTicks = 0;
     public double muzzleX = 0;
     public double muzzleY = 0;
@@ -99,8 +98,8 @@ public class Player extends Mob implements LootCollector {
         this.mouseButtons = mouseButtons;
         this.character = character;
 
-        startX = x;
-        startY = y;
+        //startX = x;
+        //startY = y;
 
         plevel = 0; // will be displayed in GUI as lev 1
         pexp = 0;
@@ -643,15 +642,6 @@ public class Player extends Mob implements LootCollector {
     	if (!(entity instanceof IUsable))
     		return false;
     	return ((IUsable)entity).isHighlightable() && canInteractWithEntity(entity);// && this.team == entity.team; 
-    }
-    
-    // Whether this Player should see the Entity in question
-    // highlighted on their game client - this indicates that
-    // they can interact with the Entity
-    private boolean shouldHighlightEntityOnThisGameClient(Entity entity) {
-    	if (!(entity instanceof IUsable))
-    		return false;
-    	return ((IUsable)entity).isHighlightable() && canInteractWithEntity(entity) && this.team == MojamComponent.localTeam; 
     }
     
     // Whether this Player is allowed to use the Entity in 

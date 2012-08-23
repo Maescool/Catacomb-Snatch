@@ -18,7 +18,7 @@ public class Melee implements IWeapon {
 	protected Mob owner;
 	protected static float BULLET_DAMAGE;
 
-	private int upgradeIndex = 1;
+	//private int upgradeIndex = 1;
 	private double accuracy;
 	protected int shootDelay = 30;
 
@@ -50,7 +50,7 @@ public class Melee implements IWeapon {
 
 	@Override
 	public void upgradeWeapon() {
-		upgradeIndex++;
+		//upgradeIndex++;
 	}
 
 	@Override

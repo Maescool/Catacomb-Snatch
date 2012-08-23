@@ -114,7 +114,7 @@ public class ObjectGroup {
 	*/
 	public void removeObject(String objectName){
 		int objectOffset = this.nameToObjectMap.get(objectName);
-		GroupObject object = (GroupObject) this.objects.remove(objectOffset);
+		this.objects.remove(objectOffset);
 	}
 	  
 	/**

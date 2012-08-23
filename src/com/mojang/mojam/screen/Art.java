@@ -10,7 +10,6 @@ import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.gui.CharacterButton;
 import com.mojang.mojam.gui.LevelButton;
 import com.mojang.mojam.gui.LevelEditorButton;
-import com.mojang.mojam.gui.components.Button;
 
 /**
  * Art management class

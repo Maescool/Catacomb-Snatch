@@ -11,14 +11,13 @@ import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.resources.Constants;
 import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.AbstractBitmap;
-import com.mojang.mojam.screen.AbstractScreen;
 
 public class Cannon implements IWeapon {
 
 	protected Mob owner;
 	protected static float BULLET_DAMAGE;
 
-	private int upgradeIndex = 1;
+	//private int upgradeIndex = 1;
 	private double accuracy;
 	private int shootDelay = 900;
 
@@ -49,7 +48,7 @@ public class Cannon implements IWeapon {
 
 	@Override
 	public void upgradeWeapon() {
-		upgradeIndex++;
+		//upgradeIndex++;
 	}
 
 	@Override
