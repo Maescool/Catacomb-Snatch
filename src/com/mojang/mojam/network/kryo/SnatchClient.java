@@ -101,7 +101,7 @@ public class SnatchClient {
 		if (message instanceof TurnMessage) {
 			mojamComponent.synchronizer.onTurnMessage((TurnMessage) message);
 		} else if (message instanceof RegisterName) {
-			RegisterName registerNamemessage = (RegisterName) message;
+			//RegisterName registerNamemessage = (RegisterName) message;
 			mojamComponent.createServerState = 1;
 			return;
 		} else if (message instanceof ChangeKeyMessage) {

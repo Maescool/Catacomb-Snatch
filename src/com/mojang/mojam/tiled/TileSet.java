@@ -14,6 +14,7 @@ import org.w3c.dom.NodeList;
  */
 public class TileSet {
 	/** The map this tileset was loaded as part of */
+	@SuppressWarnings("unused")
 	private final TiledMap map;
 	/** The index of the tile set */
 	public int index;
@@ -57,7 +58,7 @@ public class TileSet {
 	public TileSet(TiledMap map, Element element, boolean loadImage) throws Exception {
 		this.map = map;
 		firstGID = Integer.parseInt(element.getAttribute("firstgid"));
-		String source = element.getAttribute("source");
+		//String source = element.getAttribute("source");
 
 		name = element.getAttribute("name");
         String tileWidthString = element.getAttribute("tilewidth");
@@ -79,9 +80,9 @@ public class TileSet {
 			tileMargin = Integer.parseInt(mv);
 		}
           
-		NodeList list = element.getElementsByTagName("image");
-		Element imageNode = (Element) list.item(0);
-		String ref = imageNode.getAttribute("source");
+		//NodeList list = element.getElementsByTagName("image");
+		//Element imageNode = (Element) list.item(0);
+		//String ref = imageNode.getAttribute("source");
 		
 		NodeList pElements = element.getElementsByTagName("tile");
 		for (int i=0;i<pElements.getLength();i++) {

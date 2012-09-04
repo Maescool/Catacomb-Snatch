@@ -12,7 +12,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
-import com.mojang.mojam.gui.DownloadScreen;
+//import com.mojang.mojam.gui.DownloadScreen;
 
 public class ChannelDownloader implements IDownloader {
 
@@ -34,7 +34,7 @@ public class ChannelDownloader implements IDownloader {
 		// Print info about resource
 
 		Date date = new Date(urlC.getLastModified());
-		int fileSize = urlC.getContentLength();
+		//int fileSize = urlC.getContentLength();
 		System.out.print("Copying resource (type: " + urlC.getContentType());
 		System.out.println(", modified on: " + date.toString() + ")...");
 		System.out.flush();
@@ -55,7 +55,7 @@ public class ChannelDownloader implements IDownloader {
 		FileOutputStream fos = new FileOutputStream(dest);
 		fos.getChannel().transferFrom(rbc, 0, 1 << 24);
 		// DownloadScreen.drawGraph(fileSize/2, fileSize);
+		fos.close();
 		return;
 	}
-
 }

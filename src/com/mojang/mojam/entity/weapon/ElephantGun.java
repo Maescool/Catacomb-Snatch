@@ -16,7 +16,7 @@ public class ElephantGun implements IWeapon {
 	protected Mob owner;
 	protected static float BULLET_DAMAGE;
 
-	private int upgradeIndex = 1;
+	//private int upgradeIndex = 1;
 	private double accuracy;
 	private int shootDelay = 120;
 
@@ -47,7 +47,7 @@ public class ElephantGun implements IWeapon {
 
 	@Override
 	public void upgradeWeapon() {
-		upgradeIndex++;
+		//upgradeIndex++;
 	}
 
 	@Override
