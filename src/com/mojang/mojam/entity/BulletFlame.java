@@ -3,7 +3,6 @@ package com.mojang.mojam.entity;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.AbstractBitmap;
 import com.mojang.mojam.screen.AbstractScreen;
 
 public class BulletFlame extends Bullet {

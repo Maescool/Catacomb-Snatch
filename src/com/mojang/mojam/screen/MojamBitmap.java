@@ -263,7 +263,7 @@ public class MojamBitmap implements AbstractBitmap {
 
 	}
 
-	private void circle(int centerX, int centerY, int radius, int color) {
+	public void circle(int centerX, int centerY, int radius, int color) {
 		int d = 3 - (2 * radius);
 		int x = 0;
 		int y = radius;

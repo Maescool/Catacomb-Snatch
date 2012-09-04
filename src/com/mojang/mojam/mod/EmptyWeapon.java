@@ -7,11 +7,9 @@ import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Mob;
 import com.mojang.mojam.entity.weapon.IWeapon;
-import com.mojang.mojam.entity.weapon.Rifle;
 import com.mojang.mojam.network.TurnSynchronizer;
 import com.mojang.mojam.resources.Constants;
 import com.mojang.mojam.screen.AbstractBitmap;
-import com.mojang.mojam.screen.Art;
 
 public class EmptyWeapon implements IWeapon {
 

@@ -1,6 +1,5 @@
 package com.mojang.mojam.mod;
 
-import com.mojang.mojam.Keys;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.Keys.Key;
 import com.mojang.mojam.entity.Entity;
@@ -12,14 +11,14 @@ import com.mojang.mojam.level.gamemode.RandomSpawner;
 public interface IMod {
 
     /**
-     * Called at the start of every synchronised tick in game, it can be used
+     * Called at the start of every synchronized tick in game, it can be used
      * for almost anything.
      * 
      */
     public void OnTick();
 
     /**
-     * Called at the end of every synchronised tick, this is used in rare
+     * Called at the end of every synchronized tick, this is used in rare
      * circumstances, such as measuring latency or tick times.
      * 
      */

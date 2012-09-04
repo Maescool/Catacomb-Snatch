@@ -105,10 +105,10 @@ public class Flamethrower extends Rifle {
 		return dir;
 	}
 	
-	private void applyImpuls(double xDir, double yDir, double strength) {		
-		owner.xd -= xDir * strength;
-		owner.yd -= yDir * strength;
-	}
+//	private void applyImpuls(double xDir, double yDir, double strength) {		
+//		owner.xd -= xDir * strength;
+//		owner.yd -= yDir * strength;
+//	}
 
 	public Bullet getAmmo(double xDir, double yDir) {
 		Bullet bullet = new BulletFlame(owner, xDir, yDir, bulletDamage);
