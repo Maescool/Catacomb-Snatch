@@ -24,6 +24,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
@@ -35,6 +36,7 @@ import javax.swing.JPanel;
 import com.mojang.mojam.console.Console;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Team;
+import com.mojang.mojam.gui.AJoyBindingsMenu;
 import com.mojang.mojam.gui.AudioVideoMenu;
 import com.mojang.mojam.gui.CharacterSelectionMenu;
 import com.mojang.mojam.gui.CreditsScreen;
@@ -44,6 +46,7 @@ import com.mojang.mojam.gui.GuiError;
 import com.mojang.mojam.gui.HostingWaitMenu;
 import com.mojang.mojam.gui.HowToPlayMenu;
 import com.mojang.mojam.gui.JoinGameMenu;
+import com.mojang.mojam.gui.JoyBindingsMenu;
 import com.mojang.mojam.gui.KeyBindingsMenu;
 import com.mojang.mojam.gui.LevelEditorMenu;
 import com.mojang.mojam.gui.LevelSelect;
@@ -116,7 +119,9 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	private InputHandler inputHandler;
 	private int lastX = 0;
 	private int lastY = 0;
-	private boolean mouseMoved = false;
+	public boolean mouseMoved = false;
+	public boolean joyMoved = false;
+	public boolean shootMoved = false;
 	private int mouseHideTime = 0;
 	public MouseButtons mouseButtons = new MouseButtons();
 	public Keys keys = new Keys();
@@ -159,6 +164,23 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			+ File.separator
 			+ "native"
 			+ File.separator;
+	    try {
+			Field field = ClassLoader.class.getDeclaredField("usr_paths");
+			field.setAccessible(true);
+			String[] paths = (String[])field.get(null);
+			for (int i = 0; i < paths.length; i++) {
+				if (nativeLibDir.equals(paths[i])) {
+					return;
+				}
+			}
+			String[] tmp = new String[paths.length+1];
+			System.arraycopy(paths,0,tmp,0,paths.length);
+			tmp[paths.length] = nativeLibDir;
+			field.set(null,tmp);
+			System.setProperty("java.library.path", System.getProperty("java.library.path") + File.pathSeparator + nativeLibDir);
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
 	    System.setProperty("org.lwjgl.librarypath", nativeLibDir);
 		// initialize the constants
 		MojamComponent.constants = new Constants();
@@ -181,6 +203,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		snatchClient = new SnatchClient();
 		snatchClient.setComponent(this);
 		instance = this;
+		JoypadHandler.init();
 	}
 
 	public void setScale(int i) {
@@ -418,7 +441,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		ModSystem.runOnce();
 		
 
-while (running) {
+		while (running) {
+			JoypadHandler.tick();
 			ModSystem.updateTick();
 			if (!this.hasFocus()) {
 				keys.release();
@@ -638,7 +662,7 @@ while (running) {
 
 	private void renderMouse(AbstractScreen screen, MouseButtons mouseButtons) {
 
-		if (mouseButtons.mouseHidden)
+		if (!mouseButtons.renderMouse)
 			return;
 
 		int crosshairSize = 15;
@@ -701,28 +725,8 @@ while (running) {
 		if (snatchClient != null) {
 			snatchClient.tick();
 		}
-
-		// Store virtual position of mouse (pre-scaled)
-		Point mousePosition = getMousePosition();
-		if (mousePosition != null) {
-			mouseButtons.setPosition(mousePosition.x / scale, mousePosition.y / scale);
-		}
-		if (!menuStack.isEmpty()) {
-			menuStack.peek().tick(mouseButtons);
-		}
-		if (mouseMoved) {
-			mouseMoved = false;
-			mouseHideTime = 0;
-			if (mouseButtons.mouseHidden) {
-				mouseButtons.mouseHidden = false;
-			}
-		}
-		if (mouseHideTime < 60) {
-			mouseHideTime++;
-			if (mouseHideTime == 60) {
-				mouseButtons.mouseHidden = true;
-			}
-		}
+		
+		tickMouse();
 
 		if (sendCharacter) {
 			synchronizer.addMessage(new CharacterMessage(localId, playerCharacter.ordinal()));
@@ -813,6 +817,45 @@ while (running) {
 
 		}
 		ModSystem.afterTick();
+	}
+
+	private void tickMouse() {
+		// Store virtual position of mouse (pre-scaled)
+		Point mousePosition = getMousePosition();
+		if (mousePosition != null) {
+			boolean inLevel = (level != null) && (!paused);
+			mouseButtons.updatePosition(mousePosition.x / scale, mousePosition.y / scale, mouseMoved, joyMoved || shootMoved, inLevel);
+		}
+		if (!menuStack.isEmpty()) {
+			menuStack.peek().tick(mouseButtons);
+		}
+		// Do joystick handling when replacing mouse handling 
+		if (!mouseMoved && joyMoved) {
+			joyMoved = false;
+			mouseHideTime = 0;
+			mouseButtons.mouseHidden = false;
+			mouseButtons.renderMouse = true;
+		}
+		// Do mouse handling 
+		if (mouseMoved) {
+			mouseMoved = false;
+			mouseHideTime = 0;
+			mouseButtons.mouseHidden = false;
+			mouseButtons.renderMouse = true;
+		}
+		// Do shoot handling 
+		if (shootMoved) {
+			shootMoved = false;
+			mouseButtons.mouseHidden = false;
+			mouseButtons.renderMouse = false;
+			mouseHideTime = 50;
+		}
+		// Make the cursor go after a while 
+		mouseHideTime++;
+		if (mouseHideTime >= 60 && !shootMoved) {
+			mouseButtons.mouseHidden = true;
+			mouseButtons.renderMouse = false;
+		}
 	}
 
 	private void tickChat() {
@@ -1060,6 +1103,14 @@ while (running) {
 			menuStack.add(new KeyBindingsMenu(keys, inputHandler));
 			break;
 
+		case TitleMenu.JOY_MENU:
+			menuStack.add(new JoyBindingsMenu(keys));
+			break;
+
+		case TitleMenu.AXES_MENU:
+			menuStack.add(new AJoyBindingsMenu());
+			break;
+
 		case TitleMenu.LEVEL_EDITOR_ID:
 			menuStack.add(new LevelEditorMenu());
 			break;
@@ -1198,6 +1249,7 @@ while (running) {
 		};
 	}
 
+
 	public void pause(boolean paused) {
 		this.paused = paused;
 		if (paused) {
@@ -1209,6 +1261,10 @@ while (running) {
 			this.nextMusicInterval = System.currentTimeMillis() + this.pausedMusicInterval;
 			MojamComponent.soundPlayer.resumeBackgroundMusic();
 		}
-		
+	}	
+
+	public InputHandler getInputHandler() {
+		return inputHandler;
+
 	}
 }
