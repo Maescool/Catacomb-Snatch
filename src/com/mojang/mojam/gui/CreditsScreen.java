@@ -24,7 +24,7 @@ public class CreditsScreen extends GuiMenu {
 	public String[] communityMan = {"Austin01", "", "zorro300"};
 	public String[] others = {"xPaw", "BubblegumBalloon", "Elosanda", "GreenLightning", "Mebibyte", "Hammy55", 
 		"skyrick", "RaXaR", "LordofMaps", "KyleBrodie", "ervilsoft", "Stuessy", "xdreamcoding", "eirthepriest", 
-		"spidernetlabs", "..."};
+		"spidernetlabs", "Godleydemon", "..."};
 
 	public CreditsScreen(int gameWidth, int gameHeight) {
 		super();
