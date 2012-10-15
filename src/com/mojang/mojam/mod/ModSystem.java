@@ -120,14 +120,12 @@ public final class ModSystem {
 		}
 
 		inputHandler = (InputHandler) reflectField(mojam, "inputHandler");
-		
-	
-			
-			addMod(ModSystem.class.getClassLoader(), "SnatchContent.class");
-			
-			
+
 		if (Options.getAsBoolean(Options.ENABLE_MODS, Options.VALUE_FALSE)) {
 			System.out.println("ModSystem starting up...");
+
+			addMod(ModSystem.class.getClassLoader(), "SnatchContent.class");
+
 			try {
 				readLinksFromFile(new File(MojamComponent.getMojamDir(), "mods.txt"));
 				readFromClassPath(modDir);
@@ -137,7 +135,7 @@ public final class ModSystem {
 		} else {
 			System.out.println("ModSystem disabled...");
 		}
-		
+
 	}
 
 	/**
