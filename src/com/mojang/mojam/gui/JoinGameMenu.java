@@ -11,7 +11,8 @@ import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.AbstractScreen;
 
 public class JoinGameMenu extends GuiMenu {
-
+	private int inputTick;
+	
 	private Button joinButton;
 	private Button cancelButton;
 
@@ -21,15 +22,19 @@ public class JoinGameMenu extends GuiMenu {
 		LevelList.createLevelList();
 		joinButton = (Button) addButton(new Button(TitleMenu.PERFORM_JOIN_ID, MojamComponent.texts.getStatic("mp.join"), 100, 180));
 		cancelButton = (Button) addButton(new Button(TitleMenu.CANCEL_JOIN_ID, MojamComponent.texts.getStatic("cancel"), 250, 180));
+		
+		inputTick = 0;
 	}
 
 	@Override
 	public void render(AbstractScreen screen) {
-
+		inputTick++;
+		if(inputTick > 100) inputTick = 0;
+		
 		screen.clear(0);
 		screen.blit(Art.emptyBackground, 0, 0);
 		Font.defaultFont().draw(screen, MojamComponent.texts.getStatic("mp.enterIP"), 100, 100);
-		Font.defaultFont().draw(screen, TitleMenu.ip + "-", 100, 120);
+		Font.defaultFont().draw(screen, TitleMenu.ip + ((inputTick < 50) ? "|": ""), 100, 120);
 
 		super.render(screen);
 	}
@@ -37,14 +42,14 @@ public class JoinGameMenu extends GuiMenu {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// Start on Enter, Cancel on Escape
-		if ((e.getKeyChar() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_E)) {
+		if ((e.getKeyChar() == KeyEvent.VK_ENTER)) {
 			if (TitleMenu.ip.length() > 0) {
 				joinButton.postClick();
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			cancelButton.postClick();	
 		} else {
-			super.keyPressed(e);
+			inputTick = 0;
 		}
 	}
 
