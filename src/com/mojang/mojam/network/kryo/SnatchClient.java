@@ -124,12 +124,7 @@ public class SnatchClient {
 			mojamComponent.players[charMessage.localId].setCharacter(GameCharacter.values()[charMessage.ordinal]);
 		} else if (message instanceof PauseMessage) {
 			PauseMessage pm = (PauseMessage) message;
-			mojamComponent.paused = pm.paused;
-			if (pm.paused) {
-				mojamComponent.menuStack.add(new PauseMenu(MojamComponent.GAME_WIDTH, MojamComponent.GAME_HEIGHT));
-			} else {
-				mojamComponent.menuStack.pop();
-			}
+			mojamComponent.pause(pm.paused);
 		} else if (message instanceof ConsoleMessage) {
 			ConsoleMessage cm = (ConsoleMessage) message;
 			mojamComponent.console.processInputFromNetwork(cm.message);

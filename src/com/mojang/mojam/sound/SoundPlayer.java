@@ -270,4 +270,14 @@ public class SoundPlayer implements ISoundPlayer {
 	public SoundSystem getSoundSystem() {
 		return soundSystem;
 	}
+
+	@Override
+	public void pauseBackgroundMusic() {
+		getSoundSystem().pause(BACKGROUND_TRACK);		
+	}
+
+	@Override
+	public void resumeBackgroundMusic() {
+		getSoundSystem().play(BACKGROUND_TRACK);	
+	}
 }
