@@ -36,8 +36,17 @@ public class TiledMap {
 	 * 
 	 * @param h True if we're running on a headless system
 	 */
-	private static void setHeadless(boolean h) {
+	public static void setHeadless(boolean h) {
 		headless = h;
+	}
+	
+	/**
+	 * Indicate if we're running on a headless system.
+	 * 
+	 * @return True if we're running on a headless system, false otherwise
+	 */
+	public static boolean isHeadless() {
+		return headless;
 	}
 	
 	/** The width of the map */

@@ -112,7 +112,7 @@ public class TitleMenu extends GuiMenu {
 	private Button join_host = null;
 	private Button how_to = null;
 	private Button options = null;
-	private Button lvl_editor = null;
+	//private Button lvl_editor = null;
 	private Button exit_game = null;
 
 	public TitleMenu(int gameWidth, int gameHeight) {

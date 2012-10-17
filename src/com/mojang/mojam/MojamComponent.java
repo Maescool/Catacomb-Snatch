@@ -60,7 +60,6 @@ import com.mojang.mojam.gui.components.Font;
 import com.mojang.mojam.level.Level;
 import com.mojang.mojam.level.LevelInformation;
 import com.mojang.mojam.level.gamemode.GameMode;
-import com.mojang.mojam.level.tile.Tile;
 import com.mojang.mojam.math.Vec2;
 import com.mojang.mojam.mc.EnumOS2;
 import com.mojang.mojam.mc.EnumOSMappingHelper;

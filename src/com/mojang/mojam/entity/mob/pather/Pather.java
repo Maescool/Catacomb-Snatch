@@ -6,7 +6,6 @@ import java.util.Set;
 import com.mojang.mojam.entity.Entity;
 import com.mojang.mojam.entity.mob.HostileMob;
 import com.mojang.mojam.entity.mob.Mob;
-import com.mojang.mojam.entity.mob.Team;
 import com.mojang.mojam.level.AStar;
 import com.mojang.mojam.level.Path;
 import com.mojang.mojam.level.tile.*;

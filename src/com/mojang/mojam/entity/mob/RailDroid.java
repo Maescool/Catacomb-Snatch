@@ -142,6 +142,8 @@ public class RailDroid extends Mob implements IUsable, ICarrySwap, LootCollector
         case DOWN:
             yd += speed;
             break;
+		default:
+			break;
         }
 
         Vec2 oldPos = pos.clone();

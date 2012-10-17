@@ -10,7 +10,6 @@ import java.util.jar.*;
 import com.mojang.mojam.MojamComponent;
 import com.mojang.mojam.MojamStartup;
 import com.mojang.mojam.Options;
-import com.mojang.mojam.mc.EnumOS2;
 import com.mojang.mojam.mc.EnumOSMappingHelper;
 
 import com.mojang.mojam.gui.DownloadScreen;
@@ -81,7 +80,7 @@ public class Downloader {
 		MojamStartup.instance.startgame();
 	}
 
-	private static void testSpeeds() {
+	public static void testSpeeds() {
 		IDownloader old = downloadAgent;
 		downloadAgent = new DefaultDownloader();
 		long startDefault = System.nanoTime();
@@ -459,6 +458,7 @@ public class Downloader {
 				fos.close();
 				is.close();
 			}
+			jar.close();
 		} catch (Exception e) {
 			DownloadScreen.unpackStop();
 			e.printStackTrace();

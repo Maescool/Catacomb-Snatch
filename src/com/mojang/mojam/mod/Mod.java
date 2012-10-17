@@ -14,7 +14,7 @@ import com.mojang.mojam.level.gamemode.RandomSpawner;
  */
 public abstract class Mod implements IMod {
     /**
-     * Called at the start of every synchronised tick in game, it can be used
+     * Called at the start of every synchronized tick in game, it can be used
      * for almost anything.
      * 
      */
@@ -22,7 +22,7 @@ public abstract class Mod implements IMod {
     }
 
     /**
-     * Called at the end of every synchronised tick, this is used in rare
+     * Called at the end of every synchronized tick, this is used in rare
      * circumstances, such as measuring latency or tick times.
      * 
      */
@@ -148,7 +148,7 @@ public abstract class Mod implements IMod {
      * @see Entity
      */
     public Entity getEntityInstanceById(int i, double x, double y) {
-	return null;
+    	return null;
     }
 
     /**
@@ -170,7 +170,7 @@ public abstract class Mod implements IMod {
     }
 
     public int OnConsole(String command, String params) {
-	return 0;
+    	return 0;
     }
 
     /**

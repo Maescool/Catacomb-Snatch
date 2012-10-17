@@ -1,11 +1,11 @@
 package com.mojang.mojam.network;
 
-import java.net.ServerSocket;
+//import java.net.ServerSocket;
 
 
 public class TestSynchronizer {
 
-	private static ServerSocket serverSocket;
+	//private static ServerSocket serverSocket;
 
 	/**
 	 * @param args
@@ -39,7 +39,7 @@ public class TestSynchronizer {
 
 	}
 
-	private static class PlayThread extends Thread{
+	private static class PlayThread extends Thread {
 
 		private TurnSynchronizer turnSynchronizer;
 		private final int localId;
@@ -78,33 +78,31 @@ public class TestSynchronizer {
 				//turnSynchronizer.onTurnPacket((TurnPacket) packet);
 			}
 		}
-	}
+	}*/
 
-	// private static class TestPacketLink implements PacketLink {
-	//
-	// private TurnSynchronizer target;
-	// private List<Packet> packetQueue = new ArrayList<Packet>();
-	//
-	// public TestPacketLink() {
-	// }
-	//
-	// public void setTarget(TurnSynchronizer target) {
-	// this.target = target;
-	// }
-	//
-	// public synchronized void sendPacket(Packet packet) {
-	// packetQueue.add(packet);
-	// }
-	//
-	// public synchronized void tick() {
-	// for (Packet packet : packetQueue) {
-	// if (packet instanceof TurnPacket) {
-	// target.onTurnPacket((TurnPacket) packet);
-	// }
-	// }
-	// packetQueue.clear();
-	// }
-	//
-	*/ }
-
-}
+//	private static class TestPacketLink implements PacketLink {
+//
+//		private TurnSynchronizer target;
+//		private List<Packet> packetQueue = new ArrayList<Packet>();
+//
+//		public TestPacketLink() {
+//		}
+//
+//		public void setTarget(TurnSynchronizer target) {
+//			this.target = target;
+//		}
+//
+//		public synchronized void sendPacket(Packet packet) {
+//			packetQueue.add(packet);
+//		}
+//
+//		public synchronized void tick() {
+//			for (Packet packet : packetQueue) {
+//				if (packet instanceof TurnPacket) {
+//					target.onTurnPacket((TurnPacket) packet);
+//				}
+//			}
+//			packetQueue.clear();
+//		}
+//	}
+}}

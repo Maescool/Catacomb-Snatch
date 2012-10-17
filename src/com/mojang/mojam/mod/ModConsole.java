@@ -104,7 +104,7 @@ public class ModConsole implements Runnable, KeyListener {
 	frame.setVisible(true);
 
 	// SnatchConsole.redirectOutput(textArea);
-	final int i = 0;
+	// final int i = 0;
 
 	Timer timer = new Timer(1000, new ActionListener() {
 	    public void actionPerformed(ActionEvent e) {
