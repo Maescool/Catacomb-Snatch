@@ -325,4 +325,21 @@ public class Font {
 			}	
 		}
 	}
+	
+	
+	/**
+	 * Returns the text length in pixels
+	 * 
+	 * @param msg
+	 * @return int the text width in pixels
+	 */
+	public int getTextWidth(String msg) {
+		int x = 0;
+		int length = msg.length();
+		
+		for (int i = 0; i < length; i++)
+			x += getCharacterBitmap(msg.charAt(i)).getWidth() + letterSpacing;
+		
+		return x;
+	}
 }
