@@ -5,7 +5,7 @@ java_import com.mojang.mojam.screen.MojamScreen
 java_import com.mojang.mojam.gui.components.Font
 
 def OnRender()
-    ModSystem.getFont().draw(MojamComponent.screen,"Ruby",20,20)
+    #ModSystem.getFont().draw(MojamComponent.screen,"Ruby",20,20)
 end
 
 def OnLevelTick(level)

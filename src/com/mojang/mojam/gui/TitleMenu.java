@@ -41,6 +41,9 @@ public class TitleMenu extends GuiMenu {
 	public static final int LEVEL_EDITOR_ID = 1019;
 	public static final int AUDIO_VIDEO_ID = 1020;
 	public static final int LOCALE_ID = 1021;
+	public static final int SELECT_INTERNET_ID = 1023;
+	public static final int SELECT_LAN_ID = 1024;
+	public static final int CANCEL_INTERNET_ID = 1025;
 
 	public static final int FULLSCREEN_ID = 2000;
 	public static final int FPS_ID = 2001;
@@ -149,8 +152,8 @@ public class TitleMenu extends GuiMenu {
 	private final int gameHeight;
 
 	private Button select_lvl_btn = null;
-	private Button select_host_lvl = null;
-	private Button join_host = null;
+	private Button select_internet = null;
+	private Button select_lan = null;
 	private Button how_to = null;
 	private Button options = null;
 	//private Button lvl_editor = null;
@@ -163,8 +166,8 @@ public class TitleMenu extends GuiMenu {
 		int startY = 130;
 		try {
 			select_lvl_btn = (Button) addButton(new Button(SELECT_LEVEL_ID, MojamComponent.texts.getStatic("titlemenu.start"), (gameWidth - 128) / 2, (startY += 30)));
-			select_host_lvl = (Button) addButton(new Button(SELECT_HOST_LEVEL_ID, MojamComponent.texts.getStatic("titlemenu.host"), (gameWidth - 128) / 2, (startY += 30)));
-			join_host = (Button) addButton(new Button(JOIN_GAME_ID, MojamComponent.texts.getStatic("titlemenu.join"), (gameWidth - 128) / 2, (startY += 30)));
+			select_internet = (Button) addButton(new Button(SELECT_INTERNET_ID, MojamComponent.texts.getStatic("titlemenu.internet"), (gameWidth - 128) / 2, (startY += 30)));
+			select_lan = (Button) addButton(new Button(SELECT_LAN_ID, MojamComponent.texts.getStatic("titlemenu.lan"), (gameWidth - 128) / 2, (startY += 30)));
 			how_to = (Button) addButton(new Button(HOW_TO_PLAY, MojamComponent.texts.getStatic("titlemenu.help"), (gameWidth - 128) / 2, (startY += 30)));
 			options = (Button) addButton(new Button(OPTIONS_ID, MojamComponent.texts.getStatic("titlemenu.options"), (gameWidth - 128) / 2, (startY += 30)));
 			//Should be removed completely once all of the level editor code is removed. 
@@ -205,8 +208,8 @@ public class TitleMenu extends GuiMenu {
 
 	public void changeLocale() {
 		select_lvl_btn.setLabel(MojamComponent.texts.getStatic(("titlemenu.start")));
-		select_host_lvl.setLabel(MojamComponent.texts.getStatic(("titlemenu.host")));
-		join_host.setLabel(MojamComponent.texts.getStatic(("titlemenu.join")));
+		select_internet.setLabel(MojamComponent.texts.getStatic(("titlemenu.internet")));
+		select_lan.setLabel(MojamComponent.texts.getStatic(("titlemenu.lan")));
 		how_to.setLabel(MojamComponent.texts.getStatic(("titlemenu.help")));
 		options.setLabel(MojamComponent.texts.getStatic(("titlemenu.options")));
 		//lvl_editor.setLabel(MojamComponent.texts.getStatic(("titlemenu.levelEditor")));
