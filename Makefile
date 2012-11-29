@@ -12,7 +12,7 @@ distjar = $(distdir)/Catacomb-Snatch.jar
 all: jar
 
 class:
-	find src/ -name '*.java' -exec javac -classpath lib/CodecJOrbis.jar:lib/CodecWav.jar:lib/LibraryJavaSound.jar:lib/SoundSystem.jar:lib/LibraryLWJGLOpenAL.jar:lib/lwjgl.jar:lib/kryonet-1.04-all.jar:res/ '{}' '+'
+	find src/ -name '*.java' -exec javac -classpath lib/CodecJOrbis.jar:lib/CodecWav.jar:lib/LibraryJavaSound.jar:lib/SoundSystem.jar:lib/LibraryLWJGLOpenAL.jar:lib/lwjgl.jar:lib/kryonet-1.04-all.jar:lib/jruby.jar:lib/jython.jar:lib/jinput.jar:res/ '{}' '+'
 
 jar: class | lib/.tmp $(distdir)
 	cd lib/.tmp && find ../ -maxdepth 1 -name '*.jar' -exec jar xf '{}' ';'

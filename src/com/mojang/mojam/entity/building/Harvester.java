@@ -25,9 +25,9 @@ public class Harvester extends Building implements LootCollector {
 	private boolean isEmptying = false;
 	private Player emptyingPlayer = null;
 	private int emptyingSpeed = 50;
-	public int radius;
-	private int[] upgradeRadius = new int[] { (int) (1.5 * Tile.WIDTH),
-			2 * Tile.WIDTH, (int) (2.5 * Tile.WIDTH) };
+	public int radius = 60;
+	private int[] upgradeRadius = new int[] { (int) (2.5 * Tile.WIDTH),
+			3 * Tile.WIDTH, (int) (2.5 * Tile.WIDTH) };
 	private int[] upgradeCapacities = new int[] { 1500, 2500, 3500 };
 	
 	

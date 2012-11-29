@@ -95,8 +95,11 @@ public abstract class SpawnerEntity extends Building implements IEditable
 
 	public static Entity getRandomSpawner(double x, double y)
 	{
-
-		int nextInt = TurnSynchronizer.synchedRandom.nextInt(ModSystem.numEntitiesLoaded());
+		int modentloaded = ModSystem.numEntitiesLoaded();
+		if (modentloaded <= 0){
+			modentloaded = 1;
+		}
+		int nextInt = TurnSynchronizer.synchedRandom.nextInt(modentloaded);
 
 		if(nextInt == 0) return new SpawnerForBat(x, y);
 		if(nextInt == 1) return new SpawnerForSnake(x, y);
