@@ -17,3 +17,4 @@ doc/
 .idea/misc.xml
 .idea/uiDesigner.xml
 .gitm*
+.pydevproject
