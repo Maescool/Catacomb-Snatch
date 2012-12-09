@@ -69,11 +69,7 @@ public class MojamStartup extends Canvas implements Runnable {
 		menuStack.add(ds);
 	
 		instance = this;
-	
-		// dl = new Downloader();
-		// dl.CheckFiles();
-		// MojamComponent.startgame();
-		// guiFrame.disable();
+
     }
 
     @Override
