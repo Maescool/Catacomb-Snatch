@@ -432,7 +432,8 @@ public class Downloader {
 	// unpack jar
 
 	public static boolean unpackJar(String jarFile, String destDir) {
-
+		DownloadScreen.unpackStart(new File(jarFile).getName().toString());
+		
 		File jarFileJar = new File(jarFile);
 		File destDirDir = new File(destDir);
 
@@ -469,12 +470,14 @@ public class Downloader {
 			return false;
 		} finally {
 			try {
+				DownloadScreen.unpackStop();
 				zipIn.close();
 				input.close();
 			} catch (IOException e) { }
 		}
 
 		jarFileJar.delete();
+		DownloadScreen.unpackStop();
 		return true;
 	}
 
