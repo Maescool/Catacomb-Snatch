@@ -19,6 +19,6 @@
 	<classpathentry kind="lib" path="lib/sfs/sfs2x-client-core.jar"/>
 	<classpathentry kind="lib" path="lib/sfs/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/sfs/slf4j-simple-1.6.1.jar"/>
-	<classpathentry kind="lib" path="lib/sfs/netty-3.5.7.Final.jar"/>
+	<classpathentry kind="lib" path="lib/sfs/netty-3.2.2.Final.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
