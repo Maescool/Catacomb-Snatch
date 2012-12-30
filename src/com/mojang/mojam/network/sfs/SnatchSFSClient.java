@@ -38,13 +38,16 @@ public class SnatchSFSClient implements IEventListener {
 	private String EXTENSION_ID = "CatacombSnatch";
 	private String EXTENSIONS_CLASS = "net.catacombsnatch.sfs2x.CatacombSnatch";
 	
+	private String SERVER_HOSTNAME = "sfs.catacombsnatch.net";
+	private int SERVER_PORT = 9933;
+	
 	public SnatchSFSClient(){
 		this.initSmartFox();
 	}
 	
 	public void connect(){
 		System.out.println("Connecting to SFS");
-		this.connectToServer("localhost", 9933);
+		this.connectToServer(SERVER_HOSTNAME, SERVER_PORT);
 	}
 	
 	private void initSmartFox()
@@ -150,7 +153,9 @@ public class SnatchSFSClient implements IEventListener {
 		}
 		else if(event.getType().equalsIgnoreCase(SFSEvent.LOGIN))
 		{
-			sfsClient.initUdp("localhost",9933);
+			if (!sfsClient.isUdpInited() && sfsClient.isUdpAvailable()){
+				sfsClient.initUdp(SERVER_HOSTNAME,SERVER_PORT);
+			}
 			sfsClient.enableLagMonitor(true);
 			// Check if the "game" group is already subscribed; if not, subscribe it
 			/*if (!sfsClient.getRoomManager().containsGroup(GAME_ROOMS_GROUP_NAME))
