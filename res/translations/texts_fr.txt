@@ -8,13 +8,13 @@ back = RETOUR
 cancel = ANNULER
 select = CHOISIR
 
-credits.leadDev = DEVELOPPEUR PRINCIPAL:
-credits.maintainers = MANAGERS PROJET:
-credits.communityMan = MANAGERS COMMUNAUTÉ:
-credits.others = ET MERCI À TOUS LES CONTRIBUTEURS, INCLUANT:
-credits.note = CE PROJET EST MAINTENANT MAINTENU GRÂCE À  LA COMMUNAUTÉ.
+credits.leadDev = DÉVELOPPEUR PRINCIPAL :
+credits.maintainers = MANAGERS PROJET :
+credits.communityMan = MANAGERS COMMUNAUTÉ :
+credits.others = ET MERCI À TOUS LES CONTRIBUTEURS, INCLUANT :
+credits.note = CE PROJET EST ACTUELLEMENT MAINTENU GRÂCE À LA COMMUNAUTÉ.
 
-diffselect.title = CHOISIR UNE DIFFICULTE
+diffselect.title = CHOISIR UNE DIFFICULTÉ
 diffselect.start = JOUER !
 diffselect.easy = FACILE
 diffselect.normal = NORMAL
@@ -24,27 +24,27 @@ diffselect.nightmare = HARDCORE
 gameplay.player1Win = {0} GAGNE WOOHOO
 gameplay.player2Name = HERR VON SPECK
 gameplay.player2Win = {0} GAGNE YAY
-gameplay.FPS = FPS: {0}
-gameplay.latency = LATENCE: {0}
-gameplay.cantPickup = VOUS NE POUVEZ PRENDRE CECI!
+gameplay.FPS = FPS : {0}
+gameplay.latency = LATENCE : {0}
+gameplay.cantPickup = VOUS NE POUVEZ PRENDRE CECI !
 
 help.goal1 = OBJECTIF
-help.help1 = COLLECTEZ 50 ELEMENTS CONTENUS 
-help.help2 = DANS LE COFFRE AU TRESOR SITUE
+help.help1 = COLLECTEZ 50 ÉLÉMENTS CONTENUS 
+help.help2 = DANS LE COFFRE AU TRÉSOR SITUE
 help.help3 = AU CENTRE DE LA CARTE
 help.help4 = AVANT VOTRE/VOS ADVERSAIRE(S)
 help.turret = TOURELLE
-help.turret1 = TIRE SUR LES ENNEMIS A PROXIMITE.
+help.turret1 = TIRE SUR LES ENNEMIS À PROXIMITÉ.
 help.collector = COLLECTEUR
-help.collector1 = ASPIRE LES PIECES VOISINES.
-help.collector2= RAMASSEZ LE POUR RECUPERER
-help.collector3=  L'ARGENT COLLECTE.
+help.collector1 = ASPIRE LES PIÈCES VOISINES.
+help.collector2= RAMASSEZ LE POUR RECUPÉRER
+help.collector3=  L'ARGENT COLLECTÉ.
 help.bomb = BOMBE
-help.bomb1 = DETRUIT LES MURS FISSURES.
+help.bomb1 = DETRUIT LES MURS FISSURÉS.
 help.bomb2 = TIREZ POUR QU'ELLE EXPLOSE.
 help.rails = RAILS
 help.rails1 = PERMETTENT AUX ROBOTS DE COLLECTER
-help.rails2 = LES TRESORS. 'CONSTRUIRE' SUR LE
+help.rails2 = LES TRÉSORS. 'CONSTRUIRE' SUR LE
 help.rails3 = PREMIER RAIL ACHETE UN ROBOT (50PO)
 
 keys.up = HAUT
@@ -55,28 +55,28 @@ keys.sprint = SPRINT
 keys.fire = TIRER
 keys.use = UTILISER
 keys.build = CONSTRUIRE
-keys.upgrade = AMELIORER
+keys.upgrade = AMÉLIORER
 
-leveleditor.title = Créateur de Niveaux
+leveleditor.title = Créateur de niveaux
 leveleditor.new = Nouveau
 leveleditor.open = Ouvrir
 leveleditor.save = Enregistrer
-leveleditor.enterLevelName = Entrez le nom du niveau:
+leveleditor.enterLevelName = Entrez le nom du niveau :
 
 levelselect.title = CHOISIR UN NIVEAU
 levelselect.start = SUIVANT
-levelselect.update = RAFRAICHIR
+levelselect.update = RAFRAÎCHIR
 
 mp.waitingForClient = EN ATTENTE DU CLIENT...
-mp.enterIP = ENTREZ L'IP DE L'HEBERGEUR:
-mp.localIP = VOTRE IP LOCALE:
-mp.externalIP = VOTRE IP EXTERNE:
+mp.enterIP = ENTREZ L'IP DE L'HÉBERGEUR :
+mp.localIP = VOTRE IP LOCALE :
+mp.externalIP = VOTRE IP EXTERNE :
 mp.join = REJOINDRE
 
 options.on = ON
 options.off = OFF
-options.keyBindings = CONTROLES
-options.characterSelect = Sel. Joueur
+options.keyBindings = CONTRÔLES
+options.characterSelect = Sél. joueur
 options.fullscreen = PLEIN ECRAN
 options.showfps = AFFICHER FPS
 options.music = Musique
@@ -87,7 +87,7 @@ options.mute = MUET
 options.creative = MODE CRÉATIF
 options.credits = CRÉDITS
 
-character.text = Choisissez votre joueur!
+character.text = Choisissez votre joueur !
 character.select = Choisir
 
 pausemenu.help = AIDE
@@ -99,7 +99,7 @@ exitmenu.headline = VOULEZ-VOUS RÉELLEMENT QUITTER LE JEU ?
 exitmenu.cancel = NON
 exitmenu.exit = OUI
 
-player.hasDied = {0} EST MORT!
+player.hasDied = {0} EST MORT !
 
 shop.turretTooltipTitle = TOURELLE
 shop.turretTooltipLine1 = Utilisée pour la défense.
@@ -113,13 +113,13 @@ shop.bombTooltipLine2 = Utilisée pour créer des raccourcis.
 
 shop.rifleTooltipTitle = FUSIL
 shop.rifleTooltipLine1 = Arme de départ (par défaut).
-shop.rifleTooltipLine2 = Good all-round.
+shop.rifleTooltipLine2 = Elle est complète.
 shop.shotgunTooltipTitle = CARABINE
 shop.shotgunTooltipLine1 = Les tirs couvrent une large zone.
 shop.shotgunTooltipLine2 = Portée courte, dégats importants.
 shop.raygunTooltipTitle = PISTOLET À ÉNERGIE
 shop.raygunTooltipLine1 = Les tirs rebondissent sur les murs.
-shop.raygunTooltipLine2 = Chaque rebonds accroît les dégats.
+shop.raygunTooltipLine2 = Chaque rebond accroît les dégâts.
 
 titlemenu.start = JOUER
 titlemenu.host = NV. SERVEUR
@@ -129,7 +129,7 @@ titlemenu.sound_and_video = SON ET VIDÉO
 titlemenu.levelEditor = ÉDITEUR DE NIVEAU
 titlemenu.exit = QUITTER
 
-upgrade.full = DEJA AUGMENTER AU MAX!
-upgrade.notEnoughMoney = VOUS N AVEZ PAS ASSEZ D ARGENT ({0})
+upgrade.full = DÉJÀ AUGMENTÉ AU MAX !
+upgrade.notEnoughMoney = VOUS N'AVEZ PAS ASSEZ D'ARGENT ({0})
 upgrade.to = AUGMENTE AU NIVEAU {0}
 
