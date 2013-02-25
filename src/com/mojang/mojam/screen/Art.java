@@ -362,44 +362,16 @@ public class Art {
 		healthBar_Underlay = screen.cut("/art/effects/bar_green_underlay.png", 32, 4);
 		sprintBar = screen.cut("/art/effects/sprint_bar.png", 32, 4);
 		dish = screen.cut("/art/mob/dish001.png", 6, 12);
-		// different backgrounds
-		int w, h;
-		w = CharacterButton.BUTTON_WIDTH;
-		h = CharacterButton.BUTTON_HEIGHT;
-		backCharacterButton = new AbstractBitmap[3];
-		backCharacterButton[0] = screen.createBitmap(w, h);
-		backCharacterButton[0].fill(0, 0, w, h, 0xff522d16);
-		backCharacterButton[0].fill(1, 1, w - 2, h - 2, 0);
-		backCharacterButton[1] = screen.createBitmap(w, h);
-		backCharacterButton[1].fill(0, 0, w, h, 0xff26150a);
-		backCharacterButton[1].fill(1, 1, w - 2, h - 2, 0);
-		backCharacterButton[2] = screen.createBitmap(w, h);
-		backCharacterButton[2].fill(0, 0, w, h, 0xff26150a);
-		backCharacterButton[2].fill(1, 1, w - 2, h - 2, 0xff3a210f);
-		w = LevelEditorButton.WIDTH;
-		h = LevelEditorButton.HEIGHT;
-		backLevelEditorButton = new AbstractBitmap[3];
-		backLevelEditorButton[0] = screen.createBitmap(w, h);
-		backLevelEditorButton[0].fill(0, 0, w, h, 0xff522d16);
-		backLevelEditorButton[0].fill(1, 1, w - 2, h - 2, 0);
-		backLevelEditorButton[1] = screen.createBitmap(w, h);
-		backLevelEditorButton[1].fill(0, 0, w, h, 0xff26150a);
-		backLevelEditorButton[1].fill(1, 1, w - 2, h - 2, 0);
-		backLevelEditorButton[2] = screen.createBitmap(w, h);
-		backLevelEditorButton[2].fill(0, 0, w, h, 0xff26150a);
-		backLevelEditorButton[2].fill(1, 1, w - 2, h - 2, 0xff3a210f);
-		w = LevelButton.WIDTH;
-		h = LevelButton.HEIGHT;
-		backLevelButton = new AbstractBitmap[3];
-		backLevelButton[0] = screen.createBitmap(w, h);
-		backLevelButton[0].fill(0, 0, w, h, 0xff522d16);
-		backLevelButton[0].fill(1, 1, w - 2, h - 2, 0);
-		backLevelButton[1] = screen.createBitmap(w, h);
-		backLevelButton[1].fill(0, 0, w, h, 0xff26150a);
-		backLevelButton[1].fill(1, 1, w - 2, h - 2, 0);
-		backLevelButton[2] = screen.createBitmap(w, h);
-		backLevelButton[2].fill(0, 0, w, h, 0xff26150a);
-		backLevelButton[2].fill(1, 1, w - 2, h - 2, 0xff3a210f);
+
+		//convert double array of vertical tiles to single array
+		AbstractBitmap[][] temp = screen.cut("/art/screen/back_char_button.png", CharacterButton.BUTTON_WIDTH, CharacterButton.BUTTON_HEIGHT);
+		backCharacterButton = new AbstractBitmap[]{temp[0][0], temp[0][1], temp[0][2]};
+		
+		temp = screen.cut("/art/screen/back_level_editor_button.png", LevelEditorButton.WIDTH, LevelEditorButton.HEIGHT);
+		backLevelEditorButton = new AbstractBitmap[]{temp[0][0], temp[0][1], temp[0][2]};
+		
+		temp = screen.cut("/art/screen/back_level_button.png", LevelButton.WIDTH, LevelButton.HEIGHT);
+		backLevelButton = new AbstractBitmap[]{temp[0][0], temp[0][1], temp[0][2]};
 	}
 
 	/**
