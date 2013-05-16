@@ -1,4 +1,6 @@
-# The project has moved to a new repo! Go check it out * [here](https://github.com/Catacomb-Snatch/Catacomb-Snatch)
+## The project is currently being redeveloped at a new repo!
+## Until it is complete, this is the working version of the game.
+## check it out [here](https://github.com/Catacomb-Snatch/Catacomb-Snatch)
 
 
 
