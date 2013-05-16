@@ -1,9 +1,8 @@
-![Catacomb Snatch](http://i.imgur.com/uSFJF.png)
-
-
 # The project has moved to a new repo! Go check it out * [here](https://github.com/Catacomb-Snatch/Catacomb-Snatch)
 
 
+
+![Catacomb Snatch](http://i.imgur.com/uSFJF.png)
 ### Links
 
 * [Original source from Mojang](http://assets.mojang.com/mojam/CatacombSnatch_src.zip)
