@@ -178,6 +178,21 @@ public class JoypadHandler {
 		}
 
 		@Override
+		public int getRumblerCount() {
+			return 0;
+		}
+
+		@Override
+		public String getRumblerName(int i) {
+			return null;
+		}
+
+		@Override
+		public void setRumblerStrength(int i, float v) {
+
+		}
+
+		@Override
 		public void setXAxisDeadZone(float arg0) {
 			//DUMMY
 		}
