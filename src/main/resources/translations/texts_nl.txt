@@ -92,8 +92,8 @@ levelselect.update = UPDATE DE LEVELS
 
 mp.waitingForClient = WACHTEN OP MEDESPELER
 mp.enterIP = GEEF HET IP VAN DE HOST
-mp.localIP = JE LOCALE IP : 
-mp.externalIP = JE EXTERNE IP:
+mp.localIP = JE LOKAAL IP:
+mp.externalIP = JE EXTERN IP:
 mp.join = JOINEN
 
 options.on = AAN

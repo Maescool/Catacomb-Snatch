@@ -98,8 +98,8 @@ levelselect.update = UPDATE LEVELS
 
 mp.waitingForClient = WAITING FOR CLIENT TO JOIN...
 mp.enterIP = ENTER IP OF HOST:
-mp.localIP = YOUR LOCAL IP:
-mp.externalIP = YOUR EXTERNAL IP:
+mp.localIP = YOUR LOCAL IP: 
+mp.externalIP = YOUR EXTERNAL IP: 
 mp.join = JOIN
 mp.mismatch = VERSION MISMATCH!
 mp.server = SERVER
