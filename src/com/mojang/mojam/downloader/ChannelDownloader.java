@@ -12,8 +12,6 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
-//import com.mojang.mojam.gui.DownloadScreen;
-
 public class ChannelDownloader implements IDownloader {
 
 	@Override
