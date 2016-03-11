@@ -12,11 +12,11 @@ distjar = $(distdir)/Catacomb-Snatch.jar
 all: jar | natives
 
 class:
-	find src/ -name '*.java' -exec javac -classpath lib/CodecJOrbis.jar:lib/CodecWav.jar:lib/LibraryJavaSound.jar:lib/SoundSystem.jar:lib/LibraryLWJGLOpenAL.jar:lib/lwjgl.jar:lib/kryonet-2.21-all.jar:lib/jruby.jar:lib/jython.jar:lib/jinput.jar:res/ '{}' '+'
+	find src/main/java/ -name '*.java' -exec javac -classpath lib/CodecJOrbis.jar:lib/CodecWav.jar:lib/LibraryJavaSound.jar:lib/SoundSystem.jar:lib/LibraryLWJGLOpenAL.jar:lib/lwjgl.jar:lib/kryonet-2.21-all.jar:lib/jruby.jar:lib/jython.jar:lib/jinput.jar:src/main/resources/ '{}' '+'
 
 jar: class | lib/.tmp $(distdir)
 	cd lib/.tmp && find ../ -maxdepth 1 -name '*.jar' -exec jar xf '{}' ';'
-	jar cfe $(distjar) com.mojang.mojam.MojamStartup -C src/ . -C res/ .
+	jar cfe $(distjar) com.mojang.mojam.MojamStartup -C src/main/java/ . -C src/main/resources/ .
 	jar ufe $(distjar) com.mojang.mojam.MojamStartup -C lib/.tmp/ .
 
 natives: $(distdir)
@@ -37,6 +37,6 @@ clean-jar:
 	rm -rf $(distjar) lib/.tmp
 
 clean-class:
-	find src/ -name '*.class' -exec rm '{}' '+'
+	find src/main/java/ -name '*.class' -exec rm '{}' '+'
 
 .PHONY: all class jar natives clean clean-jar clean-class

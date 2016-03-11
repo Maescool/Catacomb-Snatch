@@ -8,10 +8,10 @@ project.version = "1.1.1-SNAPSHOT"
 sourceSets {
   main {
     java {
-      srcDir 'src'
+      srcDir 'src/main/java'
     }
     resources {
-      srcDir 'res'
+      srcDir 'src/main/resources'
       exclude '**/*.ogg'
     }
   }
