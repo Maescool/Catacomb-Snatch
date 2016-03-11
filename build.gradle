@@ -1,3 +1,7 @@
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.11'
+}
+
 apply plugin: 'java'
 apply plugin: 'idea'
 
@@ -53,17 +57,15 @@ macAppBundle {
 buildscript {
     repositories {
         mavenLocal()
+        mavenCentral()
         maven { url "https://plugins.gradle.org/m2/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
         maven { url "http://repo.maven.apache.org/maven2" }
+        jcenter()
     }
 
     dependencies {
         classpath "gradle.plugin.edu.sc.seis:macAppBundle:2.1.5"
     }
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.11'
 }
