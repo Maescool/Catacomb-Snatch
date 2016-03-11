@@ -42,7 +42,8 @@ task run() {
     }
   }
 }
-apply plugin: 'macAppBundle'
+
+apply plugin: 'edu.sc.seis.macAppBundle'
 
 macAppBundle {
     mainClassName = "com.mojang.mojam.MojamComponent"
@@ -51,12 +52,12 @@ macAppBundle {
 
 buildscript {
     repositories {
-        ivy {
-            artifactPattern 'http://gradle-macappbundle.googlecode.com/files/[module]-[revision].[ext]'
+        maven {
+            url "https://plugins.gradle.org/m2/"
         }
     }
 
     dependencies {
-        classpath 'edu.sc.seis:gradle-macappbundle:1.0.4'
+        classpath "gradle.plugin.edu.sc.seis:macAppBundle:2.1.5"
     }
 }
