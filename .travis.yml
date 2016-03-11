@@ -1,0 +1,28 @@
+language: java
+sudo: false
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
+
+install:
+ - ./gradlew clean
+
+script:
+ - ./gradlew -S -i check assemble
+
+jdk:
+ - oraclejdk8
+ - openjdk7
+
+os:
+ - linux
+
+env: TERM=dumb
+
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
