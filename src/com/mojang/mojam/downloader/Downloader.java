@@ -1,76 +1,92 @@
 package com.mojang.mojam.downloader;
 
-import java.net.*;
-import java.io.*;
+import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.MojamStartup;
+import com.mojang.mojam.Options;
+import com.mojang.mojam.gui.DownloadScreen;
+import com.mojang.mojam.mc.EnumOSMappingHelper;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.UnknownHostException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import com.mojang.mojam.MojamComponent;
-import com.mojang.mojam.MojamStartup;
-import com.mojang.mojam.Options;
-import com.mojang.mojam.mc.EnumOSMappingHelper;
-
-import com.mojang.mojam.gui.DownloadScreen;
-
 public class Downloader {
-
-
-	// private static DownloadScreen dScreen = null;
 
 	private static IDownloader downloadAgent = null;
 
 	private static String baseURL = "http://assets.catacombsnatch.net/";
 
-	private static String[][] binFiles = { { "lwjgl.jar", "a9deb51bea77db85de26f7b2eb1ecbea" },
-			{ "LibraryLWJGLOpenAL.jar", "9f6d36c4e4c6e5252c245bd3c61def01" },
-			{"jython.jar", "ac8b8066bf44cdc304b816179f0a96e3"},
-			{"jruby.jar", "23fcb8bdf2ac1d20b8cf247212e0310c"}
+	private static String[][] binFiles = {
+			{"jython.jar", "f63bfc8b51789b4c3d8554aa9642c7bff56b84c25215f3595457fa98ef34093b"},
+			{"jruby.jar", "b1cce9788e6c242f55423b5d88e69186e37a53e00cc9fc4cbcbe4999ab91b9a3"}
 	};
 
-	private static String[][] nativeFiles = { { "linux_native.jar", "6e05a97164478a1c0428179d78dc47ea" },
-			{ "solaris_native.jar", "f8d81693de7d8738b6adb94e022cddde" },
-			{ "windows_native.jar", "73a252d4a759230013f96e5ba6740650" },
-			{ "macosx_native.jar", "0bdc70d053e81a71a84d6f11c29ec009" } };
+	private static String nativeVersion = "lwjgl-2.9.3";
+	private static String[][] nativeFiles = {
+			{ "linux_native.jar", "a82b1906072f90018f05bd0851254729248a624b0127ef6e0ff487c748785236" },
+			{ "macosx_native.jar", "1d02f1062cf2f0dc7a41e604bc436d487e7b98371a666681f1e72f773eb74a81" },
+			{ "solaris_native.jar", "63c710911f3b5081f2ec698ed76229359787fe1b9172f516e8cd4c9ee4b8b50b" },
+			{ "windows_native.jar", "47c9fb959ec2617fdfd4bb581ed8defed7964d9642dd62d4e6d4ca91cd7c163c" }
+	};
+
 	private static String[][][] nativeLocalFiles = {
 			// linux
-			{ { "libjinput-linux64.so", "23a6b611eaab617a9394f932b69ae034" },
-					{ "libjinput-linux.so", "f2317f7c050cd441510423e90fb16dfd" },
-					{ "liblwjgl64.so", "14fba12975855da3387c57100adad0d9" },
-					{ "liblwjgl.so", "b6750ca7411ba90d131f81700d4c8e5c" },
-					{ "libopenal64.so", "36dd2aefe04f5deb4b8184d9aedecc81" },
-					{ "libopenal.so", "cc73e342aa11a584b727ceb5ff33aeff" } },
+			{
+					{"libjinput-linux64.so", "86e650f47790e789696a7a5809461eb4b503f5f841e17488aa7ee5a1bedc05a6"},
+					{"libjinput-linux.so", "ff7af7a1306451428c98e3f50c5bf2f19bb6cbc5835730917cdd755b8cc626d0"},
+					{"liblwjgl64.so", "4622966cceee1c13df9e293fbae8fa402d1be84b3e1ade7256eca57892392f08"},
+					{"liblwjgl.so", "7739ce295bfb88bceb462b3a130ec4c1668689ec3acea4b006422b43e2386b5a"},
+					{"libopenal64.so", "265310b84e3fbc292354ad9901425a4f6532e8c3f730f36be96edb790174091c"},
+					{"libopenal.so", "1b8d26bdf799a14005e4c3e20b67c4449c48d4bf6bb51e871522669b351d20ca"}
+			},
 			// solaris
-			{ { "liblwjgl64.so", "30a37613ae3b615e4908f1cd0dc64d15" },
-					{ "liblwjgl.so", "458a2f41ce039366df5b9bfaafff2cbe" },
-					{ "libopenal64.so", "960249b6592ce57f0665e2a9478f9016" },
-					{ "libopenal.so", "8dc38fc3d4d02c08af9c2644587ce946" } },
+			{
+					{"liblwjgl64.so", "fce46ded1e187f4041131d69368c6b91d6dc06effefbe36b2cec7157a25949ef"},
+					{"liblwjgl.so", "9e9e0152a346ff9afd6e7105f039459e2d215a8a939dbbc45500a93164e2c778"},
+					{"libopenal64.so", "857367e54db3ca84af99a303479375db4480e56a8088a2ec3b9e6fb96ec3421b"},
+					{"libopenal.so", "64462fec9140e1475fe74ba9383f09965463b45441951d94901d561454696801"}
+			},
 			// windows
-			{ { "jinput-dx8_64.dll", "f1a51706365a44ea21aa96a9a04bfb37" },
-					{ "jinput-dx8.dll", "83fd6e1b034dc927773322472417589e" },
-					{ "jinput-raw_64.dll", "4d1cfc36d1b5b1dd496d6e3090044cb1" },
-					{ "jinput-raw.dll", "77f9d40a81f8f062148172bac873bcad" },
-					{ "lwjgl64.dll", "13e15d61ab3d6b0c7ec602749a3bac14" },
-					{ "lwjgl.dll", "c7a795f9b8aa774c12b329d51b6307fc" },
-					{ "OpenAL32.dll", "258c3ad28efbda28363729ab6c9ca727" },
-					{ "OpenAL64.dll", "29610cfe77635b636a191746b51b71a3" } },
+			{
+					{"jinput-dx8_64.dll", "511dc50c2001d3e25845dd479ca82fdfc9d42403f9aa69c6493257c66ddf0266"},
+					{"jinput-dx8.dll", "f6ee33701bfbba481870f4a370d707b87001fb3213efcc60bff325013b4e219c"},
+					{"jinput-raw_64.dll", "74cd74d55ea20e8fcea7aed8b97c2cf096da1fcde3faf183f815a4dce9364ec3"},
+					{"jinput-raw.dll", "0fcd33e00ba5c51f3fdf3613d89c6e9e00381fef03b550412ea73bc837237dcf"},
+					{"lwjgl64.dll", "094c38a9b6b9ab76e3730838d542419811e63de5d4a4ba5a22d83f6edd803943"},
+					{"lwjgl.dll", "caf7074511c9ed3af7704223ec491b2992dc23b8c4769dffd64b9fa6c34451bd"},
+					{"OpenAL32.dll", "baf27fc91dc852d78889e052cfc9ed2b6fc0927258bb507a895c6fcd50f10fef"},
+					{"OpenAL64.dll", "9261b66010a845ddef9f61d5e4266fe2f08a53f3605da002e9e8f8d202bdbc5e"}
+			},
 			// macosx
-			{ { "libjinput-osx.jnilib", "b0f62f4735ad754a7e6c8e2f744a0523" },
-					{ "liblwjgl.jnilib", "c94e04323ebe89a60866ac3e164c0a81" },
-					{ "openal.dylib", "938a20055127b2262d114b8bba5a9e07" } } };
+			{
+					{"libjinput-osx.dylib", "d155c29cfa7d7b49cab0821d5ba00a8fdc8b386c8bf5669f0313a62e44ba70d6"},
+					{"liblwjgl.dylib", "4e9512afc0aa0831cc72591852c47c804c57ed13bd4ab9ba3ac798650616db0e"},
+					{"openal.dylib", "d845fab22fd58425deafbcb1a552633b4a62bd5dfa27b9263c050d91a3fad8c0"}
+			}
+	};
 
-	private static String[][] soundFiles = { { "Background 1.ogg", "dc981f1c6abbc9cbd789316c13404d39" },
-			{ "Background 2.ogg", "70c878491e3f4de3e0ab99c27af0bc60" },
-			{ "Background 3.ogg", "81dd986e281f42ea268d4de7751622d1" },
-			{ "Background 4.ogg", "a3d7be4ce42b2df567513728830d990a" },
-			{ "ThemeEnd.ogg", "32c3edef7c01e13bb0e55e71a71b4d99" },
-			{ "ThemeTitle.ogg", "53c6d27b515e583a7922fd41c2a10b06" } };
+	private static String[][] soundFiles = {
+			{ "Background 1.ogg", "9fcfef68c88ce6f7b180bc14ce0e920588d596b791dafd40b53336cd86bbe325" },
+			{ "Background 2.ogg", "b303abffca9c89ee22c595a86631f5eb9957d03774820510bbc90e700dfc2ada" },
+			{ "Background 3.ogg", "28d72ab1b778c9e9d58b874c1554d5f7b8a9ea7c96cf26b699327b284b6d4ab1" },
+			{ "Background 4.ogg", "489657f5c2ec87271e8d18ec145710955635b457f6db7dffecfd02febfb76bda" },
+			{ "ThemeEnd.ogg", "480f07e97b53367954f59b5f7fdf9e79ff47f5517fd5445a78696fe8f20ff167" },
+			{ "ThemeTitle.ogg", "cc445bec1e1e079eb69b483ec22f1d7a23c7d8330fb2de3259aa63618b0a2ff0" }
+	};
 
 	public void CheckFiles() {
 		// testSpeeds(); //<- Eye-opening
 		if (Options.getAsInteger(Options.DLSYSTEM, 0) == 1) {
-			downloadAgent = new ChannelDownloader();// Faster, less control
+			downloadAgent = new ChannelDownloader(); // Faster, less control
 		} else if (Options.getAsInteger(Options.DLSYSTEM, 0) == 0) {
 			downloadAgent = new DefaultDownloader();
 		}
@@ -100,13 +116,11 @@ public class Downloader {
 	}
 
 	// bindir
-
 	private static void checkBinDir() {
 		File binDir = getBinDir();
 		if (!binDir.exists()) {
 			binDir.mkdirs();
 			downloadAllBin(binDir);
-			return;
 		}
 
 		ArrayList<String> found = new ArrayList<String>();
@@ -122,29 +136,29 @@ public class Downloader {
 			}
 			// now get the missing files..
 			for (int i = 0; i < binFiles.length; i++) {
-				boolean notfoundorok = true;
 				String binFile = binFiles[i][0].toString();
-				String md5 = binFiles[i][1].toString();
+				String sha256 = binFiles[i][1].toString();
+				boolean checksum = false;
 				for (int j = 0; j < found.size(); j++) {
 					// check if file is found
 					if (binFile.equals(found.get(j).toString())) {
 						System.out.println("Found: " + binFile);
-						// md5 check
-						String hash = "";
 						try {
-							hash = getMD5Checksum(new File(binDir, binFile).getAbsolutePath());
+							checksum = verifySHA256Checksum(new File(binDir, binFile).getAbsolutePath(), sha256);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
+							// could not check
+							checksum = true;
+							break;
 						}
-						if (md5.equals("") || md5.equals(hash)) {
-							System.out.println("MD5 OK: " + hash);
-							notfoundorok = false;
+						if (checksum) {
+							System.out.println("Checksum ok.");
 							break;
 						}
 					}
 				}
-				if (notfoundorok) {
+				if (!checksum) {
 					downloadBinFile(binFile);
 				}
 			}
@@ -174,7 +188,6 @@ public class Downloader {
 	}
 
 	// native dir
-
 	private static void checkNativeDir() {
 		File nativeDir = getNativeDir();
 		if (!nativeDir.exists()) {
@@ -196,38 +209,38 @@ public class Downloader {
 			int osId = EnumOSMappingHelper.enumOSMappingArray[MojamComponent.getOs().ordinal()];
 			if (osId < 5 && osId > 0) {
 				// now check the missing files..
-				boolean notfoundorok = false;
+				boolean notok = false;
 				for (int i = 0; i < nativeLocalFiles[osId - 1].length; i++) {
 					String nativeFile = nativeLocalFiles[osId - 1][i][0].toString();
-					String md5 = nativeLocalFiles[osId - 1][i][1].toString();
+					String sha256 = nativeLocalFiles[osId - 1][i][1].toString();
+					boolean checksum = false;
 					boolean notfound = true;
 					for (int j = 0; j < found.size(); j++) {
 						// check if file is found
 						if (nativeFile.equals(found.get(j).toString())) {
 							notfound = false;
 							System.out.println("Found: " + nativeFile);
-							// md5 check
-							String hash = "";
 							try {
-								hash = getMD5Checksum(new File(nativeDir, nativeFile).getAbsolutePath());
+								checksum = verifySHA256Checksum(new File(nativeDir, nativeFile).getAbsolutePath(), sha256);
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
-							}
-							if (!md5.equals(hash)) {
-								notfoundorok = true;
+								// could not check
+								checksum = true;
 								break;
-							} else {
-								System.out.println("MD5 OK: " + hash);
+							}
+							if (checksum) {
+								System.out.println("Checksum ok.");
+								break;
 							}
 						}
 					}
-					if (notfound || notfoundorok) {
-						notfoundorok = true;
+					if (notfound || !checksum) {
+						notok = true;
 						break;
 					}
 				}
-				if (notfoundorok) {
+				if (notok) {
 					downloadNative();
 				}
 			}
@@ -262,46 +275,49 @@ public class Downloader {
 			break;
 		default:
 			// oO OS not detected..
-			break;
+			return;
 		}
-		String hash = "";
-		String md5 = "";
+		String sha256 = "";
 		for (int i = 0; i < nativeFiles.length; i++) {
 			if (jarFile.equals(nativeFiles[i][0])) {
-				md5 = nativeFiles[i][1];
+				sha256 = nativeFiles[i][1];
 				break;
 			}
 		}
 		if (!jarFile.isEmpty()) {
+			boolean checksum = false;
 			// check if we have file locally and check md5
 			if (new File(binDir, jarFile).exists()) {
-
 				try {
-					hash = getMD5Checksum(new File(binDir, jarFile).getAbsolutePath());
+					checksum = verifySHA256Checksum(new File(binDir, jarFile).getAbsolutePath(), sha256);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				if (!md5.equals(hash)) {
-					if (!download(baseURL + "native/" + jarFile, binDir + jarFile)) {
+				if (!checksum) {
+					if (!download(baseURL + "native/" + nativeVersion + "/" + jarFile, binDir + jarFile)) {
 						return;
 					}
 				}
 				unpackJar(binDir + jarFile, nativeLibDir);
 			} else {
 				// jar not found.. download and unpack!
-				if (download(baseURL + "native/" + jarFile, binDir + jarFile)) {
+				if (download(baseURL + "native/" + nativeVersion + "/" + jarFile, binDir + jarFile)) {
 					try {
-						hash = getMD5Checksum(new File(binDir, jarFile).getAbsolutePath());
+						checksum = verifySHA256Checksum(new File(binDir, jarFile).getAbsolutePath(), sha256);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						checksum = true;
 					}
-					if (md5.equals(hash)) {
+					if (checksum) {
 						unpackJar(binDir + jarFile, nativeLibDir);
 					} else {
 						// oO something went fishy..
+						System.out.println("oO, something is broken.. checksum was wrong..");
 					}
+				} else {
+					System.out.println("oO, so.. yeah.. download failed..");
 				}
 			}
 		}
@@ -312,7 +328,6 @@ public class Downloader {
 	}
 
 	// sound dir
-
 	/**
 	 * Check the sound directory if all sounds are locally available
 	 * 
@@ -337,29 +352,26 @@ public class Downloader {
 			}
 			// now get the missing files..
 			for (int i = 0; i < soundFiles.length; i++) {
-				boolean notfoundorok = true;
 				String soundFile = soundFiles[i][0].toString();
-				String md5 = soundFiles[i][1].toString();
+				String sha256 = soundFiles[i][1].toString();
+				boolean checksum = false;
 				// check if file is found
 				for (int j = 0; j < found.size(); j++) {
 					if (soundFile.equals(found.get(j).toString())) {
 						System.out.println("Found: " + soundFile);
-						// md5 check
-						String hash = "";
 						try {
-							hash = getMD5Checksum(new File(soundDir, soundFile).getAbsolutePath());
+							checksum = verifySHA256Checksum(new File(soundDir, soundFile).getAbsolutePath(), sha256);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						if (md5.equals("") || md5.equals(hash)) {
-							System.out.println("MD5 OK: " + hash);
-							notfoundorok = false;
+						if (checksum) {
+							System.out.println("Checksum ok.");
 							break;
 						}
 					}
 				}
-				if (notfoundorok) {
+				if (!checksum) {
 					downloadSoundFile(soundFile);
 				}
 			}
@@ -400,37 +412,38 @@ public class Downloader {
 		return new File(new File(MojamComponent.getMojamDir(), "resources"), "sound");
 	}
 
-	// MD5 from http://www.rgagnon.com/javadetails/java-0416.html
-	public static byte[] createChecksum(String filename) throws Exception {
-		InputStream fis = new FileInputStream(filename);
+	// From http://www.sha1-online.com/sha256-java/
+	/**
+	 * Verifies file's SHA256 checksum
+	 * @param file FilePath and name of a file that is to be verified
+	 * @param testChecksum the expected checksum
+	 * @return true if the expeceted SHA256 checksum matches the file's SHA256 checksum; false otherwise.
+	 * @throws NoSuchAlgorithmException
+	 * @throws IOException
+	 */
+	public static boolean verifySHA256Checksum(String file, String testChecksum) throws NoSuchAlgorithmException, IOException
+	{
+		MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+		FileInputStream fis = new FileInputStream(file);
 
-		byte[] buffer = new byte[1024];
-		MessageDigest complete = MessageDigest.getInstance("MD5");
-		int numRead;
+		byte[] data = new byte[1024];
+		int read = 0;
+		while ((read = fis.read(data)) != -1) {
+			sha256.update(data, 0, read);
+		};
+		byte[] hashBytes = sha256.digest();
 
-		do {
-			numRead = fis.read(buffer);
-			if (numRead > 0) {
-				complete.update(buffer, 0, numRead);
-			}
-		} while (numRead != -1);
-
-		fis.close();
-		return complete.digest();
-	}
-
-	public static String getMD5Checksum(String filename) throws Exception {
-		byte[] b = createChecksum(filename);
-		String result = "";
-
-		for (int i = 0; i < b.length; i++) {
-			result += Integer.toString((b[i] & 0xff) + 0x100, 16).substring(1);
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < hashBytes.length; i++) {
+			sb.append(Integer.toString((hashBytes[i] & 0xff) + 0x100, 16).substring(1));
 		}
-		return result;
+
+		String fileHash = sb.toString();
+
+		return fileHash.equals(testChecksum);
 	}
 
 	// unpack jar
-
 	public static boolean unpackJar(String jarFile, String destDir) {
 		DownloadScreen.unpackStart(new File(jarFile).getName().toString());
 		
@@ -523,8 +536,9 @@ public class Downloader {
 			break;
 		case 4:
 			osName = "MacOSX";
-			default:
-				osName = "Unknown";
+			break;
+		default:
+			osName = "Unknown";
 		}
 		return "Mozilla/5.0 (Catacomb Snatch; "+osName+") CatacombSnatch/"+MojamComponent.GAME_VERSION;
 	}
