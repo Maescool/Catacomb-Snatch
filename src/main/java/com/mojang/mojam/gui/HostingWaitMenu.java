@@ -1,5 +1,13 @@
 package com.mojang.mojam.gui;
 
+import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.downloader.Downloader;
+import com.mojang.mojam.gui.components.Button;
+import com.mojang.mojam.gui.components.ClickableComponent;
+import com.mojang.mojam.gui.components.Font;
+import com.mojang.mojam.screen.AbstractScreen;
+import com.mojang.mojam.screen.Art;
+
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,13 +15,6 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import com.mojang.mojam.MojamComponent;
-import com.mojang.mojam.gui.components.Button;
-import com.mojang.mojam.gui.components.ClickableComponent;
-import com.mojang.mojam.gui.components.Font;
-import com.mojang.mojam.screen.Art;
-import com.mojang.mojam.screen.AbstractScreen;
 
 public class HostingWaitMenu extends GuiMenu {
 
@@ -68,9 +69,10 @@ public class HostingWaitMenu extends GuiMenu {
 	}
 
 	public void searchIpWAN() {
+		System.setProperty("http.agent", Downloader.getUserAgent());
 		URL whatismyip;
 		try {
-			whatismyip = new URL("http://automation.whatismyip.com/n09230945.asp");
+			whatismyip = new URL("https://catacombsnatch.net/ipcheck");
 			BufferedReader in;
 			try {
 				in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
