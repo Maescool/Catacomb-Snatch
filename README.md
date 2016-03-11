@@ -1,6 +1,5 @@
 ![Catacomb Snatch](http://i.imgur.com/uSFJF.png)
-
-## Links
+### Links
 
 * [Original source from Mojang](http://assets.mojang.com/mojam/CatacombSnatch_src.zip)
 * [Website](http://catacombsnatch.net/)
@@ -11,3 +10,5 @@
 * [Download last release](http://ci.catacombsnatch.net/job/Catacomb-Snatch/lastSuccessfulBuild/artifact/build/libs/Catacomb-Snatch-1.1.0-BETA.jar)
 * [Download last development build](http://ci.catacombsnatch.net/job/Catacomb-Snatch-Dev/lastSuccessfulBuild/artifact/build/libs/Catacomb-Snatch-1.1.1-SNAPSHOT.jar)
 * Chat with the developers on the [Webchat](http://webchat.freenode.net/?channels=catacomb-snatch) or irc.freenode.net #catacomb-snatch
+* [libGDX rewrite](https://github.com/Catacomb-Snatch/Catacomb-Snatch)
+
