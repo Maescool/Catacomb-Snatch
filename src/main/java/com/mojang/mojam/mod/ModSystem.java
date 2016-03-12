@@ -1,5 +1,28 @@
 package com.mojang.mojam.mod;
 
+import com.mojang.mojam.InputHandler;
+import com.mojang.mojam.Keys;
+import com.mojang.mojam.Keys.Key;
+import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.Options;
+import com.mojang.mojam.console.Console;
+import com.mojang.mojam.entity.Entity;
+import com.mojang.mojam.entity.weapon.IWeapon;
+import com.mojang.mojam.gui.TitleMenu;
+import com.mojang.mojam.gui.components.Font;
+import com.mojang.mojam.level.Level;
+import com.mojang.mojam.level.gamemode.GameMode;
+import com.mojang.mojam.network.kryo.Network;
+import com.mojang.mojam.network.kryo.Network.ChangeKeyMessage;
+import com.mojang.mojam.screen.AbstractBitmap;
+import org.jruby.embed.InvokeFailedException;
+
+import javax.imageio.ImageIO;
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineFactory;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -29,31 +52,6 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
-
-import javax.imageio.ImageIO;
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineFactory;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-
-import org.jruby.embed.InvokeFailedException;
-
-import com.mojang.mojam.InputHandler;
-import com.mojang.mojam.Keys;
-import com.mojang.mojam.Keys.Key;
-import com.mojang.mojam.MojamComponent;
-import com.mojang.mojam.Options;
-import com.mojang.mojam.console.Console;
-import com.mojang.mojam.entity.Entity;
-import com.mojang.mojam.entity.weapon.IWeapon;
-import com.mojang.mojam.gui.TitleMenu;
-import com.mojang.mojam.gui.components.Font;
-import com.mojang.mojam.level.Level;
-import com.mojang.mojam.level.gamemode.GameMode;
-import com.mojang.mojam.network.kryo.Network;
-import com.mojang.mojam.network.kryo.Network.ChangeKeyMessage;
-import com.mojang.mojam.screen.AbstractBitmap;
 
 public final class ModSystem {
 
@@ -296,9 +294,9 @@ public final class ModSystem {
 					break;
 				}
 				String s1 = zipentry.getName();
-				if (!zipentry.isDirectory() && s1.contains("mod_") && s1.endsWith(".class")) {
+				if (!zipentry.isDirectory() && s1.startsWith("mod_") && s1.endsWith(".class")) {
 					addMod(classloader, s1);
-				} else if (!zipentry.isDirectory() && s1.contains("mod_") && !s1.toLowerCase().endsWith(".mf")) {
+				} else if (!zipentry.isDirectory() && s1.startsWith("mod_") && !s1.toLowerCase().endsWith(".mf")) {
 					addScript(zipentry);
 				}
 			} while (true);
