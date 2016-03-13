@@ -1,38 +1,5 @@
 package com.mojang.mojam;
 
-import java.awt.AWTException;
-import java.awt.BorderLayout;
-import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Point;
-import java.awt.Robot;
-import java.awt.Toolkit;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Random;
-
-import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
 import com.mojang.mojam.console.Console;
 import com.mojang.mojam.entity.Player;
 import com.mojang.mojam.entity.mob.Team;
@@ -80,13 +47,32 @@ import com.mojang.mojam.network.kryo.SnatchClient;
 import com.mojang.mojam.network.kryo.SnatchServer;
 import com.mojang.mojam.resources.Constants;
 import com.mojang.mojam.resources.Texts;
-import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.AbstractBitmap;
 import com.mojang.mojam.screen.AbstractScreen;
+import com.mojang.mojam.screen.Art;
 import com.mojang.mojam.screen.MojamScreen;
 import com.mojang.mojam.sound.ISoundPlayer;
 import com.mojang.mojam.sound.NoSoundPlayer;
 import com.mojang.mojam.sound.SoundPlayer;
+import com.mojang.mojam.util.ClassLoaderUtil;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Random;
 
 public class MojamComponent extends Canvas implements Runnable, MouseMotionListener, MouseListener, ButtonListener {
 
@@ -157,11 +143,12 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public MojamComponent() {
 		screen = new MojamScreen(GAME_WIDTH, GAME_HEIGHT);
 		screen.loadResources();
-	    final String nativeLibDir = MojamComponent.getMojamDir()
-			.getAbsolutePath().toString()
-			+ File.separator
-			+ "bin"
-			+ File.separator
+		final String binLibDir = MojamComponent.getMojamDir()
+				.getAbsolutePath().toString()
+				+ File.separator
+				+ "bin"
+				+ File.separator;
+	    final String nativeLibDir = binLibDir
 			+ "native"
 			+ File.separator;
 	    try {
@@ -177,11 +164,18 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			System.arraycopy(paths,0,tmp,0,paths.length);
 			tmp[paths.length] = nativeLibDir;
 			field.set(null,tmp);
-			System.setProperty("java.library.path", System.getProperty("java.library.path") + File.pathSeparator + nativeLibDir);
+			System.setProperty("java.library.path", System.getProperty("java.library.path")
+					+ File.pathSeparator + binLibDir
+					+ File.pathSeparator + nativeLibDir);
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
 	    System.setProperty("org.lwjgl.librarypath", nativeLibDir);
+
+		// load locally cached libs
+		ClassLoaderUtil.injectJar(new File(binLibDir + "jruby.jar"));
+		ClassLoaderUtil.injectJar(new File(binLibDir + "jython.jar"));
+
 		// initialize the constants
 		MojamComponent.constants = new Constants();
 
@@ -553,8 +547,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			}
 		}
 
-
-			chat.render(screen);
+		chat.render(screen);
 
 		if(console.isOpen()) {
 			console.render(screen);

@@ -1,71 +1,79 @@
+plugins {
+    id 'java'
+    id 'maven'
+    id 'idea'
+    id 'edu.sc.seis.macAppBundle' version '2.1.5'
+    id 'com.github.johnrengelman.shadow' version '1.2.3'
+}
+
 task wrapper(type: Wrapper) {
     gradleVersion = '2.11'
 }
-
-apply plugin: 'java'
-apply plugin: 'idea'
 
 archivesBaseName = "Catacomb-Snatch"
 project.group = "com.mojang.mojam"
 project.version = "1.1.1-SNAPSHOT"
 
 sourceSets {
-  main {
-    java {
-      srcDir 'src/main/java'
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources {
+            srcDir 'src/main/resources'
+            exclude '**/*.ogg'
+        }
     }
-    resources {
-      srcDir 'src/main/resources'
-      exclude '**/*.ogg'
-    }
-  }
+}
+
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
 }
 
 dependencies {
-  compile fileTree( dir: 'lib', include: '*.jar')
+    compile fileTree( dir: 'lib', include: '*.jar')
+    compile 'org.lwjgl.lwjgl:lwjgl:2.9.3'
+    compile 'com.esotericsoftware:kryonet:2.22.0-RC1'
+    compile 'org.jruby:jruby:1.7.21'
+    compile 'org.python:jython:2.5.3'
 }
 
-//fat jar~!
-//Could be easier to use the jarjar ant task, it's probably faster
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
 jar {
-  from {
-    configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-  }
-  manifest {
-    attributes "Main-Class" : "com.mojang.mojam.MojamStartup"
-  }
+    from {
+        configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    manifest {
+        attributes "Main-Class" : "com.mojang.mojam.MojamStartup"
+    }
+    dependsOn "shadowJar"
+}
+
+shadowJar {
+    dependencies {
+        exclude(dependency('org.jruby:.*'))
+        exclude(dependency('org.python:.*'))
+    }
 }
 
 task run() {
-  dependsOn "build"
-  doLast {
-    println "Executing Catacomb Snatch!"
-    javaexec {
-      main = '-jar'
-      args = [ jar.archivePath ]
+    dependsOn "build"
+    doLast {
+        println "Executing Catacomb Snatch!"
+        javaexec {
+            main = '-jar'
+            args = [ jar.archivePath ]
+        }
     }
-  }
 }
-
-apply plugin: 'edu.sc.seis.macAppBundle'
 
 macAppBundle {
-    mainClassName = "com.mojang.mojam.MojamComponent"
+    mainClassName = "com.mojang.mojam.MojamStartup"
     icon = "res/art/icon/cs_icons.icns"
-}
-
-buildscript {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        maven { url "https://plugins.gradle.org/m2/" }
-        maven { url "https://oss.sonatype.org/content/repositories/releases" }
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-        maven { url "http://repo.maven.apache.org/maven2" }
-        jcenter()
-    }
-
-    dependencies {
-        classpath "gradle.plugin.edu.sc.seis:macAppBundle:2.1.5"
-    }
 }
