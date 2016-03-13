@@ -124,9 +124,6 @@ public final class ModSystem {
 		
 		if (Options.getAsBoolean(Options.ENABLE_MODS, Options.VALUE_FALSE)) {
 			System.out.println("ModSystem starting up...");
-
-			
-
 			try {
 				readLinksFromFile(new File(MojamComponent.getMojamDir(), "mods.txt"));
 				readFromClassPath(modDir);
