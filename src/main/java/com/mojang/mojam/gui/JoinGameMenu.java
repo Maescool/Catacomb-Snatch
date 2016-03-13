@@ -3,6 +3,7 @@ package com.mojang.mojam.gui;
 import java.awt.event.KeyEvent;
 
 import com.mojang.mojam.MojamComponent;
+import com.mojang.mojam.MouseButtons;
 import com.mojang.mojam.gui.components.Button;
 import com.mojang.mojam.gui.components.ClickableComponent;
 import com.mojang.mojam.gui.components.Font;
@@ -39,11 +40,16 @@ public class JoinGameMenu extends GuiMenu {
 	}
 
 	@Override
+	public void tick(MouseButtons mouseButtons) {
+		super.tick(mouseButtons);
+		TitleMenu.ip = ipInput.getContent();
+	}
+
+	@Override
 	public void keyPressed(KeyEvent e) {
 		// Start on Enter, Cancel on Escape
 		if ((e.getKeyChar() == KeyEvent.VK_ENTER)) {
 			if (ipInput.getContent().length() > 0) {
-				TitleMenu.ip = ipInput.getContent();
 				joinButton.postClick();
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
