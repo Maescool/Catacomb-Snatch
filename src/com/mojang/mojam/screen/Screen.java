@@ -49,4 +49,11 @@ public class Screen extends Bitmap {
 	public void rectangle(int x, int y, int width, int height, int color) {
 		super.rectangle(x + xOffset, y + yOffset, width, height, color);
 	}
+	public void screenResolution(int width, int height){
+		int[] screenWidth = 
+		{640, 640, 800, 1024, 1152, 1280, 1280, 1280, 1366, 1400, 1440, 1600, 1680, 1920, 1920, 2560, 2560};
+		int[] screenHeight = 
+		{350, 480, 600, 768,864, 720, 800, 1024, 768, 1050, 900, 900, 1050, 1080, 1200, 1440, 1600};
+		super.Screen(screenWidth[width],screenHeight[height]);
+	}
 }
