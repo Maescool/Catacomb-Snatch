@@ -12,6 +12,5 @@ lib/.tmp/
 doc/
 *.db
 # idea related stuff
-.idea/workspace.xml
-.idea/misc.xml
-.idea/uiDesigner.xml
+.idea/
+
