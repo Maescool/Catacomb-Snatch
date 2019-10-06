@@ -42,12 +42,11 @@ task run() {
     }
   }
 }
-apply plugin: 'macAppBundle'
-
-macAppBundle {
-    mainClassName = "com.mojang.mojam.MojamStartup"
-    icon = "res/art/icon/cs_icons.icns"
-}
+//apply plugin: 'macAppBundle'
+//macAppBundle {
+//    mainClassName = "com.mojang.mojam.MojamStartup"
+//    icon = "res/art/icon/cs_icons.icns"
+//}
 
 buildscript {
     repositories {
@@ -57,6 +56,6 @@ buildscript {
     }
 
     dependencies {
-        classpath 'edu.sc.seis:gradle-macappbundle:1.0.3'
+//        classpath 'edu.sc.seis:gradle-macappbundle:1.0.3'
     }
 }
