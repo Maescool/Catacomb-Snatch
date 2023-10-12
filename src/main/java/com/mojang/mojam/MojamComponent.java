@@ -71,8 +71,11 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
+import java.util.TreeMap;
 
 public class MojamComponent extends Canvas implements Runnable, MouseMotionListener, MouseListener, ButtonListener {
 
@@ -88,6 +91,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public static final int GAME_HEIGHT = GAME_WIDTH * 3 / 4;
 	public int scale = 2;
 	private static JFrame guiFrame;
+	private static Dimension gameDimension;
+	private static DisplayMode desktopDisplayMode;
 	private boolean running = true;
 	public boolean paused;
 	private Cursor emptyCursor;
@@ -99,7 +104,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public Console console = new Console();
 
 	public int latency;
-	
+
 	public MenuStack menuStack = new MenuStack();
 
 	private InputHandler inputHandler;
@@ -116,17 +121,16 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	public Player[] players = new Player[2];
 	public Player player;
 	public TurnSynchronizer synchronizer;
-	
+
 	private boolean isMultiplayer;
 	public boolean isServer;
 	public int localId;
 	public static int localTeam; //local team is the team of the client. This can be used to check if something should be only rendered on one person's screen
 	public static Player localPlayer; //local Player. can be used to interrogate the player for level etc for level specific effects from within other entities tick/render. TODO maybe make private and use method getLocalPlayer() instead
-	
+
 	public GameCharacter playerCharacter;
 	public boolean sendCharacter = false;
 
-	private static boolean fullscreen = false;
 	public static ISoundPlayer soundPlayer;
 	private long nextMusicInterval = 0;
 	private long pausedMusicInterval = 0;
@@ -134,7 +138,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 	public int createServerState = 0;
 	private static volatile File mojamDir = null;
-	
+
 	private TitleMenu menu = null;
 	private LocaleMenu localemenu = null;
 	private SnatchClient snatchClient;
@@ -148,10 +152,10 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 				+ File.separator
 				+ "bin"
 				+ File.separator;
-	    final String nativeLibDir = binLibDir
-			+ "native"
-			+ File.separator;
-	    try {
+		final String nativeLibDir = binLibDir
+				+ "native"
+				+ File.separator;
+		try {
 			Field field = ClassLoader.class.getDeclaredField("usr_paths");
 			field.setAccessible(true);
 			String[] paths = (String[])field.get(null);
@@ -170,7 +174,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
-	    System.setProperty("org.lwjgl.librarypath", nativeLibDir);
+		System.setProperty("org.lwjgl.librarypath", nativeLibDir);
 
 		// load locally cached libs
 		ClassLoaderUtil.injectJar(new File(binLibDir + "jruby.jar"));
@@ -207,15 +211,15 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		this.setMinimumSize(dim);
 		this.setMaximumSize(dim);
 		this.setPreferredSize(dim);
-		this.setSize(dim);		
-		
-		if(guiFrame != null) {
+		this.setSize(dim);
+
+		if (guiFrame != null) {
 			guiFrame.setSize(new Dimension(guiFrame.getInsets().left + guiFrame.getInsets().right + GAME_WIDTH * scale,
 					guiFrame.getInsets().top + guiFrame.getInsets().bottom + GAME_HEIGHT * scale));
 		}
-		
+
 	}
-	
+
 	public void setLocale(String locale) {
 		setLocale(new Locale(locale));
 		Options.set(Options.LOCALE, locale);
@@ -265,8 +269,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			try {
 	            Robot robot = new Robot();   
 	            robot.mouseMove(lastX, lastY);
-	        }
-	        catch (Exception ex) {
+	        } catch (Exception ex) {
 	            ex.printStackTrace();
 	        }
 		} else {
@@ -299,20 +302,20 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 	}
 
 	public void stop(boolean exit) {
-	    if (exit) {		
-		running = false;
-		soundPlayer.stopBackgroundMusic();
-		soundPlayer.shutdown();
-		System.exit(0);
-	    } else if (menuStack.empty()){
-		if (level != null && !isMultiplayer && !paused) {
-		    paused = true;
-		    menuStack.add(new PauseMenu(GAME_WIDTH, GAME_HEIGHT));
+		if (exit) {
+			running = false;
+			soundPlayer.stopBackgroundMusic();
+			soundPlayer.shutdown();
+			System.exit(0);
+		} else if (menuStack.empty()){
+			if (level != null && !isMultiplayer && !paused) {
+				paused = true;
+				menuStack.add(new PauseMenu(GAME_WIDTH, GAME_HEIGHT));
+			}
+			menuStack.add(new ExitMenu(GAME_WIDTH, GAME_HEIGHT));
+		} else if(!(menuStack.peek() instanceof ExitMenu)){
+			menuStack.add(new ExitMenu(GAME_WIDTH, GAME_HEIGHT));
 		}
-		menuStack.add(new ExitMenu(GAME_WIDTH, GAME_HEIGHT));
-	    } else if(!(menuStack.peek() instanceof ExitMenu)){
-		menuStack.add(new ExitMenu(GAME_WIDTH, GAME_HEIGHT));
-	    }
 	}
 
 	private void init() {
@@ -469,7 +472,8 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 				continue;
 			}
 
-			if (shouldRender) {
+			shouldRender = shouldRender;
+			if (shouldRender && guiFrame.isVisible()) { //isVisible is volatile
 				frames++;
 				Graphics g = bs.getDrawGraphics();
 
@@ -500,7 +504,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 				e.printStackTrace();
 			}
 
-			if (shouldRender) {
+			if (shouldRender && guiFrame.isVisible()) {
 				if (bs != null) {
 					bs.show();
 				}
@@ -560,7 +564,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		g.clipRect(0, 0, GAME_WIDTH * scale, GAME_HEIGHT * scale);
 
 		ModSystem.afterRender();
-		
+
 		if (!menuStack.isEmpty() || level != null) {
 
 			// render mouse
@@ -570,34 +574,34 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		}
 
 	}
-	
+
 	private BufferedImage toCompatibleImage(BufferedImage image)
 	{
-	        // obtain the current system graphical settings
-	        GraphicsConfiguration gfx_config = GraphicsEnvironment.
-	                getLocalGraphicsEnvironment().getDefaultScreenDevice().
-	                getDefaultConfiguration();
+		// obtain the current system graphical settings
+		GraphicsConfiguration gfx_config = GraphicsEnvironment.
+				getLocalGraphicsEnvironment().getDefaultScreenDevice().
+				getDefaultConfiguration();
 
-	        /*
-	         * if image is already compatible and optimized for current system 
-	         * settings, simply return it
-	         */
-	        if (image.getColorModel().equals(gfx_config.getColorModel()))
-	                return image;
+		/*
+		 * if image is already compatible and optimized for current system
+		 * settings, simply return it
+		 */
+		if (image.getColorModel().equals(gfx_config.getColorModel()))
+			return image;
 
-	        // image is not optimized, so create a new image that is
-	        BufferedImage new_image = gfx_config.createCompatibleImage(
-	                        image.getWidth(), image.getHeight(), image.getTransparency());
+		// image is not optimized, so create a new image that is
+		BufferedImage new_image = gfx_config.createCompatibleImage(
+				image.getWidth(), image.getHeight(), image.getTransparency());
 
-	        // get the graphics context of the new image to draw the old image on
-	        Graphics2D g2d = (Graphics2D) new_image.getGraphics();
+		// get the graphics context of the new image to draw the old image on
+		Graphics2D g2d = (Graphics2D) new_image.getGraphics();
 
-	        // actually draw the image and dispose of context no longer needed
-	        g2d.drawImage(image, 0, 0, null);
-	        g2d.dispose();
+		// actually draw the image and dispose of context no longer needed
+		g2d.drawImage(image, 0, 0, null);
+		g2d.dispose();
 
-	        // return the new optimized image
-	        return new_image; 
+		// return the new optimized image
+		return new_image;
 	}
 
 
@@ -632,7 +636,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		Font font = Font.defaultFont();
 		font.draw(screen, texts.playerLevel(player.plevel + 1), 335, screen.getHeight() - 36);
 	}
-	
+
 	private void addWeaponSlots(AbstractScreen screen) {
 		Font font = Font.FONT_GOLD;
 		for(int i = 0; i < 3 && i < player.weaponInventory.size(); i++) {
@@ -700,7 +704,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 		if (requestToggleFullscreen || keys.fullscreen.wasPressed()) {
 			requestToggleFullscreen = false;
-			setFullscreen(!fullscreen);
+			setFullscreen(Options.getAsBoolean(Options.FULLSCREEN, "true"));
 		}
 
 		if (level != null && level.victoryConditions != null && !console.isOpen()) {
@@ -710,15 +714,15 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 						: players[1].getCharacter();
 				ModSystem.onWin(winner);
 				menuStack.add(new WinMenu(GAME_WIDTH, GAME_HEIGHT, winner, winningCharacter));
-                level = null;
-                return;
-            }
-        }
-		
+				level = null;
+				return;
+			}
+		}
+
 		if (snatchClient != null) {
 			snatchClient.tick();
 		}
-		
+
 		tickMouse();
 
 		if (sendCharacter) {
@@ -754,7 +758,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 					}
 
 					keys.tick();
-					
+
 					for (Keys skeys : synchedKeys) {
 						skeys.tick();
 					}
@@ -768,16 +772,16 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 					level.tick();
 
 					tickChat();
-						
+
 					// every 4 minutes, start new background music :)
-					
+
 					if (System.currentTimeMillis() > nextMusicInterval) {
 						nextMusicInterval = (System.currentTimeMillis()) + (4 * 60 * 1000);
 						soundPlayer.startBackgroundMusic();
 					}
-				} 
-				
-				
+				}
+
+
 				if (keys.screenShot.isDown) {
 					takeScreenShot();
 				}
@@ -795,18 +799,18 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 			synchronizer.setStarted(true);
 			if (TitleMenu.level.vanilla) {
-				
-				
+
+
 				snatchClient.sendMessage(new StartGameMessage(TurnSynchronizer.synchedSeed,
 						TitleMenu.level.getUniversalPath(), TitleMenu.difficulty.ordinal(), playerCharacter.ordinal()));
-				
-			
+
+
 			} else {
 				snatchClient.sendMessage(new StartGameCustomMessage(TurnSynchronizer.synchedSeed,
 						level, TitleMenu.difficulty.ordinal(),
 						playerCharacter.ordinal()));
 			}
-			
+
 
 		}
 		ModSystem.afterTick();
@@ -822,28 +826,28 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		if (!menuStack.isEmpty()) {
 			menuStack.peek().tick(mouseButtons);
 		}
-		// Do joystick handling when replacing mouse handling 
+		// Do joystick handling when replacing mouse handling
 		if (!mouseMoved && joyMoved) {
 			joyMoved = false;
 			mouseHideTime = 0;
 			mouseButtons.mouseHidden = false;
 			mouseButtons.renderMouse = true;
 		}
-		// Do mouse handling 
+		// Do mouse handling
 		if (mouseMoved) {
 			mouseMoved = false;
 			mouseHideTime = 0;
 			mouseButtons.mouseHidden = false;
 			mouseButtons.renderMouse = true;
 		}
-		// Do shoot handling 
+		// Do shoot handling
 		if (shootMoved) {
 			shootMoved = false;
 			mouseButtons.mouseHidden = false;
 			mouseButtons.renderMouse = false;
 			mouseHideTime = 50;
 		}
-		// Make the cursor go after a while 
+		// Make the cursor go after a while
 		mouseHideTime++;
 		if (mouseHideTime >= 60 && !shootMoved) {
 			mouseButtons.mouseHidden = true;
@@ -867,10 +871,10 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			synchronizer.addMessage(new ChatMessage(texts.playerNameCharacter(playerCharacter) + ": " + msg));
 		}
 	}
-	
+
 	public static void main(String[] args){
-	    System.err.println("YOU SHOULD CHANGE YOUR STARTUP COMPONENT TO MojamStartup!");
-	    MojamComponent.startgame();
+		System.err.println("YOU SHOULD CHANGE YOUR STARTUP COMPONENT TO MojamStartup!");
+		MojamComponent.startgame();
 	}
 
 	public static void startgame() {
@@ -879,13 +883,15 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		System.setProperty("sun.java2d.opengl", Options.get(Options.OPENGL,Options.VALUE_FALSE));
 		//True for verbose console output, true for silent
 		guiFrame = new JFrame(GAME_TITLE);
+		desktopDisplayMode = guiFrame.getGraphicsConfiguration().getDevice().getDisplayMode();
 		JPanel panel = new JPanel(new BorderLayout());
+		gameDimension = new Dimension(guiFrame.getInsets().left + guiFrame.getInsets().right + GAME_WIDTH * mc.scale,
+				guiFrame.getInsets().top + guiFrame.getInsets().bottom + GAME_HEIGHT * mc.scale);
 		panel.add(mc);
 		guiFrame.setContentPane(panel);
 		guiFrame.pack();
 		guiFrame.setResizable(false);
-		guiFrame.setSize(new Dimension(guiFrame.getInsets().left + guiFrame.getInsets().right + GAME_WIDTH * mc.scale,
-				guiFrame.getInsets().top + guiFrame.getInsets().bottom + GAME_HEIGHT * mc.scale));
+		guiFrame.setSize(gameDimension);
 		guiFrame.setLocationRelativeTo(null);
 		guiFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		guiFrame.addWindowListener(newWindowClosinglistener());
@@ -898,33 +904,99 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		mc.start();
 	}
 
-	private static void setFullscreen(boolean fs) {
-		if (fs != fullscreen) {
-			GraphicsDevice device = guiFrame.getGraphicsConfiguration().getDevice();
-			// hide window
-			guiFrame.setVisible(false);
-			guiFrame.dispose();
-			// change options
-			guiFrame.setUndecorated(fs);
-			device.setFullScreenWindow(fs ? guiFrame : null);
-			// display window
-			guiFrame.setLocationRelativeTo(null);
-			guiFrame.setVisible(true);
-			instance.requestFocusInWindow();
-			fullscreen = fs;
+	private static void setFullscreen(final boolean fs) {
+		guiFrame.setIgnoreRepaint(true);
+		final GraphicsDevice device = guiFrame.getGraphicsConfiguration().getDevice();
+		if (fs) {
+			EventQueue.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+
+					// hide window
+					guiFrame.setVisible(false);
+					guiFrame.dispose();
+					// change options
+					guiFrame.setUndecorated(fs);
+					boolean error = true;
+					Iterator<DisplayMode> iterator = getCloserDisplayMode(device).iterator();
+					for (; iterator.hasNext() ;) {
+						try {
+							DisplayMode current = iterator.next();
+							System.out.println("trying to set full screen to " + current.getWidth() + "x" + current.getHeight());
+							device.setFullScreenWindow(guiFrame);
+							device.setDisplayMode(current);
+							//			 display window
+							guiFrame.setLocation(0, 0);
+							guiFrame.setVisible(true);
+							instance.requestFocusInWindow();
+							error = false;
+						} catch (UnsupportedOperationException e) {
+							System.out.println(e.getMessage());
+							error = true;
+						}
+						if (!error) {
+							break;
+						}
+					}
+					if (error) {
+						System.out.println("Error setting full screen, restoring windowed");
+						device.setFullScreenWindow(null);
+						device.setDisplayMode(desktopDisplayMode);
+						guiFrame.setVisible(true);
+						Options.set(Options.FULLSCREEN, false);
+						return;
+					}
+					guiFrame.setVisible(true);
+					Options.set(Options.FULLSCREEN, true);
+				}
+			});
+		} else {
+			EventQueue.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					guiFrame.setVisible(false);
+					guiFrame.dispose();
+					guiFrame.setUndecorated(false);
+					device.setFullScreenWindow(null);
+					try {
+						device.setDisplayMode(desktopDisplayMode);
+					} catch (UnsupportedOperationException e) {
+						//TODO
+					}
+					guiFrame.setVisible(true);
+				}
+
+			});
 		}
-		Options.set(Options.FULLSCREEN, fullscreen);
+	}
+
+	private static Iterable<DisplayMode> getCloserDisplayMode(GraphicsDevice device) {
+		int width = gameDimension.width;
+		int height = gameDimension.height;
+		DisplayMode currentDisplayMode = device.getDisplayMode();
+		int depth = currentDisplayMode.getBitDepth();
+		int refreshRate = currentDisplayMode.getRefreshRate();
+		Map<Integer, DisplayMode> sortedModes = new TreeMap<>();
+		for (DisplayMode displayMode : device.getDisplayModes()) {
+			int distance = 0;
+			distance += Math.abs(displayMode.getWidth() - width);
+			distance += Math.abs(displayMode.getHeight() - height);
+			distance += Math.abs(displayMode.getBitDepth() - depth);
+			distance += Math.abs(displayMode.getRefreshRate() - refreshRate);
+			sortedModes.put(distance, displayMode);
+		}
+		return sortedModes.values();
 	}
 
 	private static volatile boolean requestToggleFullscreen = false;
-	
+
 	public static void toggleFullscreen() {
 		requestToggleFullscreen = true; // only toggle fullscreen in the tick()
-										// loop
+		// loop
 	}
 
 	public static boolean isFullscreen() {
-		return fullscreen;
+		return Options.getAsBoolean(Options.FULLSCREEN, "false");
 	}
 
 	@Override
@@ -941,209 +1013,209 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 
 	public void handleAction(int id) {
 		switch (id) {
-		case TitleMenu.LOCALE_EN_ID:
-			setLocale("en");
-			break;
-		case TitleMenu.LOCALE_DE_ID:
-			setLocale("de");
-			break;
-		case TitleMenu.LOCALE_ES_ID:
-			setLocale("es");
-			break;
-		case TitleMenu.LOCALE_FR_ID:
-			setLocale("fr");
-			break;
-		case TitleMenu.LOCALE_IND_ID:
-			setLocale("ind");
-			break;
-		case TitleMenu.LOCALE_IT_ID:
-			setLocale("it");
-			break;
-		case TitleMenu.LOCALE_NL_ID:
-			setLocale("nl");
-			break;
-		case TitleMenu.LOCALE_PL_ID:
-			setLocale("pl");
-			break;
-		case TitleMenu.LOCALE_PT_BR_ID:
-			setLocale("pt_br");
-			break;
-		case TitleMenu.LOCALE_RU_ID:
-			setLocale("ru");
-			break;
-		case TitleMenu.LOCALE_SL_ID:
-			setLocale("sl");
-			break;
-		case TitleMenu.LOCALE_SV_ID:
-			setLocale("sv");
-			break;
-		case TitleMenu.LOCALE_AF_ID:
-			setLocale("af");
-			break;
-		case TitleMenu.RETURN_TO_TITLESCREEN:
-			if(isMultiplayer) {
-				snatchClient.shutdown();
-				if(isServer) {
-					server.shutdown();
+			case TitleMenu.LOCALE_EN_ID:
+				setLocale("en");
+				break;
+			case TitleMenu.LOCALE_DE_ID:
+				setLocale("de");
+				break;
+			case TitleMenu.LOCALE_ES_ID:
+				setLocale("es");
+				break;
+			case TitleMenu.LOCALE_FR_ID:
+				setLocale("fr");
+				break;
+			case TitleMenu.LOCALE_IND_ID:
+				setLocale("ind");
+				break;
+			case TitleMenu.LOCALE_IT_ID:
+				setLocale("it");
+				break;
+			case TitleMenu.LOCALE_NL_ID:
+				setLocale("nl");
+				break;
+			case TitleMenu.LOCALE_PL_ID:
+				setLocale("pl");
+				break;
+			case TitleMenu.LOCALE_PT_BR_ID:
+				setLocale("pt_br");
+				break;
+			case TitleMenu.LOCALE_RU_ID:
+				setLocale("ru");
+				break;
+			case TitleMenu.LOCALE_SL_ID:
+				setLocale("sl");
+				break;
+			case TitleMenu.LOCALE_SV_ID:
+				setLocale("sv");
+				break;
+			case TitleMenu.LOCALE_AF_ID:
+				setLocale("af");
+				break;
+			case TitleMenu.RETURN_TO_TITLESCREEN:
+				if(isMultiplayer) {
+					snatchClient.shutdown();
+					if(isServer) {
+						server.shutdown();
+					}
 				}
-			}
-			menuStack.clear();
-			level = null;
-			TitleMenu menu = new TitleMenu(GAME_WIDTH, GAME_HEIGHT);
-			menuStack.add(menu);
-			this.nextMusicInterval = 0;
-			soundPlayer.stopBackgroundMusic();
-			soundPlayer.startTitleMusic();
-			break;
+				menuStack.clear();
+				level = null;
+				TitleMenu menu = new TitleMenu(GAME_WIDTH, GAME_HEIGHT);
+				menuStack.add(menu);
+				this.nextMusicInterval = 0;
+				soundPlayer.stopBackgroundMusic();
+				soundPlayer.startTitleMusic();
+				break;
 
-		case TitleMenu.START_GAME_ID:
-			menuStack.clear();
-			isMultiplayer = false;
-			chat.clear();
+			case TitleMenu.START_GAME_ID:
+				menuStack.clear();
+				isMultiplayer = false;
+				chat.clear();
 
-			localId = 0;
-			MojamComponent.localTeam = Team.Team1;
-			synchronizer = new TurnSynchronizer(snatchClient, 0, 1);
-			synchronizer.setStarted(true);
+				localId = 0;
+				MojamComponent.localTeam = Team.Team1;
+				synchronizer = new TurnSynchronizer(snatchClient, 0, 1);
+				synchronizer.setStarted(true);
 
-			createLevel(TitleMenu.level, TitleMenu.defaultGameMode, playerCharacter);
-			soundPlayer.stopBackgroundMusic();
-			break;
+				createLevel(TitleMenu.level, TitleMenu.defaultGameMode, playerCharacter);
+				soundPlayer.stopBackgroundMusic();
+				break;
 
-		case TitleMenu.SELECT_LEVEL_ID:
-			menuStack.add(new LevelSelect(false));
-			break;
+			case TitleMenu.SELECT_LEVEL_ID:
+				menuStack.add(new LevelSelect(false));
+				break;
 
-		case TitleMenu.SELECT_HOST_LEVEL_ID:
-			menuStack.add(new LevelSelect(true));
-			break;
-		case TitleMenu.HOST_GAME_ID:
-			menuStack.add(new HostingWaitMenu());
-			isMultiplayer = true;
-			isServer = true;
-			chat.clear();
-			try {
-				if (isServer) {
-					localId = 0;
-					MojamComponent.localTeam = Team.Team1;
+			case TitleMenu.SELECT_HOST_LEVEL_ID:
+				menuStack.add(new LevelSelect(true));
+				break;
+			case TitleMenu.HOST_GAME_ID:
+				menuStack.add(new HostingWaitMenu());
+				isMultiplayer = true;
+				isServer = true;
+				chat.clear();
+				try {
+					if (isServer) {
+						localId = 0;
+						MojamComponent.localTeam = Team.Team1;
 
-					server = new SnatchServer();
-					
+						server = new SnatchServer();
+
+						snatchClient.setComponent(MojamComponent.this);
+						snatchClient.connectLocal();
+
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break;
+
+			case TitleMenu.JOIN_GAME_ID:
+				menuStack.add(new JoinGameMenu());
+				break;
+
+			case TitleMenu.CANCEL_JOIN_ID:
+				menuStack.safePop();
+				if(isMultiplayer) {
+					snatchClient.shutdown();
+					if(isServer) {
+						server.shutdown();
+					}
+				}
+				break;
+
+			case TitleMenu.PERFORM_JOIN_ID:
+				menuStack.clear();
+				isMultiplayer = true;
+				isServer = false;
+				chat.clear();
+
+				String[] data = TitleMenu.ip.trim().split(":");
+				String ip = data[0];
+				Integer port = (data.length > 1) ? Integer.parseInt(data[1]) : Options.getAsInteger(Options.MP_PORT, 3000);
+
+				try {
+					localId = 1;
+					MojamComponent.localTeam = Team.Team2;
+
 					snatchClient.setComponent(MojamComponent.this);
-					snatchClient.connectLocal();				
-				
+					snatchClient.connect(ip, port);
+
+					synchronizer = new TurnSynchronizer(snatchClient, localId, 2);
+				} catch (Exception e) {
+					e.printStackTrace();
+					showError(e.getClass().getSimpleName() + ": " + e.getLocalizedMessage());
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			break;
+				break;
 
-		case TitleMenu.JOIN_GAME_ID:
-			menuStack.add(new JoinGameMenu());
-			break;
+			case TitleMenu.HOW_TO_PLAY:
+				menuStack.add(new HowToPlayMenu(level != null));
+				break;
 
-		case TitleMenu.CANCEL_JOIN_ID:
-			menuStack.safePop();
-			if(isMultiplayer) {
-				snatchClient.shutdown();
-				if(isServer) {
-					server.shutdown();
+			case TitleMenu.OPTIONS_ID:
+				menuStack.add(new OptionsMenu(level != null));
+				break;
+
+			case TitleMenu.SELECT_DIFFICULTY_ID:
+				menuStack.add(new DifficultySelect(false));
+				break;
+
+			case TitleMenu.SELECT_DIFFICULTY_HOSTING_ID:
+				menuStack.add(new DifficultySelect(true));
+				break;
+
+			case TitleMenu.KEY_BINDINGS_ID:
+				menuStack.add(new KeyBindingsMenu(keys, inputHandler));
+				break;
+
+			case TitleMenu.JOY_MENU:
+				menuStack.add(new JoyBindingsMenu(keys));
+				break;
+
+			case TitleMenu.AXES_MENU:
+				menuStack.add(new AJoyBindingsMenu());
+				break;
+
+			case TitleMenu.LEVEL_EDITOR_ID:
+				menuStack.add(new LevelEditorMenu());
+				break;
+
+			case TitleMenu.EXIT_GAME_ID:
+				stop(false);
+				break;
+
+			case TitleMenu.REALLY_EXIT_GAME_ID:
+				ModSystem.onStop();
+				stop(true);
+				break;
+
+			case TitleMenu.RETURN_ID:
+				synchronizer.addMessage(new PauseMessage(false));
+				if(!console.isOpen()) {
+					keys.tick();
 				}
-			}
-			break;
+				break;
 
-		case TitleMenu.PERFORM_JOIN_ID:
-			menuStack.clear();
-			isMultiplayer = true;
-			isServer = false;
-			chat.clear();
+			case TitleMenu.BACK_ID:
+				menuStack.safePop();
+				break;
 
-			String[] data = TitleMenu.ip.trim().split(":");
-			String ip = data[0];
-			Integer port = (data.length > 1) ? Integer.parseInt(data[1]) : Options.getAsInteger(Options.MP_PORT, 3000);
+			case TitleMenu.CREDITS_ID:
+				menuStack.add(new CreditsScreen(GAME_WIDTH, GAME_HEIGHT));
+				break;
 
-			try {
-				localId = 1;
-				MojamComponent.localTeam = Team.Team2;
-	
-				snatchClient.setComponent(MojamComponent.this);
-				snatchClient.connect(ip, port);
+			case TitleMenu.CHARACTER_ID:
+				menuStack.add(new CharacterSelectionMenu());
+				break;
 
-				synchronizer = new TurnSynchronizer(snatchClient, localId, 2);
-			} catch (Exception e) {
-				e.printStackTrace();
-				showError(e.getClass().getSimpleName() + ": " + e.getLocalizedMessage());
-			}
-			break;
+			case TitleMenu.AUDIO_VIDEO_ID:
+				menuStack.add(new AudioVideoMenu(level != null));
+				break;
 
-		case TitleMenu.HOW_TO_PLAY:
-			menuStack.add(new HowToPlayMenu(level != null));
-			break;
-
-		case TitleMenu.OPTIONS_ID:
-			menuStack.add(new OptionsMenu(level != null));
-			break;
-
-		case TitleMenu.SELECT_DIFFICULTY_ID:
-			menuStack.add(new DifficultySelect(false));
-			break;
-
-		case TitleMenu.SELECT_DIFFICULTY_HOSTING_ID:
-			menuStack.add(new DifficultySelect(true));
-			break;
-
-		case TitleMenu.KEY_BINDINGS_ID:
-			menuStack.add(new KeyBindingsMenu(keys, inputHandler));
-			break;
-
-		case TitleMenu.JOY_MENU:
-			menuStack.add(new JoyBindingsMenu(keys));
-			break;
-
-		case TitleMenu.AXES_MENU:
-			menuStack.add(new AJoyBindingsMenu());
-			break;
-
-		case TitleMenu.LEVEL_EDITOR_ID:
-			menuStack.add(new LevelEditorMenu());
-			break;
-
-		case TitleMenu.EXIT_GAME_ID:
-			stop(false);
-			break;
-
-		case TitleMenu.REALLY_EXIT_GAME_ID:
-			ModSystem.onStop();
-			stop(true);
-			break;
-
-		case TitleMenu.RETURN_ID:
-			synchronizer.addMessage(new PauseMessage(false));
-			if(!console.isOpen()) {
-			    keys.tick();
-			}
-			break;
-
-		case TitleMenu.BACK_ID:
-			menuStack.safePop();
-			break;
-
-		case TitleMenu.CREDITS_ID:
-			menuStack.add(new CreditsScreen(GAME_WIDTH, GAME_HEIGHT));
-			break;
-
-		case TitleMenu.CHARACTER_ID:
-			menuStack.add(new CharacterSelectionMenu());
-			break;
-
-		case TitleMenu.AUDIO_VIDEO_ID:
-			menuStack.add(new AudioVideoMenu(level != null));
-			break;
-
-		case TitleMenu.LOCALE_ID:
-			localemenu = new LocaleMenu(level != null);
-			menuStack.add(localemenu);
-			break;
+			case TitleMenu.LOCALE_ID:
+				localemenu = new LocaleMenu(level != null);
+				menuStack.add(localemenu);
+				break;
 		}
 	}
 
@@ -1182,27 +1254,27 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 		String s1 = System.getProperty("user.home", ".");
 		File file;
 		switch (EnumOSMappingHelper.enumOSMappingArray[getOs().ordinal()]) {
-		case 1: // '\001'
-		case 2: // '\002'
-			file = new File(s1, (new StringBuilder()).append('.').append(s).append('/').toString());
-			break;
-
-		case 3: // '\003'
-			String s2 = System.getenv("APPDATA");
-			if (s2 != null) {
-				file = new File(s2, (new StringBuilder()).append(".").append(s).append('/').toString());
-			} else {
+			case 1: // '\001'
+			case 2: // '\002'
 				file = new File(s1, (new StringBuilder()).append('.').append(s).append('/').toString());
-			}
-			break;
+				break;
 
-		case 4: // '\004'
-			file = new File(s1, (new StringBuilder()).append("Library/Application Support/").append(s).toString());
-			break;
+			case 3: // '\003'
+				String s2 = System.getenv("APPDATA");
+				if (s2 != null) {
+					file = new File(s2, (new StringBuilder()).append(".").append(s).append('/').toString());
+				} else {
+					file = new File(s1, (new StringBuilder()).append('.').append(s).append('/').toString());
+				}
+				break;
 
-		default:
-			file = new File(s1, (new StringBuilder()).append(s).append('/').toString());
-			break;
+			case 4: // '\004'
+				file = new File(s1, (new StringBuilder()).append("Library/Application Support/").append(s).toString());
+				break;
+
+			default:
+				file = new File(s1, (new StringBuilder()).append(s).append('/').toString());
+				break;
 		}
 		if (!file.exists() && !file.mkdirs()) {
 			throw new RuntimeException((new StringBuilder()).append("The working directory could not be created: ").append(file).toString());
@@ -1229,11 +1301,11 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static int clampi(int val, int min, int max){
 		return (val < min) ? min : (val > max) ? max : val;
 	}
-	
+
 	private static WindowListener newWindowClosinglistener() {
 		return new WindowAdapter() {
 			public void windowClosing(WindowEvent winEvt) {
@@ -1254,7 +1326,7 @@ public class MojamComponent extends Canvas implements Runnable, MouseMotionListe
 			this.nextMusicInterval = System.currentTimeMillis() + this.pausedMusicInterval;
 			MojamComponent.soundPlayer.resumeBackgroundMusic();
 		}
-	}	
+	}
 
 	public InputHandler getInputHandler() {
 		return inputHandler;

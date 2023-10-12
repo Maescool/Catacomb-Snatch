@@ -108,11 +108,9 @@ public class Options {
 	}
 
 	public static void loadProperties() {
-		BufferedInputStream stream;
-		try {
-			stream = new BufferedInputStream(new FileInputStream(MojamComponent.getMojamDir() + "/options.properties"));
+		;
+		try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream(MojamComponent.getMojamDir() + "/options.properties"))){
 			properties.load(stream);
-			stream.close();
 		} catch (FileNotFoundException e) {
 			// having no properties file is OK
 		} catch (IOException e) {
